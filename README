@@ -1,0 +1,21 @@
+Important configure flags:
+
+--with-ndim=NDIM
+ 
+  Lets you compile the code for 1, 2, 3 or 4 dimensional
+  simulations. (Four dimensional simulations are mostly
+  used for testing spin algorithms or other mathematical
+  models.) 
+
+--enable-mpi
+
+  Enable's MPI for parallel simulation.
+
+--enable-sprng
+
+  Use the SPRNG library for random numbers.
+
+If configure have trouble locating the proper blas
+and lapack libraries:
+--with-blas=<lib>
+--with-lapack=<lib>
