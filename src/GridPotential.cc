@@ -56,7 +56,7 @@ GridPotential::GridPotential(const SimulationInfo& simInfo,
   vegrid.resize(n1,n2,n3);
   H5Dclose(dataSetID);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
-  dataSetID = H5Dopen(groupID, "ve", H5P_DEFAULT);
+  dataSetID = H5Dopen2(groupID, "ve", H5P_DEFAULT);
 #else
   dataSetID = H5Dopen(groupID, "ve");
 #endif
