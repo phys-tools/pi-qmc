@@ -28,6 +28,7 @@ RandomPermutationChooser::RandomPermutationChooser(const int nsize)
 bool RandomPermutationChooser::choosePermutation() {
   for (int ifrom=0; ifrom<nsize;) {
     int ito = (int)(nsize*RandomNumGenerator::getRand());
+    if (ito==nsize) ito=nsize-1;
     for (int jfrom=0; jfrom<=ifrom; ++jfrom) {
       if (jfrom==ifrom) (*permutation)[ifrom++]=ito;
       if ((*permutation)[jfrom]==ito) break;

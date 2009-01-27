@@ -33,6 +33,7 @@ PairChooser::~PairChooser() {}
 void PairChooser::chooseParticles() {
   for (int imoving=0; imoving<index.size();) {
     int i = (int)(npart*RandomNumGenerator::getRand());
+    if (i==npart) i=npart-1;
     for (int jmoving=0; jmoving<=imoving; ++jmoving) {
       if (jmoving==imoving) index(imoving++)=i;
       if (index(jmoving)==i) break;

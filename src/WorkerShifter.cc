@@ -32,7 +32,7 @@ WorkerShifter::WorkerShifter(const int maxShift, Paths& paths, MPIManager* mpi)
 WorkerShifter::~WorkerShifter() {}
 
 void WorkerShifter::run() {
-  int ishift=(int)((maxShift-1)*RandomNumGenerator::getRand())+1;
+  int ishift=(int)((maxShift-1)*RandomNumGenerator::getRand()*(1-1e-8))+1;
   if (maxShift==0) ishift=0;
 #ifdef ENABLE_MPI
   if (mpi) mpi->getWorkerComm().Bcast(&ishift,1,MPI::INT,0);
