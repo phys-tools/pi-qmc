@@ -243,6 +243,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       const Species& species(simInfo.getSpecies(specName));
       double t=getEnergyAttribute(actNode,"temperature");
       bool noNodalAction=getBoolAttribute(actNode,"noNodalAction");
+      bool useDistDerivative=getBoolAttribute(actNode,"useDistDerivative");
       if (t==0) t=simInfo.getTemperature();
       NodeModel *nodeModel=0;
       if (modelName=="SHONodes") {
@@ -273,7 +274,8 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
                                         maxMovers);
       }
       doubleComposite->addAction(
-               new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction));
+               new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
+                                   useDistDerivative));
       continue;
     }  else if (name=="FixedPhaseAction") {
       ctxt->node=actNode;

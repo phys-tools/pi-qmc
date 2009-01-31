@@ -1,5 +1,5 @@
 //$Id: FreeParticleNodes.h,v 1.20 2008/09/18 21:14:30 jshumwa Exp $
-/*  Copyright (C) 2004-2008 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ public:
   typedef blitz::Array<Mat,2> MMatrix;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<int,2> IArray2;
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Class for matrix updates.
   class MatrixUpdate : public NodeModel::MatrixUpdate {
@@ -154,7 +155,9 @@ private:
   Array temp1, temp2;
   /// Storage for calculating dominant contribution to determinant.
   FMatrix uarray;
-  IArray kindex, kwork;
+  IArray2 kindex;
+  IArray kwork;
+  /// Flag for number of bad returns from LAPACK calls.
   int nerror;
 };
 #endif

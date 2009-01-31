@@ -1,5 +1,5 @@
 //$Id: FixedNodeAction.cc,v 1.24 2008/09/18 21:14:30 jshumwa Exp $
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 
 FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
   const Species &species, NodeModel *nodeModel, 
-  const bool withNodalAction, const int maxlevel) 
+  const bool withNodalAction, const bool useDistDerivative, const int maxlevel) 
   : tau(simInfo.getTau()), npart(simInfo.getNPart()),
     nSpeciesPart(species.count), ifirst(species.ifirst), 
     r1(npart), r2(npart),
@@ -40,7 +40,9 @@ FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
     dim1(npart), dip1(npart), di1(npart), dim2(npart), dip2(npart), di2(npart),
     dotdim1(npart),  dotdi1(npart), dotdim2(npart), dotdi2(npart),
     nodeModel(nodeModel), matrixUpdateObj(nodeModel->getUpdateObj()),
-    withNodalAction(withNodalAction), nerror(0) {
+    withNodalAction(withNodalAction),
+    useDistDerivative(useDistDerivative),
+    nerror(0) {
   std::cout << "FixedNodeAction" << std::endl;
 }
 
@@ -110,6 +112,10 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
         nodeModel->evaluateDistance(r1,r2,islice,d1,d2);
       }
       for (int i=0; i<npart; ++i) {
+//std::cout << dist(islice,0,i) << ", " << dist(islice-1,0,i)  << std::endl;
+//std::cout << newDist(islice,0,i) << ", " << newDist(islice-1,0,i)  << std::endl;
+//std::cout << dist(islice,1,i) << ", " << dist(islice-1,1,i)  << std::endl;
+//std::cout << newDist(islice,1,i) << ", " << newDist(islice-1,1,i)  << std::endl;
         deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
                    /(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
         deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
@@ -139,8 +145,12 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,-1);
     nodeModel->evaluate(r1, r2, 0);
     nodeModel->evaluateDistance(r1,r2,0,dim1,dim2);
-    nodeModel->evaluateDotDistance(r1,r2,0,dotdim1,dotdim2);
-    // Calculate d_i+1
+    if (useDistDerivative) {
+      nodeModel->evaluateDotDistance(r1,r2,0,dotdim1,dotdim2);
+    } else {
+      dotdim1=0.; dotdim2=0.;
+    }
+    // Calculate d_i+1 (NOTE: commented out calculation of force)
 //  for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,+1);
 //  for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,+1);
 //  nodeModel->evaluate(r1, r2, 0);
@@ -150,6 +160,11 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
     nodeModel->evaluate(r1, r2, 0);
     nodeModel->evaluateDistance(r1,r2,0,di1,di2);
+    if (useDistDerivative) {
+      nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);
+    } else {
+      dotdi1=0.; dotdi2=0.;
+    }
     // Now calculate gradient of log of distance to node.
 //  nodeModel->evaluateGradLogDist(r1,r2,0,gradd1,gradd2,di1,di2);
     // And calculate the time derivative.
@@ -170,7 +185,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
 //    }
       // Calculate the nodal action.
       u += -log(1-exp(-xim1));
-      //utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
+      utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
       utau += -dotxim1*exp(-xim1)/(1-exp(-xim1));
     }
   }

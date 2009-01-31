@@ -1,5 +1,5 @@
 //$Id: FreeParticleNodes.cc,v 1.30 2008/11/19 21:26:23 jshumwa Exp $
-/*  Copyright (C) 2004-2008 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
 #define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
-extern "C" void ASSNDX_F77(const int *mode, float *a, const int *n, 
+extern "C" void ASSNDX_F77(const int *mode, const float *a, const int *n, 
   const int *m, const int *ida, int *k, float *sum, int *iw, const int *idw);
 
 FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
@@ -50,9 +50,8 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
-    uarray(npart,npart), kindex(npart), kwork(npart*6), nerror(0) {
-    //gradArray(npart), mat2(npart,npart),
-    //gradMatrix(npart,npart), grad2Matrix(npart,npart) {
+    uarray(npart,npart,ColMajor()), 
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -97,7 +96,15 @@ double FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
       uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
   }
-  // Calculate determinant and inverse.
+  // Find dominant contribution to determinant (distroys uarray).
+  const int MODE=1;
+  float usum=0;
+  ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+             &usum,kwork.data(),&npart);
+  for(int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+  // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+  // or lowest total action.
+  // Next calculate determinant and inverse of slater matrix.
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
   if (info!=0) {
@@ -152,18 +159,9 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-  // First find dominant contribution to determinant.
-  const int MODE=2;
-  float usum=0;
-  //std::cout << uarray << std::endl;
-  //ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,kindex.data(),
-  //           &usum,kwork.data(),&npart);
-  kindex-=1;
-  // Note: u(ipart,jpart=kindex(ipart)) makes maximum contribution.
-  //std::cout << kindex << std::endl;
+  Matrix& mat(*matrix[islice]);
   // Then calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
-  Matrix& mat(*matrix[islice]);
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int ipart=0; ipart<npart; ++ipart) {
@@ -174,12 +172,13 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (jpart==kindex(ipart)) fgrad=grad;
+      if (ipart==kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray1(jpart)=logGrad-fgrad;
-    d1(jpart+ifirst)=sqrt(2*mass/((dot(logGrad,logGrad)+1e-15)*tau));
+    d1(jpart+ifirst)=sqrt(2*mass/
+                      ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
   }
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
@@ -191,12 +190,13 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (jpart==kindex(ipart)) fgrad=grad;
+      if (ipart==kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray2(ipart)=logGrad-fgrad;
-    d2(ipart+ifirst)=sqrt(2*mass/((dot(logGrad,logGrad)+1e-15)*tau));
+    d2(ipart+ifirst)=sqrt(2*mass/
+                      ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
 }
 
@@ -490,16 +490,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
 void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
     const VArray& r1, const VArray& r2,
     const int islice, Array &d1, Array &d2) {
-  // First find dominant contribution to determinant.
-  const int MODE=2;
-  float usum=0;
-  //std::cout << uarray << std::endl;
-  //ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,kindex.data(),
-  //           &usum,kwork.data(),&npart);
-  //fpNodes.kindex-=1;
-  // Note: u(ipart,jpart=kindex(ipart)) makes maximum contribution.
-  //std::cout << kindex << std::endl;
-  // Then calculate log gradients to estimate distance.
+  // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
   const Matrix& mat(*matrix[islice]);
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -512,7 +503,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/(*fpNodes.pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      //if (jpart==fpNodes.kindex(ipart)) fgrad=grad;
+      if (ipart==fpNodes.kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]));
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -530,7 +521,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/(*fpNodes.pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      //if (jpart==fpNodes.kindex(ipart)) fgrad=grad;
+      if (ipart==fpNodes.kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]));
       logGrad+=mat(jpart,ipart)*grad;
     }
