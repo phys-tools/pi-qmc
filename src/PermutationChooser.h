@@ -1,5 +1,5 @@
 // $Id: PermutationChooser.h,v 1.8 2008/11/25 13:11:21 jshumwa Exp $
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,12 +28,12 @@ public:
   /// Virtual destructor.
   virtual ~PermutationChooser();
   /// Choose and return acceptance outcome.
-  virtual bool choosePermutation()=0;
+  virtual bool choosePermutation();
   /// Return the choosen Permutation.
   const Permutation& getPermutation() {return *permutation;}
   /// Initialize.
-  virtual void init() =0;
-  virtual double getLnTranProb() const =0;
+  virtual void init() {};
+  virtual double getLnTranProb() const {return 0.0;}
 protected:
   /// The current permutation.
   Permutation* permutation;

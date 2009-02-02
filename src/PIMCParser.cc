@@ -170,19 +170,26 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     std::string speciesName=getStringAttribute(ctxt->node,"species");
     ParticleChooser* particleChooser;
     WalkingChooser* walkingChooser=0;
-    if (speciesName==""||speciesName=="all") {
+    bool noPerm=getBoolAttribute(ctxt->node,"noPermutation");
+    if (speciesName=="" || speciesName=="all") {
       particleChooser=new SimpleParticleChooser(simInfo.getNPart(),nmoving);
+    } else if (noPerm) {
+      particleChooser=new SpeciesParticleChooser(
+                            simInfo.getSpecies(speciesName),nmoving);
     } else {
       walkingChooser=new WalkingChooser(nmoving,
                           simInfo.getSpecies(speciesName),nlevel,simInfo);
       particleChooser=walkingChooser;
-//      particleChooser=new SpeciesParticleChooser(
-//                            simInfo.getSpecies(speciesName),nmoving);
     }
     if (doubleAction==0) {
-      PermutationChooser *permutationChooser=(walkingChooser)
-          ? (PermutationChooser*)walkingChooser
-          : (PermutationChooser*)new RandomPermutationChooser(nmoving);
+      PermutationChooser *permutationChooser=0;
+      if (walkingChooser) {
+        permutationChooser = walkingChooser;
+      } else if (noPerm) {
+        permutationChooser = new PermutationChooser(nmoving);
+      } else {
+        permutationChooser = new RandomPermutationChooser(nmoving);
+      } 
       int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
       if (nrepeat==0) nrepeat=1;
       algorithm=new MultiLevelSampler(nmoving, *paths, *sectionChooser, 
@@ -204,8 +211,12 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
         walkingChooser->setMLSampler((MultiLevelSampler*)algorithm);
         walkingChooser2->setMLSampler((MultiLevelSampler*)algorithm);
       } else {
-        PermutationChooser *permutationChooser
-            = new RandomPermutationChooser(nmoving);
+        PermutationChooser *permutationChooser=0;
+        if (noPerm) {
+          permutationChooser = new PermutationChooser(nmoving);
+        } else {
+          permutationChooser = new RandomPermutationChooser(nmoving);
+        }
         algorithm=new DoubleMLSampler(nmoving, *paths, *doubleSectionChooser, 
                      *particleChooser, *permutationChooser,
                      *particleChooser, *permutationChooser, *mover, action,
