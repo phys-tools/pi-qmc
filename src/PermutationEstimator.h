@@ -1,4 +1,4 @@
-// $Id: PermutationEstimator.h,v 1.1 2008/01/08 20:46:40 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ class Paths;
 class SimulationInfo;
 class MPIManager;
 /** Permutation estimator for a homogeneous system.
- *  @version $Revision: 1.1 $
+ *  @version $Revision$
  *  @bug Hard coded for two particles and no MPI.
  *  @author John Shumway  */
 class PermutationEstimator : public BlitzArrayBlkdEst<1> {

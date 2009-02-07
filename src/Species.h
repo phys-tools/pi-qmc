@@ -1,4 +1,4 @@
-// $Id: Species.h,v 1.5 2007/06/04 02:55:50 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 #include <blitz/tinyvec.h>
 
 /** Class for storing species information.
- * @version $Revision: 1.5 $
+ * @version $Revision$
  * @author John Shumway */
 class Species {
 public:

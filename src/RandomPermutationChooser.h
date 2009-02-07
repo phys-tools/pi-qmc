@@ -1,4 +1,4 @@
-// $Id: RandomPermutationChooser.h,v 1.6 2008/11/25 13:11:21 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #include "PermutationChooser.h"
 /* Class for randomly selecting a permutation.
  * @bug Temporarily set to three particle even permutations.
- * @version $Revision: 1.6 $
+ * @version $Revision$
  * @author John Shumway */
 class RandomPermutationChooser : public PermutationChooser {
 public:

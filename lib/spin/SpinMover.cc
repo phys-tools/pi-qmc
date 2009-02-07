@@ -1,4 +1,4 @@
-// $Id: SpinMover.cc,v 1.4 2007/01/03 02:39:13 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

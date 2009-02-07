@@ -1,4 +1,4 @@
-// $Id: SpinDemo.h,v 1.1 2006/12/29 21:55:49 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #include <iostream>
 
 /// Class for single spin demo.
-/// @version $Revision: 1.1 $
+/// @version $Revision$
 /// @author John Shumway.
 class SpinDemo : public Demo {
 public:

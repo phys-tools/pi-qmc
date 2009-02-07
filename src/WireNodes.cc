@@ -1,4 +1,4 @@
-//$Id: WireNodes.cc,v 1.14 2008/10/20 14:26:32 mgilbert Exp $
+//$Id$
 /*  Copyright (C) 2004-2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

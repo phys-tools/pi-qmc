@@ -1,4 +1,4 @@
-// $Id: SimInfoWriter.h,v 1.2 2008/11/21 22:19:12 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class SimulationInfo;
 
 /// Class for writing out the SimulationInfo.
 /// used in parsing and setup. 
-/// @version $Revision: 1.2 $
+/// @version $Revision$
 /// @author John Shumway
 class SimInfoWriter : public EstimatorManager::SimInfoWriter {
 public: 

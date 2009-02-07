@@ -1,4 +1,4 @@
-// $Id: StructReader.h,v 1.2 2007/04/06 23:32:59 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class Species;
 class MPIManager;
 
 /** Class for position particles from a struct.h5 file.
- * @version $Revision: 1.2 $
+ * @version $Revision$
  * @author John Shumway */
 class StructReader : public Positioner {
 public:

@@ -1,4 +1,4 @@
-// $Id: HyperbolicAction.h,v 1.6 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@ class PeriodicGaussian;
  * and 
  * @f[ z=\frac{\tau}{2\alpha}\sqrt{1+\frac{2m^*|r-r'|^2}{\tau^2}}. @f]
  *
- * @version $Revision: 1.6 $
+ * @version $Revision$
  * @bug Periodic images are ignored.
  * @author John Shumway */
 class HyperbolicAction : public Action {

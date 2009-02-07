@@ -1,4 +1,4 @@
-//$Id: SHONodes.cc,v 1.12 2007/10/23 19:41:27 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

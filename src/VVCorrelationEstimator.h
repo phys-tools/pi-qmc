@@ -1,4 +1,4 @@
-// $Id: VVCorrelationEstimator.h,v 1.10 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ class Action;
 class SimulationInfo;
 class SuperCell;
 /** @f$V \dot V@f$ Correlation Estimator.
- *  @version $Revision: 1.10 $
+ *  @version $Revision$
  *  @author Matthew Harowitz  */
 class VVCorrelationEstimator : public ScalarEstimator, public LinkSummable {
 public:

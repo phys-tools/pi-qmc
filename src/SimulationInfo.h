@@ -1,4 +1,4 @@
-// $Id: SimulationInfo.h,v 1.8 2007/06/04 02:55:50 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class BeadFactory;
 
 /// Class for storing the description of the simulation,
 /// used in parsing and setup. 
-/// @version $Revision: 1.8 $
+/// @version $Revision$
 /// @author John Shumway
 class SimulationInfo {
 public:

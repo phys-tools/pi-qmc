@@ -1,4 +1,4 @@
-// $Id: SpinEstimator.h,v 1.3 2007/01/04 01:16:28 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ class SimulationInfo;
  *  where @f[ V(\vec s)=6(1+2\alpha)^3 \dfrac{s_{0}^{2}-s_{1}^{2}-s_{2}^{2}+s_{3}^{2}}{2}
  *                 \dfrac{exp{-\alpha s^2}}{s^2} @f]
  *  
- *   @version $Revision: 1.3 $
+ *   @version $Revision$
  **  @author John Shumway, Daejin Shin  */
 class SpinEstimator : public ScalarEstimator, public LinkSummable {
 public:

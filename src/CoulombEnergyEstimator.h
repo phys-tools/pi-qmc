@@ -1,4 +1,4 @@
-// $Id: CoulombEnergyEstimator.h,v 1.12 2007/10/26 07:04:26 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class Action;
 class SimulationInfo;
 class MPIManager;
 /** Coulomb energy estimator. 
- *  @version $Revision: 1.12 $
+ *  @version $Revision$
  *  @author John Shumway  */
 class CoulombEnergyEstimator : public ScalarEstimator, public LinkSummable {
 public:

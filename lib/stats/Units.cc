@@ -1,4 +1,4 @@
-//$Id: Units.cc,v 1.4 2008/10/30 13:13:02 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

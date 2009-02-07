@@ -1,4 +1,4 @@
-// $Id: JelliumSlab.h,v 1.6 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -58,7 +58,7 @@ class SimulationInfo;
          \left(\frac{L_x-w}{2}\right)^2\right].
   * \end{split}
   * @f]
-  * @version $Revision: 1.6 $
+  * @version $Revision$
   * @author John Shumway. */
 class JelliumSlab : public Action {
 public:

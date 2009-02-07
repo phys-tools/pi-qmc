@@ -1,4 +1,4 @@
-// $Id: DoubleParallelPaths.h,v 1.10 2008/01/08 18:38:20 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class SuperCell;
 #include <blitz/array.h>
 
 /// Storage for paths in a serial process.
-/// @version $Revision: 1.10 $
+/// @version $Revision$
 /// @author John Shumway
 class DoubleParallelPaths : public Paths {
 public:

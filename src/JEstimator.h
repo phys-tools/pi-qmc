@@ -1,4 +1,4 @@
-// $Id: JEstimator.h,v 1.1 2008/06/14 17:58:50 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class Paths;
 class SimulationInfo;
 class MPIManager;
 /** Estimator for singlet-triplet exchange splitting.
- *  @version $Revision: 1.1 $
+ *  @version $Revision$
  *  @bug Hard coded for two particles and no MPI.
  *  @author John Shumway  */
 class JEstimator : public BlitzArrayBlkdEst<2>, public LinkSummable {

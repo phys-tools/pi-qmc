@@ -1,4 +1,4 @@
-// $Id: Measure.h,v 1.2 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ class Estimator;
 #include "Algorithm.h"
 
 /** Algorithm class for measure estimators.
- * @version $Revision: 1.2 $
+ * @version $Revision$
  * @author John Shumway */
 class Measure : public Algorithm {
 public:

@@ -1,4 +1,4 @@
-//$Id: SpinFixedPhaseAction.h,v 1.3 2006/10/18 17:08:18 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -76,7 +76,7 @@ S_{\text{FP}} =  \frac{\tau\hbar^3}{2m}
 For real valued functions, this action is @f$3\tau\hbar^3\pi^2/5md^2@f$ when
 the propagator crosses a node, with an average value @f$(3/5)\hbar\pi^2@f$.
 
-@version $Revision: 1.3 $
+@version $Revision$
 @author Daejin Shin and John Shumway */
 class SpinFixedPhaseAction : public DoubleAction {
 public:

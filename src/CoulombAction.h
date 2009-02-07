@@ -1,4 +1,4 @@
-// $Id: CoulombAction.h,v 1.13 2008/07/23 20:03:40 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class EwaldSum;
 #include <vector>
 
 /** Class for calculating coulomb action between particles.
-  * @version $Revision: 1.13 $
+  * @version $Revision$
   * @bug getEField method is not very accurate or efficient.
   * @author John Shumway. */
 class CoulombAction : public Action, public PairAction::EmpiricalPairAction {

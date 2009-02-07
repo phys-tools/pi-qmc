@@ -1,4 +1,4 @@
-// $Id: SpinChargeEstimator.cc,v 1.4 2007/08/08 22:14:04 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

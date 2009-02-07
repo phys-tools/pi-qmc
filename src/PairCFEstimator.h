@@ -1,4 +1,4 @@
-// $Id: PairCFEstimator.h,v 1.12 2008/08/05 21:54:30 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@
 #include <vector>
 /** Pair correlation class.
  *  Handles general pair correlation functions for many different geometries.
- *  @version $Revision: 1.12 $
+ *  @version $Revision$
  *  @author John Shumway  */
 template <int N>
 class PairCFEstimator : public BlitzArrayBlkdEst<N>, public LinkSummable {

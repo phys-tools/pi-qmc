@@ -1,4 +1,4 @@
-// $Id: SectionChooser.h,v 1.5 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ class Action;
 class BeadFactory;
 
 /// Algorithm class for choosing a section.
-/// @version $Revision: 1.5 $
+/// @version $Revision$
 /// @author John Shumway
 class SectionChooser : public CompositeAlgorithm {
 public:

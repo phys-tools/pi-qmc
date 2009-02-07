@@ -1,4 +1,4 @@
-// $Id: SimpleParticleChooser.h,v 1.3 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 
 #include "ParticleChooser.h"
 /// Class for choosing  particles at random.
-/// @version $Revision: 1.3 $
+/// @version $Revision$
 /// @author John Shumway
 class SimpleParticleChooser : public ParticleChooser {
 public:

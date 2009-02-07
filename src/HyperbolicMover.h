@@ -1,4 +1,4 @@
-// $Id: HyperbolicMover.h,v 1.5 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class PeriodicGaussian;
   * @todo May want to make this a subclass of Action, with a flag
   *       for whether to return probability or allow to cancel
   *       for efficiency.
-  * @version $Revision: 1.5 $
+  * @version $Revision$
   * @author John Shumway. */
 class HyperbolicMover : public Mover {
 public:

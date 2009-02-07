@@ -1,4 +1,4 @@
-// $Id: PathReader.h,v 1.4 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class MPIManager;
 class BeadFactory;
 
 /** Class for positioning particles in a cubic lattice.
- * @version $Revision: 1.4 $
+ * @version $Revision$
  * @author John Shumway */
 class PathReader : public Positioner {
 public:

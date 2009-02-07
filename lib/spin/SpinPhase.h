@@ -1,4 +1,4 @@
-//$Id: SpinPhase.h,v 1.3 2007/03/12 20:06:01 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

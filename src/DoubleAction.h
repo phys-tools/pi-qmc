@@ -1,4 +1,4 @@
-// $Id: DoubleAction.h,v 1.6 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ class Paths;
 /// Action objects can compute differences in action from
 /// a MultiLevelDoubleSampler, the total action, and the action and
 /// its derivatives at a bead.
-/// @version $Revision: 1.6 $
+/// @version $Revision$
 /// @author John Shumway.
 class DoubleAction {
 public:

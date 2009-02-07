@@ -1,4 +1,4 @@
-// $Id: Paths.h,v 1.14 2008/01/08 18:38:20 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class LinkSummable;
 
 /// Class for Paths, including Beads, connectivity (including any Permutation),
 /// the time step and SuperCell.
-/// @version $Revision: 1.14 $
+/// @version $Revision$
 /// @author John Shumway
 class Paths {
 public:

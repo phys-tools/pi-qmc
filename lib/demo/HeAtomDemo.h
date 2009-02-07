@@ -1,4 +1,4 @@
-// $Id: HeAtomDemo.h,v 1.1 2006/12/21 07:14:17 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #include <iostream>
 
 /// Class for helium atom demo.
-/// @version $Revision: 1.1 $
+/// @version $Revision$
 /// @author John Shumway.
 class HeAtomDemo : public Demo {
 public:

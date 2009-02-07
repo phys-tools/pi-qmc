@@ -1,4 +1,4 @@
-// $Id: GaussianDotAction.h,v 1.1 2007/12/05 18:35:58 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ class SimulationInfo;
 #include <blitz/array.h>
 
 /** Class for calculating an attractive Gaussian potenial.
-  * @version $Revision: 1.1 $
+  * @version $Revision$
   * @author John Shumway. */
 class GaussianDotAction : public Action {
 public:

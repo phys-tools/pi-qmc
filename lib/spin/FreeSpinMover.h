@@ -1,4 +1,4 @@
-// $Id: FreeSpinMover.h,v 1.1 2007/04/04 02:19:04 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class SimulationInfo;
   * @todo May want to make this a subclass of Action, with a flag
   *       for whether to return probability or allow to cancel
   *       for efficiency.
-  * @version $Revision: 1.1 $
+  * @version $Revision$
   * @author John Shumway. */
 class FreeSpinMover : public Mover {
 public:

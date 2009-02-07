@@ -1,4 +1,4 @@
-// $Id: EwaldCoulombEstimator.cc,v 1.4 2008/03/02 05:49:57 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: ActionParser.h,v 1.8 2008/06/10 22:35:02 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ class DoubleAction;
 class SimulationInfo;
 class MPIManager;
 /** XML Parser for actions.
-  * @version $Revision: 1.8 $
+  * @version $Revision$
   * @author John Shumway */
 class ActionParser : public XMLUnitParser {
 public:

@@ -1,4 +1,4 @@
-// $Id: TimpQPC.h,v 1.7 2008/06/10 22:35:02 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@ class MPIManager;
   * -\tan^{-1}(v)+\tan^{-1}\left(\frac{uv}{\sqrt{1+u^2+v^2}}\right)\right]. @f]
   * We set the default values to w=0.01 um, l=0.03 um, vG=-1V, and z=0.01 um.
   *
-  * @version $Revision: 1.7 $
+  * @version $Revision$
   * @author John Shumway. */
 class TimpQPC : public Action {
 public:

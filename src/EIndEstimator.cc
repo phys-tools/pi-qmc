@@ -1,4 +1,4 @@
-// $Id: EIndEstimator.cc,v 1.1 2008/07/23 20:03:40 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

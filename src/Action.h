@@ -1,4 +1,4 @@
-// $Id: Action.h,v 1.7 2007/05/21 19:01:07 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ class Paths;
 /// Action objects can compute differences in action from
 /// a MultiLevelSampler, the total action, and the action and
 /// its derivatives at a bead.
-/// @version $Revision: 1.7 $
+/// @version $Revision$
 /// @author John Shumway.
 class Action {
 public:

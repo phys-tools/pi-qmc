@@ -1,4 +1,4 @@
-// $Id: ConductanceEstimator.cc,v 1.33 2008/11/20 16:36:34 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

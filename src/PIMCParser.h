@@ -1,4 +1,4 @@
-// $Id: PIMCParser.h,v 1.12 2007/01/09 20:58:27 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ class ProbDensityGrid;
 class MPIManager;
 class BeadFactory;
 /** XML Parser for PIMC simulation data.
-  * @version $Revision: 1.12 $
+  * @version $Revision$
   * @todo Get rid of explicit use of blitz.
   * @todo Clean up parsing of ConditionalDensityGrid.
   * @author John Shumway */

@@ -1,4 +1,4 @@
-// $Id: EwaldCoulombEstimator.h,v 1.2 2008/03/02 05:49:57 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ class MPIManager;
 class EwaldSum;
 class SuperCell;
 /** Coulomb energy estimator with Ewald sum. 
- *  @version $Revision: 1.2 $
+ *  @version $Revision$
  *  @author John Shumway  */
 class EwaldCoulombEstimator : public ScalarEstimator, public LinkSummable {
 public:

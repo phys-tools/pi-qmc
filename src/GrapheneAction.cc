@@ -1,4 +1,4 @@
-// $Id: GrapheneAction.cc,v 1.1 2007/07/17 20:41:36 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

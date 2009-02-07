@@ -1,4 +1,4 @@
-// $Id: MultiLevelSampler.h,v 1.13 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@ class BeadFactory;
 #include <iostream>
 
 /** Class for multilevel sampling of beads. 
-  * @version $Revision: 1.13 $
+  * @version $Revision$
   * @author John Shumway */
 class MultiLevelSampler : public Algorithm {
 public:

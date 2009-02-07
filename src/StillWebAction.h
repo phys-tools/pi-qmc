@@ -1,4 +1,4 @@
-// $Id: StillWebAction.h,v 1.4 2008/04/16 22:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ class SimulationInfo;
   *
   * @bug Assumes only one particle is moving.
   * @todo Add neighbor table.
-  * @version $Revision: 1.4 $
+  * @version $Revision$
   * @author John Shumway. */
 class StillWebAction : public Action {
 public:

@@ -1,4 +1,4 @@
-// $Id: RandomNumGenerator.h,v 1.8 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 #include <blitz/array.h>
 
 /// The random number generator. 
-/// @version $Revision: 1.8 $
+/// @version $Revision$
 /// @author John Shumway
 class RandomNumGenerator{
 public:

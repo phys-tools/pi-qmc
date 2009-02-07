@@ -1,4 +1,4 @@
-// $Id: EstimatorManager.cc,v 1.5 2008/11/19 21:26:23 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: GaussianAction.h,v 1.2 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ class SimulationInfo;
 #include <blitz/array.h>
 
 /** Class for calculating coulomb action between particles.
-  * @version $Revision: 1.2 $
+  * @version $Revision$
   * Gives the same interaction between all pairs of particles.
   * @bug Assumes gaussians are small enough to neglect periodic images.
   * @author John Shumway. */

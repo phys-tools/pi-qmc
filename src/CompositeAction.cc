@@ -1,4 +1,4 @@
-// $Id: CompositeAction.cc,v 1.7 2007/05/21 19:01:07 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

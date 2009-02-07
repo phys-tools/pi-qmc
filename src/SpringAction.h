@@ -1,4 +1,4 @@
-// $Id: SpringAction.h,v 1.9 2007/10/03 12:53:56 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@ class PeriodicGaussian;
  * The kinetic action for a single particle is 
  * @f$ u(r,r';\tau) = \frac{Nd}{2}\log 2\pi\tau/m + m|r-r'|^2/(2\tau) @f$.
  *
- * @version $Revision: 1.9 $
+ * @version $Revision$
  * @author John Shumway */
 class SpringAction : public Action {
 public:

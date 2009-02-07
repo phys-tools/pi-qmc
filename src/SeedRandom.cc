@@ -1,4 +1,4 @@
-// $Id: SeedRandom.cc,v 1.3 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: EwaldAction.h,v 1.9 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ and we add it to the input actions.
 in <a href="http://dx.doi.org/10.1006/jcph.1995.1054">
 Natoli and Ceperley, J. Comp. Phys. <b>117</b>, 171-178 (1995).</a>
 @bug Only works for NDIM=3.
-@version $Revision: 1.9 $
+@version $Revision$
 @author John Shumway. */
 class EwaldAction : public Action {
   typedef std::vector<PairAction*> SRActionContainer;

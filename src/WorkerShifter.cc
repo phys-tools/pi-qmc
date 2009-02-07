@@ -1,4 +1,4 @@
-// $Id: WorkerShifter.cc,v 1.6 2007/07/26 13:03:41 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

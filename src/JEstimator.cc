@@ -1,4 +1,4 @@
-// $Id: JEstimator.cc,v 1.1 2008/06/14 17:58:50 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

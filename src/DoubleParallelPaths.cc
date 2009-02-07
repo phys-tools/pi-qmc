@@ -1,4 +1,4 @@
-// $Id: DoubleParallelPaths.cc,v 1.24 2007/07/28 02:42:07 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

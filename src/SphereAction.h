@@ -1,4 +1,4 @@
-// $Id: SphereAction.h,v 1.9 2007/06/06 18:47:03 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ template <int TDIM> class Beads;
   * @todo May want to improve action for paths that go near the boundary.
   * @bug Only puts a sphere around the first particle of the species.
   * @todo Do a set OR on a set of spheres.
-  * @version $Revision: 1.9 $
+  * @version $Revision$
   * @author John Shumway. */
 class SphereAction : public Action {
 public:

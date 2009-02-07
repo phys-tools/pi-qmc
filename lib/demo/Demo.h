@@ -1,4 +1,4 @@
-// $Id: Demo.h,v 1.2 2006/12/29 21:55:49 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #include <iostream>
 
 /// Base class for demonstration input-file generators.
-/// @version $Revision: 1.2 $
+/// @version $Revision$
 /// @author John Shumway.
 class Demo {
 public:

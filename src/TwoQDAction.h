@@ -1,4 +1,4 @@
-// $Id: TwoQDAction.h,v 1.5 2008/02/18 21:55:25 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ template <int TDIM> class Beads;
   * @f[ V(x) = \frac{1}{2}m \omega min((x-d/2)^2 +  y^2 ,
   *   (x+d/2)^2+y^2 )@f]
   * @f[ S(x,x') = \frac{k\tau}{4}({x'}^2+x^2) @f]
-  * @version $Revision: 1.5 $
+  * @version $Revision$
   * @author Daejin Shin. */
 class TwoQDAction : public Action {
 public:

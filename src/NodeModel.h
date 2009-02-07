@@ -1,4 +1,4 @@
-//$Id: NodeModel.h,v 1.13 2008/09/18 21:14:30 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

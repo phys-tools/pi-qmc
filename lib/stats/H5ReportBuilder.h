@@ -1,4 +1,4 @@
-// $Id: H5ReportBuilder.h,v 1.5 2008/11/21 22:19:12 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,7 @@ The H5ReportBuilder s responsible for recording data
 recording it to disk. We have choosen an HDF5
 file format (http://hdf.ncsa.uiuc.edu/HDF5) so that we can compress
 the data and include meta data and other structure.
-@version $Revision: 1.5 $
+@version $Revision$
 @author John Shumway */
 class H5ReportBuilder : public EstimatorReportBuilder {
 public:

@@ -1,4 +1,4 @@
-// $Id: PermutationChooser.h,v 1.8 2008/11/25 13:11:21 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 class Permutation;
 /// Base class for algorithms for selecting a permutation.
 /// Defaults to the trivial choice of the direct permutation.
-/// @version $Revision: 1.8 $
+/// @version $Revision$
 /// @author John Shumway
 class PermutationChooser {
 public:

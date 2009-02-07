@@ -1,4 +1,4 @@
-// $Id: GroundStateWFNodes.h,v 1.7 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class SuperCell;
 class Species;
 
 /** Ground state nodes.
-  * @version $Revision: 1.7 $
+  * @version $Revision$
   * @author John Shumway */
 class GroundStateWFNodes : public Action {
 public:

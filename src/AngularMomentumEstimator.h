@@ -1,4 +1,4 @@
-// $Id: AngularMomentumEstimator.h,v 1.2 2007/01/16 20:29:17 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@ class SimulationInfo;
 /** Angular Momentum estimator.
  * Hard code for 2-dimensional systems.
  * @f[ L_z = \hbar (x \partial_y\phi_T - y \partial_x\phi_T) @f]
- *  @version $Revision: 1.2 $
+ *  @version $Revision$
  *  @author Daejin Shin  */
 class AngularMomentumEstimator : public ScalarEstimator, public LinkSummable {
 public:

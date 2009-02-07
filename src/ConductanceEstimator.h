@@ -1,4 +1,4 @@
-// $Id: ConductanceEstimator.h,v 1.17 2008/08/07 20:22:08 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -43,7 +43,7 @@ class MPIManager;
  *  - species selects a species
  *  - bool speciesTensor computes a tensor of cross-species correlations
  *  - int nfreq number of frequencies to store.
- *  @version $Revision: 1.17 $
+ *  @version $Revision$
  *  @author John Shumway  */
 class ConductanceEstimator : public BlitzArrayBlkdEst<6>, public LinkSummable {
 public:

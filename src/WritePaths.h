@@ -1,4 +1,4 @@
-// $Id: WritePaths.h,v 1.6 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -40,7 +40,7 @@ class BeadFactory;
 /// Because of the uni-directionality of shift, beads are written
 /// in reverse time order.
 /// 
-/// @version $Revision: 1.6 $
+/// @version $Revision$
 /// @bug Reading and writting are done backwards because of Paths::shift
 /// @author John Shumway
 class WritePaths : public Algorithm {

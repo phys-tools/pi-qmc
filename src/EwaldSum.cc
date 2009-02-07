@@ -1,4 +1,4 @@
-// $Id: EwaldSum.cc,v 1.5 2008/08/05 21:54:30 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

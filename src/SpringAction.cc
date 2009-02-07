@@ -1,4 +1,4 @@
-// $Id: SpringAction.cc,v 1.15 2009/01/17 03:11:28 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

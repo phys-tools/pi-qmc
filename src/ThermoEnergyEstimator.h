@@ -1,4 +1,4 @@
-// $Id: ThermoEnergyEstimator.h,v 1.12 2007/10/26 07:04:26 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -34,7 +34,7 @@ class MPIManager;
  *  review article (http://link.aps.org/abstract/RMP/v67/p279),
  *  we don't make this distinction. The time derivatives are obtained
  *  by calling Action::getBeadAction.
- *  @version $Revision: 1.12 $
+ *  @version $Revision$
  *  @author John Shumway  */
 class ThermoEnergyEstimator : public ScalarEstimator, public LinkSummable {
 public:

@@ -1,4 +1,4 @@
-// $Id: ProbDensityGrid.h,v 1.9 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class SimulationInfo;
 class Paths;
 
 /// Class for storing probability density on grids.
-/// @version $Revision: 1.9 $
+/// @version $Revision$
 /// @author John Shumway 
 class ProbDensityGrid : public Algorithm, public LinkSummable {
 public:

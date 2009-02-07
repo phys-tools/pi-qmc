@@ -1,4 +1,4 @@
-// $Id: EstimatorParser.cc,v 1.67 2008/08/07 20:22:08 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

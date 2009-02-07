@@ -1,4 +1,4 @@
-// $Id: SpinChargeEstimator.h,v 1.2 2007/07/09 19:22:21 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class MPIManager;
 /// this estimator satisfies the continuity equation and has the correct
 /// coarse-grained response.
 ///
-/// @version $Revision: 1.2 $
+/// @version $Revision$
 /// @author John Shumway 
 class SpinChargeEstimator : public BlitzArrayBlkdEst<5>, public LinkSummable {
 public:

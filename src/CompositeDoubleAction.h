@@ -1,4 +1,4 @@
-// $Id: CompositeDoubleAction.h,v 1.4 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@ class Paths;
 #include <vector>
 
 /** Action class for composing multiple DoubleAction classes.
-  * @version $Revision: 1.4 $
+  * @version $Revision$
   * @author John Shumway. */
 class CompositeDoubleAction : public DoubleAction {
   typedef std::vector<DoubleAction*> ActionContainer;

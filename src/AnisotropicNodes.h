@@ -1,4 +1,4 @@
-// $Id: AnisotropicNodes.h,v 1.7 2007/10/26 07:04:26 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ class DoubleSectionChooser;
   * @todo Add documentation.
   * @bug Hacked to catch case when this species is not moved.
   * @bug Does note work when  sampling both fermion sections.
-  * @version $Revision: 1.7 $
+  * @version $Revision$
   * @author John Shumway */
 class AnisotropicNodes : public DoubleAction {
 public:

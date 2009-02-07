@@ -1,4 +1,4 @@
-// $Id: ScalarEstimator.h,v 1.5 2008/06/05 18:45:41 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #include <blitz/tinyvec.h>
 class Paths;
 /// Base class for scalar estimators.
-/// @version $Revision: 1.5 $
+/// @version $Revision$
 /// @author John Shumway
 class ScalarEstimator : public Estimator {
 public:

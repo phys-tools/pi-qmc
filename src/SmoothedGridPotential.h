@@ -1,4 +1,4 @@
-// $Id: SmoothedGridPotential.h,v 1.14 2008/11/23 15:55:22 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ class PeriodicGuassian;
   * @todo make scalar and vector mass routines
   * @bug Hard coded for SiGe ve and vh input.
   * @bug Hard coded for NDIM=3.
-  * @version $Revision: 1.14 $
+  * @version $Revision$
   * @author Matthew Harowitz. */
   
   /// Constants

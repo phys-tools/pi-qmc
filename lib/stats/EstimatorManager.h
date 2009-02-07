@@ -1,4 +1,4 @@
-// $Id: EstimatorManager.h,v 1.4 2008/11/21 22:19:12 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ file format (http://hdf.ncsa.uiuc.edu/HDF5) so that we can compress
 the data and include meta data and other structure.
 
 @todo Need to make public interface for access by EstimatorReportBuilder.
-@version $Revision: 1.4 $
+@version $Revision$
 @author John Shumway */
 class EstimatorManager{
 public:

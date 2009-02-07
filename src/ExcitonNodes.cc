@@ -1,4 +1,4 @@
-//$Id: ExcitonNodes.cc,v 1.2 2008/09/29 03:36:37 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

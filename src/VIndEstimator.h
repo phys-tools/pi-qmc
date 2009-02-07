@@ -1,4 +1,4 @@
-// $Id: VIndEstimator.h,v 1.5 2008/07/23 20:03:41 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class MPIManager;
 /// this estimator satisfies the continuity equation and has the correct
 /// coarse-grained response.
 ///
-/// @version $Revision: 1.5 $
+/// @version $Revision$
 /// @author John Shumway 
 class VIndEstimator : public BlitzArrayBlkdEst<2>, public LinkSummable {
 public:

@@ -1,4 +1,4 @@
-// $Id: QPCAction.h,v 1.5 2006/10/18 17:08:19 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ template <int TDIM> class Beads;
   * @f$ m^*=0.0667 @f$, @f$ \hbar\omega_y = 2.0 @f$ meV,
   * @f$ V_0 = 3.0 @f$ meV, and @f$ d=41.3 @f$ nm.
   *
-  * @version $Revision: 1.5 $
+  * @version $Revision$
   * @author John Shumway. */
 class QPCAction : public Action {
 public:

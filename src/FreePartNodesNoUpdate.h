@@ -1,4 +1,4 @@
-// $Id: FreePartNodesNoUpdate.h,v 1.14 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,7 @@ update returns the difference in nodal action (HUGE_NUMBER if a
 node was crossed). If the move is accepted, acceptLastMove updates
 the stored matrices and nodal distances.
 
-@version $Revision: 1.14 $
+@version $Revision$
 @author John Shumway */
 class FreePartNodesNoUpdate : public DoubleAction {
 public:

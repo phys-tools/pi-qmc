@@ -1,4 +1,4 @@
-// $Id: BlitzArrayBlkdEst.h,v 1.16 2007/09/29 19:01:30 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <blitz/tinyvec-et.h>
 class Paths;
 /// Base class for scalar estimators.
-/// @version $Revision: 1.16 $
+/// @version $Revision$
 /// @author John Shumway
 template <int N>
 class BlitzArrayBlkdEst : public ArrayBlockedEstimator {

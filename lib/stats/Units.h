@@ -1,4 +1,4 @@
-// $Id: Units.h,v 1.2 2007/01/09 20:58:27 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #include <map>
 class Paths;
 /// Class for unit translations.
-/// @version $Revision: 1.2 $
+/// @version $Revision$
 /// @author John Shumway
 class Units {
 public:

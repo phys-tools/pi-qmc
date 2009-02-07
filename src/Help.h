@@ -1,4 +1,4 @@
-// $Id: Help.h,v 1.3 2006/12/29 21:55:49 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #include <iostream>
 
 /// Class for command-line help message.
-/// @version $Revision: 1.3 $
+/// @version $Revision$
 /// @author John Shumway.
 class Help {
 public:

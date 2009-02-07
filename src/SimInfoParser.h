@@ -1,4 +1,4 @@
-// $Id: SimInfoParser.h,v 1.5 2007/01/09 20:05:34 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 class SimulationInfo;
 
 /** Class for parsing xml data into a SimulationInfo object.
- *  @version $Revision: 1.5 $
+ *  @version $Revision$
  * @author John Shumway */
 class SimInfoParser : XMLUnitParser {
 public:

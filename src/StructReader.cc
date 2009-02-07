@@ -1,4 +1,4 @@
-// $Id: StructReader.cc,v 1.4 2008/12/09 04:34:59 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

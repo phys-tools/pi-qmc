@@ -1,4 +1,4 @@
-// $Id: NodeTester.h,v 1.1 2006/12/02 11:50:59 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class MPIManager;
 class BeadFactory;
 
 /// 
-/// @version $Revision: 1.1 $
+/// @version $Revision$
 /// @author John Shumway
 class NodeTester : public Algorithm, LinkSummable {
 public:

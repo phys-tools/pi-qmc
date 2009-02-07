@@ -1,4 +1,4 @@
-//$Id: SHORealNodes.cc,v 1.8 2007/10/26 07:04:26 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: WellImageAction.h,v 1.4 2008/06/06 18:39:21 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -84,7 +84,7 @@ class SuperCell;
   * We will omit the direct terms (that diverge) since they are already 
   * handled in CoulombAction. This is an approximation, since CoulombAction
   * does not know about the different dielectric constants.
-  * @version $Revision: 1.4 $
+  * @version $Revision$
   * @author John Shumway. */
 class WellImageAction : public Action {
 public:

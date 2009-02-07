@@ -1,4 +1,4 @@
-// $Id: ConductivityEstimator.h,v 1.9 2007/09/28 20:52:37 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,7 @@ class MPIManager;
 /// this estimator satisfies the continuity equation and has the correct
 /// coarse-grained response.
 ///
-/// @version $Revision: 1.9 $
+/// @version $Revision$
 /// @author John Shumway 
 class ConductivityEstimator : public BlitzArrayBlkdEst<3>, public LinkSummable {
 public:

@@ -1,4 +1,4 @@
-// $Id: StillWebAction.cc,v 1.5 2008/11/23 15:55:22 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2007-8 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

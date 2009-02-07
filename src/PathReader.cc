@@ -1,4 +1,4 @@
-// $Id: PathReader.cc,v 1.18 2008/06/11 17:57:44 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

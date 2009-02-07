@@ -1,4 +1,4 @@
-// $Id: WellImageAction.cc,v 1.9 2008/06/12 05:26:11 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

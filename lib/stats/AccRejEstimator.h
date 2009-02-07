@@ -1,4 +1,4 @@
-// $Id: AccRejEstimator.h,v 1.3 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 #include <blitz/array.h>
 class Paths;
 /// Base class for scalar estimators.
-/// @version $Revision: 1.3 $
+/// @version $Revision$
 /// @author John Shumway
 /// @bug Need to add results for parallel MPI runs.
 class AccRejEstimator : public Estimator {

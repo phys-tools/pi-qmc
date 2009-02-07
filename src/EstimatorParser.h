@@ -1,4 +1,4 @@
-// $Id: EstimatorParser.h,v 1.8 2008/02/08 00:50:30 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class Action;
 class DoubleAction;
 class MPIManager;
 /// XML Parser for estimators.
-/// @version $Revision: 1.8 $
+/// @version $Revision$
 /// @author John Shumway */
 class EstimatorParser : public XMLUnitParser {
 public:

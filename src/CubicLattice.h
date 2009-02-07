@@ -1,4 +1,4 @@
-// $Id: CubicLattice.h,v 1.7 2007/11/26 00:00:14 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class Species;
 class MPIManager;
 
 /** Class for positioning particles in a cubic lattice.
- * @version $Revision: 1.7 $
+ * @version $Revision$
  * @author John Shumway */
 class CubicLattice : public Positioner {
 public:

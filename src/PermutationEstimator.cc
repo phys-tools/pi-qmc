@@ -1,4 +1,4 @@
-// $Id: PermutationEstimator.cc,v 1.1 2008/01/08 20:46:40 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

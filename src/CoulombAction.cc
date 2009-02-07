@@ -1,4 +1,4 @@
-// $Id: CoulombAction.cc,v 1.53 2009/01/13 05:00:32 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

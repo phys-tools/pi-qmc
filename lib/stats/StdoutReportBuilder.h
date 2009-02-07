@@ -1,4 +1,4 @@
-// $Id: StdoutReportBuilder.h,v 1.3 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <blitz/array.h>
 
 /** Class for reporting estimators to standard output.
-@version $Revision: 1.3 $
+@version $Revision$
 @author John Shumway */
 class StdoutReportBuilder : public EstimatorReportBuilder {
 public:

@@ -1,4 +1,4 @@
-// $Id: PairAction.cc,v 1.24 2009/01/06 18:38:16 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

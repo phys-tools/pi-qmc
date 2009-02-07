@@ -1,4 +1,4 @@
-// $Id: ConductivityEstimator.cc,v 1.12 2008/05/12 17:50:08 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

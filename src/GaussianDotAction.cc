@@ -1,4 +1,4 @@
-// $Id: GaussianDotAction.cc,v 1.2 2007/12/28 22:27:04 lzhang51 Exp $
+// $Id$
 /*  Copyright (C) 2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: EstimatorReportBuilder.h,v 1.3 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -28,7 +28,7 @@ class ArrayBlockedEstimator;
 We need to write methods for reporting each type of 
 Estimator data.
 
-@version $Revision: 1.3 $
+@version $Revision$
 @author John Shumway */
 class EstimatorReportBuilder {
 public:

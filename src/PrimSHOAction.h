@@ -1,4 +1,4 @@
-// $Id: PrimSHOAction.h,v 1.8 2007/10/23 20:59:21 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ class SimulationInfo;
 /** Class for calculating the primitive action for a simple harmonic
   * oscillator.
   * @f[ V(x) = a x^2  + b x^4@f]
-  * @version $Revision: 1.8 $
+  * @version $Revision$
   * @author John Shumway. */
 class PrimSHOAction : public Action {
 public:

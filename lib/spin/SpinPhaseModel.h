@@ -1,4 +1,4 @@
-//$Id: SpinPhaseModel.h,v 1.2 2006/10/18 17:08:18 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ Divide by @f$\rho@f$ on each side, we get
 Now we can get the derivative of the phase.
 @f[\boxed{\nabla\phi=Im \left(\dfrac{\nabla\rho}{\rho} \right)  }  @f]    
 How to get @f$\frac{\nabla\rho}{\rho}@f$ in the simulation?
-@version $Revision: 1.2 $
+@version $Revision$
 @author Daejin Shin and John Shumway */
 class SpinPhaseModel {
 public:

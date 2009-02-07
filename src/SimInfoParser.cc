@@ -1,4 +1,4 @@
-// $Id: SimInfoParser.cc,v 1.8 2007/01/09 20:58:27 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

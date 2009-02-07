@@ -1,4 +1,4 @@
-// $Id: CoulombEnergyEstimator.cc,v 1.13 2007/10/26 07:04:26 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2007 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

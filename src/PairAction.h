@@ -1,4 +1,4 @@
-// $Id: PairAction.h,v 1.12 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,7 @@ class SimulationInfo;
 * and
 * @f[ \frac{\partial u}{\partial (s^2)}  
 *     =\sum_{k=1}^{N_{order}} k u_k(q)s^{2(k-1)}. @f]
-* @version $Revision: 1.12 $
+* @version $Revision$
 * @todo Make a version for non-coulomb actions.
 * @author John Shumway. */
 class PairAction : public Action {

@@ -1,4 +1,4 @@
-// $Id: DensDensEstimator.h,v 1.2 2006/10/18 17:08:18 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -26,7 +26,7 @@ class DoubleAction;
 class SimulationInfo;
 class MPIManager;
 /** DensDens estimator for a homogeneous system.
- *  @version $Revision: 1.2 $
+ *  @version $Revision$
  *  @author John Shumway  */
 class DensDensEstimator : public BlitzArrayBlkdEst<3>, public LinkSummable {
 public:

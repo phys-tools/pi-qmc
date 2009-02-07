@@ -1,4 +1,4 @@
-// $Id: Beads.h,v 1.21 2007/01/03 20:06:07 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -123,7 +123,7 @@ protected:
 };
 
 /// Storage for beads on the path.
-/// @version $Revision: 1.21 $
+/// @version $Revision$
 /// @author John Shumway 
 /// @bug Permute doesn't move auxilliary beads.
 template <int TDIM>

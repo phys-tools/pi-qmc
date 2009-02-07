@@ -1,4 +1,4 @@
-// $Id: OpticalLatticeAction.h,v 1.1 2008/07/15 20:17:42 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ template <int TDIM> class Beads;
 class SimulationInfo;
 
 /** Class for calculating the primitive action for an optical lattice.
-  * @version $Revision: 1.1 $
+  * @version $Revision$
   * @author John Shumway. */
 class OpticalLatticeAction : public Action {
 public:

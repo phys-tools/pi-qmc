@@ -1,4 +1,4 @@
-// $Id: XMLUnitParser.h,v 1.3 2008/07/15 20:17:42 jshumwa Exp $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@ class Units;
 
 /** Base class for classes that parse XML data with units.  
   * Includes helper functions.
-  * @version $Revision: 1.3 $
+  * @version $Revision$
   * @author John Shumway */
 class XMLUnitParser : public XMLParser{
 public:

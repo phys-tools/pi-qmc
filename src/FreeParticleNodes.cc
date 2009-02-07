@@ -1,4 +1,4 @@
-//$Id: FreeParticleNodes.cc,v 1.30 2008/11/19 21:26:23 jshumwa Exp $
+//$Id$
 /*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
