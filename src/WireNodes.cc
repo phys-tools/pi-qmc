@@ -1,5 +1,5 @@
 //$Id$
-/*  Copyright (C) 2004-2008 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -52,7 +52,8 @@ WireNodes::WireNodes(const SimulationInfo &simInfo, const Species &species,
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()), 
-    uarray(npart,npart), kindex(npart), kwork(npart*6), nerror(0) {
+    uarray(npart,npart,ColMajor()),
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -98,9 +99,18 @@ double WireNodes::evaluate(const VArray &r1, const VArray &r2,
         rirj+=ri[i]*rj[i];
       }
       mat(ipart,jpart)*= exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+      uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
   }
-  // Calculate determinant and inverse.
+  // Find dominant contribution to determinant (distroys uarray).
+  const int MODE=1;
+  float usum=0;
+  ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+             &usum,kwork.data(),&npart);
+  for(int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+  // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+  // or lowest total action.
+  // Next calculate determinant and inverse of slater matrix.
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
   if (info!=0) {
@@ -157,16 +167,7 @@ void WireNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 
 void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-  // First find dominant contribution to determinant.
-  const int MODE=2;
-  float usum=0;
-  //std::cout << uarray << std::endl;
-  //ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,kindex.data(),
-  //           &usum,kwork.data(),&npart);
-  //kindex-=1;
-  // Note: u(ipart,jpart=kindex(ipart)) makes maximum contribution.
-  //std::cout << kindex << std::endl;
-  // Then calculate log gradients to estimate distance.
+  // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
   const Matrix& mat(*matrix[islice]);
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -179,6 +180,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad; grad=0.0;
       grad[0]=(*pg).grad(fabs(delta[0]));
+      if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
       Vec ri=r2(ipart+ifirst);
       double ri2=0, rirj=0;
@@ -191,7 +193,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=2*c*(ri[i]-coshwt*rj[i])*ear2;
       }
       grad*=exp(-c*((ri2+rj2)*coshwt-2*rirj));
-      if (jpart==kindex(ipart)) {
+      if (ipart==kindex(islice,jpart)) {
         fgrad=grad/(ear2*exp(-c*((ri2+rj2)*coshwt-2.0*rirj)));
       }
       logGrad+=mat(jpart,ipart)*grad;
@@ -203,13 +205,13 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     Vec logGrad=0.0, fgrad=0.0;
     Vec ri=r2(ipart+ifirst);
     double ri2=0; for (int i=1; i<NDIM; ++i) ri2+=ri[i]*ri[i];
-    Vec bigTerm=0.0;
     for(int jpart=0; jpart<npart; ++jpart) {
       // Free particle in idim=0.
       Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
       cell.pbc(delta);
       Vec grad; grad=0.0;
       grad[0]=(*pg).grad(fabs(delta[0]));
+      if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
       Vec rj=r1(jpart+ifirst);
       double rj2=0, rirj=0;
@@ -222,7 +224,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=2*c*(rj[i]-coshwt*ri[i])*ear2;
       }
       grad*=exp(-c*((ri2+rj2)*coshwt-2*rirj));
-      if (jpart==kindex(ipart)) {
+      if (ipart==kindex(islice,jpart)) {
         fgrad=grad/(ear2*exp(-c*((ri2+rj2)*coshwt-2.0*rirj)));
       }
       logGrad+=mat(jpart,ipart)*grad;
@@ -377,57 +379,6 @@ void WireNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
   }*/
 }
 
-/*int main(int argc, char** argv) {
-  const double SCALE_RAND=1./RAND_MAX;
-  const double EPS=1e-4;
-  std::cout << "Test free particle nodes" << std::endl;
-  const int npart=(int)pow(2,NDIM);
-  Species *species=new Species("e",npart,1.0,-1.0,2,true);  
-  species->ifirst=0;
-  std::vector<Species*> speciesList(1), speciesIndex(npart);
-  speciesList[0]=species;
-  for (int i=0; i<npart; ++i) speciesIndex[i]=species;
-  const double temperature=0.01, tau=0.01;
-  const int nslice = (int)(1.0/(temperature*tau));
-  SuperCell *cell=new SuperCell(SuperCell::Vec(10.));
-  cell->computeRecipricalVectors();
-  SimulationInfo simInfo(cell,npart,speciesList,speciesIndex,temperature,
-                         tau,nslice);
-  WireNodes nodes(simInfo, *species, temperature, 4);
-  // Put particles on a grid with random displacements.
-  WireNodes::VArray r1(npart), r2(npart);
-  for (int ipart=0; ipart<npart; ++ipart) {
-    for (int idim=0; idim<NDIM; ++idim) {
-      int i=(ipart/(int)pow(2,idim))&1;
-      r1(ipart)[idim]=r2(ipart)[idim]=2.5-5.0*i;
-      r1(ipart)[idim]+=1.0*(SCALE_RAND*rand()-0.5);
-      r2(ipart)[idim]+=1.0*(SCALE_RAND*rand()-0.5);
-    }
-  }
-  WireNodes::Vec delta=r1(0.0)-r2(0.0);
-  nodes.evaluate(r1,r2,0);
-  double d=nodes.evaluateDistance(r1,r2,0);
-  std::cout << "Distance to node " << d << std::endl;
-  // Now check forces.
-  WireNodes::VArray f(npart);
-  nodes.evaluateGradLogDist(r1,r2,0,f,d);
-  for (int ipart=0; ipart<npart; ++ipart) {
-    for (int idim=0; idim<NDIM; ++idim) {
-      std::cout << ipart << "[" << idim << "] = " << f(ipart)[idim] << " ";
-      r1(ipart)[idim]+=EPS;
-      nodes.evaluate(r1,r2,0);
-      double dp=nodes.evaluateDistance(r1,r2,0);
-      r1(ipart)[idim]-=2*EPS;
-      nodes.evaluate(r1,r2,0);
-      double dm=nodes.evaluateDistance(r1,r2,0);
-      r1(ipart)[idim]+=EPS;
-      std::cout << "(numerical derivative: " 
-                << (dp-dm)/(2*EPS*d) << ")" << std::endl;
-    }
-  }
-  return 0;
-}*/
-
 const double WireNodes::EPSILON=1e-6;
 
 WireNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, int npart,
@@ -532,16 +483,6 @@ void WireNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
 void WireNodes::MatrixUpdate::evaluateNewDistance(
     const VArray& r1, const VArray& r2,
     const int islice, Array &d1, Array &d2) {
-  // First find dominant contribution to determinant.
-  const int MODE=2;
-  float usum=0;
-  //std::cout << uarray << std::endl;
-  //ASSNDX_F77(&MODE,wireNodes.uarray.data(),&npart,&npart,&npart,
-  //           wireNodes.kindex.data(),
-  //           &usum,wireNodes.kwork.data(),&npart);
-  //wireNodes.kindex-=1;
-  // Note: u(ipart,jpart=kindex(ipart)) makes maximum contribution.
-  //std::cout << kindex << std::endl;
   // Then calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
   const Matrix& mat(*newMatrix[islice]);
@@ -555,6 +496,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
       wireNodes.cell.pbc(delta);
       Vec grad; grad=0.0;
       grad[0]=(*wireNodes.pg).grad(fabs(delta[0]));
+      if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
       Vec ri=r2(ipart+wireNodes.ifirst);
       double ri2=0, rirj=0;
@@ -567,7 +509,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=2*wireNodes.c*(ri[i]-wireNodes.coshwt*rj[i])*ear2;
       }
       grad*=exp(-wireNodes.c*((ri2+rj2)*wireNodes.coshwt-2*rirj));
-      if (jpart==wireNodes.kindex(ipart)) {
+      if (ipart==wireNodes.kindex(islice,jpart)) {
         fgrad=grad/(ear2*exp(-wireNodes.c*
                                ((ri2+rj2)*wireNodes.coshwt-2.0*rirj)));
       }
@@ -581,13 +523,13 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
     Vec logGrad=0.0, fgrad=0.0;
     Vec ri=r2(ipart+wireNodes.ifirst);
     double ri2=0; for (int i=1; i<NDIM; ++i) ri2+=ri[i]*ri[i];
-    Vec bigTerm=0.0;
     for(int jpart=0; jpart<npart; ++jpart) {
       // Free particle in idim=0.
       Vec delta=r2(ipart+wireNodes.ifirst)-r1(jpart+wireNodes.ifirst);
       wireNodes.cell.pbc(delta);
       Vec grad; grad=0.0;
       grad[0]=(*wireNodes.pg).grad(fabs(delta[0]));
+      if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
       Vec rj=r1(jpart+wireNodes.ifirst);
       double rj2=0, rirj=0;
@@ -600,7 +542,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=2*wireNodes.c*(rj[i]-wireNodes.coshwt*ri[i])*ear2;
       }
       grad*=exp(-wireNodes.c*((ri2+rj2)*wireNodes.coshwt-2*rirj));
-      if (jpart==wireNodes.kindex(ipart)) {
+      if (ipart==wireNodes.kindex(jpart)) {
         fgrad=grad/(ear2*exp(-wireNodes.c*((ri2+rj2)
                              *wireNodes.coshwt-2.0*rirj)));
       }

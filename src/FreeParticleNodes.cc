@@ -35,7 +35,7 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
 #define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
-extern "C" void ASSNDX_F77(const int *mode, const float *a, const int *n, 
+extern "C" void ASSNDX_F77(const int *mode, float *a, const int *n, 
   const int *m, const int *ida, int *k, float *sum, int *iw, const int *idw);
 
 FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
@@ -160,7 +160,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
   Matrix& mat(*matrix[islice]);
-  // Then calculate log gradients to estimate distance.
+  // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
