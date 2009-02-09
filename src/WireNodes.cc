@@ -251,7 +251,7 @@ WireNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, int npart,
     smallDet(maxMovers,maxMovers),
     matrix(matrix),
     ipiv(maxMovers),lwork(maxMovers*maxMovers),work(lwork),
-    isNewMatrixUpdated(false),index1(maxMovers),nMoving(0) {
+    isNewMatrixUpdated(false),index1(maxMovers),mindex1(maxMovers),nMoving(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     newMatrix[i] = new Matrix(npart,npart,ColMajor());
     phi[i] = new Matrix(npart,maxMovers,ColMajor());
@@ -268,13 +268,16 @@ double WireNodes::MatrixUpdate::evaluateChange(
   const IArray& movingIndex(sampler.getMovingIndex(1));
   nMoving=0;
   for (int i=0; i<movingIndex.size(); ++i) {
-    if (movingIndex(i)>=wireNodes.ifirst && movingIndex(i)<wireNodes.npart) {
-      index1(nMoving++) = movingIndex(i);
+    if (movingIndex(i) >= wireNodes.ifirst &&
+        movingIndex(i) < wireNodes.npart+wireNodes.ifirst) {
+      index1(nMoving) = movingIndex(i);
+      mindex1(nMoving) = i;
+      ++nMoving;
     }
   }
   // Compute new Slater matrix elements for moving particles.
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
-    Vec rj=movingBeads1(jmoving,islice);
+    Vec rj=movingBeads1(mindex1(jmoving),islice);
     double rj2=0; for (int i=1; i<NDIM; ++i) rj2+=rj[i]*rj[i];
     for (int ipart=0; ipart<npart; ++ipart) {
       Vec ri=sectionBeads2(ipart+wireNodes.ifirst,islice);

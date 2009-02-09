@@ -407,7 +407,7 @@ FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel,
     smallDet(maxMovers,maxMovers),
     matrix(matrix),
     ipiv(maxMovers),lwork(maxMovers*maxMovers),work(lwork),
-    isNewMatrixUpdated(false),index1(maxMovers),nMoving(0) {
+    isNewMatrixUpdated(false),index1(maxMovers),mindex1(maxMovers),nMoving(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     newMatrix[i] = new Matrix(npart,npart,ColMajor());
     phi[i] = new Matrix(npart,maxMovers,ColMajor());
@@ -424,14 +424,17 @@ double FreeParticleNodes::MatrixUpdate::evaluateChange(
   const IArray &movingIndex(sampler.getMovingIndex(1));
   nMoving=0;
   for (int i=0; i<movingIndex.size(); ++i) {
-    if (movingIndex(i)>=fpNodes.ifirst && movingIndex(i)<fpNodes.npart) {
-      index1(nMoving++) = movingIndex(i);
+    if (movingIndex(i) >= fpNodes.ifirst &&
+        movingIndex(i) < fpNodes.npart+fpNodes.ifirst) {
+      index1(nMoving) = movingIndex(i);
+      mindex1(nMoving) = i;
+      ++nMoving;
     }
   }
   // Compute new slater matrix elements for moving particles.
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
     for (int ipart=0; ipart<npart; ++ipart) {
-      Vec delta(movingBeads1(jmoving,islice)
+      Vec delta(movingBeads1(mindex1(jmoving),islice)
                -sectionBeads2(ipart+fpNodes.ifirst,islice));
       fpNodes.cell.pbc(delta);
       double ear2=1;
