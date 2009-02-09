@@ -407,7 +407,7 @@ FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel,
     smallDet(maxMovers,maxMovers),
     matrix(matrix),
     ipiv(maxMovers),lwork(maxMovers*maxMovers),work(lwork),
-    isNewMatrixUpdated(false) {
+    isNewMatrixUpdated(false),index1(maxMovers),nMoving(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     newMatrix[i] = new Matrix(npart,npart,ColMajor());
     phi[i] = new Matrix(npart,maxMovers,ColMajor());
@@ -418,11 +418,16 @@ FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel,
 double FreeParticleNodes::MatrixUpdate::evaluateChange(
     const DoubleMLSampler &sampler, int islice) {
   isNewMatrixUpdated=false;
-  // Get info on moving paths.
   const Beads<NDIM>& sectionBeads2=sampler.getSectionBeads(2);
   const Beads<NDIM>& movingBeads1=sampler.getMovingBeads(1);
-  index1=&sampler.getMovingIndex(1); 
-  nMoving=index1->size();
+  // Get info on moving paths of this species.
+  const IArray &movingIndex(sampler.getMovingIndex(1));
+  nMoving=0;
+  for (int i=0; i<movingIndex.size(); ++i) {
+    if (movingIndex(i)>=fpNodes.ifirst && movingIndex(i)<fpNodes.npart) {
+      index1(nMoving++) = movingIndex(i);
+    }
+  }
   // Compute new slater matrix elements for moving particles.
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
     for (int ipart=0; ipart<npart; ++ipart) {
@@ -434,7 +439,7 @@ double FreeParticleNodes::MatrixUpdate::evaluateChange(
       (*phi[islice])(ipart,jmoving)=ear2;
     }
     for (int imoving=0; imoving<nMoving; ++imoving) {
-      int ipart=(*index1)(imoving)-fpNodes.ifirst;
+      int ipart=index1(imoving)-fpNodes.ifirst;
       (*bvec[islice])(ipart,jmoving)=0;
       for (int k=0; k<npart; ++k) {
         (*bvec[islice])(ipart,jmoving)
@@ -445,7 +450,7 @@ double FreeParticleNodes::MatrixUpdate::evaluateChange(
   // Compute change in the slater determinant.
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
     for (int imoving=0; imoving<nMoving; ++imoving) {
-      int ipart=(*index1)(imoving)-fpNodes.ifirst;
+      int ipart=index1(imoving)-fpNodes.ifirst;
       smallDet(imoving,jmoving)=(*bvec[islice])(ipart,jmoving);
     }
   }
@@ -464,7 +469,7 @@ double FreeParticleNodes::MatrixUpdate::evaluateChange(
 void FreeParticleNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
   *newMatrix[islice]=*matrix[islice];
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
-    int jpart=(*index1)(jmoving)-fpNodes.ifirst;
+    int jpart=index1(jmoving)-fpNodes.ifirst;
     double bjjinv=0;
     for (int k=0; k<npart; ++k) {
       bjjinv += (*phi[islice])(k,jmoving)*(*newMatrix[islice])(jpart,k);
@@ -541,7 +546,7 @@ void FreeParticleNodes::MatrixUpdate::acceptLastMove(int nslice) {
   } else {
     for (int islice=1; islice<nslice-1; ++islice) {
       for (int jmoving=0; jmoving<nMoving; ++jmoving) {
-        int jpart=(*index1)(jmoving)-fpNodes.ifirst;
+        int jpart=index1(jmoving)-fpNodes.ifirst;
         double bjjinv=0;
         for (int k=0; k<npart; ++k) {
           bjjinv += (*phi[islice])(k,jmoving)*(*matrix[islice])(jpart,k);

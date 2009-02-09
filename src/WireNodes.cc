@@ -238,145 +238,6 @@ void WireNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
        const int islice, VMatrix &gradd1, VMatrix &gradd2, 
        const Array& dist1, const Array& dist2) {
   gradd1=0.; gradd2=0.; 
-/*  const Matrix& mat(*matrix[islice]);
-  // ipart is the index of the particle in the gradient.
-  // jpart is the index of the particle in the distance.
-  for (int ipart=0; ipart<npart; ++ipart) {
-    for (int jpart=0; jpart<npart; ++jpart) {
-      // First treat d1 terms.
-      if (ipart==jpart) {
-        Mat d2ii=Mat(0.0);
-        for(int kpart=0; kpart<npart; ++kpart) {
-          Vec delta=r1(ipart+ifirst)-r2(kpart+ifirst);
-          cell.pbc(delta);
-          Mat d2iik=Mat(0.0);
-          for (int i=0; i<NDIM; ++i) {
-            for (int j=0; j<NDIM; ++j) {
-              if (i==j) {
-                d2iik(i,j)=(*pg[i]).d2(fabs(delta[i]))
-                          /(*pg[i])(fabs(delta[i]));
-              } else {
-                d2iik(i,j)=(*pg[i]).grad(fabs(delta[i]))
-                          /(*pg[i])(fabs(delta[i])) 
-                          *(*pg[j]).grad(fabs(delta[j]))
-                          /(*pg[j])(fabs(delta[j]));
-                if (delta[i]*delta[j]<0) d2iik(i,j)=-d2iik(i,j);
-              }
-            }
-          }
-          d2ii+=mat(ipart,kpart)*d2iik;
-        }
-        for (int i=0; i<NDIM; ++i) {
-          for (int j=0; j<NDIM; ++j) {
-            gradd1(ipart+ifirst,jpart+ifirst)(i)=gradArray1(jpart)(j)*d2ii(j,i);
-          }
-        }
-      } else { // ipart!=jpart
-        // Two derivatives act on different columns, so you get a 2x2 det.
-        Vec g00(0.0),g01(0.0),g10(0.0),g11(0.0);
-        for(int kpart=0; kpart<npart; ++kpart) {
-          // First derivative acts on particle ipart.
-          Vec delta=r1(ipart+ifirst)-r2(kpart+ifirst);
-          cell.pbc(delta);
-          Vec grad;
-          for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-            if (delta[i]<0) grad[i]=-grad[i];
-          }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
-          g00 += mat(ipart,kpart)*grad;
-          g10 += mat(jpart,kpart)*grad;
-          // Next derivative acts on particle jpart.
-          delta=r1(jpart+ifirst)-r2(kpart+ifirst);
-          cell.pbc(delta);
-          for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-            if (delta[i]<0) grad[i]=-grad[i];
-          }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
-          g01 += mat(ipart,kpart)*grad;
-          g11 += mat(jpart,kpart)*grad;
-        }
-        for (int i=0; i<NDIM; ++i) {
-          for (int j=0; j<NDIM; ++j) {
-            gradd1(ipart+ifirst,jpart+ifirst)(i)=gradArray1(jpart)(j)
-                                 *(g00(i)*g11(j)-g10(i)*g01(j));
-          }
-        }
-      }
-      // Then treat d2 terms.
-      // Derivative on row is a sum of derivatives on each column.
-      for(int lpart=0; lpart<npart; ++lpart) {
-        if (ipart==lpart) {
-          // Only one term is non-zero. NEED TO CHECK THESE DERIVATIVES
-          Vec delta=r1(ipart+ifirst)-r2(jpart+ifirst);
-          cell.pbc(delta);
-          Mat d2ii=Mat(0.0);
-          for (int i=0; i<NDIM; ++i) {
-            for (int j=0; j<NDIM; ++j) {
-              if (i==j) {
-                d2ii(i,j)=(*pg[i]).d2(fabs(delta[i]))
-                         /(*pg[i])(fabs(delta[i]));
-              } else {
-                d2ii(i,j)=(*pg[i]).grad(fabs(delta[i]))
-                         /(*pg[i])(fabs(delta[i])) 
-                         *(*pg[j]).grad(fabs(delta[j]))
-                         /(*pg[j])(fabs(delta[j]));
-                if (delta[i]*delta[j]>=0) d2ii(i,j)=-d2ii(i,j);
-              }
-            }
-          }
-          d2ii*=mat(ipart,jpart);
-          for (int i=0; i<NDIM; ++i) {
-            for (int j=0; j<NDIM; ++j) {
-              gradd2(ipart+ifirst,jpart+ifirst)(i)=gradArray2(jpart)(j)*d2ii(j,i);
-            }
-          }
-        } else { // ipart!=lpart
-          // Two derivatives act on different columns, so you get a 2x2 det.
-          Vec g00(0.0),g01(0.0),g10(0.0),g11(0.0);
-          for(int kpart=0; kpart<npart; ++kpart) {
-            // First derivative acts on particle ipart.
-            Vec delta=r1(ipart+ifirst)-r2(kpart+ifirst);
-            cell.pbc(delta);
-            Vec grad;
-            for (int i=0; i<NDIM; ++i) {
-              grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-              if (delta[i]<0) grad[i]=-grad[i];
-            }
-            for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
-            g00 += mat(ipart,kpart)*grad;
-            g10 += mat(lpart,kpart)*grad;
-          }
-          // Next derivative acts on particle jpart.
-          Vec delta=r2(jpart+ifirst)-r1(lpart+ifirst);
-          cell.pbc(delta);
-          Vec grad(0.0);
-          for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-            if (delta[i]<0) grad[i]=-grad[i];
-          }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
-          g01 = mat(ipart,jpart)*grad;
-          g11 = mat(lpart,jpart)*grad;
-          for (int i=0; i<NDIM; ++i) {
-            for (int j=0; j<NDIM; ++j) {
-              gradd2(ipart+ifirst,jpart+ifirst)(i)=gradArray2(jpart)(j)
-                                   *(g00(i)*g11(j)-g10(i)*g01(j));
-            }
-          }
-        }
-      }
-      // Put in prefactors.
-      gradd1(ipart+ifirst,jpart+ifirst)
-        *= -(tau/mass)*dist1(jpart+ifirst)*dist1(jpart+ifirst);
-      gradd2(ipart+ifirst,jpart+ifirst)
-        *= -(tau/mass)*dist2(jpart+ifirst)*dist2(jpart+ifirst);
-      // Then add linear (j independent) contribution.
-      gradd1(ipart+ifirst,jpart+ifirst)+=gradArray1(ipart);
-      gradd2(ipart+ifirst,jpart+ifirst)+=gradArray1(ipart);
-    }
-  }*/
 }
 
 const double WireNodes::EPSILON=1e-6;
@@ -390,7 +251,7 @@ WireNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, int npart,
     smallDet(maxMovers,maxMovers),
     matrix(matrix),
     ipiv(maxMovers),lwork(maxMovers*maxMovers),work(lwork),
-    isNewMatrixUpdated(false) {
+    isNewMatrixUpdated(false),index1(maxMovers),nMoving(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     newMatrix[i] = new Matrix(npart,npart,ColMajor());
     phi[i] = new Matrix(npart,maxMovers,ColMajor());
@@ -401,11 +262,16 @@ WireNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, int npart,
 double WireNodes::MatrixUpdate::evaluateChange(
     const DoubleMLSampler &sampler, int islice) {
   isNewMatrixUpdated=false;
-  // Get info on moving paths.
   const Beads<NDIM>& sectionBeads2=sampler.getSectionBeads(2);
   const Beads<NDIM>& movingBeads1=sampler.getMovingBeads(1);
-  index1=&sampler.getMovingIndex(1); 
-  nMoving=index1->size();
+  // Get info on moving paths of this species.
+  const IArray& movingIndex(sampler.getMovingIndex(1));
+  nMoving=0;
+  for (int i=0; i<movingIndex.size(); ++i) {
+    if (movingIndex(i)>=wireNodes.ifirst && movingIndex(i)<wireNodes.npart) {
+      index1(nMoving++) = movingIndex(i);
+    }
+  }
   // Compute new Slater matrix elements for moving particles.
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
     Vec rj=movingBeads1(jmoving,islice);
@@ -427,7 +293,7 @@ double WireNodes::MatrixUpdate::evaluateChange(
                                *wireNodes.coshwt-2.0*rirj));
     }
     for (int imoving=0; imoving<nMoving; ++imoving) {
-      int ipart=(*index1)(imoving)-wireNodes.ifirst;
+      int ipart=index1(imoving)-wireNodes.ifirst;
       (*bvec[islice])(ipart,jmoving)=0;
       for (int k=0; k<npart; ++k) {
         (*bvec[islice])(ipart,jmoving)
@@ -438,7 +304,7 @@ double WireNodes::MatrixUpdate::evaluateChange(
   // Compute change in the slater determinant.
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
     for (int imoving=0; imoving<nMoving; ++imoving) {
-      int ipart=(*index1)(imoving)-wireNodes.ifirst;
+      int ipart=index1(imoving)-wireNodes.ifirst;
       smallDet(imoving,jmoving)=(*bvec[islice])(ipart,jmoving);
     }
   }
@@ -457,7 +323,7 @@ double WireNodes::MatrixUpdate::evaluateChange(
 void WireNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
   *newMatrix[islice]=*matrix[islice];
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
-    int jpart=(*index1)(jmoving)-wireNodes.ifirst;
+    int jpart=index1(jmoving)-wireNodes.ifirst;
     double bjjinv=0;
     for (int k=0; k<npart; ++k) {
       bjjinv += (*phi[islice])(k,jmoving)*(*newMatrix[islice])(jpart,k);
@@ -564,7 +430,7 @@ void WireNodes::MatrixUpdate::acceptLastMove(int nslice) {
   } else {
     for (int islice=1; islice<nslice-1; ++islice) {
       for (int jmoving=0; jmoving<nMoving; ++jmoving) {
-        int jpart=(*index1)(jmoving)-wireNodes.ifirst;
+        int jpart=index1(jmoving)-wireNodes.ifirst;
         double bjjinv=0;
         for (int k=0; k<npart; ++k) {
           bjjinv += (*phi[islice])(k,jmoving)*(*matrix[islice])(jpart,k);

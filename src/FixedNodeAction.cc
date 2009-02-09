@@ -63,7 +63,7 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
   const int nMoving=index1.size();
   if (!nodeModel->dependsOnOtherParticles() ) {
     for (int i=0; i<nMoving; ++i) {
-      if ( (index1(i)>=ifirst && index1(i)<ifirst+nSpeciesPart)) continue;
+      if ( (index1(i)>=ifirst && index1(i)<ifirst+nSpeciesPart)) break;
       if (i==nMoving-1) {notMySpecies=true; return 0;}
     }
   }

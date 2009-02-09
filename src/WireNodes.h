@@ -93,7 +93,7 @@ public:
     /// Flag for updating inverse.
     bool isNewMatrixUpdated;
     /// Reference to moving particles.
-    const IArray* index1;    
+    IArray index1;    
     int nMoving;
   };
   /// Constructor.
