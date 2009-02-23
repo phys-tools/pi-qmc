@@ -121,7 +121,7 @@ void H5ReportBuilder::writeStep(EstimatorManager& manager) {
 void H5ReportBuilder::reportScalarStep(const ScalarEstimator& est) {
   hid_t space = H5Dget_space(*dset); 
   H5Sselect_none(space);
-#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR==6)&&(H5_VERS_RELEASE>=7))
   hsize_t element = istep;
   H5Sselect_elements(space, H5S_SELECT_SET, 1, &element);
 #else
