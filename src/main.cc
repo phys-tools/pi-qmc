@@ -39,62 +39,6 @@ void usage();
   * <p>This program implements the path integral Monte Carlo technique.
   * The goal of this program is to develop PIMC methods for applied 
   * physics.</p>
-  * @section goals Immediate Goals
-  * <p>There are three immediate goals to keep in mind:</p>
-  * <ul>
-  * <li>Simulate transport in quantum point contacts (John, Matthew).</li>
-  * <li>Create practical all-electron or all-valence-electron calculations
-        of atoms and molecules (John).</li>
-  * <li>Try spin-state sampling techniques. (Daejin, Hosam) </li>
-  * </ul>
-  * @section spin Spin sampling and and semiconductor spintronics
-  * <p>We should try spin sampling soon. Here is an outline of the approach.</p>
-  * <ul>
-  * <li>Add spin variables (done, in testing).</li>
-  * <li>Add spin sampling (done, in testing).</li>
-  * <li>Add magnetization estimator (done, in testing).</li>
-  * <li>Add magnetization estimator (done, in testing).</li>
-  * </ul>
-  * @section plan Implementation Plan
-  * <p> The code is now in its second phase of development, where we focus
-  *     on production runs. We need the following improvements:</p>
-  * <ol>
-  * <li>Test and develop new restart features (perhaps some functionality 
-        like qmcpack?).</li>
-  * <li>Implement built-in coulomb action for 2 and 3 dimensions 
-        (partially done).</li>
-  * <li>Add long range coulomb action with Ewald sums. (partially done)</li>
-  * <li>Improve estimators:
-  * <ol>
-  * <li>Design and implement general estimator manager.(done)</li>
-  * <li>Implement pair corelation functions, structure factors, and 
-  *     polarization estimators.(in progress)</li>
-  * <li>Collect statistics on accept/reject rates. (done)</li>
-  * <li>Develop new nodal models for atoms and molecules.</li>
-  * <li>Develop a demo feature and help option (started).</li>
-  * <li>Implement superfluid estimator.</li>
-  * </ol>
-  * </li>
-  * <li>Implement position dependent mass.</li>
-  * <li>Implement and test spin sampling. (in progress)</li>
-  * <li>Implement and test pseudopotential or pseudohamiltonian.</li>
-  * </ol>
-  * @section outline Outline of code
-  * <p>The classes can be viewed in the Class Hierarchy or the Compound
-  * Members list.  The program runs by calling the MainParser
-  * (a subclass of XMLParser), which
-  * constructs and runs a SerialPIMC simulation object, using
-  * input from an XML file "pimc.xml".</p>
-  * <p>The PIMC algorithm is implemented in SerialPIMC, which also stores
-  * the Beads and global permutation.
-  * Sampling is implemented in MultiLevelSampler, which has a local copy
-  * of moving Beads.  Trial paths are grown using FreeMover for free 
-  * particle sampling.</p>
-  * @todo Add built-in coulomb interaction.
-  * @todo Add local pseudopotentials.
-  * @todo Debug spinors.
-  * @todo Add help and demo features.
-  * @todo Implement atomic and molecular nodes.
   * @author John Shumway */
 int main(int argc, char** argv) {
   int rank=0;

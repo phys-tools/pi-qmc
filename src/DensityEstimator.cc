@@ -36,7 +36,8 @@ DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species &spec, int N,
     const Vec &min, const Vec &max, const IVec &nbin,
     const DistArray &dist, MPIManager *mpi) 
-  : N(N), min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
+  : ArrayBlockedEstimator(name,true),
+    N(N), min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
     cell(*simInfo.getSuperCell()), 
     ifirst(spec.ifirst), npart(spec.count), mpi(mpi) {
   //BlitzArrayBlkdEst<N>::norm=0;
@@ -59,7 +60,7 @@ void DensityEstimator::handleLink(const Vec& start, const Vec& end,
     Vec r=start;
     //IVecN ibin=0;
     for (int i=0; i<N; ++i) {
-      double d=(*dist[i])(r,cell);
+      //double d=(*dist[i])(r,cell);
       //ibin[i]=int((d-min[i])*deltaInv[i]);
       //if (d<min[i] || ibin[i]>nbin[i]-1) break;
       //if (i==N-1) ++temp(ibin);

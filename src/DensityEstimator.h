@@ -22,7 +22,7 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "stats/BlitzArrayBlkdEst.h"
+#include "stats/ArrayBlockedEstimator.h"
 #include "stats/MPIManager.h"
 #include "LinkSummable.h"
 #include "Paths.h"
@@ -38,7 +38,7 @@
  *  Implements several options for studying fluctations.
  *  @version $Revision: 12 $
  *  @author John Shumway  */
-class DensityEstimator : public LinkSummable {
+class DensityEstimator : public LinkSummable, public ArrayBlockedEstimator {
 public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int, NDIM> IVec;
@@ -72,7 +72,7 @@ public:
     double min;
   };
   typedef std::vector<Dist*> DistArray;
-  typedef std::Blitz<double,1> Array;
+  typedef blitz::Array<double,1> Array;
 
   /// Constructor.
   DensityEstimator(const SimulationInfo& simInfo, const std::string& name,
@@ -98,6 +98,24 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths);
 
+  /// Callback EstimatorReportBuilder method or blocked arrays.
+  virtual void startReport(EstimatorReportBuilder &builder) {
+    babe->startReport(builder);
+  }
+  /// Callback EstimatorReportBuilder method or blocked arrays.
+  virtual void reportStep(EstimatorReportBuilder &builder) {
+    babe->reportStep(builder);
+  }
+  /// Get number of dimensions in the array.
+  virtual int getNDim() {return babe->getNDim();}
+  /// Get the extent of the array in dimension idim.
+  virtual int getExtent(const int idim) {return babe->getExtent(idim);}
+  /// Get a pointer to the data.
+  virtual const void* getData() {return babe->getData();}
+  /// Get a pointer to the error array.
+  virtual const void* getError() {return babe->getError();}
+  virtual const void normalize() {babe->normalize();}
+  virtual const void unnormalize() {babe->unnormalize();}
 private:
   const int N;
   const Vec min;
@@ -105,8 +123,9 @@ private:
   const IVec nbin;
   const DistArray dist;
   SuperCell cell;
-  //Array temp;
+  Array temp;
   int ifirst, npart;
   MPIManager *mpi;
+  ArrayBlockedEstimator *babe;
 };
 #endif
