@@ -47,6 +47,10 @@ public:
   bool hasError() const {return hasErrorFlag;}
   virtual void normalize() const=0;
   virtual void unnormalize() const=0;
+  virtual bool hasScale() const=0;
+  virtual bool hasOrigin() const=0;
+  virtual const void* getScale() const=0;
+  virtual const void* getOrigin() const=0;
   protected:
   bool hasErrorFlag;
 };

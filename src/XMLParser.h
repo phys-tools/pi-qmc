@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,35 +27,41 @@
   * @author John Shumway */
 class XMLParser {
 public:
-/** Destructor. */
-virtual ~XMLParser() {};
-/** Parse some xml. */
-virtual void parse(const xmlXPathContextPtr& ctxt)=0;
+  typedef blitz::TinyVector<double,NDIM> Vec; 
+  typedef blitz::TinyVector<int,NDIM> IVec; 
+  /// Destructor.
+  virtual ~XMLParser() {};
+  /// Parse some xml.
+  virtual void parse(const xmlXPathContextPtr& ctxt)=0;
 protected:
-/** Get the name of the node.*/
-static std::string getName(const xmlNodePtr& node);
-/** Get a double valued attribute.*/
-static double getDoubleAttribute(const xmlNodePtr& node,
-                          const std::string& attName);
-/** Get an integer valued attribute.*/
-static int getIntAttribute(const xmlNodePtr& node,
-                       const std::string& attName);
-/** Get a string valued attribute.*/
-static std::string getStringAttribute(const xmlNodePtr& node,
+  /// Get the name of the node.
+  static std::string getName(const xmlNodePtr& node);
+  /// Get a double valued attribute.
+  static double getDoubleAttribute(const xmlNodePtr& node,
+                                   const std::string& attName);
+  /// Get an integer valued attribute.
+  static int getIntAttribute(const xmlNodePtr& node,
+                             const std::string& attName);
+  /// Get a string valued attribute.
+  static std::string getStringAttribute(const xmlNodePtr& node,
+                                        const std::string& attName);
+  /// Get a bool valued attribute.
+  static bool getBoolAttribute(const xmlNodePtr& node,
                                const std::string& attName);
-/** Get a bool valued attribute.*/
-static bool getBoolAttribute(const xmlNodePtr& node,
+  /// Get a vector valued attribute.
+  static Vec getVecAttribute(const xmlNodePtr& node,
+                             const std::string& attName);
+  /// Get a vector valued attribute.
+  static IVec getIVecAttribute(const xmlNodePtr& node,
                                const std::string& attName);
-/** Get a TinyVector valued attribute.*/
-static const blitz::TinyVector<double,NDIM> 
-  getVecAttribute(const xmlNodePtr& node);
+  /// Get the base of a link.
+  static std::string getLinkBase(const xmlNodePtr& node,
+                                 const std::string& attName="href");
 
-/** Get the base of a link.*/
-static std::string getLinkBase(const xmlNodePtr& node,
-                               const std::string& attName="href");
-
-/** Get the path of a link.*/
-static std::string getLinkPath(const xmlNodePtr& node,
-                               const std::string& attName="href");
+  /// Get the path of a link.
+  static std::string getLinkPath(const xmlNodePtr& node,
+                                 const std::string& attName="href");
+  /// Letters associated with directions in input file.
+  static const std::string dimName;
 };
 #endif

@@ -63,7 +63,7 @@ void SimInfoParser::parse(const xmlXPathContextPtr& ctxt) {
     xmlXPathObjectPtr obj2 = xmlXPathEval(BAD_CAST"AnisotropicMass",ctxt);
     if (obj2->nodesetval->nodeNr>0) {
       xmlNodePtr node=obj2->nodesetval->nodeTab[0];    
-      species->anMass = new Vec(getVecAttribute(node));
+      species->anMass = new Vec(getVecAttribute(node,""));
     }
     xmlXPathFreeObject(obj2);
   }
@@ -82,7 +82,7 @@ void SimInfoParser::parse(const xmlXPathContextPtr& ctxt) {
   xmlNodePtr node=obj->nodesetval->nodeTab[0]; ctxt->node=node;
   xmlXPathFreeObject(obj);
   const double a=getLengthAttribute(node,"a");
-  Vec extent = getVecAttribute(node);
+  Vec extent = getVecAttribute(node,"");
   simInfo->superCell=new SuperCell(a*extent);
   simInfo->superCell->computeRecipricalVectors();
   std::cout << "Supercell dimensions: "

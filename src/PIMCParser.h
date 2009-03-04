@@ -81,7 +81,5 @@ private:
   int nlevel;
   /// Count number of loop iterations surrounding an XML node.
   int getLoopCount(const xmlXPathContextPtr& ctxt);
-  /// Letters associated with directions in input file.
-  static const std::string dimName;
 };
 #endif

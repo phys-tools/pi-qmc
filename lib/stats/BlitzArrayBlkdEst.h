@@ -30,6 +30,7 @@ class BlitzArrayBlkdEst : public ArrayBlockedEstimator {
 public:
   typedef blitz::Array<float,N> ArrayN;
   typedef blitz::TinyVector<int,N> IVecN;
+  typedef blitz::TinyVector<double,N> VecN;
   /// Construct by giving the name and size.
   BlitzArrayBlkdEst(const std::string& name, const IVecN& n,
                     bool hasError);
@@ -64,6 +65,10 @@ public:
     }
     accumvalue*=accumnorm;
   }
+  virtual bool hasScale() const {return scale!=0;}
+  virtual bool hasOrigin() const {return origin!=0;}
+  virtual const void* getScale() const {return scale;}
+  virtual const void* getOrigin() const {return origin;}
 protected:
   static const int rank=N;
   const IVecN n;
@@ -71,6 +76,8 @@ protected:
   double norm, accumnorm;
   bool hasError;
   int iblock;
+  VecN* scale;
+  VecN* origin;
 };
 
 
@@ -80,7 +87,7 @@ BlitzArrayBlkdEst<N>::BlitzArrayBlkdEst(const std::string& name,
   const IVecN& n, bool hasError)
  : ArrayBlockedEstimator(name,hasError), n(n), value(n), accumvalue(n),
    accumvalue2(hasError?n:n*0), norm(0), accumnorm(0),
-   hasError(hasError), iblock(0) {
+   hasError(hasError), iblock(0), scale(0), origin(0) {
   value=0; accumvalue=0; accumvalue2=0;
 }
 

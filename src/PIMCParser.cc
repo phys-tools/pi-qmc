@@ -326,5 +326,3 @@ int PIMCParser::getLoopCount(const xmlXPathContextPtr& ctxt) {
   xmlXPathFreeObject(obj);
   return count;
 }
-
-const std::string PIMCParser::dimName="xyzklmnopqrstuv";

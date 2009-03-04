@@ -23,6 +23,7 @@
 #include <mpi.h>
 #endif
 #include "stats/ArrayBlockedEstimator.h"
+#include "stats/BlitzArrayBlkdEst.h"
 #include "stats/MPIManager.h"
 #include "LinkSummable.h"
 #include "Paths.h"
@@ -38,45 +39,38 @@
  *  Implements several options for studying fluctations.
  *  @version $Revision: 12 $
  *  @author John Shumway  */
-class DensityEstimator : public LinkSummable, public ArrayBlockedEstimator {
+class DensityEstimator : public LinkSummable, public BlitzArrayBlkdEst<NDIM> {
 public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int, NDIM> IVec;
   /// Base class for distance functions.
   class Dist {public: 
-    virtual double operator()(const Vec &r, const SuperCell &cell)=0;
+    virtual double operator()(const Vec &r)=0;
   };
   /// Distance taken from radial separation.
   class Radial : public Dist {
   public:
-    Radial(int idir=-1, Vec center=Vec(0.)) 
-      : mask(1.0), center(center) {
+    Radial(int idir=-1) : mask(1.0) {
       if (idir!=-1) mask(idir)=0;
     }
-    virtual double operator()(const Vec &r, const SuperCell &cell) {
-      Vec delta=r-center;
+    virtual double operator()(const Vec &r) {
       double radius2=0;
-      for (int i=0; i<NDIM; ++i) radius2 += delta(i)*delta(i)*mask(i);
+      for (int i=0; i<NDIM; ++i) radius2 += r(i)*r(i)*mask(i);
       return sqrt(radius2);
     }
-    Vec mask, center;
+    Vec mask;
   };
-  /// Distance taken from cartesian position of particle.
-  class Cart1 : public Dist { public:
-    Cart1(int idim, double min=0.) : idim(idim), min(min) {};
+  /// Distance taken from Cartesian position of particle.
+  class Cart : public Dist { public:
+    Cart(int idim) : idim(idim) {};
     int idim;
-    virtual double operator()(const Vec &r,
-                              const SuperCell &cell) {
-      return r[idim]-min;
-    };
-    double min;
+    virtual double operator()(const Vec &r) {return r[idim];};
   };
   typedef std::vector<Dist*> DistArray;
-  typedef blitz::Array<double,1> Array;
 
   /// Constructor.
   DensityEstimator(const SimulationInfo& simInfo, const std::string& name,
-      const Species &s1, int N, const Vec &min, const Vec &max,
+      const Species *s, const Vec &min, const Vec &max,
       const IVec &nbin, const DistArray &dist, MPIManager *mpi); 
 
   /// Virtual destructor.
@@ -98,34 +92,14 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths);
 
-  /// Callback EstimatorReportBuilder method or blocked arrays.
-  virtual void startReport(EstimatorReportBuilder &builder) {
-    babe->startReport(builder);
-  }
-  /// Callback EstimatorReportBuilder method or blocked arrays.
-  virtual void reportStep(EstimatorReportBuilder &builder) {
-    babe->reportStep(builder);
-  }
-  /// Get number of dimensions in the array.
-  virtual int getNDim() {return babe->getNDim();}
-  /// Get the extent of the array in dimension idim.
-  virtual int getExtent(const int idim) {return babe->getExtent(idim);}
-  /// Get a pointer to the data.
-  virtual const void* getData() {return babe->getData();}
-  /// Get a pointer to the error array.
-  virtual const void* getError() {return babe->getError();}
-  virtual const void normalize() {babe->normalize();}
-  virtual const void unnormalize() {babe->unnormalize();}
 private:
-  const int N;
   const Vec min;
   const Vec deltaInv;
   const IVec nbin;
   const DistArray dist;
   SuperCell cell;
-  Array temp;
+  ArrayN temp;
   int ifirst, npart;
   MPIManager *mpi;
-  ArrayBlockedEstimator *babe;
 };
 #endif

@@ -29,6 +29,7 @@
 #include "ConductivityEstimator.h"
 #include "ConductanceEstimator.h"
 #include "DensDensEstimator.h"
+#include "DensityEstimator.h"
 #include "CoulombEnergyEstimator.h"
 #include "EwaldCoulombEstimator.h"
 #include "DoubleAction.h"
@@ -262,6 +263,25 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (norder==0) norder=1;
       manager->add(new ConductanceEstimator(simInfo,nfreq,0,
                            useSpeciesTensor,idim,useCharge,mpi,norder));
+    }
+    if (name=="DensityEstimator") {
+      bool useCharge=getBoolAttribute(estNode,"useCharge");
+      std::string species=getStringAttribute(estNode,"species");
+      const Species *spec = 0;
+      if (species!="" && species!="all") spec=&simInfo.getSpecies(species);
+      std::string name=getStringAttribute(estNode,"name");
+      if (name=="") {
+        name = "rho";
+        if (spec) name += species;
+      }
+      IVec nbin = getIVecAttribute(estNode,"n");
+      double a = getLengthAttribute(estNode,"a");
+      Vec min=-0.5*a*nbin;
+      Vec max=0.5*a*nbin;
+      DensityEstimator::DistArray dist(NDIM);
+      for (int i=0; i<NDIM; ++i) dist[i]=new DensityEstimator::Cart(i);
+      manager->add(new DensityEstimator(simInfo,name,spec,
+                                        min,max,nbin,dist, mpi));
     }
     if (name=="DensDensEstimator") {
       int nbin=getIntAttribute(estNode,"nbin");

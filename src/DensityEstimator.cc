@@ -21,7 +21,6 @@
 #include <mpi.h>
 #endif
 #include "DensityEstimator.h"
-#include "stats/BlitzArrayBlkdEst.h"
 #include "stats/MPIManager.h"
 #include "LinkSummable.h"
 #include "Paths.h"
@@ -33,19 +32,22 @@
 #include "Paths.h"
 
 DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
-    const std::string& name, const Species &spec, int N,
+    const std::string& name, const Species *spec,
     const Vec &min, const Vec &max, const IVec &nbin,
     const DistArray &dist, MPIManager *mpi) 
-  : ArrayBlockedEstimator(name,true),
-    N(N), min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
-    cell(*simInfo.getSuperCell()), 
-    ifirst(spec.ifirst), npart(spec.count), mpi(mpi) {
-  //BlitzArrayBlkdEst<N>::norm=0;
+  : BlitzArrayBlkdEst<NDIM>(name,nbin,false),
+    min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
+    cell(*simInfo.getSuperCell()),temp(nbin), 
+    ifirst(spec->ifirst), npart(spec->count), mpi(mpi) {
+  scale=new Vec((max-min)/nbin);
+  origin=new Vec(min);
 }
 
 
 DensityEstimator::~DensityEstimator() {
-  for (int i=0; i<N; ++i) delete dist[i];
+  for (int i=0; i<NDIM; ++i) delete dist[i];
+  delete scale;
+  delete origin;
 }
 
 void DensityEstimator::initCalc(const int nslice,
@@ -58,12 +60,12 @@ void DensityEstimator::handleLink(const Vec& start, const Vec& end,
     const int ipart, const int islice, const Paths &paths) {
   if (ipart>=ifirst && ipart<ifirst+npart) {
     Vec r=start;
-    //IVecN ibin=0;
-    for (int i=0; i<N; ++i) {
-      //double d=(*dist[i])(r,cell);
-      //ibin[i]=int((d-min[i])*deltaInv[i]);
-      //if (d<min[i] || ibin[i]>nbin[i]-1) break;
-      //if (i==N-1) ++temp(ibin);
+    IVec ibin=0;
+    for (int i=0; i<NDIM; ++i) {
+      double d=(*dist[i])(r);
+      ibin[i]=int((d-min[i])*deltaInv[i]);
+      if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
+      if (i==NDIM-1) ++temp(ibin);
     }
   }
 }
@@ -87,7 +89,8 @@ void DensityEstimator::endCalc(const int nslice) {
 #endif
   ///Need code for multiple workers!
   if (workerID==0) {
-    //BlitzArrayBlkdEst<N>::value+=temp;
+    BlitzArrayBlkdEst<NDIM>::value+=temp;
+    norm+=1;
   }
 }
 

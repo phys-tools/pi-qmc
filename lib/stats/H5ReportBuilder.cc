@@ -162,6 +162,37 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
   hid_t dataSetID = H5Dcreate(writingGroupID, est.getName().c_str(),
                               H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT);
 #endif
+
+  if (est.hasScale()) {
+    hsize_t dim=est.getNDim();
+    hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "scale", H5T_NATIVE_DOUBLE,
+                              attrSpaceID, H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "scale",
+                             H5T_NATIVE_DOUBLE, attrSpaceID, H5P_DEFAULT);
+#endif
+    H5Sclose(attrSpaceID);
+    H5Awrite(attrID, H5T_NATIVE_DOUBLE, est.getScale()); 
+    H5Aclose(attrID);
+  }
+
+  if (est.hasOrigin()) {
+    hsize_t dim=est.getNDim();
+    hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "origin", H5T_NATIVE_DOUBLE,
+                              attrSpaceID, H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "origin",
+                             H5T_NATIVE_DOUBLE, attrSpaceID, H5P_DEFAULT);
+#endif
+    H5Sclose(attrSpaceID);
+    H5Awrite(attrID, H5T_NATIVE_DOUBLE, est.getOrigin()); 
+    H5Aclose(attrID);
+  }
+
   H5Sclose(dataSpaceID);
   dataset.push_back(dataSetID);
 

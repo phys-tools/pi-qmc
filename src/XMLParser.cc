@@ -57,20 +57,21 @@ std::string XMLParser::getStringAttribute(const xmlNodePtr& node,
   return value;
 }
 
-const blitz::TinyVector<double,NDIM> 
-XMLParser::getVecAttribute(const xmlNodePtr& node) {
-  blitz::TinyVector<double,NDIM> v;
-  v[0]=getDoubleAttribute(node,"x");
-  v=v[0];
-#if NDIM>1
-  v[1]=getDoubleAttribute(node,"y");
-#endif
-#if NDIM>2
-  v[2]=getDoubleAttribute(node,"z");
-#endif
-#if NDIM>3
-  v[3]=getDoubleAttribute(node,"k");
-#endif
+XMLParser::Vec XMLParser::getVecAttribute(const xmlNodePtr& node,
+                                          const std::string& attName) {
+  Vec v;
+  for (int i=0; i<NDIM; ++i) {
+    v[i]=getDoubleAttribute(node,attName+dimName[i]);
+  }
+  return v;
+}
+
+XMLParser::IVec XMLParser::getIVecAttribute(const xmlNodePtr& node,
+                                            const std::string& attName) {
+  IVec v;
+  for (int i=0; i<NDIM; ++i) {
+    v[i]=getIntAttribute(node,attName+dimName[i]);
+  }
   return v;
 }
 
@@ -89,3 +90,5 @@ std::string XMLParser::getLinkPath(const xmlNodePtr& node,
   xmlFree(temp);
   return href.substr(href.find('|')+1);
 }
+
+const std::string XMLParser::dimName="xyzklmnopqrstuv";
