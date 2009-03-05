@@ -30,6 +30,7 @@
 #include "SuperCell.h"
 #include "Action.h"
 #include "Paths.h"
+#include "Distance.h"
 
 DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species *spec,
@@ -41,6 +42,7 @@ DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
     ifirst(spec->ifirst), npart(spec->count), mpi(mpi) {
   scale=new Vec((max-min)/nbin);
   origin=new Vec(min);
+  value=0.;
 }
 
 
@@ -63,7 +65,7 @@ void DensityEstimator::handleLink(const Vec& start, const Vec& end,
     IVec ibin=0;
     for (int i=0; i<NDIM; ++i) {
       double d=(*dist[i])(r);
-      ibin[i]=int((d-min[i])*deltaInv[i]);
+      ibin[i]=int(floor((d-min[i])*deltaInv[i]));
       if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
       if (i==NDIM-1) ++temp(ibin);
     }
@@ -73,7 +75,6 @@ void DensityEstimator::handleLink(const Vec& start, const Vec& end,
 
 void DensityEstimator::endCalc(const int nslice) {
   temp/=nslice;
-  //BlitzArrayBlkdEst<N>::norm+=1;
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI

@@ -35,6 +35,7 @@
 #include "Paths.h"
 #include <blitz/tinyvec-et.h>
 #include <vector>
+class Distance;
 /** Calculates single particle densities for many different geometries.
  *  Implements several options for studying fluctations.
  *  @version $Revision: 12 $
@@ -43,30 +44,7 @@ class DensityEstimator : public LinkSummable, public BlitzArrayBlkdEst<NDIM> {
 public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int, NDIM> IVec;
-  /// Base class for distance functions.
-  class Dist {public: 
-    virtual double operator()(const Vec &r)=0;
-  };
-  /// Distance taken from radial separation.
-  class Radial : public Dist {
-  public:
-    Radial(int idir=-1) : mask(1.0) {
-      if (idir!=-1) mask(idir)=0;
-    }
-    virtual double operator()(const Vec &r) {
-      double radius2=0;
-      for (int i=0; i<NDIM; ++i) radius2 += r(i)*r(i)*mask(i);
-      return sqrt(radius2);
-    }
-    Vec mask;
-  };
-  /// Distance taken from Cartesian position of particle.
-  class Cart : public Dist { public:
-    Cart(int idim) : idim(idim) {};
-    int idim;
-    virtual double operator()(const Vec &r) {return r[idim];};
-  };
-  typedef std::vector<Dist*> DistArray;
+  typedef std::vector<Distance*> DistArray;
 
   /// Constructor.
   DensityEstimator(const SimulationInfo& simInfo, const std::string& name,

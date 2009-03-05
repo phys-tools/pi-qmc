@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,9 +17,11 @@
 #ifndef __EstimatorParser_h_
 #define __EstimatorParser_h_
 #include <string>
+#include <vector>
 #include "XMLUnitParser.h"
 #include "PairCFEstimator.h"
 class EstimatorManager;
+class Distance;
 class SimulationInfo;
 class Action;
 class DoubleAction;
@@ -54,5 +56,9 @@ private:
   /// Parser for pair correlation estimator.
   template<int N> PairCFEstimator<N>* parsePairCF(xmlNodePtr estNode,
                                                   xmlXPathObjectPtr ctxt);
+  /// Parser for distance subtagss.
+  void parseDistance(xmlNodePtr estNode, const xmlXPathContextPtr& ctxt,
+    std::vector<Distance*> &darray, std::vector<double>& min,
+    std::vector<double> &max, std::vector<int>& nbin);
 };
 #endif

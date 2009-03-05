@@ -30,6 +30,7 @@
 #include "ConductanceEstimator.h"
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
+#include "Distance.h"
 #include "CoulombEnergyEstimator.h"
 #include "EwaldCoulombEstimator.h"
 #include "DoubleAction.h"
@@ -265,7 +266,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
                            useSpeciesTensor,idim,useCharge,mpi,norder));
     }
     if (name=="DensityEstimator") {
-      bool useCharge=getBoolAttribute(estNode,"useCharge");
+      //bool useCharge=getBoolAttribute(estNode,"useCharge");
       std::string species=getStringAttribute(estNode,"species");
       const Species *spec = 0;
       if (species!="" && species!="all") spec=&simInfo.getSpecies(species);
@@ -274,12 +275,27 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         name = "rho";
         if (spec) name += species;
       }
-      IVec nbin = getIVecAttribute(estNode,"n");
-      double a = getLengthAttribute(estNode,"a");
-      Vec min=-0.5*a*nbin;
-      Vec max=0.5*a*nbin;
-      DensityEstimator::DistArray dist(NDIM);
-      for (int i=0; i<NDIM; ++i) dist[i]=new DensityEstimator::Cart(i);
+      DensityEstimator::DistArray dist;
+      std::vector<double> min_,max_;
+      std::vector<int> nbin_;
+      parseDistance(estNode,ctxt,dist,min_,max_,nbin_);
+      IVec nbin;
+      Vec min,max;
+      if (dist.size()==0) {
+        nbin = getIVecAttribute(estNode,"n");
+        double a = getLengthAttribute(estNode,"a");
+        min=-0.5*a*nbin;
+        max=0.5*a*nbin;
+        for (int i=0; i<NDIM; ++i) dist.push_back(new Cart(i));
+      } else {
+        for (unsigned int i=0; i<NDIM; ++i) {
+          if (i<dist.size()) {
+            min[i]=min_[i]; max[i]=max_[i]; nbin[i]=nbin_[i];
+          } else {
+            min[i]=0; max[i]=1; nbin[i]=1; dist.push_back(new Distance());
+          }
+        }
+      }
       manager->add(new DensityEstimator(simInfo,name,spec,
                                         min,max,nbin,dist, mpi));
     }
@@ -356,4 +372,35 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
     }
   }
   return new PairCFEstimator<N>(simInfo,name,s1,s2,min,max,nbin,dist,mpi);
+}
+
+void EstimatorParser::parseDistance(xmlNodePtr estNode, 
+    const xmlXPathContextPtr& ctxt,
+    std::vector<Distance*> &darray, std::vector<double> &min,
+    std::vector<double> &max, std::vector<int>& nbin) {
+  ctxt->node = estNode;
+  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+  int N=obj->nodesetval->nodeNr;
+  int idir=0;
+  for (int idist=0; idist<N; ++idist) {
+    xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
+    std::string name=getName(distNode);
+    if (name=="Cartesian") {
+      std::string dirName = getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1));
+      darray.push_back(new Cart(idir));
+      min.push_back(getLengthAttribute(distNode,"min"));
+      max.push_back(getLengthAttribute(distNode,"max"));
+      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      idir++;
+    } else if (name=="Radial") {
+      int idir=-1;
+      std::string dirName = getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
+      darray.push_back(new Radial(idir));
+      min.push_back(getLengthAttribute(distNode,"min"));
+      max.push_back(getLengthAttribute(distNode,"max"));
+      nbin.push_back(getIntAttribute(distNode,"nbin"));
+    }
+  }
 }

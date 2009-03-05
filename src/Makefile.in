@@ -323,18 +323,18 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	ConductanceEstimator.h ConductivityEstimator.h CoulombAction.h \
 	CoulombEnergyEstimator.h CubicLattice.h \
 	DampedFreeTensorMover.h DensDensEstimator.h DensityEstimator.h \
-	DipoleMomentEstimator.h DoubleAction.h DoubleMLSampler.h \
-	DoubleParallelPaths.h DoubleSectionChooser.h EFieldAction.h \
-	EIndEstimator.h EmpiricalInteraction.h EstimatorParser.h \
-	ExcitonNodes.h EwaldCoulombEstimator.h EwaldAction.h \
-	EwaldSum.h FixedNodeAction.h FixedPhaseAction.h FreeMover.h \
-	FreeParticleNodes.h FreePartNodesNoUpdate.h FreeTensorMover.h \
-	FrequencyEstimator.h GaussianAction.h GaussianDotAction.h \
-	GrapheneAction.h GreenDipoleMEstimator.h GridPotential.h \
-	GroundStateSNode.h GroundStateWFNodes.h HyperbolicAction.h \
-	HyperbolicMover.h ImagePairAction.h JelliumSlab.h JEstimator.h \
-	LinkSummable.h Loop.h MainParser.h Measure.h Mover.h \
-	MultiLevelSampler.h NodeModel.h NodeTester.h \
+	DipoleMomentEstimator.h Distance.h DoubleAction.h \
+	DoubleMLSampler.h DoubleParallelPaths.h DoubleSectionChooser.h \
+	EFieldAction.h EIndEstimator.h EmpiricalInteraction.h \
+	EstimatorParser.h ExcitonNodes.h EwaldCoulombEstimator.h \
+	EwaldAction.h EwaldSum.h FixedNodeAction.h FixedPhaseAction.h \
+	FreeMover.h FreeParticleNodes.h FreePartNodesNoUpdate.h \
+	FreeTensorMover.h FrequencyEstimator.h GaussianAction.h \
+	GaussianDotAction.h GrapheneAction.h GreenDipoleMEstimator.h \
+	GridPotential.h GroundStateSNode.h GroundStateWFNodes.h \
+	HyperbolicAction.h HyperbolicMover.h ImagePairAction.h \
+	JelliumSlab.h JEstimator.h LinkSummable.h Loop.h MainParser.h \
+	Measure.h Mover.h MultiLevelSampler.h NodeModel.h NodeTester.h \
 	OpticalLatticeAction.h PairAction.h PairChooser.h \
 	PairCFEstimator.h ParallelPaths.h ParticleChooser.h \
 	PathReader.h Paths.h PeriodicGaussian.h PermutationChooser.h \
