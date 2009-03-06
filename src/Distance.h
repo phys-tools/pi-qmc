@@ -1,4 +1,4 @@
-// $Id: Distance.h 12 2009-02-07 23:32:51Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

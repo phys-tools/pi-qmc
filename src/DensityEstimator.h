@@ -1,4 +1,4 @@
-// $Id: DensityEstimator.h 12 2009-02-07 23:32:51Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -38,7 +38,7 @@
 class Distance;
 /** Calculates single particle densities for many different geometries.
  *  Implements several options for studying fluctations.
- *  @version $Revision: 12 $
+ *  @version $Revision$
  *  @author John Shumway  */
 class DensityEstimator : public LinkSummable, public BlitzArrayBlkdEst<NDIM> {
 public:
