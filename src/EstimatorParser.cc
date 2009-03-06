@@ -31,6 +31,7 @@
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
 #include "DensCountEstimator.h"
+#include "CountCountEstimator.h"
 #include "Distance.h"
 #include "CoulombEnergyEstimator.h"
 #include "EwaldCoulombEstimator.h"
@@ -266,7 +267,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       manager->add(new ConductanceEstimator(simInfo,nfreq,0,
                            useSpeciesTensor,idim,useCharge,mpi,norder));
     }
-    if (name=="DensityEstimator" || name=="DensCountEstimator") {
+    if (name=="DensityEstimator" || name=="DensCountEstimator"||
+        name=="CountCountEstimator") {
       //bool useCharge=getBoolAttribute(estNode,"useCharge");
       std::string species=getStringAttribute(estNode,"species");
       const Species *spec = 0;
@@ -307,11 +309,27 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       } else {
         int maxCount=getIntAttribute(estNode,"maxCount");
         if (maxCount==0) maxCount=1;
-        DensCountEstimator::IVecN nbinN;
-        for (int i=0; i<NDIM; ++i) nbinN[i]=nbin[i];
-        nbinN[NDIM]=maxCount+1;
-        manager->add(new DensCountEstimator(simInfo,estName,spec,
-                                            min,max,nbin,nbinN,dist,mpi));
+        if (name=="DensCountEstimator") {
+          DensCountEstimator::IVecN nbinN;
+          for (int i=0; i<NDIM; ++i) nbinN[i]=nbin[i];
+          nbinN[NDIM]=maxCount+1;
+          manager->add(new DensCountEstimator(simInfo,estName,spec,
+                                              min,max,nbin,nbinN,dist,mpi));
+        } else {
+          CountCountEstimator::IVecN nbinN;
+          for (int i=0; i<NDIM; ++i) {
+            nbinN[i]=nbin[i];
+            nbinN[i+NDIM]=nbin[i];
+          }
+          nbinN[2*NDIM]=nbinN[2*NDIM+1]=maxCount+1;
+          int nfreq=getIntAttribute(estNode,"nfreq");
+          if (nfreq==0) nfreq=simInfo.getNSlice();
+          int nstride=getIntAttribute(estNode,"nstride");
+          if (nstride==0) nstride=2;
+          nbinN[2*NDIM+2]=nfreq;
+          manager->add(new CountCountEstimator(simInfo,estName,spec,
+                             min,max,nbin,nbinN,dist,nstride,mpi));
+        }
       }
     }
     if (name=="DensDensEstimator") {

@@ -61,8 +61,9 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-ConductivityEstimator.$(OBJEXT) pi-CoulombAction.$(OBJEXT) \
 	pi-CoulombEnergyEstimator.$(OBJEXT) pi-CubicLattice.$(OBJEXT) \
 	pi-DampedFreeTensorMover.$(OBJEXT) \
-	pi-DensDensEstimator.$(OBJEXT) pi-DensCountEstimator.$(OBJEXT) \
-	pi-DensityEstimator.$(OBJEXT) \
+	pi-DensDensEstimator.$(OBJEXT) \
+	pi-CountCountEstimator.$(OBJEXT) \
+	pi-DensCountEstimator.$(OBJEXT) pi-DensityEstimator.$(OBJEXT) \
 	pi-DipoleMomentEstimator.$(OBJEXT) \
 	pi-DoubleMLSampler.$(OBJEXT) pi-DoubleParallelPaths.$(OBJEXT) \
 	pi-DoubleSectionChooser.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
@@ -282,13 +283,14 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	ConductivityEstimator.cc CoulombAction.cc \
 	CoulombEnergyEstimator.cc CubicLattice.cc \
 	DampedFreeTensorMover.cc DensDensEstimator.cc \
-	DensCountEstimator.cc DensityEstimator.cc \
-	DipoleMomentEstimator.cc DoubleMLSampler.cc \
-	DoubleParallelPaths.cc DoubleSectionChooser.cc EFieldAction.cc \
-	EIndEstimator.cc EmpiricalInteraction.cc EstimatorParser.cc \
-	ExcitonNodes.cc EwaldAction.cc EwaldCoulombEstimator.cc \
-	EwaldSum.cc FixedNodeAction.cc FixedPhaseAction.cc \
-	FreeMover.cc FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
+	CountCountEstimator.cc DensCountEstimator.cc \
+	DensityEstimator.cc DipoleMomentEstimator.cc \
+	DoubleMLSampler.cc DoubleParallelPaths.cc \
+	DoubleSectionChooser.cc EFieldAction.cc EIndEstimator.cc \
+	EmpiricalInteraction.cc EstimatorParser.cc ExcitonNodes.cc \
+	EwaldAction.cc EwaldCoulombEstimator.cc EwaldSum.cc \
+	FixedNodeAction.cc FixedPhaseAction.cc FreeMover.cc \
+	FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
 	FreeTensorMover.cc FrequencyEstimator.cc GaussianAction.cc \
 	GaussianDotAction.cc GrapheneAction.cc \
 	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
@@ -324,7 +326,7 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	ConductanceEstimator.h ConductivityEstimator.h CoulombAction.h \
 	CoulombEnergyEstimator.h CubicLattice.h \
 	DampedFreeTensorMover.h DensDensEstimator.h \
-	DensCountEstimator.h DensityEstimator.h \
+	DensCountEstimator.h CountCountEstimator.h DensityEstimator.h \
 	DipoleMomentEstimator.h Distance.h DoubleAction.h \
 	DoubleMLSampler.h DoubleParallelPaths.h DoubleSectionChooser.h \
 	EFieldAction.h EIndEstimator.h EmpiricalInteraction.h \
@@ -444,6 +446,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ConductivityEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CoulombAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CoulombEnergyEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CountCountEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CubicLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DampedFreeTensorMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DensCountEstimator.Po@am__quote@
@@ -845,6 +848,20 @@ pi-DensDensEstimator.obj: DensDensEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DensDensEstimator.cc' object='pi-DensDensEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensDensEstimator.obj `if test -f 'DensDensEstimator.cc'; then $(CYGPATH_W) 'DensDensEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensDensEstimator.cc'; fi`
+
+pi-CountCountEstimator.o: CountCountEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CountCountEstimator.o -MD -MP -MF $(DEPDIR)/pi-CountCountEstimator.Tpo -c -o pi-CountCountEstimator.o `test -f 'CountCountEstimator.cc' || echo '$(srcdir)/'`CountCountEstimator.cc
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-CountCountEstimator.Tpo $(DEPDIR)/pi-CountCountEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CountCountEstimator.cc' object='pi-CountCountEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CountCountEstimator.o `test -f 'CountCountEstimator.cc' || echo '$(srcdir)/'`CountCountEstimator.cc
+
+pi-CountCountEstimator.obj: CountCountEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CountCountEstimator.obj -MD -MP -MF $(DEPDIR)/pi-CountCountEstimator.Tpo -c -o pi-CountCountEstimator.obj `if test -f 'CountCountEstimator.cc'; then $(CYGPATH_W) 'CountCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CountCountEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-CountCountEstimator.Tpo $(DEPDIR)/pi-CountCountEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CountCountEstimator.cc' object='pi-CountCountEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CountCountEstimator.obj `if test -f 'CountCountEstimator.cc'; then $(CYGPATH_W) 'CountCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CountCountEstimator.cc'; fi`
 
 pi-DensCountEstimator.o: DensCountEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensCountEstimator.o -MD -MP -MF $(DEPDIR)/pi-DensCountEstimator.Tpo -c -o pi-DensCountEstimator.o `test -f 'DensCountEstimator.cc' || echo '$(srcdir)/'`DensCountEstimator.cc
