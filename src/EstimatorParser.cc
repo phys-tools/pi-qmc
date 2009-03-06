@@ -30,6 +30,7 @@
 #include "ConductanceEstimator.h"
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
+#include "DensCountEstimator.h"
 #include "Distance.h"
 #include "CoulombEnergyEstimator.h"
 #include "EwaldCoulombEstimator.h"
@@ -265,15 +266,19 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       manager->add(new ConductanceEstimator(simInfo,nfreq,0,
                            useSpeciesTensor,idim,useCharge,mpi,norder));
     }
-    if (name=="DensityEstimator") {
+    if (name=="DensityEstimator" || name=="DensCountEstimator") {
       //bool useCharge=getBoolAttribute(estNode,"useCharge");
       std::string species=getStringAttribute(estNode,"species");
       const Species *spec = 0;
       if (species!="" && species!="all") spec=&simInfo.getSpecies(species);
-      std::string name=getStringAttribute(estNode,"name");
-      if (name=="") {
-        name = "rho";
-        if (spec) name += species;
+      std::string estName=getStringAttribute(estNode,"name");
+      if (estName=="") {
+        if (name=="DensityEstimator") {
+          estName = "rho";
+        } else {
+          estName = "count";
+        }
+        if (spec) estName += species;
       }
       DensityEstimator::DistArray dist;
       std::vector<double> min_,max_;
@@ -296,8 +301,18 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
           }
         }
       }
-      manager->add(new DensityEstimator(simInfo,name,spec,
-                                        min,max,nbin,dist, mpi));
+      if (name=="DensityEstimator") {
+        manager->add(new DensityEstimator(simInfo,estName,spec,
+                                          min,max,nbin,dist, mpi));
+      } else {
+        int maxCount=getIntAttribute(estNode,"maxCount");
+        if (maxCount==0) maxCount=1;
+        DensCountEstimator::IVecN nbinN;
+        for (int i=0; i<NDIM; ++i) nbinN[i]=nbin[i];
+        nbinN[NDIM]=maxCount+1;
+        manager->add(new DensCountEstimator(simInfo,estName,spec,
+                                            min,max,nbin,nbinN,dist,mpi));
+      }
     }
     if (name=="DensDensEstimator") {
       int nbin=getIntAttribute(estNode,"nbin");
