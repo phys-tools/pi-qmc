@@ -39,6 +39,14 @@ Units::Units(const std::string& eunit, const std::string& lunit)
   energyOut["nK"]=3.1577465e14;
   energyOut["Ha"]=1.0;
   energyOut["Ry"]=2.0;
+  energyOut["cm-1"]=219474.6314;
+  energyOut["kcal/mol"]=627.5095;
+  energyOut["Hz"]=6.579683920e15;
+  energyOut["kHz"]=6.579683920e12;
+  energyOut["MHz"]=6.579683920e9;
+  energyOut["GHz"]=6.579683920e6;
+  energyOut["THz"]=6.579683920e3;
+  energyOut["PHz"]=6.579683920;
   /// Set conversion from electron mass to common mass units.
   massOut["amu"]=9.1093826e-31/1.66053886e-27;
   massOut["m_p"]=9.1093826e-31/1.67262171e-27;
