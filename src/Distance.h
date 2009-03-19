@@ -47,45 +47,4 @@ class Cart : public Distance { public:
   virtual double operator()(const Vec &r) {return r[idim];};
 };
 
-/// Base class for pair distance functions.
-class PairDistance {public: 
-  virtual double operator()(const Vec &r1, const Vec &r2, 
-                            const SuperCell &cell)=0;
-};
-/// Distance taken from radial separation.
-class RadialPair : public PairDistance { public:
-  RadialPair(int idir=-1) : mask(1.0) {if (idir!=-1) mask(idir)=0;}
-  virtual double operator()(const Vec &r1, const Vec &r2, 
-                            const SuperCell &cell) {
-    Vec delta=r1-r2; cell.pbc(delta);
-    double radius2=0;
-    for (int i=0; i<NDIM; ++i) radius2 += delta(i)*delta(i)*mask(i);
-    return sqrt(radius2);
-  }
-  Vec mask;
-};
-/// Distance taken from cartesian position of particle 1.
-class Cart1 : public PairDistance { public:
-  Cart1(int idim) : idim(idim){};
-  int idim;
-  virtual double operator()(const Vec &r1, const Vec &r2, 
-                            const SuperCell &cell) {return r1[idim];};
-};
-/// Distance taken from cartesian position of particle 2.
-class Cart2 : public PairDistance { public:
-  Cart2(int idim) : idim(idim){};
-  int idim;
-  virtual double operator()(const Vec &r1, const Vec &r2, 
-                            const SuperCell &cell) {return r2[idim];};
-};
-/// Distance taken from cartesian separation.
-class CartPair : public PairDistance { public:
-  CartPair(int idim) : idim(idim){};
-  int idim;
-  virtual double operator()(const Vec &r1, const Vec &r2, 
-                            const SuperCell &cell) {
-    Vec delta=r1-r2; cell.pbc(delta);
-    return delta[idim];
-  }
-};
 #endif

@@ -32,6 +32,7 @@
 #include "SuperCell.h"
 #include "Action.h"
 #include "Paths.h"
+#include "PairDistance.h"
 #include <blitz/tinyvec-et.h>
 #include <vector>
 /** Pair correlation class.
@@ -45,48 +46,7 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<double,N> VecN;
   typedef blitz::TinyVector<int,N> IVecN;
-  /// Base class for distance functions.
-  class Dist {public: 
-    virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell)=0;
-  };
-  /// Distance taken from radial separation.
-  class Radial : public Dist { public:
-    Radial(int idir=-1) : mask(1.0) {if (idir!=-1) mask(idir)=0;}
-    virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {
-      Vec delta=r1-r2; cell.pbc(delta);
-      double radius2=0;
-      for (int i=0; i<NDIM; ++i) radius2 += delta(i)*delta(i)*mask(i);
-      return sqrt(radius2);
-    }
-    Vec mask;
-  };
-  /// Distance taken from cartesian position of particle 1.
-  class Cart1 : public Dist { public:
-    Cart1(int idim) : idim(idim){};
-    int idim;
-    virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {return r1[idim];};
-  };
-  /// Distance taken from cartesian position of particle 2.
-  class Cart2 : public Dist { public:
-    Cart2(int idim) : idim(idim){};
-    int idim;
-    virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {return r2[idim];};
-  };
-  /// Distance taken from cartesian separation.
-  class Cart : public Dist { public:
-    Cart(int idim) : idim(idim){};
-    int idim;
-    virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {
-      Vec delta=r1-r2; cell.pbc(delta);
-      return delta[idim];
-    }
-  };
-  typedef std::vector<Dist*> DistN;
+  typedef std::vector<PairDistance*> DistN;
   /// Constructor.
   PairCFEstimator(const SimulationInfo& simInfo, const std::string& name,
                   const Species &s1, const Species &s2, const VecN &min, 

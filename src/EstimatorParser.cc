@@ -33,6 +33,7 @@
 #include "DensCountEstimator.h"
 #include "CountCountEstimator.h"
 #include "Distance.h"
+#include "PairDistance.h"
 #include "CoulombEnergyEstimator.h"
 #include "EwaldCoulombEstimator.h"
 #include "DoubleAction.h"
@@ -382,7 +383,7 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
   typename PairCFEstimator<N>::VecN min(0.), max(1.);
   typename PairCFEstimator<N>::IVecN nbin(1);
   typename PairCFEstimator<N>::DistN 
-    dist(N,(typename PairCFEstimator<N>::Dist*)0);
+    dist(N,(PairDistance*)0);
   for (int idist=0; idist<N; ++idist) {
     xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
     std::string name=getName(distNode);
@@ -390,11 +391,11 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
       std::string dirName = getStringAttribute(distNode,"dir");
       int idir=0; if (dirName=="y") idir=1; else if (dirName=="z") idir=2;
       if (name=="Cartesian") {
-        dist[idist]=new typename PairCFEstimator<N>::Cart(idir);
+        dist[idist]=new PairCart(idir);
       } else if (name=="Cartesian1") {
-        dist[idist]=new typename PairCFEstimator<N>::Cart1(idir);
+        dist[idist]=new PairCart1(idir);
       } else if (name=="Cartesian2") {
-        dist[idist]=new typename PairCFEstimator<N>::Cart2(idir);
+        dist[idist]=new PairCart2(idir);
       }
       min[idist] = getLengthAttribute(distNode,"min");
       max[idist] = getLengthAttribute(distNode,"max");
@@ -405,7 +406,7 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
       if (dirName=="x") idir=0;
       else if (dirName=="y") idir=1;
       else if (dirName=="z") idir=2;
-      dist[idist] = new typename PairCFEstimator<N>::Radial(idir);
+      dist[idist] = new PairRadial(idir);
       min[idist] = getLengthAttribute(distNode,"min");
       max[idist] = getLengthAttribute(distNode,"max");
       nbin[idist] = getIntAttribute(distNode,"nbin");

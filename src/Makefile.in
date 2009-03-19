@@ -340,21 +340,21 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	JelliumSlab.h JEstimator.h LinkSummable.h Loop.h MainParser.h \
 	Measure.h Mover.h MultiLevelSampler.h NodeModel.h NodeTester.h \
 	OpticalLatticeAction.h PairAction.h PairChooser.h \
-	PairCFEstimator.h ParallelPaths.h ParticleChooser.h \
-	PathReader.h Paths.h PeriodicGaussian.h PermutationChooser.h \
-	Permutation.h PhaseModel.h PermutationEstimator.h PIMCParser.h \
-	Positioner.h PositionEstimator.h PrimSHOAction.h \
-	ProbDensityGrid.h QPCAction.h QuadrupoleMomentEstimator.h \
-	RandomNumGenerator.h RandomPermutationChooser.h \
-	SectionChooser.h SeedRandom.h SerialPaths.h SHOAction.h \
-	SHODotAction.h SHONodes.h SHOPhase.h SHORealNodes.h \
-	SimInfoParser.h SimInfoWriter.h SimpleParticleChooser.h \
-	SimulationInfo.h SmoothedGridPotential.h Species.h \
-	SpeciesParticleChooser.h SphereAction.h Spin4DPhase.h \
-	SpinChargeEstimator.h SpringAction.h SpringTensorAction.h \
-	StillWebAction.h StructReader.h SuperCell.h \
-	ThermoEnergyEstimator.h TimpQPC.h TwoQDAction.h \
-	VIndEstimator.h VirialEnergyEstimator.h \
+	PairCFEstimator.h PairDistance.h ParallelPaths.h \
+	ParticleChooser.h PathReader.h Paths.h PeriodicGaussian.h \
+	PermutationChooser.h Permutation.h PhaseModel.h \
+	PermutationEstimator.h PIMCParser.h Positioner.h \
+	PositionEstimator.h PrimSHOAction.h ProbDensityGrid.h \
+	QPCAction.h QuadrupoleMomentEstimator.h RandomNumGenerator.h \
+	RandomPermutationChooser.h SectionChooser.h SeedRandom.h \
+	SerialPaths.h SHOAction.h SHODotAction.h SHONodes.h SHOPhase.h \
+	SHORealNodes.h SimInfoParser.h SimInfoWriter.h \
+	SimpleParticleChooser.h SimulationInfo.h \
+	SmoothedGridPotential.h Species.h SpeciesParticleChooser.h \
+	SphereAction.h Spin4DPhase.h SpinChargeEstimator.h \
+	SpringAction.h SpringTensorAction.h StillWebAction.h \
+	StructReader.h SuperCell.h ThermoEnergyEstimator.h TimpQPC.h \
+	TwoQDAction.h VIndEstimator.h VirialEnergyEstimator.h \
 	VVCorrelationEstimator.h WalkingChooser.h WellImageAction.h \
 	WireNodes.h WorkerShifter.h WritePaths.h WriteProbDensity.h \
 	XMLParser.h XMLUnitParser.h XMLWriter.h
