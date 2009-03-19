@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2008 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -268,7 +268,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
                            useSpeciesTensor,idim,useCharge,mpi,norder));
     }
     if (name=="DensityEstimator" || name=="DensCountEstimator"||
-        name=="CountCountEstimator") {
+        name=="DensDensEstimator" || name=="CountCountEstimator") {
       //bool useCharge=getBoolAttribute(estNode,"useCharge");
       std::string species=getStringAttribute(estNode,"species");
       const Species *spec = 0;
@@ -277,6 +277,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (estName=="") {
         if (name=="DensityEstimator") {
           estName = "rho";
+        } else if (name=="DensDensEstimator") {
+          estName = "nn";
         } else {
           estName = "count";
         }
@@ -306,6 +308,19 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (name=="DensityEstimator") {
         manager->add(new DensityEstimator(simInfo,estName,spec,
                                           min,max,nbin,dist, mpi));
+      } else if (name=="DensDensEstimator") {
+        DensDensEstimator::IVecN nbinN;
+        int nfreq=getIntAttribute(estNode,"nfreq");
+        if (nfreq==0) nfreq=simInfo.getNSlice();
+        int nstride=getIntAttribute(estNode,"nstride");
+        if (nstride==0) nstride=1;
+        for (int i=0; i<NDIM; ++i) {
+          nbinN[i]=nbin[i];
+          nbinN[i+NDIM]=nbin[i];
+        }
+        nbinN[2*NDIM]=nfreq;
+        manager->add(new DensDensEstimator(simInfo,estName,spec,min,max,nbin,
+                                           nbinN,dist,nstride,mpi));
       } else {
         int maxCount=getIntAttribute(estNode,"maxCount");
         if (maxCount==0) maxCount=1;
@@ -325,20 +340,12 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
           int nfreq=getIntAttribute(estNode,"nfreq");
           if (nfreq==0) nfreq=simInfo.getNSlice();
           int nstride=getIntAttribute(estNode,"nstride");
-          if (nstride==0) nstride=2;
+          if (nstride==0) nstride=1;
           nbinN[2*NDIM+2]=nfreq;
           manager->add(new CountCountEstimator(simInfo,estName,spec,
                              min,max,nbin,nbinN,dist,nstride,mpi));
         }
       }
-    }
-    if (name=="DensDensEstimator") {
-      int nbin=getIntAttribute(estNode,"nbin");
-      if (nbin==0) nbin=1;
-      int ndbin=getIntAttribute(estNode,"ndbin");
-      if (ndbin==0) ndbin=1;
-      manager->add(new DensDensEstimator(simInfo,action,doubleAction,
-                                         nbin,ndbin,mpi));
     }
     if (name=="PairCFEstimator") {
       ctxt->node = estNode;

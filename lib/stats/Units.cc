@@ -25,14 +25,15 @@ Units::Units(const std::string& eunit, const std::string& lunit)
   /// To set these values, express the atomic unit in terms of named unit.
   ///
   /// Set conversion from bohr radius to common length units.
-  lengthOut["nm"]=0.05291772108;
-  lengthOut["A"] =0.5291772108;
-  lengthOut["pm"]=52.91772108;
-  lengthOut["um"]=0.05291772108e-3;
+  lengthOut["nm"]=0.05291772086;
+  lengthOut["A"] =0.5291772086;
+  lengthOut["pm"]=52.91772086;
+  lengthOut["um"]=0.05291772086e-3;
   lengthOut["a0"]=1.0;
   /// Set conversion from Hartree to common energy units.
   energyOut["eV"]=27.2113845;
   energyOut["meV"]=27211.3845;
+  energyOut["ueV"]=27211384.5;
   energyOut["K"]=3.1577465e5;
   energyOut["mK"]=3.1577465e8;
   energyOut["uK"]=3.1577465e11;

@@ -52,7 +52,7 @@ Unit.eV = EnergyUnit("eV",27.211396)
 Unit.meV = EnergyUnit("meV",27211.396)
 
 Unit.a0 = LengthUnit.a0
-Unit.pm = LengthUnit("pm",52.9177)
-Unit.A = LengthUnit("A",0.529177)
-Unit.nm = LengthUnit("nm",0.0529177)
-Unit.um = LengthUnit("um",5.29177e-5)
+Unit.pm = LengthUnit("pm",52.91772086)
+Unit.A = LengthUnit("A",0.5291772086)
+Unit.nm = LengthUnit("nm",0.05291772086)
+Unit.um = LengthUnit("um",5.291772086e-5)

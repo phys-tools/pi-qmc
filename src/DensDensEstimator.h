@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,52 +16,79 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __DensDensEstimator_h_
 #define __DensDensEstimator_h_
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
+#include "stats/ArrayBlockedEstimator.h"
 #include "stats/BlitzArrayBlkdEst.h"
+#include "stats/MPIManager.h"
 #include "LinkSummable.h"
 #include "Paths.h"
+#include <blitz/array.h>
+#include "SimulationInfo.h"
+#include "Species.h"
+#include "SuperCell.h"
+#include "Action.h"
+#include "Paths.h"
+#include <blitz/tinyvec-et.h>
+#include <vector>
 #include <fftw3.h>
-class Paths;
-class Action;
-class DoubleAction;
-class SimulationInfo;
-class MPIManager;
-/** DensDens estimator for a homogeneous system.
+class Distance;
+/** Calculates single particle densities for many different geometries.
+ *  Implements several options for studying fluctations.
  *  @version $Revision$
  *  @author John Shumway  */
-class DensDensEstimator : public BlitzArrayBlkdEst<3>, public LinkSummable {
+class DensDensEstimator : public LinkSummable, 
+                          public BlitzArrayBlkdEst<2*NDIM+1> {
 public:
-  typedef blitz::Array<std::complex<double>,3> CArray3;
-  typedef blitz::Array<int,1> IArray;
+  typedef blitz::TinyVector<double,NDIM> Vec;
+  typedef blitz::TinyVector<int, NDIM> IVec;
+  typedef std::vector<Distance*> DistArray;
+  typedef blitz::Array<int,NDIM> IArrayNDIM;
+  typedef std::complex<double> Complex;
+
   /// Constructor.
-  DensDensEstimator(const SimulationInfo& simInfo,
-    const Action*, const DoubleAction*,
-    const int nbin, const int ndbin, MPIManager *mpi);
+  DensDensEstimator(const SimulationInfo& simInfo, const std::string& name,
+      const Species *s, const Vec &min, const Vec &max, const IVec &nbin,
+      const IVecN &nbinN, const DistArray &dist, int nstride,
+      MPIManager *mpi); 
+
   /// Virtual destructor.
   virtual ~DensDensEstimator();
+  
   /// Initialize the calculation.
   virtual void initCalc(const int nslice, const int firstSlice);
+
   /// Add contribution from a link.
-  virtual void handleLink(const blitz::TinyVector<double,NDIM>& start,
-                          const blitz::TinyVector<double,NDIM>& end,
-                          const int ipart, const int islice, const Paths&);
+  virtual void handleLink(const Vec& start, const Vec& end,
+      const int ipart, const int islice, const Paths &paths);
+  
   /// Finalize the calculation.
   virtual void endCalc(const int nslice);
-  // Get value of kinetic energy estimator.
-  //virtual double calcValue() {return value=etot/enorm;}
-  /// Clear value of the estimator.
-  virtual void reset() {}
-  /// Evaluate for Paths configuration.
-  virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
-private:
-  const Action *action;
-  const DoubleAction *doubleAction;
-  ///
-  const int npart, nslice, nbin, ndbin;
-  const double tauinv, massinv, dx, dxinv;
-  CArray3 temp;
-  IArray ninbin,ninbinbuff;
-  fftw_plan fwd, rev;
-  MPIManager *mpi;
-};
+  
+  /// Clear value of estimator.
+  virtual void reset();
 
+  /// Evaluate for Paths configuration.
+  virtual void evaluate(const Paths& paths);
+
+private:
+  const int nslice,nfreq,nstride,ntot;
+  const Vec min;
+  const Vec deltaInv;
+  const IVec nbin;
+  const IVecN nbinN;
+  const DistArray dist;
+  SuperCell cell;
+  const double tau;
+  blitz::Array<Complex,NDIM+1> temp;
+  int ifirst, npart;
+  fftw_plan fwd;
+  MPIManager *mpi;
+  blitz::Array<Complex,2>* temp2;
+  blitz::Array<float,3>* value2;
+};
 #endif

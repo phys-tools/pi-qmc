@@ -84,7 +84,7 @@ private:
   const DistArray dist;
   SuperCell cell;
   const double tau;
-  blitz::Array<Complex,NDIM+1> temp;
+  blitz::Array<Complex,NDIM+2> temp;
   IArrayNDIM count;
   int ifirst, npart;
   fftw_plan fwd;

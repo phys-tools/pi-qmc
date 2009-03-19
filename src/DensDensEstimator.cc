@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,86 +21,115 @@
 #include <mpi.h>
 #endif
 #include "DensDensEstimator.h"
-#include "SimulationInfo.h"
-#include "Action.h"
-#include "DoubleAction.h"
-#include "SuperCell.h"
-#include <blitz/tinyvec.h>
 #include "stats/MPIManager.h"
+#include "LinkSummable.h"
+#include "Paths.h"
+#include <blitz/array.h>
+#include "SimulationInfo.h"
+#include "Species.h"
+#include "SuperCell.h"
+#include "Action.h"
+#include "Paths.h"
+#include "Distance.h"
 
 DensDensEstimator::DensDensEstimator(const SimulationInfo& simInfo,
-  const Action* action, const DoubleAction* doubleAction,
-  const int nbin, const int ndbin, MPIManager *mpi)
-  : BlitzArrayBlkdEst<3>("densityDensity",
-                         IVecN(2*ndbin-1,nbin,simInfo.getNSlice()),true), 
-    action(action), doubleAction(doubleAction),
-    npart(simInfo.getNPart()), nslice(n[2]), nbin(nbin), ndbin(ndbin),
-    tauinv(1./simInfo.getTau()), massinv(1./simInfo.getSpecies(0).mass),
-    dx(simInfo.getSuperCell()->a[0]/nbin), dxinv(1/dx),
-    temp(2*ndbin-1,nbin,nslice), ninbin(nbin), ninbinbuff(nbin), mpi(mpi) {
+    const std::string& name, const Species *spec,
+    const Vec &min, const Vec &max, const IVec &nbin, const IVecN &nbinN,
+    const DistArray &dist, int nstride, MPIManager *mpi) 
+  : BlitzArrayBlkdEst<2*NDIM+1>(name,nbinN,false),
+    nslice(simInfo.getNSlice()), nfreq(nbinN[2*NDIM]), 
+    nstride(nstride), ntot(product(nbin)),
+    min(min), deltaInv(nbin/(max-min)), nbin(nbin), nbinN(nbinN), dist(dist),
+    cell(*simInfo.getSuperCell()), tau(simInfo.getTau()), temp(),
+    ifirst(spec->ifirst), npart(spec->count), mpi(mpi) {
+  scale=new VecN(1.);
+  origin=new VecN(0.);
+  for (int i=0; i<NDIM; ++i) {
+    (*scale)[i] = (*scale)[i+NDIM] = (max[i]-min[i])/nbin[i];
+    (*origin)[i] = (*origin)[i+NDIM] = min[i];
+  }
+  (*scale)[2*NDIM] = 2*3.141592653*simInfo.getTemperature();
+  value=0.;
+  blitz::TinyVector<int,NDIM+1> tempDim;
+  for (int i=0; i<NDIM; ++i) tempDim[i]=nbin[i];
+  tempDim[NDIM]=nslice/nstride;
+  temp.resize(tempDim);
+  // Set up new views of the arrays for convenience.
+  temp2 = new blitz::Array<Complex,2>(temp.data(),
+    blitz::shape(ntot,nslice/nstride), blitz::neverDeleteData); 
+  value2 = new blitz::Array<float,3>(value.data(),
+    blitz::shape(ntot,ntot,nfreq), blitz::neverDeleteData); 
+  // Set up the FFT.
   fftw_complex *ptr = (fftw_complex*)temp.data();
-  fwd = fftw_plan_many_dft(1,&nslice,nbin,
-                           ptr,0,1,nslice,
-                           ptr,0,1,nslice,
+  int nsliceEff=nslice/nstride;
+  fwd = fftw_plan_many_dft(1,&nsliceEff,ntot,
+                           ptr,0,1,nsliceEff,
+                           ptr,0,1,nsliceEff,
                            FFTW_FORWARD,FFTW_MEASURE);
-  rev = fftw_plan_many_dft(1,&nslice,nbin*(2*ndbin-1),
-                           ptr,0,1,nslice,
-                           ptr,0,1,nslice,
-                           FFTW_BACKWARD,FFTW_MEASURE);
 }
 
 DensDensEstimator::~DensDensEstimator() {
-  fftw_destroy_plan(rev);
+  for (int i=0; i<NDIM; ++i) delete dist[i];
+  delete scale;
+  delete origin;
+  delete temp2;
+  delete value2;
   fftw_destroy_plan(fwd);
 }
 
-void DensDensEstimator::initCalc(const int lnslice, const int firstSlice) {
-  temp=0; ninbin=0;
+void DensDensEstimator::initCalc(const int nslice,
+    const int firstSlice) {
+  temp=0;
 }
+
 
 void DensDensEstimator::handleLink(const Vec& start, const Vec& end,
-          const int ipart, const int islice, const Paths& paths) {
-  int ibin = (int)((end[0]+0.5*nbin*dx)*dxinv);
-  if (ibin>=0 && ibin<nbin) temp(0,ibin,islice)+=1;
+    const int ipart, const int islice, const Paths &paths) {
+  if (ipart>=ifirst && ipart<ifirst+npart) {
+    Vec r=start;
+    blitz::TinyVector<int,NDIM+1> ibin=0;
+    ibin[NDIM]=islice;
+    for (int i=0; i<NDIM; ++i) {
+      double d=(*dist[i])(r);
+      ibin[i]=int(floor((d-min[i])*deltaInv[i]));
+      if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
+      if (i==NDIM-1) temp(ibin) += 1.0;
+    }
+  }
 }
 
-void DensDensEstimator::endCalc(const int lnslice) {
-  blitz::Range allSlice = blitz::Range::all();
-  blitz::Range allBin = blitz::Range::all();
+
+void DensDensEstimator::endCalc(const int nslice) {
+  temp/=nstride;
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
+  ///Need code for multiple workers!
 #ifdef ENABLE_MPI
-  if (mpi) {
-    mpi->getWorkerComm().Reduce(&temp(0,0,0),&temp(1,0,0),
-                                2*nslice*nbin,MPI::DOUBLE,MPI::SUM,0);
-    temp(0,allBin,allSlice)=temp(1,allBin,allSlice); 
-    //mpi->getWorkerComm().Reduce(ninbin.data(),ninbinbuff.data(),
-    //                            nbin,MPI::INTEGER,MPI::SUM,0);
-    //ninbin=ninbinbuff;
-  }
+//    if (mpi) {
+//      if (workerID==0) {
+//        mpi->getWorkerComm().Reduce(&temp(0,0,0),&temp(0,0,0),
+//                                    product(nbin),MPI::DOUBLE,MPI::SUM,0);
+//      } else {
+//        mpi->getWorkerComm().Reduce(MPI::IN_PLACE,&temp(0,0,0),
+//                                    product(nbin),MPI::DOUBLE,MPI::SUM,0);
+//      }
+//    }
 #endif
-  // Calculate autocorrelation function using FFT's.
   if (workerID==0) {
-    temp/=nslice;
+    // Calculate autocorrelation function using FFT for convolution.
     fftw_execute(fwd);
-    for (int ibin=0; ibin<nbin; ++ibin) {
-      for (int jdbin=1; jdbin<ndbin; ++jdbin) {
-        int jbin=(ibin+jdbin)%nbin;
-        temp(jdbin,ibin,allSlice)=conj(temp(0,ibin,allSlice))
-                                      *temp(0,jbin,allSlice);
-        jbin=(ibin-jdbin+nbin)%nbin;
-        temp(2*ndbin-1-jdbin,ibin,allSlice)=conj(temp(0,ibin,allSlice))
-                                                *temp(0,jbin,allSlice);
-      }
-    }
-    for (int ibin=0; ibin<nbin; ++ibin) {
-      temp(0,ibin,allSlice)*=conj(temp(0,ibin,allSlice));
-    }
-    fftw_execute(rev);
-    //for (int ibin=0; ibin<nbin; ++ibin) {
-    //  temp(0,ibin,0) -= ninbin(ibin)*tauinv*massinv/nslice;
-    //}
-    value -= real(temp);
+    double betaInv=1./(tau*nslice);
+    for (int i=0; i<ntot; ++i) 
+      for (int j=0; j<ntot; ++j) 
+        for (int ifreq=0; ifreq<nfreq; ++ifreq)
+          (*value2)(i,j,ifreq) += betaInv
+            *real((*temp2)(i,ifreq)*conj((*temp2)(j,ifreq)));
     norm+=1;
   }
+}
+
+void DensDensEstimator::reset() {}
+
+void DensDensEstimator::evaluate(const Paths& paths) {
+  paths.sumOverLinks(*this);
 }

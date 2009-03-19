@@ -50,9 +50,10 @@ CountCountEstimator::CountCountEstimator(const SimulationInfo& simInfo,
   }
   (*scale)[2*NDIM+2] = 2*3.141592653*simInfo.getTemperature();
   value=0.;
-  blitz::TinyVector<int,NDIM+1> tempDim;
+  blitz::TinyVector<int,NDIM+2> tempDim;
   for (int i=0; i<NDIM; ++i) tempDim[i]=nbin[i];
-  tempDim[2*NDIM+2]=nslice/nstride;
+  tempDim[NDIM]=maxc;
+  tempDim[NDIM+1]=nslice/nstride;
   temp.resize(tempDim);
   // Set up new views of the arrays for convenience.
   count2 = new blitz::Array<int,1>(count.data(),
