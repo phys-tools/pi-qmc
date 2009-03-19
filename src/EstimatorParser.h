@@ -56,9 +56,13 @@ private:
   /// Parser for pair correlation estimator.
   template<int N> PairCFEstimator<N>* parsePairCF(xmlNodePtr estNode,
                                                   xmlXPathObjectPtr ctxt);
-  /// Parser for distance subtagss.
+  /// Parser for distance subtags.
   void parseDistance(xmlNodePtr estNode, const xmlXPathContextPtr& ctxt,
     std::vector<Distance*> &darray, std::vector<double>& min,
+    std::vector<double> &max, std::vector<int>& nbin);
+  /// Parser for distance subtags.
+  void parsePairDistance(xmlNodePtr estNode, const xmlXPathContextPtr& ctxt,
+    std::vector<PairDistance*> &darray, std::vector<double>& min,
     std::vector<double> &max, std::vector<int>& nbin);
 };
 #endif

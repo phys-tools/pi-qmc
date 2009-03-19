@@ -26,7 +26,7 @@ typedef blitz::TinyVector<double,NDIM> Vec;
 /// Base class for distance functions.
 class PairDistance {public: 
   virtual double operator()(const Vec &r1, const Vec &r2, 
-                            const SuperCell &cell)=0;
+                            const SuperCell &cell)const=0;
 
 };
 
@@ -34,7 +34,7 @@ class PairDistance {public:
   class PairRadial : public PairDistance { public:
     PairRadial(int idir=-1) : mask(1.0) {if (idir!=-1) mask(idir)=0;}
     virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {
+                              const SuperCell &cell) const {
       Vec delta=r1-r2; cell.pbc(delta);
       double radius2=0;
       for (int i=0; i<NDIM; ++i) radius2 += delta(i)*delta(i)*mask(i);
@@ -47,21 +47,21 @@ class PairDistance {public:
     PairCart1(int idim) : idim(idim){};
     int idim;
     virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {return r1[idim];};
+                              const SuperCell &cell) const {return r1[idim];};
   };
   /// Distance taken from cartesian position of particle 2.
   class PairCart2 : public PairDistance { public:
     PairCart2(int idim) : idim(idim){};
     int idim;
     virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {return r2[idim];};
+                              const SuperCell &cell)const {return r2[idim];};
   };
   /// Distance taken from cartesian separation.
   class PairCart : public PairDistance { public:
     PairCart(int idim) : idim(idim){};
     int idim;
     virtual double operator()(const Vec &r1, const Vec &r2, 
-                              const SuperCell &cell) {
+                              const SuperCell &cell)const {
       Vec delta=r1-r2; cell.pbc(delta);
       return delta[idim];
     }

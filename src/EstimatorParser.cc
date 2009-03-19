@@ -31,6 +31,7 @@
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
 #include "DensCountEstimator.h"
+#include "DynamicPCFEstimator.h"
 #include "CountCountEstimator.h"
 #include "Distance.h"
 #include "PairDistance.h"
@@ -360,6 +361,25 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         case 5: manager->add(parsePairCF<5>(estNode,obj)); break;
       }
     }
+    if (name=="DynamicPCFEstimator") {
+      std::string name=getStringAttribute(estNode,"name");
+      std::string species1=getStringAttribute(estNode,"species1");
+      std::string species2=getStringAttribute(estNode,"species2");
+      const Species &s1(simInfo.getSpecies(species1));
+      const Species &s2(simInfo.getSpecies(species2));
+      int nfreq=getIntAttribute(estNode,"nfreq");
+      if (nfreq==0) nfreq=simInfo.getNSlice();
+      int nstride=getIntAttribute(estNode,"nstride");
+      if (nstride==0) nstride=1;
+      std::vector<PairDistance*> dist;
+      std::vector<double> min,max;
+      std::vector<int> nbin;
+      parsePairDistance(estNode,ctxt,dist,min,max,nbin);
+      if (dist.size()==1) {
+        manager->add(new DynamicPCFEstimator(simInfo,name,&s1,&s2,
+             min[0], max[0], nbin[0], nfreq, nstride, dist[0], mpi));
+      }
+    }
     if (name=="PermutationEstimator") {
       manager->add(new PermutationEstimator(simInfo,mpi));
     }
@@ -382,8 +402,7 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
   const Species &s2(simInfo.getSpecies(species2));
   typename PairCFEstimator<N>::VecN min(0.), max(1.);
   typename PairCFEstimator<N>::IVecN nbin(1);
-  typename PairCFEstimator<N>::DistN 
-    dist(N,(PairDistance*)0);
+  typename PairCFEstimator<N>::DistN dist(N,(PairDistance*)0);
   for (int idist=0; idist<N; ++idist) {
     xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
     std::string name=getName(distNode);
@@ -439,6 +458,43 @@ void EstimatorParser::parseDistance(xmlNodePtr estNode,
       std::string dirName = getStringAttribute(distNode,"dir");
       for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
       darray.push_back(new Radial(idir));
+      min.push_back(getLengthAttribute(distNode,"min"));
+      max.push_back(getLengthAttribute(distNode,"max"));
+      nbin.push_back(getIntAttribute(distNode,"nbin"));
+    }
+  }
+}
+
+void EstimatorParser::parsePairDistance(xmlNodePtr estNode, 
+    const xmlXPathContextPtr& ctxt,
+    std::vector<PairDistance*> &darray, std::vector<double> &min,
+    std::vector<double> &max, std::vector<int>& nbin) {
+  ctxt->node = estNode;
+  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+  int N=obj->nodesetval->nodeNr;
+  int idir=0;
+  for (int idist=0; idist<N; ++idist) {
+    xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
+    std::string name=getName(distNode);
+    if (name=="Cartesian" || name=="Cartesian1" || name=="Cartesian2") {
+      std::string dirName = getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1));
+      if (name=="Cartesian") {
+        darray.push_back(new PairCart(idir));
+      } else if (name=="Cartesian1") {
+        darray.push_back(new PairCart1(idir));
+      } else {
+        darray.push_back(new PairCart2(idir));
+      }
+      min.push_back(getLengthAttribute(distNode,"min"));
+      max.push_back(getLengthAttribute(distNode,"max"));
+      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      idir++;
+    } else if (name=="Radial") {
+      int idir=-1;
+      std::string dirName = getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
+      darray.push_back(new PairRadial(idir));
       min.push_back(getLengthAttribute(distNode,"min"));
       max.push_back(getLengthAttribute(distNode,"max"));
       nbin.push_back(getIntAttribute(distNode,"nbin"));
