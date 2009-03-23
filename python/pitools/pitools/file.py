@@ -66,7 +66,10 @@ class File(object):
 
   def getResponseFunction(self,name):
     data = self.file.getNode("/estimators",name).read()
-    error = self.file.getNode("/estimators",name+"_err").read()
+    try:
+      error = self.file.getNode("/estimators",name+"_err").read()
+    except:
+      error = None
     t = self.file.getNode("/simInfo","temperature").read()[0]
     return ResponseFunction(name,data,error,t)
 

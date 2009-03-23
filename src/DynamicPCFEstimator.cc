@@ -84,7 +84,7 @@ void DynamicPCFEstimator::handleLink(const Vec& start, const Vec& end,
         int ibin = 0;
         double d = (*dist)(r1,r2,cell);
         ibin = int(floor((d-min)*deltaInv));
-        if (ibin>=0 && ibin<nbin) temp(ibin,islice) += 1.0;
+        if (ibin>=0 && ibin<nbin) temp(ibin,islice/nstride) += 1.0;
       }
     }
   }

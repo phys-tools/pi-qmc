@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006,2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
 #ifndef __SHOAction_h_
 #define __SHOAction_h_
 class MultiLevelSampler;
+class Species;
 template <int TDIM> class Beads;
 #include <blitz/array.h>
 #include "Action.h"
@@ -57,7 +58,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor by providing the timestep tau.
   SHOAction(const double tau, const double omega, const double mass,
-            const int ndim=NDIM);
+            const int ndim, const Species&);
   /// Virtual destructor.
   virtual ~SHOAction() {}
   /// Calculate the difference in action.
@@ -77,5 +78,9 @@ private:
   const double mass;
   /// The number of dimensions (can be less than NDIM, i.e., to make a wire).
   const int ndim;
+  /// The first particle in this interaction.
+  const int ifirst;
+  /// The number of particles with this interaction.
+  const int npart;
 };
 #endif

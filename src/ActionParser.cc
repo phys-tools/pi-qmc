@@ -171,11 +171,14 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       continue;
     } else if (name=="SHOAction") {
       double omega=getEnergyAttribute(actNode,"omega");
-      const double mass=simInfo.getSpecies(0).mass;
       if (omega==0) omega=1;
       int ndim=getIntAttribute(actNode,"ndim");
       if (ndim==0) ndim=NDIM;
-      composite->addAction(new SHOAction(simInfo.getTau(),omega,mass,ndim));
+      std::string specName=getStringAttribute(actNode,"species");
+      const Species& species(simInfo.getSpecies(specName));
+      const double mass = species.mass;
+      composite->addAction(new SHOAction(simInfo.getTau(),
+                               omega,mass,ndim,species));
       continue;
     } else if (name=="TwoQDAction") {
       const double omega=getEnergyAttribute(actNode,"omega");
