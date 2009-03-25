@@ -10,9 +10,9 @@ Classes:
 
 class Unit(object):
   allUnits = {}
-  def __init__(self,name=""):
+  def __init__(self,name="",conversion=1.):
     self.name = name
-    self.conversion = 1
+    self.conversion = conversion
     self.native = self
   def __str__(self):
     return self.name
@@ -52,10 +52,12 @@ Unit.eV = EnergyUnit("eV",27.211396)
 Unit.meV = EnergyUnit("meV",27211.396)
 Unit.Hz = EnergyUnit("Hz",6579687033582561.)
 Unit.THz = EnergyUnit("THz",6579.4687033582561)
-Unit.cmInv = EnergyUnit("cmInv",21947473.52)
+Unit.cmInv = EnergyUnit("cmInv",219474.7352)
 
 Unit.a0 = LengthUnit.a0
 Unit.pm = LengthUnit("pm",52.91772086)
 Unit.A = LengthUnit("A",0.5291772086)
 Unit.nm = LengthUnit("nm",0.05291772086)
 Unit.um = LengthUnit("um",5.291772086e-5)
+
+Unit.Debye = Unit("D",1./0.393456)

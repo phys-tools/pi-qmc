@@ -77,8 +77,8 @@ void FrequencyEstimator::endCalc(const int lnslice) {
  #endif 
   // Calculate autocorrelation function using FFT's.
  // if (workerID==0) {
-    temp/=nslice;
     fftw_execute(fwd);
+    temp *= tau;
     temp(allSlice)=conj(temp(allSlice))*temp(allSlice);
     double betainv=1./(tau*nslice);
     value -= real(temp)*betainv;
