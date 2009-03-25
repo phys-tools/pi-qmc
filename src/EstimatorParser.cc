@@ -179,8 +179,12 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     if (name=="FrequencyEstimator") {
       std::string species1=getStringAttribute(estNode,"species1");
       std::string species2=getStringAttribute(estNode,"species2");
-      manager->add(new FrequencyEstimator(simInfo,simInfo.getSpecies(species1)
-			      ,simInfo.getSpecies(species2), mpi));
+      int nfreq=getIntAttribute(estNode,"nfreq");
+      if (nfreq==0) nfreq=simInfo.getNSlice();
+      int nstride=getIntAttribute(estNode,"nstride");
+      if (nstride==0) nstride=1;
+      manager->add(new FrequencyEstimator(simInfo,simInfo.getSpecies(species1),
+	simInfo.getSpecies(species2), nfreq, nstride, mpi));
     }
     if (name=="BoxEstimator") {
       std::string component=getStringAttribute(estNode,"component");

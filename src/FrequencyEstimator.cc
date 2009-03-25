@@ -31,23 +31,21 @@
 #include "stats/MPIManager.h"
 
 FrequencyEstimator::FrequencyEstimator(const SimulationInfo& simInfo,
-  const Species& species1, const Species& species2, MPIManager *mpi)
-  : BlitzArrayBlkdEst<1>("frequency", IVecN(simInfo.getNSlice() ),true),
+  const Species& species1, const Species& species2, 
+  int nfreq, int nstride, MPIManager *mpi)
+  : BlitzArrayBlkdEst<1>("frequency", IVecN(nfreq),true),
     npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), 
-    tau(simInfo.getTau()),
-    names(simInfo.getNPart()), spec1(species1.name), spec2(species2.name),
-    temp(nslice), mpi(mpi){
-  for (int i=0; i<names.size(); ++i)
-    names(i)=simInfo.getPartSpecies(i).name;
-  std::cout << "Frequency Estimator " << spec1 << " " << spec2 << std::endl;
+    nfreq(nfreq), nstride(nstride), tau(simInfo.getTau()),
+    ipart(species1.ifirst), jpart(species2.ifirst+species2.count-1),
+    temp(nslice/nstride), mpi(mpi){
+  std::cout << "Frequency Estimator " << species1.name 
+            << " " << species2.name << std::endl;
   fftw_complex *ptr = (fftw_complex*)temp.data();
-  fwd = fftw_plan_dft_1d(nslice, ptr, ptr, FFTW_FORWARD, FFTW_MEASURE);
-  rev = fftw_plan_dft_1d(nslice, ptr, ptr, FFTW_BACKWARD, FFTW_MEASURE);
+  fwd = fftw_plan_dft_1d(nslice/nstride, ptr, ptr, FFTW_FORWARD, FFTW_MEASURE);
 }
 
 FrequencyEstimator::~FrequencyEstimator() {
   fftw_destroy_plan(fwd);
-  fftw_destroy_plan(rev);
 }
 
 void FrequencyEstimator::initCalc(const int lnslice, const int firstSlice) {
@@ -55,15 +53,11 @@ void FrequencyEstimator::initCalc(const int lnslice, const int firstSlice) {
 }
 
 void FrequencyEstimator::handleLink(const Vec& start, const Vec& end,
-          const int ipart, const int islice, const Paths& paths) {
-  if(names(ipart)==spec1) {
-     for(int jpart=0; jpart<names.size();++jpart){
-        if(names(jpart)==spec2 && jpart!=ipart) {
-           Vec delta=paths(ipart,islice)-paths(jpart,islice);
-  	   double delta2=dot(delta, delta);
-           temp(islice)= sqrt(delta2);
-        }
-     }
+          const int iipart, const int islice, const Paths& paths) {
+  if (iipart==ipart) {
+    Vec delta = start-paths(jpart,islice);
+    double delta2 = dot(delta, delta);
+    temp(islice/nstride) = sqrt(delta2);
   }
 }
 
@@ -86,8 +80,8 @@ void FrequencyEstimator::endCalc(const int lnslice) {
     temp/=nslice;
     fftw_execute(fwd);
     temp(allSlice)=conj(temp(allSlice))*temp(allSlice);
-    fftw_execute(rev);
-    value -= real(temp);
+    double betainv=1./(tau*nslice);
+    value -= real(temp)*betainv;
     norm+=1;
  // }
 }

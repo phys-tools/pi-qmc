@@ -1,4 +1,4 @@
-// $Id $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -30,15 +30,17 @@ class Species;
 class MPIManager;
 /** Frequency estimator.
  *  @version $Revision $ 
- *  @author Daejin Shin  */
-class FrequencyEstimator : public BlitzArrayBlkdEst<1>, public LinkSummable {
+ *  @author Daejin Shin, John Shumway  */
+class FrequencyEstimator : public BlitzArrayBlkdEst<1>,
+                           public LinkSummable {
 public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<std::complex<double>,1> CArray1;
   typedef blitz::Array<std::string,1> SArray;
   /// Constructor.
-  FrequencyEstimator(const SimulationInfo& simInfo, const Species& species1, 
-		     const Species& species2, MPIManager *mpi);
+  FrequencyEstimator(const SimulationInfo& simInfo,
+                     const Species& species1, const Species& species2,
+                     int nfreq, int nstride, MPIManager *mpi);
   /// Virtual destructor.
   virtual ~FrequencyEstimator();
   /// Initialize the calculation.
@@ -54,24 +56,14 @@ public:
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
   /// parameters.
-  const int npart, nslice;
+  const int npart, nslice, nfreq, nstride;
   const double tau;
-  /// Bond length.
-  double length;
-  /// The normalization of the bond length (for multiple bonds).
-  double norm1;
-  /// The normalization of the bond length.
-  double norm2;
-  /// The Average length.
-  double avlength;
-  /// The names of the particles.
-  SArray names;
-  /// The species to measure the bond length of.
-  std::string spec1;
-  std::string spec2;
+  /// Particle indices for the bond we are measuring.
+  const int ipart, jpart;
+  /// Temporary array for collecting correlation function. 
   CArray1 temp;
   /// FFT plan
-  fftw_plan fwd, rev;
+  fftw_plan fwd;
   MPIManager *mpi;
 };
 

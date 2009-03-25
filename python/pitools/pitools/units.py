@@ -50,6 +50,9 @@ Unit.uK = EnergyUnit("uK",3.1577465e11)
 Unit.nK = EnergyUnit("nK",3.1577465e14)
 Unit.eV = EnergyUnit("eV",27.211396)
 Unit.meV = EnergyUnit("meV",27211.396)
+Unit.Hz = EnergyUnit("Hz",6579687033582561.)
+Unit.THz = EnergyUnit("THz",6579.4687033582561)
+Unit.cmInv = EnergyUnit("cmInv",21947473.52)
 
 Unit.a0 = LengthUnit.a0
 Unit.pm = LengthUnit("pm",52.91772086)
