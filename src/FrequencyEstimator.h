@@ -65,6 +65,9 @@ private:
   /// FFT plan
   fftw_plan fwd;
   MPIManager *mpi;
+#ifdef ENABLE_MPI
+  CArray1 mpiBuffer;
+#endif
 };
 
 #endif

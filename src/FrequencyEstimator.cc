@@ -37,11 +37,14 @@ FrequencyEstimator::FrequencyEstimator(const SimulationInfo& simInfo,
     npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), 
     nfreq(nfreq), nstride(nstride), tau(simInfo.getTau()),
     ipart(species1.ifirst), jpart(species2.ifirst+species2.count-1),
-    temp(nslice/nstride), mpi(mpi){
+    temp(nslice/nstride), mpi(mpi) {
   std::cout << "Frequency Estimator " << species1.name 
             << " " << species2.name << std::endl;
   fftw_complex *ptr = (fftw_complex*)temp.data();
   fwd = fftw_plan_dft_1d(nslice/nstride, ptr, ptr, FFTW_FORWARD, FFTW_MEASURE);
+#ifdef ENABLE_MPI
+  if (mpi) mpiBuffer.resize(nslice/nstride);
+#endif
 }
 
 FrequencyEstimator::~FrequencyEstimator() {
@@ -63,25 +66,22 @@ void FrequencyEstimator::handleLink(const Vec& start, const Vec& end,
 
 void FrequencyEstimator::endCalc(const int lnslice) {
   blitz::Range allSlice = blitz::Range::all();
- // First move all data to 1st worker. 
- // int workerID=(mpi)?mpi->getWorkerID():0;
- #ifdef ENABLE_MPI
+  // First move all data to 1st worker. 
+  int workerID=(mpi)?mpi->getWorkerID():0;
+#ifdef ENABLE_MPI
   if (mpi) {
-//    mpi->getWorkerComm().Reduce(&temp(0),&temp(0),
-//                                nslice*nbin,MPI::DOUBLE,MPI::SUM,0);
-//    temp(0,allBin,allSlice)=temp(1,allBin,allSlice); 
-//    mpi->getWorkerComm().Reduce(ninbin.data(),ninbinbuff.data(),
-//                                nbin,MPI::INTEGER,MPI::SUM,0);
-//    ninbin=ninbinbuff;
+    mpi->getWorkerComm().Reduce(temp.data(), mpiBuffer.data(),
+                                2*(nslice/nstride),MPI::DOUBLE,MPI::SUM,0);
+    temp = mpiBuffer; 
   }
- #endif 
+#endif 
   // Calculate autocorrelation function using FFT's.
- // if (workerID==0) {
+  if (workerID==0) {
     fftw_execute(fwd);
-    temp *= tau;
+    temp *= nstride*tau;
     temp(allSlice)=conj(temp(allSlice))*temp(allSlice);
     double betainv=1./(tau*nslice);
-    value -= real(temp)*betainv;
+    value -= real(temp(blitz::Range(0,nfreq-1)))*betainv;
     norm+=1;
- // }
+  }
 }

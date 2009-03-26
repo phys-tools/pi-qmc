@@ -58,6 +58,9 @@ public:
       ifirst(s1.ifirst), jfirst(s2.ifirst), nipart(s1.count), njpart(s2.count),
       mpi(mpi) {
     BlitzArrayBlkdEst<N>::norm=0;
+#ifdef ENABLE_MPI
+    if (mpi) mpiBuffer.resize(nbin);
+#endif
   }
   /// Virtual destructor.
   virtual ~PairCFEstimator() {
@@ -71,8 +74,6 @@ public:
   virtual void handleLink(const Vec& start, const Vec& end,
          const int ipart, const int islice, const Paths &paths) {
     if (ipart>=ifirst && ipart<ifirst+nipart) {
-//      for (int jpart=jfirst; jpart<(jfirst+njpart) 
-//           && (jfirst!=ifirst ||jpart<ipart); ++jpart) {
       for (int jpart=jfirst; jpart<(jfirst+njpart); ++jpart) {
         if (ipart!=jpart) {
           Vec r1=start; Vec r2=paths(jpart,islice);
@@ -94,17 +95,12 @@ public:
     // First move all data to 1st worker. 
     int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
-//    if (mpi) {
-//      if (workerID==0) {
-//        mpi->getWorkerComm().Reduce(&temp(0,0,0),&temp(0,0,0),
-//                                    product(nbin),MPI::DOUBLE,MPI::SUM,0);
-//      } else {
-//        mpi->getWorkerComm().Reduce(MPI::IN_PLACE,&temp(0,0,0),
-//                                    product(nbin),MPI::DOUBLE,MPI::SUM,0);
-//      }
-//    }
+    if (mpi) {
+      mpi->getWorkerComm().Reduce(temp.data(),mpiBuffer.data(),
+                                  product(nbin),MPI::DOUBLE,MPI::SUM,0);
+      temp = mpiBuffer;
+    }
 #endif
-    ///Need code for multiple workers!
     if (workerID==0) {
       BlitzArrayBlkdEst<N>::value+=temp;
     }
@@ -122,5 +118,8 @@ private:
   ArrayN temp;
   int ifirst, jfirst, nipart, njpart;
   MPIManager *mpi;
+#ifdef ENABLE_MPI
+  ArrayN mpiBuffer;
+#endif
 };
 #endif
