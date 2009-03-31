@@ -49,7 +49,7 @@ double SHOAction::getActionDifference(const MultiLevelSampler& sampler,
   for (int islice=nStride; islice<nSlice; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
-      if (i<ifirst || i>ifirst+npart) continue;
+      if (i<ifirst || i>=ifirst+npart) continue;
       // Add action for moving beads.
       Vec r1=movingBeads(iMoving,islice); 
       Vec r0=movingBeads(iMoving,islice-nStride); 
@@ -85,7 +85,7 @@ double SHOAction::getTotalAction(const Paths& paths, const int level) const {
 void SHOAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
   u=utau=0; fm=0; fp=0;
-  if (ipart<ifirst || ipart>ifirst+npart) return;
+  if (ipart<ifirst || ipart>=ifirst+npart) return;
   double wt=omega*tau;
   double sinhwt=sinh(wt);
   double coshwt=cosh(wt);
