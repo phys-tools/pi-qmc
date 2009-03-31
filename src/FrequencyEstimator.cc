@@ -60,7 +60,7 @@ void FrequencyEstimator::handleLink(const Vec& start, const Vec& end,
   if (iipart==ipart) {
     Vec delta = start-paths(jpart,islice);
     double delta2 = dot(delta, delta);
-    temp(islice/nstride) = sqrt(delta2);
+    temp(islice/nstride) += sqrt(delta2);
   }
 }
 
@@ -69,6 +69,7 @@ void FrequencyEstimator::endCalc(const int lnslice) {
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
+  mpiBuffer = 0.;
   if (mpi) {
     mpi->getWorkerComm().Reduce(temp.data(), mpiBuffer.data(),
                                 2*(nslice/nstride),MPI::DOUBLE,MPI::SUM,0);
@@ -78,7 +79,7 @@ void FrequencyEstimator::endCalc(const int lnslice) {
   // Calculate autocorrelation function using FFT's.
   if (workerID==0) {
     fftw_execute(fwd);
-    temp *= nstride*tau;
+    temp *= tau;
     temp(allSlice)=conj(temp(allSlice))*temp(allSlice);
     double betainv=1./(tau*nslice);
     value -= real(temp(blitz::Range(0,nfreq-1)))*betainv;
