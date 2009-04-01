@@ -73,7 +73,7 @@ void FrequencyEstimator::endCalc(const int lnslice) {
   if (mpi) {
     mpi->getWorkerComm().Reduce(temp.data(), mpiBuffer.data(),
                                 2*(nslice/nstride),MPI::DOUBLE,MPI::SUM,0);
-    temp = mpiBuffer; 
+    if (workerID==0) temp = mpiBuffer; 
   }
 #endif 
   // Calculate autocorrelation function using FFT's.
