@@ -93,8 +93,9 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-PermutationChooser.$(OBJEXT) \
 	pi-PermutationEstimator.$(OBJEXT) pi-PIMCParser.$(OBJEXT) \
 	pi-PositionEstimator.$(OBJEXT) pi-PrimSHOAction.$(OBJEXT) \
-	pi-ProbDensityGrid.$(OBJEXT) pi-QPCAction.$(OBJEXT) \
-	pi-QuadrupoleMomentEstimator.$(OBJEXT) \
+	pi-PrimAnisSHOAction.$(OBJEXT) pi-PrimCosineAction.$(OBJEXT) \
+	pi-PrimTorusAction.$(OBJEXT) pi-ProbDensityGrid.$(OBJEXT) \
+	pi-QPCAction.$(OBJEXT) pi-QuadrupoleMomentEstimator.$(OBJEXT) \
 	pi-RandomNumGenerator.$(OBJEXT) \
 	pi-RandomPermutationChooser.$(OBJEXT) \
 	pi-SectionChooser.$(OBJEXT) pi-SeedRandom.$(OBJEXT) \
@@ -303,7 +304,8 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	ParallelPaths.cc ParticleChooser.cc PathReader.cc Paths.cc \
 	PeriodicGaussian.cc Permutation.cc PermutationChooser.cc \
 	PermutationEstimator.cc PIMCParser.cc PositionEstimator.cc \
-	PrimSHOAction.cc ProbDensityGrid.cc QPCAction.cc \
+	PrimSHOAction.cc PrimAnisSHOAction.cc PrimCosineAction.cc \
+	PrimTorusAction.cc ProbDensityGrid.cc QPCAction.cc \
 	QuadrupoleMomentEstimator.cc RandomNumGenerator.cc \
 	RandomPermutationChooser.cc SectionChooser.cc SeedRandom.cc \
 	SerialPaths.cc SHOAction.cc SHODotAction.cc SHONodes.cc \
@@ -346,7 +348,8 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	ParticleChooser.h PathReader.h Paths.h PeriodicGaussian.h \
 	PermutationChooser.h Permutation.h PhaseModel.h \
 	PermutationEstimator.h PIMCParser.h Positioner.h \
-	PositionEstimator.h PrimSHOAction.h ProbDensityGrid.h \
+	PositionEstimator.h PrimSHOAction.h PrimAnisSHOAction.h \
+	PrimCosineAction.h PrimTorusAction.h ProbDensityGrid.h \
 	QPCAction.h QuadrupoleMomentEstimator.h RandomNumGenerator.h \
 	RandomPermutationChooser.h SectionChooser.h SeedRandom.h \
 	SerialPaths.h SHOAction.h SHODotAction.h SHONodes.h SHOPhase.h \
@@ -505,7 +508,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PermutationChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PermutationEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PositionEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PrimAnisSHOAction.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PrimCosineAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PrimSHOAction.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PrimTorusAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ProbDensityGrid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-QPCAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-QuadrupoleMomentEstimator.Po@am__quote@
@@ -1635,6 +1641,48 @@ pi-PrimSHOAction.obj: PrimSHOAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimSHOAction.cc' object='pi-PrimSHOAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimSHOAction.obj `if test -f 'PrimSHOAction.cc'; then $(CYGPATH_W) 'PrimSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimSHOAction.cc'; fi`
+
+pi-PrimAnisSHOAction.o: PrimAnisSHOAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimAnisSHOAction.o -MD -MP -MF $(DEPDIR)/pi-PrimAnisSHOAction.Tpo -c -o pi-PrimAnisSHOAction.o `test -f 'PrimAnisSHOAction.cc' || echo '$(srcdir)/'`PrimAnisSHOAction.cc
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-PrimAnisSHOAction.Tpo $(DEPDIR)/pi-PrimAnisSHOAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimAnisSHOAction.cc' object='pi-PrimAnisSHOAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimAnisSHOAction.o `test -f 'PrimAnisSHOAction.cc' || echo '$(srcdir)/'`PrimAnisSHOAction.cc
+
+pi-PrimAnisSHOAction.obj: PrimAnisSHOAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimAnisSHOAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimAnisSHOAction.Tpo -c -o pi-PrimAnisSHOAction.obj `if test -f 'PrimAnisSHOAction.cc'; then $(CYGPATH_W) 'PrimAnisSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimAnisSHOAction.cc'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-PrimAnisSHOAction.Tpo $(DEPDIR)/pi-PrimAnisSHOAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimAnisSHOAction.cc' object='pi-PrimAnisSHOAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimAnisSHOAction.obj `if test -f 'PrimAnisSHOAction.cc'; then $(CYGPATH_W) 'PrimAnisSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimAnisSHOAction.cc'; fi`
+
+pi-PrimCosineAction.o: PrimCosineAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimCosineAction.o -MD -MP -MF $(DEPDIR)/pi-PrimCosineAction.Tpo -c -o pi-PrimCosineAction.o `test -f 'PrimCosineAction.cc' || echo '$(srcdir)/'`PrimCosineAction.cc
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-PrimCosineAction.Tpo $(DEPDIR)/pi-PrimCosineAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimCosineAction.cc' object='pi-PrimCosineAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimCosineAction.o `test -f 'PrimCosineAction.cc' || echo '$(srcdir)/'`PrimCosineAction.cc
+
+pi-PrimCosineAction.obj: PrimCosineAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimCosineAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimCosineAction.Tpo -c -o pi-PrimCosineAction.obj `if test -f 'PrimCosineAction.cc'; then $(CYGPATH_W) 'PrimCosineAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimCosineAction.cc'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-PrimCosineAction.Tpo $(DEPDIR)/pi-PrimCosineAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimCosineAction.cc' object='pi-PrimCosineAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimCosineAction.obj `if test -f 'PrimCosineAction.cc'; then $(CYGPATH_W) 'PrimCosineAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimCosineAction.cc'; fi`
+
+pi-PrimTorusAction.o: PrimTorusAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimTorusAction.o -MD -MP -MF $(DEPDIR)/pi-PrimTorusAction.Tpo -c -o pi-PrimTorusAction.o `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-PrimTorusAction.Tpo $(DEPDIR)/pi-PrimTorusAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='pi-PrimTorusAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimTorusAction.o `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
+
+pi-PrimTorusAction.obj: PrimTorusAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimTorusAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimTorusAction.Tpo -c -o pi-PrimTorusAction.obj `if test -f 'PrimTorusAction.cc'; then $(CYGPATH_W) 'PrimTorusAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimTorusAction.cc'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-PrimTorusAction.Tpo $(DEPDIR)/pi-PrimTorusAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='pi-PrimTorusAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimTorusAction.obj `if test -f 'PrimTorusAction.cc'; then $(CYGPATH_W) 'PrimTorusAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimTorusAction.cc'; fi`
 
 pi-ProbDensityGrid.o: ProbDensityGrid.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ProbDensityGrid.o -MD -MP -MF $(DEPDIR)/pi-ProbDensityGrid.Tpo -c -o pi-ProbDensityGrid.o `test -f 'ProbDensityGrid.cc' || echo '$(srcdir)/'`ProbDensityGrid.cc

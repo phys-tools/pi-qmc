@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006,2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,10 +25,12 @@
 #include "SuperCell.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
+#include "Species.h"
 
 PrimSHOAction::PrimSHOAction(const double a, const double b, 
-  const SimulationInfo &simInfo, int ndim) 
-  : tau(simInfo.getTau()), a(a), b(b), ndim(ndim) {
+  const SimulationInfo &simInfo, int ndim, const Species &species) 
+  : tau(simInfo.getTau()), a(a), b(b), ndim(ndim),
+  ifirst(species.ifirst), npart(species.count){
 }
 
 double PrimSHOAction::getActionDifference(const MultiLevelSampler& sampler,
@@ -45,6 +47,7 @@ double PrimSHOAction::getActionDifference(const MultiLevelSampler& sampler,
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
+if (i<ifirst || i>=ifirst+npart) continue;
       // Add action for moving beads.
       Vec delta=movingBeads(iMoving,islice);
       cell.pbc(delta);
@@ -71,6 +74,8 @@ double PrimSHOAction::getTotalAction(const Paths& paths,
 
 void PrimSHOAction::getBeadAction(const Paths& paths, int ipart, int islice,
      double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
+u=utau=0; fm=0; fp=0;
+if (ipart<ifirst || ipart>=ifirst+npart) return;
   Vec delta=paths(ipart,islice);
   //double x2=dot(delta,delta);
   double x2=0;

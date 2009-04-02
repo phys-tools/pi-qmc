@@ -61,6 +61,9 @@
 #include "SHOPhase.h"
 #include "Spin4DPhase.h"
 #include "PrimSHOAction.h"
+#include "PrimCosineAction.h"
+#include "PrimTorusAction.h"
+#include "PrimAnisSHOAction.h"
 #include "EFieldAction.h"
 #include "EwaldAction.h"
 #include "StillWebAction.h"
@@ -150,11 +153,53 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double a=getDoubleAttribute(actNode,"a");
       double b=getDoubleAttribute(actNode,"b");
       double omega=getEnergyAttribute(actNode,"omega");
-      if (a==0) a=0.5*omega*omega;
+      std::string specName=getStringAttribute(actNode,"species");
+      const Species& species(simInfo.getSpecies(specName));
+      const double mass = species.mass; 
+      if (a==0) a=0.5*mass*omega*omega;
       int ndim=getIntAttribute(actNode,"ndim");
       if (ndim==0) ndim=NDIM;
-      composite->addAction(new PrimSHOAction(a,b,simInfo,ndim));
+      composite->addAction(new PrimSHOAction(a,b,simInfo,ndim,species));
       continue;
+    } else if (name=="PrimCosineAction") {
+                double a=getDoubleAttribute(actNode,"a");
+                double b=getDoubleAttribute(actNode,"b");
+                int ndim=getIntAttribute(actNode,"ndim");
+                if (ndim==0) ndim=1;
+                composite->addAction(new PrimCosineAction(a,b,simInfo,ndim));
+                continue;
+    } else if (name=="PrimTorusAction") {
+                double a=getDoubleAttribute(actNode,"a");
+                double b=getDoubleAttribute(actNode,"b");
+                  double omega=getEnergyAttribute(actNode,"omega");
+                std::string specName=getStringAttribute(actNode,"species");
+                const Species& species(simInfo.getSpecies(specName));
+                const double mass = species.mass;
+                if (a==0) a=0.5*mass*omega*omega;
+	        int ndim=getIntAttribute(actNode,"ndim");
+                if (ndim==0) ndim=2;
+
+		composite->addAction(new PrimTorusAction(a,b,simInfo,ndim,species));
+                continue;
+	} else if (name=="PrimAnisSHOAction") {
+
+	        double a=getDoubleAttribute(actNode,"a");
+	        double b=getDoubleAttribute(actNode,"c");
+      		double c=getDoubleAttribute(actNode,"c");
+
+		double omegax=getEnergyAttribute(actNode,"omegax");
+		double omegay=getEnergyAttribute(actNode,"omegay");
+		double omegaz=getEnergyAttribute(actNode,"omegaz");
+		std::string specName=getStringAttribute(actNode,"species");
+		const Species& species(simInfo.getSpecies(specName));
+		const double mass = species.mass; 
+		if (a==0)  a=0.5*mass*omegax*omegax;
+		if (b==0) b=0.5*mass*omegay*omegay;
+		if (c==0) c=0.5*mass*omegaz*omegaz;
+		int ndim=getIntAttribute(actNode,"ndim");
+		if (ndim==0) ndim=NDIM;
+		composite->addAction(new PrimAnisSHOAction(a,b,c,simInfo,ndim,species));
+		continue;
     } else if (name=="StillingerWeberAction") {
       composite->addAction(new StillWebAction(simInfo,"struct.h5"));
 //    } else if (name=="GrapheneActionAction") {
@@ -169,7 +214,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       composite->addAction(
         new SpinAction(tau,mass,bx,by,bz,simInfo.spinOmega,gc));
       continue;
-    } else if (name=="SHOAction") {
+ } else if (name=="SHOAction") {
       double omega=getEnergyAttribute(actNode,"omega");
       if (omega==0) omega=1;
       int ndim=getIntAttribute(actNode,"ndim");

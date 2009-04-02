@@ -17,6 +17,7 @@
 #ifndef __PrimSHOAction_h_
 #define __PrimSHOAction_h_
 class MultiLevelSampler;
+class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
 #include <blitz/array.h>
@@ -33,7 +34,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Construct by providing the timestep tau.
   PrimSHOAction(const double a, const double b,
-                const SimulationInfo &simInfo, const int ndim);
+                const SimulationInfo &simInfo, const int ndim, const Species &species);
   /// Virtual destructor.
   virtual ~PrimSHOAction() {}
   /// Calculate the difference in action.
@@ -51,5 +52,9 @@ private:
   const double a, b;
   /// The number of dimensions (can be less than NDIM, i.e., to make a wire).
   const int ndim;
+  /// The first particle in this interaction.
+  const int ifirst;
+  /// The number of particles with this interaction.
+  const int npart;
 };
 #endif
