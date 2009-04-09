@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2008 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,20 +30,21 @@
 CoulombAction::CoulombAction(const double epsilon, 
     const SimulationInfo& simInfo, const int norder, double rmin, 
     double rmax, int ngpts, const bool dumpFiles,
-    bool useEwald, int ewaldNDim, double ewaldKcut, double screenDist)
+    bool useEwald, int ewaldNDim, double ewaldRcut, 
+    double ewaldKcut, double screenDist)
   : epsilon(epsilon), tau(simInfo.getTau()), npart(simInfo.getNPart()),
     pairActionArray(0), screenDist(screenDist), ewaldSum(0) {
   typedef blitz::TinyVector<int, NDIM> IVec;
   const int nspecies=simInfo.getNSpecies();
   if (useEwald && NDIM==3 && ewaldNDim==NDIM) {
     SuperCell &cell(*simInfo.getSuperCell());
-    double rcut = cell.a[0]/2.;
-    ewaldSum = new EwaldSum(cell,npart,rcut,ewaldKcut);
+    if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
+std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
+    ewaldSum = new EwaldSum(cell,npart,ewaldRcut,ewaldKcut);
     rewald.resize(npart);
     EwaldSum::Array1 &q=ewaldSum->getQArray();  
     for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge;
     ewaldSum->evalSelfEnergy();
-    std::cout << "using ewald sums" << ewaldSum << std::endl;
   }
   for (int i=0; i<nspecies; ++i) {
     for (int j=i; j<nspecies; ++j) {
@@ -84,7 +85,6 @@ CoulombAction::CoulombAction(const double epsilon,
       }
     }
   }
-  std::cout << "Coulomb action" << std::endl;
 }
 
 CoulombAction::~CoulombAction() {
@@ -100,23 +100,19 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
   for (unsigned int i=0; i<pairActionArray.size(); ++i) {
     u += pairActionArray[i]->getActionDifference(sampler,level);
   }
-  // Compute long range ewald action at lowest level.
+  // Compute long range Ewald action at lowest level.
   if (ewaldSum && level==0) {
     const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
     const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
     const int nSlice=sectionBeads.getNSlice();
     const IArray& index=sampler.getMovingIndex(); 
     const int nMoving=index.size();
-//std::cout << "    u=" << u << std::endl;
     for (int islice=1; islice<nSlice-1; ++islice) {
       for (int i=0; i<npart; ++i) rewald(i)=sectionBeads(i,islice);
       u -= ewaldSum->evalLongRange(rewald)*tau/epsilon;
-//      std::cout << ewaldSum->evalLongRange(rewald)*tau/epsilon << std::endl;
       for (int i=0; i<nMoving; ++i) rewald(index(i))=movingBeads(i,islice);
       u += ewaldSum->evalLongRange(rewald)*tau/epsilon;
-//      std::cout << ewaldSum->evalLongRange(rewald)*tau/epsilon << std::endl;
     }
-//std::cout << "now u=" << u << std::endl;
   }
   return u;
 }
@@ -324,5 +320,6 @@ double CoulombAction::utau(double r, int order) const {
   double up=u(r,order);
   tau = tausave*(1.0-eps);
   double um=u(r,order);
+  tau = tausave;
   return (up-um)/(2.0*eps*tau);
 }

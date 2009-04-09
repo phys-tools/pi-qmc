@@ -81,7 +81,10 @@ EwaldSum::~EwaldSum() {
 }
 
 void EwaldSum::evalSelfEnergy() {
-  selfEnergy = -kappa/sqrt(PI)*sum(q*q);
+  double Q = sum(q);
+  double V = 1;
+  for (int i=0; i<NDIM; ++i) V *= cell[i];
+  selfEnergy = -kappa/sqrt(PI)*sum(q*q) - PI*Q*Q/(2*V*kappa*kappa);
 }
 
 double EwaldSum::evalShortRange(const double r) const {
@@ -135,12 +138,7 @@ double EwaldSum::evalLongRange(const VArray1& r) const {
           for (int jpart=0; jpart<npart; ++jpart) {
             csum+=q(jpart)*eikx(jpart,kx)*eiky(jpart,ky)*eikz(jpart,kz);
           }
-          //sum+=factor*expoverk2(ikvec++)*norm(csum);
-          sum+=factor*expoverk2(ikvec++)*
-               abs(csum)*abs(csum);
-//               (real(csum)*real(csum)+imag(csum)*imag(csum));
-//std::cout << "sum=" << sum << std::endl;
-//std::cout << "csum=" << csum << std::endl;
+          sum+=factor*expoverk2(ikvec++)*abs(csum)*abs(csum);
         }
       }
     }

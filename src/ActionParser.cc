@@ -108,11 +108,12 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       bool useEwald=getBoolAttribute(actNode,"useEwald");
       int ndim=getIntAttribute(actNode,"ewaldNDim");
       if (ndim==0) ndim=NDIM;
+      double rcut=getLengthAttribute(actNode,"ewaldRcut");
       double kcut=getDoubleAttribute(actNode,"ewaldKcut");
       double screenDist=getLengthAttribute(actNode,"screenDist");
       composite->addAction(
         new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
-                          useEwald,ndim,kcut,screenDist));
+                          useEwald,ndim,rcut,kcut,screenDist));
       continue;
     } else if (name=="GaussianAction") {
       double v0=getEnergyAttribute(actNode,"v0");

@@ -48,6 +48,11 @@ Thus the following quantity is zero,
 -\frac{\kappa}{\sqrt\pi}\sum_j q_j^2
 -\frac{2\pi}{3V}\left|\sum_j q_j\bfr_j\right|^2,
 @f]
+For a charged system such as the electron gas, there is an additional 
+constant term,
+@f[
+-\frac{\pi}{2\kappa^2 V}\left|\sum_j q_j \right|^2.
+@f]
 @todo Make a new implementation using optimized Ewald breakup, as described
 in <a href="http://dx.doi.org/10.1006/jcph.1995.1054">
 Natoli and Ceperley, J. Comp. Phys. <b>117</b>, 171-178 (1995).</a>
