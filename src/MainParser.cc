@@ -33,7 +33,8 @@
 #include "EstimatorParser.h"
 #include "spin/MainSpinParser.h"
 
-MainParser::MainParser(const std::string& filename) : context (0) {
+MainParser::MainParser(const std::string& filename) 
+  : filename(filename), context (0) {
   doc = xmlParseFile((char*)filename.c_str());
   context = xmlXPathNewContext(doc);
 }
@@ -91,6 +92,7 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
   EstimatorParser estimatorParser(simInfo,tau,action,doubleAction,mpi);
   estimatorParser.parse(ctxt);
   EstimatorManager* estimators=estimatorParser.getEstimatorManager();
+  estimators->recordInputDocument(filename);
   // Setup a serial PIMC method.
   PIMCParser pimcParser(simInfo,action,doubleAction,estimators,
                         simInfo.getBeadFactory(),mpi);

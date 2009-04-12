@@ -210,3 +210,21 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
     dataset.push_back(dataSetID);
   }
 }
+
+void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
+  hid_t dspaceID = H5Screate(H5S_SCALAR);
+  hid_t dtypeID = H5Tcopy(H5T_C_S1);
+  size_t size = docstring.size();
+  H5Tset_size(dtypeID, size);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+  hid_t dsetID = H5Dcreate(fileID, "simInfo/inputDoc", dtypeID, dspaceID,
+                           H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+#else
+  hid_t dsetID = H5Dcreate(fileID, "comment", dtypeID, dspaceID, H5P_DEFAULT);
+#endif
+  H5Dwrite(dsetID, dtypeID, H5S_ALL, H5S_ALL, H5P_DEFAULT, docstring.data());
+  H5Dclose(dsetID);
+  H5Tclose(dtypeID);
+  H5Sclose(dspaceID);
+
+}

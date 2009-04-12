@@ -17,6 +17,7 @@
 #ifndef __EstimatorReportBuilder_h_
 #define __EstimatorReportBuilder_h_
 
+#include <string>
 class EstimatorManager;
 class ScalarEstimator;
 class AccRejEstimator;
@@ -56,5 +57,7 @@ public:
   virtual void startArrayBlockedReport(const ArrayBlockedEstimator& est) {}
   /// Method to write a step for a ArrayBlockedEstimator.
   virtual void reportArrayBlockedStep(const ArrayBlockedEstimator& est) {}
+  /// Method to record the input file contents.
+  virtual void recordInputDocument(const std::string &docstring) {}
 };
 #endif

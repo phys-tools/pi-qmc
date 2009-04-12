@@ -31,6 +31,8 @@ public:
   /// Parse from a context.
   virtual void parse(const xmlXPathContextPtr& ctxt);
 private:
+  /// The input file name.
+  const std::string filename;
   /// The xml document to parse from.
   xmlDocPtr doc;
   /// The context to parse from.

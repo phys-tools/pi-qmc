@@ -68,6 +68,8 @@ public:
   void startWritingGroup(const int nstep, const std::string& name);
   /// Write a simulation step to the current writing group.
   void writeStep();
+  /// Record the input file in the simulation output.
+  void recordInputDocument(const std::string &filename);
 friend class H5ReportBuilder;
 friend class StdoutReportBuilder;
 friend class AsciiReportBuilder;

@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <fstream>
 
 EstimatorManager::EstimatorManager(const std::string& filename,
     MPIManager *mpi, const SimInfoWriter *simInfoWriter)
@@ -96,4 +97,18 @@ EstimatorManager::getEstimatorSet(const std::string& name) {
     for (unsigned int i=0; i<set.size(); ++i) set[i]=*iter++;
   }
   return set;
+}
+
+
+void EstimatorManager::recordInputDocument(const std::string &filename) {
+  std::string buffer;
+  std::string docstring;
+  std::ifstream in(filename.c_str());
+  while(!std::getline(in, buffer).eof())
+    docstring+=buffer+="\n";
+
+  for (BuilderIter builder=builders.begin();
+       builder!=builders.end(); ++builder) {
+    (*builder)->recordInputDocument(docstring);
+  }
 }

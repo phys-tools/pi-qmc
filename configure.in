@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(pi, 1.2.0, john.shumway@asu.edu)
+AC_INIT(pi, 1.3.0, john.shumway@asu.edu)
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(pi, 1.2,0)
+AM_INIT_AUTOMAKE(pi, 1.3,0)
 AC_CONFIG_SRCDIR([src])
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE 

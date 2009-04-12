@@ -56,6 +56,8 @@ public:
   virtual void startAccRejReport(const AccRejEstimator& est);
   /// Method to write a step for a AccRejEstimator.
   virtual void reportAccRejStep(const AccRejEstimator& est);
+  /// Method to record the input file contents.
+  virtual void recordInputDocument(const std::string &docstring);
 private:
   std::string filename;
   const EstimatorManager::SimInfoWriter *simInfoWriter;
