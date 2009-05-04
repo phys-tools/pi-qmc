@@ -1,4 +1,4 @@
-// $Id$
+// $Id: TradEwaldSum.h 38 2009-04-09 20:01:17Z john.shumwayjr $
 /*  Copyright (C) 2008-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __EwaldSum
-#define __EwaldSum
+#ifndef __TradEwaldSum
+#define __TradEwaldSum
 class MultiLevelSampler;
 class SectionChooser;
 class Paths;
@@ -24,9 +24,11 @@ class SuperCell;
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <complex>
+#include "EwaldSum.h"
 
 /** Class for creating and evaluating Ewald sums.
-The most common Ewald summation technique splits a sum of @f$1/r@f$ 
+The traditional (and most common)
+Ewald summation technique splits a sum of @f$1/r@f$ 
 potentials into short-range real space and long-range k-space terms,
 @f[
 \newcommand{\bfr}{\mathbf{r}}
@@ -53,64 +55,27 @@ constant term,
 @f[
 -\frac{\pi}{2\kappa^2 V}\left|\sum_j q_j \right|^2.
 @f]
-@version $Revision$
+@todo Make a new implementation using optimized Ewald breakup, as described
+in <a href="http://dx.doi.org/10.1006/jcph.1995.1054">
+Natoli and Ceperley, J. Comp. Phys. <b>117</b>, 171-178 (1995).</a>
+@bug Only works for NDIM=3.
+@version $Revision: 38 $
 @author John Shumway. */
-class EwaldSum {
+class TradEwaldSum : public EwaldSum {
 public:
-  typedef blitz::TinyVector<double,NDIM> Vec;
-  typedef blitz::TinyVector<int,NDIM> IVec;
-  typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,1> Array1;
-  typedef blitz::Array<Vec,1> VArray1;
-  typedef std::complex<double> Complex;
-  typedef blitz::Array<Complex,2> CArray2;
   /// Constructor calcuates the k-vectors for a given rcut and kcut.
-  EwaldSum(const SuperCell&, const int npart, 
+  TradEwaldSum(const SuperCell&, const int npart, 
            const double rcut, const double kcut);
   /// Virtual destructor.
-  virtual ~EwaldSum();
+  virtual ~TradEwaldSum();
   /// Evaluate the short range function for a radial distance.
-  virtual double evalVShort(const double r) const=0;
+  virtual double evalVShort(const double r) const;
   /// Evaluate the long range function for a k-vector magnitude.
-  virtual double evalVLong(const double k2) const=0;
-  /// Evaluate the long range sum.
-  double evalLongRange(const VArray1& r) const;
+  virtual double evalVLong(const double k2) const;
   /// Evaluate the self energy.
-  virtual void evalSelfEnergy()=0;
-  /// Get a reference to the charge array.
-  Array1& getQArray() {return q;}
-  /// Set the long range table using the evalVLong virtual method.
-  void setLongRangeArray();
-protected:
-  /// The SuperCell.
-  const SuperCell &cell;
-  /// The number of particles.
-  const int npart;
-  /// Real space cutoff.
-  const double rcut;
-  /// K-space cutoff.
-  const double kcut;
-  /// Self energy;
-  double selfEnergy;
-  /// The particle charges.
-  mutable Array1 q;
-  /// The particle positions.
-  mutable VArray1 pos;
-  /// Constants.
-  static const double PI;
-  /// Integer limits of k-space sums.
-  IVec ikmax;
-  /// Reciprical space lattice spacing.
-  Vec deltak;
-  /// Number of k-vectors.
-  int totk;
-  /// Stored values of k-space potential.
-  Array1 vk;
-  /// Arrays to tabulate @f$e^{ik_xx},e^{ik_yy},e^{ik_zz}@f$
-  mutable CArray2 eikx, eiky, eikz;
-  /// Calculate the long range part.
-  double calcLongRangeUtau(VArray1& r) const;
-  /// The the prefactor on the k-space sum.
-  double kPrefactor;
+  virtual void evalSelfEnergy();
+private:
+  /// Screening parameter.
+  const double kappa;
 };
 #endif

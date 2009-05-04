@@ -28,7 +28,7 @@
 #include "SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"
-#include "EwaldSum.h"
+#include "TradEwaldSum.h"
 
 
 EwaldCoulombEstimator::EwaldCoulombEstimator(
@@ -36,8 +36,8 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   const double rcut, const double kcut,
   MPIManager *mpi, const std::string& unitName, double scale, double shift)
   : ScalarEstimator("coulomb_energy",unitName,scale,shift),
-    ewaldSum(*new EwaldSum(*simInfo.getSuperCell(),
-                            simInfo.getNPart(),rcut,kcut)),
+    ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(),
+                                simInfo.getNPart(),rcut,kcut)),
     cell(*simInfo.getSuperCell()),
     energy(0), etot(0), enorm(0), vgrid(1001), nradial(1001),
     rcut(rcut), dr(rcut/1000), drinv(1./dr),
@@ -47,7 +47,7 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   ewaldSum.getQArray() = q;
   ewaldSum.evalSelfEnergy();
   for (int i=1; i<nradial; ++i) {
-    vgrid(i) = ewaldSum.evalShortRange(i*dr)/epsilon;
+    vgrid(i) = ewaldSum.evalVShort(i*dr)/epsilon;
   }
   vgrid(0)=2*vgrid(1)-vgrid(2); //Linear extrapolation.
 }

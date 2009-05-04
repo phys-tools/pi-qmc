@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2007 John B. Shumway, Jr.
+/*  Copyright (C) 2008-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
                    const double rcut, const double kcut)
   : cell(cell), npart(npart), rcut(rcut), kcut(kcut),
-    kappa(3.0/rcut), q(npart)
+    q(npart)
 #if NDIM==3
     ,ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI)),
           (int)(cell.a[2]*kcut/(2*PI))),
@@ -37,58 +37,70 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
     eikx(blitz::shape(npart,ikmax[0]+1)),
     eiky(blitz::shape(0,-ikmax[1]), blitz::shape(npart,2*ikmax[1]+1)),
     eikz(blitz::shape(0,-ikmax[2]), blitz::shape(npart,2*ikmax[2]+1)),
-    twoPiOverV(2*PI/(cell.a[0]*cell.a[1]*cell.a[2]))
+    kPrefactor(2*PI/(cell.a[0]*cell.a[1]*cell.a[2]))
+#endif
+#if NDIM==2
+    ,ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI))),
+    deltak(2*PI*cell.b[0],2*PI*cell.b[1]),
+    eikx(blitz::shape(npart,ikmax[0]+1)),
+    eiky(blitz::shape(0,-ikmax[1]), blitz::shape(npart,2*ikmax[1]+1)),
+    kPrefactor(2*PI/(cell.a[0]*cell.a[1]))
 #endif
 {
-#if NDIM==3
+#if (NDIM==3) || (NDIM==2)
+  // Assume charges are all +1, can be reset if evalSelfEnergy is called again.
   q=1.0;
-  evalSelfEnergy();
-  // Calculate self-energy contribution.
-  //for (int jpart=0; jpart<npart; ++jpart) selfEnergy+=q(jpart)*q(jpart);
-  //selfEnergy*=kappa/sqrt(PI);
   // Calculate k-vectors.
   totk=0;
   std::cout << ikmax;
   for (int kx=0; kx<=ikmax[0]; ++kx) {
     double kx2=kx*kx*deltak[0]*deltak[0];
     for (int ky=((kx==0) ? 0 : -ikmax[1]); ky<=ikmax[1]; ++ky) {
+#if NDIM==3
       double ky2=ky*ky*deltak[1]*deltak[1];
       for (int kz=((kx==0 && ky==0)? 0 : -ikmax[2]); kz<=ikmax[2]; ++kz) {
         double k2=kx2+ky2+kz*kz*deltak[2]*deltak[2];
+#else
+        double k2 = ky*ky*deltak[1]*deltak[1];
+#endif
         if (k2<kcut*kcut && k2!=0) ++totk;
+#if NDIM==3
       }
+#endif
     }
   }
   std::cout << "Ewald: totk=" << totk << std::endl;
-  expoverk2.resize(totk);
+  vk.resize(totk);
+  // Subclasses should be sure to call setLongRangeArray and
+  // evalSelfEnerrgy in their constructors.
+#endif
+}
+
+void EwaldSum::setLongRangeArray() {
+#if (NDIM==3) || (NDIM==2)
   int ikvec=0;
   for (int kx=0; kx<=ikmax[0]; ++kx) {
     double kx2=kx*kx*deltak[0]*deltak[0];
     for (int ky=((kx==0) ? 0 : -ikmax[1]); ky<=ikmax[1]; ++ky) {
+#if NDIM==3
       double ky2=ky*ky*deltak[1]*deltak[1];
       for (int kz=((kx==0 && ky==0)? 0 : -ikmax[2]); kz<=ikmax[2]; ++kz) {
         double k2=kx2+ky2+kz*kz*deltak[2]*deltak[2];
+#else
+        double k2= ky*ky*deltak[1]*deltak[1];
+#endif
         if (k2<kcut*kcut && k2!=0) {
-          expoverk2(ikvec++)=exp(-k2/(4*kappa*kappa))/k2;
+          vk(ikvec++)=evalVLong(k2);
         }
+#if NDIM==3
       }
+#endif
     }
   }
 #endif
 }
 
 EwaldSum::~EwaldSum() {
-}
-
-void EwaldSum::evalSelfEnergy() {
-  double Q = sum(q);
-  double V = 1;
-  for (int i=0; i<NDIM; ++i) V *= cell[i];
-  selfEnergy = -kappa/sqrt(PI)*sum(q*q) - PI*Q*Q/(2*V*kappa*kappa);
-}
-
-double EwaldSum::evalShortRange(const double r) const {
- return -erf(kappa*r)/r;
 }
 
 double EwaldSum::evalLongRange(const VArray1& r) const {
@@ -138,13 +150,13 @@ double EwaldSum::evalLongRange(const VArray1& r) const {
           for (int jpart=0; jpart<npart; ++jpart) {
             csum+=q(jpart)*eikx(jpart,kx)*eiky(jpart,ky)*eikz(jpart,kz);
           }
-          sum+=factor*expoverk2(ikvec++)*abs(csum)*abs(csum);
+          sum+=factor*vk(ikvec++)*abs(csum)*abs(csum);
         }
       }
     }
   }
 #endif
-  return sum*twoPiOverV + selfEnergy;
+  return sum*kPrefactor + selfEnergy;
 }
 
 const double EwaldSum::PI=3.14159265358979;

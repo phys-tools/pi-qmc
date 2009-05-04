@@ -15,6 +15,7 @@ import tables
 from units import Unit
 from scalar import Scalar
 from response import ResponseFunction
+from density import Density
 
 def openFile(name="pimc.h5"):
   return File(name)
@@ -72,4 +73,15 @@ class File(object):
       error = None
     t = self.file.getNode("/simInfo","temperature").read()[0]
     return ResponseFunction(name,data,error,t)
+
+  def getDensity(self,name):
+    node = self.file.getNode("/estimators",name)
+    data = node.read()
+    try:
+      error = self.file.getNode("/estimators",name+"_err").read()
+    except:
+      error = None
+    origin = node.getAttr("origin")
+    scale = node.getAttr("scale")
+    return Density(name,data,error,origin,scale)
 

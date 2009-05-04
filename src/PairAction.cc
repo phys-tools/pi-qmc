@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -106,8 +106,8 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
     for (int iorder=0; iorder<norder+1; ++iorder) {
       ugrid(i,iorder)=action.u(r,iorder);
       ugrid(i,iorder+norder+1)=action.utau(r,iorder);
-//std::cout << r << " " << ugrid(i,iorder) 
-//               << " " << ugrid(i,iorder+norder+1) << std::endl;
+std::cout << r << " " << ugrid(i,iorder) 
+               << " " << ugrid(i,iorder+norder+1) << std::endl;
     }
   }
 }

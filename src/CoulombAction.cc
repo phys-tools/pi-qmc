@@ -25,7 +25,7 @@
 #include "SimulationInfo.h"
 #include "PairAction.h"
 #include "ImagePairAction.h"
-#include "EwaldSum.h"
+#include "TradEwaldSum.h"
 
 CoulombAction::CoulombAction(const double epsilon, 
     const SimulationInfo& simInfo, const int norder, double rmin, 
@@ -40,7 +40,7 @@ CoulombAction::CoulombAction(const double epsilon,
     SuperCell &cell(*simInfo.getSuperCell());
     if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
 std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
-    ewaldSum = new EwaldSum(cell,npart,ewaldRcut,ewaldKcut);
+    ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut);
     rewald.resize(npart);
     EwaldSum::Array1 &q=ewaldSum->getQArray();  
     for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge;
@@ -250,7 +250,7 @@ double CoulombAction::u(double r, int order) const {
   if (order==0) {
     u = u1_0 + log(c);
     if (ewaldSum) {
-      u += tau*q1q2*ewaldSum->evalShortRange(r);
+      u += tau*q1q2*ewaldSum->evalVShort(r);
     }
   } else if (order==1) {
     u = u1_1 + c*(b*u1_1 - 4*a*(1-b)*u1_2);
