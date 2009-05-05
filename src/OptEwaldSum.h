@@ -24,8 +24,9 @@ class SuperCell;
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <complex>
+#include "EwaldSum.h"
 
-/** Class for creating and evaluating Ewald sums.
+/** Class for creating and evaluating optimized Ewald sums.
 The most common Ewald summation technique splits a sum of @f$1/r@f$ 
 potentials into short-range real space and long-range k-space terms,
 @f[
@@ -53,22 +54,25 @@ constant term,
 @f[
 -\frac{\pi}{2\kappa^2 V}\left|\sum_j q_j \right|^2.
 @f]
-@todo Make a new implementation using optimized Ewald breakup, as described
-in <a href="http://dx.doi.org/10.1006/jcph.1995.1054">
-Natoli and Ceperley, J. Comp. Phys. <b>117</b>, 171-178 (1995).</a>
 @version $Revision: 38 $
 @author John Shumway. */
 class OptEwaldSum : public EwaldSum {
 public:
   /// Constructor calcuates the k-vectors for a given rcut and kcut.
-  OptEwaldSum(const SuperCell&, const int npart, 
-           const double rcut, const double kcut);
+  OptEwaldSum(const SuperCell&, int npart, double rcut, double kcut,
+    double khalo, int npoly, int ncts);
   /// Virtual destructor.
   virtual ~OptEwaldSum();
   /// Evaluate the short range function for a radial distance.
   virtual double evalVShort(const double r) const;
   /// Evaluate the long range function for a k-vector magnitude.
   virtual double evalVLong(const double k2) const;
+  /// Evaluate the long range function for a k-vector magnitude.
+  virtual void evalSelfEnergy() const;
 private:
+  /// Order of the polynomial.
+  const int npoly;
+  /// Coefficients for short range potential.
+  IArray coef; 
 };
 #endif

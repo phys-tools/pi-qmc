@@ -26,10 +26,28 @@
 #include "Beads.h"
 #include "MultiLevelSampler.h"
 
-OptEwaldSum::OptEwaldSum(const SuperCell& cell, const int npart,
-                   const double rcut, const double kcut)
-  : EwaldSum(cell, npart, rcut, kcut) {
+OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
+  double rcut, double kcut, double khalo, int npoly, int ncts)
+  : EwaldSum(cell, npart, rcut, kcut),
+    npoly(npoly), coef(npoly) {
 }
 
 OptEwaldSum::~OptEwaldSum() {
+}
+
+double OptEwaldSum::evalVShort(double r) const {
+  double v=0.;
+  double r2 = r*r;
+  for (int i=npoly-1; i>=0; --i) {
+    v *= r2;
+    v += coef(i);
+  }
+  return v;
+}
+
+double OptEwaldSum::evalVLong(double k2) const {
+  return 0;
+}
+
+void OptEwaldSum::evalSelfEnergy() const {
 }
