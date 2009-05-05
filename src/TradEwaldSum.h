@@ -68,12 +68,15 @@ public:
            const double rcut, const double kcut);
   /// Virtual destructor.
   virtual ~TradEwaldSum();
-  /// Evaluate the short range function for a radial distance.
-  virtual double evalVShort(const double r) const;
-  /// Evaluate the long range function for a k-vector magnitude.
-  virtual double evalVLong(const double k2) const;
-  /// Evaluate the self energy.
-  virtual void evalSelfEnergy();
+  /// Returns @f$ f(r) @f$, used to cancel tails on actions or potentials.
+  virtual double evalFR(const double r) const;
+  /// Returns @f$ f(r\rightarrow 0) @f$, used in evalSelfEnergy.
+  virtual double evalFR0() const;
+  /// Returns @f$ f(k) @f$, used to set up vk array.
+  virtual double evalFK(const double k) const;
+  /// Returns @f$ f(k\rightarrow 0) @f$, used in evalSelfEnergy for interaction
+  /// with neutralizing background if system has a net charge.
+  virtual double evalFK0() const;
 private:
   /// Screening parameter.
   const double kappa;

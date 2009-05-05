@@ -46,10 +46,10 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
   ewaldSum.getQArray() = q;
   ewaldSum.evalSelfEnergy();
+  vgrid(0) = -ewaldSum.evalFR0()/epsilon;
   for (int i=1; i<nradial; ++i) {
-    vgrid(i) = ewaldSum.evalVShort(i*dr)/epsilon;
+    vgrid(i) = -ewaldSum.evalFR(i*dr)/epsilon;
   }
-  vgrid(0)=2*vgrid(1)-vgrid(2); //Linear extrapolation.
 }
 
 EwaldCoulombEstimator::~EwaldCoulombEstimator() {

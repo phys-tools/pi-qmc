@@ -26,33 +26,34 @@ class SuperCell;
 #include <complex>
 
 /** Class for creating and evaluating Ewald sums.
-The most common Ewald summation technique splits a sum of @f$1/r@f$ 
-potentials into short-range real space and long-range k-space terms,
+The Ewald sum technique enables fast evaluation of a periodic
+sum of long-range potentials. At the heart of the method
+is a function @f$f(r)@f$ that behaves as @f$1/r@f$ for large r,
+but is smooth for small r.
+The traditional choice for this function is
+@f$ f(r) = \operatorname{erf}(\kappa r)/r@f$.
+The periodic sum of this smooth function may be evaluated
+efficiently in k-space.
 @f[
-\newcommand{\bfr}{\mathbf{r}}
-\newcommand{\bfk}{\mathbf{k}}
-\sum_{i<j} \frac{q_iq_j}{|\bfr_{ij}|}
-=\sum_{i<j}\frac{q_iq_j\operatorname{erfc}(\kappa|\bfr_{ij}|)}{|\bfr_{ij}|}
-+\frac{2\pi}{V}\sum_{\bfk\ne 0}\frac{e^{-\frac{|\bfk|^2}{4\kappa^2}}}{|\bfk|^2}
-  \left|\sum_j q_j e^{i\bfk\cdot\bfr_j}\right|^2
--\frac{\kappa}{\sqrt\pi}\sum_j q_j^2
--\frac{2\pi}{3V}\left|\sum_j q_j\bfr_j\right|^2
+\begin{split}
+\frac{1}{2}\sum_{\mathbf{L}}\sum_{ij}' 
+q_iq_j f(|\mathbf{r}_i-\mathbf{r_j}+\mathbf{L}|)
+= &\frac{1}{2V}\sum_{\mathbf{k}\ne 0} f(|\mathbf{k}|)
+\left|\sum_j q_j e^{i\mathbf k\cdot \mathbf r_j}\right|^2\\
+-&\frac{1}{2}\sum_j q_j^2 f(r\rightarrow 0)
++\frac{1}{2V}f(k\rightarrow 0)\left|\sum_j q_j \right|^2.
+\end{split},
 @f]
-Thus the following quantity is zero,
-@f[
-\newcommand{\bfr}{\mathbf{r}}
-\newcommand{\bfk}{\mathbf{k}}
-0=-\sum_{i<j}\frac{q_iq_j\operatorname{erf}(\kappa|\bfr_{ij}|)}{|\bfr_{ij}|}
-+\frac{2\pi}{V}\sum_{\bfk\ne 0}\frac{e^{-\frac{|\bfk|^2}{4\kappa^2}}}{|\bfk|^2}
-  \left|\sum_j q_j e^{i\bfk\cdot\bfr_j}\right|^2
--\frac{\kappa}{\sqrt\pi}\sum_j q_j^2
--\frac{2\pi}{3V}\left|\sum_j q_j\bfr_j\right|^2,
-@f]
-For a charged system such as the electron gas, there is an additional 
-constant term,
-@f[
--\frac{\pi}{2\kappa^2 V}\left|\sum_j q_j \right|^2.
-@f]
+where the prime on the sum indicates that the i=j term is
+omitted for L=0.
+The left hand side of this equation may be subtracted from any
+sum over pair actions or potentials to remove 1/r tails and
+periodic images, then the quantity is easily added back in using
+the k-space sum on the right hand side.
+Two choices for f(r) are implemented as sub-classes: 
+TradEwaldSum makes the traditional choice that uses an error function,
+and OptEwaldSum uses a polynomial fit to connect smoothly to the
+1/r tail and optimized to converge quickly in k-space.
 @version $Revision$
 @author John Shumway. */
 class EwaldSum {
@@ -69,17 +70,23 @@ public:
            const double rcut, const double kcut);
   /// Virtual destructor.
   virtual ~EwaldSum();
-  /// Evaluate the short range function for a radial distance.
-  virtual double evalVShort(const double r) const=0;
-  /// Evaluate the long range function for a k-vector magnitude.
-  virtual double evalVLong(const double k2) const=0;
+  /// Returns @f$ f(r) @f$, used to cancel tails on actions or potentials.
+  virtual double evalFR(const double r) const=0;
+  /// Returns @f$ f(r\rightarrow 0) @f$, used in evalSelfEnergy.
+  virtual double evalFR0() const=0;
+  /// Returns @f$ f(k) @f$, used to set up vk array.
+  virtual double evalFK(const double k) const=0;
+  /// Returns @f$ f(k\rightarrow 0) @f$, used in evalSelfEnergy for interaction
+  /// with neutralizing background if system has a net charge.
+  virtual double evalFK0() const=0;
   /// Evaluate the long range sum.
   double evalLongRange(const VArray1& r) const;
-  /// Evaluate the self energy.
-  virtual void evalSelfEnergy()=0;
+  /// Evaluate the self energy using evalFR0 and evalFK0 virtual methods.
+  /// You must call this function again if you change the charge array.
+  void evalSelfEnergy();
   /// Get a reference to the charge array.
   Array1& getQArray() {return q;}
-  /// Set the long range table using the evalVLong virtual method.
+  /// Set the long range table using the evalFK virtual method.
   void setLongRangeArray();
 protected:
   /// The SuperCell.
@@ -110,7 +117,7 @@ protected:
   mutable CArray2 eikx, eiky, eikz;
   /// Calculate the long range part.
   double calcLongRangeUtau(VArray1& r) const;
-  /// The the prefactor on the k-space sum.
-  double kPrefactor;
+  /// The prefactor on the k-space sum, 1/2V.
+  double oneOver2V;
 };
 #endif

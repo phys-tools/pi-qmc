@@ -25,27 +25,27 @@
 #include "Paths.h"
 #include "Beads.h"
 #include "MultiLevelSampler.h"
+#include <blitz/tinyvec-et.h>
 
 EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
                    const double rcut, const double kcut)
   : cell(cell), npart(npart), rcut(rcut), kcut(kcut),
-    q(npart)
+    q(npart),
 #if NDIM==3
-    ,ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI)),
+    ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI)),
           (int)(cell.a[2]*kcut/(2*PI))),
     deltak(2*PI*cell.b[0],2*PI*cell.b[1],2*PI*cell.b[2]),
     eikx(blitz::shape(npart,ikmax[0]+1)),
     eiky(blitz::shape(0,-ikmax[1]), blitz::shape(npart,2*ikmax[1]+1)),
     eikz(blitz::shape(0,-ikmax[2]), blitz::shape(npart,2*ikmax[2]+1)),
-    kPrefactor(2*PI/(cell.a[0]*cell.a[1]*cell.a[2]))
 #endif
 #if NDIM==2
-    ,ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI))),
+    ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI))),
     deltak(2*PI*cell.b[0],2*PI*cell.b[1]),
     eikx(blitz::shape(npart,ikmax[0]+1)),
     eiky(blitz::shape(0,-ikmax[1]), blitz::shape(npart,2*ikmax[1]+1)),
-    kPrefactor(2*PI/(cell.a[0]*cell.a[1]))
 #endif
+    oneOver2V(0.5/product(cell.a))
 {
 #if (NDIM==3) || (NDIM==2)
   // Assume charges are all +1, can be reset if evalSelfEnergy is called again.
@@ -90,7 +90,7 @@ void EwaldSum::setLongRangeArray() {
         double k2= ky*ky*deltak[1]*deltak[1];
 #endif
         if (k2<kcut*kcut && k2!=0) {
-          vk(ikvec++)=evalVLong(k2);
+          vk(ikvec++)=evalFK(sqrt(k2));
         }
 #if NDIM==3
       }
@@ -156,7 +156,12 @@ double EwaldSum::evalLongRange(const VArray1& r) const {
     }
   }
 #endif
-  return sum*kPrefactor + selfEnergy;
+  return sum*oneOver2V + selfEnergy;
+}
+
+void EwaldSum::evalSelfEnergy() {
+  double Q = sum(q);
+  selfEnergy = -0.5*sum(q*q)*evalFR0() + oneOver2V*evalFK0()*Q*Q;
 }
 
 const double EwaldSum::PI=3.14159265358979;

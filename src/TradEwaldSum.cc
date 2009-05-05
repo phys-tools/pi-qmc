@@ -36,17 +36,18 @@ TradEwaldSum::TradEwaldSum(const SuperCell& cell, const int npart,
 TradEwaldSum::~TradEwaldSum() {
 }
 
-double TradEwaldSum::evalVShort(const double r) const {
- return -erf(kappa*r)/r;
+double TradEwaldSum::evalFR(const double r) const {
+ return erf(kappa*r)/r;
 }
 
-double TradEwaldSum::evalVLong(const double k2) const {
- return exp(-k2/(4*kappa*kappa))/k2;
+double TradEwaldSum::evalFR0() const {
+ return 2*kappa/sqrt(PI);
 }
 
-void TradEwaldSum::evalSelfEnergy() {
-  double Q = sum(q);
-  double V = 1;
-  for (int i=0; i<NDIM; ++i) V *= cell[i];
-  selfEnergy = -kappa/sqrt(PI)*sum(q*q) - PI*Q*Q/(2*V*kappa*kappa);
+double TradEwaldSum::evalFK(const double k) const {
+ return 4*PI*exp(-(k*k)/(4*kappa*kappa))/(k*k);
+}
+
+double TradEwaldSum::evalFK0() const {
+ return -PI/(kappa*kappa);
 }
