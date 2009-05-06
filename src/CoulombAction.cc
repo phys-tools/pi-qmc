@@ -37,7 +37,7 @@ CoulombAction::CoulombAction(const double epsilon,
     pairActionArray(0), screenDist(screenDist), ewaldSum(0) {
   typedef blitz::TinyVector<int, NDIM> IVec;
   const int nspecies=simInfo.getNSpecies();
-  if (useEwald && NDIM==3 && ewaldNDim==NDIM) {
+  if (useEwald && (NDIM==3||NDIM==2) && ewaldNDim==NDIM) {
     SuperCell &cell(*simInfo.getSuperCell());
     if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
 std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
@@ -302,6 +302,9 @@ double CoulombAction::u(double r, int order) const {
     //u = (u0 + reff*( (-2.+u0*a) + reff*(f + reff*(g + e*taueff*reff)))) /
     //    (1. + reff*(a + reff*(b + reff*(c + reff*(d + e*reff)))));
     u = u3_0 + 0.5*log(1.+4*stau*stau*u3_1/(reff*reff));
+    if (ewaldSum) {
+      u -= tau*q1q2*ewaldSum->evalFR(r);
+    }
     if (screenDist!=0) {
       //ureff=2.0*mu*fabs(q1q2)*sqrt(r*r+screenDist*screenDist);
       //u -= (u0 + ureff*( (-2.+u0*a) + ureff*(f + ureff*(g + e*taueff*ureff)))) /

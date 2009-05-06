@@ -106,7 +106,36 @@ OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
       }
     }
 #else
-    double v = 0;
+    double v = -2.*PI/k;
+    if (k*rcut > 30.) {
+      v = 0; 
+      ftemp =0.;
+    } else {
+      double factor = -0.25*k*k*rcut*rcut;
+      /// handle n=-1 term
+      double term = 2.*PI;
+      double fn = term*rcut;
+      int m = 1;
+      while (fabs(term)>1e-100) {
+        term *= factor/(m*m);
+        fn += term*rcut/(2*m+1);
+        ++m;
+      }
+      v += fn;
+      // loop over even n terms
+      double rnplus2 = rcut*rcut;
+      for (int n=0; n<2*npoly; n+=2) {
+        double term = 2.*PI;
+        ftemp(n/2) = term*rnplus2/(n+2); 
+        int m = 1;
+        while (fabs(term)>1e-100) {
+          term *= factor/(m*m);
+          ftemp(n/2) += term*rnplus2/(2*m+n+2);
+          ++m;
+        }
+        rnplus2 *= rcut*rcut;
+      }
+    }
 #endif
     for (int i=0; i<npoly; ++i) {
       b(i) += degen[ik]*v*ftemp(i);
@@ -159,7 +188,7 @@ OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
   t = b + lamc*c + lamd*d;
   DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
              t.data(),&npoly,&info);
-  //double f = evalFRcut(t,0), df = evalFRcut(t,1);
+  double f = evalFRcut(t,0), df = evalFRcut(t,1);
   coef = t;
 #endif
 }
@@ -202,7 +231,35 @@ double OptEwaldSum::evalFK(const double k) const {
   }
   return v;
 #else
-  return 0.;
+  double v = 2.*PI/k;
+  if (k*rcut < 30.) {
+    /// handle n=-1 term
+    double factor = -0.25*k*k*rcut*rcut;
+    double term = 2.*PI;
+    double fn = term*rcut;
+    int m = 1;
+    while (fabs(term)>1e-100) {
+      term *= factor/(m*m);
+      fn += term*rcut/(2*m+1);
+      ++m;
+    }
+    v -= fn;
+    /// sum over even n terms
+    double rnplus2 = rcut*rcut;
+    for (int n=0; n<2*npoly; n+=2) {
+      double term = 2.*PI;
+      double fn = term*rnplus2/(n+2); 
+      int m = 1;
+      while (fabs(term)>1e-100) {
+        term *= factor/(m*m);
+        fn += term*rnplus2/(2*m+n+2);
+        ++m;
+      }
+      v += coef(n/2)*fn;
+      rnplus2 *= rcut*rcut;
+    }
+  }
+  return v;
 #endif
 }
 
@@ -217,7 +274,14 @@ double OptEwaldSum::evalFK0() const {
   }
   return v;
 #else
-  return 0.;
+  double fn = 2.*PI*rcut;
+  double v = -fn;
+  fn *= rcut/2.;
+  for (int n=0; n<2*npoly; n+=2) {
+    v += coef(n/2)*fn;
+    fn *= (rcut*rcut)*(2+n)/(4+n);
+  }
+  return v;
 #endif
 }
 

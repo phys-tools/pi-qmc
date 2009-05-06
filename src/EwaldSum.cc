@@ -60,7 +60,7 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
       for (int kz=((kx==0 && ky==0)? 0 : -ikmax[2]); kz<=ikmax[2]; ++kz) {
         double k2=kx2+ky2+kz*kz*deltak[2]*deltak[2];
 #else
-        double k2 = ky*ky*deltak[1]*deltak[1];
+        double k2 = kx2 + ky*ky*deltak[1]*deltak[1];
 #endif
         if (k2<kcut*kcut && k2!=0) ++totk;
 #if NDIM==3
@@ -68,7 +68,7 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
 #endif
     }
   }
-  std::cout << "Ewald: totk=" << totk << std::endl;
+  std::cout << "Ewald: totk=" << 2*totk << std::endl;
   vk.resize(totk);
   // Subclasses should be sure to call setLongRangeArray and
   // evalSelfEnerrgy in their constructors.
