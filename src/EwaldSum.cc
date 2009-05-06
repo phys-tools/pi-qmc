@@ -52,7 +52,6 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
   q=1.0;
   // Calculate k-vectors.
   totk=0;
-  std::cout << ikmax;
   for (int kx=0; kx<=ikmax[0]; ++kx) {
     double kx2=kx*kx*deltak[0]*deltak[0];
     for (int ky=((kx==0) ? 0 : -ikmax[1]); ky<=ikmax[1]; ++ky) {
@@ -103,7 +102,7 @@ void EwaldSum::setLongRangeArray() {
 EwaldSum::~EwaldSum() {
 }
 
-double EwaldSum::evalLongRange(const VArray1& r) const {
+double EwaldSum::evalLongRange(const VArray& r) const {
   // Set up the exponential tables
 #if NDIM==3
   for (int ipart=0; ipart<npart; ++ipart) {

@@ -58,9 +58,10 @@ constant term,
 @author John Shumway. */
 class OptEwaldSum : public EwaldSum {
 public:
+  typedef blitz::Array<double,2> Array2;
   /// Constructor calcuates the k-vectors for a given rcut and kcut.
   OptEwaldSum(const SuperCell&, int npart, double rcut, double kcut,
-    double khalo, int npoly, int ncts);
+    double khalo, int npoly);
   /// Virtual destructor.
   virtual ~OptEwaldSum();
   /// Returns @f$ f(r) @f$, used to cancel tails on actions or potentials.
@@ -76,6 +77,9 @@ private:
   /// Order of the polynomial.
   const int npoly;
   /// Coefficients for short range potential.
-  IArray coef; 
+  Array coef; 
+  /// Helper function to evaluate value or nd-order derivative at rcut for 
+  /// coefficients t.
+  double evalFRcut(Array& t, int nd);
 };
 #endif

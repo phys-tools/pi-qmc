@@ -61,8 +61,8 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int,NDIM> IVec;
   typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,1> Array1;
-  typedef blitz::Array<Vec,1> VArray1;
+  typedef blitz::Array<double,1> Array;
+  typedef blitz::Array<Vec,1> VArray;
   typedef std::complex<double> Complex;
   typedef blitz::Array<Complex,2> CArray2;
   /// Constructor calcuates the k-vectors for a given rcut and kcut.
@@ -80,12 +80,12 @@ public:
   /// with neutralizing background if system has a net charge.
   virtual double evalFK0() const=0;
   /// Evaluate the long range sum.
-  double evalLongRange(const VArray1& r) const;
+  double evalLongRange(const VArray& r) const;
   /// Evaluate the self energy using evalFR0 and evalFK0 virtual methods.
   /// You must call this function again if you change the charge array.
   void evalSelfEnergy();
   /// Get a reference to the charge array.
-  Array1& getQArray() {return q;}
+  Array& getQArray() {return q;}
   /// Set the long range table using the evalFK virtual method.
   void setLongRangeArray();
 protected:
@@ -100,9 +100,9 @@ protected:
   /// Self energy;
   double selfEnergy;
   /// The particle charges.
-  mutable Array1 q;
+  mutable Array q;
   /// The particle positions.
-  mutable VArray1 pos;
+  mutable VArray pos;
   /// Constants.
   static const double PI;
   /// Integer limits of k-space sums.
@@ -112,11 +112,11 @@ protected:
   /// Number of k-vectors.
   int totk;
   /// Stored values of k-space potential.
-  Array1 vk;
+  Array vk;
   /// Arrays to tabulate @f$e^{ik_xx},e^{ik_yy},e^{ik_zz}@f$
   mutable CArray2 eikx, eiky, eikz;
   /// Calculate the long range part.
-  double calcLongRangeUtau(VArray1& r) const;
+  double calcLongRangeUtau(VArray& r) const;
   /// The prefactor on the k-space sum, 1/2V.
   double oneOver2V;
 };

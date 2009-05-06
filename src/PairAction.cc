@@ -106,8 +106,8 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
     for (int iorder=0; iorder<norder+1; ++iorder) {
       ugrid(i,iorder)=action.u(r,iorder);
       ugrid(i,iorder+norder+1)=action.utau(r,iorder);
-std::cout << r << " " << ugrid(i,iorder) 
-               << " " << ugrid(i,iorder+norder+1) << std::endl;
+//std::cout << r << " " << ugrid(i,iorder) 
+//               << " " << ugrid(i,iorder+norder+1) << std::endl;
     }
   }
 }

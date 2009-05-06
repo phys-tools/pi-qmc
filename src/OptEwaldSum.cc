@@ -27,8 +27,24 @@
 #include "Beads.h"
 #include "MultiLevelSampler.h"
 
+
+#define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
+extern "C" void DGETRF_F77(const int *m, const int *n, double *a, 
+                           const int *lda, int *ipiv, int *info);
+
+#define DGETRS_F77 F77_FUNC(dgetrs,DGETRS)
+extern "C" void DGETRS_F77(const char *trans, const int *n, const int *nrhs,
+                           const double *a, const int *lda, const int *ipiv,
+                           double *b, const int *ldb, int *info);
+
+#define DGESV_F77 F77_FUNC(dgesv,DGESV)
+extern "C" void DGESV_F77(const int *n, const int *nrhs,
+                          const double *a, const int *lda, int *ipiv,
+                          double *b, const int *ldb, int *info);
+
+
 OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
-  double rcut, double kcut, double khalo, int npoly, int ncts)
+  double rcut, double kcut, double khalo, int npoly)
   : EwaldSum(cell, npart, rcut, kcut), npoly(npoly), coef(npoly) {
 #if NDIM==2 || NDIM==3
   // Fit coefficients to minimize chi2 error, constraining derivatives.
@@ -70,9 +86,81 @@ OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
   // Now fit the coefficients.
   Array2 a(npoly,npoly);
   Array b(npoly);
+  IArray ipiv(npoly);
+  Array ftemp(npoly);
   a=0.; b=0.;
-  for (unsigned int i=0; i<kval.size(); ++i) {
+  for (unsigned int ik=0; ik<kval.size(); ++ik) {
+    // Compute Fourier transform of basis functions and 1/r.
+    double k = kval[ik];
+#if NDIM==3
+    double v = -4.*PI/(k*k);
+    Complex eikr = exp(Complex(0.,k*rcut));
+    Complex temp = (eikr-1.)/Complex(0.,k);
+    v += 4.*PI*imag(temp)/k;
+    double rn = rcut;
+    for (int n=0; n<2*npoly-1; ++n) {
+      temp = (rn*eikr - (n+1.)*temp)/Complex(0.,k);
+      rn *= rcut;
+      if (n%2 == 0) {
+        ftemp(n/2) = 4.*PI*imag(temp)/k;
+      }
+    }
+#else
+    double v = 0;
+#endif
+    for (int i=0; i<npoly; ++i) {
+      b(i) += degen[ik]*v*ftemp(i);
+      for (int j=0; j<npoly; ++j) {
+        a(i,j) += degen[ik]*ftemp(i)*ftemp(j);
+      }
+    }
   }
+  // Lagrange multipliers for value (c) and derivative (d) at rcut.
+  int ncts=2;
+  Array c(npoly), d(npoly);
+  for (int i=0; i<npoly; ++i) {
+    c(i) = pow(rcut,2*i);
+    d(i) = (2*i)*pow(rcut,2*i-1);
+  }
+  // Get ready to solve  linear equations.
+  int info, one=1;
+  char trans='N';
+  DGETRF_F77(&npoly,&npoly,a.data(),&npoly,ipiv.data(),&info);
+  // Solve with no constraint (Lagrange multipliers are zero).
+  Array t0(npoly), tc(npoly), td(npoly), t(npoly);
+  t0 = b;
+  DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
+             t0.data(),&npoly,&info);
+  double f0 = evalFRcut(t0,0), df0 = evalFRcut(t0,1);
+  // Guess Lagrange multipliers.
+  double lamc = 10*rcut;
+  double lamd = -rcut*rcut;
+  tc = b + lamc*c;
+  DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
+             tc.data(),&npoly,&info);
+  double fc = evalFRcut(tc,0), dfc = evalFRcut(tc,1);
+  td = b + lamd*d;
+  DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
+             td.data(),&npoly,&info);
+  double fd = evalFRcut(td,0), dfd = evalFRcut(td,1);
+  // Linear extropolation gives great estimate of correct Lagrange multipliers.
+  Array2 mat(ncts,ncts);
+  Array rhs(ncts);
+  IArray ipv(ncts);
+  mat(0,0) = (evalFRcut(tc,0)-f0)/lamc;
+  mat(0,1) = (evalFRcut(td,0)-f0)/lamd;
+  mat(1,0) = (evalFRcut(tc,1)-df0)/lamc;
+  mat(1,1) = (evalFRcut(td,1)-df0)/lamd;
+  rhs(0) =  1./rcut - f0;
+  rhs(1) = -1./(rcut*rcut) - df0;
+  DGESV_F77(&ncts,&one,mat.data(),&ncts,ipv.data(),rhs.data(),&ncts,&info);
+  lamc = rhs(0); lamd = rhs(1);
+  // Solve with correct Lagrange multipliers.
+  t = b + lamc*c + lamd*d;
+  DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
+             t.data(),&npoly,&info);
+  //double f = evalFRcut(t,0), df = evalFRcut(t,1);
+  coef = t;
 #endif
 }
 
@@ -133,3 +221,15 @@ double OptEwaldSum::evalFK0() const {
 #endif
 }
 
+double OptEwaldSum::evalFRcut(Array& t, int nd) {
+  // Calculate value or nd-order derivative of f(rcut) using coeffients t.
+  double v=0;
+  for (int i=0; i<npoly; ++i) {
+    double x=pow(rcut,2*i-nd);
+    for (int j=0; j<nd; ++j) {
+      x *= 2*i-j;
+    }
+    v += t(i)*x;
+  }
+  return v;
+}
