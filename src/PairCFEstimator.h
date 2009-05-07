@@ -97,7 +97,7 @@ public:
 #ifdef ENABLE_MPI
     if (mpi) {
       mpi->getWorkerComm().Reduce(temp.data(),mpiBuffer.data(),
-                                  product(nbin),MPI::DOUBLE,MPI::SUM,0);
+                                  product(nbin),MPI::FLOAT,MPI::SUM,0);
       temp = mpiBuffer;
     }
 #endif
