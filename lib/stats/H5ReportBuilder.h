@@ -20,7 +20,6 @@
 #include "EstimatorReportBuilder.h"
 #include <string>
 #include <vector>
-#include <H5Cpp.h>
 #include <hdf5.h>
 
 #include "EstimatorManager.h"
