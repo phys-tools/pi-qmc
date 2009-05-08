@@ -89,17 +89,21 @@ public:
     }
   }
   /// Finalize the calculation.
-  virtual void endCalc(const int nslice) {
-    temp/=nslice;
+  virtual void endCalc(const int lnslice) {
+    int nslice=lnslice;
     // First move all data to 1st worker. 
     int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
     if (mpi) {
+      int ibuffer;
       mpi->getWorkerComm().Reduce(temp.data(),mpiBuffer.data(),
                                   product(nbin),MPI::FLOAT,MPI::SUM,0);
+      mpi->getWorkerComm().Reduce(&lnslice,&ibuffer,1,MPI::INT,MPI::SUM,0);
       temp = mpiBuffer;
+      nslice = ibuffer;
     }
 #endif
+    temp /= nslice;
     if (workerID==0) {
       BlitzArrayBlkdEst<N>::value+=temp;
       BlitzArrayBlkdEst<N>::norm+=1;

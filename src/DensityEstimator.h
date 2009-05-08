@@ -77,6 +77,9 @@ private:
   const DistArray dist;
   SuperCell cell;
   ArrayN temp;
+#ifdef ENABLE_MPI
+  ArrayN mpiBuffer;
+#endif
   int ifirst, npart;
   MPIManager *mpi;
 };

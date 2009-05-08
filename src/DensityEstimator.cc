@@ -38,7 +38,10 @@ DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
     const DistArray &dist, MPIManager *mpi) 
   : BlitzArrayBlkdEst<NDIM>(name,nbin,false),
     min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
-    cell(*simInfo.getSuperCell()),temp(nbin), 
+    cell(*simInfo.getSuperCell()),temp(nbin),
+#ifdef ENABLE_MPI
+    mpiBuffer(nbin),
+#endif 
     ifirst(spec->ifirst), npart(spec->count), mpi(mpi) {
   scale=new Vec((max-min)/nbin);
   origin=new Vec(min);
@@ -73,22 +76,21 @@ void DensityEstimator::handleLink(const Vec& start, const Vec& end,
 }
 
 
-void DensityEstimator::endCalc(const int nslice) {
-  temp/=nslice;
+void DensityEstimator::endCalc(const int lnslice) {
+  int nslice = lnslice;
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
-//    if (mpi) {
-//      if (workerID==0) {
-//        mpi->getWorkerComm().Reduce(&temp(0,0,0),&temp(0,0,0),
-//                                    product(nbin),MPI::DOUBLE,MPI::SUM,0);
-//      } else {
-//        mpi->getWorkerComm().Reduce(MPI::IN_PLACE,&temp(0,0,0),
-//                                    product(nbin),MPI::DOUBLE,MPI::SUM,0);
-//      }
-//    }
+  if (mpi) {
+    int ibuffer;
+    mpi->getWorkerComm().Reduce(temp.data(),mpiBuffer.data(),
+                                product(nbin),MPI::FLOAT,MPI::SUM,0);
+    mpi->getWorkerComm().Reduce(&lnslice,&ibuffer,1,MPI::INT,MPI::SUM,0);
+    temp = mpiBuffer;
+    nslice = ibuffer;
+  }
 #endif
-  ///Need code for multiple workers!
+  temp /= nslice;
   if (workerID==0) {
     BlitzArrayBlkdEst<NDIM>::value+=temp;
     norm+=1;
