@@ -57,6 +57,7 @@ void SimInfoParser::parse(const xmlXPathContextPtr& ctxt) {
     std::string type=getStringAttribute(specNode,"type");
     species->isFermion=(type=="fermion")?true:false;
     species->isStatic=getBoolAttribute(specNode,"isStatic");
+    species->displace=getLengthAttribute(specNode,"displace");
     simInfo->npart+=species->count;
     // Look for optional child nodes.
     ctxt->node=specNode;

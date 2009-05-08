@@ -54,6 +54,7 @@ std::ostream& operator<<(std::ostream& os, const Species& s) {
      << (s.twos%2==0?"":"/2") << ", m=";
   if (s.anMass) os << *s.anMass; else os << s.mass;
   os << ", q=" << s.charge;
+  if (fabs(s.displace)>1e-10) os << ", displace=" << s.displace;
   os << (s.isFermion?" (fermionic)":"") 
      << std::endl;
   return os;

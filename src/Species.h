@@ -60,6 +60,8 @@ public:
   bool isStatic;
   /// Pointer to opitional anisotropic mass.
   Vec* anMass;
+  /// An optional displacement (useful for parallel quantum wells in 2D).
+  double displace;
 };
 
 std::ostream& operator<<(std::ostream& os, const Species& s);

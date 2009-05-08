@@ -16,13 +16,14 @@ from units import Unit
 from scalar import Scalar
 from response import ResponseFunction
 from density import Density
+from paircf import PairCF
 
 def openFile(name="pimc.h5"):
   return File(name)
 
 class File(object):
   """
-  In-memory representation of a pimc.h5 file.
+  Representation of a pimc.h5 file.
   """
 
   def __init__(self,name):
@@ -85,3 +86,11 @@ class File(object):
     scale = node.getAttr("scale")
     return Density(name,data,error,origin,scale)
 
+  def getPairCF(self,name):
+    node = self.file.getNode("/estimators",name)
+    data = node.read()
+    try:
+      error = self.file.getNode("/estimators",name+"_err").read()
+    except:
+      error = None
+    return PairCF(name,data,error)

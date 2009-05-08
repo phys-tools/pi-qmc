@@ -69,6 +69,8 @@ private:
   double q1q2;
   /// Reduced mass for EmpiricalPairAction method.
   double mu;
+  /// Displacement variable for EmpricalPairAction method.
+  double displace2;
   /// Screening distance (zero for no screening).
   double screenDist;
   /// Ewald sums.

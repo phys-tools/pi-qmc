@@ -55,6 +55,7 @@ std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
       q1q2=s1.charge*s2.charge/epsilon;
       if (q1q2!=0 && ((s1.name!=s2.name) || s1.count>1) ) {
         mu=1./(1./s1.mass+1./s2.mass);
+        displace2 = s1.displace-s2.displace; displace2 *= displace2;
         /// Hack to handle ion-ion interaction properly.
         if (rmin==0) rmin=0.005/(2*((mu>500)?1:mu)*fabs(q1q2)); 
         IVec nimage=0; bool needImages=false;
@@ -177,6 +178,7 @@ double CoulombAction::getEField(const Paths& paths, int ipart,
 }
 
 double CoulombAction::u(double r, int order) const {
+  r = sqrt(r*r+displace2);
   double taueff = 2.0*mu*q1q2*q1q2*tau;
   double u=0;
   double reff = 2.0*mu*q1q2*r;

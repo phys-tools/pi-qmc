@@ -91,7 +91,6 @@ public:
   /// Finalize the calculation.
   virtual void endCalc(const int nslice) {
     temp/=nslice;
-    BlitzArrayBlkdEst<N>::norm+=1;
     // First move all data to 1st worker. 
     int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
@@ -103,6 +102,7 @@ public:
 #endif
     if (workerID==0) {
       BlitzArrayBlkdEst<N>::value+=temp;
+      BlitzArrayBlkdEst<N>::norm+=1;
     }
   }
   /// Clear value of estimator.
