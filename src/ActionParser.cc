@@ -364,6 +364,9 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         pot = new EmpiricalInteraction::Cosh2Potential(v0,kappa); 
       }
       EmpiricalInteraction empAction(*pot,simInfo.getTau());
+      std::cout << "Scattering length = " 
+                << empAction.getScatteringLength(species1,species2,
+                   rmax,rmax/(100*ngpts)) << std::endl;
       composite->addAction(new PairAction(species1,species2,empAction,
                                           simInfo,norder,rmin,rmax,ngpts));
       delete pot;

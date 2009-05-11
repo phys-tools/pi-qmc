@@ -48,6 +48,10 @@ public:
 
   //Construct by providing an emprical potential and timestep.
   EmpiricalInteraction(const Potential& v, const double tau);
+
+  //Calculate the scattering length.
+  double getScatteringLength(
+    Species s1, Species s2, double rmax, double dr) const;
 private:
   const Potential& v;
   const double tau;

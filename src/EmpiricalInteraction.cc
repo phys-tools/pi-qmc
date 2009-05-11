@@ -18,11 +18,13 @@
 #include <config.h>
 #endif
 #include "EmpiricalInteraction.h"
+#include "Species.h"
 
 
 EmpiricalInteraction::Cosh2Potential::Cosh2Potential(
   double v0, double kappa) 
   : v0(v0), kappa(kappa) {
+std::cout << v0 << ", " << kappa << std::endl;
 }
 
 double EmpiricalInteraction::Cosh2Potential::operator()(double r) const {
@@ -41,4 +43,22 @@ double EmpiricalInteraction::utau(double r, int iorder) const {
 
 EmpiricalInteraction::EmpiricalInteraction(const Potential& v, const double tau)
   : v(v), tau(tau) {
+}
+
+double EmpiricalInteraction::getScatteringLength(
+    Species s1, Species s2, double rmax, double dr) const {
+  //Use Numerov method to integrate SE. a=r-psi(r)/psi'(r).
+  double mu = 1./(1./s1.mass+1./s2.mass);
+  double psi = dr, psim=0.;
+  double f = 2*mu*v(dr), fm = 2*mu*v(0.);
+  double r = dr;
+  while (r<rmax) {
+    r += dr;
+    double fp = 2*mu*v(r);
+    double psip = (2.*psi - psim + dr*dr*(fm*psim + 10*f*psi)/12.)
+                 /(1.-dr*dr*fp/12.);
+    psim=psi; fm=f;
+    psi=psip; f=fp;
+  }
+  return (r-0.5*dr) - 0.5*dr*(psi+psim)/(psi-psim);
 }
