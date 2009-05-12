@@ -10,3 +10,4 @@ path integral quantum Monte Carlo program.
 
 from pitools.file import File, openFile
 from pitools.units import Unit
+from pitools.filegroup import FileGroup, openFileGroup
