@@ -221,9 +221,9 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
     const Matrix& mat(*matrix[0]);
     gradArray=0.0;
     gradMatrix=0.0;
-    grad2Matrix=Mat(0);
     for (int jpart=0; jpart<npart; ++jpart) {
       for (int ipart=0; ipart<npart; ++ipart) {
+        grad2Matrix(ipart,jpart)=0.;
         // First calculate first derivative (loggrad) terms.
         Vec delta=r1(jpart)-r2(ipart);
         cell.pbc(delta);
@@ -249,8 +249,18 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
                 }
               }
             }
-            for (int i=0; i<NDIM; ++i) grad2*=pg(fabs(delta[i]));
-            grad2Matrix(jpart,jpart)+=mat(jpart,ipart)*grad2;
+            for (int ii=0; ii<NDIM; ++ii) {
+              for (int i=0; i<NDIM; ++i) {
+                for (int j=0; j<NDIM; ++j) {
+                  grad2(i,j) *= pg(fabs(delta[i]));
+                }
+              }
+            }
+            for (int i=0; i<NDIM; ++i) {
+              for (int j=0; j<NDIM; ++j) {
+                grad2Matrix(jpart,jpart)(i,j) += mat(jpart,ipart)*grad2(i,j);
+              }
+            }
           } else {
             gradMatrix(jpart,kpart)+=mat(kpart,ipart)*grad;
           }
@@ -273,11 +283,11 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
     }
     for (int jpart=0; jpart<npart; ++jpart) {
       for (int kpart=0; kpart<npart; ++kpart) {
-        // Ugly conversion for mixing tvmet and blitz::TinyVector.
-        double *fptr(&force(jpart)[0]),*gptr(&gradArray(kpart)[0]);
-        tvmet::Vector<double,NDIM> &f(*(tvmet::Vector<double,NDIM>*)fptr);
-        tvmet::Vector<double,NDIM> &g(*(tvmet::Vector<double,NDIM>*)gptr);
-        f-=di*di*grad2Matrix(jpart,kpart)*g;
+        for (int i=0; i<NDIM; ++i) {
+          for (int j=0; i<NDIM; ++i) {
+            force(jpart)(i) -= di*di*grad2Matrix(jpart,kpart)(i,j)*gradArray(kpart)(j);
+          }
+        }
       }
     }
     // Calculate terms with gradients on other beads.
@@ -330,12 +340,18 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
                 }
               }
             }
-            for (int i=0; i<NDIM; ++i) grad2*=pg(fabs(delta[i]));
-            // Ugly conversion for mixing tvmet and blitz::TinyVector.
-            double *tptr(&temp[0]),*gptr(&gradArray(jpart)[0]);
-            tvmet::Vector<double,NDIM> &t(*(tvmet::Vector<double,NDIM>*)tptr);
-            tvmet::Vector<double,NDIM> &g(*(tvmet::Vector<double,NDIM>*)gptr);
-            t+=mat(ipart,jpart)*grad2*g;
+            for (int ii=0; ii<NDIM; ++ii) {
+              for (int i=0; i<NDIM; ++i) {
+                for (int j=0; j<NDIM; ++j) {
+                  grad2(i,j) *= pg(fabs(delta[ii]));
+                }
+              }
+            }
+            for (int i=0; i<NDIM; ++i) {
+              for (int j=0; j<NDIM; ++j) {
+                temp(i) +=mat(ipart,jpart)*grad2(i,j)*gradArray(jpart)(j);
+              }
+            }
           } else {
             Vec grad;
             for (int i=0; i<NDIM; ++i) {

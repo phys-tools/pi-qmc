@@ -19,7 +19,7 @@
 
 #include "NodeModel.h"
 #include <vector>
-#include <tvmet/Matrix.h>
+#include <blitz/tinymat.h>
 class PeriodicGaussian;
 class SimulationInfo;
 class Species;
@@ -53,7 +53,7 @@ where the indicies refer to particles.
 @author John Shumway */
 class ExcitonNodes : public NodeModel {
 public:
-  typedef tvmet::Matrix<double,NDIM,NDIM> Mat;
+  typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,2> Matrix;
   typedef blitz::Array<float,2> FMatrix;
   typedef blitz::Array<Vec,2> VMatrix;

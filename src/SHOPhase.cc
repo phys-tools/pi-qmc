@@ -19,8 +19,7 @@
 #endif
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
+#include <blitz/tinymat.h>
 #include "SHOPhase.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"

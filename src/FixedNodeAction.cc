@@ -19,6 +19,7 @@
 #endif
 #include "FixedNodeAction.h"
 
+#include <cstdlib>
 #include "Beads.h"
 #include "DoubleSectionChooser.h"
 #include "DoubleMLSampler.h"

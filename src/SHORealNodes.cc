@@ -18,8 +18,7 @@
 #include <config.h>
 #endif
 #include <blitz/tinyvec-et.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
+#include <blitz/tinymat.h>
 #include "SHORealNodes.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"

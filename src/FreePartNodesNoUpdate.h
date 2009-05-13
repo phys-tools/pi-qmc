@@ -20,8 +20,6 @@
 #include "DoubleAction.h"
 #include <blitz/array.h>
 #include <blitz/tinymat.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
 #include <vector>
 class SimulationInfo;
 class Paths;
@@ -89,7 +87,7 @@ class FreePartNodesNoUpdate : public DoubleAction {
 public:
   /// Constants and typedefs.
   typedef blitz::TinyVector<double,NDIM> Vec;
-  typedef tvmet::Matrix<double,NDIM,NDIM> Mat;
+  typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<Vec,1> VArray;

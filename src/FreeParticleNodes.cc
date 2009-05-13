@@ -18,8 +18,6 @@
 #include <config.h>
 #endif
 #include <blitz/tinyvec-et.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
 #include "FreeParticleNodes.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"
@@ -27,6 +25,7 @@
 #include "SuperCell.h"
 #include "Beads.h"
 #include "DoubleMLSampler.h"
+#include <cstdlib>
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
@@ -211,11 +210,12 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
     for (int jpart=0; jpart<npart; ++jpart) {
       // First treat d1 terms.
       if (ipart==jpart) {
-        Mat d2ii=Mat(0.0);
+        Mat d2ii;
+        d2ii = 0.0;
         for(int kpart=0; kpart<npart; ++kpart) {
           Vec delta=r1(ipart+ifirst)-r2(kpart+ifirst);
           cell.pbc(delta);
-          Mat d2iik=Mat(0.0);
+          Mat d2iik;
           for (int i=0; i<NDIM; ++i) {
             for (int j=0; j<NDIM; ++j) {
               if (i==j) {
@@ -230,7 +230,11 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
               }
             }
           }
-          d2ii+=mat(ipart,kpart)*d2iik;
+          for (int i=0; i<NDIM; ++i) {
+            for (int j=0; j<NDIM; ++j) {
+              d2ii(i,j) += mat(ipart,kpart)*d2iik(i,j);
+            }
+          }
         }
         for (int i=0; i<NDIM; ++i) {
           for (int j=0; j<NDIM; ++j) {
@@ -277,7 +281,8 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
           // Only one term is non-zero. NEED TO CHECK THESE DERIVATIVES
           Vec delta=r1(ipart+ifirst)-r2(jpart+ifirst);
           cell.pbc(delta);
-          Mat d2ii=Mat(0.0);
+          Mat d2ii;
+          d2ii = 0.0;
           for (int i=0; i<NDIM; ++i) {
             for (int j=0; j<NDIM; ++j) {
               if (i==j) {
@@ -292,7 +297,11 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
               }
             }
           }
-          d2ii*=mat(ipart,jpart);
+          for (int i=0; i<NDIM; ++i) {
+            for (int j=0; j<NDIM; ++j) {
+               d2ii(i,j) *= mat(ipart,jpart);
+            }
+          }
           for (int i=0; i<NDIM; ++i) {
             for (int j=0; j<NDIM; ++j) {
               gradd2(ipart+ifirst,jpart+ifirst)(i)=gradArray2(jpart)(j)*d2ii(j,i);

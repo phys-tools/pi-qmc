@@ -18,8 +18,7 @@
 #include <config.h>
 #endif
 #include <blitz/tinyvec-et.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
+#include <blitz/tinymat.h>
 #include "Spin4DPhase.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"

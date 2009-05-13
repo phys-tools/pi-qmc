@@ -17,9 +17,9 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
+#include <blitz/tinymat.h>
 #include "SHONodes.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"
@@ -194,11 +194,7 @@ void SHONodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
   }
   for (int jpart=0; jpart<npart; ++jpart) {
     for (int kpart=0; kpart<npart; ++kpart) {
-      // Ugly conversion for mixing tvmet and blitz::TinyVector.
-      double *fptr(&force(jpart)[0]),*gptr(&gradArray(kpart)[0]);
-      tvmet::Vector<double,NDIM> &f(*(tvmet::Vector<double,NDIM>*)fptr);
-      tvmet::Vector<double,NDIM> &g(*(tvmet::Vector<double,NDIM>*)gptr);
-      f-=(0.5*tau/mass)*dist*dist*grad2Matrix(jpart,kpart)*g;
+      force(jpart)-=(0.5*tau/mass)*dist*dist*grad2Matrix(jpart,kpart)*g(kpart);
     }
   }
   // Calculate terms with gradients on other beads.

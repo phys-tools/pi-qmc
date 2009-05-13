@@ -1510,7 +1510,6 @@ Optional Packages:
   --with-gsl-prefix=PFX   Prefix where GSL is installed (optional)
   --with-gsl-exec-prefix=PFX Exec prefix where GSL is installed (optional)
   --with-blitz[=DIR]      Set the path for Blitz++
-  --with-tvmet[=DIR]      Set the path for tvmet
   --with-ndim=NDIM    Set the number of physical dimensions (default is 3)
 
 Some influential environment variables:
@@ -6459,7 +6458,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6462 "configure"' > conftest.$ac_ext
+  echo '#line 6461 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8472,11 +8471,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8475: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8474: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8479: \$? = $ac_status" >&5
+   echo "$as_me:8478: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8740,11 +8739,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8743: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8742: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8747: \$? = $ac_status" >&5
+   echo "$as_me:8746: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8844,11 +8843,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8847: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8846: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8851: \$? = $ac_status" >&5
+   echo "$as_me:8850: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11224,7 +11223,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11227 "configure"
+#line 11226 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11324,7 +11323,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11327 "configure"
+#line 11326 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13676,11 +13675,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13679: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13678: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13683: \$? = $ac_status" >&5
+   echo "$as_me:13682: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13780,11 +13779,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13783: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13782: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13787: \$? = $ac_status" >&5
+   echo "$as_me:13786: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15350,11 +15349,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15353: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15352: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15357: \$? = $ac_status" >&5
+   echo "$as_me:15356: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15454,11 +15453,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15457: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15456: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15461: \$? = $ac_status" >&5
+   echo "$as_me:15460: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17652,11 +17651,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17655: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17654: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17659: \$? = $ac_status" >&5
+   echo "$as_me:17658: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17920,11 +17919,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17923: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17922: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17927: \$? = $ac_status" >&5
+   echo "$as_me:17926: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18024,11 +18023,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18027: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18026: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18031: \$? = $ac_status" >&5
+   echo "$as_me:18030: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -23394,166 +23393,6 @@ When installed give the directory of installation with the option
 
 fi
 
-
-
-
-
-
-# Check whether --with-tvmet was given.
-if test "${with_tvmet+set}" = set; then
-  withval=$with_tvmet;
-else
-  withval='yes'
-fi
-
-
-if test "required" = required -a "$withval" = no ; then
-
-{ { echo "$as_me:$LINENO: error:
-$PACKAGE_STRING requires the tvmet template library
-available at http://tvmet.sourceforge.net
-When installed give the directory of installation with the option
-  --with-tvmet[=DIR]
-" >&5
-echo "$as_me: error:
-$PACKAGE_STRING requires the tvmet template library
-available at http://tvmet.sourceforge.net
-When installed give the directory of installation with the option
-  --with-tvmet[=DIR]
-" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-if test "$withval" != no ; then
-
-        saveCPPFLAGS=$CPPFLAGS
-        saveLDFLAGS=$LDFLAGS
-
-        if test "$withval" != 'yes'; then
-                CPPFLAGS="-I$withval/include"
-                LDFLAGS="-L$withval/lib"
-        fi
-
-        { echo "$as_me:$LINENO: checking whether tvmet is installed" >&5
-echo $ECHO_N "checking whether tvmet is installed... $ECHO_C" >&6; }
-if test "${acx_tvmet+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-        ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-        if test "$cross_compiling" = yes; then
-  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
-See \`config.log' for more details." >&5
-echo "$as_me: error: cannot run test program while cross compiling
-See \`config.log' for more details." >&2;}
-   { (exit 1); exit 1; }; }
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#include <tvmet/Vector.h>
-#include <tvmet/Matrix.h>
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-
-tvmet::Vector<double,3> x(1.0);
-tvmet::Matrix<double,3,3> a(1.0);
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  acx_tvmet=yes
-else
-  echo "$as_me: program exited with status $ac_status" >&5
-echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-( exit $ac_status )
-acx_tvmet=no
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-fi
-
-
-        ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-fi
-{ echo "$as_me:$LINENO: result: $acx_tvmet" >&5
-echo "${ECHO_T}$acx_tvmet" >&6; }
-
-        CPPFLAGS=$saveCPPFLAGS
-        LDFLAGS=$saveLDFLAGS
-
-
-        if test "$acx_tvmet" = yes ; then
-                if test "$withval" != yes ; then
-                        CPPFLAGS="-I$withval/include $CPPFLAGS"
-                fi
-        else
-                if test "required" = required ; then
-
-{ { echo "$as_me:$LINENO: error:
-$PACKAGE_STRING requires the tvmet template library
-available at http://tvmet.sourceforge.net
-When installed give the directory of installation with the option
-  --with-tvmet[=DIR]
-" >&5
-echo "$as_me: error:
-$PACKAGE_STRING requires the tvmet template library
-available at http://tvmet.sourceforge.net
-When installed give the directory of installation with the option
-  --with-tvmet[=DIR]
-" >&2;}
-   { (exit 1); exit 1; }; }
-                fi
-        fi
-
-fi
 
 
 

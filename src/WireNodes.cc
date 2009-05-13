@@ -17,9 +17,9 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
+#include <blitz/tinymat.h>
 #include "WireNodes.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"

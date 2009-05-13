@@ -47,7 +47,6 @@ AM_PATH_GSL(1.0,, AC_MSG_ERROR([
 LIBS="$GSL_LIBS $LIBS"
 CPPFLAGS="$GSL_CFLAGS $CPPFLAGS"
 ACX_BLITZ(required)
-ACX_TVMET(required)
 AC_CHECK_LIB(hdf5,H5Fopen)
 AC_CHECK_LIB(fftw3,fftw_plan_dft)
 

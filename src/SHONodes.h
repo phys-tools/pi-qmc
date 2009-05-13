@@ -19,7 +19,6 @@
 
 #include "NodeModel.h"
 #include <vector>
-#include <tvmet/Matrix.h>
 class SimulationInfo;
 class Species;
 
@@ -66,7 +65,7 @@ For the virial estimator, we neee to calculate forces.
 @author John Shumway and Daejin Shin. */
 class SHONodes : public NodeModel {
 public:
-  typedef tvmet::Matrix<double,NDIM,NDIM> Mat;
+  typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,2> Matrix;

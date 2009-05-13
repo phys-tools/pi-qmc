@@ -21,8 +21,6 @@
 #include "NodeModel.h"
 #include <blitz/array.h>
 #include <blitz/tinymat.h>
-#include <tvmet/Matrix.h>
-#include <tvmet/Vector.h>
 #include <vector>
 class SimulationInfo;
 class Paths;
@@ -71,7 +69,7 @@ class FixedNodeAction : public DoubleAction {
 public:
   /// Constants and typedefs.
   typedef blitz::TinyVector<double,NDIM> Vec;
-  typedef tvmet::Matrix<double,NDIM,NDIM> Mat;
+  typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<double,2> Array2;
   typedef blitz::Array<double,3> Array3;

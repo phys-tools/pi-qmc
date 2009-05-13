@@ -19,7 +19,9 @@
 
 #include "NodeModel.h"
 #include <vector>
-#include <tvmet/Matrix.h>
+#include <blitz/array.h>
+#include <blitz/tinyvec-et.h>
+#include <blitz/tinymat.h>
 class PeriodicGaussian;
 class SimulationInfo;
 class Species;
@@ -53,11 +55,10 @@ where the indicies refer to particles.
 @author John Shumway */
 class FreeParticleNodes : public NodeModel {
 public:
-  typedef tvmet::Matrix<double,NDIM,NDIM> Mat;
+  typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,2> Matrix;
   typedef blitz::Array<float,2> FMatrix;
   typedef blitz::Array<Vec,2> VMatrix;
-  typedef blitz::Array<Mat,2> MMatrix;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<int,2> IArray2;
