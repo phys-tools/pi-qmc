@@ -55,7 +55,6 @@ class ExcitonNodes : public NodeModel {
 public:
   typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,2> Matrix;
-  typedef blitz::Array<float,2> FMatrix;
   typedef blitz::Array<Vec,2> VMatrix;
   typedef blitz::Array<Mat,2> MMatrix;
   typedef blitz::Array<double,1> Array;
@@ -124,7 +123,7 @@ private:
   /// Storage for calculating derivatives.
   Array temp1, temp2;
   /// Storage for calculating dominant contribution to determinant.
-  FMatrix uarray;
+  Matrix uarray;
   IArray kindex, kwork;
   int nerror;
 };

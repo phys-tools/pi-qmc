@@ -1,5 +1,5 @@
-//$Id$
-/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
+//$Id: AugmentedNodes.cc 52 2009-05-13 18:51:51Z john.shumwayjr $
+/*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include <blitz/tinyvec-et.h>
-#include "FreeParticleNodes.h"
+#include "AugmentedNodes.h"
 #include "PeriodicGaussian.h"
 #include "SimulationInfo.h"
 #include "Species.h"
@@ -37,24 +37,32 @@ extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
 extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n, 
   const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
-FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
-  const Species &species, const double temperature, const int maxlevel,
-  const bool useUpdates, const int maxMovers)
+AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
+  const Species &species, const Species &species2,
+  const double temperature, const double radius, const double energy,
+  const int maxlevel, const bool useUpdates, const int maxMovers)
   : NodeModel("_"+species.name),
-    tau(simInfo.getTau()),mass(species.mass),npart(species.count),
-    ifirst(species.ifirst), 
+    tau(simInfo.getTau()),mass(species.mass),mass2(species2.mass),
+    npart(species.count), ifirst(species.ifirst), 
+    npart2(species2.count), kfirst(species2.ifirst), 
+    fpnorm(pow(2*PI*mass*temperature, -0.5*NDIM)),
+    comnorm(pow(2*PI*(mass+mass2)*temperature, -0.5*NDIM)),
+    alpha(1.0/radius), 
+    anorm(exp(-energy/temperature)*pow(alpha,NDIM)/PI*(NDIM==2?0.5:1.)),
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
-    cell(*simInfo.getSuperCell()), pg(NDIM), pgp(NDIM), pgm(NDIM),
+    cell(*simInfo.getSuperCell()),
+    pg(NDIM), pgp(NDIM), pgm(NDIM), pgCOM(NDIM),
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0) {
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
+    kindex2(npart2) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
-  std::cout << "FreeParticleNodes with temperature = "
+  std::cout << "AugmentedNodes with temperature = "
             << temperature << std::endl;
   double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
   double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
@@ -68,35 +76,64 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
                              (int)(100*cell.a[idim]*sqrt(mass*tempm)));
     pgp[idim]=new PeriodicGaussian(mass*tempp,cell.a[idim],
                              (int)(100*cell.a[idim]*sqrt(mass*tempp)));
+    pgCOM[idim]=new PeriodicGaussian(mass*temperature,cell.a[idim],
+      (int)(100*cell.a[idim]*sqrt((mass+mass2)*temperature)));
   }
   if (useUpdates) {
     updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
   }
 }
 
-FreeParticleNodes::~FreeParticleNodes() {
+AugmentedNodes::~AugmentedNodes() {
   for (int idim=0; idim<NDIM; ++idim) {
-    delete pg[idim]; delete pgm[idim]; delete pgp[idim];
+    delete pg[idim]; delete pgm[idim]; delete pgp[idim]; delete pgCOM[idim];
   }
   delete updateObj;
 }
 
-double FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2, 
+double AugmentedNodes::evaluate(const VArray &r1, const VArray &r2, 
                           const int islice) {
   Matrix& mat(*matrix[islice]);
   mat=0;
+  // To avoid double sum over k, find first find closest kindex.
+  for (int ipart=0; ipart<npart2; ++ipart) {
+    for (int jpart=0; jpart<npart2; ++jpart) {
+      Vec delta(r1(jpart+kfirst)-r2(ipart+kfirst));
+      cell.pbc(delta);
+      mat(jpart,ipart)=dot(delta,delta);
+    }
+  }
+  const int MODE=1;
+  double sum;
+  ASSNDX_F77(&MODE,mat.data(),&npart2,&npart2,&npart2,kindex2.data(),
+             &sum,kwork.data(),&npart2);
+  kindex2 -= 1;
+  // Now compute determinant.
+  double rcut2=4./(alpha*alpha);
+  double shift=exp(-2.);
   for(int jpart=0; jpart<npart; ++jpart) {
     for(int ipart=0; ipart<npart; ++ipart) {
       Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
       cell.pbc(delta);
       double ear2=1;
       for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
-      mat(ipart,jpart)=ear2;
+      mat(ipart,jpart)=fpnorm*ear2;
+      for (int kpart=0; kpart<npart2; ++kpart) {
+        Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
+        cell.pbc(delta1);
+        double d1 = dot(delta1,delta1);
+        if (d1>rcut2) continue;
+        Vec delta2(r2(ipart+ifirst)-r2(kindex2(kpart)+kfirst));
+        cell.pbc(delta2);
+        double d2 = dot(delta2,delta2);
+        if (d2>rcut2) continue;
+        mat(ipart,jpart) += anorm*(exp(-alpha*(sqrt(d1)+sqrt(d2)))-shift);
+      }
       uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
   }
   // Find dominant contribution to determinant (distroys uarray).
-  const int MODE=1;
+  //const int MODE=1;
   double usum=0;
   ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
              &usum,kwork.data(),&npart);
@@ -131,7 +168,7 @@ double FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
   return det;
 }
 
-void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
+void AugmentedNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
          const int islice, Array &d1, Array &d2) {
   std::vector<PeriodicGaussian*> pgSave(NDIM);
   for (int i=0; i<NDIM; ++i) pgSave[i]=pg[i];
@@ -156,7 +193,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
   tau=tauSave;
 }
 
-void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
+void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
   Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
@@ -199,7 +236,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
   }
 }
 
-void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
+void AugmentedNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
        const int islice, VMatrix &gradd1, VMatrix &gradd2, 
        const Array& dist1, const Array& dist2) {
   gradd1=0.; gradd2=0.; 
@@ -354,61 +391,10 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
   }
 }
 
-/*int main(int argc, char** argv) {
-  const double SCALE_RAND=1./RAND_MAX;
-  const double EPS=1e-4;
-  std::cout << "Test free particle nodes" << std::endl;
-  const int npart=(int)pow(2,NDIM);
-  Species *species=new Species("e",npart,1.0,-1.0,2,true);  
-  species->ifirst=0;
-  std::vector<Species*> speciesList(1), speciesIndex(npart);
-  speciesList[0]=species;
-  for (int i=0; i<npart; ++i) speciesIndex[i]=species;
-  const double temperature=0.01, tau=0.01;
-  const int nslice = (int)(1.0/(temperature*tau));
-  SuperCell *cell=new SuperCell(SuperCell::Vec(10.));
-  cell->computeRecipricalVectors();
-  SimulationInfo simInfo(cell,npart,speciesList,speciesIndex,temperature,
-                         tau,nslice);
-  FreeParticleNodes nodes(simInfo, *species, temperature, 4);
-  // Put particles on a grid with random displacements.
-  FreeParticleNodes::VArray r1(npart), r2(npart);
-  for (int ipart=0; ipart<npart; ++ipart) {
-    for (int idim=0; idim<NDIM; ++idim) {
-      int i=(ipart/(int)pow(2,idim))&1;
-      r1(ipart)[idim]=r2(ipart)[idim]=2.5-5.0*i;
-      r1(ipart)[idim]+=1.0*(SCALE_RAND*rand()-0.5);
-      r2(ipart)[idim]+=1.0*(SCALE_RAND*rand()-0.5);
-    }
-  }
-  FreeParticleNodes::Vec delta=r1(0.0)-r2(0.0);
-  nodes.evaluate(r1,r2,0);
-  double d=nodes.evaluateDistance(r1,r2,0);
-  std::cout << "Distance to node " << d << std::endl;
-  // Now check forces.
-  FreeParticleNodes::VArray f(npart);
-  nodes.evaluateGradLogDist(r1,r2,0,f,d);
-  for (int ipart=0; ipart<npart; ++ipart) {
-    for (int idim=0; idim<NDIM; ++idim) {
-      std::cout << ipart << "[" << idim << "] = " << f(ipart)[idim] << " ";
-      r1(ipart)[idim]+=EPS;
-      nodes.evaluate(r1,r2,0);
-      double dp=nodes.evaluateDistance(r1,r2,0);
-      r1(ipart)[idim]-=2*EPS;
-      nodes.evaluate(r1,r2,0);
-      double dm=nodes.evaluateDistance(r1,r2,0);
-      r1(ipart)[idim]+=EPS;
-      std::cout << "(numerical derivative: " 
-                << (dp-dm)/(2*EPS*d) << ")" << std::endl;
-    }
-  }
-  return 0;
-}*/
+const double AugmentedNodes::EPSILON=1e-6;
 
-const double FreeParticleNodes::EPSILON=1e-6;
-
-FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, 
-    int npart, std::vector<Matrix*> &matrix, const FreeParticleNodes &fpNodes)
+AugmentedNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, 
+    int npart, std::vector<Matrix*> &matrix, const AugmentedNodes &fpNodes)
   : fpNodes(fpNodes), maxMovers(maxMovers), npart(npart),
     newMatrix((int)(pow(2,maxlevel)+0.1)+1),
     phi((int)(pow(2,maxlevel)+0.1)+1),
@@ -424,7 +410,7 @@ FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel,
   }
 }
 
-double FreeParticleNodes::MatrixUpdate::evaluateChange(
+double AugmentedNodes::MatrixUpdate::evaluateChange(
     const DoubleMLSampler &sampler, int islice) {
   isNewMatrixUpdated=false;
   const Beads<NDIM>& sectionBeads2=sampler.getSectionBeads(2);
@@ -478,7 +464,7 @@ double FreeParticleNodes::MatrixUpdate::evaluateChange(
   return det;
 }
 
-void FreeParticleNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
+void AugmentedNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
   *newMatrix[islice]=*matrix[islice];
   for (int jmoving=0; jmoving<nMoving; ++jmoving) {
     int jpart=index1(jmoving)-fpNodes.ifirst;
@@ -504,7 +490,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewInverse(const int islice) {
   isNewMatrixUpdated=true;
 }
 
-void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
+void AugmentedNodes::MatrixUpdate::evaluateNewDistance(
     const VArray& r1, const VArray& r2,
     const int islice, Array &d1, Array &d2) {
   // Calculate log gradients to estimate distance.
@@ -548,7 +534,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
   }
 }
 
-void FreeParticleNodes::MatrixUpdate::acceptLastMove(int nslice) {
+void AugmentedNodes::MatrixUpdate::acceptLastMove(int nslice) {
   if (isNewMatrixUpdated) {
     for (int islice=1; islice<nslice-1; ++islice) {
       Matrix* ptr=matrix[islice];    
@@ -581,3 +567,5 @@ void FreeParticleNodes::MatrixUpdate::acceptLastMove(int nslice) {
     }
   }
 }
+
+const double AugmentedNodes::PI = acos(-1.0);

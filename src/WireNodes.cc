@@ -35,8 +35,8 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
 #define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
-extern "C" void ASSNDX_F77(const int *mode, float *a, const int *n, 
-  const int *m, const int *ida, int *k, float *sum, int *iw, const int *idw);
+extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n, 
+  const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
 WireNodes::WireNodes(const SimulationInfo &simInfo, const Species &species,
     const double omega, const double temperature, const int maxlevel,
@@ -104,7 +104,7 @@ double WireNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   // Find dominant contribution to determinant (distroys uarray).
   const int MODE=1;
-  float usum=0;
+  double usum=0;
   ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
              &usum,kwork.data(),&npart);
   for(int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;

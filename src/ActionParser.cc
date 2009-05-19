@@ -23,6 +23,7 @@
 
 #include "ActionParser.h"
 #include "Action.h"
+#include "AugmentedNodes.h"
 #include "SimulationInfo.h"
 #include "SphereAction.h"
 #include "CompositeAction.h"
@@ -270,6 +271,16 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         int maxMovers=3;
         nodeModel=new ExcitonNodes(simInfo,species,t,maxlevel,radius,updates,
                                         maxMovers);
+      } else if (modelName=="AugmentedNodes") {
+        double radius=getLengthAttribute(ctxt->node,"radius");
+        if (radius==0) radius=1.0;
+        const double energy=getEnergyAttribute(ctxt->node,"energy");
+        const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
+        int maxMovers=3;
+        std::string spec2Name=getStringAttribute(ctxt->node,"refSpecies");
+        const Species& species2(simInfo.getSpecies(spec2Name));
+        nodeModel=new AugmentedNodes(simInfo,species,species2,
+                        t,radius,energy,maxlevel,updates,maxMovers);
       } else {
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         int maxMovers=0;

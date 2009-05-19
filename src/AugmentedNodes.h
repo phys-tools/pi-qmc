@@ -1,5 +1,5 @@
-//$Id$
-/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
+//$Id: AugmentedNodes.h 52 2009-05-13 18:51:51Z john.shumwayjr $
+/*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,8 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __FreeParticleNodes_h_
-#define __FreeParticleNodes_h_
+#ifndef __AugmentedNodes_h_
+#define __AugmentedNodes_h_
 
 #include "NodeModel.h"
 #include <vector>
@@ -27,12 +27,15 @@ class SimulationInfo;
 class Species;
 class SuperCell;
 
-/** Free particle nodes.
+/** Augmented free particle nodes.
 We define the node model as a slater determinant of density matricies
-of single, free particles,
-@f[\rho_T(R,R')=\operatorname{det}|\rho(r_j,r_i)|,@f]
-where 
-@f[\rho(r_j,r_i)=\exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right).@f]
+of single particles,
+@f[\rho_T(R,R')=\operatorname{det}|\rho(r_j,r_i)|.@f]
+The single particle density matrices are taken to be a mixture
+of free particle density matricies plus orbital density matrices,
+@f[\rho(r_j,r_i)=\frac{1}{(2\pi m k_B T)^{N_{\text{dim}}/2}}
+\exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right)
++ p \sum_k \psi(r_j,r_k)\psi^*(r_i,r_k').@f]
 For periodic boundary conditions, we use must use a PeriodicGaussian.
 Note that the normalization factor is not needed for a NodeModel.
 
@@ -53,7 +56,7 @@ of the trial density matrix,
 @f]
 where the indicies refer to particles.
 @author John Shumway */
-class FreeParticleNodes : public NodeModel {
+class AugmentedNodes : public NodeModel {
 public:
   typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,2> Matrix;
@@ -66,14 +69,14 @@ public:
   class MatrixUpdate : public NodeModel::MatrixUpdate {
   public:
     MatrixUpdate(int maxMovers, int maxlevel, int npart,
-       std::vector<Matrix*>& matrix, const FreeParticleNodes &fpnodes);
+       std::vector<Matrix*>& matrix, const AugmentedNodes &fpnodes);
     virtual double evaluateChange(const DoubleMLSampler&, int islice);
     virtual void evaluateNewInverse(const int islice);
     virtual void evaluateNewDistance(const VArray &r1, const VArray &r2,
       const int islice, Array &d1, Array &d2);
     virtual void acceptLastMove(int nslice);
   private:
-    const FreeParticleNodes& fpNodes;
+    const AugmentedNodes& fpNodes;
     const int maxMovers;
     const int npart;
     /// Temporary storage for inverse slater matricies.
@@ -97,11 +100,11 @@ public:
     int nMoving;
   };
   /// Constructor.
-  FreeParticleNodes(const SimulationInfo&, const Species&, 
-    const double temperature, const int maxlevel, 
-    const bool useUpdates, const int maxMovers);
+  AugmentedNodes(const SimulationInfo&, const Species&, const Species&, 
+    const double temperature, const double radius, const double energy,
+    const int maxlevel, const bool useUpdates, const int maxMovers);
   /// Virtual destructor.
-  virtual ~FreeParticleNodes();
+  virtual ~AugmentedNodes();
   /// Evaluate the density matrix function, returning the value.
   virtual double evaluate(const VArray &r1, const VArray &r2, 
                           const int islice);
@@ -123,10 +126,17 @@ private:
   double tau;
   /// The mass.
   const double mass;
+  const double mass2;
   /// Number of particles of this type of fermion.
   const int npart;
   /// Index of first particle of this type of fermion.
   const int ifirst;
+  const int npart2;
+  const int kfirst;
+  const double fpnorm;
+  const double comnorm;
+  const double alpha;
+  const double anorm;
   /// Number of slices.
   int nslice;
   /// The inverse slater matricies.
@@ -141,6 +151,7 @@ private:
   SuperCell& cell;
   /// A periodic gaussian.
   std::vector<PeriodicGaussian*> pg, pgp, pgm;
+  std::vector<PeriodicGaussian*> pgCOM;
   /// Flag for checking if this species is being moved.
   bool notMySpecies;
   /// Storage for first derivatives needed for forces.
@@ -157,7 +168,10 @@ private:
   Matrix uarray;
   IArray2 kindex;
   IArray kwork;
+  IArray kindex2;
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
+  /// Constant.
+  static const double PI;
 };
 #endif

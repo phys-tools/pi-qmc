@@ -35,8 +35,8 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
 #define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
-extern "C" void ASSNDX_F77(const int *mode, float *a, const int *n, 
-  const int *m, const int *ida, int *k, float *sum, int *iw, const int *idw);
+extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n, 
+  const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
 ExcitonNodes::ExcitonNodes(const SimulationInfo &simInfo,
   const Species &species, const double temperature, const int maxlevel,

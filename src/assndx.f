@@ -12,6 +12,7 @@
 *
 *     #include "gen/pilot.h"
       SUBROUTINE ASSNDX(MODE,A,N,M,IDA,K,SUM,IW,IDW)
+      IMPLICIT REAL*8 (A-H,O-Z)
       LOGICAL LSW
       CHARACTER NAME*(*)
       CHARACTER*80 ERRTXT
