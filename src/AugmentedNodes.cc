@@ -45,7 +45,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     tau(simInfo.getTau()),mass(species.mass),mass2(species2.mass),
     npart(species.count), ifirst(species.ifirst), 
     npart2(species2.count), kfirst(species2.ifirst), 
-    fpnorm(pow(2*PI*mass*temperature, -0.5*NDIM)),
+    fpnorm(pow(2*PI*mass*temperature, -0.2*NDIM)),
     comnorm(pow(2*PI*(mass+mass2)*temperature, -0.5*NDIM)),
     alpha(1.0/radius), 
     anorm(exp(-energy/temperature)*pow(alpha,NDIM)/PI*(NDIM==2?0.5:1.)),
@@ -109,8 +109,8 @@ double AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
              &sum,kwork.data(),&npart2);
   kindex2 -= 1;
   // Now compute determinant.
-  double rcut2=4./(alpha*alpha);
-  double shift=exp(-2.);
+  double rcut2=25./(alpha*alpha);
+  double shift=exp(-5.);
   for(int jpart=0; jpart<npart; ++jpart) {
     for(int ipart=0; ipart<npart; ++ipart) {
       Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
