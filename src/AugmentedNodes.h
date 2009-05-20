@@ -121,6 +121,8 @@ public:
   virtual void evaluateGradLogDist(const VArray &r1, const VArray &r2,
            const int islice, VMatrix &gradd1, VMatrix &gradd2,
                              const Array &d1, const Array &d2);
+  /// Returns true if action depends on other particle coordinates.
+  virtual bool dependsOnOtherParticles() {return true;}
 private:
   /// The time step.
   double tau;
@@ -134,7 +136,6 @@ private:
   const int npart2;
   const int kfirst;
   const double fpnorm;
-  const double comnorm;
   const double alpha;
   const double anorm;
   /// Number of slices.
@@ -151,7 +152,6 @@ private:
   SuperCell& cell;
   /// A periodic gaussian.
   std::vector<PeriodicGaussian*> pg, pgp, pgm;
-  std::vector<PeriodicGaussian*> pgCOM;
   /// Flag for checking if this species is being moved.
   bool notMySpecies;
   /// Storage for first derivatives needed for forces.

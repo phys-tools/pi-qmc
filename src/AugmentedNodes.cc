@@ -45,14 +45,13 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     tau(simInfo.getTau()),mass(species.mass),mass2(species2.mass),
     npart(species.count), ifirst(species.ifirst), 
     npart2(species2.count), kfirst(species2.ifirst), 
-    fpnorm(pow(2*PI*mass*temperature, -0.2*NDIM)),
-    comnorm(pow(2*PI*(mass+mass2)*temperature, -0.5*NDIM)),
+    fpnorm(pow(4*PI*mass*temperature, -0.5*NDIM)),
     alpha(1.0/radius), 
-    anorm(exp(-energy/temperature)*pow(alpha,NDIM)/PI*(NDIM==2?0.5:1.)),
+    anorm(exp(-0.5*energy/temperature)*pow(alpha,NDIM)/PI*(NDIM==2?0.5:1.)),
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()),
-    pg(NDIM), pgp(NDIM), pgm(NDIM), pgCOM(NDIM),
+    pg(NDIM), pgp(NDIM), pgm(NDIM),
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
@@ -76,8 +75,6 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
                              (int)(100*cell.a[idim]*sqrt(mass*tempm)));
     pgp[idim]=new PeriodicGaussian(mass*tempp,cell.a[idim],
                              (int)(100*cell.a[idim]*sqrt(mass*tempp)));
-    pgCOM[idim]=new PeriodicGaussian(mass*temperature,cell.a[idim],
-      (int)(100*cell.a[idim]*sqrt((mass+mass2)*temperature)));
   }
   if (useUpdates) {
     updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
@@ -86,7 +83,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
 
 AugmentedNodes::~AugmentedNodes() {
   for (int idim=0; idim<NDIM; ++idim) {
-    delete pg[idim]; delete pgm[idim]; delete pgp[idim]; delete pgCOM[idim];
+    delete pg[idim]; delete pgm[idim]; delete pgp[idim];
   }
   delete updateObj;
 }
@@ -105,12 +102,12 @@ double AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   const int MODE=1;
   double sum;
-  ASSNDX_F77(&MODE,mat.data(),&npart2,&npart2,&npart2,kindex2.data(),
+  ASSNDX_F77(&MODE,mat.data(),&npart2,&npart2,&npart,kindex2.data(),
              &sum,kwork.data(),&npart2);
   kindex2 -= 1;
   // Now compute determinant.
-  double rcut2=25./(alpha*alpha);
-  double shift=exp(-5.);
+  double rcut2=16./(alpha*alpha);
+  double shift=exp(-4.);
   for(int jpart=0; jpart<npart; ++jpart) {
     for(int ipart=0; ipart<npart; ++ipart) {
       Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
@@ -127,13 +124,13 @@ double AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
         cell.pbc(delta2);
         double d2 = dot(delta2,delta2);
         if (d2>rcut2) continue;
-        mat(ipart,jpart) += anorm*(exp(-alpha*(sqrt(d1)+sqrt(d2)))-shift);
+        mat(ipart,jpart) += anorm*((exp(-alpha*sqrt(d1))-shift)
+                                  *(exp(-alpha*sqrt(d2))-shift));
       }
       uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
   }
   // Find dominant contribution to determinant (distroys uarray).
-  //const int MODE=1;
   double usum=0;
   ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
              &usum,kwork.data(),&npart);
