@@ -217,10 +217,13 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
       cell.pbc(delta);
       Vec grad;
+      double value=1;
       for (int i=0; i<NDIM; ++i) {
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
+      for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
+      grad *= value;
       // Add contribution from orbital.
       for (int kpart=0; kpart<npart2; ++kpart) {
         Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
@@ -234,9 +237,10 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad += -alpha*delta1/sqrt(d1) 
                       *anorm*(exp(-alpha*sqrt(d1))
                             *(exp(-alpha*sqrt(d2))-shift));
+        value += anorm*((exp(-alpha*sqrt(d1))-shift)
+                       *(exp(-alpha*sqrt(d2))-shift));
       }
-      if (ipart==kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+      if (ipart==kindex(islice,jpart)) fgrad=grad/value;
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray1(jpart)=logGrad-fgrad;
@@ -249,10 +253,13 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
       cell.pbc(delta);
       Vec grad;
+      double value=1;
       for (int i=0; i<NDIM; ++i) {
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
+      for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
+      grad *= value;
       // Add contribution from orbital.
       for (int kpart=0; kpart<npart2; ++kpart) {
         Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
@@ -266,9 +273,10 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad += -alpha*delta2/sqrt(d2) 
                       *anorm*((exp(-alpha*sqrt(d1))-shift)
                               *exp(-alpha*sqrt(d2)));
+        value += anorm*((exp(-alpha*sqrt(d1))-shift)
+                       *(exp(-alpha*sqrt(d2))-shift));
       }
-      if (ipart==kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+      if (ipart==kindex(islice,jpart)) fgrad=grad/value;
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray2(ipart)=logGrad-fgrad;
