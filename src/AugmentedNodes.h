@@ -35,7 +35,7 @@ The single particle density matrices are taken to be a mixture
 of free particle density matricies plus orbital density matrices,
 @f[\rho(r_j,r_i)=\frac{1}{(2\pi m k_B T)^{N_{\text{dim}}/2}}
 \exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right)
-+ p \sum_k \psi(r_j,r_k)\psi^*(r_i,r_k').@f]
++ w \sum_k \psi(r_j,r_k)\psi^*(r_i,r_k').@f]
 For periodic boundary conditions, we use must use a PeriodicGaussian.
 Note that the normalization factor is not needed for a NodeModel.
 
@@ -101,7 +101,7 @@ public:
   };
   /// Constructor.
   AugmentedNodes(const SimulationInfo&, const Species&, const Species&, 
-    const double temperature, const double radius, const double energy,
+    const double temperature, const double radius, const double weight,
     const int maxlevel, const bool useUpdates, const int maxMovers);
   /// Virtual destructor.
   virtual ~AugmentedNodes();
@@ -168,9 +168,9 @@ private:
   Matrix uarray;
   IArray2 kindex;
   IArray kwork;
-  IArray kindex2;
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
+  IArray kindex2;
   /// Constant.
   static const double PI;
 };
