@@ -171,6 +171,7 @@ private:
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
   IArray kindex2;
+  Matrix kmat;
   /// Constant.
   static const double PI;
 };

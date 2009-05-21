@@ -57,7 +57,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
-    kindex2(npart2) {
+    kindex2(npart2),kmat(npart2,npart2,ColMajor()) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -93,21 +93,22 @@ double AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
   Matrix& mat(*matrix[islice]);
   mat=0;
   // To avoid double sum over k, find first find closest kindex.
+  kmat=0;
   for (int ipart=0; ipart<npart2; ++ipart) {
     for (int jpart=0; jpart<npart2; ++jpart) {
       Vec delta(r1(jpart+kfirst)-r2(ipart+kfirst));
       cell.pbc(delta);
-      mat(jpart,ipart)=dot(delta,delta);
+      kmat(jpart,ipart)=dot(delta,delta);
     }
   }
   const int MODE=1;
   double sum;
-  ASSNDX_F77(&MODE,mat.data(),&npart2,&npart2,&npart,kindex2.data(),
+  ASSNDX_F77(&MODE,kmat.data(),&npart2,&npart2,&npart2,kindex2.data(),
              &sum,kwork.data(),&npart2);
   kindex2 -= 1;
-  // Now compute determinant.
   double rcut2=16./(alpha*alpha);
   double shift=exp(-4.);
+  // Now compute determinant.
   for(int jpart=0; jpart<npart; ++jpart) {
     for(int ipart=0; ipart<npart; ++ipart) {
       Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
@@ -193,6 +194,21 @@ void AugmentedNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
   Matrix& mat(*matrix[islice]);
+  // To avoid double sum over k, find first find closest kindex.
+  for (int ipart=0; ipart<npart2; ++ipart) {
+    for (int jpart=0; jpart<npart2; ++jpart) {
+      Vec delta(r1(jpart+kfirst)-r2(ipart+kfirst));
+      cell.pbc(delta);
+      kmat(jpart,ipart)=dot(delta,delta);
+    }
+  }
+  const int MODE=1;
+  double sum;
+  ASSNDX_F77(&MODE,kmat.data(),&npart2,&npart2,&npart2,kindex2.data(),
+             &sum,kwork.data(),&npart2);
+  kindex2 -= 1;
+  double rcut2=16./(alpha*alpha);
+  double shift=exp(-4.);
   // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -204,6 +220,20 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       for (int i=0; i<NDIM; ++i) {
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
+      }
+      // Add contribution from orbital.
+      for (int kpart=0; kpart<npart2; ++kpart) {
+        Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
+        cell.pbc(delta1);
+        double d1 = dot(delta1,delta1);
+        if (d1>rcut2) continue;
+        Vec delta2(r2(ipart+ifirst)-r2(kindex2(kpart)+kfirst));
+        cell.pbc(delta2);
+        double d2 = dot(delta2,delta2);
+        if (d2>rcut2) continue;
+        grad += -alpha*delta1/sqrt(d1) 
+                      *anorm*((exp(-alpha*sqrt(d1))-shift)
+                             *(exp(-alpha*sqrt(d2))-shift));
       }
       if (ipart==kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
@@ -222,6 +252,20 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       for (int i=0; i<NDIM; ++i) {
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
+      }
+      // Add contribution from orbital.
+      for (int kpart=0; kpart<npart2; ++kpart) {
+        Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
+        cell.pbc(delta1);
+        double d1 = dot(delta1,delta1);
+        if (d1>rcut2) continue;
+        Vec delta2(r2(ipart+ifirst)-r2(kindex2(kpart)+kfirst));
+        cell.pbc(delta2);
+        double d2 = dot(delta2,delta2);
+        if (d2>rcut2) continue;
+        grad += -alpha*delta2/sqrt(d2) 
+                      *anorm*((exp(-alpha*sqrt(d1))-shift)
+                             *(exp(-alpha*sqrt(d2))-shift));
       }
       if (ipart==kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
