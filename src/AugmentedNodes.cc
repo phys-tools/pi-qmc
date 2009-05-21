@@ -232,8 +232,8 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         double d2 = dot(delta2,delta2);
         if (d2>rcut2) continue;
         grad += -alpha*delta1/sqrt(d1) 
-                      *anorm*((exp(-alpha*sqrt(d1))-shift)
-                             *(exp(-alpha*sqrt(d2))-shift));
+                      *anorm*(exp(-alpha*sqrt(d1))
+                            *(exp(-alpha*sqrt(d2))-shift));
       }
       if (ipart==kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
@@ -265,7 +265,7 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         if (d2>rcut2) continue;
         grad += -alpha*delta2/sqrt(d2) 
                       *anorm*((exp(-alpha*sqrt(d1))-shift)
-                             *(exp(-alpha*sqrt(d2))-shift));
+                              *exp(-alpha*sqrt(d2)));
       }
       if (ipart==kindex(islice,jpart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
