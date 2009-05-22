@@ -36,7 +36,7 @@ public:
   WalkingChooser(const int nsize, const Species&, 
                  const int nlevel, const SimulationInfo&);
   virtual ~WalkingChooser();
-  void setMLSampler(const MultiLevelSampler*);
+  virtual void setMLSampler(const MultiLevelSampler*);
   virtual bool choosePermutation();
   virtual void chooseParticles();
   virtual void init(); 

@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,20 +18,33 @@
 #define __PairChooser_h_
 
 #include "ParticleChooser.h"
-/*** Choose a pair of particles.
-  * @bug Not fully implemented.
+#include "PermutationChooser.h"
+class MultiLevelSampler;
+class Species;
+class SimulationInfo;
+class WalkingChooser;
+/*** Choose permutations for two species.
   * @version $Revision$
   * @author John Shumway */
-class PairChooser : public ParticleChooser {
+class PairChooser : public ParticleChooser, public PermutationChooser {
 public:
-  /// Construct by giving the number of particles and number of moving particles.
-  PairChooser(const int npart, const int nmoving);
+  /// Constructor.
+  PairChooser(const int npart, const Species&, const Species&, 
+              const int nlevel, const SimulationInfo&);
   /// Virtual destructor.
   virtual ~PairChooser();
   /// Choose a new set of particles.
   virtual void chooseParticles();
+  /// Choose a new permutation.
+  virtual bool choosePermutation();
+  /// Initialize.
+  virtual void init();
+  /// Get log of the transition probability.
+  virtual double getLnTranProb() const;
+  /// Set the MultiLevelSampler (needed by init method).
+  virtual void setMLSampler(const MultiLevelSampler*);
 private:
-  /// The number of particles.
-  const int npart;
+  int npart;
+  WalkingChooser &chooser1, &chooser2;
 };
 #endif

@@ -39,13 +39,13 @@ class RandomNumGenerator{
 public:
   ///
   static void seed(const int iseed) {
+#ifdef ENABLE_SPRNG
+    init_sprng(DEFAULT_RNG_TYPE,iseed,SPRNG_DEFAULT);
+#else
     int rank=0;
 #ifdef ENABLE_MPI
     rank=MPI::COMM_WORLD.Get_rank();
 #endif
-#ifdef ENABLE_SPRNG
-    init_sprng(DEFAULT_RNG_TYPE,iseed,SPRNG_DEFAULT);
-#else
     //add 149*rank to the process number for parallel seeding
     srand(iseed+149*rank);
 #endif

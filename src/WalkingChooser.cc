@@ -59,7 +59,7 @@ bool WalkingChooser::choosePermutation() {
     if (ipart== 0) {
        // Select first particle at random.
        index(ipart)=(int)(npart*RandomNumGenerator::getRand());
-       if (index(ipart)==npart) index(ipart)==npart-1;
+       if (index(ipart)==npart) index(ipart)=npart-1;
     } else { 
       // Select subsequent particle from t(k1,k2)/h(k1)
       double h=0;
