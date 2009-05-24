@@ -59,6 +59,7 @@ public:
   typedef blitz::Array<Mat,2> MMatrix;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<int,2> IArray2;
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Constructor.
   ExcitonNodes(const SimulationInfo&, const Species&, 
@@ -124,7 +125,8 @@ private:
   Array temp1, temp2;
   /// Storage for calculating dominant contribution to determinant.
   Matrix uarray;
-  IArray kindex, kwork;
+  IArray2 kindex;
+  IArray kwork;
   int nerror;
 };
 #endif

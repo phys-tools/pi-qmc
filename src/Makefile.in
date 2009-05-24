@@ -117,10 +117,11 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-VirialEnergyEstimator.$(OBJEXT) \
 	pi-VVCorrelationEstimator.$(OBJEXT) \
 	pi-WalkingChooser.$(OBJEXT) pi-WellImageAction.$(OBJEXT) \
-	pi-WireNodes.$(OBJEXT) pi-WorkerShifter.$(OBJEXT) \
-	pi-WritePaths.$(OBJEXT) pi-WriteProbDensity.$(OBJEXT) \
-	pi-XMLParser.$(OBJEXT) pi-XMLUnitParser.$(OBJEXT) \
-	pi-XMLWriter.$(OBJEXT) assndx.$(OBJEXT)
+	pi-WindingEstimator.$(OBJEXT) pi-WireNodes.$(OBJEXT) \
+	pi-WorkerShifter.$(OBJEXT) pi-WritePaths.$(OBJEXT) \
+	pi-WriteProbDensity.$(OBJEXT) pi-XMLParser.$(OBJEXT) \
+	pi-XMLUnitParser.$(OBJEXT) pi-XMLWriter.$(OBJEXT) \
+	assndx.$(OBJEXT)
 pi_OBJECTS = $(am_pi_OBJECTS)
 pi_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(pi_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
@@ -334,9 +335,9 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	ThermoEnergyEstimator.cc TimpQPC.cc TwoQDAction.cc \
 	VIndEstimator.cc VirialEnergyEstimator.cc \
 	VVCorrelationEstimator.cc WalkingChooser.cc WellImageAction.cc \
-	WireNodes.cc WorkerShifter.cc WritePaths.cc \
-	WriteProbDensity.cc XMLParser.cc XMLUnitParser.cc XMLWriter.cc \
-	assndx.f
+	WindingEstimator.cc WireNodes.cc WorkerShifter.cc \
+	WritePaths.cc WriteProbDensity.cc XMLParser.cc \
+	XMLUnitParser.cc XMLWriter.cc assndx.f
 noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	AngularMomentumEstimator.h AnisotropicNodes.h \
 	AperiodicGaussian.h AugmentedNodes.h BeadFactory.h Beads.h \
@@ -380,8 +381,8 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	ThermoEnergyEstimator.h TimpQPC.h TwoQDAction.h \
 	VIndEstimator.h VirialEnergyEstimator.h \
 	VVCorrelationEstimator.h WalkingChooser.h WellImageAction.h \
-	WireNodes.h WorkerShifter.h WritePaths.h WriteProbDensity.h \
-	XMLParser.h XMLUnitParser.h XMLWriter.h
+	WindingEstimator.h WireNodes.h WorkerShifter.h WritePaths.h \
+	WriteProbDensity.h XMLParser.h XMLUnitParser.h XMLWriter.h
 all: all-am
 
 .SUFFIXES:
@@ -570,6 +571,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-VirialEnergyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WalkingChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WellImageAction.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WindingEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WireNodes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WorkerShifter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WritePaths.Po@am__quote@
@@ -2251,6 +2253,20 @@ pi-WellImageAction.obj: WellImageAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WellImageAction.cc' object='pi-WellImageAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-WellImageAction.obj `if test -f 'WellImageAction.cc'; then $(CYGPATH_W) 'WellImageAction.cc'; else $(CYGPATH_W) '$(srcdir)/WellImageAction.cc'; fi`
+
+pi-WindingEstimator.o: WindingEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-WindingEstimator.o -MD -MP -MF $(DEPDIR)/pi-WindingEstimator.Tpo -c -o pi-WindingEstimator.o `test -f 'WindingEstimator.cc' || echo '$(srcdir)/'`WindingEstimator.cc
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-WindingEstimator.Tpo $(DEPDIR)/pi-WindingEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WindingEstimator.cc' object='pi-WindingEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-WindingEstimator.o `test -f 'WindingEstimator.cc' || echo '$(srcdir)/'`WindingEstimator.cc
+
+pi-WindingEstimator.obj: WindingEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-WindingEstimator.obj -MD -MP -MF $(DEPDIR)/pi-WindingEstimator.Tpo -c -o pi-WindingEstimator.obj `if test -f 'WindingEstimator.cc'; then $(CYGPATH_W) 'WindingEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/WindingEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/pi-WindingEstimator.Tpo $(DEPDIR)/pi-WindingEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WindingEstimator.cc' object='pi-WindingEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-WindingEstimator.obj `if test -f 'WindingEstimator.cc'; then $(CYGPATH_W) 'WindingEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/WindingEstimator.cc'; fi`
 
 pi-WireNodes.o: WireNodes.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-WireNodes.o -MD -MP -MF $(DEPDIR)/pi-WireNodes.Tpo -c -o pi-WireNodes.o `test -f 'WireNodes.cc' || echo '$(srcdir)/'`WireNodes.cc

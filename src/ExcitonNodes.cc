@@ -1,5 +1,5 @@
 //$Id$
-/*  Copyright (C) 2008 John B. Shumway, Jr.
+/*  Copyright (C) 2008-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -51,7 +51,8 @@ ExcitonNodes::ExcitonNodes(const SimulationInfo &simInfo,
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
-    uarray(npart,npart), kindex(npart), kwork(npart*6), nerror(0) {
+    uarray(npart,npart,ColMajor()), 
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0) {
     //gradArray(npart), mat2(npart,npart),
     //gradMatrix(npart,npart), grad2Matrix(npart,npart) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
@@ -91,7 +92,15 @@ double ExcitonNodes::evaluate(const VArray &r1, const VArray &r2,
       uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
   }
-  // Calculate determinant and inverse.
+  // Find dominant contribution to determinant (distroys uarray).
+  const int MODE=1;
+  double usum=0;
+  ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+             &usum,kwork.data(),&npart);
+  for(int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+  // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+  // or lowest total action.
+  // Next calculate determinant and inverse.
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
   if (info!=0) {
@@ -126,7 +135,39 @@ void ExcitonNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 
 void ExcitonNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-  return;
+  Matrix& mat(*matrix[islice]);
+  // Calculate log gradients to estimate distance.
+  d1=200; d2=200; // Initialize distances to a very large value.
+  for (int jpart=0; jpart<npart; ++jpart) {
+    Vec logGrad=0.0, fgrad=0.0;
+    for (int ipart=0; ipart<npart; ++ipart) {
+      Vec delta(r1(jpart)-r1(ipart+npart));
+      cell.pbc(delta);
+      double d=sqrt(dot(delta,delta));
+      Vec grad = -alpha*delta/d;
+      if (ipart==kindex(islice,jpart)) fgrad=grad;
+      grad *= exp(-alpha*d);
+      logGrad += mat(jpart,ipart)*grad;
+    }
+    gradArray1(jpart)=logGrad-fgrad;
+    d1(jpart+ifirst)
+      =sqrt(2*mass/((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
+  }
+  for (int ipart=0; ipart<npart; ++ipart) {
+    Vec logGrad=0.0, fgrad=0.0;
+    for (int jpart=0; jpart<npart; ++jpart) {
+      Vec delta(r1(ipart+npart)-r1(jpart));
+      cell.pbc(delta);
+      double d=sqrt(dot(delta,delta));
+      Vec grad = -alpha*delta/d;
+      if (ipart==kindex(islice,jpart)) fgrad=grad;
+      grad *= exp(-alpha*d);
+      logGrad += mat(ipart,jpart)*grad;
+    }
+    gradArray1(ipart)=logGrad-fgrad;
+    d1(ipart+ifirst+npart)
+      =sqrt(2*mass/((dot(gradArray1(ipart),gradArray1(ipart))+1e-15)*tau));
+  }
 }
 
 void ExcitonNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,

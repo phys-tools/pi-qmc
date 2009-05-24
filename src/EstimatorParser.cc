@@ -60,6 +60,7 @@
 #include "VIndEstimator.h"
 #include "EIndEstimator.h"
 #include "SimInfoWriter.h"
+#include "WindingEstimator.h"
 #include "stats/Units.h"
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
@@ -391,6 +392,10 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       int nBField=getIntAttribute(estNode,"nBField");
       double bmax=getDoubleAttribute(estNode,"bmax");
       manager->add(new JEstimator(simInfo,nBField,bmax,mpi));
+    }
+    if (name=="WindingEstimator") {
+      int nmax=getIntAttribute(estNode,"nmax");
+      manager->add(new WindingEstimator(simInfo,nmax,mpi));
     }
   }
   xmlXPathFreeObject(obj);
