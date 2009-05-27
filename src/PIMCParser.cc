@@ -300,6 +300,7 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       n[idim]=getIntAttribute(ctxt->node,std::string("n")+dimName[idim]);
       aa[idim]=getLengthAttribute(ctxt->node,
                                   std::string(dimName).substr(idim,1));
+      if (n[idim]==0) n[idim]=1;
     }
     std::string speciesName=getStringAttribute(ctxt->node,"species");
     if (speciesName=="") {
