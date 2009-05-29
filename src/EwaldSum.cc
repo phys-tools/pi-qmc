@@ -38,15 +38,15 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
     ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI)),
           (int)(cell.a[2]*kcut/(2*PI))),
     deltak(2*PI*cell.b[0],2*PI*cell.b[1],2*PI*cell.b[2]),
-    eikx(blitz::shape(npart,ikmax[0]+1)),
-    eiky(blitz::shape(0,-ikmax[1]), blitz::shape(npart,2*ikmax[1]+1)),
-    eikz(blitz::shape(0,-ikmax[2]), blitz::shape(npart,2*ikmax[2]+1)),
+    eikx(blitz::shape(ikmax[0]+1,npart)),
+    eiky(blitz::shape(-ikmax[1],0), blitz::shape(2*ikmax[1]+1,npart)),
+    eikz(blitz::shape(-ikmax[2],0), blitz::shape(2*ikmax[2]+1,npart)),
 #endif
 #if NDIM==2
     ikmax((int)(cell.a[0]*kcut/(2*PI)),(int)(cell.a[1]*kcut/(2*PI))),
     deltak(2*PI*cell.b[0],2*PI*cell.b[1]),
-    eikx(blitz::shape(npart,ikmax[0]+1)),
-    eiky(blitz::shape(0,-ikmax[1]), blitz::shape(npart,2*ikmax[1]+1)),
+    eikx(blitz::shape(ikmax[0]+1,npart)),
+    eiky(blitz::shape(-ikmax[1],0), blitz::shape(2*ikmax[1]+1,npart)),
 #endif
     oneOver2V(0.5/product(cell.a))
 {
@@ -121,44 +121,57 @@ double EwaldSum::evalLongRange(const VArray& r) const {
   double sum=0;
   // Set up the exponential tables
 #if NDIM==3 || NDIM==2
+  const Complex I(0,1);
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eikx(0,ipart)=1.0;
+      eiky(0,ipart)=1.0;
+#if NDIM==3
+      eikz(0,ipart)=1.0;
+#endif
+    } 
+  if (ikmax[0]>0) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eikx(1,ipart)=exp(I*deltak[0]*r(ipart)[0]);
+    }
+  } 
+  if (ikmax[1]>0) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eiky(1,ipart)=exp(I*deltak[1]*r(ipart)[1]);
+      eiky(-1,ipart)=conj(eiky(1,ipart));
+    }
+  }
+#if NDIM==3
+  if (ikmax[2]>0) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eikz(1,ipart)=exp(I*deltak[2]*r(ipart)[2]);
+      eikz(-1,ipart)=conj(eikz(1,ipart));
+    }
+  } 
+#endif
+  for (int kx=2; kx<=ikmax[0]; ++kx) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eikx(kx,ipart)=eikx(kx-1,ipart)*eikx(1,ipart);
+    }
+  }
+  for (int ky=2; ky<=ikmax[1]; ++ky) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eiky(ky, ipart)=eiky(ky-1, ipart)*eiky(1,ipart);
+      eiky(-ky, ipart)=eiky(-ky+1, ipart)*eiky(-1,ipart);
+    }
+  }
+#if NDIM==3
+  for (int kz=2; kz<=ikmax[2]; ++kz) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      eikz(kz,ipart)=eikz(kz-1,ipart)*eikz(1,ipart);
+      eikz(-kz,ipart)=eikz(-kz+1,ipart)*eikz(-1,ipart);
+    }
+  }
+#endif
+  // Sum long range action over all k-vectors.
 #ifdef _OPENMP
 #pragma omp parallel
 #endif
   {
-#ifdef _OPENMP
-#pragma omp for
-#endif
-  for (int ipart=0; ipart<npart; ++ipart) {
-    const Complex I(0,1);
-    if (ikmax[0]>0) {
-      eikx(ipart,0)=eiky(ipart,0)=eikz(ipart,0)=1.0;
-      eikx(ipart,1)=exp(I*deltak[0]*r(ipart)[0]);
-    }
-    if (ikmax[1]>0) {
-      eiky(ipart,1)=exp(I*deltak[1]*r(ipart)[1]);
-      eiky(ipart,-1)=conj(eiky(ipart,1));
-    }
-#if NDIM==3
-    if (ikmax[2]>0) {
-      eikz(ipart,1)=exp(I*deltak[2]*r(ipart)[2]);
-      eikz(ipart,-1)=conj(eikz(ipart,1));
-    } 
-#endif
-    for (int kx=2; kx<=ikmax[0]; ++kx) {
-      eikx(ipart,kx)=eikx(ipart,kx-1)*eikx(ipart,1);
-    }
-    for (int ky=2; ky<=ikmax[1]; ++ky) {
-      eiky(ipart, ky)=eiky(ipart, ky-1)*eiky(ipart, 1);
-      eiky(ipart,-ky)=eiky(ipart,-ky+1)*eiky(ipart,-1);
-    }
-#if NDIM==3
-    for (int kz=2; kz<=ikmax[2]; ++kz) {
-      eikz(ipart, kz)=eikz(ipart, kz-1)*eikz(ipart, 1);
-      eikz(ipart,-kz)=eikz(ipart,-kz+1)*eikz(ipart,-1);
-    }
-#endif
-  }
-  // Sum long range action over all k-vectors.
 #ifdef _OPENMP
 #pragma omp for reduction(+:sum)
 #endif
@@ -166,10 +179,10 @@ double EwaldSum::evalLongRange(const VArray& r) const {
     Complex csum=0.;
     for (int jpart=0; jpart<npart; ++jpart) {
 #if NDIM==3
-      csum+=q(jpart)*eikx(jpart,kvec(ikvec)[0])*eiky(jpart,kvec(ikvec)[1])
-                    *eikz(jpart,kvec(ikvec)[2]);
+      csum+=q(jpart)*eikx(kvec(ikvec)[0],jpart)*eiky(kvec(ikvec)[1],jpart)
+                    *eikz(kvec(ikvec)[2],jpart);
 #else
-      csum+=q(jpart)*eikx(jpart,kvec(ikvec)[0])*eiky(jpart,kvec(ikvec)[1]);
+      csum+=q(jpart)*eikx(kvec(ikvec)[0],jpart)*eiky(kvec(ikvec)[1],jpart);
                  
 #endif
     }
