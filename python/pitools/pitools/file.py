@@ -75,15 +75,15 @@ class File(object):
     t = self.file.getNode("/simInfo","temperature").read()[0]
     return ResponseFunction(name,data,error,t)
 
-  def getDensity(self,name):
+  def getDensity(self,name,unit=Unit.a0):
     node = self.file.getNode("/estimators",name)
     data = node.read()
     try:
       error = self.file.getNode("/estimators",name+"_err").read()
     except:
       error = None
-    origin = node.getAttr("origin")
-    scale = node.getAttr("scale")
+    origin = unit.convert(node.getAttr("origin"),unit.a0)
+    scale = unit.convert(node.getAttr("scale"),unit.a0)
     return Density(name,data,error,origin,scale)
 
   def getPairCF(self,name):
