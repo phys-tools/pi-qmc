@@ -167,11 +167,9 @@ OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
   tc = b + lamc*c;
   DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
              tc.data(),&npoly,&info);
-  double fc = evalFRcut(tc,0), dfc = evalFRcut(tc,1);
   td = b + lamd*d;
   DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
              td.data(),&npoly,&info);
-  double fd = evalFRcut(td,0), dfd = evalFRcut(td,1);
   // Linear extropolation gives great estimate of correct Lagrange multipliers.
   Array2 mat(ncts,ncts);
   Array rhs(ncts);
@@ -188,7 +186,6 @@ OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
   t = b + lamc*c + lamd*d;
   DGETRS_F77(&trans,&npoly,&one,a.data(),&npoly,ipiv.data(),
              t.data(),&npoly,&info);
-  double f = evalFRcut(t,0), df = evalFRcut(t,1);
   coef = t;
 #endif
 }
@@ -219,14 +216,14 @@ double OptEwaldSum::evalFK(const double k) const {
   double v = 4.*PI/(k*k);
   Complex eikr = exp(Complex(0.,k*rcut));
   Complex temp = (eikr-1.)/Complex(0.,k);
-  double fn = 4.*PI/k*imag(temp);
-  v -= 4.*PI*imag(temp)/k;
+  double fpioverk = 4.*PI*imag(temp)/k;
+  v -= fpioverk;
   double rn = rcut;
   for (int n=0; n<2*npoly-1; ++n) {
     temp = (rn*eikr - (n+1.)*temp)/Complex(0.,k);
     rn *= rcut;
     if (n%2 == 0) {
-      v += coef(n/2) * 4.*PI*imag(temp)/k;
+      v += coef(n/2) * fpioverk;
     }
   }
   return v;

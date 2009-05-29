@@ -63,6 +63,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<Vec,1> VArray;
+  typedef blitz::Array<IVec,1> IVArray;
   typedef std::complex<double> Complex;
   typedef blitz::Array<Complex,2> CArray2;
   /// Constructor calcuates the k-vectors for a given rcut and kcut.
@@ -113,6 +114,10 @@ protected:
   int totk;
   /// Stored values of k-space potential.
   Array vk;
+  /// Stored k-vectors.
+  IVArray kvec;
+  /// Stored magnetude of k-vectors.
+  Array kvec2;
   /// Arrays to tabulate @f$e^{ik_xx},e^{ik_yy},e^{ik_zz}@f$
   mutable CArray2 eikx, eiky, eikz;
   /// Calculate the long range part.

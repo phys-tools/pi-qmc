@@ -26,6 +26,9 @@
 #include "Beads.h"
 #include "MultiLevelSampler.h"
 #include <blitz/tinyvec-et.h>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
                    const double rcut, const double kcut)
@@ -70,13 +73,9 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
   }
   std::cout << "Ewald: totk=" << 2*totk << std::endl;
   vk.resize(totk);
-  // Subclasses should be sure to call setLongRangeArray and
-  // evalSelfEnerrgy in their constructors.
-#endif
-}
-
-void EwaldSum::setLongRangeArray() {
-#if (NDIM==3) || (NDIM==2)
+  kvec.resize(totk);
+  kvec2.resize(totk);
+  // Calculate k-vectors.
   int ikvec=0;
   for (int kx=0; kx<=ikmax[0]; ++kx) {
     double kx2=kx*kx*deltak[0]*deltak[0];
@@ -86,15 +85,31 @@ void EwaldSum::setLongRangeArray() {
       for (int kz=((kx==0 && ky==0)? 0 : -ikmax[2]); kz<=ikmax[2]; ++kz) {
         double k2=kx2+ky2+kz*kz*deltak[2]*deltak[2];
 #else
-        double k2= ky*ky*deltak[1]*deltak[1];
+        double k2 = kx2 + ky*ky*deltak[1]*deltak[1];
 #endif
         if (k2<kcut*kcut && k2!=0) {
-          vk(ikvec++)=evalFK(sqrt(k2));
+#if NDIM==3
+          kvec(ikvec) = IVec(kx,ky,kz);
+#else
+          kvec(ikvec) = IVec(kx,ky);
+#endif
+          kvec2(ikvec) = k2;
+          ++ikvec;
         }
 #if NDIM==3
       }
 #endif
     }
+  }
+  // Subclasses should be sure to call setLongRangeArray and
+  // evalSelfEnerrgy in their constructors.
+#endif
+}
+
+void EwaldSum::setLongRangeArray() {
+#if (NDIM==3) || (NDIM==2)
+  for (int ikvec=0; ikvec<totk; ++ikvec) {
+    vk(ikvec)=evalFK(sqrt(kvec2(ikvec)));
   }
 #endif
 }
@@ -103,8 +118,16 @@ EwaldSum::~EwaldSum() {
 }
 
 double EwaldSum::evalLongRange(const VArray& r) const {
+  double sum=0;
   // Set up the exponential tables
-#if NDIM==3
+#if NDIM==3 || NDIM==2
+#ifdef _OPENMP
+#pragma omp parallel
+#endif
+  {
+#ifdef _OPENMP
+#pragma omp for
+#endif
   for (int ipart=0; ipart<npart; ++ipart) {
     const Complex I(0,1);
     if (ikmax[0]>0) {
@@ -115,10 +138,12 @@ double EwaldSum::evalLongRange(const VArray& r) const {
       eiky(ipart,1)=exp(I*deltak[1]*r(ipart)[1]);
       eiky(ipart,-1)=conj(eiky(ipart,1));
     }
+#if NDIM==3
     if (ikmax[2]>0) {
       eikz(ipart,1)=exp(I*deltak[2]*r(ipart)[2]);
       eikz(ipart,-1)=conj(eikz(ipart,1));
     } 
+#endif
     for (int kx=2; kx<=ikmax[0]; ++kx) {
       eikx(ipart,kx)=eikx(ipart,kx-1)*eikx(ipart,1);
     }
@@ -126,34 +151,31 @@ double EwaldSum::evalLongRange(const VArray& r) const {
       eiky(ipart, ky)=eiky(ipart, ky-1)*eiky(ipart, 1);
       eiky(ipart,-ky)=eiky(ipart,-ky+1)*eiky(ipart,-1);
     }
+#if NDIM==3
     for (int kz=2; kz<=ikmax[2]; ++kz) {
       eikz(ipart, kz)=eikz(ipart, kz-1)*eikz(ipart, 1);
       eikz(ipart,-kz)=eikz(ipart,-kz+1)*eikz(ipart,-1);
     }
+#endif
   }
   // Sum long range action over all k-vectors.
+#ifdef _OPENMP
+#pragma omp for reduction(+:sum)
 #endif
-  double sum=0;
+  for (int ikvec=0; ikvec<totk; ++ikvec) {
+    Complex csum=0.;
+    for (int jpart=0; jpart<npart; ++jpart) {
 #if NDIM==3
-  int ikvec=0;
-  for (int kx=0; kx<=ikmax[0]; ++kx) {
-    double factor=(kx==0)?1.0:2.0;
-    double kx2=kx*kx*deltak[0]*deltak[0];
-    for (int ky=((kx==0) ? 0 : -ikmax[1]); ky<=ikmax[1]; ++ky) {
-      double ky2=ky*ky*deltak[1]*deltak[1];
-      for (int kz=((kx==0 && ky==0)? 0 : -ikmax[2]); kz<=ikmax[2]; ++kz) {
-        double k2=kx2+ky2+kz*kz*deltak[2]*deltak[2];
-        if (k2<kcut*kcut && k2>=kcut*kcut*1e-9) {
-          Complex csum=0.;
-          csum*=0.;
-          for (int jpart=0; jpart<npart; ++jpart) {
-            csum+=q(jpart)*eikx(jpart,kx)*eiky(jpart,ky)*eikz(jpart,kz);
-          }
-          sum+=factor*vk(ikvec++)*abs(csum)*abs(csum);
-        }
-      }
+      csum+=q(jpart)*eikx(jpart,kvec(ikvec)[0])*eiky(jpart,kvec(ikvec)[1])
+                    *eikz(jpart,kvec(ikvec)[2]);
+#else
+      csum+=q(jpart)*eikx(jpart,kvec(ikvec)[0])*eiky(jpart,kvec(ikvec)[1]);
+                 
+#endif
     }
+    sum+=vk(ikvec)*abs(csum)*abs(csum);
   }
+  } //end of omp parallel section
 #endif
   return sum*oneOver2V + selfEnergy;
 }
