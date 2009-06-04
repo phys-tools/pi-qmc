@@ -17,6 +17,7 @@
 #ifndef __CoulombAction_h_
 #define __CoulombAction_h_
 class MultiLevelSampler;
+class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 class EwaldSum;
@@ -43,6 +44,8 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
+  virtual double getActionDifference(const DisplaceMoveSampler&,
+                                     const int nMoving);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

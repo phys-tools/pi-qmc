@@ -28,25 +28,89 @@
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"
 #include <fstream>
-
-PermutationEstimator::PermutationEstimator(const SimulationInfo& simInfo,
-    MPIManager *mpi)
-  : BlitzArrayBlkdEst<1>("permutations", IVecN(simInfo.getNPart()), true), 
-    npart(simInfo.getNPart()), workFlags(npart),
+#include "Species.h"
+//sak
+#include <iostream>
+PermutationEstimator::PermutationEstimator(const SimulationInfo& simInfo, const std::string& name,
+		       const Species &s1, MPIManager *mpi)
+  : BlitzArrayBlkdEst<1>(name, IVecN(s1.count), true), 
+    npart(simInfo.getNPart()),  ifirst(s1.ifirst), nipart(s1.count),
     mpi(mpi) {
   value = 0.;
   norm = 0;
+  visited = new bool[nipart];
+  for (int i=0; i<nipart; ++i)   visited[i] = false;
 }
 
 PermutationEstimator::~PermutationEstimator() {
+  delete [] visited;
 }
 
 void PermutationEstimator::evaluate(const Paths &paths) {
   const Permutation &perm(paths.getPermutation());
-  if (perm[0]==0) {
-    value(0)+=1.;
-  } else {
-    value(1)+=1.;
+  //std :: cout << "SAK :: IN PERMUTATION ESTIMATOR"<<std :: endl;
+  //std :: cout << perm<<std :: endl;
+
+  for (int k=0; k<nipart; k++){
+    int i = ifirst + k;
+    if (!visited[k]){
+      int cnt = 1;
+      visited[k] = true;
+      int j = i;
+      while(perm[j] !=i){
+	cnt++;	
+	j = perm[j];
+	if ((j-ifirst) > (ifirst+nipart)){
+	  std :: cout<< "*** WARNING in permutationEstimator"<<std ::endl;
+	  break;
+	}
+	visited[j-ifirst]= true;
+      }
+      value(cnt) += 1.;
+    }
   }
+  for (int i=0; i<nipart; ++i)   visited[i] = false;
   norm += 1.;
+  
+}
+
+
+
+void PermutationEstimator::averageOverClones(const MPIManager* mpi) {
+#ifdef ENABLE_MPI
+  if (mpi && mpi->isCloneMain()) {
+    int rank = mpi->getCloneComm().Get_rank();
+    int size = mpi->getCloneComm().Get_size();
+    if (size>1) {
+      reset();
+      if (rank==0) {
+#if MPI_VERSION==2
+        mpi->getCloneComm().Reduce(MPI::IN_PLACE,&norm,1,MPI::DOUBLE,
+                                   MPI::SUM,0);
+        mpi->getCloneComm().Reduce(MPI::IN_PLACE,value.data(),value.size(),
+                                   MPI::FLOAT,MPI::SUM,0);
+#else
+        double nbuff;
+        ArrayN vbuff(n);
+        mpi->getCloneComm().Reduce(&norm,&nbuff,1,MPI::DOUBLE,
+                                   MPI::SUM,0);
+        mpi->getCloneComm().Reduce(value.data(),vbuff.data(),value.size(),
+                                   MPI::FLOAT,MPI::SUM,0);
+        norm=nbuff;
+        value=vbuff;
+#endif
+      } else {
+        mpi->getCloneComm().Reduce(&norm,NULL,1,MPI::DOUBLE,MPI::SUM,0);
+        mpi->getCloneComm().Reduce(value.data(),NULL,value.size(),
+                                   MPI::FLOAT,MPI::SUM,0);
+      }
+    }
+  }
+#endif
+  // Next add value to accumvalue and accumvalue2.
+  accumvalue += value/norm;
+  if (hasErrorFlag) accumvalue2 += (value*value)/(norm*norm);
+  accumnorm+=1.; 
+  value=0.; norm=0;
+  ++iblock; 
 }

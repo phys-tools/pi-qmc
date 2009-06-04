@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __GridPotential_h 
 #define __GridPotential_h
-class MultiLevelSampler;
+class MultiLevelSampler;class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 #include "Action.h"
@@ -41,6 +41,8 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
+ virtual double getActionDifference(const DisplaceMoveSampler&,
+				    const int nMoving){ return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the and derivatives at a bead.

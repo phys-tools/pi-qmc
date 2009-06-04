@@ -18,6 +18,7 @@
 #define __SpinAction_h_
 class Paths;
 class MultiLevelSampler;
+class DisplaceMoveSampler;
 template <int TDIM> class Beads;
 #include "Action.h"
 #include <blitz/tinyvec.h>
@@ -52,7 +53,10 @@ public:
                                      const int level);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
-  /// Calculate the action and derivatives at a bead.
+  virtual double getActionDifference(const DisplaceMoveSampler&,
+				    const int nMoving){ return 0;};
+
+ /// Calculate the action and derivatives at a bead.
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
        double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const;
   /// Accept last move.

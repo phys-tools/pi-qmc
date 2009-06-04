@@ -17,6 +17,7 @@
 #ifndef __SmoothedGridPotential_h
 #define __SmoothedGridPotential_h
 #include "MultiLevelSampler.h"
+#include "DisplaceMoveSampler.h"
 #include "SimulationInfo.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -85,7 +86,9 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int ilevel);
-  /// Calculate the total action.
+  virtual double getActionDifference(const DisplaceMoveSampler&,
+				    const int nMoving){ return 0;};
+ /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int ilevel) const;
   /// Calculate the and derivatives at a bead.
   virtual void getBeadAction(const Paths&, int ipart, int islice,

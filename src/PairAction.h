@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PairAction_h_
 #define __PairAction_h_
-class MultiLevelSampler;
+class MultiLevelSampler;class DisplaceMoveSampler;
 class Paths;
 class Species;
 class SimulationInfo;
@@ -75,7 +75,9 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
-  /// Calculate the total action.
+ virtual double getActionDifference(const DisplaceMoveSampler&,
+				    const int nMoving);
+    /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
