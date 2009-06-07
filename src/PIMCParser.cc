@@ -27,8 +27,6 @@
 #include "stats/AccRejEstimator.h"
 #include "SimulationInfo.h"
 #include "FreeMover.h"
-#include "UniformMover.h"
-#include "DisplaceMoveSampler.h"
 #include "spin/SpinMover.h"
 #include "spin/FreeSpinMover.h"
 #include "DampedFreeTensorMover.h"
@@ -139,45 +137,6 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       parseBody(ctxt,doubleSectionChooser);
       algorithm=doubleSectionChooser;
     }
-  }  else if (name=="SampleDisplaceMove") {
-    Mover* mover(0);
-    std::string moverName=getStringAttribute(ctxt->node,"mover");
-    //if (moverName=="Gauss") mover = new GaussMover(simInfo);
-    if (moverName=="Uniform") mover = new UniformMover();
-
-    double dist = getDoubleAttribute(ctxt->node,"dist");
-    int nmoving=getIntAttribute(ctxt->node,"npart");
-    std::string speciesName=getStringAttribute(ctxt->node,"species");
-    
-    ParticleChooser* particleChooser;      
-    if (speciesName=="" || speciesName=="all") {
-      particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
-    }else{ 
-      particleChooser = new SpeciesParticleChooser(simInfo.getSpecies(speciesName),nmoving);
-    }
-    //PermutationChooser *permutationChooser=0;
-    //permutationChooser = new PermutationChooser(nmoving);
-
-    int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
-    if (nrepeat==0) nrepeat=1;
-    
-    if (doubleAction==0) {
-      // pathsChooser = new PathsChooser(*paths, *action, beadFactory);
-      /*  algorithm=new DisplaceMoveSampler(nmoving, *paths, dist,
-					 *particleChooser,  *permutationChooser,
-					 *mover, action, nrepeat, beadFactory);*/
-      algorithm=new DisplaceMoveSampler(nmoving, *paths, dist,
-					*particleChooser, 
-					*mover, action, nrepeat, beadFactory);
-    }/*else{ needs fixinf
-      algorithm=new DoubleDisplcaceMoveSampler(nmoving, *paths, dist,
-					       *particleChooser, *permutationChooser, *mover, action,
-					       doubleAction, both, nrepeat, beadFactory);
-					       }*/
-    std::string accRejName="DisplaceMoveSampler";
-        estimators->add(((DisplaceMoveSampler*)algorithm)->
-    		    getAccRejEstimator(accRejName));
-
   } else if (name=="ShiftWorkers") {
     int maxShift=getIntAttribute(ctxt->node,"maxShift");
     WorkerShifter *shifter=new WorkerShifter(maxShift,*paths,mpi);
@@ -190,7 +149,7 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     std::string estName=getStringAttribute(ctxt->node,"estimator");
     algorithm=new Collect(estName,*estimators,getLoopCount(ctxt));
   } else if (name=="RandomGenerator") {
-    int iseed = getIntAttribute(ctxt->node,"iseed");
+    int iseed=getIntAttribute(ctxt->node,"iseed");
     algorithm=new SeedRandom(iseed);
   } else if (name=="Sample") {
     Mover* mover(0);

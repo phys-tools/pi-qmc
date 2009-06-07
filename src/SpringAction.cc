@@ -21,7 +21,6 @@
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "MultiLevelSampler.h"
-#include "DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -106,53 +105,6 @@ double SpringAction::getActionDifference(const MultiLevelSampler& sampler,
   }
   return deltaAction;
 }
-
-
-// displacemove
-double SpringAction::getActionDifference(const DisplaceMoveSampler& sampler,
-                                         const int nMoving) {
-  const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
-  const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-  const SuperCell& cell=sampler.getSuperCell();
-  const int nStride= 1; // (int)pow(2,level);
-  const int nSlice=pathsBeads.getNSlice();
-  const IArray& index=sampler.getMovingIndex(); 
-  const int level = 0;
-  double deltaAction=0;
-  for (int islice=1; islice<nSlice; islice+=nStride) {// you count from islice= 0 or 1?
-    for (int iMoving=0; iMoving<nMoving; ++iMoving) {
-      const int i=index(iMoving);
-      if (isStatic(i)) continue;
-      const int ispec=specIndex(i);
-      const double inv2Sigma2 = 0.25/(lambda(i)*tau*nStride);
-      // Add action for moving beads.
-      Vec delta=movingBeads.delta(iMoving,islice,-nStride);
-      cell.pbc(delta);
-      double temp = 1.0;
-      for (int idim=0;idim<NDIM;++idim) {
-        if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
-        } else {
-          deltaAction+=delta[idim]*delta[idim]*inv2Sigma2;
-        }
-      }
-      temp = 1.0/temp;
-      // Subtract action for old beads.
-      delta=pathsBeads.delta(i,islice,-nStride);
-      cell.pbc(delta);
-      for (int idim=0;idim<NDIM;++idim) {
-        if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
-        } else {
-          deltaAction-=delta[idim]*delta[idim]*inv2Sigma2;
-        }
-      }
-      deltaAction+=log(temp);
-    }
-  }
-  return deltaAction;
-}
-
 
 double SpringAction::getTotalAction(const Paths& paths, int level) const {
   return 0;

@@ -17,7 +17,6 @@
 #ifndef __Mover_h_
 #define __Mover_h_
 class MultiLevelSampler;
-class DisplaceMoveSampler;
 /** Virtual base class for routines to select trial moves for beads.
   * @version $Revision$
   * @author John Shumway. */
@@ -28,8 +27,6 @@ public:
   /// Move the samplers moving beads for a given level, returning
   /// the probability for the old move divided by the probability for the 
   /// new move.
-    //  virtual double makeMove(MultiLevelSampler&, const int level)=0;
-  virtual double makeMove(MultiLevelSampler&, const int level){return 0;}
-  virtual double makeMove(DisplaceMoveSampler&) {return 0;}
+  virtual double makeMove(MultiLevelSampler&, const int level)=0;
 };
 #endif

@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __GrapheneAction_h_
 #define __GrapheneAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class MultiLevelSampler;
 template <int TDIM> class Beads;
 #include "Action.h"
 #include <blitz/array.h>
@@ -37,9 +37,7 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
-  virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
- /// Calculate the total action.
+  /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
   virtual void getBeadAction(const Paths&, int ipart, int islice,

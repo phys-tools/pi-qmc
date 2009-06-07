@@ -19,7 +19,6 @@
 #endif
 #include "CoulombAction.h"
 #include "MultiLevelSampler.h"
-#include "DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -120,35 +119,6 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
   }
   return u;
 }
-
-//displace move
-double CoulombAction::getActionDifference(const DisplaceMoveSampler& sampler,
-                                         const int nMoving) {
-  double u=0;
-  for (unsigned int i=0; i<pairActionArray.size(); ++i) {
-    u += pairActionArray[i]->getActionDifference(sampler, 0);
-  }
-  // Compute long range Ewald action at lowest level.
-  if (ewaldSum) {
-    const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
-    const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-    const int nSlice=pathsBeads.getNSlice();
-    const IArray& index=sampler.getMovingIndex(); 
-    // const int nMoving=index.size();
-    for (int islice=1; islice<nSlice-1; ++islice) {
-      for (int i=0; i<npart; ++i) rewald(i)=pathsBeads(i,islice);
-      u -= ewaldSum->evalLongRange(rewald)*tau/epsilon;
-      for (int i=0; i<nMoving; ++i) rewald(index(i))=movingBeads(i,islice);
-      u += ewaldSum->evalLongRange(rewald)*tau/epsilon;
-    }
-  }
-  return u;
-}
-
-
-
-
-
 
 double CoulombAction::getTotalAction(const Paths& paths, int level) const {
   return 0;

@@ -22,7 +22,6 @@
 #include "Paths.h"
 #include "SuperCell.h"
 #include "MultiLevelSampler.h"
-//#include "DisplaceMoveSampler.h"
 
 SpinAction::SpinAction(const double tau, const double mass, 
                        const double bx, const double by, const double bz,

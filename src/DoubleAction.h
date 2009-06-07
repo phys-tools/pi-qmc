@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __DoubleAction_h_
 #define __DoubleAction_h_
-class DoubleMLSampler;class DisplaceMoveSampler;
+class DoubleMLSampler;
 class DoubleSectionChooser;
 class Paths;
 #include <blitz/tinyvec.h>
@@ -37,8 +37,6 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const DoubleMLSampler&,
                                      int level)=0;
- virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const=0;
   /// Calculate action and derivatives at a bead (defaults to no

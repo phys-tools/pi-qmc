@@ -36,15 +36,6 @@ double CompositeAction::getActionDifference(
   return diff;
 }
 
-double CompositeAction::getActionDifference(
-    const DisplaceMoveSampler& sampler, const int nmoving) {
-  double diff=0;
-  for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
-    if (*action) diff+=(*action)->getActionDifference(sampler, nmoving);
-  }
-  return diff;
-}
-
 double CompositeAction::getTotalAction(const Paths& paths, int level) const {
   double total=0;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {

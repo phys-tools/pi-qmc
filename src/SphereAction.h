@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __SphereAction_h_
 #define __SphereAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class MultiLevelSampler;
 class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
@@ -41,8 +41,6 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
- virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int) const {return 0;}
   /// Calculate action and derivatives at a bead (no contribution).

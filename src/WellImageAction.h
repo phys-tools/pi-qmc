@@ -17,7 +17,6 @@
 #ifndef __WellImageAction_h_
 #define __WellImageAction_h_
 class MultiLevelSampler;
-class DisplaceMoveSampler;
 template <int TDIM> class Beads;
 class SimulationInfo;
 class SuperCell;
@@ -100,9 +99,6 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
- virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
-
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
