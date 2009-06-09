@@ -509,7 +509,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
     const int islice, Array &d1, Array &d2) {
   // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
-  const Matrix& mat(*matrix[islice]);
+  const Matrix& mat(*newMatrix[islice]);
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int ipart=0; ipart<npart; ++ipart) {
