@@ -45,6 +45,12 @@ class FileGroup(object):
   def __str__(self):
     return "Filegroup"
 
+  def getNPart(self):
+    npart = numpy.zeros(self.nfile,numpy.int32)
+    for i,file in enumerate(self.fileList):
+      npart[i] = file.getNPart()
+    return npart
+
   def getNSlice(self):
     nslice = numpy.zeros(self.nfile,numpy.int32)
     for i,file in enumerate(self.fileList):
