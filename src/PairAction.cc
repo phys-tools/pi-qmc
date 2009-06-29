@@ -30,10 +30,11 @@
 
 PairAction::PairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
-            const int norder, const bool isDMD) 
+            const int norder, const bool hasZ, const bool isDMD) 
   : tau(simInfo.getTau()), species1(s1), species2(s2),
     ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder), isDMD(isDMD) {
+    npart1(s1.count), npart2(s2.count), norder(norder), isDMD(isDMD),
+    hasZ(hasZ) {
 std::cout << "constructing PairAction" << std::endl;
 std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
 std::cout << "filename=" << filename << std::endl;
@@ -41,16 +42,17 @@ std::cout << "filename=" << filename << std::endl;
   std::ifstream dmfile((filename+".dmu").c_str()); std::string temp;
   double r;
   double junk;
-  Array u(norder+1);
+  int ndata = (hasZ) ? (norder+1)*(norder+2)/2 : norder+1;
+  Array u(ndata);
   dmfile >> r; if (isDMD) dmfile >> junk; 
-  for (int k=0; k<=norder; ++k) {
+  for (int k=0; k<ndata; ++k) {
     dmfile >> u(k);
     if (isDMD && k>0) u(k)/=r*r;
   }
   getline(dmfile,temp); buffer.push_back(u.copy());
   rgridinv=1./r;
   dmfile >> r; if (isDMD) dmfile >> junk;
-  for (int k=0; k<=norder; ++k) {
+  for (int k=0; k<ndata; ++k) {
     dmfile >> u(k); 
     if (isDMD && k>0) u(k)/=r*r;
   }
@@ -58,23 +60,23 @@ std::cout << "filename=" << filename << std::endl;
   logrratioinv = 1/log(r*rgridinv);
   while (dmfile) {
     dmfile >> r; if (isDMD) dmfile >> junk;
-    for (int k=0; k<=norder; ++k) {
+    for (int k=0; k<ndata; ++k) {
       dmfile >> u(k); 
       if (isDMD && k>0) u(k)/=r*r;
     }
     getline(dmfile,temp); if (dmfile) buffer.push_back(u.copy());
   }
   ngpts=buffer.size();
-  ugrid.resize(ngpts, (norder+1)*2);
+  ugrid.resize(ngpts,2,ndata);
   for (int i=0; i<ngpts; ++i) {
-    for (int k=0; k<=norder; ++k) ugrid(i,k)=buffer[i](k);
+    for (int k=0; k<ndata; ++k) ugrid(i,0,k)=buffer[i](k);
   }
   std::ifstream dmefile((filename+".dme").c_str());
   for (int i=0; i<ngpts; ++i) {
     dmefile >> r; if (isDMD) dmefile >> junk;
-    for (int k=0; k<=norder; ++k) {
-      dmefile >> ugrid(i,k+norder+1);
-      if (isDMD && k>0) ugrid(i,k+norder+1)/=r*r;
+    for (int k=0; k<ndata; ++k) {
+      dmefile >> ugrid(i,1,k);
+      if (isDMD && k>0) ugrid(i,1,k)/=r*r;
     }
     getline(dmefile,temp);
   }
@@ -83,7 +85,7 @@ std::cout << "filename=" << filename << std::endl;
     for (int i=0; i<ngpts; ++i) {
       double v;
       potfile >> r >> v; getline(potfile,temp);
-      ugrid(i,norder+1)+=v;
+      ugrid(i,1,0)+=v;
     }
   }
   std::ofstream file((filename+".dat").c_str());
@@ -95,7 +97,7 @@ PairAction::PairAction(const Species& s1, const Species& s2,
             const int norder, const double rmin, const double rmax,
             const int ngpts) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
-    logrratioinv((ngpts-1)/log(rmax/rmin)), ugrid(ngpts,(norder+1)*2),
+    logrratioinv((ngpts-1)/log(rmax/rmin)), ugrid(ngpts,2,norder+1),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
     npart1(s1.count), npart2(s2.count), norder(norder) {
 std::cout << "constructing PairAction" << std::endl;
@@ -105,8 +107,8 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
     for (int iorder=0; iorder<norder+1; ++iorder) {
-      ugrid(i,iorder)=action.u(r,iorder);
-      ugrid(i,iorder+norder+1)=action.utau(r,iorder);
+      ugrid(i,0,iorder)=action.u(r,iorder);
+      ugrid(i,1,iorder)=action.utau(r,iorder);
 //std::cout << r << " " << ugrid(i,iorder) 
 //               << " " << ugrid(i,iorder+norder+1) << std::endl;
     }
@@ -118,22 +120,27 @@ PairAction::PairAction(const Species& s1, const Species& s2,
             const int norder, const double rmin, const double rmax,
             const int ngpts) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
-    logrratioinv((ngpts-1)/log(rmax/rmin)), ugrid(ngpts,(norder+1)*2),
+    logrratioinv((ngpts-1)/log(rmax/rmin)), 
+    ugrid(ngpts,2,(norder+1)*(norder+2)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder) {
+    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(true) {
 std::cout << "constructing PairAction" << std::endl;
 std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
-//  std::cout << 1./rgridinv << ", " << logrratioinv << std::endl;
+  int ndata = (norder+1)*(norder+2)/2;
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
     integrator.integrate(r);
     Array u = integrator.getU();
-    for (int iorder=0; iorder<norder+1; ++iorder) {
-      ugrid(i,iorder)= u(iorder);
-      ugrid(i,iorder+norder+1)=0;//action.utau(r,iorder);
-//std::cout << r << " " << ugrid(i,iorder) 
-//               << " " << ugrid(i,iorder+norder+1) << std::endl;
+    for (int idata=0; idata<ndata; ++idata) ugrid(i,0,idata) = u(idata);
+    integrator.integrate(r,1.01);
+    u = integrator.getU();
+    for (int idata=0; idata<ndata; ++idata) ugrid(i,1,idata) = u(idata);
+    integrator.integrate(r,0.99);
+    u = integrator.getU();
+    for (int idata=0; idata<ndata; ++idata) {
+      ugrid(i,1,idata) -= u(idata);
+      ugrid(i,1,idata) /= 0.02*tau;
     }
   }
 }
@@ -180,7 +187,12 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
         double q=0.5*(r+prevMovingR);
        	if (level<3) {
           Vec svec=delta-prevMovingDelta; double s2=dot(svec,svec)/(q*q);
-          deltaAction+=uk0(q,s2);
+          if (hasZ) {
+            double z=(r-prevMovingR)/q;
+            deltaAction+=uk0(q,s2,z*z);
+          } else {
+            deltaAction+=uk0(q,s2);
+          }
         } else { 
           deltaAction+=u00(q);
         }
@@ -193,7 +205,12 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
         q=0.5*(r+prevR);
         if (level<3) {
           Vec svec=delta-prevDelta; double s2=dot(svec,svec)/(q*q);
-          deltaAction-=uk0(q,s2);
+          if (hasZ) {
+            double z=(r-prevR)/q;
+            deltaAction-=uk0(q,s2,z*z);
+          } else {
+            deltaAction-=uk0(q,s2);
+          }
         } else {
           deltaAction-=u00(q);
         }
@@ -228,21 +245,37 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
     Vec prevDelta=paths(ipart,islice,-1);
     prevDelta-=paths(j,islice,-1);
     paths.getSuperCell().pbc(prevDelta);
-    double q=0.5*(r+sqrt(dot(prevDelta,prevDelta)));
+    double prevR=sqrt(dot(prevDelta,prevDelta));
+    double q=0.5*(r+prevR);
     Vec svec=delta-prevDelta; double s2=dot(svec,svec)/(q*q);
-    double v,vtau,vq,vs2;
-    uk0CalcDerivatives(q,s2,v,vtau,vq,vs2);
+    double v,vtau,vq,vs2,vz2,z;
+    if (hasZ) { 
+      z=(r-prevR)/q;
+      uk0CalcDerivatives(q,s2,z*z,v,vtau,vq,vs2,vz2);
+    } else {
+      uk0CalcDerivatives(q,s2,v,vtau,vq,vs2);
+      vz2=0.; z=0;
+    }
     u += 0.5*v;
     utau += 0.5*vtau;
-    fm -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r));
+    fm -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
+         +vz2*z*(2*delta/(q*r) -z*delta/(q*r));
     // And force contribution from next slice.
     Vec nextDelta=paths(ipart,islice,+1);
     nextDelta-=paths(j,islice,+1);
     paths.getSuperCell().pbc(nextDelta);
-    q=0.5*(r+sqrt(dot(nextDelta,nextDelta)));
+    double nextR=sqrt(dot(nextDelta,nextDelta));
+    q=0.5*(r+nextR);
     svec=delta-nextDelta; s2=dot(svec,svec)/(q*q);
-    uk0CalcDerivatives(q,s2,v,vtau,vq,vs2);
-    fp -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r));
+    if (hasZ) { 
+      z=(r-nextR)/q;
+      uk0CalcDerivatives(q,s2,z*z,v,vtau,vq,vs2,vz2);
+    } else {
+      uk0CalcDerivatives(q,s2,v,vtau,vq,vs2);
+      vz2=0.; z=0.;
+    }
+    fp -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
+         +vz2*z*(2*delta/(q*r) -z*delta/(q*r));
   }
 }
 
@@ -252,7 +285,7 @@ double PairAction::u00(double r) const {
   if (r<1) {i=0; x=0;}
   else if (i>ngpts-2) {i=ngpts-2; x=1;}
   else x-=i;
-  return (1-x)*ugrid(i,0)+x*ugrid(i+1,0);
+  return (1-x)*ugrid(i,0,0)+x*ugrid(i+1,0,0);
 }
 
 double PairAction::uk0(double q, double s2) const {
@@ -263,7 +296,26 @@ double PairAction::uk0(double q, double s2) const {
   else x-=i;
   double action=0;
   for (int k=norder; k>=0; k--) {
-    action*=s2; action+=(1-x)*ugrid(i,k)+x*ugrid(i+1,k);
+    action*=s2; action+=(1-x)*ugrid(i,0,k)+x*ugrid(i+1,0,k);
+  }
+  return action;
+}
+
+double PairAction::uk0(double q, double s2, double z2) const {
+  q*=rgridinv; double x=log(q)*logrratioinv;
+  int i = (int)x;
+  if (q<1) {i=0; x=0;}
+  else if (i>ngpts-2) {i=ngpts-2; x=1;}
+  else x-=i;
+  double action=0;
+  int index=(norder+1)*(norder+2)/2-1;
+  for (int k=norder; k>=0; k--) {
+    double temp=0;
+    for (int l=k; l>=0; l--) {
+      temp*=z2; temp+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      --index;
+    }
+    action*=s2; action+=temp;
   }
   return action;
 }
@@ -275,16 +327,58 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double &u,
   if (q<1) {i=0; x=0;}
   else if (i>ngpts-2) {i=ngpts-2; x=1;}
   else x-=i;
-  int koffset=norder+1;
   u=utau=uq=us2=0;
   for (int k=norder; k>=0; k--) {
-    u*=s2; u+=(1-x)*ugrid(i,k)+x*ugrid(i+1,k);
-    utau*=s2; utau+=(1-x)*ugrid(i,k+koffset)+x*ugrid(i+1,k+koffset);
-    uq*=s2; uq+=ugrid(i+1,k)-ugrid(i,k);
+    u*=s2; u+=(1-x)*ugrid(i,0,k)+x*ugrid(i+1,0,k);
+    utau*=s2; utau+=(1-x)*ugrid(i,1,k)+x*ugrid(i+1,1,k);
+    uq*=s2; uq+=ugrid(i+1,0,k)-ugrid(i,0,k);
   }
   uq*=logrratioinv*rgridinv/q;
   for (int k=norder; k>0; k--) {
-    us2*=s2; us2+=k*((1-x)*ugrid(i,k)+x*ugrid(i+1,k));
+    us2*=s2; us2+=k*((1-x)*ugrid(i,0,k)+x*ugrid(i+1,0,k));
+  }
+}
+
+void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
+            double &utau, double &uq, double &us2, double& uz2) const {
+  q*=rgridinv; double x=log(q)*logrratioinv;
+  int i = (int)x;
+  if (q<1) {i=0; x=0;}
+  else if (i>ngpts-2) {i=ngpts-2; x=1;}
+  else x-=i;
+  u=utau=uq=us2=uz2=0.;
+  int index=(norder+1)*(norder+2)/2-1;
+  for (int k=norder; k>=0; k--) {
+    double a=0, atau=0, aq=0;
+    for (int l=k; l>=0; l--) {
+      a*=z2; a+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      atau*=z2; atau+=(1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index);
+      aq*=z2; aq += ugrid(i+1,0,index)-ugrid(i,0,index);
+      --index;
+    }
+    u*=s2; u+=a;
+    utau*=s2; utau+=atau;
+    uq*=s2; uq+=aq;
+  }
+  uq*=logrratioinv*rgridinv/q;
+  index=(norder+1)*(norder+2)/2-1;
+  for (int k=norder; k>0; k--) {
+    double as2=0;
+    for (int l=k; l>=0; l--) {
+      as2*=z2; as2+=k*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
+      --index;
+    }
+    us2*=s2; us2+=k*as2;
+  }
+  index=(norder+1)*(norder+2)/2-1;
+  for (int k=norder; k>0; k--) {
+    double az2=0;
+    for (int l=k; l>0; l--) {
+      az2*=z2; az2+=l*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
+      --index;
+    }
+    --index;
+    uz2+=az2; uz2*=s2;
   }
 }
 
@@ -294,12 +388,13 @@ void PairAction::write(const std::string &fname) const {
   ufile.setf(ufile.scientific,ufile.floatfield); ufile.setf(ufile.showpos);
   std::ofstream efile((filename+".dme").c_str()); efile.precision(6);
   efile.setf(efile.scientific,efile.floatfield); efile.setf(efile.showpos);
+  int ndata = (hasZ) ? (norder+1)*(norder+2)/2 : norder+1;
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
     ufile << r; efile << r;
-    for (int iorder=0; iorder<norder+1; ++iorder) {
-      ufile << " " << ugrid(i,iorder);
-      efile << " " << ugrid(i,iorder+norder+1);
+    for (int idata=0; idata<ndata; ++idata) {
+      ufile << " " << ugrid(i,0,idata);
+      efile << " " << ugrid(i,1,idata);
     }
     ufile << std::endl; efile << std::endl;
   }

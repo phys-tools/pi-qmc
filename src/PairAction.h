@@ -62,6 +62,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<double,2> Array2;
+  typedef blitz::Array<double,3> Array3;
   /// Helper class for constructing from emprical action.
   class EmpiricalPairAction{public: 
     virtual double u(double r, int iorder) const=0;
@@ -69,7 +70,8 @@ public:
   };
   /// Construct by providing the species and dmu filename.
   PairAction(const Species&, const Species&, const std::string& filename,
-             const SimulationInfo&, const int norder=0, const bool isDMD=false);
+             const SimulationInfo&, const int norder, 
+             const bool hasZ, const bool isDMD);
   /// Construct by providing the species and EmpiricalPairAction.
   PairAction(const Species&, const Species&, const EmpiricalPairAction&,
              const SimulationInfo&, const int norder, 
@@ -101,14 +103,19 @@ protected:
   /// The log of the ratio of consecutive grid points.
   double logrratioinv;
   /// The action grid (radial coord is logrithmic).
-  Array2 ugrid;
+  Array3 ugrid;
   /// Evalute the diagonal action from the grid.
   double u00(double r) const;
   /// Evalute the off-diagonal action from the grid.
   double uk0(double q, double s2) const;
+  /// Evalute the off-diagonal action from the grid.
+  double uk0(double q, double s2, double z2) const;
   /// Evaluate the derivatives of the action from the grid.
   void uk0CalcDerivatives(double q, double s2, double &u,
             double &utau, double &uq, double &us2) const;
+  /// Evaluate the derivatives of the action from the grid.
+  void uk0CalcDerivatives(double q, double s2, double z2, double &u,
+            double &utau, double &uq, double &us2, double &uz2) const;
   /// The species.
   const Species &species1, &species2;
   /// Indicies of first particles of each species.

@@ -47,7 +47,7 @@ public:
   typedef blitz::TinyVector<int,NDIM+1> IVecN1;
   typedef blitz::TinyVector<int,NDIM+2> IVecN2;
   PairIntegrator(double tau, double mu, double dr, int norder, int maxiter,
-                 const PairPotential &pot, double tol);
+    const PairPotential &pot, double tol, int nsegment, double intRange);
   ~PairIntegrator();
   void integrate(double q, double scaleTau=1.);
   void propagate(double segTau, double tol);
@@ -76,5 +76,6 @@ private:
   static const double PI=3.1415926535897931;
   const PairPotential &pot;
   const double tol;
+  const int nsegment;
 };
 #endif

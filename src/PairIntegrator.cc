@@ -41,18 +41,20 @@ extern "C" void zaxpy_(const int *n, const double *da, const Complex *dx,
   const int *incx, const Complex *dy, const int *incy);
 
 PairIntegrator::PairIntegrator(double tau, double mu, double dr,
-  int norder, int maxiter, const PairPotential &pot, double tol) 
+  int norder, int maxiter, const PairPotential &pot, double tol,
+  int nsegment, double intRange) 
   : tau(tau), mu(mu), dr(dr), norder(norder), maxiter(maxiter),
     ndata(NDIM>1 ? (norder+1)*(norder+2)/2 : norder+1),
     nstep(maxiter), nstepInv(maxiter),
     g(ndata), g0(ndata), s2(ndata), z(ndata), u(ndata), pot(pot),
-    tol(tol) {
-  // Figure out the number of grid points (power of two larger than 2.5 sigma).
+    tol(tol), nsegment(nsegment) {
+  // Figure out the number of grid points.
+  // (power of two larger than intRange*sigma).
   double sigma = sqrt(tau/mu);
-  ngrid = 2*(int)exp2(ceil(log2((2.5*sigma/dr))));
+  ngrid = 2*(int)exp2(ceil(log2((intRange*sigma/dr))));
   if (ngrid < 16) {
    ngrid=16;
-   dr = 5*sigma/ngrid;
+   dr = 2*intRange*sigma/ngrid;
   }
   ngridN = pow(ngrid,NDIM);
   // Allocate the grids.
@@ -123,7 +125,6 @@ PairIntegrator::~PairIntegrator() {
 }
 
 void PairIntegrator::integrate(double q, double scaleTau) {
-  int nsegment=1;
   double tauSave = tau;
   tau *= scaleTau;
   blitz::Range all(blitz::Range::all());
@@ -175,7 +176,7 @@ void PairIntegrator::integrate(double q, double scaleTau) {
   //Propagate the wavefunction forward in a series of segments.
   for (int iseg=0; iseg<nsegment; ++iseg) {
     std::cout << "Segment " << iseg+1 << " (of " << nsegment
-              << ", q=" << q << "):" << std::endl;
+              << ", q=" << q << ", tol=" << tol << "):" << std::endl;
     propagate(tau/nsegment, tol);
   }
   // Calculate free propagator (includes FFT normalization).

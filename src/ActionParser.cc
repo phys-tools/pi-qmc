@@ -356,8 +356,9 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       std::string filename=getStringAttribute(ctxt->node,"file");
       int norder=getIntAttribute(actNode,"norder");
       bool isDMD=getBoolAttribute(actNode,"isDMD");
+      bool hasZ=getBoolAttribute(actNode,"hasZ");
       composite->addAction(new PairAction(species1,species2,filename,
-                                          simInfo,norder,isDMD));
+                                          simInfo,norder,hasZ,isDMD));
       continue;
     } else if (name=="EmpiricalInteraction") {
       ctxt->node=actNode;
@@ -387,11 +388,15 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         int norder=getIntAttribute(actNode,"norder");
         double deltar=getLengthAttribute(actNode,"deltaR");
         double tol=getDoubleAttribute(actNode,"tol");
+        double intRange=getDoubleAttribute(actNode,"intRange");
+        if (intRange<1.0) intRange = 2.5;
         int maxIter=getIntAttribute(actNode,"maxIter");
+        int nsegment=getIntAttribute(actNode,"nsegment");
+        if (nsegment==0) nsegment=1;
         bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
         double mu=1./(1./species1.mass+1./species2.mass);
         PairIntegrator integrator(simInfo.getTau(),mu,deltar,
-                                  norder,maxIter,*pot,tol);
+                                  norder,maxIter,*pot,tol,nsegment,intRange);
         double ascat = pot->getScatteringLength(mu,rmax,0.01*deltar); 
         std::cout << "Scattering length = " << ascat << "a0, or " 
                   << ascat*0.0529177 << " nm." << std::endl;
@@ -461,7 +466,8 @@ Action* ActionParser::parseEwaldActions(const xmlXPathContextPtr& ctxt) {
     const Species& species2(simInfo.getSpecies(specName));
     std::string filename=getStringAttribute(actNode,"file");
     int norder=getIntAttribute(actNode,"norder");
-    ewald->addAction(new PairAction(species1,species2,filename,simInfo,norder));
+    ewald->addAction(new PairAction(species1,species2,filename,
+                                    simInfo,norder,false,false));
   }
   xmlXPathFreeObject(obj);
   ewald->setup();
