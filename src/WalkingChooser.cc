@@ -88,7 +88,6 @@ bool WalkingChooser::choosePermutation() {
   prob=1;
   for (int i=0; i<nsize; ++i) prob*=t(index(i),index(i))
                                    /t(index(i),index((i+1)%nsize));
-//std::cout << prob << std::endl;
   // Add ifirst to particle IDs to convert to absolute IDs.
   index += ifirst;
   return RandomNumGenerator::getRand()<accept;

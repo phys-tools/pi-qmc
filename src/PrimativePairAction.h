@@ -20,6 +20,7 @@ class MultiLevelSampler;
 class Paths;
 class Species;
 class SimulationInfo;
+class PairPotential;
 #include "PairAction.h"
 #include <blitz/array.h>
 
@@ -27,33 +28,19 @@ class SimulationInfo;
   * Right now it just uses the primative approximation.
   * We may add methods for squaring or parsing formulas later.
   * @author John Shumway. */
-class EmpiricalInteraction : public PairAction::EmpiricalPairAction {
+class PrimativePairAction : public PairAction::EmpiricalPairAction {
 public:
-  // Base class for empirical potentials.
-  class Potential {
-  public:
-    virtual double operator()(double r) const=0;
-  };
-
-  //Empirical short range potential for trapped atoms.
-  class Cosh2Potential : public Potential {
-  public: 
-    Cosh2Potential(double v0, double kappa);
-    virtual double operator()(double r) const;
-    double v0, kappa;
-  };
-
   virtual double u(double r, int iorder) const;
   virtual double utau(double r, int iorder) const;
 
   //Construct by providing an emprical potential and timestep.
-  EmpiricalInteraction(const Potential& v, const double tau);
+  PrimativePairAction(const PairPotential& v, const double tau);
 
   //Calculate the scattering length.
   double getScatteringLength(
     Species s1, Species s2, double rmax, double dr) const;
 private:
-  const Potential& v;
+  const PairPotential& v;
   const double tau;
 };
 #endif

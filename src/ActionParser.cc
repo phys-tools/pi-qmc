@@ -45,7 +45,8 @@
 #include "FreePartNodesNoUpdate.h"
 #include "AnisotropicNodes.h"
 #include "PairAction.h"
-#include "EmpiricalInteraction.h"
+#include "PrimativePairAction.h"
+#include "PairPotential.h"
 #include "GridPotential.h"
 #include "GroundStateSNode.h"
 #include "GroundStateWFNodes.h"
@@ -66,6 +67,7 @@
 #include "EwaldAction.h"
 #include "StillWebAction.h"
 #include "stats/MPIManager.h"
+#include "PairIntegrator.h"
 //#include "GrapheneAction.h"
 #include "WellImageAction.h"
 #include <iostream>
@@ -364,7 +366,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       specName=getStringAttribute(ctxt->node,"species2");
       const Species& species2(simInfo.getSpecies(specName));
       std::string modelName=getStringAttribute(ctxt->node,"model");
-      EmpiricalInteraction::Potential* pot=0;
+      PairPotential* pot=0;
       int norder=getIntAttribute(actNode,"norder");
       double rmin=getLengthAttribute(actNode,"rmin");
       double rmax=getLengthAttribute(actNode,"rmax");
@@ -372,14 +374,26 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       if (modelName=="cosh2") {
         double v0=getEnergyAttribute(actNode,"v0");
         double kappa=getInvLengthAttribute(actNode,"kappa");
-        pot = new EmpiricalInteraction::Cosh2Potential(v0,kappa); 
+        pot = new PairPotential::InvCosh2(v0,kappa); 
       }
-      EmpiricalInteraction empAction(*pot,simInfo.getTau());
-      std::cout << "Scattering length = " 
-                << empAction.getScatteringLength(species1,species2,
-                   rmax,rmax/(100*ngpts)) << std::endl;
-      composite->addAction(new PairAction(species1,species2,empAction,
-                                          simInfo,norder,rmin,rmax,ngpts));
+      bool useIntegrator=getBoolAttribute(actNode,"useIntegrator");
+      if (useIntegrator) {
+        int norder=getIntAttribute(actNode,"norder");
+        double deltar=getLengthAttribute(actNode,"deltaR");
+        double tol=getDoubleAttribute(actNode,"tol");
+        int maxIter=getIntAttribute(actNode,"maxiter");
+        bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
+        double mu=1./(1./species1.mass+1./species2.mass);
+        PairIntegrator integrator(simInfo.getTau(),mu,deltar,
+                                  norder,maxIter,*pot);
+      } else {
+        PrimativePairAction empAction(*pot,simInfo.getTau());
+        std::cout << "Scattering length = " 
+                  << empAction.getScatteringLength(species1,species2,
+                     rmax,rmax/(100*ngpts)) << std::endl;
+        composite->addAction(new PairAction(species1,species2,empAction,
+                                            simInfo,norder,rmin,rmax,ngpts));
+      }
       delete pot;
       continue;
     } else if (name=="GroundStateWFNodes") {

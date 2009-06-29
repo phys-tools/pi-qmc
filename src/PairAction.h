@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006, 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,10 +30,14 @@ class SimulationInfo;
 * @f[ q_{ij} = \frac{r_{ij} + r'_{ij}}{2} @f]
 * and
 * @f[ s^2_{ij} = \frac{|r_{ij}- r'_{ij}|^2}{q^2}. @f]
+* For general potentials (not 1/r), there is an additional coordinate
+* @f[ z_{ij} = \frac{r_{ij}-r'_{ij}}{q}. @f]
 * The action and its tau derivative are stored as radial grids,
-* @f[ u(q,s)=\sum_{k=0}^{N_{order}} u_k(q)s^{2k} @f]
+* @f[ u(q,s)=\sum_{k=0}^{N_{order}}
+*            \sum_{l=0}^k u_{kl}(q)s^{2k}z^{2l}. @f]
 * and
-* @f[ \dot{u}(q,s)=\sum_{k=0}^{N_{order}} \dot{u}_k(q)s^{2k}. @f]
+* @f[ \dot{u}(q,s)=\sum_{k=0}^{N_{order}}
+*                  \sum_{l=0}^k \dot{u}_{kl}(q)s^{2k}z^{2l}. @f]
 * The derivatives of the action (for the VirialEnergyEstimator) are given by
 * @f[ \;-\nabla_i u(r_{ij},r'_{ij}) = -
 * \frac{\partial u}{\partial q} \nabla q -
@@ -50,7 +54,6 @@ class SimulationInfo;
 * @f[ \frac{\partial u}{\partial (s^2)}  
 *     =\sum_{k=1}^{N_{order}} k u_k(q)s^{2(k-1)}. @f]
 * @version $Revision$
-* @todo Make a version for non-coulomb actions.
 * @author John Shumway. */
 class PairAction : public Action {
 public:
@@ -110,6 +113,8 @@ protected:
   /// Order of the off-diagonal expansion.
   int norder;
   /// Flag for using the format from DMD downloaded from Ceperley site. 
-  int isDMD;
+  bool isDMD;
+  /// Flag for including sum over z.
+  bool hasZ;
 };
 #endif
