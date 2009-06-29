@@ -23,6 +23,7 @@
 #include "Paths.h"
 #include "SuperCell.h"
 #include "SimulationInfo.h"
+#include "PairIntegrator.h"
 #include <vector>
 #include <fstream>
 #include <blitz/tinyvec-et.h>
@@ -111,6 +112,33 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
     }
   }
 }
+
+PairAction::PairAction(const Species& s1, const Species& s2,
+            PairIntegrator &integrator, const SimulationInfo& simInfo, 
+            const int norder, const double rmin, const double rmax,
+            const int ngpts) 
+  : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
+    logrratioinv((ngpts-1)/log(rmax/rmin)), ugrid(ngpts,(norder+1)*2),
+    species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
+    npart1(s1.count), npart2(s2.count), norder(norder) {
+std::cout << "constructing PairAction" << std::endl;
+std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
+  ugrid=0;
+//  std::cout << 1./rgridinv << ", " << logrratioinv << std::endl;
+  for (int i=0; i<ngpts; ++i) {
+    double r=(1./rgridinv)*exp(i/logrratioinv);
+    integrator.integrate(r);
+    Array u = integrator.getU();
+    for (int iorder=0; iorder<norder+1; ++iorder) {
+      ugrid(i,iorder)= u(iorder);
+      ugrid(i,iorder+norder+1)=0;//action.utau(r,iorder);
+//std::cout << r << " " << ugrid(i,iorder) 
+//               << " " << ugrid(i,iorder+norder+1) << std::endl;
+    }
+  }
+}
+
+
 
 double PairAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {

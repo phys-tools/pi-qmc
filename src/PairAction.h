@@ -20,6 +20,7 @@ class MultiLevelSampler;
 class Paths;
 class Species;
 class SimulationInfo;
+class PairIntegrator;
 #include "Action.h"
 #include <blitz/array.h>
 
@@ -69,8 +70,12 @@ public:
   /// Construct by providing the species and dmu filename.
   PairAction(const Species&, const Species&, const std::string& filename,
              const SimulationInfo&, const int norder=0, const bool isDMD=false);
-  /// Construct by providing the species and dmu filename.
+  /// Construct by providing the species and EmpiricalPairAction.
   PairAction(const Species&, const Species&, const EmpiricalPairAction&,
+             const SimulationInfo&, const int norder, 
+             const double rmin, const double rmax, const int ngpts);
+  /// Construct by providing the species and PairIntegrator.
+  PairAction(const Species&, const Species&, PairIntegrator&,
              const SimulationInfo&, const int norder, 
              const double rmin, const double rmax, const int ngpts);
   /// Virtual destructor.

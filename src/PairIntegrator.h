@@ -47,15 +47,15 @@ public:
   typedef blitz::TinyVector<int,NDIM+1> IVecN1;
   typedef blitz::TinyVector<int,NDIM+2> IVecN2;
   PairIntegrator(double tau, double mu, double dr, int norder, int maxiter,
-                 const PairPotential &pot);
+                 const PairPotential &pot, double tol);
   ~PairIntegrator();
-  void integrate(double q);
+  void integrate(double q, double scaleTau=1.);
   void propagate(double segTau, double tol);
   void vpolyfit(const Array &x, const CArray3 &y, CArray2 &y0, 
                 CArray2 &diff, CArray2 &a, CArray3 &c, CArray3 &d);
   const Array& getU() {return u;}
 private:
-  const double tau;
+  double tau;
   const double mu;
   double dr;
   const int norder;
@@ -75,5 +75,6 @@ private:
   fftw_plan fwd, rev;
   static const double PI=3.1415926535897931;
   const PairPotential &pot;
+  const double tol;
 };
 #endif

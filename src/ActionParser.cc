@@ -375,17 +375,30 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         double v0=getEnergyAttribute(actNode,"v0");
         double kappa=getInvLengthAttribute(actNode,"kappa");
         pot = new PairPotential::InvCosh2(v0,kappa); 
+      } else if (modelName=="LJ") {
+        double epsilon=getEnergyAttribute(actNode,"epsilon");
+        double sigma=getLengthAttribute(actNode,"sigma");
+        pot = new PairPotential::LennardJones(epsilon,sigma); 
+      } else if (modelName=="Aziz") {
+        pot = new PairPotential::Aziz(); 
       }
       bool useIntegrator=getBoolAttribute(actNode,"useIntegrator");
       if (useIntegrator) {
         int norder=getIntAttribute(actNode,"norder");
         double deltar=getLengthAttribute(actNode,"deltaR");
         double tol=getDoubleAttribute(actNode,"tol");
-        int maxIter=getIntAttribute(actNode,"maxiter");
+        int maxIter=getIntAttribute(actNode,"maxIter");
         bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
         double mu=1./(1./species1.mass+1./species2.mass);
         PairIntegrator integrator(simInfo.getTau(),mu,deltar,
-                                  norder,maxIter,*pot);
+                                  norder,maxIter,*pot,tol);
+        double ascat = pot->getScatteringLength(mu,rmax,0.01*deltar); 
+        std::cout << "Scattering length = " << ascat << "a0, or " 
+                  << ascat*0.0529177 << " nm." << std::endl;
+        PairAction *action = new PairAction(species1,species2,integrator,
+                                            simInfo,norder,rmin,rmax,ngpts);
+        if (dumpFiles) action -> write("");
+        composite->addAction(action);
       } else {
         PrimativePairAction empAction(*pot,simInfo.getTau());
         std::cout << "Scattering length = " 

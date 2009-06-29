@@ -41,11 +41,12 @@ extern "C" void zaxpy_(const int *n, const double *da, const Complex *dx,
   const int *incx, const Complex *dy, const int *incy);
 
 PairIntegrator::PairIntegrator(double tau, double mu, double dr,
-  int norder, int maxiter, const PairPotential &pot) 
+  int norder, int maxiter, const PairPotential &pot, double tol) 
   : tau(tau), mu(mu), dr(dr), norder(norder), maxiter(maxiter),
     ndata(NDIM>1 ? (norder+1)*(norder+2)/2 : norder+1),
     nstep(maxiter), nstepInv(maxiter),
-    g(ndata), g0(ndata), s2(ndata), z(ndata), u(ndata), pot(pot) {
+    g(ndata), g0(ndata), s2(ndata), z(ndata), u(ndata), pot(pot),
+    tol(tol) {
   // Figure out the number of grid points (power of two larger than 2.5 sigma).
   double sigma = sqrt(tau/mu);
   ngrid = 2*(int)exp2(ceil(log2((2.5*sigma/dr))));
@@ -121,9 +122,10 @@ PairIntegrator::~PairIntegrator() {
   fftw_destroy_plan(fwd);
 }
 
-void PairIntegrator::integrate(double q) {
+void PairIntegrator::integrate(double q, double scaleTau) {
   int nsegment=1;
-  double tol=1e-6;
+  double tauSave = tau;
+  tau *= scaleTau;
   blitz::Range all(blitz::Range::all());
   // Initialize potential grid.
   for (int i=0; i<ngrid; ++i) {
@@ -229,6 +231,8 @@ void PairIntegrator::integrate(double q) {
   }
   int info, nrhs=1;
   dgesv_(&ndata,&nrhs,mat.data(),&ndata,ipiv.data(),u.data(),&ndata,&info);
+  //Reset tau value.
+  tau = tauSave;
 }
 
 void PairIntegrator::propagate(double segTau, double tol) {
