@@ -1,4 +1,4 @@
-// $Id: PairPotential.h 50 2009-05-11 20:05:24Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

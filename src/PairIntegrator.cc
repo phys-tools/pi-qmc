@@ -1,4 +1,4 @@
-// $Id: PairIntegrator.h 50 2009-05-11 20:05:24Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -220,12 +220,12 @@ void PairIntegrator::integrate(double q, double scaleTau) {
   //Now find coefficients G(s^2)=sum c_ij s^2j z^2i
   Array2 mat(ndata,ndata);
   IArray ipiv(ndata);
-  u = log(g0)-log(g);
+  u = log(g0/g);
   int jdata = 0;
   for (int jorder=0; jorder<norder+1; ++jorder) {
     for (int joff=0; joff < ((NDIM>1)?jorder+1:1); ++joff) {
       for (int i=0; i<ndata; ++i) {
-        mat(jdata,i) = pow(s2(i),jorder)*pow(z(i),2*joff);
+        mat(jdata,i) = pow(s2(i),jorder-joff)*pow(z(i),2*joff);
       }
       ++jdata;
     }

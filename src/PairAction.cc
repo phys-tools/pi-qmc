@@ -312,7 +312,7 @@ double PairAction::uk0(double q, double s2, double z2) const {
   for (int k=norder; k>=0; k--) {
     double temp=0;
     for (int l=k; l>=0; l--) {
-      temp*=z2; temp+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      temp*=z2/s2; temp+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
       --index;
     }
     action*=s2; action+=temp;
@@ -351,9 +351,9 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
   for (int k=norder; k>=0; k--) {
     double a=0, atau=0, aq=0;
     for (int l=k; l>=0; l--) {
-      a*=z2; a+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-      atau*=z2; atau+=(1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index);
-      aq*=z2; aq += ugrid(i+1,0,index)-ugrid(i,0,index);
+      a*=z2/s2; a+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      atau*=z2/s2; atau+=(1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index);
+      aq*=z2/s2; aq += ugrid(i+1,0,index)-ugrid(i,0,index);
       --index;
     }
     u*=s2; u+=a;
@@ -365,7 +365,7 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
   for (int k=norder; k>0; k--) {
     double as2=0;
     for (int l=k; l>=0; l--) {
-      as2*=z2; as2+=k*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
+      as2*=z2/s2; as2+=k*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
       --index;
     }
     us2*=s2; us2+=k*as2;
