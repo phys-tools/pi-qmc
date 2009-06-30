@@ -60,9 +60,27 @@ public:
   double epsilon, sigma;
 };
 
-/// Aziz potential. 
+/// Aziz potential (HFD-B2). 
+/// R. A. Aziz et al., Mol. Phys. 77, 321 (1992).
 class PairPotential::Aziz : public PairPotential {
   public: 
-  virtual double operator()(double r) const {return 0.;}
+  virtual double operator()(double r) const {
+    double x = r/r0;
+    double v = (x<D) ? exp(-(D/x-1)*(D/x-1)) : 1.;
+    double x2inv = 1./(x*x);
+    v *= -x2inv*x2inv*x2inv*(C6+x2inv*(C8+x2inv*C10));
+    v += A*exp(-x*(alpha-beta*x));
+    v *= eps;
+    return v;
+  }
+  static const double A=1.9221529e5;
+  static const double alpha=10.73520708;
+  static const double beta=-1.89296514;
+  static const double C6=1.34920045;
+  static const double C8=0.41365922;
+  static const double C10=0.17078164;
+  static const double D=1.4135;
+  static const double eps=10.94/3.1577465e5;
+  static const double r0=0.2970/0.05291772086;
 };
 #endif

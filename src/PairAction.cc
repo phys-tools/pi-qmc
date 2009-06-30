@@ -259,7 +259,7 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
     u += 0.5*v;
     utau += 0.5*vtau;
     fm -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
-         +vz2*z*(2*delta/(q*r) -z*delta/(q*r));
+         +vz2*z*delta*(2-z)/(q*r);
     // And force contribution from next slice.
     Vec nextDelta=paths(ipart,islice,+1);
     nextDelta-=paths(j,islice,+1);
@@ -275,7 +275,7 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
       vz2=0.; z=0.;
     }
     fp -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
-         +vz2*z*(2*delta/(q*r) -z*delta/(q*r));
+         +vz2*z*delta*(2-z)/(q*r);
   }
 }
 
@@ -374,7 +374,7 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
   for (int k=norder; k>0; k--) {
     double az2=0;
     for (int l=k; l>0; l--) {
-      az2*=z2; az2+=l*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
+      az2*=z2/s2; az2+=l*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
       --index;
     }
     --index;
