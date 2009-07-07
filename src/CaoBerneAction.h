@@ -14,8 +14,8 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __EmpriricalInteraction_h_
-#define __EmpriricalInteraction_h_
+#ifndef __CaoBerneAction_h_
+#define __CaoBerneAction_h_
 class MultiLevelSampler;
 class Paths;
 class Species;
@@ -35,19 +35,29 @@ class PairPotential;
 * @author John Shumway. */
 class CaoBerneAction : public PairAction::EmpiricalPairAction {
 public:
-  virtual double u(double r, int idata) const;
-  virtual double utau(double r, int idata) const;
+  typedef blitz::Array<double,1> Array;
+  typedef blitz::Array<double,2> Array2;
+  typedef blitz::Array<int,1> IArray;
+  typedef blitz::TinyVector<double,NDIM> Vec;
 
   //Construct by providing a reduced mass, radius, timestep, and order.
-  CaoBerneAction(double mu, double tau, int norder);
+  CaoBerneAction(double mu, double tau, double radius, int norder);
 
   //Calculate the action.
-  double getAction(double r1, double r2, double costheta) const;
+  double getAction(double r1, double r2, double costheta, double dtau) const;
+  void calcU(double q) const;
+  virtual double u(double r, int idata) const;
+  virtual double utau(double r, int idata) const;
 private:
   double radius;
   const double mu;
   const double tau;
   const int norder;
   const int ndata;
+  mutable double q;
+  mutable Array2 uarray;
+  mutable Array2 mat;
+  mutable IArray ipiv;
+  mutable Array s2,z;
 };
 #endif

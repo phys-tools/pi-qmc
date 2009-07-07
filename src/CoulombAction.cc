@@ -82,7 +82,7 @@ std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
           pairActionArray.push_back(
             /// Hack to handle ion-ion interaction properly.
             new PairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-                           rmin, rmax, ngpts));
+                           rmin, rmax, ngpts, false));
         }
         if (dumpFiles) (*(pairActionArray.end()-1))->write("");
       }

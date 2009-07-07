@@ -95,22 +95,24 @@ std::cout << "filename=" << filename << std::endl;
 PairAction::PairAction(const Species& s1, const Species& s2,
             const EmpiricalPairAction &action, const SimulationInfo& simInfo, 
             const int norder, const double rmin, const double rmax,
-            const int ngpts) 
+            const int ngpts, const bool hasZ) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
-    logrratioinv((ngpts-1)/log(rmax/rmin)), ugrid(ngpts,2,norder+1),
+    logrratioinv((ngpts-1)/log(rmax/rmin)), 
+    ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder) {
+    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ) {
 std::cout << "constructing PairAction" << std::endl;
 std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
-//  std::cout << 1./rgridinv << ", " << logrratioinv << std::endl;
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
+    int idata=0;
     for (int iorder=0; iorder<norder+1; ++iorder) {
-      ugrid(i,0,iorder)=action.u(r,iorder);
-      ugrid(i,1,iorder)=action.utau(r,iorder);
-//std::cout << r << " " << ugrid(i,iorder) 
-//               << " " << ugrid(i,iorder+norder+1) << std::endl;
+      for (int ioff=0; ioff<=(hasZ?iorder:0); ++ioff) {
+        ugrid(i,0,idata)=action.u(r,idata);
+        ugrid(i,1,idata)=action.utau(r,idata);
+        ++idata;
+      }
     }
   }
 }
@@ -308,14 +310,14 @@ double PairAction::uk0(double q, double s2, double z2) const {
   else if (i>ngpts-2) {i=ngpts-2; x=1;}
   else x-=i;
   double action=0;
-  int index=(norder+1)*(norder+2)/2-1;
-  for (int k=norder; k>=0; k--) {
+  for (int l=norder; l>=0; l--) {
+    int index=norder*(norder+1)/2+l;
     double temp=0;
-    for (int l=k; l>=0; l--) {
-      temp*=z2/s2; temp+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-      --index;
+    for (int k=norder-l; k>=0; k--) {
+      temp*=s2; temp+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      index -= k+l;
     }
-    action*=s2; action+=temp;
+    action*=z2; action+=temp;
   }
   return action;
 }
@@ -347,38 +349,36 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
   else if (i>ngpts-2) {i=ngpts-2; x=1;}
   else x-=i;
   u=utau=uq=us2=uz2=0.;
-  int index=(norder+1)*(norder+2)/2-1;
-  for (int k=norder; k>=0; k--) {
+  for (int l=norder; l>=0; l--) {
+    int index=norder*(norder+1)/2+l;
     double a=0, atau=0, aq=0;
-    for (int l=k; l>=0; l--) {
-      a*=z2/s2; a+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-      atau*=z2/s2; atau+=(1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index);
-      aq*=z2/s2; aq += ugrid(i+1,0,index)-ugrid(i,0,index);
-      --index;
+    for (int k=norder-l; k>=0; k--) {
+      a*=s2; a+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      atau*=s2; atau+=(1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index);
+      aq*=s2; aq += ugrid(i+1,0,index)-ugrid(i,0,index);
+      index -= k+l;
     }
-    u*=s2; u+=a;
-    utau*=s2; utau+=atau;
-    uq*=s2; uq+=aq;
+    u*=z2; u+=a;
+    utau*=z2; utau+=atau;
+    uq*=z2; uq+=aq;
   }
   uq*=logrratioinv*rgridinv/q;
-  index=(norder+1)*(norder+2)/2-1;
-  for (int k=norder; k>0; k--) {
+  for (int l=norder; l>=0; l--) {
+    int index=norder*(norder+1)/2+l;
     double as2=0;
-    for (int l=k; l>=0; l--) {
-      as2*=z2/s2; as2+=k*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
-      --index;
+    for (int k=norder-l; k>0; k--) {
+      as2*=s2; as2+=k*(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      index -= k+l;
     }
-    us2*=s2; us2+=k*as2;
+    us2*=z2; us2+=as2;
   }
-  index=(norder+1)*(norder+2)/2-1;
-  for (int k=norder; k>0; k--) {
+  for (int l=norder; l>0; l--) {
+    int index=norder*(norder+1)/2+l;
     double az2=0;
-    for (int l=k; l>0; l--) {
-      az2*=z2/s2; az2+=l*((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index));
-      --index;
+    for (int k=norder-l; k>=0; k--) {
+      az2*=s2; az2+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
     }
-    --index;
-    uz2+=az2; uz2*=s2;
+    uz2*=z2; uz2+=l*az2;
   }
 }
 

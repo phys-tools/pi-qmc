@@ -24,6 +24,7 @@
 #include "ActionParser.h"
 #include "Action.h"
 #include "AugmentedNodes.h"
+#include "CaoBerneAction.h"
 #include "SimulationInfo.h"
 #include "SphereAction.h"
 #include "CompositeAction.h"
@@ -382,6 +383,16 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         pot = new PairPotential::LennardJones(epsilon,sigma); 
       } else if (modelName=="Aziz") {
         pot = new PairPotential::Aziz(); 
+      } else if (modelName=="CaoBerne") {
+        double mu=1./(1./species1.mass+1./species2.mass);
+        double radius = getLengthAttribute(actNode,"radius");
+        bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
+        PairAction* action = new PairAction(species1,species2,
+                             CaoBerneAction(mu,radius,tau,norder),
+                             simInfo,norder,rmin,rmax,ngpts,true);
+        if (dumpFiles) action -> write("");
+        composite->addAction(action);
+        continue; 
       }
       bool useIntegrator=getBoolAttribute(actNode,"useIntegrator");
       if (useIntegrator) {
@@ -410,7 +421,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
                   << empAction.getScatteringLength(species1,species2,
                      rmax,rmax/(100*ngpts)) << std::endl;
         composite->addAction(new PairAction(species1,species2,empAction,
-                                            simInfo,norder,rmin,rmax,ngpts));
+                                      simInfo,norder,rmin,rmax,ngpts,false));
       }
       delete pot;
       continue;

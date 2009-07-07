@@ -75,7 +75,8 @@ public:
   /// Construct by providing the species and EmpiricalPairAction.
   PairAction(const Species&, const Species&, const EmpiricalPairAction&,
              const SimulationInfo&, const int norder, 
-             const double rmin, const double rmax, const int ngpts);
+             const double rmin, const double rmax, const int ngpts,
+             const bool hasZ);
   /// Construct by providing the species and PairIntegrator.
   PairAction(const Species&, const Species&, PairIntegrator&,
              const SimulationInfo&, const int norder, 
