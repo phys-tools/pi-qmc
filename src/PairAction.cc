@@ -187,7 +187,7 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
         cell.pbc(delta);
         double r=sqrt(dot(delta,delta));
         double q=0.5*(r+prevMovingR);
-       	if (level<3) {
+       	if (level<3 && norder>0) {
           Vec svec=delta-prevMovingDelta; double s2=dot(svec,svec)/(q*q);
           if (hasZ) {
             double z=(r-prevMovingR)/q;
@@ -205,7 +205,7 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
         cell.pbc(delta);
         r=sqrt(dot(delta,delta));
         q=0.5*(r+prevR);
-        if (level<3) {
+        if (level<3 && norder>0) {
           Vec svec=delta-prevDelta; double s2=dot(svec,svec)/(q*q);
           if (hasZ) {
             double z=(r-prevR)/q;

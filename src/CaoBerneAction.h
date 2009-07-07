@@ -29,7 +29,7 @@ class PairPotential;
 * u(r,r',\cos \theta;\tau)
 * = -\ln\left[
 * 1 - \frac{a(r+r')-a^2}{rr'}
-* e^{-\frac{m}{2\hbar^2\tau}[rr'+a^2-a(r+r')](1+\cos\theta)}
+* e^{-\frac{\mu}{\hbar^2\tau}[rr'+a^2-a(r+r')](1+\cos\theta)}
 *  \right]
 * @f]  
 * @author John Shumway. */
