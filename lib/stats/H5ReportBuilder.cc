@@ -217,7 +217,7 @@ void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
   size_t size = docstring.size();
   H5Tset_size(dtypeID, size);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
-  hid_t dsetID = H5Dcreate(fileID, "simInfo/inputDoc", dtypeID, dspaceID,
+  hid_t dsetID = H5Dcreate2(fileID, "simInfo/inputDoc", dtypeID, dspaceID,
                            H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 #else
   hid_t dsetID = H5Dcreate(fileID, "comment", dtypeID, dspaceID, H5P_DEFAULT);
