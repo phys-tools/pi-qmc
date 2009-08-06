@@ -33,7 +33,7 @@ public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   /// Construct by providing the timestep tau.
-  PrimTorusAction(const double a, const double b,
+  PrimTorusAction(const double a, const double b, const double c,
                 const SimulationInfo &simInfo, const int ndim, const Species&);
   /// Virtual destructor.
   virtual ~PrimTorusAction() {}
@@ -49,7 +49,7 @@ private:
   /// The timestep.
   const double tau;
   /// The interaction parameters.
-  const double a, b;
+  const double a, b, c;
   /// The number of dimensions (can be less than NDIM, i.e., to make a wire).
   const int ndim;
   /// The first particle in this interaction.

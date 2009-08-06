@@ -38,7 +38,7 @@ Virial ---- works
 
 Changelog 
 -Removed loop over NDIMS
--defined x,y and r
+-defined x,y,z and r,z
 -added ring potential and ring virial forces
 -added Species option from SHOAction
 
@@ -46,8 +46,8 @@ Peter G McDonald 2009, Heriot Watt University, Scotland. pgm4@hw.ac.uk
 */
 
 PrimTorusAction::PrimTorusAction(const double a, const double b, 
-  const SimulationInfo &simInfo, int ndim, const Species &species) 
-  : tau(simInfo.getTau()), a(a), b(b), ndim(ndim),
+const double c,  const SimulationInfo &simInfo, int ndim, const Species &species) 
+  : tau(simInfo.getTau()), a(a), b(b), c(c), ndim(ndim),
   ifirst(species.ifirst), npart(species.count){
 }
 
@@ -71,19 +71,22 @@ if (i<ifirst || i>=ifirst+npart) continue;
       cell.pbc(delta);
 	double x=0;
 	double y=0;      
+	double z=0;
 	double r=0;
-	 x=delta[0];
-       y=delta[1];
-       r=sqrt(x*x + y*y);
+	x=delta[0];
+        y=delta[1];
+	z=delta[2];
+        r=sqrt(x*x + y*y);
 
-      deltaAction+=a*pow((r-b),2)*ktstride;
+      deltaAction+=(a*pow((r-b),2) + c*z*z)*ktstride;
       // Subtract action for old beads.
       delta=sectionBeads(i,islice);
       cell.pbc(delta);
-x=delta[0];
-y=delta[1];
-       r=sqrt(x*x + y*y);
-      deltaAction-=a*pow((r-b),2)*ktstride;
+      x=delta[0];
+      y=delta[1];
+      z=delta[2];
+      r=sqrt(x*x + y*y);
+      deltaAction-=(a*pow((r-b),2) + c*z*z)*ktstride;
     }
   }
   return deltaAction;
@@ -100,13 +103,15 @@ void PrimTorusAction::getBeadAction(const Paths& paths, int ipart, int islice,
 fm=0; fp=0; ulambda=0;
 	double x=0;
 	double y=0;
+	double z=0;
 	double r=0; 
    if (ipart<ifirst || ipart>=ifirst+npart) return;
 	x=delta[0];
 	y=delta[1];
+	z=delta[2];
 	r=sqrt(x*x + y*y);
-  utau=a*pow((r-b),2);
+  utau=a*pow((r-b),2) + c*z*z;
   u=utau*tau;
-  fm=a/r*(b-r)*(x+y)*tau;
-  fp=a/r*(b-r)*(x+y)*tau;
+  fm=((a/r)*(b-r)*(x+y) - c*z)*tau;
+  fp=((a/r)*(b-r)*(x+y) - c*z)*tau;
 }
