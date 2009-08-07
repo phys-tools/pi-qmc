@@ -428,16 +428,46 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
       min[idist] = getLengthAttribute(distNode,"min");
       max[idist] = getLengthAttribute(distNode,"max");
       nbin[idist] = getIntAttribute(distNode,"nbin");
-    } else if (name=="Radial") {
+    } else if (name=="Radial"||name=="Radial1"||name=="Radial2") {
       std::string dirName = getStringAttribute(distNode,"dir");
       int idir=-1;
       if (dirName=="x") idir=0;
       else if (dirName=="y") idir=1;
       else if (dirName=="z") idir=2;
-      dist[idist] = new PairRadial(idir);
+      if (name=="Radial") {
+        dist[idist] = new PairRadial(idir);
+      } else if (name=="Radial1") {
+        dist[idist] = new PairRadial1(idir);
+      } else if (name=="Radial2") {
+        dist[idist] = new PairRadial2(idir);
+      }
       min[idist] = getLengthAttribute(distNode,"min");
       max[idist] = getLengthAttribute(distNode,"max");
       nbin[idist] = getIntAttribute(distNode,"nbin");
+    } else if (name=="Angle" || name=="Angle1" || name=="Angle2") {
+      int idim=0, jdim=1;
+      if (NDIM==1) {
+        jdim=0;
+      } else if (NDIM>2) {
+        std::string dirName = getStringAttribute(distNode,"dir");
+        if (dirName=="x") {idim=1; jdim=2;}
+        else if (dirName=="y") {idim=0; jdim=2;}
+      }
+      if (name=="Angle") {
+        dist[idist]=new PairAngle(idim,jdim);
+      } else if (name=="Angle1") {
+        dist[idist]=new PairAngle1(idim,jdim);
+      } else if (name=="Angle2") {
+        dist[idist]=new PairAngle2(idim,jdim);
+      }
+      double minv = getDoubleAttribute(distNode,"min");
+      double maxv = getDoubleAttribute(distNode,"max");
+      const double PI=3.14159265358793;
+      if (fabs(minv-maxv)<1e-9) {minv=-PI; maxv=+PI;}
+      min[idist]=minv;
+      max[idist]=maxv;
+      nbin[idist]=getIntAttribute(distNode,"nbin");
+std::cout << name << min[idist] << " - " << max[idist] << "  " << nbin << std::endl;
     }
   }
   return new PairCFEstimator<N>(simInfo,name,s1,s2,min,max,nbin,dist,mpi);
@@ -499,13 +529,42 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
       max.push_back(getLengthAttribute(distNode,"max"));
       nbin.push_back(getIntAttribute(distNode,"nbin"));
       idir++;
-    } else if (name=="Radial") {
+    } else if (name=="Radial"||name=="Radial1"||name=="Radial2") {
       int idir=-1;
       std::string dirName = getStringAttribute(distNode,"dir");
       for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
-      darray.push_back(new PairRadial(idir));
+      if (name=="Radial") {
+        darray.push_back(new PairRadial(idir));
+      } else if (name=="Radial1") {
+        darray.push_back(new PairRadial1(idir));
+      } else if (name=="Radial2") {
+        darray.push_back(new PairRadial2(idir));
+      }
       min.push_back(getLengthAttribute(distNode,"min"));
       max.push_back(getLengthAttribute(distNode,"max"));
+      nbin.push_back(getIntAttribute(distNode,"nbin"));
+    } else if (name=="Angle" || name=="Angle1" || name=="Angle2") {
+      int idim=0, jdim=1;
+      if (NDIM==1) {
+        jdim=0;
+      } else if (NDIM>2) {
+        std::string dirName = getStringAttribute(distNode,"dir");
+        if (dirName=="x") {idim=1; jdim=2;}
+        else if (dirName=="y") {idim=0; jdim=2;}
+      }
+      if (name=="Angle") {
+        darray.push_back(new PairAngle(idim,jdim));
+      } else if (name=="Angle1") {
+        darray.push_back(new PairAngle1(idim,jdim));
+      } else if (name=="Angle2") {
+        darray.push_back(new PairAngle2(idim,jdim));
+      }
+      double minv = getDoubleAttribute(distNode,"min");
+      double maxv = getDoubleAttribute(distNode,"max");
+      const double PI=3.14159265358793;
+      if (fabs(minv-maxv)<1e-9) {minv=-PI; maxv=+PI;}
+      min.push_back(minv);
+      max.push_back(maxv);
       nbin.push_back(getIntAttribute(distNode,"nbin"));
     }
   }

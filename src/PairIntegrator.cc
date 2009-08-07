@@ -140,11 +140,11 @@ void PairIntegrator::integrate(double q, double scaleTau) {
         vgrid(i,j,k) = pot(sqrt(x2+y2+z2));
       }
 #else
-      t(i,j) = (kx2+ky2)*over2mu;
+      vgrid(i,j) = pot(sqrt(x2+y2));
 #endif
     }
 #else
-    t(i) = kx2*over2mu;
+    vgrid(i) = pot(sqrt(x2));
 #endif
   }
   // Initialize wavefunction.
