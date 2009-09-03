@@ -18,6 +18,8 @@
 #include <config.h>
 #endif
 
+extern int irank;
+
 #include <Beads.h>
 #include "ActionParser.h"
 #include "Action.h"
@@ -69,11 +71,13 @@
 #include "EFieldAction.h"
 #include "EwaldAction.h"
 #include "StillWebAction.h"
+#include "RingGateAction.h"
 #include "stats/MPIManager.h"
 #include "PairIntegrator.h"
 //#include "GrapheneAction.h"
 #include "WellImageAction.h"
 #include <iostream>
+#include <cstdlib>
 
 ActionParser::ActionParser(const SimulationInfo& simInfo, const int maxlevel,
   MPIManager *mpi)
@@ -174,7 +178,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
 	  continue;
     } else if (name=="PrimTorusAction") {
 	  double a=getDoubleAttribute(actNode,"a");
-	  double b=getDoubleAttribute(actNode,"b");
+	  double b=getLengthAttribute(actNode,"b");
 	  double c=getDoubleAttribute(actNode,"c");		
 	  double omegar=getEnergyAttribute(actNode,"omegar");
 	  double omegaz=getEnergyAttribute(actNode,"omegaz");
@@ -241,7 +245,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       composite->addAction(new SHOAction(simInfo.getTau(),
                                omega,mass,ndim,species));
       continue;
-    } else if (name=="TwoQDAction") {
+   }  else if (name=="TwoQDAction") {
       const double omega=getEnergyAttribute(actNode,"omega");
       const double mass=simInfo.getSpecies(0).mass;
       const double d=getLengthAttribute(actNode,"d");
@@ -296,6 +300,26 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double v0=getEnergyAttribute(actNode,"v0");
       double k=getDoubleAttribute(actNode,"k");
       composite->addAction(new SHODotAction(simInfo.getTau(),t,v0,k));
+      continue;
+    } else if (name == "RingGateAction") {
+      if (NDIM != 2) {
+        if (irank == 0) {
+          std::cout<<"The RingGateAction only works for 2D."<<std::endl;
+          exit(-1);
+        }
+      }
+      double Vg = getEnergyAttribute(actNode,"Vg");
+      double s = getDoubleAttribute(actNode,"s");
+      double theta0 = getDoubleAttribute(actNode,"theta0");
+      if (theta0 == 0) {
+        if (irank == 0) {
+          std::cout<<"The gate action is shut down because theta0 = 0."<<std::endl;
+        }
+      }
+      std::string specName=getStringAttribute(actNode,"species");
+      const Species& species(simInfo.getSpecies(specName));
+      if (irank == 0) std::cout << "The gate action is set." << std::endl;
+      composite->addAction(new RingGateAction(simInfo,Vg,s,theta0,species));
       continue;
     } else if (name=="SpringTensorAction") {
       composite->addAction(new SpringTensorAction(simInfo));

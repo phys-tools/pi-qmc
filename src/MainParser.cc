@@ -20,6 +20,9 @@
 #ifdef ENABLE_MPI 
 #include <mpi.h>
 #endif
+
+extern int irank;
+
 #include "MainParser.h"
 #include <iostream>
 #include "Action.h"
@@ -59,6 +62,7 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
     if (nworker==0) nworker=1;
     if (nclone==0) nclone=MPI::COMM_WORLD.Get_size()/nworker;
     mpi=new MPIManager(nworker,nclone);
+    irank = MPI::COMM_WORLD.Get_rank();
   }
 #endif
   // Find the maximum level for any sampling.

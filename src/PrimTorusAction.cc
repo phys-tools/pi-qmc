@@ -75,7 +75,9 @@ if (i<ifirst || i>=ifirst+npart) continue;
 	double r=0;
 	x=delta[0];
         y=delta[1];
+#if NDIM>2
 	z=delta[2];
+#endif
         r=sqrt(x*x + y*y);
 
       deltaAction+=(a*pow((r-b),2) + c*z*z)*ktstride;
@@ -84,7 +86,9 @@ if (i<ifirst || i>=ifirst+npart) continue;
       cell.pbc(delta);
       x=delta[0];
       y=delta[1];
+#if NDIM>2
       z=delta[2];
+#endif
       r=sqrt(x*x + y*y);
       deltaAction-=(a*pow((r-b),2) + c*z*z)*ktstride;
     }
@@ -108,7 +112,9 @@ fm=0; fp=0; ulambda=0;
    if (ipart<ifirst || ipart>=ifirst+npart) return;
 	x=delta[0];
 	y=delta[1];
+#if NDIM>2
 	z=delta[2];
+#endif
 	r=sqrt(x*x + y*y);
   utau=a*pow((r-b),2) + c*z*z;
   u=utau*tau;
