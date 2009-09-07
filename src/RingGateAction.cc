@@ -1,3 +1,4 @@
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -13,6 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #include <stdio.h>
@@ -34,10 +36,10 @@ The potential is Vg * (tanh(s(theta+theta0)) - tanh(s(theta-theta0))).
 Vg is the potential of the top gate in energy unit.
 s is a parameter.
 theta0 is defined w.r.t x-axis and cannot be zero.
-The potential can be expanded:
 
-Vg * (2 * tanh(s * theta) - 2 * tanh(s * theta)^2 * tanh(s * theta0))/(1 - tanh(s * theta)^2 * tanh(s * theta0)^2)
+Virial -- not works
 
+@author Jianheng Liu
 */
 
 RingGateAction::RingGateAction(const SimulationInfo &simInfo, const double Vg, const double s, const double theta0, const Species &species)
@@ -54,12 +56,9 @@ double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, con
   const int nMoving=index.size();
   double deltaAction=0;
   double ktstride = tau*nStride;
-  double st0 = tanh(s * theta0);
-  double st02 = pow(st0,2);
   double x = 0;
   double y = 0;
   double theta = 0;
-  double st = 0;
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
@@ -69,23 +68,15 @@ double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, con
       cell.pbc(delta);
       x = delta[0];
       y = delta[1];
-      if (x == 0. && y == 0.) deltaAction+=0;
-      else {
-        theta = atan2(y,x);
-        st = tanh(s*theta);
-        deltaAction+=Vg * (2 * st0 - 2 * st * st * st0)/(1 - st * st * st02) * ktstride;
-      }
+      theta = atan2(y,x);
+      deltaAction+=Vg * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
       // Subtract action for old beads.
       delta = sectionBeads(i,islice);
       cell.pbc(delta);
       x = delta[0];
       y = delta[1];
-      if (x == 0. && y == 0.) deltaAction-=0;
-      else {
-        theta = atan2(y,x);
-        st = tanh(s*theta);
-        deltaAction-=Vg * (2 * st0 - 2 * st * st * st0)/(1 - st * st * st02) * ktstride;
-      }
+      theta = atan2(y,x);
+      deltaAction+=Vg * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
     }
   }
   return deltaAction;
@@ -102,14 +93,7 @@ void RingGateAction::getBeadAction(const Paths& paths, int ipart, int islice, do
   double x = delta[0];
   double y = delta[1];
   double theta = 0;
-  double st0 = tanh(s * theta0);
-  double st02 = pow(st0, 2);
-  double st = 0;
-  if (x == 0. && y == 0.) utau=0;
-  else {
-    theta = atan2(y,x);
-    st = tanh(s*theta);
-    utau=Vg * (2 * st0 - 2 * st * st * st0)/(1 - st * st * st02);
-  }
+  theta = atan2(y,x);
+  utau=Vg * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0)));
   u = utau * tau;
 }

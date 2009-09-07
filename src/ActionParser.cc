@@ -313,12 +313,12 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double theta0 = getDoubleAttribute(actNode,"theta0");
       if (theta0 == 0) {
         if (irank == 0) {
-          std::cout<<"The gate action is shut down because theta0 = 0."<<std::endl;
+          std::cout<<"The ring gate action is shut down because theta0 = 0."<<std::endl;
         }
       }
       std::string specName=getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
-      if (irank == 0) std::cout << "The gate action is set." << std::endl;
+      if (irank == 0) std::cout << "The ring gate action is set." << std::endl;
       composite->addAction(new RingGateAction(simInfo,Vg,s,theta0,species));
       continue;
     } else if (name=="SpringTensorAction") {
