@@ -161,10 +161,19 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double a=getDoubleAttribute(actNode,"a");
       double b=getDoubleAttribute(actNode,"b");
       double omega=getEnergyAttribute(actNode,"omega");
+      double d=getLengthAttribute(actNode,"d");
       std::string specName=getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
       const double mass = species.mass; 
-      if (a==0) a=0.5*mass*omega*omega;
+      if (a==0.&&b==0.&&d>0.0001) { 
+            a=-0.25*mass*omega*omega;
+            b=0.5*mass*omega*omega/d/d;
+         }
+      if (a==0.&&b==0.&&d<0.0001) {
+             a=0.5*mass*omega*omega;
+             b=0;
+         }
+      std::cout <<"a,b=" <<a<<","<<b<<std::endl;
       int ndim=getIntAttribute(actNode,"ndim");
       if (ndim==0) ndim=NDIM;
       composite->addAction(new PrimSHOAction(a,b,simInfo,ndim,species));
