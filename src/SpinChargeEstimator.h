@@ -56,7 +56,7 @@ public:
   /// Constructor.
   SpinChargeEstimator(const SimulationInfo& simInfo,
     const Species &s1, const Species &s2, const int nfreq,
-    const int nbin, const int ndbin, MPIManager *mpi);
+    const int nbin, const int ndbin, const int nstride,  MPIManager *mpi);
   /// Virtual destructor.
   virtual ~SpinChargeEstimator();
   /// Initialize the calculation.
@@ -75,7 +75,7 @@ public:
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
   ///
-  const int npart, nslice, nfreq, nbin, ndbin;
+  const int npart, nslice, nfreq, nbin, ndbin, nstride;
   const int nup, ndn, ifirstup, ifirstdn;
   const double beta, tau, tauinv, massinv, dx, dxinv;
   Array q;

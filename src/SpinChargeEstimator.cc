@@ -29,24 +29,25 @@
 
 SpinChargeEstimator::SpinChargeEstimator(const SimulationInfo& simInfo,
   const Species &sup, const Species &sdn, const int nfreq,
-  const int nbin, const int ndbin, MPIManager *mpi)
+  const int nbin, const int ndbin, const int nstride, MPIManager *mpi)
   : BlitzArrayBlkdEst<5>("spincharge",
                          IVecN(2*ndbin-1,nbin,2,2,nfreq),true), 
     npart(simInfo.getNPart()), nslice(simInfo.getNSlice()),
-    nfreq(nfreq), nbin(nbin), ndbin(ndbin),
+    nfreq(nfreq), nbin(nbin), ndbin(ndbin), nstride(nstride),
     nup(sup.count), ndn(sdn.count), ifirstup(sup.ifirst), ifirstdn(sdn.ifirst),
     beta(1./simInfo.getTemperature()), tau(simInfo.getTau()),
     tauinv(1./tau), massinv(1./simInfo.getSpecies(0).mass),
     dx(simInfo.getSuperCell()->a[0]/nbin), dxinv(1/dx),q(npart),
-    temp(2*ndbin-1,nbin,2,2,nslice), mpi(mpi) {
+    temp(2*ndbin-1,nbin,2,2,nslice/nstride), mpi(mpi) {
   fftw_complex *ptr = (fftw_complex*)temp.data();
-  fwd = fftw_plan_many_dft(1,&nslice,4*nbin,
-                           ptr,0,1,nslice,
-                           ptr,0,1,nslice,
+  int nsliceEff=nslice/nstride;
+  fwd = fftw_plan_many_dft(1,&nsliceEff,4*nbin,
+                           ptr,0,1,nsliceEff,
+                           ptr,0,1,nsliceEff,
                            FFTW_FORWARD,FFTW_MEASURE);
-  rev = fftw_plan_many_dft(1,&nslice,4*nbin*(2*ndbin-1),
-                           ptr,0,1,nslice,
-                           ptr,0,1,nslice,
+  rev = fftw_plan_many_dft(1,&nsliceEff,4*nbin*(2*ndbin-1),
+                           ptr,0,1,nsliceEff,
+                           ptr,0,1,nsliceEff,
                            FFTW_BACKWARD,FFTW_MEASURE);
   for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge; 
 }
@@ -80,9 +81,9 @@ void SpinChargeEstimator::handleLink(const Vec& start, const Vec& end,
     int nstep = ((ibin-jbin+3*nbin/2)%nbin)-nbin/2;
     int idir = (nstep>0)?1:-1;
     if (idir>0) {
-      for (int i=1; i<=nstep; i++) temp(0,(jbin+i)%nbin,0,ispin,islice)+=idir;
+      for (int i=1; i<=nstep; i++) temp(0,(jbin+i)%nbin,0,ispin,islice/nstride)+=idir;
     } else {
-      for (int i=1; i<=-nstep; i++) temp(0,(ibin+i)%nbin,0,ispin,islice)+=idir;
+      for (int i=1; i<=-nstep; i++) temp(0,(ibin+i)%nbin,0,ispin,islice/nstride)+=idir;
     }
   }
 }
@@ -96,7 +97,7 @@ void SpinChargeEstimator::endCalc(const int lnslice) {
 #ifdef ENABLE_MPI
   if (mpi) {
     mpi->getWorkerComm().Reduce(&temp(0,0,0,0,0),&temp(1,0,0,0,0),
-                                8*nslice*nbin,MPI::DOUBLE,MPI::SUM,0);
+                                8*nslice/nstride*nbin,MPI::DOUBLE,MPI::SUM,0);
     temp(0,allBin,allSpin,allSpin,allSlice)
      =temp(1,allBin,allSpin,allSpin,allSlice); 
   }

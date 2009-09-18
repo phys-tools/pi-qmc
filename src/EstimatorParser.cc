@@ -251,12 +251,14 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (ndbin==0) ndbin=1;
       int nfreq=getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
+      int nstride=getIntAttribute(estNode,"nstride");
+      if (nstride==0) nstride=1;
       std::string speciesUp=getStringAttribute(estNode,"speciesUp");
       std::string speciesDown=getStringAttribute(estNode,"speciesDown");
       const Species &sup(simInfo.getSpecies(speciesUp));
       const Species &sdn(simInfo.getSpecies(speciesDown));
       manager->add(new SpinChargeEstimator(
-                         simInfo,sup,sdn,nfreq,nbin,ndbin,mpi));
+                         simInfo,sup,sdn,nfreq,nbin,ndbin,nstride,mpi));
     }
     if (name=="ConductanceEstimator") {
       int nfreq=getIntAttribute(estNode,"nfreq");
