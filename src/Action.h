@@ -17,6 +17,7 @@
 #ifndef __Action_h_
 #define __Action_h_
 class MultiLevelSampler;
+class DisplaceMoveSampler; 
 class SectionChooser;
 class Paths;
 #include <blitz/tinyvec.h>
@@ -36,6 +37,8 @@ public:
   virtual ~Action() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&, int level)=0;
+  virtual double getActionDifference(const DisplaceMoveSampler&, int nmoving)=0;
+ 
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const=0;
   /// Calculate action and derivatives at a bead (defaults to no
@@ -43,7 +46,9 @@ public:
   virtual void getBeadAction(const Paths&, int ipart, int islice,
           double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const=0;
   /// Initialize for a sampling section.
-  virtual void initialize(const SectionChooser&) {};
+  virtual void initialize(const SectionChooser&) { };
+  virtual void initialize(const DisplaceMoveSampler &) {};
+
   /// Accept last move.
   virtual void acceptLastMove() {};
   /// Returns pointer to Action of type t, otherwise returns null pointer.

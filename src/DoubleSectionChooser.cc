@@ -45,6 +45,8 @@ DoubleSectionChooser::~DoubleSectionChooser() {
 }
 
 void DoubleSectionChooser::run() {
+
+
   //double x; gsl_qrng_get(qrng,&x);
   double x=RandomNumGenerator::getRand()*(1-1e-8);
   int ilo=paths.getLowestSampleSlice(beads->getNSlice(),true);
@@ -59,13 +61,14 @@ void DoubleSectionChooser::run() {
   // Copy coordinates from allBeads to section Beads.
   paths.getBeads(iFirstSlice1,*beads1);
   paths.getBeads(iFirstSlice2,*beads2);
-  permutation1->reset();
-  permutation2->reset();
+  permutation1->reset(); 
+  permutation2->reset(); 
   // Initialize the action.
   action.initialize(*this);
   doubleAction.initialize(*this);
   // Run the sampling algorithm.
   CompositeAlgorithm::run();
+
   // Copy moved coordinates from sectionBeads to allBeads.
   paths.putDoubleBeads(iFirstSlice1,*beads1,*permutation1,
                        iFirstSlice2,*beads2,*permutation2);

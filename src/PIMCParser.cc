@@ -27,6 +27,9 @@
 #include "stats/AccRejEstimator.h"
 #include "SimulationInfo.h"
 #include "FreeMover.h"
+#include "UniformMover.h"
+#include "DisplaceMoveSampler.h"
+#include "DoubleDisplaceMoveSampler.h"
 #include "spin/SpinMover.h"
 #include "spin/FreeSpinMover.h"
 #include "DampedFreeTensorMover.h"
@@ -53,6 +56,7 @@
 #include "BinProbDensity.h"
 #include "SimpleParticleChooser.h"
 #include "SpeciesParticleChooser.h"
+#include "MultiSpeciesParticleChooser.h"
 #include "PathReader.h"
 #include "StructReader.h"
 #include "WorkerShifter.h"
@@ -64,6 +68,7 @@
 #include "PairChooser.h"
 #include "NodeTester.h"
 #include "FreeParticleNodes.h"
+
 
 PIMCParser::PIMCParser(const SimulationInfo& simInfo, Action* action,
   DoubleAction* doubleAction, EstimatorManager* estimators,
@@ -121,7 +126,16 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     algorithm=composite;
   } else if (name=="Loop") {
     int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
-    Loop *loop=new Loop(nrepeat);
+    //The timer for the main loop is called Main. Sub loops can be named arbitrarily
+    std::string timer = getStringAttribute(ctxt->node,"timer");
+    int hour=getIntAttribute(ctxt->node,"hours");
+    int min=getIntAttribute(ctxt->node,"minutes");
+    int sec=getIntAttribute(ctxt->node,"seconds");
+    int totalSimTime = hour*3600 + min*60 + sec; 
+    if (timer == "Main" && totalSimTime ==0 ) totalSimTime = 12*3600;
+    Loop *loop(0);      
+    loop=new Loop(nrepeat,totalSimTime,timer,mpi);
+    
     parseBody(ctxt,loop);
     algorithm=loop;
   } else if (name=="ChooseSection") {
@@ -137,6 +151,57 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       parseBody(ctxt,doubleSectionChooser);
       algorithm=doubleSectionChooser;
     }
+  } else if (name=="SampleDisplaceMove") {
+    Mover* mover(0);
+    std::string moverName=getStringAttribute(ctxt->node,"mover");
+    if (moverName=="Uniform") mover = new UniformMover(mpi);
+
+    double freq = getDoubleAttribute(ctxt->node,"freq");
+    double dist = getDoubleAttribute(ctxt->node,"dist");
+    int nmoving=getIntAttribute(ctxt->node,"npart");
+
+ 
+    int nspecies = getIntAttribute(ctxt->node,"nspecies");
+
+    ParticleChooser* particleChooser=0;
+    if (nspecies<=1) {                                               
+      std::string speciesName=getStringAttribute(ctxt->node,"species");
+      std :: cout<<"Picked species "<< speciesName <<" for displacement."<<std :: endl;
+      if (speciesName=="" || speciesName=="all") {
+	particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
+      }else{ 
+	particleChooser = new SpeciesParticleChooser(simInfo.getSpecies(speciesName),nmoving);
+      }
+    } else {
+      Species *speciesList = new Species [nspecies];
+      for (int ispec=0; ispec<nspecies; ispec++){
+	std::stringstream sispec;
+	sispec << "species"<<(ispec+1);
+	std::string speciesName=getStringAttribute(ctxt->node,sispec.str());
+	std :: cout<<"Picked species "<< speciesName <<" for displacement."<<std :: endl;
+	speciesList[ispec]=simInfo.getSpecies(speciesName);
+      }
+      particleChooser = new MultiSpeciesParticleChooser(speciesList, nspecies, nmoving);
+      delete [] speciesList;
+    }
+    
+    int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
+    
+    if (doubleAction) {
+      algorithm = new DoubleDisplaceMoveSampler(nmoving, *paths, dist, freq,
+					      *particleChooser, *mover, action,
+					      nrepeat, beadFactory, mpi, doubleAction);
+      std :: cout <<"Using DoubleDisplaceMoveSampler."<<std :: endl;
+    } else {    
+      algorithm = new DisplaceMoveSampler(nmoving, *paths, dist, freq,
+					  *particleChooser, *mover, action,
+					  nrepeat, beadFactory, mpi);
+      std :: cout <<"Using DisplaceMoveSampler."<<std :: endl;
+    } 
+    std::string accRejName="DisplaceMoveSampler";
+    estimators->add(((DisplaceMoveSampler*)algorithm)->
+		    getAccRejEstimator(accRejName));
+
   } else if (name=="ShiftWorkers") {
     int maxShift=getIntAttribute(ctxt->node,"maxShift");
     WorkerShifter *shifter=new WorkerShifter(maxShift,*paths,mpi);
@@ -149,7 +214,7 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     std::string estName=getStringAttribute(ctxt->node,"estimator");
     algorithm=new Collect(estName,*estimators,getLoopCount(ctxt));
   } else if (name=="RandomGenerator") {
-    int iseed=getIntAttribute(ctxt->node,"iseed");
+    int iseed = getIntAttribute(ctxt->node,"iseed");
     algorithm=new SeedRandom(iseed);
   } else if (name=="Sample") {
     Mover* mover(0);
@@ -288,7 +353,16 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     algorithm=new WriteProbDensity(simInfo,condDensityGrid[i],filename);
   } else if (name=="WritePaths") {
     std::string filename=getStringAttribute(ctxt->node,"file");
-    algorithm=new WritePaths(*paths,filename,mpi,beadFactory);
+    int dumpFreq=getIntAttribute(ctxt->node,"freq");
+    int maxConfigs=getIntAttribute(ctxt->node,"configs");
+    maxConfigs = (maxConfigs==0)?500:maxConfigs;
+    bool writeMovie=0;
+    if (mpi){
+      if (mpi->isMain()) writeMovie=getBoolAttribute(ctxt->node,"movie");     
+    } else {
+      writeMovie=getBoolAttribute(ctxt->node,"movie");
+    }
+    algorithm=new WritePaths(*paths,filename,dumpFreq,maxConfigs,writeMovie,simInfo,mpi,beadFactory);
   } else if (name=="SetSpin") {
     algorithm=new SpinSetter(*paths,mpi);
   } else if (name=="SetCubicLattice") {

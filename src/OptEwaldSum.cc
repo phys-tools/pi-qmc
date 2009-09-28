@@ -188,6 +188,8 @@ OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
              t.data(),&npoly,&info);
   coef = t;
 #endif
+  setLongRangeArray();
+  evalSelfEnergy();
 }
 
 OptEwaldSum::~OptEwaldSum() {

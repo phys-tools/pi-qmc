@@ -21,6 +21,7 @@
 #include "Beads.h"
 #include "DoubleSectionChooser.h"
 #include "DoubleMLSampler.h"
+#include "DisplaceMoveSampler.h"
 #include "SpinPhaseModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"

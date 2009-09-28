@@ -19,6 +19,7 @@
 #endif
 #include "CoulombAction.h"
 #include "MultiLevelSampler.h"
+#include "DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -40,9 +41,9 @@ CoulombAction::CoulombAction(const double epsilon,
   if (useEwald && (NDIM==3||NDIM==2) && ewaldNDim==NDIM) {
     SuperCell &cell(*simInfo.getSuperCell());
     if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
-std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
-    //ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut);
-    ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
+    std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
+    ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut);
+    //ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
     rewald.resize(npart);
     EwaldSum::Array &q=ewaldSum->getQArray();  
     for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge;
@@ -111,7 +112,31 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
     const IArray& index=sampler.getMovingIndex(); 
     const int nMoving=index.size();
     for (int islice=1; islice<nSlice-1; ++islice) {
-      for (int i=0; i<npart; ++i) rewald(i)=sectionBeads(i,islice);
+      for (int i=0; i<npart; ++i) rewald(i)=sectionBeads(i,islice); 
+      u -= ewaldSum->evalLongRange(rewald)*tau/epsilon; 
+      for (int i=0; i<nMoving; ++i) rewald(index(i))=movingBeads(i,islice);
+      u += ewaldSum->evalLongRange(rewald)*tau/epsilon; 
+    }
+  } 
+  return u;
+}
+
+//displace move
+double CoulombAction::getActionDifference(const DisplaceMoveSampler& sampler,
+                                         const int nMoving) {
+  double u=0;
+  for (unsigned int i=0; i<pairActionArray.size(); ++i) {
+    u += pairActionArray[i]->getActionDifference(sampler, nMoving);
+  }
+  // Compute long range Ewald action at lowest level.
+  if (ewaldSum) {
+    const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
+    const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
+    const int nSlice=pathsBeads.getNSlice();
+    const IArray& index=sampler.getMovingIndex(); 
+    
+    for (int islice=1; islice<nSlice-1; ++islice) {
+      for (int i=0; i<npart; ++i) rewald(i)=pathsBeads(i,islice);
       u -= ewaldSum->evalLongRange(rewald)*tau/epsilon;
       for (int i=0; i<nMoving; ++i) rewald(index(i))=movingBeads(i,islice);
       u += ewaldSum->evalLongRange(rewald)*tau/epsilon;
@@ -119,6 +144,11 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
   }
   return u;
 }
+
+
+
+
+
 
 double CoulombAction::getTotalAction(const Paths& paths, int level) const {
   return 0;
@@ -141,6 +171,7 @@ void CoulombAction::getBeadAction(const Paths& paths, int ipart, int islice,
     u += longRange*tau;
     utau += longRange;
   }
+  //std :: cout << "CA :: "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
 }
 
 double CoulombAction::getAction(const Paths& paths, int islice) const {
@@ -317,6 +348,7 @@ double CoulombAction::u(double r, int order) const {
     u = u3_1;
   }
 #endif
+ 
   return u;
 }
 

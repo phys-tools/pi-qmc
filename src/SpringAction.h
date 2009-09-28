@@ -17,6 +17,7 @@
 #ifndef __SpringAction_h_
 #define __SpringAction_h_
 class MultiLevelSampler;
+class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 class PeriodicGaussian;
@@ -45,6 +46,8 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
+  virtual double getActionDifference(const DisplaceMoveSampler&,
+                                     const int nMoving);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate action and derivatives at a bead (defaults to no

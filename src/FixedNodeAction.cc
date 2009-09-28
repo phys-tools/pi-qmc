@@ -26,6 +26,7 @@
 #include "NodeModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
+#include "DoubleDisplaceMoveSampler.h"
 
 FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
   const Species &species, NodeModel *nodeModel, 
@@ -124,8 +125,92 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
       }
     }
   }
+ 
   return deltaAction;
 }
+
+
+///////////// displace
+double FixedNodeAction::getActionDifference(const DoubleDisplaceMoveSampler &sampler,
+   const int nMoving) {
+  // Get ready to move paths.
+  double deltaAction=0;
+  const Beads<NDIM>& pathsBeads1=sampler.getPathsBeads(1);
+  const Beads<NDIM>& pathsBeads2=sampler.getPathsBeads(2);
+  const Beads<NDIM>& movingBeads1=sampler.getMovingBeads(1);
+  const Beads<NDIM>& movingBeads2=sampler.getMovingBeads(2);
+  const IArray& index=sampler.getMovingIndex(); 
+
+  if (!nodeModel->dependsOnOtherParticles() ) {
+    for (int i=0; i<nMoving; ++i) {
+      if ( (index(i)>=ifirst && index(i)<ifirst+nSpeciesPart)) break;
+      if (i==nMoving-1) {notMySpecies=true; return 0;}
+    }
+  }
+  notMySpecies=false;
+  const int nSlice=pathsBeads1.getNSlice();
+  const int nStride=2;// level is 0;(int)pow(2,level+1);
+  // First check for node crossing.
+  for (int islice=nStride/2; islice<nSlice; islice+=nStride) {
+    /*  if (matrixUpdateObj) {
+      newDMValue(islice)=matrixUpdateObj->evaluateChange(sampler, islice)
+                        *dmValue(islice);
+    } else {
+    */
+      for (int i=0; i<npart; ++i) r1(i)=pathsBeads1(i,islice);
+      for (int i=0; i<nMoving; ++i) r1(index(i))=movingBeads1(i,islice);
+      for (int i=0; i<npart; ++i) r2(i)=pathsBeads2(i,islice);
+      for (int i=0; i<nMoving; ++i) r2(index(i))=movingBeads2(i,islice);
+      newDMValue(islice)=nodeModel->evaluate(r1,r2,islice);
+      //} matrixupdate
+    if (newDMValue(islice)*dmValue(0)<=0) return deltaAction=2e100;
+  } 
+  // Calculate the nodal action if level=0;
+  if (withNodalAction) {
+    blitz::Range allPart = blitz::Range::all();
+    for (int islice=1;islice<nSlice; ++islice) { 
+      /*if (matrixUpdateObj) { not implemented yet
+        matrixUpdateObj->evaluateNewInverse(islice);
+        Array d1(newDist(islice,0,allPart));
+        Array d2(newDist(islice,1,allPart));
+        for (int i=0; i<npart; ++i) r1(i)=pathsBeads1(i,islice);
+        for (int i=0; i<nMoving; ++i)
+                                    r1(index1(i))=movingBeads1(i,islice);
+        for (int i=0; i<npart; ++i) r2(i)=pathsBeads2(i,islice);
+        if (sampler.isSamplingBoth()) for (int i=0; i<nMoving; ++i)
+                                    r2(index2(i))=movingBeads2(i,islice);
+        matrixUpdateObj->evaluateNewDistance(r1,r2,islice,d1,d2);
+      } else {
+      */
+        for (int i=0; i<npart; ++i) r1(i)=pathsBeads1(i,islice);
+        for (int i=0; i<nMoving; ++i) r1(index(i))=movingBeads1(i,islice);
+        for (int i=0; i<npart; ++i) r2(i)=pathsBeads2(i,islice);
+	for (int i=0; i<nMoving; ++i) r2(index(i))=movingBeads2(i,islice);
+        Array d1(newDist(islice,0,allPart));
+        Array d2(newDist(islice,1,allPart));
+        nodeModel->evaluateDistance(r1,r2,islice,d1,d2);
+	//} matrixUpdateObj
+      for (int i=0; i<npart; ++i) {
+//std::cout << dist(islice,0,i) << ", " << dist(islice-1,0,i)  << std::endl;
+//std::cout << newDist(islice,0,i) << ", " << newDist(islice-1,0,i)  << std::endl;
+//std::cout << dist(islice,1,i) << ", " << dist(islice-1,1,i)  << std::endl;
+//std::cout << newDist(islice,1,i) << ", " << newDist(islice-1,1,i)  << std::endl;
+        deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
+                   /(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
+        deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
+                   /(1-exp(-newDist(islice,1,i)*newDist(islice-1,1,i))) );
+      }
+    }
+  }   
+ 
+
+
+  return deltaAction;
+}
+
+
+
+
 
 double FixedNodeAction::getTotalAction(const Paths&, const int level) const {
   return 0;
@@ -187,10 +272,12 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       // Calculate the nodal action.
       u += -log(1-exp(-xim1));
       utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
-      utau += -dotxim1*exp(-xim1)/(1-exp(-xim1));
+      utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
+//std :: cout << "FNA :: "<<jpart<<". xim1 "<<xim1<<". dotxim1   "<<dotxim1<<". utau  "<<utau<<". u  "<<u<<". tau  "<<tau<<std ::endl;
     }
   }
-  fm=force(ipart);
+  fm=force(ipart); 
+  //std :: cout << "FNA :: "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
 }
 
 void FixedNodeAction::initialize(const DoubleSectionChooser &chooser) {
@@ -199,9 +286,37 @@ void FixedNodeAction::initialize(const DoubleSectionChooser &chooser) {
   nslice=sectionBeads1.getNSlice();
   blitz::Range allPart = blitz::Range::all();
   blitz::Range both = blitz::Range::all();
-  for (int islice=0; islice<nslice; ++islice) {
+  for (int islice=0; islice<nslice; ++islice) {  
     for (int i=0; i<npart; ++i) r1(i)=sectionBeads1(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=sectionBeads2(i,islice);
+    dmValue(islice)=nodeModel->evaluate(r1,r2,islice);
+    if (dmValue(islice)*dmValue(0)<=0.0) {
+      std::cout << "ERROR - crossed node" << islice << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many node crossings, exiting" << std::endl;
+        std::exit(-1);
+      }
+    }
+    if (withNodalAction) {
+      Array d1(dist(islice,0,allPart)), d2(dist(islice,1,allPart));
+      nodeModel->evaluateDistance(r1,r2,islice,d1,d2);
+    }
+  } 
+  newDMValue(0)=dmValue(0); newDist(0,both,allPart)=dist(0,both,allPart);
+}
+
+
+// displacemove
+void FixedNodeAction::initialize(const DoubleDisplaceMoveSampler &sampler) {
+  const Beads<NDIM>& pathsBeads1=sampler.getPathsBeads(1);
+  const Beads<NDIM>& pathsBeads2=sampler.getPathsBeads(2);
+  nslice=pathsBeads1.getNSlice();
+  blitz::Range allPart = blitz::Range::all(); 
+  blitz::Range both = blitz::Range::all();
+  for (int islice=0; islice<nslice; ++islice) {
+    for (int i=0; i<npart; ++i) r1(i)=pathsBeads1(i,islice);
+    for (int i=0; i<npart; ++i) r2(i)=pathsBeads2(i,islice);
     dmValue(islice)=nodeModel->evaluate(r1,r2,islice);
     if (dmValue(islice)*dmValue(0)<=0.0) {
       std::cout << "ERROR - crossed node" << islice << std::endl;

@@ -1,4 +1,4 @@
-// $Id$
+// $Id: UniformMover.h 22  2009-05-18 Saad Khairallah  $
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,24 +14,26 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __Mover_h_
-#define __Mover_h_
-class MultiLevelSampler;
-class DisplaceMoveSampler;
-class DoubleDisplaceMoveSampler;
-/** Virtual base class for routines to select trial moves for beads.
-  * @version $Revision$
-  * @author John Shumway. */
-class Mover{
+#ifndef __UniformMover_h_
+#define __UniformMover_h_
+#include <blitz/array.h>
+#include <vector>
+#include "Mover.h"
+
+class MPIManager;
+
+class UniformMover : public Mover {
 public:
-  /// Virtual destructor.
-  virtual ~Mover() {}
-  /// Move the samplers moving beads for a given level, returning
-  /// the probability for the old move divided by the probability for the 
-  /// new move.
-    //  virtual double makeMove(MultiLevelSampler&, const int level)=0;
-  virtual double makeMove(MultiLevelSampler&, const int level){return 0;}
-  virtual double makeMove(DisplaceMoveSampler&) {return 0;}
-  virtual double makeMove(DoubleDisplaceMoveSampler&) {return 0;}
+  /// Typedefs.
+  typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<double,1> Array;
+  typedef blitz::TinyVector<double,NDIM> Vec;
+
+  UniformMover( const MPIManager *mpi=0);
+  virtual ~UniformMover();
+  virtual double makeMove(DisplaceMoveSampler&);
+  virtual double makeMove(DoubleDisplaceMoveSampler&);
+ private:
+  const MPIManager* mpi;
 };
 #endif

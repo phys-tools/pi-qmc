@@ -22,6 +22,7 @@
 #include "Paths.h"
 #include "SuperCell.h"
 #include "MultiLevelSampler.h"
+#include "DisplaceMoveSampler.h"
 
 SpinAction::SpinAction(const double tau, const double mass, 
                        const double bx, const double by, const double bz,
@@ -81,6 +82,60 @@ double SpinAction::getActionDifference(
           + 2*bx*f*(-s[0]*s[2]+s[1]*s[3]) + 2*by*f*(s[0]*s[1]+s[2]*s[3]) )/l2;
 //#if NDIM!=4
       s0=sectionBeads(i,islice-nStride);
+      diff-=m*omega*((dot(s,s)+dot(s0,s0))*coshwt-2.0*dot(s,s0))*div1;
+//#endif
+    }
+  }
+  return diff;
+}
+
+//displace move
+double SpinAction::getActionDifference(
+    const DisplaceMoveSampler& sampler, const int nMoving) {
+  double diff=0;
+  const int nStride=1;
+#if NDIM==4
+  const Beads<4>& pathsBeads=sampler.getPathsBeads();
+  const Beads<4>& movingBeads=sampler.getMovingBeads();
+#else
+  //int nAuxBeads=sampler.getPathsBeads().getAuxBeadCount();
+  const Beads<4>& pathsBeads
+    = *dynamic_cast<const Beads<4>*>(sampler.getPathsBeads().getAuxBeads(1));
+  const Beads<4>& movingBeads
+    = *dynamic_cast<const Beads<4>*>(sampler.getMovingBeads().getAuxBeads(1));
+#endif
+  double wt=omega*tau*nStride;
+  double sinhwt=sinh(wt);
+  double coshwt=cosh(wt);
+  double m=mass;
+  double div1=1.0/(2.0*sinhwt);
+//#endif
+  const int nSlice=pathsBeads.getNSlice();
+  const IArray& index=sampler.getMovingIndex(); 
+  //const int nMoving=index.size();
+
+  for (int islice=nStride; islice<nSlice; islice+=nStride) {
+    for (int iMoving=0; iMoving<nMoving; ++iMoving) {
+      const int i=index(iMoving);
+     //Add new action.
+      SVec s=movingBeads(iMoving,islice);
+      double dots=dot(s,s);
+      double f=invgc*exp(-gc*dots/l2);
+      diff-=nStride*tau*( bz*f*(s[0]*s[0]-s[1]*s[1]-s[2]*s[2]+s[3]*s[3]) 
+          + 2*bx*f*(-s[0]*s[2]+s[1]*s[3]) + 2*by*f*(s[0]*s[1]+s[2]*s[3]) )/l2;
+//#if NDIM!=4
+      SVec s0=movingBeads(iMoving,islice-nStride);
+      diff+=m*omega*((dot(s,s)+dot(s0,s0))*coshwt-2.0*dot(s,s0))*div1;
+//#endif
+    
+     //Subtract old action.
+      s=pathsBeads(i,islice);
+      dots=dot(s,s);
+      f=invgc*exp(-gc*dots/l2);
+      diff+=nStride*tau*(bz*f*( s[0]*s[0]-s[1]*s[1]-s[2]*s[2]+s[3]*s[3]) 
+          + 2*bx*f*(-s[0]*s[2]+s[1]*s[3]) + 2*by*f*(s[0]*s[1]+s[2]*s[3]) )/l2;
+//#if NDIM!=4
+      s0=pathsBeads(i,islice-nStride);
       diff-=m*omega*((dot(s,s)+dot(s0,s0))*coshwt-2.0*dot(s,s0))*div1;
 //#endif
     }

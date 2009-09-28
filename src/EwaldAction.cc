@@ -25,6 +25,7 @@
 #include "Paths.h"
 #include "Beads.h"
 #include "MultiLevelSampler.h"
+#include "DisplaceMoveSampler.h"
 
 #if NDIM==3
 EwaldAction::EwaldAction(const SimulationInfo& simInfo, 
@@ -116,6 +117,42 @@ return diff;
       diff+=utauLR*tau;
     }
   }
+  return diff;
+}
+
+//displace move
+double EwaldAction::getActionDifference( const DisplaceMoveSampler& sampler, const int nMoving) {
+  double diff=0;
+return diff;
+  for (ConstSRActIter action=actions.begin(); action<actions.end(); ++action) {
+    if (*action) diff+=(*action)->getActionDifference(sampler, nMoving);
+  }
+  // if (level==0) { // Calculate long range action.
+    const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
+    const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
+    const int nSlice=pathsBeads.getNSlice();
+    const IArray& index=sampler.getMovingIndex(); 
+    //  const int nMoving=index.size();
+    for (int islice=1;islice<nSlice; ++islice) { 
+      for (int i=0; i<npart; ++i) {
+        pos(i)=pathsBeads(i,islice);
+        cell.pbc(pos(i)-=pathsBeads(i,islice-1));
+        pos(i)*=-0.5;
+        pos(i)+=pathsBeads(i,islice);
+      }
+      double utauLR=calcLongRangeUtau(pos);
+      diff-=utauLR*tau;
+      for (int imoving=0; imoving<nMoving; ++imoving) {
+        const int i=index(imoving);
+        pos(i)=movingBeads(imoving,islice);
+        cell.pbc(pos(i)-=movingBeads(imoving,islice-1));
+        pos(i)*=-0.5;
+        pos(i)+=movingBeads(imoving,islice);
+      }
+      utauLR=calcLongRangeUtau(pos);
+      diff+=utauLR*tau;
+    }
+    //}
   return diff;
 }
 

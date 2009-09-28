@@ -17,6 +17,7 @@
 #ifndef __CompositeAction_h_
 #define __CompositeAction_h_
 class MultiLevelSampler;
+class DisplaceMoveSampler;
 class SectionChooser;
 class Paths;
 #include "Action.h"
@@ -37,6 +38,9 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
+  virtual double getActionDifference(const DisplaceMoveSampler&,
+				     const int nmoving);
+  
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

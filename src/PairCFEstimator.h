@@ -43,20 +43,32 @@ template <int N>
 class PairCFEstimator : public BlitzArrayBlkdEst<N>, public LinkSummable {
 public:
   typedef blitz::Array<float,N> ArrayN;
+  typedef blitz::Array<int,1> IArray;
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<double,N> VecN;
   typedef blitz::TinyVector<int,N> IVecN;
   typedef std::vector<PairDistance*> DistN;
   /// Constructor.
   PairCFEstimator(const SimulationInfo& simInfo, const std::string& name,
-                  const Species &s1, const Species &s2, const VecN &min, 
+                  const Species *speciesList, const int nspecies, const VecN &min, 
                   const VecN &max, const IVecN &nbin, const DistN &dist,
                   MPIManager *mpi) 
     : BlitzArrayBlkdEst<N>(name,nbin,true), 
-      min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
-      cell(*simInfo.getSuperCell()), temp(nbin),
-      ifirst(s1.ifirst), jfirst(s2.ifirst), nipart(s1.count), njpart(s2.count),
-      mpi(mpi) {
+    min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist), nspecies(nspecies),
+      cell(*simInfo.getSuperCell()), temp(nbin), mpi(mpi) {
+  
+    ifirst = speciesList[0].ifirst;
+    nipart = speciesList[0].count; 
+
+    jfirst.resize(nspecies);
+    njpart.resize(nspecies);
+    for (int ispec=1; ispec < nspecies; ispec++){
+      jfirst(ispec) = speciesList[ispec].ifirst;
+      njpart(ispec) = speciesList[ispec].count; 
+    }
+
+
+
     BlitzArrayBlkdEst<N>::norm=0;
 #ifdef ENABLE_MPI
     if (mpi) mpiBuffer.resize(nbin);
@@ -74,17 +86,21 @@ public:
   virtual void handleLink(const Vec& start, const Vec& end,
          const int ipart, const int islice, const Paths &paths) {
     if (ipart>=ifirst && ipart<ifirst+nipart) {
-      for (int jpart=jfirst; jpart<(jfirst+njpart); ++jpart) {
-        if (ipart!=jpart) {
-          Vec r1=start; Vec r2=paths(jpart,islice);
-          IVecN ibin=0;
-          for (int i=0; i<N; ++i) {
-            double d=(*dist[i])(r1,r2,cell);
-            ibin[i]=int((d-min[i])*deltaInv[i]);
-            if (d<min[i] || ibin[i]>nbin[i]-1) break;
-            if (i==N-1) ++temp(ibin);
-          }
-        }
+      for (int ispec=1; ispec<nspecies; ispec++){
+	for (int jpart=jfirst(ispec); jpart<(jfirst(ispec)+njpart(ispec)); ++jpart) {
+	 
+	  if (ipart!=jpart) {
+	    Vec r1=start; Vec r2=paths(jpart,islice);
+	    IVecN ibin=0;
+	    for (int i=0; i<N; ++i) {
+	      double d=(*dist[i])(r1,r2,cell);
+	      ibin[i]=int((d-min[i])*deltaInv[i]);
+	      if (d<min[i] || ibin[i]>nbin[i]-1) break;
+	      if (i==N-1) ++temp(ibin);
+	    }
+	  }
+
+	}
       }
     }
   }
@@ -120,7 +136,9 @@ private:
   DistN dist;
   SuperCell cell;
   ArrayN temp;
-  int ifirst, jfirst, nipart, njpart;
+  int ifirst, nipart;
+  IArray jfirst,njpart;
+  const int nspecies;
   MPIManager *mpi;
 #ifdef ENABLE_MPI
   ArrayN mpiBuffer;

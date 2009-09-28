@@ -33,6 +33,12 @@
 #include "DoubleSectionChooser.h"
 #include "BeadFactory.h"
 
+
+//////////////////////////////// delete this when done
+#include <iostream>
+#include <sstream>
+#include <fstream>
+
 DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
   DoubleSectionChooser &sectionChooser,
   ParticleChooser& particleChooser, PermutationChooser& permutationChooser,
@@ -56,6 +62,7 @@ DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
     permutationChooser2(permutationChooser2),
     nrepeat(nrepeat) {
   for (int i=0; i<nmoving; ++i) (*movingIndex2)(i)=identityIndex(i)=i;
+
 }
 
 DoubleMLSampler::~DoubleMLSampler() {
@@ -73,7 +80,7 @@ void DoubleMLSampler::run() {
   // Select particles to move and the permuation.
   for (int irepeat=0; irepeat<nrepeat; ++irepeat) {
     bool isNewPerm=permutationChooser.choosePermutation();
-    permutation1=permutationChooser.getPermutation();
+    permutation1=permutationChooser.getPermutation(); 
     particleChooser.chooseParticles();
     double lnTranProb=permutationChooser.getLnTranProb();
     for (int i=0; i<nmoving; ++i) (*movingIndex1)(i)=particleChooser[i];
@@ -84,14 +91,18 @@ void DoubleMLSampler::run() {
       particleChooser2.chooseParticles();
       for (int i=0; i<nmoving; ++i) (*movingIndex2)(i)=particleChooser2[i];
     }
+    
     if (isNewPerm) {
-      // Copy old coordinate endpoint to the moving coordinate endpoints.
+  // Copy old coordinate endpoint to the moving coordinate endpoints.
       const int nsectionSlice=movingBeads->getNSlice();
       for (int imoving=0; imoving<nmoving; ++imoving) {
         pMovingIndex(imoving)=(*movingIndex1)(permutation1[imoving]);
         pMovingIndex2(imoving)=(*movingIndex2)(permutation2[imoving]);
       }
+      
       sectionBeads1->copySlice(*movingIndex1,0,*movingBeads1,identityIndex,0);
+     
+   
       sectionBeads1->copySlice(pMovingIndex,nsectionSlice-1,
                                *movingBeads1,identityIndex,nsectionSlice-1);
       if (samplingBoth) {
@@ -100,6 +111,7 @@ void DoubleMLSampler::run() {
                                  *movingBeads2,identityIndex,nsectionSlice-1);
       }
       if (tryMove(lnTranProb) && irepeat<nrepeat-1) {
+    
         permutationChooser.init();
         if (samplingBoth) {
           activateSection(2); permutationChooser2.init(); activateSection(1); 
@@ -127,14 +139,38 @@ bool DoubleMLSampler::tryMove(double initialLnTranProb) {
     // Evaluate and add change in DoubleAction. 
     deltaAction+=doubleAction->getActionDifference(*this,ilevel);
     double acceptProb=exp(lnTranProb-deltaAction+oldDeltaAction);
-    //std::cout << acceptProb << ", " << lnTranProb << ",  " << ilevel << ", "
-    //          << -deltaAction  << ", " << oldDeltaAction << std::endl;
+      
     if (RandomNumGenerator::getRand()>acceptProb) return false;
     oldDeltaAction=deltaAction;
-    if (accRejEst) accRejEst->moveAccepted(ilevel);
+    if (accRejEst) accRejEst->moveAccepted(ilevel); 
+  
   }
+
   // Move accepted.
   action->acceptLastMove();
+  /* ///////////////////////////// print the old and new sections
+  std::ofstream *file=0;  
+
+  std::string ext="old";
+  file = new std::ofstream((ext).c_str());
+  for (int islice=0; islice <sectionBeads1->getNSlice(); islice++)
+    *file <<(*sectionBeads1)((*movingIndex1)(0),islice)[0]<< "     "<< (*sectionBeads1)((*movingIndex1)(0),islice)[1]<<"   "<< (*sectionBeads1)((*movingIndex1)(0),islice)[2]<<std :: endl;
+  for (int islice=0; islice <sectionBeads2->getNSlice(); islice++)
+    *file <<(*sectionBeads2)((*movingIndex2)(0),islice)[0]<< "     "<< (*sectionBeads2)((*movingIndex2)(0),islice)[1]<<"   "<< (*sectionBeads2)((*movingIndex2)(0),islice)[2]<<std :: endl;
+ 
+
+  ext="new";
+  file = new std::ofstream((ext).c_str());
+  for (int islice=0; islice < movingBeads1->getNSlice(); islice++)
+    *file <<(*movingBeads1)(0,islice)[0]<< "  "<< (*movingBeads1)(0,islice)[1]<<"  "<<(*movingBeads1)(0,islice)[2]<<std :: endl;
+  for (int islice=0; islice < movingBeads2->getNSlice(); islice++)
+    *file <<(*movingBeads2)(0,islice)[0]<< "  "<< (*movingBeads2)(0,islice)[1]<<"  "<<(*movingBeads2)(0,islice)[2]<<std :: endl;
+
+ delete file;
+  ////////////////////////////// */
+
+
+
   //if (samplingBoth)  {
   //  activateSection(2); action->acceptLastMove(); activateSection(1);
   // }
@@ -148,19 +184,21 @@ bool DoubleMLSampler::tryMove(double initialLnTranProb) {
                *sectionBeads2,*movingIndex2,islice);
       }
   }
+ 
+
   // Append the current permutation to section permutation.
   Permutation temp1(permutation1), temp2(permutation2);
-  if (nmoving>0) {
-  }
   for (int i=0; i<nmoving; ++i) {
     temp1[i]=(*sectionPermutation1)[(*movingIndex1)(i)];
     if (samplingBoth) temp2[i]=(*sectionPermutation2)[(*movingIndex2)(i)];
   }
   for (int i=0; i<nmoving; ++i) {
-    (*sectionPermutation1)[(*movingIndex1)(i)]=temp1[permutation1[i]];
+    (*sectionPermutation1)[(*movingIndex1)(i)]= temp1[permutation1[i]];
     if (samplingBoth)
       (*sectionPermutation2)[(*movingIndex2)(i)]=temp2[permutation2[i]];
   }
+
+
   return true;
 }
 

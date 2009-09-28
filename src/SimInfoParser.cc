@@ -51,7 +51,7 @@ void SimInfoParser::parse(const xmlXPathContextPtr& ctxt) {
     speciesList[ispecies]=species;
     species->name=getStringAttribute(specNode,"name");
     species->count=getIntAttribute(specNode,"count");
-    species->mass=getMassAttribute(specNode,"mass");
+    species->mass=getMassAttribute(specNode,"mass"); 
     species->charge=getDoubleAttribute(specNode,"charge");
     species->twos=getIntAttribute(specNode,"twos");
     std::string type=getStringAttribute(specNode,"type");

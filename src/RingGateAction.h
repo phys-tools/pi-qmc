@@ -35,6 +35,9 @@ public:
   virtual ~RingGateAction() {}
   /// Calcuate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&, const int level);
+  /// Calcuate the difference in action (NOT IMPLEMENTED YET).
+  virtual double getActionDifference(const DisplaceMoveSampler&,
+				    const int nMoving){ return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

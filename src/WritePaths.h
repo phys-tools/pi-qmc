@@ -23,6 +23,7 @@ template <int TDIM> class Beads;
 class Paths;
 class MPIManager;
 class BeadFactory;
+class SimulationInfo;
 
 /// Algorithm for writting paths to an ascii file.
 /// Last line of the file is the same positions as the first
@@ -46,7 +47,7 @@ class BeadFactory;
 class WritePaths : public Algorithm {
 public:
   /// Construct by providing the paths to write.
-  WritePaths(Paths&, const std::string&, MPIManager*, const BeadFactory&);
+  WritePaths(Paths&, const std::string&, const int dumpFreq, const int maxConfigs, const bool writeMovie, const SimulationInfo& simInfo, MPIManager*, const BeadFactory&);
   /// Virtual destructor.
   virtual ~WritePaths() {}
   /// Write the paths.
@@ -60,5 +61,12 @@ private:
   MPIManager *mpi;
   /// The BeadFactory.
   const BeadFactory& beadFactory;
+  const int dumpFreq;
+  const SimulationInfo& simInfo;
+  const int maxConfigs;
+  const bool writeMovie;
+  std::ofstream *movieFile;
+  
 };
 #endif
+

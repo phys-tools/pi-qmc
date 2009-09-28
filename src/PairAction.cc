@@ -27,6 +27,7 @@
 #include <vector>
 #include <fstream>
 #include <blitz/tinyvec-et.h>
+#include "DisplaceMoveSampler.h"
 
 PairAction::PairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
@@ -35,9 +36,9 @@ PairAction::PairAction(const Species& s1, const Species& s2,
     ifirst1(s1.ifirst), ifirst2(s2.ifirst),
     npart1(s1.count), npart2(s2.count), norder(norder), isDMD(isDMD),
     hasZ(hasZ) {
-std::cout << "constructing PairAction" << std::endl;
-std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
-std::cout << "filename=" << filename << std::endl;
+  //std::cout << "constructing PairAction" << std::endl;
+  //std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
+  //std::cout << "filename=" << filename << std::endl;
   std::vector<Array> buffer; buffer.reserve(300);
   std::ifstream dmfile((filename+".dmu").c_str()); std::string temp;
   double r;
@@ -101,8 +102,8 @@ PairAction::PairAction(const Species& s1, const Species& s2,
     ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
     npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ) {
-std::cout << "constructing PairAction" << std::endl;
-std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
+  //std::cout << "constructing PairAction" << std::endl;
+  //std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
@@ -123,9 +124,9 @@ PairAction::PairAction(const Species& s1, const Species& s2,
             const int ngpts) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
     logrratioinv((ngpts-1)/log(rmax/rmin)), 
-    ugrid(ngpts,2,(norder+1)*(norder+2)),
+    ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(true) {
+    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ) {
 std::cout << "constructing PairAction" << std::endl;
 std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
@@ -146,7 +147,6 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
     }
   }
 }
-
 
 
 double PairAction::getActionDifference(const MultiLevelSampler& sampler,
@@ -223,12 +223,78 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
   return deltaAction*nStride;
 }
 
+// displace move
+double PairAction::getActionDifference(const DisplaceMoveSampler& sampler,
+                                         const int nMoving) {
+  const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
+  const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
+  const SuperCell& cell=sampler.getSuperCell();
+  const int nStride=1; //(int)pow(2,level);
+  const int nSlice=pathsBeads.getNSlice();
+  const IArray& index=sampler.getMovingIndex(); 
+  //const int nMoving=index.size();
+  double deltaAction=0;
+  for (int iMoving=0; iMoving<nMoving; ++iMoving) {
+    const int i=index(iMoving);
+    int jbegin,jend;
+    if (i>=ifirst1 && i<ifirst1+npart1) {
+      jbegin=ifirst2; jend=ifirst2+npart2;
+    } else
+    if (i>=ifirst2 && i<ifirst2+npart2) {
+      jbegin=ifirst1; jend=ifirst1+npart1;
+    } else 
+    continue; //Particle not in this interaction.
+    for (int j=jbegin; j<jend; ++j) {
+      bool isMoving=false; int jMoving=0;
+      for (int k=0;k<nMoving;++k) {
+        if (j==index(k)) {isMoving=true; jMoving=k; break;}
+      }
+      if (isMoving && i<=j) continue; //Don't double count moving interactions.
+      Vec prevDelta =pathsBeads(i,0);
+      prevDelta-=pathsBeads(j,0); cell.pbc(prevDelta);
+      Vec prevMovingDelta=prevDelta;
+      double prevR=sqrt(dot(prevDelta,prevDelta));
+      double prevMovingR=prevR;
+      for (int islice=nStride; islice<nSlice; islice+=nStride) {
+        // Add action for moving beads.
+        Vec delta=movingBeads(iMoving,islice);
+        delta-=(isMoving)?movingBeads(jMoving,islice):pathsBeads(j,islice);
+        cell.pbc(delta);
+        double r=sqrt(dot(delta,delta));
+        double q=0.5*(r+prevMovingR);
+      
+          Vec svec=delta-prevMovingDelta; double s2=dot(svec,svec)/(q*q);
+          deltaAction+=uk0(q,s2);
+      
+        prevMovingDelta=delta; prevMovingR=r;
+        // Subtract action for old beads.
+        delta=pathsBeads(i,islice);
+        delta-=pathsBeads(j,islice);
+        cell.pbc(delta);
+        r=sqrt(dot(delta,delta));
+        q=0.5*(r+prevR);
+      
+          svec=delta-prevDelta;  s2=dot(svec,svec)/(q*q);
+          deltaAction-=uk0(q,s2);
+      
+        prevDelta=delta; prevR=r;
+      }
+    }
+  }
+  return deltaAction*nStride;
+}
+
+
+
+
+
 double PairAction::getTotalAction(const Paths& paths, int level) const {
   return 0;
 }
 
 void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const {
+
   u=utau=ulambda=0; fm=0.; fp=0.;
   int jbegin,jend;
   if (ipart>=ifirst1 && ipart<ifirst1+npart1) {
@@ -279,6 +345,7 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
     fp -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
          +vz2*z*delta*(2-z)/(q*r);
   }
+ 
 }
 
 double PairAction::u00(double r) const {

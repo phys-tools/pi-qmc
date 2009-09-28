@@ -97,7 +97,9 @@ void WalkingChooser::init() {
   // Setup the table of free particle propagotor values.
   const Beads<NDIM> &sectionBeads=multiLevelSampler->getSectionBeads();
   const SuperCell &cell=multiLevelSampler->getSuperCell();
-  const int nslice=sectionBeads.getNSlice();
+  const int nslice=sectionBeads.getNSlice(); 
+
+
   for (int ipart=0; ipart<npart; ++ipart) {
     for (int jpart=0; jpart<npart; ++jpart) {
       Vec delta=sectionBeads(ipart+ifirst,0);

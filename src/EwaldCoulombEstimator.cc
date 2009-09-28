@@ -37,10 +37,10 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   const double rcut, const double kcut,
   MPIManager *mpi, const std::string& unitName, double scale, double shift)
   : ScalarEstimator("coulomb_energy",unitName,scale,shift),
-    //ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(),
-    //                            simInfo.getNPart(),rcut,kcut)),
-    ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(),
-                               simInfo.getNPart(),rcut,kcut,4*kcut,8)),
+    ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(),
+                                simInfo.getNPart(),rcut,kcut)),
+    //ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(),
+    //                           simInfo.getNPart(),rcut,kcut,4*kcut,8)),
     cell(*simInfo.getSuperCell()),
     energy(0), etot(0), enorm(0), vgrid(1001), nradial(1001),
     rcut(rcut), dr(rcut/1000), drinv(1./dr),
@@ -53,6 +53,7 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   for (int i=1; i<nradial; ++i) {
     vgrid(i) = -ewaldSum.evalFR(i*dr)/epsilon;
   }
+
 }
 
 EwaldCoulombEstimator::~EwaldCoulombEstimator() {
@@ -65,6 +66,8 @@ void EwaldCoulombEstimator::initCalc(const int nslice, const int firstSlice) {
 
 void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
           const int ipart, const int islice, const Paths& paths) {
+
+
   for (int jpart=0; jpart<ipart; ++jpart) {
     Vec delta=end-paths(jpart,islice);
     cell.pbc(delta);
@@ -76,11 +79,14 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
              *(1./(r*epsilon) + (1-x)*vgrid(igrid)+x*vgrid(igrid+1));
     }
   }
+
+ 
   // Add long range contribution.
   if (ipart==0) {
     paths.getSlice(islice,r);
     energy += ewaldSum.evalLongRange(r)/epsilon;
-  }
+   }
+
 }
 
 void EwaldCoulombEstimator::endCalc(const int lnslice) {

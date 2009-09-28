@@ -21,6 +21,7 @@
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "MultiLevelSampler.h"
+#include "DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -102,9 +103,17 @@ double SpringAction::getActionDifference(const MultiLevelSampler& sampler,
       }
       deltaAction+=log(temp);
     }
-  }
+  } 
   return deltaAction;
 }
+
+
+// displacemove
+double SpringAction::getActionDifference(const DisplaceMoveSampler& sampler,
+                                         const int nMoving) {
+  return 0;
+}
+
 
 double SpringAction::getTotalAction(const Paths& paths, int level) const {
   return 0;
@@ -116,7 +125,8 @@ void SpringAction::getBeadAction(const Paths& paths, int ipart, int islice,
   if (isStatic(ipart)) return;
   Vec delta = paths.delta(ipart,islice,-1);
   fm-=(delta/(2*lambda(ipart)*tau));
-  utau = NDIM/(2*tau) - dot(delta,delta)/(4.0*lambda(ipart)*tau*tau);
+  utau = NDIM/(2*tau) - dot(delta,delta)/(4.0*lambda(ipart)*tau*tau);   //std :: cout << "SA :: "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
   delta = paths.delta(ipart,islice,1);
   fp-=(delta/(2*lambda(ipart)*tau));
+
 }

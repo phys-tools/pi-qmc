@@ -77,8 +77,11 @@ void MultiLevelSampler::run() {
       for (int imoving=0; imoving<nmoving; ++imoving) {
         pMovingIndex(imoving)=(*movingIndex)(permutation[imoving]);
       }
+
+     
+
       sectionBeads->copySlice(*movingIndex,0,*movingBeads,identityIndex,0);
-      sectionBeads->copySlice(pMovingIndex,nsectionSlice-1,
+       sectionBeads->copySlice(pMovingIndex,nsectionSlice-1,
                  *movingBeads,identityIndex,nsectionSlice-1);
 //        (*movingBeads)(imoving,0)=(*sectionBeads)(particleChooser[imoving],0);
 //        (*movingBeads)(imoving,nsectionSlice-1)

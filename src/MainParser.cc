@@ -35,7 +35,7 @@ extern int irank;
 #include "stats/EstimatorManager.h"
 #include "EstimatorParser.h"
 #include "spin/MainSpinParser.h"
-
+#include <ctime>
 MainParser::MainParser(const std::string& filename) 
   : filename(filename), context (0) {
   doc = xmlParseFile((char*)filename.c_str());
@@ -52,6 +52,7 @@ void MainParser::parse() {
 }
 
 void MainParser::parse(const xmlXPathContextPtr& ctxt) {
+
   MPIManager *mpi=0;
 #ifdef ENABLE_MPI
   { xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//PIMC",ctxt);
@@ -64,7 +65,23 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
     mpi=new MPIManager(nworker,nclone);
     irank = MPI::COMM_WORLD.Get_rank();
   }
+  //print date
+  std::time_t rawtime;
+  std::time ( &rawtime );
+  if (mpi){ 
+    if ( mpi->isMain()) {
+      std :: cout << "Start Simulation at current local time and date: "<< std::ctime (&rawtime)<<std ::endl ;
+    } 
+  }else {
+    std :: cout << "Start Simulation at current local time and date: "<< std::ctime (&rawtime)<<std ::endl ;
+  }
+#else
+  std::time_t rawtime;
+  std::time(&rawtime);
+  std :: cout << "Start Simulation at current local time and date: "<< std::ctime (&rawtime)<<std ::endl ;
 #endif
+  
+
   // Find the maximum level for any sampling.
   int maxlevel=1;
   { xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//ChooseSection",ctxt);
@@ -74,7 +91,27 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
       int nlevel=getIntAttribute(node,"nlevel");
       if (nlevel>maxlevel) maxlevel=nlevel;
     }
-  }
+    // in case you have displace moves and fixed node action. Bug. need to fix for no double action case
+        int nslices=1;
+    obj = xmlXPathEval(BAD_CAST"//Temperature",ctxt);
+    nsample=obj->nodesetval->nodeNr;
+    for (int i=0; i<nsample; ++i) {
+      xmlNodePtr& node=obj->nodesetval->nodeTab[i];
+      nslices = getIntAttribute(node,"nslice");
+    }
+    obj = xmlXPathEval(BAD_CAST"//SampleDisplaceMove",ctxt);
+    nsample=obj->nodesetval->nodeNr;
+    for (int i=0; i<nsample; ++i) {
+      xmlNodePtr& node=obj->nodesetval->nodeTab[i];
+      int nrepeat =getIntAttribute(node,"nrepeat");
+      if (mpi){
+	if (nrepeat>0) maxlevel= log(nslices/mpi->getNWorker())/log(2);
+      }else{
+	  if (nrepeat>0) maxlevel=log(nslices)/log(2);
+      }
+      }
+    }
+
   std::cout << "  maxlevel = " << maxlevel << std::endl;
   // Get the simulation info.
   SimInfoParser simInfoParser;
@@ -102,6 +139,22 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
                         simInfo.getBeadFactory(),mpi);
   pimcParser.parse(ctxt);
   Algorithm* algorithm=pimcParser.getAlgorithm();
+
+
   // Run the simulation.
   algorithm->run();
+
+  //print date
+#ifdef ENABLE_MPI
+  std::time (&rawtime );
+  if (mpi){ 
+    if ( mpi->isMain()) {
+      std :: cout << "\n\n********** Simulation ended successfully :: "<< std::ctime (&rawtime)<<std ::endl ;
+    } 
+  }else {
+    std :: cout << "\n\n********** Simulation ended successfully :: "<< std::ctime (&rawtime)<<std ::endl ;
+  }
+#else
+  std :: cout << "\n\n********** Simulation ended successfully :: "<< std::ctime (&rawtime)<<std ::endl ;
+#endif
 }

@@ -19,6 +19,8 @@
 #include "stats/BlitzArrayBlkdEst.h"
 #include "Paths.h"
 #include <fftw3.h>
+#include <blitz/array.h>
+#include "Species.h"
 class Paths;
 class SimulationInfo;
 class MPIManager;
@@ -26,23 +28,29 @@ class MPIManager;
  *  @version $Revision$
  *  @bug Hard coded for two particles and no MPI.
  *  @author John Shumway  */
+
 class PermutationEstimator : public BlitzArrayBlkdEst<1> {
 public:
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<bool,1> BArray;
   typedef blitz::Array<double,1> Array;
   /// Constructor.
-  PermutationEstimator(const SimulationInfo& simInfo, MPIManager *mpi);
+  PermutationEstimator(const SimulationInfo& simInfo,  const std::string& name,
+		       const Species &s1,MPIManager *mpi);
   /// Virtual destructor.
   virtual ~PermutationEstimator();
   /// Clear value of the estimator.
   virtual void reset() {}
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths);
+
+  virtual void averageOverClones(const MPIManager* mpi);
+
 private:
   ///
+  int ifirst, nipart;
   const int npart;
-  BArray workFlags;
+  bool *visited; 
   MPIManager *mpi;
 };
 

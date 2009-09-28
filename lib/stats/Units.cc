@@ -57,7 +57,8 @@ Units::Units(const std::string& eunit, const std::string& lunit)
 double Units::getLengthScaleIn(const std::string& unit) const {
   unitMap::const_iterator i=lengthOut.find(unit);
   if (i==lengthOut.end()) {
-    return 1; //Unit not found, may want to throw error.
+    std :: cout<<"WARNING :: Length Unit not found, may want to throw error."<<std :: endl;//Unit not found, may want to throw error.
+    return 1;  
   } else {
     return 1.0/i->second;
   }
@@ -66,7 +67,8 @@ double Units::getLengthScaleIn(const std::string& unit) const {
 double Units::getEnergyScaleIn(const std::string& unit) const {
   unitMap::const_iterator i=energyOut.find(unit);
   if (i==energyOut.end()) {
-    return 1; //Unit not found, may want to throw error.
+    std :: cout<<"WARNING :: Energy Unit not found, may want to throw error."<<std :: endl;//Unit not found, may want to throw error.
+   return 1; 
   } else {
     return 1.0/i->second;
   }
@@ -75,8 +77,10 @@ double Units::getEnergyScaleIn(const std::string& unit) const {
 double Units::getMassScaleIn(const std::string& unit) const {
   unitMap::const_iterator i=massOut.find(unit);
   if (i==massOut.end()) {
-    return 1; //Unit not found, may want to throw error.
+    std :: cout<<"WARNING :: Mass Unit not found, may want to throw error."<<std :: endl;
+    return 1; 
   } else {
-    return 1.0/i->second;
+ 
+    return 1.0/i->second; 
   }
 }

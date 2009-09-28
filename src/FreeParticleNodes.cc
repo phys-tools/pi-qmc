@@ -91,7 +91,7 @@ double FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
       cell.pbc(delta);
       double ear2=1;
       for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
-      mat(ipart,jpart)=ear2;
+      mat(ipart,jpart)=ear2; //std :: cout << mat(ipart,jpart) <<std :: endl;
       uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
   }
@@ -405,7 +405,7 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
   return 0;
 }*/
 
-const double FreeParticleNodes::EPSILON=1e-6;
+const double FreeParticleNodes::EPSILON=1e-6;//6
 
 FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, 
     int npart, std::vector<Matrix*> &matrix, const FreeParticleNodes &fpNodes)

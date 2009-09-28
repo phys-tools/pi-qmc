@@ -37,6 +37,7 @@ CoulombEnergyEstimator::CoulombEnergyEstimator(
     energy(0), etot(0), enorm(0),
     action(action), epsilon(epsilon),q(simInfo.getNPart()), mpi(mpi) {
   for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
+
 }
 
 void CoulombEnergyEstimator::initCalc(const int nslice, const int firstSlice) {

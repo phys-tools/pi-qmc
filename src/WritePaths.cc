@@ -1,3 +1,4 @@
+ 
 // $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
@@ -28,27 +29,59 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include "SimulationInfo.h"
 
-WritePaths::WritePaths(Paths& paths, const std::string& filename,
-    MPIManager *mpi, const BeadFactory& beadFactory)
-  : filename(filename), paths(paths), mpi(mpi), beadFactory(beadFactory) {
+WritePaths::WritePaths(Paths& paths, const std::string& filename, const int dumpFreq, const int maxConfigs,  const bool writeMovie, const SimulationInfo& simInfo, MPIManager *mpi, const BeadFactory& beadFactory)  : filename(filename), paths(paths), mpi(mpi), beadFactory(beadFactory), dumpFreq(dumpFreq), maxConfigs(maxConfigs), writeMovie(writeMovie),simInfo(simInfo) {
+  if (writeMovie) movieFile = new std::ofstream("pathMovie", std::ios::out);
 }
 
 void WritePaths::run() {
+  
+  //Write paths (movie) every dumpFreq (dumpMovieCounter) times
+  static int dumpPathCounter=0;
+  if (dumpPathCounter < dumpFreq) {
+    dumpPathCounter++;
+    return;
+  }
+  dumpPathCounter=0;
+  static int dumpMovieCounter=0;
+  dumpMovieCounter++;
+
+  //Prepare file handlers 
   int workerID=(mpi)?mpi->getWorkerID():0;
   int nclone=(mpi)?mpi->getNClone():1;
-  /// Add cloneID to name if there are clones.
   int cloneID=(mpi)?mpi->getCloneID():0;
+
+   
   std::stringstream ext;
   if (nclone>1) ext << cloneID;
-  std::ofstream *file=0;
+  std::ofstream *file=0;   
+  //paths files
+  Permutation perm(paths.getGlobalPermutation());   
   if (workerID==0){
     file = new std::ofstream((filename+ext.str()).c_str());
+    *file <<"#Permutations ";
+    for (int i=0; i<paths.getNPart(); i++) *file << perm[i]<< " ";
+    *file << std::endl;
     *file << "#Path coordinates: " << paths.getNPart()
-         << " particles in " << NDIM << "-d" << std::endl;
+	  << " particles in " << NDIM << "-d" << std::endl;
   }
-  /// Now determine how many chunked steps we need to write out all slices.
+  //movie files
+  if (cloneID==0 && workerID==0 && writeMovie) {
+    if (dumpMovieCounter > maxConfigs) {
+      (*movieFile).close();
+      (*movieFile).open("pathMovie", std::ios::trunc);
+      dumpMovieCounter=0;
+    }
+    *movieFile <<"#Permutations ";
+    for (int i=0; i<paths.getNPart(); i++) *movieFile << perm[i]<< " ";
+    *movieFile << std::endl;
+    *movieFile << "# " << paths.getNPart()<<"   ";
+      for (int ispec=0;ispec<simInfo.getNSpecies(); ispec++) *movieFile <<simInfo.getSpecies(ispec).count<<"  ";
+      *movieFile <<std::endl;
+  }
 
+  /// Now determine how many chunked steps we need to write out all slices.
   int nslice=paths.getNSlice();
   int ifirst=0;//paths.getLowestSampleSlice(1,false);
   int imax=paths.getHighestSampleSlice(1,true);
@@ -91,8 +124,10 @@ void WritePaths::run() {
           for (int ipart=0; ipart<paths.getNPart(); ++ipart) {
             Paths::Vec p = paths(ipart,islice);
             for (int i=0; i<NDIM; ++i) *file << p[i] << " ";
+	    if (writeMovie)  for (int i=0; i<NDIM; ++i) *movieFile << p[i] << " ";
           }
           *file << std::endl;
+	  if (writeMovie) *movieFile << std::endl;
         }
       }
       if (ichunk+1<ceil((nslice+1.)/nslicePerChunk)) 

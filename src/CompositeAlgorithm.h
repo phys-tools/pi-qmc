@@ -33,7 +33,7 @@ public:
   }
   /// Run the algorithm.
   virtual void run() {
-    for(unsigned int i=0;i<step.size();++i) if (step[i]) step[i]->run();
+    for(unsigned int i=0;i<step.size();++i)   if (step[i]) step[i]->run();
   }
   /// Resize the number of steps in the algorithm.
   void resize(const int n) {

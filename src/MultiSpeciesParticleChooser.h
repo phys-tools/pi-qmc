@@ -1,4 +1,3 @@
-// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,24 +13,27 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __Mover_h_
-#define __Mover_h_
-class MultiLevelSampler;
-class DisplaceMoveSampler;
-class DoubleDisplaceMoveSampler;
-/** Virtual base class for routines to select trial moves for beads.
-  * @version $Revision$
-  * @author John Shumway. */
-class Mover{
+#ifndef __MultiSpeciesParticleChooser_h_
+#define __MultiSpeciesParticleChooser_h_
+
+#include "ParticleChooser.h"
+class Species;
+class SimulationInfo;
+
+/// Class for choosing particles at random from a more than one species.
+
+class MultiSpeciesParticleChooser : public ParticleChooser {
+  typedef blitz::Array<int,1> IArray;
 public:
+  /// Construct by giving Species and number of moving particles.
+  MultiSpeciesParticleChooser( const Species * speciesList, const int nspecies, const int nmoving);
   /// Virtual destructor.
-  virtual ~Mover() {}
-  /// Move the samplers moving beads for a given level, returning
-  /// the probability for the old move divided by the probability for the 
-  /// new move.
-    //  virtual double makeMove(MultiLevelSampler&, const int level)=0;
-  virtual double makeMove(MultiLevelSampler&, const int level){return 0;}
-  virtual double makeMove(DisplaceMoveSampler&) {return 0;}
-  virtual double makeMove(DoubleDisplaceMoveSampler&) {return 0;}
+  virtual ~MultiSpeciesParticleChooser();
+  /// Choose a new set of particles.
+  virtual void chooseParticles();
+
+ protected:
+  IArray speciesContainer;
+  int count;
 };
 #endif

@@ -388,7 +388,11 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
     }
     if (name=="PermutationEstimator") {
-      manager->add(new PermutationEstimator(simInfo,mpi));
+      std::string name=getStringAttribute(estNode,"name");
+      std::string species1=getStringAttribute(estNode,"species1");
+      //      std::string species1=getStringAttribute(estNode,"species");
+      const Species &s1(simInfo.getSpecies(species1));
+      manager->add(new PermutationEstimator(simInfo, name, s1, mpi));
     }
     if (name=="JEstimator") {
       int nBField=getIntAttribute(estNode,"nBField");
@@ -407,10 +411,20 @@ template<int N>
 PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
     xmlXPathObjectPtr obj) {
   std::string name=getStringAttribute(estNode,"name");
-  std::string species1=getStringAttribute(estNode,"species1");
-  std::string species2=getStringAttribute(estNode,"species2");
-  const Species &s1(simInfo.getSpecies(species1));
-  const Species &s2(simInfo.getSpecies(species2));
+  // std::string species1=getStringAttribute(estNode,"species1");
+  //const Species &s1(simInfo.getSpecies(species1));
+
+  int nspecies = getIntAttribute(estNode,"nspecies");
+  if (nspecies == 0) nspecies=2;
+  Species *speciesList = new Species [nspecies];
+  for (int ispec=0; ispec<nspecies; ispec++){
+    std::stringstream sispec;
+    sispec << "species"<<(ispec+1);
+    std::string speciesName=getStringAttribute(estNode,sispec.str());
+    std :: cout<<"Picked species "<< speciesName <<" for pairCF."<<std :: endl;
+    speciesList[ispec]=simInfo.getSpecies(speciesName);
+    }
+  
   typename PairCFEstimator<N>::VecN min(0.), max(1.);
   typename PairCFEstimator<N>::IVecN nbin(1);
   typename PairCFEstimator<N>::DistN dist(N,(PairDistance*)0);
@@ -472,7 +486,8 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
 std::cout << name << min[idist] << " - " << max[idist] << "  " << nbin << std::endl;
     }
   }
-  return new PairCFEstimator<N>(simInfo,name,s1,s2,min,max,nbin,dist,mpi);
+  return new PairCFEstimator<N>(simInfo,name,speciesList,nspecies,min,max,nbin,dist,mpi);
+  delete [] speciesList;
 }
 
 void EstimatorParser::parseDistance(xmlNodePtr estNode, 
