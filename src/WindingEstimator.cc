@@ -68,7 +68,7 @@ void WindingEstimator::endCalc(int nslice) {
   if (mpi) {
     Vec buffer1, buffer2;
     mpi->getWorkerComm().Reduce(&winding1,&buffer1,NDIM,MPI::DOUBLE,MPI::SUM,0);
-    mpi->getWorkerComm().Reduce(&winding1,&buffer2,NDIM,MPI::DOUBLE,MPI::SUM,0);
+    mpi->getWorkerComm().Reduce(&winding2,&buffer2,NDIM,MPI::DOUBLE,MPI::SUM,0);
     winding1 = buffer1; winding2 = buffer2;
   }
   #endif

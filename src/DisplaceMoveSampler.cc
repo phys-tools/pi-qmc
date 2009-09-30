@@ -145,7 +145,7 @@ bool DisplaceMoveSampler::tryMove(int imovingNonPerm) {
 
     double acceptProb = exp(-netDeltaAction);
     bool acceptReject = RandomNumGenerator::getRand()>acceptProb;
-    mpi->getWorkerComm().Bcast(&acceptReject,1,MPI::LOGICAL,0); 
+    mpi->getWorkerComm().Bcast(&acceptReject,1,MPI::CHAR,0); 
     if (acceptReject) return false;
   }else
     {
