@@ -43,7 +43,10 @@ public:
   int getNPart() const {return npart;}
   /// Get the number of slices.
   int getNSlice() const {return nslice;}
-  virtual int getnprocSlice(){return nslice;}
+  /// Get the number of slices on this processor.
+  virtual int getNProcSlice(){return nslice;}
+  /// Get the number of slices unique to this processor.
+  virtual int getNUniqueSlice() {return nslice;}
   /// Get the temperature for a slice.
   double getTau() const {return tau;}
   /// Get the supercell.

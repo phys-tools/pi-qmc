@@ -121,24 +121,24 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
   return u;
 }
 
-//displace move
-double CoulombAction::getActionDifference(const DisplaceMoveSampler& sampler,
-                                         const int nMoving) {
+double CoulombAction::getActionDifference(const Paths &paths, 
+    const VArray &displacement, int nmoving, const IArray &movingIndex, 
+    int iFirstSlice, int nslice) {
+  SuperCell cell=paths.getSuperCell();
   double u=0;
   for (unsigned int i=0; i<pairActionArray.size(); ++i) {
-    u += pairActionArray[i]->getActionDifference(sampler, nMoving);
+    u += pairActionArray[i]->getActionDifference(paths, displacement, nmoving,
+                               movingIndex, iFirstSlice, nslice); 
   }
   // Compute long range Ewald action at lowest level.
   if (ewaldSum) {
-    const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
-    const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-    const int nSlice=pathsBeads.getNSlice();
-    const IArray& index=sampler.getMovingIndex(); 
-    
-    for (int islice=1; islice<nSlice-1; ++islice) {
-      for (int i=0; i<npart; ++i) rewald(i)=pathsBeads(i,islice);
+    for (int islice=iFirstSlice; islice<nslice; ++islice) {
+      for (int i=0; i<npart; ++i) rewald(i)=paths(i,islice);
       u -= ewaldSum->evalLongRange(rewald)*tau/epsilon;
-      for (int i=0; i<nMoving; ++i) rewald(index(i))=movingBeads(i,islice);
+      for (int i=0; i<nmoving; ++i) {
+        rewald(movingIndex(i))+=displacement(i);
+        rewald(movingIndex(i))=cell.pbc(rewald(movingIndex(i)));
+      }
       u += ewaldSum->evalLongRange(rewald)*tau/epsilon;
     }
   }

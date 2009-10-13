@@ -223,19 +223,13 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
   return deltaAction*nStride;
 }
 
-// displace move
-double PairAction::getActionDifference(const DisplaceMoveSampler& sampler,
-                                         const int nMoving) {
-  const Beads<NDIM>& pathsBeads=sampler.getPathsBeads();
-  const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-  const SuperCell& cell=sampler.getSuperCell();
-  const int nStride=1; //(int)pow(2,level);
-  const int nSlice=pathsBeads.getNSlice();
-  const IArray& index=sampler.getMovingIndex(); 
-  //const int nMoving=index.size();
+double PairAction::getActionDifference(const Paths &paths, 
+    const VArray &displacement, int nmoving, const IArray &movingIndex, 
+    int iFirstSlice, int nslice) {
+  const SuperCell& cell=paths.getSuperCell();
   double deltaAction=0;
-  for (int iMoving=0; iMoving<nMoving; ++iMoving) {
-    const int i=index(iMoving);
+  for (int iMoving=0; iMoving<nmoving; ++iMoving) {
+    const int i=movingIndex(iMoving);
     int jbegin,jend;
     if (i>=ifirst1 && i<ifirst1+npart1) {
       jbegin=ifirst2; jend=ifirst2+npart2;
@@ -246,19 +240,21 @@ double PairAction::getActionDifference(const DisplaceMoveSampler& sampler,
     continue; //Particle not in this interaction.
     for (int j=jbegin; j<jend; ++j) {
       bool isMoving=false; int jMoving=0;
-      for (int k=0;k<nMoving;++k) {
-        if (j==index(k)) {isMoving=true; jMoving=k; break;}
+      for (int k=0;k<nmoving;++k) {
+        if (j==movingIndex(k)) {isMoving=true; jMoving=k; break;}
       }
       if (isMoving && i<=j) continue; //Don't double count moving interactions.
-      Vec prevDelta =pathsBeads(i,0);
-      prevDelta-=pathsBeads(j,0); cell.pbc(prevDelta);
+      Vec prevDelta =paths(i,iFirstSlice);
+      prevDelta-=paths(j,iFirstSlice); cell.pbc(prevDelta);
       Vec prevMovingDelta=prevDelta;
       double prevR=sqrt(dot(prevDelta,prevDelta));
       double prevMovingR=prevR;
-      for (int islice=nStride; islice<nSlice; islice+=nStride) {
+      for (int islice=iFirstSlice+1; islice<nslice; islice++) {
         // Add action for moving beads.
-        Vec delta=movingBeads(iMoving,islice);
-        delta-=(isMoving)?movingBeads(jMoving,islice):pathsBeads(j,islice);
+        Vec delta=paths(i,islice);
+        delta+=displacement(iMoving);
+        delta-=paths(j,islice);
+        if (isMoving) delta-=displacement(jMoving);
         cell.pbc(delta);
         double r=sqrt(dot(delta,delta));
         double q=0.5*(r+prevMovingR);
@@ -268,8 +264,8 @@ double PairAction::getActionDifference(const DisplaceMoveSampler& sampler,
       
         prevMovingDelta=delta; prevMovingR=r;
         // Subtract action for old beads.
-        delta=pathsBeads(i,islice);
-        delta-=pathsBeads(j,islice);
+        delta=paths(i,islice);
+        delta-=paths(j,islice);
         cell.pbc(delta);
         r=sqrt(dot(delta,delta));
         q=0.5*(r+prevR);
@@ -281,12 +277,8 @@ double PairAction::getActionDifference(const DisplaceMoveSampler& sampler,
       }
     }
   }
-  return deltaAction*nStride;
+  return deltaAction;
 }
-
-
-
-
 
 double PairAction::getTotalAction(const Paths& paths, int level) const {
   return 0;

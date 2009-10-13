@@ -36,11 +36,14 @@ double CompositeAction::getActionDifference(
   return diff;
 }
 
-double CompositeAction::getActionDifference(
-    const DisplaceMoveSampler& sampler, const int nmoving) {
+double CompositeAction::getActionDifference(const Paths &paths, 
+    const VArray &displacement, int nmoving, const IArray &movingIndex, 
+    int iFirstSlice, int nslice) {
   double diff=0;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
-    if (*action) diff+=(*action)->getActionDifference(sampler, nmoving);
+    if (*action)
+      diff+=(*action)->getActionDifference(paths,displacement,nmoving,
+                                           movingIndex,iFirstSlice,nslice);
   }
   return diff;
 }

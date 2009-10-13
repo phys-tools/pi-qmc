@@ -19,7 +19,7 @@
 class DoubleMLSampler;class DoubleDisplaceMoveSampler;
 class DoubleSectionChooser;
 class Paths;
-#include <blitz/tinyvec.h>
+#include <blitz/array.h>
 
 /// Virtual base class for calculating the fermi action that depends
 /// on two slices
@@ -32,13 +32,18 @@ class DoubleAction {
 public:
   /// Typdefs and constants.
   typedef blitz::TinyVector<double,NDIM> Vec;
+  typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<Vec,1> VArray;
   /// Virtual destructor.
   virtual ~DoubleAction() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const DoubleMLSampler&,
-                                     int level)=0;
- virtual double getActionDifference(const DoubleDisplaceMoveSampler&,
-				    const int nMoving)=0;
+                                     int level) {return 0;}
+  /// Calculate the difference in action.
+  virtual double getActionDifference(const Paths&, const VArray &displacement,
+    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice) {
+    return 0;
+  }
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const=0;
   /// Calculate action and derivatives at a bead (defaults to no
@@ -47,7 +52,6 @@ public:
           double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const=0;
   /// Initialize for a sampling section.
   virtual void initialize(const DoubleSectionChooser&) {};
-  virtual void initialize(const DoubleDisplaceMoveSampler &){};
 
   /// Accept last move.
   virtual void acceptLastMove() {};

@@ -62,6 +62,14 @@ public:
     for (int i=0; i<a.size(); ++i) a(i)=getRand();
   }
 
+  /** Fill a blitz array with uniform random numbers. */
+  template <int N>
+  static void makeRand(blitz::Array<blitz::TinyVector<double,N>,1>& a) {
+    for (int j=0; j<a.size(); ++j) {
+      for (int i=0; i<N; ++i) a(j)[i]=getRand();
+    }
+  }
+
   /** Fill a blitz array with Gaussian distributed random
       numbers using Box-Mueller algorithm. */
   static void makeGaussRand(blitz::Array<double,1>& a) {

@@ -93,7 +93,7 @@ double SpinAction::getActionDifference(
 double SpinAction::getActionDifference(
     const DisplaceMoveSampler& sampler, const int nMoving) {
   double diff=0;
-  const int nStride=1;
+/*  const int nStride=1;
 #if NDIM==4
   const Beads<4>& pathsBeads=sampler.getPathsBeads();
   const Beads<4>& movingBeads=sampler.getMovingBeads();
@@ -140,6 +140,7 @@ double SpinAction::getActionDifference(
 //#endif
     }
   }
+*/
   return diff;
 }
 

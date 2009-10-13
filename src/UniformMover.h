@@ -1,4 +1,4 @@
-// $Id: UniformMover.h 22  2009-05-18 Saad Khairallah  $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -18,22 +18,25 @@
 #define __UniformMover_h_
 #include <blitz/array.h>
 #include <vector>
-#include "Mover.h"
 
 class MPIManager;
+class DisplaceMoveSampler;
+class DoubleDisplaceMoveSampler;
 
-class UniformMover : public Mover {
+class UniformMover {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   typedef blitz::TinyVector<double,NDIM> Vec;
+  typedef blitz::Array<Vec,1> VArray;
 
-  UniformMover( const MPIManager *mpi=0);
+  UniformMover(double dist, const MPIManager *mpi);
   virtual ~UniformMover();
-  virtual double makeMove(DisplaceMoveSampler&);
-  virtual double makeMove(DoubleDisplaceMoveSampler&);
- private:
+  virtual double makeMove(VArray&) const;
+  virtual double makeMove(DoubleDisplaceMoveSampler&) const;
+private:
+  const double dist;
   const MPIManager* mpi;
 };
 #endif

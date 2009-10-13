@@ -53,7 +53,10 @@ public:
 
   /// Get a slice.
   virtual void getSlice(int islice, VArray& ) const;
-  virtual int getnprocSlice(){return nprocSlice;}
+  /// Get the number of slices on this processor.
+  virtual int getNProcSlice(){return nprocSlice;}
+  /// Get the number of slices unique to this processor.
+  virtual int getNUniqueSlice(){return nprocSlice-1;}
   /// Get auxialiary bead.
   virtual const void* getAuxBead(const int ipart, const int islice, 
                                  const int iaux) const;

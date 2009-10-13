@@ -1,4 +1,4 @@
-// $Id: UniformMover.cc 22 2009-03-06 13:52:07Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -34,57 +34,40 @@
 
 #include <sstream>
 #include <string>
-UniformMover::UniformMover(const MPIManager* mpi)
-  : mpi(mpi) {
+UniformMover::UniformMover(double dist, const MPIManager* mpi)
+  : dist(dist), mpi(mpi) {
 }
 
 UniformMover::~UniformMover() {
  }
 
-double UniformMover::makeMove(DisplaceMoveSampler& sampler) {
-  // typedef blitz::TinyVector<double,NDIM> Vec;
-  Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-  const SuperCell& cell=sampler.getSuperCell();
-  const double dist = sampler.getDist();
-  const int nSlice = sampler.getNSlice();
-  const int ifirstSlice = 0; 
-   IArray& index=sampler.getMovingIndex(); 
-  const int nMoving=index.size();
-  Array uniRand(nMoving*NDIM);
-  RandomNumGenerator::makeRand(uniRand); // fix::makerand should take a vec. also.  
+double UniformMover::makeMove(VArray& displacement) const {
+  int npart=displacement.size();
+  const Vec half = 0.5;
+  RandomNumGenerator::makeRand(displacement);
+  for (int i=0; i<npart; i++){
+    displacement(i) -= half;
+    displacement(i) *= dist;
+  }
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {
-    mpi->getWorkerComm().Bcast(&uniRand(0),nMoving*NDIM,MPI::DOUBLE,0);
+    mpi->getWorkerComm().Bcast(displacement.data(),nMoving*NDIM,MPI::DOUBLE,0);
   }
 #endif
-  
-  // Calculate the new position.
-  double * dr = new double[NDIM]; 
-  for (int i=0; i<NDIM; i++){
-    for (int iMoving=0; iMoving<nMoving; ++iMoving) {
-      dr[i] =  dist*(uniRand(NDIM*iMoving+i)-0.5);	
-      for (int islice=0; islice<nSlice; islice++) {
-	movingBeads(iMoving,islice)[i] += dr[i];
-	cell.pbc(movingBeads(iMoving,islice));
-      }
-    }
-  }
-
-  delete [] dr;
   return 0; 
 }
 
 
-double UniformMover::makeMove(DoubleDisplaceMoveSampler& sampler) {
+double UniformMover::makeMove(DoubleDisplaceMoveSampler& sampler) const {
+/*
   // typedef blitz::TinyVector<double,NDIM> Vec;
   // Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   Beads<NDIM>& movingBeads1=sampler.getMovingBeads(1);
   Beads<NDIM>& movingBeads2=sampler.getMovingBeads(2); 
   const SuperCell& cell=sampler.getSuperCell();
-  const double dist = sampler.getDist();
   const int nSlice = sampler.getNSlice(); 
  
-  IArray& index=sampler.getMovingIndex(); 
+  const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
   Array uniRand(nMoving*NDIM);// fix::makerand should take a vec. also.  
   RandomNumGenerator::makeRand(uniRand); 
@@ -110,5 +93,6 @@ double UniformMover::makeMove(DoubleDisplaceMoveSampler& sampler) {
   }
   
   delete [] dr;
+*/
   return 0; 
 }

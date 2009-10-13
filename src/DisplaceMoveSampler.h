@@ -1,5 +1,5 @@
-// $Id: DisplaceMoveSampler.h 22  2009-05-18 Saad Khairallah $
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+// $Id$
+/*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,18 +16,14 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __DisplaceMoveSampler_h_
 #define __DisplaceMoveSampler_h_
-template <int TDIM> class Beads;
 class SuperCell;
 class Action;
-class DoubleAction;
-class Mover;
+class UniformMover;
 class Paths;
-class PathsChooser;
 class ParticleChooser;
 class PermutationChooser;
 class Permutation;
 class AccRejEstimator;
-class BeadFactory;
 class MPIManager;
 
 #include "Algorithm.h"
@@ -35,57 +31,53 @@ class MPIManager;
 #include <blitz/array.h>
 #include <iostream>
 
-
+/** Class to perform classical displacements of the particles.
+  @author Saad Khairallah, John Shumway
+*/
 class DisplaceMoveSampler : public Algorithm {
 public:
   typedef blitz::Array<int,1> IArray;
-  DisplaceMoveSampler(const int nmoving, Paths&,  const double dist, const double freq,
-		      ParticleChooser&, Mover&, Action*, const int nrepeat,
-		      const BeadFactory&, const MPIManager* mpi);
+  typedef blitz::TinyVector<double,NDIM> Vec;
+  typedef blitz::Array<Vec,1> VArray;
+  /// Constructor.
+  DisplaceMoveSampler(const int nmoving, const int nrepeat,
+    Paths&, ParticleChooser&, const UniformMover&, Action*, 
+    const MPIManager* mpi);
+  /// Destructor.
   virtual ~DisplaceMoveSampler();
+  /// Run method, performs nrepeat samplings with probability ifreq.
   virtual void run();
-  Beads<NDIM>& getMovingBeads() {return *movingBeads;}
-  Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
-  Beads<NDIM>& getPathsBeads() {return *pathsBeads;}
-  const Beads<NDIM>& getPathsBeads() const {return *pathsBeads;}
-  IArray&  getMovingIndex() {return *movingIndex;}
-  const IArray&  getMovingIndex() const {return *movingIndex;}
-  void setAction(Action*, const int level=0); /// not needed
-  const SuperCell& getSuperCell() const {return cell;}
-  const Paths& getPaths() const {return paths;}
-  double getDist() {return dist;}
-  int getNSlice() {return nslice;}
-  int getNSlice() const {return nslice;}
-
   /// Get a pointer to the accept/reject statistic estimator.
   /// (You are responsible for deleting this new object.) 
   virtual AccRejEstimator* getAccRejEstimator(const std::string& name);
-
 protected:
-  bool tryMove(int imovingNonPerm);
-
-  Beads<NDIM> *pathsBeads;
-  Beads<NDIM> *movingBeads;
-  //const Permutation & pathsPermutation;
-  ParticleChooser& particleChooser; 
-  Mover& mover;
-  Action *action; // DoubleAction *doubleAction;
-  Paths& paths;
-  AccRejEstimator* accRejEst;
-
-  IArray *movingIndex;
-  IArray identityIndex; 
-  const BeadFactory& beadFactory;
-  const SuperCell& cell; 
-  const MPIManager* mpi;
-  const int nrepeat;
-  const double dist;
-  const double freq;
+  /// The number of particles to move together.
   const int nmoving;
- 
+  /// The number of times to try dispace moves.
+  const int nrepeat;
+  /// The number of slices this worker is moving. 
   int nslice;
+  /// The first slice this worker is moving. 
   int iFirstSlice;
-
-
+  /// The dispalcement of the moving particles in a particular attempt.
+  VArray displacement;
+  /// Index of the particles to be moved.
+  IArray movingIndex;
+  /// Helper class to choose the particles to move.
+  ParticleChooser& particleChooser; 
+  /// Helper class to choose the displacement.
+  const UniformMover& mover;
+  /// A reference to the paths.
+  Paths& paths;
+  /// A reference to the simulation super cell.
+  const SuperCell& cell; 
+  /// The action to be evaluated during the move.
+  Action *action;
+  /// A pointer to the accept-reject estimator.
+  AccRejEstimator* accRejEst;
+  /// A pointer to the MPI manager, zero if MPI is not used.
+  const MPIManager* mpi;
+  /// Method to atempt a Monte Carlo move, return true if accepted.
+  virtual bool tryMove();
 };
 #endif

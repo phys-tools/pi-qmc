@@ -20,7 +20,7 @@ class MultiLevelSampler;
 class DisplaceMoveSampler; 
 class SectionChooser;
 class Paths;
-#include <blitz/tinyvec.h>
+#include <blitz/array.h>
 #include <typeinfo>
 
 /// Virtual base class for calculating the action.
@@ -33,11 +33,17 @@ class Action {
 public:
   /// Typdefs and constants.
   typedef blitz::TinyVector<double,NDIM> Vec;
+  typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<Vec,1> VArray;
   /// Virtual destructor.
   virtual ~Action() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&, int level)=0;
-  virtual double getActionDifference(const DisplaceMoveSampler&, int nmoving)=0;
+  /// Calculate the difference in action.
+  virtual double getActionDifference(const Paths&, const VArray &displacement,
+    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice) {
+    return 0;
+  }
  
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const=0;
@@ -47,7 +53,6 @@ public:
           double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const=0;
   /// Initialize for a sampling section.
   virtual void initialize(const SectionChooser&) { };
-  virtual void initialize(const DisplaceMoveSampler &) {};
 
   /// Accept last move.
   virtual void acceptLastMove() {};

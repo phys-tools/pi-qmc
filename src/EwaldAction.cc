@@ -124,6 +124,7 @@ return diff;
 double EwaldAction::getActionDifference( const DisplaceMoveSampler& sampler, const int nMoving) {
   double diff=0;
 return diff;
+/*
   for (ConstSRActIter action=actions.begin(); action<actions.end(); ++action) {
     if (*action) diff+=(*action)->getActionDifference(sampler, nMoving);
   }
@@ -154,6 +155,7 @@ return diff;
     }
     //}
   return diff;
+*/
 }
 
 double EwaldAction::getTotalAction(const Paths& paths, int level) const {

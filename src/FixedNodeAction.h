@@ -89,10 +89,9 @@ public:
   ~FixedNodeAction();
   /// Calculate the difference in action.
   virtual double getActionDifference(const DoubleMLSampler&,int level);
-  // virtual double getActionDifference(const DisplaceMoveSampler&,
-  //			    const int nMoving){ return 0;};
- virtual double getActionDifference(const DoubleDisplaceMoveSampler&,
-				    const int nMoving);
+  /// Calculate the difference in action.
+  virtual double getActionDifference(const Paths&, const VArray &displacement,
+    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate action and derivatives at a bead.
@@ -100,7 +99,6 @@ public:
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
   /// Initialize for a sampling section.
   virtual void initialize(const DoubleSectionChooser&);
-  virtual void initialize(const DoubleDisplaceMoveSampler &);
   /// Accept last move.
   virtual void acceptLastMove();
 private:

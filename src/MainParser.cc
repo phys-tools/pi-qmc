@@ -105,9 +105,9 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
       xmlNodePtr& node=obj->nodesetval->nodeTab[i];
       int nrepeat =getIntAttribute(node,"nrepeat");
       if (mpi){
-	if (nrepeat>0) maxlevel= log(nslices/mpi->getNWorker())/log(2);
+//	if (nrepeat>0) maxlevel= log(nslices/mpi->getNWorker())/log(2);
       }else{
-	  if (nrepeat>0) maxlevel=log(nslices)/log(2);
+//	  if (nrepeat>0) maxlevel=log(nslices)/log(2);
       }
       }
     }

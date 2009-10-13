@@ -36,12 +36,14 @@ double CompositeDoubleAction::getActionDifference(
   return diff;
 }
 
-////////// displace
-double CompositeDoubleAction::getActionDifference(
-    const DoubleDisplaceMoveSampler& sampler, const int nMoving) {
+double CompositeDoubleAction::getActionDifference(const Paths &paths, 
+    const VArray &displacement, int nmoving, const IArray &movingIndex, 
+    int iFirstSlice, int nslice) {
   double diff=0;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
-    if (*action) diff+=(*action)->getActionDifference(sampler,nMoving);
+    if (*action)
+      diff+=(*action)->getActionDifference(paths,displacement,nmoving,
+                                           movingIndex,iFirstSlice,nslice);
   }
   return diff;
 }
@@ -74,13 +76,6 @@ void CompositeDoubleAction::initialize(const DoubleSectionChooser&
   }
 }
 
-/////// displace
-void CompositeDoubleAction::initialize(const DoubleDisplaceMoveSampler& 
-                                             sampler) {
-  for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
-    (*action)->initialize(sampler);
-  }
-}
 void CompositeDoubleAction::acceptLastMove() {
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
     (*action)->acceptLastMove();

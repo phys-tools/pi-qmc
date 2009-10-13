@@ -108,10 +108,10 @@ double SpringAction::getActionDifference(const MultiLevelSampler& sampler,
 }
 
 
-// displacemove
-double SpringAction::getActionDifference(const DisplaceMoveSampler& sampler,
-                                         const int nMoving) {
-  return 0;
+double SpringAction::getActionDifference(const Paths &paths, 
+   const VArray &displacement, int nmoving, const IArray &movingIndex, 
+   int iFirstSlice, int nslice) {
+ return 0; //No change in action for uniform displacements of particles.
 }
 
 

@@ -54,7 +54,8 @@ void PathReader::run() {
     std::string temp; 
     *infile >> temp; 
     if (temp.compare("#Permutations") == 0) {
-      std :: cout <<"Clone ID :: "<< cloneID<<" :: Found an Permutations array in restart file: " << std::endl;
+      std::cout << "Clone ID :: " << cloneID
+         << " :: Found a Permutations array in restart file: " << std::endl;
       permutationsFlag = true;
       std :: cout << temp<<"  ";
       for (int i=0; i < npart; i++){
@@ -65,7 +66,10 @@ void PathReader::run() {
       getline(*infile,temp); 
     }
     else{
-      std :: cout << "WARNING :: Did not find #Permutations in the restart file. Automatically set up Permutations from paths."<<std :: endl; 
+      std::cout << "WARNING :: Did not find #Permutations in the restart file."
+                << std::endl; 
+      std::cout << "Automatically set up Permutations from paths."
+                << std::endl; 
       getline(*infile,temp); 
     }
     for (int i=0; i<npart; ++i) {
@@ -128,7 +132,8 @@ void PathReader::run() {
   paths.setBuffers();
   delete infile;
   if (workerID==0 && !permutationsFlag){
-    std::cout << "Clone ID :: "<<mpi->getCloneID()<<" :: Permuation read in is " << p << std::endl; 
+    std::cout << "Clone ID :: " << cloneID << " :: Permuation read in is "
+              << p << std::endl; 
   }
   delete &slice;
 
