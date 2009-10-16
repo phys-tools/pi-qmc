@@ -30,7 +30,7 @@ public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   /// Constructor
-  RingGateAction(const SimulationInfo &simInfo, const double Vg, const double s, const double theta0, const Species&);
+  RingGateAction(const SimulationInfo &simInfo, const double GVolt, const double s, const double theta0, const Species&);
   /// Virtual destructor.
   virtual ~RingGateAction() {}
   /// Calcuate the difference in action.
@@ -46,7 +46,7 @@ private:
   /// The timestep.
   const double tau;
   /// The interatction parameters.
-  const double Vg, s, theta0;
+  const double GVolt, s, theta0;
   /// The first particle in this interaction.
   const int ifirst;
   /// The number of particles with this interaction.

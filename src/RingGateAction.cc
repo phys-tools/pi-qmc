@@ -32,8 +32,8 @@
 
 /* 
 This is a potential for a 2d ring mimicking the gate potential in experiments.
-The potential is Vg * (tanh(s(theta+theta0)) - tanh(s(theta-theta0))).
-Vg is the potential of the top gate in energy unit.
+The potential is GVolt * (tanh(s(theta+theta0)) - tanh(s(theta-theta0))).
+GVolt is the potential of the top gate in energy unit.
 s is a parameter.
 theta0 is defined w.r.t x-axis and cannot be zero.
 
@@ -42,8 +42,8 @@ Virial -- not works
 @author Jianheng Liu
 */
 
-RingGateAction::RingGateAction(const SimulationInfo &simInfo, const double Vg, const double s, const double theta0, const Species &species)
-  : tau(simInfo.getTau()), Vg(Vg), s(s), theta0(theta0), ifirst(species.ifirst), npart(species.count){
+RingGateAction::RingGateAction(const SimulationInfo &simInfo, const double GVolt, const double s, const double theta0, const Species &species)
+  : tau(simInfo.getTau()), GVolt(GVolt), s(s), theta0(theta0), ifirst(species.ifirst), npart(species.count){
 }
 
 double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {
@@ -69,14 +69,14 @@ double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, con
       x = delta[0];
       y = delta[1];
       theta = atan2(y,x);
-      deltaAction+=Vg * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
+      deltaAction+=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
       // Subtract action for old beads.
       delta = sectionBeads(i,islice);
       cell.pbc(delta);
       x = delta[0];
       y = delta[1];
       theta = atan2(y,x);
-      deltaAction+=Vg * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
+      deltaAction-=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
     }
   }
   return deltaAction;
@@ -94,6 +94,6 @@ void RingGateAction::getBeadAction(const Paths& paths, int ipart, int islice, do
   double y = delta[1];
   double theta = 0;
   theta = atan2(y,x);
-  utau=Vg * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0)));
+  utau=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0)));
   u = utau * tau;
 }

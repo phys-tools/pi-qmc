@@ -317,7 +317,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
           exit(-1);
         }
       }
-      double Vg = getEnergyAttribute(actNode,"Vg");
+      double GVolt = getEnergyAttribute(actNode,"Vg");
       double s = getDoubleAttribute(actNode,"s");
       double theta0 = getDoubleAttribute(actNode,"theta0");
       if (theta0 == 0) {
@@ -328,7 +328,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       std::string specName=getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
       if (irank == 0) std::cout << "The ring gate action is set." << std::endl;
-      composite->addAction(new RingGateAction(simInfo,Vg,s,theta0,species));
+      composite->addAction(new RingGateAction(simInfo,GVolt,s,theta0,species));
       continue;
     } else if (name=="SpringTensorAction") {
       composite->addAction(new SpringTensorAction(simInfo));
