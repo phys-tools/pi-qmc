@@ -57,10 +57,16 @@ class FileGroup(object):
       nslice[i] = file.getNSlice()
     return nslice
 
-  def getScalar(self,name,unit=None):
+  def getTemperature(self,unit=Unit.Ha):
+    temperature = numpy.zeros(self.nfile,numpy.float64)
+    for i,file in enumerate(self.fileList):
+      temperature[i] = file.getTemperature(unit)
+    return temperature
+
+  def getScalar(self,name,unit=None,nskip=0):
     scalar = numpy.zeros(self.nfile)
     error = numpy.zeros(self.nfile)
     for i,file in enumerate(self.fileList):
-      scalar[i],error[i] = file.getScalar(name,unit).getAverage()
+      scalar[i],error[i] = file.getScalar(name,unit).getAverage(nskip=nskip)
     return scalar,error
 
