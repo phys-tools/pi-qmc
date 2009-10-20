@@ -19,4 +19,8 @@ class PairCF(object):
   def __str__(self):
     return "Pair correlation function '%s'" % (self.name)
 
-
+  def getCoordinateGrid(self, rmax, idim=0, rmin=0.):
+    ngrid = self.data.shape[idim]
+    dr = (rmax-rmin)/ngrid
+    r = (numpy.arange(ngrid)+0.5)*dr+rmin
+    return r,dr;

@@ -94,3 +94,7 @@ class File(object):
     except:
       error = None
     return PairCF(name,data,error)
+
+  def getAllSpecies(self):
+    slist = []
+    return slist
