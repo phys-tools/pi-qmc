@@ -82,7 +82,7 @@ void DisplaceMoveSampler::run() {
     if (reject) continue;
 #ifdef ENABLE_MPI
     if ( nworker > 1) {
-      mpi->getWorkerComm().Bcast(&(*movingIndex)(0), nmoving, MPI::INT, 0); 
+      mpi->getWorkerComm().Bcast(&(movingIndex)(0), nmoving, MPI::INT, 0); 
     }
 #endif
     tryMove();
@@ -93,7 +93,7 @@ void DisplaceMoveSampler::run() {
 bool DisplaceMoveSampler::tryMove() {
  
   accRejEst->tryingMove(0);
-  mover.makeMove(displacement);
+  mover.makeMove(displacement,nmoving);
 
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 

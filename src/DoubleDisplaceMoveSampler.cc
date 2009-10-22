@@ -57,7 +57,7 @@ DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {
 bool DoubleDisplaceMoveSampler::tryMove() {
  
   accRejEst->tryingMove(0);
-  mover.makeMove(displacement);
+  mover.makeMove(displacement,nmoving);
 
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 

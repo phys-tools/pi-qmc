@@ -33,7 +33,7 @@ public:
 
   UniformMover(double dist, const MPIManager *mpi);
   virtual ~UniformMover();
-  virtual double makeMove(VArray&) const;
+  virtual double makeMove(VArray&, const int&) const;
   virtual double makeMove(DoubleDisplaceMoveSampler&) const;
 private:
   const double dist;
