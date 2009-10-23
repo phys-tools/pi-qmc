@@ -42,6 +42,7 @@
 #include "HyperbolicMover.h"
 #include "Collect.h"
 #include "CubicLattice.h"
+#include "RingLattice.h"
 #include "spin/SpinSetter.h"
 #include "SeedRandom.h"
 #include "Measure.h"
@@ -383,6 +384,15 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     } else {
       algorithm=new CubicLattice(*paths,a,scatter,n,aa,
                                  simInfo.getSpecies(speciesName),mpi);
+    }
+  } else if (name=="SetRingLattice") {
+    double radius = getLengthAttribute(ctxt->node,"radius");
+    double angle0 = getDoubleAttribute(ctxt->node,"angle0");
+    std::string speciesName=getStringAttribute(ctxt->node,"species");
+    if (speciesName=="") {
+      algorithm = new RingLattice(*paths,radius,angle0,mpi);
+    } else {
+      algorithm = new RingLattice(*paths,radius,angle0,simInfo.getSpecies(speciesName),mpi);
     }
   } else if (name=="ReadPaths") {
     std::string filename=getStringAttribute(ctxt->node,"file");
