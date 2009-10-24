@@ -47,8 +47,16 @@ void RingLattice::run() {
     int ipart = ifirst;
     double angleDist = 2. * 3.141592653589793 / npart;
     for (int i=0; i<npart; ++i) {
-      paths(ipart, ifirstSlice) = Vec(radius * cos(angleDist * i + angle0),
+      paths(ipart, ifirstSlice) =
+#if NDIM==2 
+                                  Vec(radius * cos(angleDist * i + angle0),
                                       radius * sin(angleDist * i + angle0));
+#endif
+#if NDIM==3
+                                  Vec(radius * cos(angleDist * i + angle0),
+                                      radius * sin(angleDist * i + angle0),
+                                      0);
+#endif
       cell.pbc(paths(ipart, ifirstSlice));
       ++ipart;
     }
