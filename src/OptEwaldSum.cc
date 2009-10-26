@@ -264,9 +264,9 @@ double OptEwaldSum::evalFK(const double k) const {
 
 double OptEwaldSum::evalFK0() const {
 #if NDIM==3
-  double fn = 4.*PI*rcut*rcut/2.;
+  double fn = 2.*PI*rcut*rcut;
   double v = -fn;
-  fn *= rcut*2./3.;
+  fn *= rcut/3.;
   for (int n=0; n<2*npoly; n+=2) {
     v += coef(n/2)*fn;
     fn *= (rcut*rcut)*(n+3.)/(n+5.);

@@ -57,7 +57,7 @@ DensityEstimator::~DensityEstimator() {
 
 void DensityEstimator::initCalc(const int nslice,
     const int firstSlice) {
-  temp=0;
+  temp=0.;
 }
 
 
@@ -93,7 +93,7 @@ void DensityEstimator::endCalc(const int lnslice) {
   temp /= nslice;
   if (workerID==0) {
     BlitzArrayBlkdEst<NDIM>::value+=temp;
-    norm+=1;
+    norm+=1.;
   }
 }
 
