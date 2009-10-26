@@ -25,36 +25,30 @@
 #include "SuperCell.h"
 #include "math.h"
 
-RingLattice::RingLattice(Paths& paths, const double radius, const double angle0, MPIManager *mpi):paths(paths), radius(radius), angle0(angle0),ifirst(0),npart(paths.getNPart()), mpi(mpi) {
+RingLattice::RingLattice(Paths& paths, const double radius, const double angle0, const double anglef, const double anglex, MPIManager *mpi):paths(paths), radius(radius),angle0(angle0), anglef(anglef), anglex(anglex),ifirst(0),npart(paths.getNPart()), mpi(mpi) {
 }
 
-RingLattice::RingLattice(Paths& paths, const double radius, const double angle0, const Species& species, MPIManager *mpi):paths(paths), radius(radius), angle0(angle0), ifirst(species.ifirst), npart(species.count), mpi(mpi) {
+RingLattice::RingLattice(Paths& paths, const double radius, const double angle0, const double anglef, const double anglex, const Species& species, MPIManager *mpi):paths(paths), radius(radius), angle0(angle0), anglef(anglef), anglex(anglex), ifirst(species.ifirst), npart(species.count), mpi(mpi) {
 }
 
 void RingLattice::run() {
   int nslice = paths.getNSlice();
-//  int nsites = npart;
-//  IArray n(nsites);
-//  n = npart / nsites;
-//#ifdef ENABLE_MPI
-//  if (mpi) mpi->getWorkerComm().Bcast(n.data(), nsites, MPI::INT, 0);
-//#endif
   // Place the particles on the ring.
   int ifirstSlice = paths.getLowestSampleSlice(0,false);
   int ilastSlice = paths.getHighestStoredSlice(0,false);
   SuperCell cell=paths.getSuperCell();
   if (!mpi || mpi->isCloneMain()) {
     int ipart = ifirst;
-    double angleDist = 2. * 3.141592653589793 / npart;
+    double angleDist = (anglef - angle0) /npart;
     for (int i=0; i<npart; ++i) {
       paths(ipart, ifirstSlice) =
 #if NDIM==2 
-                                  Vec(radius * cos(angleDist * i + angle0),
-                                      radius * sin(angleDist * i + angle0));
+                                  Vec(radius * cos(angle0 + angleDist * i + anglex),
+                                      radius * sin(angle0 + angleDist * i + anglex));
 #endif
 #if NDIM==3
-                                  Vec(radius * cos(angleDist * i + angle0),
-                                      radius * sin(angleDist * i + angle0),
+                                  Vec(radius * cos(angle0 + angleDist * i + anglex),
+                                      radius * sin(angle0 + angleDist * i + anglex),
                                       0);
 #endif
       cell.pbc(paths(ipart, ifirstSlice));

@@ -388,11 +388,19 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
   } else if (name=="SetRingLattice") {
     double radius = getLengthAttribute(ctxt->node,"radius");
     double angle0 = getDoubleAttribute(ctxt->node,"angle0");
+    double anglef = getDoubleAttribute(ctxt->node,"anglef");
+    double anglex = getDoubleAttribute(ctxt->node,"anglex");
+    if (anglef == angle0 && angle0 != 0) {
+      std::cout<<"The ending angle cannot be the same as the beginning angle."<<std::endl;
+      exit(-1);
+    }
+    if (anglef == 0 && angle0 == 0) anglef = 2 * 3.141592653589793;
+    std::cout<<"angle0 = "<<angle0<<"; anglef = "<<anglef<<std::endl;
     std::string speciesName=getStringAttribute(ctxt->node,"species");
     if (speciesName=="") {
-      algorithm = new RingLattice(*paths,radius,angle0,mpi);
+      algorithm = new RingLattice(*paths,radius,angle0,anglef,anglex,mpi);
     } else {
-      algorithm = new RingLattice(*paths,radius,angle0,simInfo.getSpecies(speciesName),mpi);
+      algorithm = new RingLattice(*paths,radius,angle0,anglef,anglex,simInfo.getSpecies(speciesName),mpi);
     }
   } else if (name=="ReadPaths") {
     std::string filename=getStringAttribute(ctxt->node,"file");
