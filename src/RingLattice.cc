@@ -39,7 +39,7 @@ void RingLattice::run() {
   SuperCell cell=paths.getSuperCell();
   if (!mpi || mpi->isCloneMain()) {
     int ipart = ifirst;
-    double angleDist = (anglef - angle0) /npart;
+    double angleDist = (anglef - angle0) / (npart-1);
     for (int i=0; i<npart; ++i) {
       paths(ipart, ifirstSlice) =
 #if NDIM==2 
