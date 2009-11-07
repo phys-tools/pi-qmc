@@ -394,9 +394,17 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       std::cout<<"The ending angle cannot be the same as the beginning angle."<<std::endl;
       exit(-1);
     }
-    if (anglef == 0 && angle0 == 0) anglef = 2 * 3.141592653589793;
-    std::cout<<"angle0 = "<<angle0<<"; anglef = "<<anglef<<std::endl;
     std::string speciesName=getStringAttribute(ctxt->node,"species");
+    int numpart = paths->getNPart();
+    if (anglef == 0 && angle0 == 0) {
+      if (speciesName=="") {
+      } else {
+        Species temp = simInfo.getSpecies(speciesName);
+        numpart = temp.count;
+      }
+      anglef = 2 * 3.141592653589793 * (numpart - 1) / numpart;
+    }
+    std::cout<<"angle0 = "<<angle0<<"; anglef = "<<anglef<<std::endl;
     if (speciesName=="") {
       algorithm = new RingLattice(*paths,radius,angle0,anglef,anglex,mpi);
     } else {
