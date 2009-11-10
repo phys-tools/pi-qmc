@@ -42,12 +42,17 @@ DoubleDisplaceMoveSampler::DoubleDisplaceMoveSampler(int nmoving, int nrepeat,
   : DisplaceMoveSampler(nmoving, nrepeat, paths, particleChooser, mover, 
                         action, mpi),
     doubleAction(doubleAction) { 
-    int totslice=paths.getNSlice();
+  /*    int totslice=paths.getNSlice();
     if (totslice==nslice) nslice/=2;
     iFirstSlice2=iFirstSlice+nslice;
-std::cout << "nslice=" << nslice << std::endl;
-std::cout << "iFirstSlice=" << iFirstSlice << std::endl;
-std::cout << "iFirstSlice2=" << iFirstSlice2 << std::endl;
+  */ 
+  // nslice = paths.getnprocSlice(); 
+  if (mpi->getNWorker() ==1 && mpi->getNClone()!=0){ nslice/=2; }
+  iFirstSlice = paths.getLowestSampleSlice(0,false);
+  iFirstSlice2 = (iFirstSlice + paths.getNSlice()/2)%paths.getNSlice();
+  std::cout << "nslice=" << nslice << std::endl;
+  std::cout << "iFirstSlice=" << iFirstSlice << std::endl;
+  std::cout << "iFirstSlice2=" << iFirstSlice2 << std::endl;
 }
 
 DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {
@@ -58,15 +63,20 @@ bool DoubleDisplaceMoveSampler::tryMove() {
  
   accRejEst->tryingMove(0);
   mover.makeMove(displacement,nmoving);
-
+  int iFirst = iFirstSlice;
+  int iFirst2 = iFirstSlice2;
+  if (mpi->getNWorker() >1 ){
+    iFirst = iFirstSlice+1;
+    iFirst2 = iFirstSlice2+1;
+  }
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 
    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                 iFirstSlice,nslice);
+                                 iFirst,nslice+iFirstSlice);
   deltaAction += (action==0) ?  0 
    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                 iFirstSlice2,nslice);
-
+                                 iFirst2,nslice+iFirstSlice2);
+  //Saad comment: fixednodeaction returns 0.
   deltaAction += (action==0) ?  0 
    : doubleAction->getActionDifference(paths,displacement,nmoving,movingIndex,
                                        iFirstSlice,nslice);

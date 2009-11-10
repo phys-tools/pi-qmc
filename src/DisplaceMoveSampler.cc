@@ -45,6 +45,8 @@ DisplaceMoveSampler::DisplaceMoveSampler(int nmoving, int nrepeat,
     particleChooser(particleChooser), mover(mover), 
     paths(paths), cell(paths.getSuperCell()), action(action),
     accRejEst(0),  mpi(mpi) {
+  std::cout << "nslice=" << nslice << std::endl;
+  std::cout << "iFirstSlice=" << iFirstSlice << std::endl;
 }
 
 DisplaceMoveSampler::~DisplaceMoveSampler() {
@@ -98,7 +100,7 @@ bool DisplaceMoveSampler::tryMove() {
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 
    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                 iFirstSlice,nslice);
+                                 iFirstSlice,nslice+iFirstSlice);
 
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {

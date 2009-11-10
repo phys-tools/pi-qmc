@@ -51,7 +51,7 @@ double UniformMover::makeMove(VArray& displacement, const int& nMoving) const {
   }
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {
-    mpi->getWorkerComm().Bcast(displacement.data(),nMoving*NDIM,MPI::DOUBLE,0);
+    mpi->getWorkerComm().Bcast(displacement.data(),npart*NDIM,MPI::DOUBLE,0);
   }
 #endif
   return 0; 

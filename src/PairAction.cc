@@ -249,7 +249,8 @@ double PairAction::getActionDifference(const Paths &paths,
       Vec prevMovingDelta=prevDelta;
       double prevR=sqrt(dot(prevDelta,prevDelta));
       double prevMovingR=prevR;
-      for (int islice=iFirstSlice+1; islice<nslice; islice++) {
+      //      for (int islice=iFirstSlice+1; islice<nslice; islice++) {
+      for (int islice=iFirstSlice; islice<nslice; islice++) {
         // Add action for moving beads.
         Vec delta=paths(i,islice);
         delta+=displacement(iMoving);
