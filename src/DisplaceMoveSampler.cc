@@ -45,8 +45,8 @@ DisplaceMoveSampler::DisplaceMoveSampler(int nmoving, int nrepeat,
     particleChooser(particleChooser), mover(mover), 
     paths(paths), cell(paths.getSuperCell()), action(action),
     accRejEst(0),  mpi(mpi) {
-  std::cout << "nslice=" << nslice << std::endl;
-  std::cout << "iFirstSlice=" << iFirstSlice << std::endl;
+  std::cout << "In DisplaceMove nslice=" << nslice << std::endl;
+  std::cout << "In DisplaceMove iFirstSlice=" << iFirstSlice << std::endl;
 }
 
 DisplaceMoveSampler::~DisplaceMoveSampler() {
@@ -96,11 +96,14 @@ bool DisplaceMoveSampler::tryMove() {
  
   accRejEst->tryingMove(0);
   mover.makeMove(displacement,nmoving);
-
+  int iFirst = iFirstSlice;
+  if (mpi->getNWorker() >1 ){
+    iFirst = iFirstSlice+1;
+  }
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 
    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                 iFirstSlice,nslice+iFirstSlice);
+                                 iFirst,nslice+iFirstSlice);
 
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {
@@ -128,7 +131,7 @@ bool DisplaceMoveSampler::tryMove() {
   // Put moved beads in paths beads.
   for (int islice=0; islice<nslice; ++islice) {
     for (int imoving=0; imoving<nmoving; ++imoving) {
-      Vec &bead(paths(movingIndex(imoving),islice));
+      Vec &bead(paths(movingIndex(imoving),islice+iFirstSlice));
       bead += displacement(imoving);
       bead = cell.pbc(bead);
     }

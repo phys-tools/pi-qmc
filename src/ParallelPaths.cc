@@ -54,8 +54,7 @@ ParallelPaths::~ParallelPaths() {
 
 void ParallelPaths::sumOverLinks(LinkSummable& estimator) const {
   estimator.initCalc(nprocSlice-2,1+ifirst);
-   for (int islice=0; islice<nprocSlice; ++islice) {
-  //  for (int islice=1; islice<nprocSlice-1; ++islice) {
+  for (int islice=1; islice<nprocSlice-1; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       estimator.handleLink(beads(ipart,islice-1), beads(ipart,islice),
                            ipart, (islice+ifirst)%nslice, *this);

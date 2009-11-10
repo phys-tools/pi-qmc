@@ -124,7 +124,7 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
 double CoulombAction::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
     int iFirstSlice, int nslice) {
-  // std :: cout << "iFirstsilce -> nslice "<< iFirstSlice<<" -> " <<nslice<< std :: endl;
+   std :: cout << "iFirstsilce -> nslice "<< iFirstSlice<<" -> " <<nslice<< std :: endl;
 
   SuperCell cell=paths.getSuperCell();
   double u=0;
