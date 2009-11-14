@@ -25,6 +25,42 @@ class SuperCell;
 #include <blitz/array.h>
 
 /// Storage for paths in a parallel simulation.
+/// This is parallelization in imaginary time.
+/// The parallelization strategy is like parallelzing a lattice model in 1D.
+/// The simplest idea is to break time up into nworker domains, each 
+/// each approximately equal in size.
+/// The size of the domain stored on the worker is nProcSlice.
+/// For example, if we have 1024 slices and four workers, 
+/// nslice=256.
+/// The boundaries between slices should be frozen. 
+/// We accomplish this by freezing slice i=0 and slice i=nProcSlice.
+/// Note that slice i=0 is slice i=nprocSlice on the previous worker,
+/// and slice i=nprocSlice is slice i=0 on the next worker.
+/// For single-slice or multi-level sampling, each worker 
+/// should only move beads on slices i=1 through i=nprocSlice-1. 
+/// However, for measurements and displace moves, it is important that
+/// all slices, including the buffers, be owned by exactly one worker.
+/// That is other workers may have copies of buffer slice data, but only
+/// the owner (owning worker) should evalauate estimators or perform
+/// displacement movements on the beads.
+/// We adopt the convention that each worker owns i=nprocSlice.
+/// To compute estimators or make displace moves, it is necessary that
+/// each worker also have a read-only copy of slice i=nprocSlice+1.
+///
+/// To summarize, each worker has nproc+2 slices stored on it.
+/// Slice i=0 is read only and is owned by the previous worker.
+/// Slice i=nprocSlice is owned by the worker, but is only moved in
+/// displace moves.
+/// Slice i=nprocSlice+1 is read only and is owned by the next worker.
+/// 
+/// To communicate these ideas with the rest of the code, which may
+/// deal with serial paths, parallel paths, or double parallel paths,
+/// we have three informative methods: getLowestOwnedSlice,
+/// getHighestOwnedSlice, and getHighestSampledSlice.
+/// These should return 1, nprocSlice, and nprocSlice-nsampling.
+/// 
+/// Finally, we have shiftWorkers and setBuffers method to communicate
+/// slices between workers.
 /// @version $Revision$
 /// @author John Shumway
 class ParallelPaths : public Paths {
@@ -38,16 +74,16 @@ public:
   /// Loop over links, calling a LinkSummable object.
   virtual void sumOverLinks(LinkSummable&) const;
   /// Get a reference to a bead.
-  virtual Vec& operator()(const int ipart, const int islice);
+  virtual Vec& operator()(int ipart, int islice);
   /// Get a const reference to a bead.
-  virtual const Vec& operator()(const int ipart, const int islice) const;
+  virtual const Vec& operator()(int ipart, int islice) const;
   /// Get a reference to a bead by offset.
-  virtual Vec& operator()(const int ipart, const int islice, const int istep);
+  virtual Vec& operator()(int ipart, int islice, int istep);
   /// Get a const reference to a bead by offset.
   virtual const Vec&
-    operator()(const int ipart, const int islice, const int istep) const;
+    operator()(int ipart, int islice, int istep) const;
   /// Get a relative displacement a bead by offset.
-  virtual Vec delta(const int ipart, const int islice, const int istep) const;
+  virtual Vec delta(int ipart, int islice, int istep) const;
   /// Get beads.
   virtual void getBeads(int ifirstSlice, Beads<NDIM>& ) const;
   /// Get a slice.
@@ -57,11 +93,9 @@ public:
   /// Get the number of slices unique to this processor.
   virtual int getNUniqueSlice(){return nprocSlice-1;}
   /// Get auxialiary bead.
-  virtual const void* getAuxBead(const int ipart, const int islice, 
-                                 const int iaux) const;
+  virtual const void* getAuxBead(int ipart, int islice, int iaux) const;
   /// Get auxialiary bead.
-  virtual void* getAuxBead(const int ipart, const int islice, 
-                                 const int iaux);
+  virtual void* getAuxBead(int ipart, int islice, int iaux);
   /// Put beads.
   virtual void putBeads(int ifirstSlice,
                         const Beads<NDIM>&, const Permutation&) const;
@@ -72,16 +106,15 @@ public:
   /// @bug Placeholder, not correct for MPI.
     virtual const Permutation& getGlobalPermutation() const;
     virtual   const Permutation& getPermutation() const {return permutation;}
-  virtual int getLowestSampleSlice(const int n, bool d) const {return ifirst;}
-  virtual int getHighestSampleSlice(const int n, const bool d) const {
-    return ifirst+nprocSlice-n-1;}
-  virtual int getHighestStoredSlice(const int n, const bool d) const {
+  virtual int getLowestOwnedSlice(bool d) const {return ifirst+1;}
+  virtual int getHighestOwnedSlice(bool d) const {return ifirst+nprocSlice;}
+  virtual int getHighestSampledSlice(int n, bool d) const {
     return ifirst+nprocSlice-n;}
-  virtual void shift(const int ishift);
+  virtual bool isOwnedSlice(int islice) const {
+    return islice > ifirst && islice <= ifirst+nprocSlice;}
+  virtual void shift(int ishift);
   virtual void setBuffers();
   virtual bool is() const {return true;}
-  virtual bool isProcessorSlice(const int islice) const {
-    return islice-ifirst>=0 && islice-ifirst<nprocSlice-2;}
   virtual void clearPermutation();
 private:
   /// Worker nubmer.

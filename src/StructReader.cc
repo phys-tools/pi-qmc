@@ -34,8 +34,8 @@ StructReader::StructReader(Paths& paths, const std::string& filename,
 
 void StructReader::run() {
   int nslice=paths.getNSlice();
-  int ifirstSlice=paths.getLowestSampleSlice(0,false);
-  int ilastSlice=paths.getHighestStoredSlice(0,false);
+  int ifirstSlice=paths.getLowestOwnedSlice(false);
+  int ilastSlice=paths.getHighestOwnedSlice(false);
   int npart=0;
   // Read the particle positions from the struct.h5 file.
   if (!mpi || mpi->isCloneMain()) {
@@ -68,16 +68,17 @@ void StructReader::run() {
   } 
 #endif
   // Copy to other slices.
-  for (int islice=ifirstSlice+1; islice<ilastSlice; ++islice) {
+  for (int islice=ifirstSlice; islice<=ilastSlice; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       paths(ipart,islice)=paths(ipart,ifirstSlice);
     } 
   }
   if (paths.isDouble()) {
-    for (int islice=ifirstSlice; islice<ilastSlice; ++islice) {
+    for (int islice=ifirstSlice; islice<=ilastSlice; ++islice) {
       for (int ipart=0; ipart<npart; ++ipart) {
         paths(ipart,islice+nslice/2)=paths(ipart,islice);
       } 
     }
   } 
+  paths.setBuffers();
 }

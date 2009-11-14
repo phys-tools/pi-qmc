@@ -34,8 +34,8 @@ RingLattice::RingLattice(Paths& paths, const double radius, const double angle0,
 void RingLattice::run() {
   int nslice = paths.getNSlice();
   // Place the particles on the ring.
-  int ifirstSlice = paths.getLowestSampleSlice(0,false);
-  int ilastSlice = paths.getHighestStoredSlice(0,false);
+  int ifirstSlice = paths.getLowestOwnedSlice(false);
+  int ilastSlice = paths.getHighestOwnedSlice(false);
   SuperCell cell=paths.getSuperCell();
   if (!mpi || mpi->isCloneMain()) {
     int ipart = ifirst;
@@ -75,4 +75,5 @@ void RingLattice::run() {
       }
     }
   }
+  paths.setBuffers();
 }

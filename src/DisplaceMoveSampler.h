@@ -55,10 +55,10 @@ protected:
   const int nmoving;
   /// The number of times to try dispace moves.
   const int nrepeat;
-  /// The number of slices this worker is moving. 
-  int nslice;
   /// The first slice this worker is moving. 
   int iFirstSlice;
+  /// The last slice this worker is moving. 
+  int iLastSlice;
   /// The dispalcement of the moving particles in a particular attempt.
   VArray displacement;
   /// Index of the particles to be moved.

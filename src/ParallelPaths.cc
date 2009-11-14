@@ -36,9 +36,9 @@ ParallelPaths::ParallelPaths(int npart, int nslice, double tau,
     iworker(mpi.getWorkerID()),
     nworker(mpi.getNWorker()),
     ifirst(nslice/nworker*iworker),
-    nprocSlice(nslice/nworker+2+((iworker+1==nworker)?(nslice)%nworker:0)),
-    beads(*beadFactory.getNewBeads(npart,nprocSlice)),
-    buffer(*beadFactory.getNewBeads(npart,nprocSlice)),
+    nprocSlice(nslice/nworker+((iworker+1==nworker)?(nslice)%nworker:0)),
+    beads(*beadFactory.getNewBeads(npart,nprocSlice+2)),
+    buffer(*beadFactory.getNewBeads(npart,nprocSlice+2)),
     permutation(*new Permutation(npart)),globalPermutation(*new Permutation(npart)),
     inversePermutation(*new Permutation(npart)),
     mpi(mpi), npSlice(nworker) {
@@ -53,14 +53,22 @@ ParallelPaths::~ParallelPaths() {
 }
 
 void ParallelPaths::sumOverLinks(LinkSummable& estimator) const {
-  estimator.initCalc(nprocSlice-2,1+ifirst);
-  for (int islice=1; islice<nprocSlice-1; ++islice) {
+  estimator.initCalc(nprocSlice,1+ifirst);
+  for (int islice=1; islice<=nprocSlice; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       estimator.handleLink(beads(ipart,islice-1), beads(ipart,islice),
                            ipart, (islice+ifirst)%nslice, *this);
     }
   }
-  estimator.endCalc(nprocSlice-2);
+// Code to print out slices
+//#ifdef ENABLE_MPI
+//   mpi.getWorkerComm().Barrier();
+//  for (int islice=0; islice<nprocSlice+2; ++islice) {
+//  std :: cout << "IW="<<(mpi.getWorkerID())<< ", islice="<<islice+ifirst << ", " << beads(0,islice) << std::endl;
+//  }
+//#endif
+// end code to print out slices
+  estimator.endCalc(nprocSlice);
 }
 
 Paths::Vec& 
@@ -135,7 +143,7 @@ void ParallelPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
   // Now permute the following beads.
   int jlastSlice=jfirstSlice+nsectionSlice;
   if (!inPermutation.isIdentity()){
-    for (int islice=jlastSlice; islice<nprocSlice; ++islice) {
+    for (int islice=jlastSlice; islice<nprocSlice+2; ++islice) {
       // Swap paths.
       VArray buffer(npart);
       for (int i=0; i<npart; ++i) buffer(i)=beads(inPermutation[i],islice);
@@ -181,18 +189,18 @@ void ParallelPaths::shift(const int ishift) {
   int idest=(iworker+nworker-1)%nworker;
   int isrc=(iworker+1)%nworker;
   double *sendbuf=&(beads(0,0)[0]);
-  double *recvbuf=&(buffer(0,nprocSlice-ishift-2)[0]);
+  double *recvbuf=&(buffer(0,nprocSlice-ishift)[0]);
   mpi.getWorkerComm().Sendrecv(
        sendbuf,(ishift+2)*NDIM*npart,MPI::DOUBLE,idest,1,
        recvbuf,(ishift+2)*NDIM*npart,MPI::DOUBLE,isrc,1);
   // Permute the ishift beads that we got from the next worker.
-  for (int islice=nprocSlice-ishift-2; islice<nprocSlice; ++islice) {
+  for (int islice=nprocSlice-ishift; islice<nprocSlice+2; ++islice) {
     VArray vbuffer(npart);
     for (int i=0; i<npart; ++i) vbuffer(i)=buffer(permutation[i],islice);
     for (int i=0; i<npart; ++i) buffer(i,islice)=vbuffer(i);
   }
   // Shift the remaining beads that are in this worker.
-  for (int j=0; j<nprocSlice-ishift-2; ++j) {
+  for (int j=0; j<nprocSlice-ishift; ++j) {
     for (int i=0; i<npart; ++i) {
       buffer(i,j)=beads(i,j+ishift);
     }
@@ -203,24 +211,27 @@ void ParallelPaths::shift(const int ishift) {
 } 
 
 void ParallelPaths::setBuffers() {
-  shift(0);
-}
-/*#ifdef ENABLE_MPI
-  // Copy first two slices of beads to previous worker's buffers.
-  int isrc=(iworker+1)%nworker;
+#ifdef ENABLE_MPI
+  // Get the i=nprocSlice+1 buffer slice from i=1 slice on next worker.
   int idest=(iworker+nworker-1)%nworker;
-  Vec *sendbuf=beads.getCoordArray().data();
-  Vec *recvbuf=buffer.getCoordArray().data();
-  mpi.getWorkerComm().Sendrecv(
-       sendbuf,2*NDIM*npart,MPI::DOUBLE,idest,1,
-       recvbuf,2*NDIM*npart,MPI::DOUBLE,isrc,1);
-  // Permute buffered beads and put into last two slices of beads.
-  for (int i=0; i<npart; ++i) {
-    beads(i,nprocSlice-2)=buffer(permutation[i],0);
-    beads(i,nprocSlice-1)=buffer(permutation[i],1);
-  }
-//#endif
-} */
+  int isrc=(iworker+1)%nworker;
+  double *sendbuf=&(beads(0,1)[0]);
+  double *recvbuf=&(buffer(0,0)[0]);
+  mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
+                               recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
+  // Permute the beads that we got from the next worker.
+  for (int i=0; i<npart; ++i) beads(i,nprocSlice+1)=buffer(permutation[i],0);
+  // Get the i=0 buffer slice from i=nprocSlice slice on next worker.
+  // First permute the beads that we will send to the next worker.
+  for (int i=0; i<npart; ++i) buffer(permutation[i],0)=beads(i,nprocSlice);
+  idest=(iworker+1)%nworker;
+  isrc=(iworker+nworker-1)%nworker;
+  sendbuf=&(buffer(0,0)[0]);
+  recvbuf=&(beads(0,0)[0]);
+  mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
+                               recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
+#endif
+}
 
 void ParallelPaths::clearPermutation() {
   permutation.reset(); inversePermutation.reset();

@@ -33,8 +33,7 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<Vec,1> VArray;
   /// Constructor.
-  Paths(const int npart, const int nslice, const double tau,
-    const SuperCell& cell);
+  Paths(int npart, int nslice, double tau, const SuperCell& cell);
   /// Destructor.
   virtual ~Paths() {}
   /// Loop over links, calling a LinkSummable object.
@@ -44,33 +43,31 @@ public:
   /// Get the number of slices.
   int getNSlice() const {return nslice;}
   /// Get the number of slices on this processor.
-  virtual int getNProcSlice(){return nslice;}
-  /// Get the number of slices unique to this processor.
-  virtual int getNUniqueSlice() {return nslice;}
+  //virtual int getNProcSlice(){return nslice;}
+  /// Get the number of slices owned by this processor.
+  //virtual int getNOwnedSlice() {return nslice;}
   /// Get the temperature for a slice.
   double getTau() const {return tau;}
   /// Get the supercell.
   const SuperCell& getSuperCell() const {return cell;}
   /// Get a reference to a bead.
-  virtual Vec& operator()(const int ipart, const int islice)=0;
+  virtual Vec& operator()(int ipart, int islice)=0;
   /// Get a const reference to a bead.
-  virtual const Vec& operator()(const int ipart, const int islice) const=0;
+  virtual const Vec& operator()(int ipart, int islice) const=0;
   /// Get a reference to a bead by offset.
-  virtual Vec& operator()(const int ipart, const int islice, const int istep)=0;
+  virtual Vec& operator()(int ipart, int islice, int istep)=0;
   /// Get a const reference to a bead by offset.
   virtual const Vec&
-    operator()(const int ipart, const int islice, const int istep) const=0;
+    operator()(int ipart, int islice, int istep) const=0;
   /// Get a relative displacement a bead by offset.
   virtual Vec
-    delta(const int ipart, const int islice, const int istep) const=0;
+    delta(int ipart, int islice, int istep) const=0;
   /// Get beads.
   virtual void getBeads(int ifirstSlice, Beads<NDIM>& ) const=0;
   /// Get auxialiary bead.
-  virtual const void* getAuxBead(const int ipart, const int islice, 
-                                 const int iaux) const=0;
+  virtual const void* getAuxBead(int ipart, int islice, int iaux) const=0;
   /// Get auxialiary bead.
-  virtual void* getAuxBead(const int ipart, const int islice, 
-                                 const int iaux)=0;
+  virtual void* getAuxBead(int ipart, int islice, int iaux)=0;
   /// Get a slice.
   virtual void getSlice(int islice, VArray& ) const=0;
   /// Put beads.
@@ -82,13 +79,13 @@ public:
   /// Get the global permuation.
   virtual const Permutation& getPermutation() const=0;
   virtual const Permutation& getGlobalPermutation() const=0;
-  virtual int getLowestSampleSlice(const int n, bool d) const=0;
-  virtual int getHighestSampleSlice(const int n, bool d) const=0;
-  virtual int getHighestStoredSlice(const int n, bool d) const=0;
-  virtual void shift(const int ishift)=0;
+  virtual int getLowestOwnedSlice(bool d) const=0;
+  virtual int getHighestOwnedSlice(bool d) const=0;
+  virtual int getHighestSampledSlice(int n, bool d) const=0;
+  virtual bool isOwnedSlice(int islice) const=0;
+  virtual void shift(int ishift)=0;
   virtual void setBuffers() {}
   virtual bool isDouble() const {return false;}
-  virtual bool isProcessorSlice(const int islice) const=0;
   virtual void clearPermutation()=0;
 protected:
   /// Number of particles.

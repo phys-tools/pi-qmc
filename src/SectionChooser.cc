@@ -46,9 +46,10 @@ SectionChooser::~SectionChooser() {
 
 void SectionChooser::run() {
   double x=RandomNumGenerator::getRand()*(1-1e-8);
-  int ilo=paths.getLowestSampleSlice(beads->getNSlice(),false);
-  int ihi=paths.getHighestSampleSlice(beads->getNSlice(),false);
-  iFirstSlice=ilo+(int)((ihi-ilo)*x);
+  int ilo=paths.getLowestOwnedSlice(false)-1;
+  int ihi=paths.getHighestSampledSlice(beads->getNSlice()-1,false);
+  iFirstSlice=ilo+(int)((ihi+1-ilo)*x);
+  if (iFirstSlice>ihi) iFirstSlice=ihi;
   // Copy coordinates from allBeads to section Beads.
   paths.getBeads(iFirstSlice,*beads);
   permutation->reset();
@@ -58,4 +59,6 @@ void SectionChooser::run() {
   CompositeAlgorithm::run();
   // Copy moved coordinates from sectionBeads to allBeads.
   paths.putBeads(iFirstSlice,*beads,*permutation);
+  // Refresh the buffer slices.
+  paths.setBuffers();
 }

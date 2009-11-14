@@ -87,7 +87,7 @@ void PathReader::run() {
   for (int islice=0; islice<(nslice/bfactor)-1; ++islice) { 
     for (int ib=0; ib<bfactor; ++ib) { //Put the previous slice.
       int jslice=islice+ib*nfslice;
-      if (paths.isProcessorSlice(jslice)) paths.putBeads(jslice,slice,pidentity);
+      if (paths.isOwnedSlice(jslice)) paths.putBeads(jslice,slice,pidentity);
     }
     if (workerID==0){
     //if (!mpi || mpi->isMain()) {
@@ -127,7 +127,7 @@ void PathReader::run() {
 #endif
   for (int ib=bfactor-1; ib>=0; --ib) {
     int jslice=nfslice-1+ib*nfslice;
-    if (paths.isProcessorSlice(jslice)) paths.putBeads(jslice,slice,p);
+    if (paths.isOwnedSlice(jslice)) paths.putBeads(jslice,slice,p);
   }
   paths.setBuffers();
   delete infile;

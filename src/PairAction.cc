@@ -225,7 +225,7 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
 
 double PairAction::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
-    int iFirstSlice, int nslice) {
+    int iFirstSlice, int iLastSlice) {
   const SuperCell& cell=paths.getSuperCell();
   double deltaAction=0;
   for (int iMoving=0; iMoving<nmoving; ++iMoving) {
@@ -250,7 +250,7 @@ double PairAction::getActionDifference(const Paths &paths,
       double prevR=sqrt(dot(prevDelta,prevDelta));
       double prevMovingR=prevR;
       //     for (int islice=iFirstSlice+1; islice<nslice; islice++) {
-      for (int islice=iFirstSlice; islice<nslice; islice++) {
+      for (int islice=iFirstSlice-1; islice<=iLastSlice; islice++) {
         // Add action for moving beads.
         Vec delta=paths(i,islice);
         delta+=displacement(iMoving);

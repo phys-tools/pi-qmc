@@ -32,8 +32,8 @@ SpinSetter::SpinSetter(Paths& paths,MPIManager *mpi)
 void SpinSetter::run() {
 std::cout << "setting spin" << std::endl;
   int nslice=paths.getNSlice();
-  int ifirstSlice=paths.getLowestSampleSlice(0,false);
-  int ilastSlice=paths.getHighestStoredSlice(0,false);
+  int ifirstSlice=paths.getLowestOwnedSlice(false);
+  int ilastSlice=paths.getHighestOwnedSlice(false);
   SuperCell cell=paths.getSuperCell();
   if (!mpi || mpi->isCloneMain()) {
     for (int ipart=0; ipart<npart; ++ipart) {

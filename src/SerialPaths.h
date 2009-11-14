@@ -64,12 +64,12 @@ public:
   /// Get the global permuatation.
   virtual const Permutation& getPermutation() const {return permutation;}
   virtual const Permutation& getGlobalPermutation() const {return permutation;}
-  virtual int getLowestSampleSlice(const int n, bool d) const {return 0;}
-  virtual int getHighestSampleSlice(const int n, const bool d) const {
-    return d?nslice/2:nslice;}
-  virtual int getHighestStoredSlice(const int n, const bool d) const {
-    return d?nslice/2:nslice;}
-  virtual bool isProcessorSlice(const int islice) const {
+  virtual int getLowestOwnedSlice(bool d) const {return 0;}
+  virtual int getHighestOwnedSlice(bool d) const {
+    return d?nslice/2:nslice - 1;}
+  virtual int getHighestSampledSlice(int n, bool d) const {
+    return (d?nslice/2:nslice);}
+  virtual bool isOwnedSlice(int islice) const {
     return islice>=0 && islice<nslice;}
   virtual void shift(const int ishift);
   virtual void clearPermutation();

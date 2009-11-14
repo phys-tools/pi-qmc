@@ -38,10 +38,12 @@ public:
   /// Destructor.
   virtual ~DoubleDisplaceMoveSampler();
 protected:
-  /// First slice of second beads.
-  int iFirstSlice2;
   /// Pointer to the double action.
   DoubleAction* doubleAction;
+  /// Flag for double paths.
+  const bool isDoublePaths;
+  /// Half the total slices.
+  const int nsliceOver2;
   /// Method to atempt a Monte Carlo move, return true if accepted.
   virtual bool tryMove();
 };

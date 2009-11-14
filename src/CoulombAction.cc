@@ -123,18 +123,17 @@ double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
 
 double CoulombAction::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
-    int iFirstSlice, int nslice) {
-   std :: cout << "iFirstsilce -> nslice "<< iFirstSlice<<" -> " <<nslice<< std :: endl;
+    int iFirstSlice, int iLastSlice) {
 
   SuperCell cell=paths.getSuperCell();
   double u=0;
   for (unsigned int i=0; i<pairActionArray.size(); ++i) {
     u += pairActionArray[i]->getActionDifference(paths, displacement, nmoving,
-                               movingIndex, iFirstSlice, nslice); 
+                               movingIndex, iFirstSlice, iLastSlice); 
   }
   // Compute long range Ewald action at lowest level.
   if (ewaldSum) {
-     for (int islice=iFirstSlice; islice<nslice; ++islice) {
+     for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
       for (int i=0; i<npart; ++i)  rewald(i)=paths(i,islice);
       u -= ewaldSum->evalLongRange(rewald)*tau/epsilon;
       for (int i=0; i<nmoving; ++i) {

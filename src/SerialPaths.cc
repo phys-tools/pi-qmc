@@ -66,6 +66,11 @@ void SerialPaths::sumOverLinks(LinkSummable& estimator) const {
       }
     }
   }
+// Code to print out slices
+//  for (int islice=0; islice<nslice; ++islice) {
+//  std::cout << "islice="<<islice << ", " << beads(0,islice) << std::endl;
+//  }
+// end code to print out slices
   estimator.endCalc(nslice);
 }
 
@@ -122,7 +127,10 @@ void SerialPaths::getBeads(const int ifirstSlice, Beads<NDIM>& outBeads) const {
   int nsectionSlice=outBeads.getNSlice();
   for (int isectionSlice=0; isectionSlice<nsectionSlice; ++isectionSlice) {
     int islice=isectionSlice+ifirstSlice;
-    if (islice<nslice) {
+    if (islice<0) {
+      beads.copySlice(inversePermutation,nslice+islice,
+                      outBeads,isectionSlice);
+    } else if (islice<nslice) {
       beads.copySlice(islice,outBeads,isectionSlice);
       //for (int ipart=0; ipart<npart; ++ipart) {
       //  outBeads(ipart,isectionSlice)=beads(ipart,islice);
@@ -154,7 +162,9 @@ void SerialPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
   int nsectionSlice=nmslice;
   for (int isectionSlice=0; isectionSlice<nsectionSlice; ++isectionSlice) {
     int islice=isectionSlice+ifirstSlice+ifirst;
-    if (islice<nslice) {
+    if (islice<0) {
+      // Do nothing, since this slice should not have been moved. 
+    } else if (islice<nslice) {
       inBeads.copySlice(isectionSlice+ifirst,beads,islice);
       //for (int ipart=0; ipart<npart; ++ipart) {
       //  beads(ipart,islice)=inBeads(ipart,isectionSlice);

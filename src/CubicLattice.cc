@@ -55,8 +55,8 @@ void CubicLattice::run() {
   if (mpi) mpi->getWorkerComm().Bcast(n.data(),nsites,MPI::INT,0);
 #endif
   // Now place the particles on the lattice.
-  int ifirstSlice=paths.getLowestSampleSlice(0,false);
-  int ilastSlice=paths.getHighestStoredSlice(0,false);
+  int ifirstSlice=paths.getLowestOwnedSlice(false);
+  int ilastSlice=paths.getHighestOwnedSlice(false);
   SuperCell cell=paths.getSuperCell();
   if (!mpi || mpi->isCloneMain()) {
   int ipart=ifirst; int isite=0;
@@ -120,16 +120,17 @@ void CubicLattice::run() {
   } 
 #endif
   // Copy to other slices.
-  for (int islice=ifirstSlice+1; islice<ilastSlice; ++islice) {
+  for (int islice=ifirstSlice+1; islice<=ilastSlice; ++islice) {
     for (int ipart=ifirst; ipart<ifirst+npart; ++ipart) {
       paths(ipart,islice)=paths(ipart,ifirstSlice);
     } 
   }
   if (paths.isDouble()) {
-  for (int islice=ifirstSlice; islice<ilastSlice; ++islice) {
+  for (int islice=ifirstSlice; islice<=ilastSlice; ++islice) {
     for (int ipart=ifirst; ipart<ifirst+npart; ++ipart) {
       paths(ipart,islice+nslice/2)=paths(ipart,islice);
     } 
   }
   }
+  paths.setBuffers();
 }

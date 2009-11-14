@@ -39,14 +39,14 @@ DisplaceMoveSampler::DisplaceMoveSampler(int nmoving, int nrepeat,
   Paths& paths, ParticleChooser& particleChooser, const UniformMover& mover, 
   Action* action, const MPIManager* mpi)
   : nmoving(nmoving), nrepeat(nrepeat),
-    nslice(paths.getNUniqueSlice()),
-    iFirstSlice(paths.getLowestSampleSlice(1,true)),
+    iFirstSlice(paths.getLowestOwnedSlice(false)),
+    iLastSlice(paths.getHighestOwnedSlice(false)),
     displacement(nmoving), movingIndex(nmoving), 
     particleChooser(particleChooser), mover(mover), 
     paths(paths), cell(paths.getSuperCell()), action(action),
     accRejEst(0),  mpi(mpi) {
-  std::cout << "In DisplaceMove nslice=" << nslice << std::endl;
   std::cout << "In DisplaceMove iFirstSlice=" << iFirstSlice << std::endl;
+  std::cout << "In DisplaceMove iLastSlice=" << iLastSlice << std::endl;
 }
 
 DisplaceMoveSampler::~DisplaceMoveSampler() {
@@ -93,17 +93,15 @@ void DisplaceMoveSampler::run() {
 
 
 bool DisplaceMoveSampler::tryMove() {
+
  
   accRejEst->tryingMove(0);
   mover.makeMove(displacement,nmoving);
-  int iFirst = iFirstSlice;
-  if (mpi->getNWorker() >1 ){
-    iFirst = iFirstSlice+1;
-  }
+  
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 
    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                 iFirst,nslice+iFirstSlice);
+                                 iFirstSlice,iLastSlice);
 
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {
@@ -129,9 +127,9 @@ bool DisplaceMoveSampler::tryMove() {
   action->acceptLastMove();
 
   // Put moved beads in paths beads.
-  for (int islice=0; islice<nslice; ++islice) {
+  for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
     for (int imoving=0; imoving<nmoving; ++imoving) {
-      Vec &bead(paths(movingIndex(imoving),islice+iFirstSlice));
+      Vec &bead(paths(movingIndex(imoving),islice));
       bead += displacement(imoving);
       bead = cell.pbc(bead);
     }

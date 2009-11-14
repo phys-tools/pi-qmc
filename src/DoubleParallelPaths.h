@@ -74,17 +74,16 @@ public:
   virtual   const Permutation& getGlobalPermutation() const;
 
   virtual const Permutation& getPermutation() const {return permutation1;}
-  virtual int getLowestSampleSlice(const int n, bool d) const {return ifirst;}
-  virtual int getHighestSampleSlice(const int n, const bool d) const {
-    return ifirst+nprocSlice-n-1;}
-  virtual int getHighestStoredSlice(const int n, const bool d) const {
+  virtual int getLowestOwnedSlice(bool d) const {return ifirst+1;}
+  virtual int getHighestOwnedSlice(bool d) const { return ifirst+nprocSlice;}
+  virtual int getHighestSampledSlice(int n, bool d) const {
     return ifirst+nprocSlice-n;}
+  virtual bool isOwnedSlice(int islice) const {
+    const int jslice = (islice+1)%(nslice/2)-1;
+    return jslice>ifirst && jslice <= ifirst+nprocSlice;}
   virtual void shift(const int ishift);
   virtual void setBuffers();
   virtual bool isDouble() const {return true;}
-  virtual bool isProcessorSlice(const int islice) const {
-    const int jslice = (islice+1)%(nslice/2)-1;
-    return jslice-ifirst>=0 && jslice-ifirst<nprocSlice-2;}
   virtual void clearPermutation();
 private:
   /// Worker nubmer.

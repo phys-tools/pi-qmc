@@ -49,9 +49,10 @@ void DoubleSectionChooser::run() {
 
   //double x; gsl_qrng_get(qrng,&x);
   double x=RandomNumGenerator::getRand()*(1-1e-8);
-  int ilo=paths.getLowestSampleSlice(beads->getNSlice(),true);
-  int ihi=paths.getHighestSampleSlice(beads->getNSlice(),true);
-  iFirstSlice1=ilo+(int)((ihi-ilo)*x);
+  int ilo=paths.getLowestOwnedSlice(true)-1;
+  int ihi=paths.getHighestSampledSlice(beads->getNSlice()-1,true);
+  iFirstSlice1=ilo+(int)((ihi+1-ilo)*x);
+  if (iFirstSlice>ihi) iFirstSlice=ihi;
   if (RandomNumGenerator::getRand()>=0.5) {
     iFirstSlice1=(iFirstSlice1+paths.getNSlice()/2)%paths.getNSlice();
   }
@@ -72,6 +73,8 @@ void DoubleSectionChooser::run() {
   // Copy moved coordinates from sectionBeads to allBeads.
   paths.putDoubleBeads(iFirstSlice1,*beads1,*permutation1,
                        iFirstSlice2,*beads2,*permutation2);
+  // Refresh the buffer slices.
+  paths.setBuffers();
 }
 
 void DoubleSectionChooser::activateSection(const int i) {

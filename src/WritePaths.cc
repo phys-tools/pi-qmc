@@ -83,8 +83,8 @@ void WritePaths::run() {
 
   /// Now determine how many chunked steps we need to write out all slices.
   int nslice=paths.getNSlice();
-  int ifirst=0;//paths.getLowestSampleSlice(1,false);
-  int imax=paths.getHighestSampleSlice(1,true);
+  int ifirst=paths.getLowestOwnedSlice(false);
+  int imax=paths.getHighestOwnedSlice(false);
 #ifdef ENABLE_MPI
   int nworker=(mpi)?mpi->getNWorker():1;
   if (mpi && nworker>1) {

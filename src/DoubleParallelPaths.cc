@@ -36,11 +36,11 @@ DoubleParallelPaths::DoubleParallelPaths(int npart, int nslice, double tau,
     iworker(mpi.getWorkerID()),
     nworker(mpi.getNWorker()),
     ifirst(nslice/2/nworker*iworker-1),
-    nprocSlice(nslice/2/nworker+2+((iworker+1==nworker)?(nslice/2)%nworker:0)),
-    beads1(*beadFactory.getNewBeads(npart,nprocSlice)),
-    beads2(*beadFactory.getNewBeads(npart,nprocSlice)),
-    buffer1(*beadFactory.getNewBeads(npart,nprocSlice)),
-    buffer2(*beadFactory.getNewBeads(npart,nprocSlice)),
+    nprocSlice(nslice/2/nworker+((iworker+1==nworker)?(nslice/2)%nworker:0)),
+    beads1(*beadFactory.getNewBeads(npart,nprocSlice+2)),
+    beads2(*beadFactory.getNewBeads(npart,nprocSlice+2)),
+    buffer1(*beadFactory.getNewBeads(npart,nprocSlice+2)),
+    buffer2(*beadFactory.getNewBeads(npart,nprocSlice+2)),
     permutation1(*new Permutation(npart)), globalPermutation(*new Permutation(npart)),
     permutation2(*new Permutation(npart)),  
     inversePermutation1(*new Permutation(npart)),
@@ -59,32 +59,43 @@ DoubleParallelPaths::~DoubleParallelPaths() {
 }
 
 void DoubleParallelPaths::sumOverLinks(LinkSummable& estimator) const {
-  estimator.initCalc(2*(nprocSlice-2),1+ifirst);
-  for (int islice=1; islice<nprocSlice-1; ++islice) {
+  estimator.initCalc(2*nprocSlice,1+ifirst);
+  for (int islice=1; islice<=nprocSlice; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       estimator.handleLink(beads1(ipart,islice-1), beads1(ipart,islice),
                            ipart, (islice+ifirst)%nslice, *this);
     }
   }
-  for (int islice=1; islice<nprocSlice-1; ++islice) {
+  for (int islice=1; islice<=nprocSlice; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       estimator.handleLink(beads2(ipart,islice-1), beads2(ipart,islice),
                            ipart, (islice+ifirst+nslice/2)%nslice, *this);
     }
   }
-  estimator.endCalc(2*(nprocSlice-2));
+// Code to print out slicesv
+//#ifdef ENABLE_MPI
+//  mpi.getWorkerComm().Barrier();
+//  for (int islice=0; islice<=nprocSlice+1; ++islice) {
+//  std :: cout << "IW="<<(mpi.getWorkerID())<< ", islice="<<islice+ifirst << ", " << beads1(0,islice) << std::endl;
+//  }
+//  for (int islice=0; islice<=nprocSlice+1; ++islice) {
+//  std :: cout << "IW="<<(mpi.getWorkerID())<< ", islice="<<islice+nslice/2+ifirst << ", " << beads2(0,islice) << std::endl;
+//  }
+//#endif
+// end code to print out slicesv
+  estimator.endCalc(2*nprocSlice);
 }
 
 Paths::Vec& 
 DoubleParallelPaths::operator()(const int ipart, const int islice) {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice)
+  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
            ?beads1(ipart,(islice-ifirst+nslice)%nslice)
            :beads2(ipart,islice-ifirst-nslice/2);
 }
 
 const Paths::Vec& 
 DoubleParallelPaths::operator()(const int ipart, const int islice) const {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice)
+  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
            ?beads1(ipart,(islice-ifirst+nslice)%nslice)
            :beads2(ipart,islice-ifirst-nslice/2);
 }
@@ -92,21 +103,21 @@ DoubleParallelPaths::operator()(const int ipart, const int islice) const {
 Paths::Vec&
 DoubleParallelPaths::operator()(const int ipart, const int islice,
                                 const int istep) {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice)
+  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
            ?beads1(ipart,(islice-ifirst+istep+nslice)%nslice)
            :beads2(ipart,(islice-ifirst+istep+nslice/2)%nslice);
 }
 
 const void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice, 
     const int iaux) const {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice)
+  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
          ?beads1.getAuxBead(ipart,(islice-ifirst+nslice)%nslice,iaux)
          :beads2.getAuxBead(ipart,(islice-ifirst+nslice/2)%nslice,iaux);
 }
 
 void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice, 
     const int iaux) {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice)
+  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
          ?beads1.getAuxBead(ipart,(islice-ifirst+nslice)%nslice,iaux)
          :beads2.getAuxBead(ipart,(islice-ifirst+nslice/2)%nslice,iaux);
 }
@@ -114,14 +125,14 @@ void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice,
 const Paths::Vec&
   DoubleParallelPaths::operator()(const int ipart, const int islice,
                                   const int istep) const {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice)
+  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
            ?beads1(ipart,(islice-ifirst+istep+nslice)%nslice)
            :beads2(ipart,(islice-ifirst+istep+nslice/2)%nslice);
 }
 
 Paths::Vec DoubleParallelPaths::delta(const int ipart, const int islice,
                        const int istep) const {
-  Beads<NDIM>& beads(((islice-ifirst)%nslice<nprocSlice)?beads1:beads2);
+  Beads<NDIM>& beads(((islice-ifirst)%nslice<nprocSlice+2)?beads1:beads2);
   int jslice=(islice-ifirst)%(nslice/2);
   Vec v = beads(ipart,jslice);
   v-=beads(ipart,jslice+istep);
@@ -132,7 +143,7 @@ Paths::Vec DoubleParallelPaths::delta(const int ipart, const int islice,
 void DoubleParallelPaths::getBeads(const int ifirstSlice, 
                                    Beads<NDIM>& outBeads) const {
   int nsectionSlice=outBeads.getNSlice();
-  Beads<NDIM>& beads(((ifirstSlice-ifirst+nslice)%nslice<nprocSlice)?beads1:beads2);
+  Beads<NDIM>& beads(((ifirstSlice-ifirst+nslice)%nslice<nprocSlice+2)?beads1:beads2);
   int jfirstSlice=(ifirstSlice-ifirst)%(nslice/2);
   for (int isectionSlice=0; isectionSlice<nsectionSlice; ++isectionSlice) {
     int islice=isectionSlice+jfirstSlice;
@@ -143,7 +154,7 @@ void DoubleParallelPaths::getBeads(const int ifirstSlice,
 }
 
 void DoubleParallelPaths::getSlice(int islice, VArray& out) const {
-  Beads<NDIM>& beads(((islice-ifirst+nslice)%nslice<nprocSlice)?beads1:beads2);
+  Beads<NDIM>& beads(((islice-ifirst+nslice)%nslice<nprocSlice+2)?beads1:beads2);
   int jslice=(islice-ifirst)%(nslice/2);
   for (int ipart=0; ipart<npart; ++ipart) out(ipart)=beads(ipart,jslice);
 }
@@ -151,7 +162,7 @@ void DoubleParallelPaths::getSlice(int islice, VArray& out) const {
 void DoubleParallelPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
                            const Permutation& inPermutation) const {
   //First place the section beads back in the bead array.
-  bool first = (((ifirstSlice-ifirst+nslice)%nslice)<nprocSlice);
+  bool first = (((ifirstSlice-ifirst+nslice)%nslice)<nprocSlice+2);
   Beads<NDIM>& beads(first?beads1:beads2);
   Permutation& permutation(first?permutation1:permutation2);
   Permutation& inversePermutation(first
@@ -167,7 +178,7 @@ void DoubleParallelPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
   // Now permute the following beads.
   int jlastSlice=jfirstSlice+nsectionSlice;
   if (!inPermutation.isIdentity()){
-    for (int islice=jlastSlice; islice<nprocSlice; ++islice) {
+    for (int islice=jlastSlice; islice<nprocSlice+2; ++islice) {
       // Swap paths.
       VArray buffer(npart);
       for (int i=0; i<npart; ++i) buffer(i)=beads(inPermutation[i],islice);
@@ -229,19 +240,19 @@ void DoubleParallelPaths::shift(const int ishift) {
   int idest=(iworker+nworker-1)%nworker;
   int isrc=(iworker+1)%nworker;
   double *sendbuf1=&(beads1(0,0)[0]);
-  double *recvbuf1=(iworker<nworker-1)?&(buffer1(0,nprocSlice-ishift-2)[0])
-                                      :&(buffer2(0,nprocSlice-ishift-2)[0]);
+  double *recvbuf1=(iworker<nworker-1)?&(buffer1(0,nprocSlice-ishift)[0])
+                                      :&(buffer2(0,nprocSlice-ishift)[0]);
   mpi.getWorkerComm().Sendrecv(
        sendbuf1,(ishift+2)*NDIM*npart,MPI::DOUBLE,idest,1,
        recvbuf1,(ishift+2)*NDIM*npart,MPI::DOUBLE,isrc,1);
   double *sendbuf2=&(beads2(0,0)[0]);
-  double *recvbuf2=(iworker<nworker-1)?&(buffer2(0,nprocSlice-ishift-2)[0])
-                                      :&(buffer1(0,nprocSlice-ishift-2)[0]);
+  double *recvbuf2=(iworker<nworker-1)?&(buffer2(0,nprocSlice-ishift)[0])
+                                      :&(buffer1(0,nprocSlice-ishift)[0]);
   mpi.getWorkerComm().Sendrecv(
        sendbuf2,(ishift+2)*NDIM*npart,MPI::DOUBLE,idest,2,
        recvbuf2,(ishift+2)*NDIM*npart,MPI::DOUBLE,isrc,2);
   // Permute the ishift beads that we got from the next worker.
-  for (int islice=nprocSlice-ishift-2; islice<nprocSlice; ++islice) {
+  for (int islice=nprocSlice-ishift; islice<=nprocSlice+1; ++islice) {
     VArray buffer(npart);
     for (int i=0; i<npart; ++i) buffer(i)=buffer1(permutation1[i],islice);
     for (int i=0; i<npart; ++i) buffer1(i,islice)=buffer(i);
@@ -249,7 +260,7 @@ void DoubleParallelPaths::shift(const int ishift) {
     for (int i=0; i<npart; ++i) buffer2(i,islice)=buffer(i);
   }
   // Shift the remaining beads that are in this worker.
-  for (int j=0; j<nprocSlice-ishift-2; ++j) {
+  for (int j=0; j<nprocSlice-ishift; ++j) {
     for (int i=0; i<npart; ++i) {
       buffer1(i,j)=beads1(i,j+ishift);
       buffer2(i,j)=beads2(i,j+ishift);
@@ -263,29 +274,70 @@ void DoubleParallelPaths::shift(const int ishift) {
 
 void DoubleParallelPaths::setBuffers() {
 #ifdef ENABLE_MPI
-  Beads<NDIM> buffer1(npart,2), buffer2(npart,2);
-  // Copy first two slices of beads to previous worker's buffers.
-  int isrc=(iworker+1)%nworker;
+  // Get the i=nprocSlice+1 buffer slice from i=1 slice on next worker.
   int idest=(iworker+nworker-1)%nworker;
-  Vec *sendbuf=beads1.getCoordArray().data();
-  Vec *recvbuf=((iworker<nworker-1)?buffer1:buffer2).getCoordArray().data();
-  mpi.getWorkerComm().Sendrecv(
-       sendbuf,2*NDIM*npart,MPI::DOUBLE,idest,1,
-       recvbuf,2*NDIM*npart,MPI::DOUBLE,isrc,1);
-  sendbuf=beads2.getCoordArray().data();
-  recvbuf=((iworker<nworker-1)?buffer2:buffer1).getCoordArray().data();
-  mpi.getWorkerComm().Sendrecv(
-       sendbuf,2*NDIM*npart,MPI::DOUBLE,idest,2,
-       recvbuf,2*NDIM*npart,MPI::DOUBLE,isrc,2);
-  // Permute buffered beads and put into last two slices of beads.
-  for (int i=0; i<npart; ++i) {
-    beads1(i,nprocSlice-2)=buffer1(permutation1[i],0);
-    beads1(i,nprocSlice-1)=buffer1(permutation1[i],1);
-    beads2(i,nprocSlice-2)=buffer2(permutation2[i],0);
-    beads2(i,nprocSlice-1)=buffer2(permutation2[i],1);
+  int isrc=(iworker+1)%nworker;
+  double *sendbuf = &(beads1(0,1)[0]);
+  double *recvbuf = &(buffer1(0,0)[0]);
+  mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
+                               recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
+  // Permute the beads that we got from the next worker.
+  if (iworker<nworker-1) {
+    for (int i=0; i<npart; ++i) {
+      beads1(i,nprocSlice+1)=buffer1(permutation1[i],0);
+    }
+  } else {
+    for (int i=0; i<npart; ++i) {
+      beads2(i,nprocSlice+1)=buffer1(permutation2[i],0);
+    }
   }
+  sendbuf = &(beads2(0,1)[0]);
+  recvbuf = &(buffer2(0,0)[0]);
+  mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
+                               recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
+  // Permute the beads that we got from the next worker.
+  if (iworker<nworker-1) {
+    for (int i=0; i<npart; ++i) {
+      beads2(i,nprocSlice+1)=buffer2(permutation2[i],0);
+    }
+  } else {
+    for (int i=0; i<npart; ++i) {
+      beads1(i,nprocSlice+1)=buffer2(permutation1[i],0);
+    }
+  }
+  // Get the i=0 buffer slice from i=nprocSlice slice on next worker.
+  // First permute the beads that we will send to the next worker.
+  if (iworker>nworker-1) {
+    for (int i=0; i<npart; ++i) {
+      buffer1(permutation1[i],0)=beads1(i,nprocSlice);
+    }
+  } else {
+    for (int i=0; i<npart; ++i) {
+      buffer1(permutation2[i],0)=beads2(i,nprocSlice);
+    }
+  }
+  idest=(iworker+1)%nworker;
+  isrc=(iworker+nworker-1)%nworker;
+  sendbuf=&(buffer1(0,0)[0]);
+  recvbuf=&(beads1(0,0)[0]);
+  mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
+                               recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
+  if (iworker>nworker-1) {
+    for (int i=0; i<npart; ++i) {
+      buffer2(permutation2[i],0)=beads2(i,nprocSlice);
+    }
+  } else {
+    for (int i=0; i<npart; ++i) {
+      buffer2(permutation1[i],0)=beads1(i,nprocSlice);
+    }
+  }
+  sendbuf=&(buffer2(0,0)[0]);
+  recvbuf=&(beads2(0,0)[0]);
+  mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
+                               recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
 #endif
 }
+
 
 void DoubleParallelPaths::clearPermutation() {
   permutation1.reset(); inversePermutation1.reset();
