@@ -35,13 +35,6 @@ SerialPaths::SerialPaths(int npart, int nslice, double tau,
     buffer2(*beadFactory.getNewBeads(npart,(nslice>1000)?1000:nslice)),
     permutation(*new Permutation(npart)),
     inversePermutation(*new Permutation(npart)) {
-/** HACK FOR SPIN --- REMOVE SOON!
-  blitz::TinyVector<double,4> s(-0.149505,0.076342,-0.0201831,0); 
-  for (int j=0; j<nslice; ++j) {
-    for (int i=0; i<npart; ++i) {
-      (*dynamic_cast<Beads<4>*>(beads.getAuxBeads(1)))(i,j)=s;
-    }
-  } */
   std::cout << "Creating serial paths with " 
             << nslice << " slices." << std::endl;
 }
@@ -52,18 +45,14 @@ SerialPaths::~SerialPaths() {
 
 void SerialPaths::sumOverLinks(LinkSummable& estimator) const {
   estimator.initCalc(nslice,0);
-  for (int islice=0; islice<nslice; ++islice) {
-    if (islice>0) {
-      for (int ipart=0; ipart<npart; ++ipart) {
-        estimator.handleLink(beads(ipart,islice-1), beads(ipart,islice),
-                             ipart, islice, *this);
-      }
-    } else {
-      for (int ipart=0; ipart<npart; ++ipart) {
-        estimator.handleLink(beads(inversePermutation[ipart],nslice-1),
-                             beads(ipart,islice), 
-                             ipart, 0, *this);
-      }
+  for (int ipart=0; ipart<npart; ++ipart) {
+    estimator.handleLink(beads(inversePermutation[ipart],nslice-1),
+                         beads(ipart,0), ipart, 0, *this);
+  }
+  for (int islice=1; islice<nslice; ++islice) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      estimator.handleLink(beads(ipart,islice-1), beads(ipart,islice),
+                           ipart, islice, *this);
     }
   }
 // Code to print out slices
@@ -75,21 +64,23 @@ void SerialPaths::sumOverLinks(LinkSummable& estimator) const {
 }
 
 Paths::Vec& SerialPaths::operator()(const int ipart, const int islice) {
-  return beads(ipart,islice);
+  return (islice>=0) ? beads(ipart,islice)
+                     : beads(inversePermutation[ipart],nslice+islice);
 }
 
 const Paths::Vec& 
 SerialPaths::operator()(const int ipart, const int islice) const {
-  return beads(ipart,islice);
+  return (islice>=0) ? beads(ipart,islice)
+                     : beads(inversePermutation[ipart],nslice+islice);
 }
 
 Paths::Vec&
 SerialPaths::operator()(const int ipart, const int islice, const int istep) {
   int jslice=islice+istep;
   if (jslice<0) {
-    return beads(inversePermutation[ipart],(jslice+nslice)%nslice);
+    return beads(inversePermutation[ipart],jslice+nslice);
   } else if (jslice>=nslice) {
-    return beads(permutation[ipart],jslice%nslice);
+    return beads(permutation[ipart],jslice-nslice);
   } else {
     return beads(ipart,jslice);
   }
@@ -100,9 +91,9 @@ const Paths::Vec&
     const {
   int jslice=islice+istep;
   if (jslice<0) {
-    return beads(inversePermutation[ipart],(jslice+nslice)%nslice);
+    return beads(inversePermutation[ipart],jslice+nslice);
   } else if (jslice>=nslice) {
-    return beads(permutation[ipart],jslice%nslice);
+    return beads(permutation[ipart],jslice-nslice);
   } else {
     return beads(ipart,jslice);
   }
@@ -113,9 +104,9 @@ Paths::Vec SerialPaths::delta(const int ipart, const int islice,
   Vec v = beads(ipart,islice);
   int jslice=islice+istep;
   if (jslice<0) {
-    v-= beads(inversePermutation[ipart],(jslice+nslice)%nslice);
+    v-= beads(inversePermutation[ipart],jslice+nslice);
   } else if (jslice>=nslice) {
-    v-= beads(permutation[ipart],jslice%nslice);
+    v-= beads(permutation[ipart],jslice-nslice);
   } else {
     v-= beads(ipart,jslice);
   }
@@ -132,15 +123,8 @@ void SerialPaths::getBeads(const int ifirstSlice, Beads<NDIM>& outBeads) const {
                       outBeads,isectionSlice);
     } else if (islice<nslice) {
       beads.copySlice(islice,outBeads,isectionSlice);
-      //for (int ipart=0; ipart<npart; ++ipart) {
-      //  outBeads(ipart,isectionSlice)=beads(ipart,islice);
-      //}
     } else {
-      islice%=nslice;
-      beads.copySlice(permutation,islice,outBeads,isectionSlice);
-      //for (int ipart=0; ipart<npart; ++ipart) {
-      //  outBeads(ipart,isectionSlice)=(permutation[ipart],islice);
-      //}
+      beads.copySlice(permutation,islice-nslice,outBeads,isectionSlice);
     }
   }
 }

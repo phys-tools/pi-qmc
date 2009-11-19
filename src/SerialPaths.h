@@ -23,6 +23,8 @@ class BeadFactory;
 #include "Paths.h"
 
 /// Storage for paths in a serial process.
+/// We own slices 0 through nslice-1.
+/// Access methods accept slices -nslice+1 through 2*nslice-1.
 /// @version $Revision$
 /// @author John Shumway
 class SerialPaths : public Paths {

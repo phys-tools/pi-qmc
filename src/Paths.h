@@ -25,6 +25,32 @@ class LinkSummable;
 
 /// Class for Paths, including Beads, connectivity (including any Permutation),
 /// the time step and SuperCell.
+/// Several operations are needed for paths:
+/// -# Check out and check in of a section of beads for multi level sampling.
+/// -# Looping over all beads to accumulate estimators.
+/// -# Accessing single beads with read-only or read-write access.
+/// -# Get the global permuation of the particles.
+///
+/// In parallel simulations with multiple workers, each worker owns
+/// some of the slices. Further, the worker will have some other workers' 
+/// slices buffered, which it has access to in read-only mode.
+/// To check out paths or set the coordinates, it is necessary to know which 
+/// slices a path owns. The notion or ownership is also need to perform
+/// the sumOverLinks. Note that in parallel simulations is it often 
+/// necessary to freeze a slice during MultiLevelSampling in order to
+/// prevent extra communication; hence the last slice owned in a 
+/// parallel simulation may be treated as read-only by a SectionChooser. 
+/// The following methods give information about
+/// ownership and allowed sampling
+/// - isOwnedSlice
+/// - getLowestOwnedSlice
+/// - getHighestOwnedSlice
+/// - getHigestSampledSlice
+///
+/// Finally, for parallel simulations it is necessary to shift the
+/// slices so that boundaries betweenw workers get sampled.
+/// For parallel fermion simulations, beads are stored for two sections,
+/// and this condition is flagged by the isDoubleMethod.
 /// @version $Revision$
 /// @author John Shumway
 class Paths {
