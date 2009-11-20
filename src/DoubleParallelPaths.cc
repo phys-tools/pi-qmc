@@ -307,7 +307,7 @@ void DoubleParallelPaths::setBuffers() {
   }
   // Get the i=0 buffer slice from i=nprocSlice slice on next worker.
   // First permute the beads that we will send to the next worker.
-  if (iworker>nworker-1) {
+  if (iworker<nworker-1) {
     for (int i=0; i<npart; ++i) {
       buffer1(permutation1[i],0)=beads1(i,nprocSlice);
     }
@@ -322,7 +322,7 @@ void DoubleParallelPaths::setBuffers() {
   recvbuf=&(beads1(0,0)[0]);
   mpi.getWorkerComm().Sendrecv(sendbuf,NDIM*npart,MPI::DOUBLE,idest,1,
                                recvbuf,NDIM*npart,MPI::DOUBLE,isrc,1);
-  if (iworker>nworker-1) {
+  if (iworker<nworker-1) {
     for (int i=0; i<npart; ++i) {
       buffer2(permutation2[i],0)=beads2(i,nprocSlice);
     }
