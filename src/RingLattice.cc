@@ -63,13 +63,13 @@ void RingLattice::run() {
   }
 #endif
   // Copy to other slices.
-  for (int islice=ifirstSlice+1; islice<ilastSlice; ++islice) {
+  for (int islice=ifirstSlice+1; islice<=ilastSlice; ++islice) {
     for (int ipart=ifirst; ipart<ifirst+npart; ++ipart) {
       paths(ipart,islice)=paths(ipart,ifirstSlice);
     }
   }
   if (paths.isDouble()) {
-    for (int islice=ifirstSlice; islice<ilastSlice; ++islice) {
+    for (int islice=ifirstSlice; islice<=ilastSlice; ++islice) {
       for (int ipart=ifirst; ipart<ifirst+npart; ++ipart) {
         paths(ipart,islice+nslice/2)=paths(ipart,islice);
       }
