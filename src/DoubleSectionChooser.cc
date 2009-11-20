@@ -50,14 +50,14 @@ void DoubleSectionChooser::run() {
   //double x; gsl_qrng_get(qrng,&x);
   double x=RandomNumGenerator::getRand()*(1-1e-8);
   int ilo=paths.getLowestOwnedSlice(true)-1;
-  int ihi=paths.getHighestSampledSlice(beads->getNSlice()-1,true);
+  int ihi=paths.getHighestSampledSlice(beads->getNSlice()-2,true);
   iFirstSlice1=ilo+(int)((ihi+1-ilo)*x);
   if (iFirstSlice>ihi) iFirstSlice=ihi;
   if (RandomNumGenerator::getRand()>=0.5) {
-    iFirstSlice1=(iFirstSlice1+paths.getNSlice()/2)%paths.getNSlice();
+    iFirstSlice1=(iFirstSlice1+paths.getNSlice()/2+1)%paths.getNSlice()-1;
   }
   //iFirstSlice1=(int)(paths.getNSlice()*x);
-  iFirstSlice2=(iFirstSlice1+paths.getNSlice()/2)%paths.getNSlice();
+  iFirstSlice2=(iFirstSlice1+paths.getNSlice()/2+1)%paths.getNSlice()-1;
   activateSection(1);
   // Copy coordinates from allBeads to section Beads.
   paths.getBeads(iFirstSlice1,*beads1);
