@@ -160,7 +160,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
   Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
-  d1=200; d2=200; // Initialize distances to a very large value.
+  d1=200.; d2=200.; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int ipart=0; ipart<npart; ++ipart) {
@@ -168,11 +168,11 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
       if (ipart==kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray1(jpart)=logGrad-fgrad;
@@ -186,11 +186,11 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
       if (ipart==kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray2(ipart)=logGrad-fgrad;
@@ -250,20 +250,20 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
           cell.pbc(delta);
           Vec grad;
           for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+            grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
             if (delta[i]<0) grad[i]=-grad[i];
           }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
           g00 += mat(ipart,kpart)*grad;
           g10 += mat(jpart,kpart)*grad;
           // Next derivative acts on particle jpart.
           delta=r1(jpart+ifirst)-r2(kpart+ifirst);
           cell.pbc(delta);
           for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+            grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
             if (delta[i]<0) grad[i]=-grad[i];
           }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
           g01 += mat(ipart,kpart)*grad;
           g11 += mat(jpart,kpart)*grad;
         }
@@ -287,12 +287,12 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
             for (int j=0; j<NDIM; ++j) {
               if (i==j) {
                 d2ii(i,j)=(*pg[i]).d2(fabs(delta[i]))
-                         /(*pg[i])(fabs(delta[i]));
+                         /((*pg[i])(fabs(delta[i]))+1e-300);
               } else {
                 d2ii(i,j)=(*pg[i]).grad(fabs(delta[i]))
-                         /(*pg[i])(fabs(delta[i])) 
+                         /((*pg[i])(fabs(delta[i]))+1e-300) 
                          *(*pg[j]).grad(fabs(delta[j]))
-                         /(*pg[j])(fabs(delta[j]));
+                         /((*pg[j])(fabs(delta[j]))+1e-300);
                 if (delta[i]*delta[j]>=0) d2ii(i,j)=-d2ii(i,j);
               }
             }
@@ -316,10 +316,10 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
             cell.pbc(delta);
             Vec grad;
             for (int i=0; i<NDIM; ++i) {
-              grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+              grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
               if (delta[i]<0) grad[i]=-grad[i];
             }
-            for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+            for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
             g00 += mat(ipart,kpart)*grad;
             g10 += mat(lpart,kpart)*grad;
           }
@@ -328,10 +328,10 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
           cell.pbc(delta);
           Vec grad(0.0);
           for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+            grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
             if (delta[i]<0) grad[i]=-grad[i];
           }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
           g01 = mat(ipart,jpart)*grad;
           g11 = mat(lpart,jpart)*grad;
           for (int i=0; i<NDIM; ++i) {
@@ -517,11 +517,11 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
       fpNodes.cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/(*fpNodes.pg[i])(fabs(delta[i]));
+        grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/((*fpNodes.pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
       if (ipart==fpNodes.kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
     fpNodes.gradArray1(jpart)=logGrad-fgrad;
@@ -535,11 +535,11 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
       fpNodes.cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/(*fpNodes.pg[i])(fabs(delta[i]));
+        grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/((*fpNodes.pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
       if (ipart==fpNodes.kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
     fpNodes.gradArray2(ipart)=logGrad-fgrad;
