@@ -244,13 +244,14 @@ double PairAction::getActionDifference(const Paths &paths,
         if (j==movingIndex(k)) {isMoving=true; jMoving=k; break;}
       }
       if (isMoving && i<=j) continue; //Don't double count moving interactions.
-      Vec prevDelta =paths(i,iFirstSlice);
-      prevDelta-=paths(j,iFirstSlice); cell.pbc(prevDelta);
-      Vec prevMovingDelta=prevDelta;
+      Vec prevDelta =paths(i,iFirstSlice-1);
+      prevDelta-=paths(j,iFirstSlice-1); cell.pbc(prevDelta);
+      Vec prevMovingDelta=prevDelta+displacement(iMoving);
+      if (isMoving) prevMovingDelta-=displacement(jMoving);
+      cell.pbc(prevMovingDelta);
       double prevR=sqrt(dot(prevDelta,prevDelta));
-      double prevMovingR=prevR;
-      //     for (int islice=iFirstSlice+1; islice<nslice; islice++) {
-      for (int islice=iFirstSlice-1; islice<=iLastSlice; islice++) {
+      double prevMovingR=sqrt(dot(prevMovingDelta,prevMovingDelta));
+      for (int islice=iFirstSlice; islice<=iLastSlice; islice++) {
         // Add action for moving beads.
         Vec delta=paths(i,islice);
         delta+=displacement(iMoving);
