@@ -111,16 +111,14 @@ void WritePaths::run() {
       }
     }
   } else { */
-    int nslicePerChunk = (imax-ifirst)/2;
+    int nslicePerChunk = (imax+1-ifirst)/2;
 
     /// Loop over chunks.
-    for (int ichunk=0; ichunk<ceil((nslice+1.)/nslicePerChunk); ++ichunk) {
-      int lastSlice=(nslice+1-ifirst)-ichunk*nslicePerChunk;
+    for (int ichunk=0; ichunk<ceil(nslice/nslicePerChunk); ++ichunk) {
+      int lastSlice=(nslice+ifirst)-ichunk*nslicePerChunk;
       if (lastSlice>nslicePerChunk) lastSlice=nslicePerChunk;
       if (workerID==0){
         for (int islice=0; islice<lastSlice; ++islice) {
-        //for (int islice=nslicePerChunk-1; 
-        //         islice>=(nslicePerChunk-lastSlice)+ifirst; --islice) {
           for (int ipart=0; ipart<paths.getNPart(); ++ipart) {
             Paths::Vec p = paths(ipart,islice);
             for (int i=0; i<NDIM; ++i) *file << p[i] << " ";
@@ -130,10 +128,8 @@ void WritePaths::run() {
 	  if (writeMovie) *movieFile << std::endl;
         }
       }
-      if (ichunk+1<ceil((nslice+1.)/nslicePerChunk)) 
-        paths.shift(nslicePerChunk);
+      paths.shift(lastSlice);
     }
-//  }
 
   if (workerID==0) delete file;
 }

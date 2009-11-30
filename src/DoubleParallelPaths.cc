@@ -49,7 +49,7 @@ DoubleParallelPaths::DoubleParallelPaths(int npart, int nslice, double tau,
   if (mpi.isMain()) std::cout << "Creating double parallel paths" << std::endl;
   for (int i=0; i<nworker; ++i)
     npSlice=nslice/2/nworker+1+((i+1==nworker)?(nslice/2)%nworker:0);
-  std :: cout <<"CloneID :: "<< mpi.getCloneID()  <<" :: Creating DoubleParallelPaths on  WorkerID "<< mpi.getWorkerID()<<" with nprocSlice "<<nprocSlice<<std ::endl;
+  std :: cout <<"CloneID :: "<< mpi.getCloneID()  <<" :: Creating DoubleParallelPaths on  WorkerID "<< mpi.getWorkerID()<<" with nprocSlice "<<nprocSlice << ",  ifirst= " << ifirst <<std ::endl;
 }
 
 DoubleParallelPaths::~DoubleParallelPaths() {

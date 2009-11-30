@@ -79,7 +79,7 @@ public:
   virtual int getHighestSampledSlice(int n, bool d) const {
     return ifirst+nprocSlice-n;}
   virtual bool isOwnedSlice(int islice) const {
-    const int jslice = (islice+1)%(nslice/2)-1;
+    const int jslice = (islice-ifirst+1)%(nslice/2)+ifirst-1;
     return jslice>ifirst && jslice <= ifirst+nprocSlice;}
   virtual void shift(const int ishift);
   virtual void setBuffers();

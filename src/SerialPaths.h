@@ -68,9 +68,9 @@ public:
   virtual const Permutation& getGlobalPermutation() const {return permutation;}
   virtual int getLowestOwnedSlice(bool d) const {return 0;}
   virtual int getHighestOwnedSlice(bool d) const {
-    return d?nslice/2:nslice - 1;}
+    return d?nslice/2-1:nslice - 1;}
   virtual int getHighestSampledSlice(int n, bool d) const {
-    return (d?nslice/2:nslice);}
+    return (d?nslice/2-1:nslice - 1);}
   virtual bool isOwnedSlice(int islice) const {
     return islice>=0 && islice<nslice;}
   virtual void shift(const int ishift);
