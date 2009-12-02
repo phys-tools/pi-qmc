@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006,2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -186,7 +186,7 @@ void SerialPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
 void SerialPaths::putDoubleBeads(
           int ifirstSlice1,Beads<NDIM> &beads1, Permutation &p1,
           int ifirstSlice2,Beads<NDIM> &beads2, Permutation &p2) const {
-  if (ifirstSlice1<nslice/2) {
+  if (ifirstSlice1<nslice/2-1) {
     putBeads(ifirstSlice1,beads1,p1);
     Permutation p1inv(p1); p1inv.setToInverse(p1);
     p2.prepend(p1);
