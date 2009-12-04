@@ -63,13 +63,13 @@ void DoubleParallelPaths::sumOverLinks(LinkSummable& estimator) const {
   for (int islice=1; islice<=nprocSlice; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       estimator.handleLink(beads1(ipart,islice-1), beads1(ipart,islice),
-                           ipart, (islice+ifirst)%nslice, *this);
+                           ipart, islice+ifirst, *this);
     }
   }
   for (int islice=1; islice<=nprocSlice; ++islice) {
     for (int ipart=0; ipart<npart; ++ipart) {
       estimator.handleLink(beads2(ipart,islice-1), beads2(ipart,islice),
-                           ipart, (islice+ifirst+nslice/2)%nslice, *this);
+                           ipart, islice+ifirst+nslice/2, *this);
     }
   }
 // Code to print out slicesv
@@ -88,51 +88,51 @@ void DoubleParallelPaths::sumOverLinks(LinkSummable& estimator) const {
 
 Paths::Vec& 
 DoubleParallelPaths::operator()(const int ipart, const int islice) {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
-           ?beads1(ipart,(islice-ifirst+nslice)%nslice)
+  return (islice-ifirst<nprocSlice+2)
+           ?beads1(ipart,islice-ifirst)
            :beads2(ipart,islice-ifirst-nslice/2);
 }
 
 const Paths::Vec& 
 DoubleParallelPaths::operator()(const int ipart, const int islice) const {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
-           ?beads1(ipart,(islice-ifirst+nslice)%nslice)
+  return (islice-ifirst<nprocSlice+2)
+           ?beads1(ipart,islice-ifirst)
            :beads2(ipart,islice-ifirst-nslice/2);
 }
 
 Paths::Vec&
 DoubleParallelPaths::operator()(const int ipart, const int islice,
                                 const int istep) {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
-           ?beads1(ipart,(islice-ifirst+istep+nslice)%nslice)
-           :beads2(ipart,(islice-ifirst+istep+nslice/2)%nslice);
-}
-
-const void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice, 
-    const int iaux) const {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
-         ?beads1.getAuxBead(ipart,(islice-ifirst+nslice)%nslice,iaux)
-         :beads2.getAuxBead(ipart,(islice-ifirst+nslice/2)%nslice,iaux);
-}
-
-void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice, 
-    const int iaux) {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
-         ?beads1.getAuxBead(ipart,(islice-ifirst+nslice)%nslice,iaux)
-         :beads2.getAuxBead(ipart,(islice-ifirst+nslice/2)%nslice,iaux);
+  return (islice-ifirst<nprocSlice+2)
+           ?beads1(ipart,islice-ifirst+istep)
+           :beads2(ipart,islice-ifirst+istep-nslice/2);
 }
 
 const Paths::Vec&
   DoubleParallelPaths::operator()(const int ipart, const int islice,
                                   const int istep) const {
-  return ((islice-ifirst+nslice)%nslice<nprocSlice+2)
-           ?beads1(ipart,(islice-ifirst+istep+nslice)%nslice)
-           :beads2(ipart,(islice-ifirst+istep+nslice/2)%nslice);
+  return (islice-ifirst<nprocSlice+2)
+           ?beads1(ipart,islice-ifirst+istep)
+           :beads2(ipart,islice-ifirst+istep-nslice/2);
+}
+
+const void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice, 
+    const int iaux) const {
+  return (islice-ifirst<nprocSlice+2)
+         ?beads1.getAuxBead(ipart,islice-ifirst,iaux)
+         :beads2.getAuxBead(ipart,islice-ifirst-nslice/2,iaux);
+}
+
+void* DoubleParallelPaths::getAuxBead(const int ipart, const int islice, 
+    const int iaux) {
+  return (islice-ifirst<nprocSlice+2)
+         ?beads1.getAuxBead(ipart,islice-ifirst,iaux)
+         :beads2.getAuxBead(ipart,islice-ifirst-nslice/2,iaux);
 }
 
 Paths::Vec DoubleParallelPaths::delta(const int ipart, const int islice,
                        const int istep) const {
-  Beads<NDIM>& beads(((islice-ifirst)%nslice<nprocSlice+2)?beads1:beads2);
+  Beads<NDIM>& beads((islice-ifirst<nprocSlice+2)?beads1:beads2);
   int jslice=(islice-ifirst)%(nslice/2);
   Vec v = beads(ipart,jslice);
   v-=beads(ipart,jslice+istep);
@@ -143,7 +143,7 @@ Paths::Vec DoubleParallelPaths::delta(const int ipart, const int islice,
 void DoubleParallelPaths::getBeads(const int ifirstSlice, 
                                    Beads<NDIM>& outBeads) const {
   int nsectionSlice=outBeads.getNSlice();
-  Beads<NDIM>& beads(((ifirstSlice-ifirst+nslice)%nslice<nprocSlice+2)?beads1:beads2);
+  Beads<NDIM>& beads((ifirstSlice-ifirst<nprocSlice+2)?beads1:beads2);
   int jfirstSlice=(ifirstSlice-ifirst)%(nslice/2);
   for (int isectionSlice=0; isectionSlice<nsectionSlice; ++isectionSlice) {
     int islice=isectionSlice+jfirstSlice;
@@ -154,7 +154,7 @@ void DoubleParallelPaths::getBeads(const int ifirstSlice,
 }
 
 void DoubleParallelPaths::getSlice(int islice, VArray& out) const {
-  Beads<NDIM>& beads(((islice-ifirst+nslice)%nslice<nprocSlice+2)?beads1:beads2);
+  Beads<NDIM>& beads((islice-ifirst<nprocSlice+2)?beads1:beads2);
   int jslice=(islice-ifirst)%(nslice/2);
   for (int ipart=0; ipart<npart; ++ipart) out(ipart)=beads(ipart,jslice);
 }
@@ -162,7 +162,7 @@ void DoubleParallelPaths::getSlice(int islice, VArray& out) const {
 void DoubleParallelPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
                            const Permutation& inPermutation) const {
   //First place the section beads back in the bead array.
-  bool first = (((ifirstSlice-ifirst+nslice)%nslice)<nprocSlice+2);
+  bool first = (ifirstSlice-ifirst<nprocSlice+2);
   Beads<NDIM>& beads(first?beads1:beads2);
   Permutation& permutation(first?permutation1:permutation2);
   Permutation& inversePermutation(first
@@ -176,7 +176,7 @@ void DoubleParallelPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
     }
   }
   // Now permute the following beads.
-  int jlastSlice=jfirstSlice+nsectionSlice;
+  int jlastSlice=nsectionSlice+jfirstSlice;
   if (!inPermutation.isIdentity()){
     for (int islice=jlastSlice; islice<nprocSlice+2; ++islice) {
       // Swap paths.
@@ -190,10 +190,10 @@ void DoubleParallelPaths::putBeads(int ifirstSlice, const Beads<NDIM>& inBeads,
 }
 
 void DoubleParallelPaths::putDoubleBeads(
-          int ifirstSlice1,Beads<NDIM> &beads1, Permutation &p1,
-          int ifirstSlice2,Beads<NDIM> &beads2, Permutation &p2) const {
-  putBeads(ifirstSlice1,beads1,p1);
-  putBeads(ifirstSlice2,beads2,p2);
+          int ifirstSlice1,Beads<NDIM> &inbeads1, Permutation &p1,
+          int ifirstSlice2,Beads<NDIM> &inbeads2, Permutation &p2) const {
+  putBeads(ifirstSlice1,inbeads1,p1);
+  putBeads(ifirstSlice2,inbeads2,p2);
 }
 
 const Permutation& DoubleParallelPaths::getGlobalPermutation() const {
@@ -305,7 +305,7 @@ void DoubleParallelPaths::setBuffers() {
       beads1(i,nprocSlice+1)=buffer2(permutation1[i],0);
     }
   }
-  // Get the i=0 buffer slice from i=nprocSlice slice on next worker.
+  // Get the i=0 buffer slice from i=nprocSlice slice on previous worker.
   // First permute the beads that we will send to the next worker.
   if (iworker<nworker-1) {
     for (int i=0; i<npart; ++i) {

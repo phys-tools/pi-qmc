@@ -44,8 +44,8 @@ public:
   /// Get a reference to a bead by offset.
   virtual Vec& operator()(const int ipart, const int islice, const int istep);
   /// Get a const reference to a bead by offset.
-  virtual const Vec&
-    operator()(const int ipart, const int islice, const int istep) const;
+  virtual const Vec& operator()(const int ipart, const int islice, 
+                                const int istep) const;
   /// Get a relative displacement a bead by offset.
   virtual Vec delta(const int ipart, const int islice, const int istep) const;
   /// Get beads.
@@ -79,8 +79,8 @@ public:
   virtual int getHighestSampledSlice(int n, bool d) const {
     return ifirst+nprocSlice-n;}
   virtual bool isOwnedSlice(int islice) const {
-    const int jslice = (islice-ifirst+1)%(nslice/2)+ifirst-1;
-    return jslice>ifirst && jslice <= ifirst+nprocSlice;}
+    const int jslice = (islice-ifirst)%(nslice/2);
+    return jslice>0 && jslice <= nprocSlice;}
   virtual void shift(const int ishift);
   virtual void setBuffers();
   virtual bool isDouble() const {return true;}

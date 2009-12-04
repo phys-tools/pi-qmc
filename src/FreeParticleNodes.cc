@@ -107,7 +107,7 @@ double FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
   if (info!=0) {
-    std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
+    std::cout << "BAD RETURN FROM ZGETRF!!!! " << islice << std::endl;
     nerror++;
     if (nerror>1000) {
       std::cout << "too many errors!!!!" << std::endl;
@@ -121,7 +121,7 @@ double FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
   if (info!=0) {
-    std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
+    std::cout << "BAD RETURN FROM ZGETRI!!!! " << islice << std::endl;
     nerror++;
     if (nerror>1000) {
       std::cout << "too many errors!!!!" << std::endl;
