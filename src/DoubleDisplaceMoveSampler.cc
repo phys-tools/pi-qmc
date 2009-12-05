@@ -74,7 +74,7 @@ bool DoubleDisplaceMoveSampler::tryMove() {
                                 1,MPI::DOUBLE,MPI::SUM,0);
     double acceptProb = exp(-netDeltaAction);
     bool acceptReject = RandomNumGenerator::getRand()>acceptProb;
-    mpi->getWorkerComm().Bcast(&acceptReject,1,MPI::CHAR,0); 
+    mpi->getWorkerComm().Bcast(&acceptReject,sizeof(bool),MPI::CHAR,0); 
     if (acceptReject) return false;
   } else {
     double acceptProb=exp(-deltaAction); 

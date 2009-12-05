@@ -78,7 +78,7 @@ void DisplaceMoveSampler::run() {
     }
 #ifdef ENABLE_MPI
     if (nworker > 1) {
-      mpi->getWorkerComm().Bcast(&reject, 1, MPI::CHAR, 0); 
+      mpi->getWorkerComm().Bcast(&reject, sizeof(bool), MPI::CHAR, 0); 
     }
 #endif 
     if (reject) continue;
