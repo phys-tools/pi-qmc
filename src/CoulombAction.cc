@@ -33,17 +33,17 @@ CoulombAction::CoulombAction(const double epsilon,
     const SimulationInfo& simInfo, const int norder, double rmin, 
     double rmax, int ngpts, const bool dumpFiles,
     bool useEwald, int ewaldNDim, double ewaldRcut, 
-    double ewaldKcut, double screenDist)
+			     double ewaldKcut, double screenDist, const double kappa)
   : epsilon(epsilon), tau(simInfo.getTau()), npart(simInfo.getNPart()),
-    pairActionArray(0), screenDist(screenDist), ewaldSum(0) {
+    pairActionArray(0), screenDist(screenDist), ewaldSum(0), kappa(kappa) {
   typedef blitz::TinyVector<int, NDIM> IVec;
   const int nspecies=simInfo.getNSpecies();
   if (useEwald && (NDIM==3||NDIM==2) && ewaldNDim==NDIM) {
     SuperCell &cell(*simInfo.getSuperCell());
     if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
     std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
-    //////////////////////ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut);
-    ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
+    ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut, kappa);
+    ////////////////////// ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
     rewald.resize(npart);
     EwaldSum::Array &q=ewaldSum->getQArray();  
     for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge;
@@ -85,7 +85,7 @@ CoulombAction::CoulombAction(const double epsilon,
             new PairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
                            rmin, rmax, ngpts, false));
         }
-        if (dumpFiles) (*(pairActionArray.end()-1))->write("");
+        if (dumpFiles) (*(pairActionArray.end()-1))->write("",0);
       }
     }
   }

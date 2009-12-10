@@ -38,7 +38,7 @@ public:
   CoulombAction(const double epsilon, const SimulationInfo&, const int norder,
                 double rmin, double rmax, int ngpts, const bool dumpFiles,
                 bool useEwald, int ewaldNDim, double ewaldRcut, 
-                double ewaldKcut, double screenDist);
+                double ewaldKcut, double screenDist, const double kappa);
   /// Virtual destructor.
   virtual ~CoulombAction();
   /// Calculate the difference in action.
@@ -61,6 +61,7 @@ public:
   /// EmpiricalPairAction method.
   virtual double utau(double r, int order) const;
 private:
+  const double kappa;
   /// The dielectric constant.
   const double epsilon;
   /// The timestep.

@@ -125,7 +125,8 @@ void SpringAction::getBeadAction(const Paths& paths, int ipart, int islice,
   if (isStatic(ipart)) return;
   Vec delta = paths.delta(ipart,islice,-1);
   fm-=(delta/(2*lambda(ipart)*tau));
-  utau = NDIM/(2*tau) - dot(delta,delta)/(4.0*lambda(ipart)*tau*tau);   //std :: cout << "SA :: "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
+  utau = NDIM/(2*tau) - dot(delta,delta)/(4.0*lambda(ipart)*tau*tau);   
+
   delta = paths.delta(ipart,islice,1);
   fp-=(delta/(2*lambda(ipart)*tau));
 

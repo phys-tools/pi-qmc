@@ -68,6 +68,10 @@ public:
     virtual double u(double r, int iorder) const=0;
     virtual double utau(double r, int iorder) const=0;
   };
+  /// Construct by providing the species and squarer pidmu filename.
+  PairAction(const Species&, const Species&, const std::string& filename,
+             const SimulationInfo&, const int norder, 
+             const bool hasZ);
   /// Construct by providing the species and dmu filename.
   PairAction(const Species&, const Species&, const std::string& filename,
              const SimulationInfo&, const int norder, 
@@ -95,7 +99,7 @@ public:
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
   /// Write data tables to disk (defaults to speciesNames.dm[eu]).
-  void write(const std::string &filename) const;
+    void write(const std::string &filename, const bool hasZ) const;
   friend class EwaldAction;
 protected:
   /// The timestep.
@@ -132,5 +136,6 @@ protected:
   bool isDMD;
   /// Flag for including sum over z.
   bool hasZ;
+  
 };
 #endif

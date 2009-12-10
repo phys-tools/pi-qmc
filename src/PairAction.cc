@@ -28,7 +28,78 @@
 #include <fstream>
 #include <blitz/tinyvec-et.h>
 #include "DisplaceMoveSampler.h"
+PairAction::PairAction(const Species& s1, const Species& s2,
+            const std::string& filename, const SimulationInfo& simInfo, 
+            const int norder, const bool hasZ) 
+  : tau(simInfo.getTau()), species1(s1), species2(s2),
+    ifirst1(s1.ifirst), ifirst2(s2.ifirst),
+    npart1(s1.count), npart2(s2.count), norder(norder),
+    hasZ(hasZ) {
+  std::cout << "constructing PairAction";
+  std::cout << " : species1= " <<  s1 << "species2= " <<  s2;
+  std::cout << " : squarer filename=" << filename << std::endl;
+  std::vector<Array> buffer; buffer.reserve(300);
+  std::ifstream dmfile((filename+".pidmu").c_str()); 
+  std::string temp;
+  double r;
+  double junk;
+  int ndata=1;
+  if (hasZ) {
+    for (int k=0; k <= norder; k++)
+      ndata += k*(k+3)/2;
+  } else
+    {
+      ndata+=norder;
+    }
+  Array u(ndata);
 
+  // read .pidmu file int u
+  while (dmfile) {
+    dmfile >> r;
+    for (int k=0; k<ndata; ++k) {
+      dmfile >> u(k); 
+    }
+    if (dmfile) buffer.push_back(u.copy());
+  }
+  // copy u into ugrid
+  ngpts=buffer.size();
+  ugrid.resize(ngpts,2,ndata);
+  for (int i=0; i<ngpts; ++i) {
+    for (int k=0; k<ndata; ++k) ugrid(i,0,k)=buffer[i](k);
+  }
+  // now copy the action beta derivatives directly to ugrid. Assuming LOG grid from squarer.
+  std::ifstream dmefile((filename+".pidme").c_str());
+  for (int i=0; i<ngpts; ++i) {
+    dmefile >> r; 
+    if (i==0) {
+      rgridinv = 1.0/r;
+    }
+    if (i==ngpts-1) {
+      logrratioinv = (ngpts-1)/log(r*rgridinv);
+    }
+    for (int k=0; k<ndata; ++k) {
+      dmefile >> ugrid(i,1,k);
+    }
+  }
+ 
+  std::ofstream file((filename+".pidmucheck").c_str());
+  file.precision(6);
+  file.setf(file.scientific,file.floatfield); 
+  file.setf(file.showpos);
+  for (int i=0; i<ngpts; ++i) {      
+    double r=(1./rgridinv)*exp(i/logrratioinv);
+    file <<r;   
+   for (int k=0; k<ndata; ++k) {
+     file << "  " << ugrid(i,0,k);
+   }
+   file << std::endl;
+  }
+  write("",hasZ);
+}
+
+
+
+/////////// 
 PairAction::PairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
             const int norder, const bool hasZ, const bool isDMD) 
@@ -443,13 +514,21 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
   }
 }
 
-void PairAction::write(const std::string &fname) const {
+void PairAction::write(const std::string &fname,const bool hasZ) const {
   std::string filename=(fname=="")?(species1.name+species2.name):fname;
   std::ofstream ufile((filename+".dmu").c_str()); ufile.precision(6);
   ufile.setf(ufile.scientific,ufile.floatfield); ufile.setf(ufile.showpos);
   std::ofstream efile((filename+".dme").c_str()); efile.precision(6);
   efile.setf(efile.scientific,efile.floatfield); efile.setf(efile.showpos);
-  int ndata = (hasZ) ? (norder+1)*(norder+2)/2 : norder+1;
+  int ndata=1;
+  if (hasZ) {
+    for (int k=0; k <= norder; k++)
+      ndata += k*(k+3)/2;
+  } else
+    {
+      ndata+=norder;
+    }
+  // write
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
     ufile << r; efile << r;

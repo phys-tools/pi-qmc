@@ -27,8 +27,8 @@
 #include "MultiLevelSampler.h"
 
 TradEwaldSum::TradEwaldSum(const SuperCell& cell, const int npart,
-                   const double rcut, const double kcut)
-  : EwaldSum(cell,npart,rcut,kcut), kappa(3.0/rcut) {
+			   const double rcut, const double kcut, const double kappa)
+  : EwaldSum(cell,npart,rcut,kcut), kappa(kappa) {
   setLongRangeArray();
   evalSelfEnergy();
 }

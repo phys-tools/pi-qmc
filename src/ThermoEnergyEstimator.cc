@@ -47,15 +47,16 @@ void ThermoEnergyEstimator::handleLink(const Vec& start, const Vec& end,
     double u(0),utau(0),ulambda(0);
     Vec fm,fp;
     action->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
-    energy+=utau;//std :: cout << "action TE :: "<<energy<<"  "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
+    energy+=utau;
   }
+ 
   if (doubleAction) {
     double u(0),utau(0),ulambda(0);
     Vec fm,fp;
     doubleAction->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
-    energy+=utau;//std :: cout << "daction TE :: "<<energy<<"  "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
+    energy+=utau;
   }
- 
+
 }
 
 void ThermoEnergyEstimator::endCalc(const int lnslice) {
@@ -69,5 +70,5 @@ void ThermoEnergyEstimator::endCalc(const int lnslice) {
   }
   #endif
   energy/=nslice;
-  etot+=energy; enorm+=1; //std :: cout <<"End calc ::"<<energy<<" "<<nslice<<"  "<<etot<<std ::endl;
+  etot+=energy; enorm+=1; 
 }

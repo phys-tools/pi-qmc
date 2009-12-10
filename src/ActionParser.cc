@@ -116,12 +116,22 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       int ndim=getIntAttribute(actNode,"ewaldNDim");
       if (ndim==0) ndim=NDIM;
       double rcut=getLengthAttribute(actNode,"ewaldRcut");
-      double kcut=getDoubleAttribute(actNode,"ewaldKcut");
-      double screenDist=getLengthAttribute(actNode,"screenDist");
-      composite->addAction(
-        new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
-                          useEwald,ndim,rcut,kcut,screenDist));
-      continue;
+      double kappa=getDoubleAttribute(actNode,"kappa");
+  	if (kappa==0) {
+	  double Lside=1000000000000000.0 ;
+	  for (int i=0; i<NDIM; i++) {
+	    if (Lside > (*simInfo.getSuperCell()).a[i] )
+	      Lside = (*simInfo.getSuperCell()).a[i];
+	  }
+	  kappa = sqrt( pow(3.6*simInfo.getNPart(),(1.0/6.0))*sqrt(3.1415926535897931)/Lside );
+	}
+	std :: cout <<"ActionParser :: CoulombAction :: kappa :: "<< kappa<<std :: endl;
+	double kcut=getDoubleAttribute(actNode,"ewaldKcut");
+	double screenDist=getLengthAttribute(actNode,"screenDist");
+	composite->addAction(
+			     new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
+                          useEwald,ndim,rcut,kcut,screenDist,kappa));
+	continue;
     } else if (name=="GaussianAction") {
       double v0=getEnergyAttribute(actNode,"v0");
       double alpha=getDoubleAttribute(actNode,"alpha");
@@ -447,8 +457,16 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       int norder=getIntAttribute(actNode,"norder");
       bool isDMD=getBoolAttribute(actNode,"isDMD");
       bool hasZ=getBoolAttribute(actNode,"hasZ");
-      composite->addAction(new PairAction(species1,species2,filename,
-                                          simInfo,norder,hasZ,isDMD));
+      bool readSquarerFile =getBoolAttribute(actNode,"squarerFile"); 
+      if (readSquarerFile>0){
+	std :: cout << "Pair action from squarer file"<< std :: endl;
+	composite->addAction(new PairAction(species1,species2,filename,
+					    simInfo,norder,hasZ));
+      } else {
+	composite->addAction(new PairAction(species1,species2,filename,
+					    simInfo,norder,hasZ,isDMD));
+      }
+
       continue;
     } else if (name=="EmpiricalInteraction") {
       ctxt->node=actNode;
@@ -476,10 +494,11 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         double mu=1./(1./species1.mass+1./species2.mass);
         double radius = getLengthAttribute(actNode,"radius");
         bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
+	bool hasZ=getBoolAttribute(actNode,"hasZ");
         PairAction* action = new PairAction(species1,species2,
                              CaoBerneAction(mu,radius,tau,norder),
                              simInfo,norder,rmin,rmax,ngpts,true);
-        if (dumpFiles) action -> write("");
+        if (dumpFiles) action -> write("",hasZ);
         composite->addAction(action);
         continue; 
       }
@@ -500,9 +519,10 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         double ascat = pot->getScatteringLength(mu,rmax,0.01*deltar); 
         std::cout << "Scattering length = " << ascat << "a0, or " 
                   << ascat*0.0529177 << " nm." << std::endl;
+	bool hasZ=getBoolAttribute(actNode,"hasZ");
         PairAction *action = new PairAction(species1,species2,integrator,
                                             simInfo,norder,rmin,rmax,ngpts);
-        if (dumpFiles) action -> write("");
+        if (dumpFiles) action -> write("", hasZ);
         composite->addAction(action);
       } else {
         PrimativePairAction empAction(*pot,simInfo.getTau());

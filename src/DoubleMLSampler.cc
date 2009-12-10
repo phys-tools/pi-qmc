@@ -148,28 +148,6 @@ bool DoubleMLSampler::tryMove(double initialLnTranProb) {
 
   // Move accepted.
   action->acceptLastMove();
-  /* ///////////////////////////// print the old and new sections
-  std::ofstream *file=0;  
-
-  std::string ext="old";
-  file = new std::ofstream((ext).c_str());
-  for (int islice=0; islice <sectionBeads1->getNSlice(); islice++)
-    *file <<(*sectionBeads1)((*movingIndex1)(0),islice)[0]<< "     "<< (*sectionBeads1)((*movingIndex1)(0),islice)[1]<<"   "<< (*sectionBeads1)((*movingIndex1)(0),islice)[2]<<std :: endl;
-  for (int islice=0; islice <sectionBeads2->getNSlice(); islice++)
-    *file <<(*sectionBeads2)((*movingIndex2)(0),islice)[0]<< "     "<< (*sectionBeads2)((*movingIndex2)(0),islice)[1]<<"   "<< (*sectionBeads2)((*movingIndex2)(0),islice)[2]<<std :: endl;
- 
-
-  ext="new";
-  file = new std::ofstream((ext).c_str());
-  for (int islice=0; islice < movingBeads1->getNSlice(); islice++)
-    *file <<(*movingBeads1)(0,islice)[0]<< "  "<< (*movingBeads1)(0,islice)[1]<<"  "<<(*movingBeads1)(0,islice)[2]<<std :: endl;
-  for (int islice=0; islice < movingBeads2->getNSlice(); islice++)
-    *file <<(*movingBeads2)(0,islice)[0]<< "  "<< (*movingBeads2)(0,islice)[1]<<"  "<<(*movingBeads2)(0,islice)[2]<<std :: endl;
-
- delete file;
-  ////////////////////////////// */
-
-
 
   //if (samplingBoth)  {
   //  activateSection(2); action->acceptLastMove(); activateSection(1);

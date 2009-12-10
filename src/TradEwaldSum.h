@@ -65,7 +65,7 @@ class TradEwaldSum : public EwaldSum {
 public:
   /// Constructor calcuates the k-vectors for a given rcut and kcut.
   TradEwaldSum(const SuperCell&, const int npart, 
-           const double rcut, const double kcut);
+	       const double rcut, const double kcut, const double kappa);
   /// Virtual destructor.
   virtual ~TradEwaldSum();
   /// Returns @f$ f(r) @f$, used to cancel tails on actions or potentials.
