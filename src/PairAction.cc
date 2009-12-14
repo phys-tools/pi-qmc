@@ -37,36 +37,41 @@ PairAction::PairAction(const Species& s1, const Species& s2,
     hasZ(hasZ) {
   std::cout << "constructing PairAction";
   std::cout << " : species1= " <<  s1 << "species2= " <<  s2;
-  std::cout << " : squarer filename=" << filename << std::endl;
+  std::cout << " : squarer filename (LOG grid assumed)=" << filename << std::endl;
   std::vector<Array> buffer; buffer.reserve(300);
   std::ifstream dmfile((filename+".pidmu").c_str()); 
   std::string temp;
   double r;
   double junk;
-  int ndata=1;
+  int ndata=1;// count diagonal term
   if (hasZ) {
-    for (int k=0; k <= norder; k++)
-      ndata += k*(k+3)/2;
-  } else
-    {
-      ndata+=norder;
-    }
+    ndata += norder*(norder+3)/2;
+  } else {
+    ndata+=norder;
+  }
   Array u(ndata);
 
-  // read .pidmu file int u
+  // read .pidmu file into u 
+  // Correct the fact that actions tabulated with squarer are with respect to s and z
+  // not s/q and z/q (dimensionless) like is done with pi.
   while (dmfile) {
     dmfile >> r;
+    int iorder=0;
     for (int k=0; k<ndata; ++k) {
       dmfile >> u(k); 
+      if (k > iorder*(iorder+3)/2) iorder++;
+      u(k)*=pow(r,2*iorder);
     }
     if (dmfile) buffer.push_back(u.copy());
   }
+
   // copy u into ugrid
   ngpts=buffer.size();
   ugrid.resize(ngpts,2,ndata);
   for (int i=0; i<ngpts; ++i) {
     for (int k=0; k<ndata; ++k) ugrid(i,0,k)=buffer[i](k);
   }
+
   // now copy the action beta derivatives directly to ugrid. Assuming LOG grid from squarer.
   std::ifstream dmefile((filename+".pidme").c_str());
   for (int i=0; i<ngpts; ++i) {
@@ -77,22 +82,28 @@ PairAction::PairAction(const Species& s1, const Species& s2,
     if (i==ngpts-1) {
       logrratioinv = (ngpts-1)/log(r*rgridinv);
     }
+    int iorder=0;
     for (int k=0; k<ndata; ++k) {
-      dmefile >> ugrid(i,1,k);
+      dmefile >> ugrid(i,1,k); 
+      if (k > iorder*(iorder+3)/2) iorder++;
+      ugrid(i,1,k)*=pow(r,2*iorder);
     }
   }
  
+  // check the squarer
   std::ofstream file((filename+".pidmucheck").c_str());
-  file.precision(6);
+  file.precision(8);
   file.setf(file.scientific,file.floatfield); 
   file.setf(file.showpos);
   for (int i=0; i<ngpts; ++i) {      
     double r=(1./rgridinv)*exp(i/logrratioinv);
     file <<r;   
-   for (int k=0; k<ndata; ++k) {
-     file << "  " << ugrid(i,0,k);
-   }
-   file << std::endl;
+    int iorder=0;
+    for (int k=0; k<ndata; ++k) {  
+      if (k > iorder*(iorder+3)/2) iorder++;
+      file << "  " << ugrid(i,0,k)/pow(r,2*iorder);
+    }
+    file << std::endl;
   }
   write("",hasZ);
 }
@@ -441,15 +452,13 @@ double PairAction::uk0(double q, double s2, double z2) const {
   if (q<1) {i=0; x=0;}
   else if (i>ngpts-2) {i=ngpts-2; x=1;}
   else x-=i;
+  int index=0;
   double action=0;
-  for (int l=norder; l>=0; l--) {
-    int index=norder*(norder+1)/2+l;
-    double temp=0;
-    for (int k=norder-l; k>=0; k--) {
-      temp*=s2; temp+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-      index -= k+l;
+  for (int k=0; k<=norder; k++) {
+    for (int j=0; j<=k; j++) {
+      action += ((1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index))*pow(z2,j)*pow(s2,k-j);
+      index++;
     }
-    action*=z2; action+=temp;
   }
   return action;
 }
@@ -472,7 +481,7 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double &u,
     us2*=s2; us2+=k*((1-x)*ugrid(i,0,k)+x*ugrid(i+1,0,k));
   }
 }
-
+//
 void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
             double &utau, double &uq, double &us2, double& uz2) const {
   q*=rgridinv; double x=log(q)*logrratioinv;
@@ -481,53 +490,42 @@ void PairAction::uk0CalcDerivatives(double q, double s2, double z2, double &u,
   else if (i>ngpts-2) {i=ngpts-2; x=1;}
   else x-=i;
   u=utau=uq=us2=uz2=0.;
-  for (int l=norder; l>=0; l--) {
-    int index=norder*(norder+1)/2+l;
-    double a=0, atau=0, aq=0;
-    for (int k=norder-l; k>=0; k--) {
-      a*=s2; a+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-      atau*=s2; atau+=(1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index);
-      aq*=s2; aq += ugrid(i+1,0,index)-ugrid(i,0,index);
-      index -= k+l;
+  double z2j, s2kminusj,ukj,dukj;
+  int index=0;
+  for (int k=0; k<=norder; k++) {
+    for (int j=0; j<=k; j++) {
+      z2j=pow(z2,j);
+      s2kminusj=pow(s2,k-j);
+      ukj=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
+      dukj=ugrid(i+1,0,index)-ugrid(i,0,index);
+
+      u+=ukj*z2j*s2kminusj; 
+      utau+=( (1-x)*ugrid(i,1,index)+x*ugrid(i+1,1,index) )*z2j*s2kminusj; 
+
+      uz2+=j*ukj*s2kminusj*z2j;
+      us2+=(k-j)*ukj*z2j*s2kminusj;
+      uq+=z2j*s2kminusj*dukj;
+
+      index++;
     }
-    u*=z2; u+=a;
-    utau*=z2; utau+=atau;
-    uq*=z2; uq+=aq;
   }
+  uz2/=z2;
+  us2/=s2;
   uq*=logrratioinv*rgridinv/q;
-  for (int l=norder; l>=0; l--) {
-    int index=norder*(norder+1)/2+l;
-    double as2=0;
-    for (int k=norder-l; k>0; k--) {
-      as2*=s2; as2+=k*(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-      index -= k+l;
-    }
-    us2*=z2; us2+=as2;
-  }
-  for (int l=norder; l>0; l--) {
-    int index=norder*(norder+1)/2+l;
-    double az2=0;
-    for (int k=norder-l; k>=0; k--) {
-      az2*=s2; az2+=(1-x)*ugrid(i,0,index)+x*ugrid(i+1,0,index);
-    }
-    uz2*=z2; uz2+=l*az2;
-  }
 }
 
 void PairAction::write(const std::string &fname,const bool hasZ) const {
   std::string filename=(fname=="")?(species1.name+species2.name):fname;
-  std::ofstream ufile((filename+".dmu").c_str()); ufile.precision(6);
+  std::ofstream ufile((filename+".dmu").c_str()); ufile.precision(8);
   ufile.setf(ufile.scientific,ufile.floatfield); ufile.setf(ufile.showpos);
-  std::ofstream efile((filename+".dme").c_str()); efile.precision(6);
+  std::ofstream efile((filename+".dme").c_str()); efile.precision(8);
   efile.setf(efile.scientific,efile.floatfield); efile.setf(efile.showpos);
   int ndata=1;
   if (hasZ) {
-    for (int k=0; k <= norder; k++)
-      ndata += k*(k+3)/2;
-  } else
-    {
-      ndata+=norder;
-    }
+    ndata += norder*(norder+3)/2;
+  } else {
+    ndata+=norder;
+  }
   // write
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);

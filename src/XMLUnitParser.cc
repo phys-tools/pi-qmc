@@ -28,7 +28,7 @@ double XMLUnitParser::getLengthAttribute(const xmlNodePtr &node,
                                          const std::string &attName) {
   parseUnitAndValue(node,attName);
   double scale=1;
-  if (unit!="") scale=units->getLengthScaleIn(unit);
+  ////////sak if (unit!="") scale=units->getLengthScaleIn(unit);
   return scale*value;
 }
 
@@ -36,7 +36,7 @@ double XMLUnitParser::getEnergyAttribute(const xmlNodePtr &node,
                                          const std::string &attName) {
   parseUnitAndValue(node,attName);
   double scale=1;
-  if (unit!="") scale=units->getEnergyScaleIn(unit);
+  //////sak if (unit!="") scale=units->getEnergyScaleIn(unit);
   return scale*value;
 }
 
@@ -44,7 +44,7 @@ double XMLUnitParser::getMassAttribute(const xmlNodePtr &node,
                                          const std::string &attName) {
   parseUnitAndValue(node,attName);
   double scale=1;
-  if (unit!="") scale=units->getMassScaleIn(unit);
+  ///////sak if (unit!="") scale=units->getMassScaleIn(unit);
   return scale*value;
 }
 
@@ -65,7 +65,7 @@ double XMLUnitParser::getInvLengthAttribute(const xmlNodePtr &node,
   double scale=1;
   if (unit!="") {
     // Assume units end in "-1".
-    scale=1.0/units->getLengthScaleIn(unit.substr(0,unit.length()-2));
+    ////////sak   scale=1.0/units->getLengthScaleIn(unit.substr(0,unit.length()-2));
   }
   return scale*value;
 }
