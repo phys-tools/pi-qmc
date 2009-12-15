@@ -402,6 +402,8 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
     }
     u += 0.5*v;
     utau += 0.5*vtau;
+
+
     fm -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
          +vz2*z*delta*(2-z)/(q*r);
     // And force contribution from next slice.

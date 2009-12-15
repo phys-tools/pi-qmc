@@ -117,21 +117,21 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       if (ndim==0) ndim=NDIM;
       double rcut=getLengthAttribute(actNode,"ewaldRcut");
       double kappa=getDoubleAttribute(actNode,"kappa");
-  	if (kappa==0) {
-	  double Lside=1000000000000000.0 ;
-	  for (int i=0; i<NDIM; i++) {
-	    if (Lside > (*simInfo.getSuperCell()).a[i] )
-	      Lside = (*simInfo.getSuperCell()).a[i];
-	  }
-	  kappa = sqrt( pow(3.6*simInfo.getNPart(),(1.0/6.0))*sqrt(3.1415926535897931)/Lside );
+      if (kappa==0) {
+	double Lside=1000000000000000.0 ;
+	for (int i=0; i<NDIM; i++) {
+	  if (Lside > (*simInfo.getSuperCell()).a[i] )
+	    Lside = (*simInfo.getSuperCell()).a[i];
 	}
-	std :: cout <<"ActionParser :: CoulombAction :: kappa :: "<< kappa<<std :: endl;
-	double kcut=getDoubleAttribute(actNode,"ewaldKcut");
-	double screenDist=getLengthAttribute(actNode,"screenDist");
-	composite->addAction(
-			     new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
-                          useEwald,ndim,rcut,kcut,screenDist,kappa));
-	continue;
+	kappa = sqrt( pow(3.6*simInfo.getNPart(),(1.0/6.0))*sqrt(3.1415926535897931)/Lside );
+      }
+      std :: cout <<"ActionParser :: CoulombAction :: kappa :: "<< kappa<<std :: endl;
+      double kcut=getDoubleAttribute(actNode,"ewaldKcut");
+      double screenDist=getLengthAttribute(actNode,"screenDist");
+      composite->addAction(
+			   new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
+					     useEwald,ndim,rcut,kcut,screenDist,kappa));
+      continue;
     } else if (name=="GaussianAction") {
       double v0=getEnergyAttribute(actNode,"v0");
       double alpha=getDoubleAttribute(actNode,"alpha");
