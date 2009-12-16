@@ -122,6 +122,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (useEwald) {
         double rcut=getLengthAttribute(estNode,"rcut");
         double kcut=getDoubleAttribute(estNode,"kcut");
+	int nimages=getIntAttribute(estNode, "ewaldImages");
+	if (nimages ==0) nimages=1;
 	double kappa=getDoubleAttribute(estNode,"kappa");
 	if (kappa==0) {
 	  double Lside=1000000000000000.0 ;
@@ -133,7 +135,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	}
 	std :: cout <<"Estimator Parser :: CoulombEnergyEstimator :: kappa :: "<< kappa<<std :: endl;
         manager->add(new EwaldCoulombEstimator(simInfo,action,
-					       epsilon,rcut,kcut,mpi,unitName,scale,shift, kappa));
+					       epsilon,rcut,kcut,mpi,unitName,scale,shift, kappa, nimages));
       } else {
         manager->add(new CoulombEnergyEstimator(simInfo,action,epsilon,mpi,
                                                 unitName,scale,shift));

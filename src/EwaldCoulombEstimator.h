@@ -39,7 +39,7 @@ public:
   EwaldCoulombEstimator(const SimulationInfo& simInfo, const Action*, 
        const double epsilon, const double rcut, const double kcut,
        MPIManager *mpi,
-			const std::string& unitName, double scale, double shift, const double kappa);
+			const std::string& unitName, double scale, double shift, const double kappa, const int nimages);
   /// Virtual destructor.
   virtual ~EwaldCoulombEstimator();
   /// Initialize the calculation.
@@ -56,6 +56,7 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
+  const int nimages;
   const double kappa;
   /// Ewald sum object.
   EwaldSum &ewaldSum;

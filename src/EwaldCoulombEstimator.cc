@@ -35,16 +35,17 @@
 EwaldCoulombEstimator::EwaldCoulombEstimator(
   const SimulationInfo& simInfo, const Action* action, const double epsilon,
   const double rcut, const double kcut,
-  MPIManager *mpi, const std::string& unitName, double scale, double shift, double kappa)
+  MPIManager *mpi, const std::string& unitName, double scale, double shift, const double kappa, const int nimages)
   : ScalarEstimator("coulomb_energy",unitName,scale,shift),
-    //ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,kappa)),
-   ///////
-  ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,4*kcut,8)),
+    //
+    //
+ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,kappa)),
+   ///////     ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,4*kcut,8)),
     cell(*simInfo.getSuperCell()),
     energy(0), etot(0), enorm(0), vgrid(1001), nradial(1001),
     rcut(rcut), dr(rcut/1000), drinv(1./dr),
     action(action), epsilon(epsilon),q(simInfo.getNPart()),
-  r(simInfo.getNPart()), mpi(mpi), kappa(kappa) {
+  r(simInfo.getNPart()), mpi(mpi), kappa(kappa), nimages(nimages) {
   for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
   ewaldSum.getQArray() = q;
   ewaldSum.evalSelfEnergy();

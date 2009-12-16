@@ -116,6 +116,8 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       int ndim=getIntAttribute(actNode,"ewaldNDim");
       if (ndim==0) ndim=NDIM;
       double rcut=getLengthAttribute(actNode,"ewaldRcut");
+      int nimages=getIntAttribute(actNode, "ewaldImages");
+      if (nimages ==0) nimages=1;
       double kappa=getDoubleAttribute(actNode,"kappa");
       if (kappa==0) {
 	double Lside=1000000000000000.0 ;
@@ -130,7 +132,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double screenDist=getLengthAttribute(actNode,"screenDist");
       composite->addAction(
 			   new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
-					     useEwald,ndim,rcut,kcut,screenDist,kappa));
+					     useEwald,ndim,rcut,kcut,screenDist,kappa,nimages));
       continue;
     } else if (name=="GaussianAction") {
       double v0=getEnergyAttribute(actNode,"v0");

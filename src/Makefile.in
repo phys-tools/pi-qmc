@@ -80,7 +80,8 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-DoubleSectionChooser.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
 	pi-EIndEstimator.$(OBJEXT) pi-EstimatorParser.$(OBJEXT) \
 	pi-ExcitonNodes.$(OBJEXT) pi-EwaldAction.$(OBJEXT) \
-	pi-EwaldCoulombEstimator.$(OBJEXT) pi-EwaldSum.$(OBJEXT) \
+	pi-EwaldCoulombEstimator.$(OBJEXT) \
+	pi-EwaldImagePairAction.$(OBJEXT) pi-EwaldSum.$(OBJEXT) \
 	pi-FixedNodeAction.$(OBJEXT) pi-FixedPhaseAction.$(OBJEXT) \
 	pi-FreeMover.$(OBJEXT) pi-FreeParticleNodes.$(OBJEXT) \
 	pi-FreePartNodesNoUpdate.$(OBJEXT) \
@@ -313,15 +314,15 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	DoubleDisplaceMoveSampler.cc DoubleMLSampler.cc \
 	DoubleParallelPaths.cc DoubleSectionChooser.cc EFieldAction.cc \
 	EIndEstimator.cc EstimatorParser.cc ExcitonNodes.cc \
-	EwaldAction.cc EwaldCoulombEstimator.cc EwaldSum.cc \
-	FixedNodeAction.cc FixedPhaseAction.cc FreeMover.cc \
-	FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
-	FreeTensorMover.cc FrequencyEstimator.cc GaussianAction.cc \
-	GaussianDotAction.cc GrapheneAction.cc \
-	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
-	GroundStateWFNodes.cc Help.h Hungarian.cc HyperbolicAction.cc \
-	HyperbolicMover.cc ImagePairAction.cc JelliumSlab.cc \
-	JEstimator.cc main.cc MainParser.cc Measure.cc \
+	EwaldAction.cc EwaldCoulombEstimator.cc \
+	EwaldImagePairAction.cc EwaldSum.cc FixedNodeAction.cc \
+	FixedPhaseAction.cc FreeMover.cc FreeParticleNodes.cc \
+	FreePartNodesNoUpdate.cc FreeTensorMover.cc \
+	FrequencyEstimator.cc GaussianAction.cc GaussianDotAction.cc \
+	GrapheneAction.cc GreenDipoleMEstimator.cc GridPotential.cc \
+	GroundStateSNode.cc GroundStateWFNodes.cc Help.h Hungarian.cc \
+	HyperbolicAction.cc HyperbolicMover.cc ImagePairAction.cc \
+	JelliumSlab.cc JEstimator.cc main.cc MainParser.cc Measure.cc \
 	MultiLevelSampler.cc MultiSpeciesParticleChooser.cc \
 	NodeModel.cc NodeTester.cc OptEwaldSum.cc \
 	OpticalLatticeAction.cc PairAction.cc PrimativePairAction.cc \
@@ -365,15 +366,16 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	DoubleMLSampler.h DoubleParallelPaths.h DoubleSectionChooser.h \
 	EFieldAction.h EIndEstimator.h EstimatorParser.h \
 	ExcitonNodes.h EwaldCoulombEstimator.h EwaldAction.h \
-	EwaldSum.h FixedNodeAction.h FixedPhaseAction.h FreeMover.h \
-	FreeParticleNodes.h FreePartNodesNoUpdate.h FreeTensorMover.h \
-	FrequencyEstimator.h GaussianAction.h GaussianDotAction.h \
-	GrapheneAction.h GreenDipoleMEstimator.h GridPotential.h \
-	GroundStateSNode.h GroundStateWFNodes.h HyperbolicAction.h \
-	HyperbolicMover.h ImagePairAction.h JelliumSlab.h JEstimator.h \
-	LinkSummable.h Loop.h MainParser.h Measure.h Mover.h \
-	MultiLevelSampler.h MultiSpeciesParticleChooser.h NodeModel.h \
-	NodeTester.h OptEwaldSum.h OpticalLatticeAction.h PairAction.h \
+	EwaldImagePairAction.h EwaldSum.h FixedNodeAction.h \
+	FixedPhaseAction.h FreeMover.h FreeParticleNodes.h \
+	FreePartNodesNoUpdate.h FreeTensorMover.h FrequencyEstimator.h \
+	GaussianAction.h GaussianDotAction.h GrapheneAction.h \
+	GreenDipoleMEstimator.h GridPotential.h GroundStateSNode.h \
+	GroundStateWFNodes.h HyperbolicAction.h HyperbolicMover.h \
+	ImagePairAction.h JelliumSlab.h JEstimator.h LinkSummable.h \
+	Loop.h MainParser.h Measure.h Mover.h MultiLevelSampler.h \
+	MultiSpeciesParticleChooser.h NodeModel.h NodeTester.h \
+	OptEwaldSum.h OpticalLatticeAction.h PairAction.h \
 	PrimativePairAction.h PairChooser.h PairIntegrator.h \
 	PairPotential.h PairCFEstimator.h PairDistance.h \
 	ParallelPaths.h ParticleChooser.h PathReader.h Paths.h \
@@ -504,6 +506,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EstimatorParser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EwaldAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EwaldCoulombEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EwaldImagePairAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EwaldSum.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ExcitonNodes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FixedNodeAction.Po@am__quote@
@@ -1156,6 +1159,20 @@ pi-EwaldCoulombEstimator.obj: EwaldCoulombEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EwaldCoulombEstimator.cc' object='pi-EwaldCoulombEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EwaldCoulombEstimator.obj `if test -f 'EwaldCoulombEstimator.cc'; then $(CYGPATH_W) 'EwaldCoulombEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/EwaldCoulombEstimator.cc'; fi`
+
+pi-EwaldImagePairAction.o: EwaldImagePairAction.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EwaldImagePairAction.o -MD -MP -MF "$(DEPDIR)/pi-EwaldImagePairAction.Tpo" -c -o pi-EwaldImagePairAction.o `test -f 'EwaldImagePairAction.cc' || echo '$(srcdir)/'`EwaldImagePairAction.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pi-EwaldImagePairAction.Tpo" "$(DEPDIR)/pi-EwaldImagePairAction.Po"; else rm -f "$(DEPDIR)/pi-EwaldImagePairAction.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EwaldImagePairAction.cc' object='pi-EwaldImagePairAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EwaldImagePairAction.o `test -f 'EwaldImagePairAction.cc' || echo '$(srcdir)/'`EwaldImagePairAction.cc
+
+pi-EwaldImagePairAction.obj: EwaldImagePairAction.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EwaldImagePairAction.obj -MD -MP -MF "$(DEPDIR)/pi-EwaldImagePairAction.Tpo" -c -o pi-EwaldImagePairAction.obj `if test -f 'EwaldImagePairAction.cc'; then $(CYGPATH_W) 'EwaldImagePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/EwaldImagePairAction.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pi-EwaldImagePairAction.Tpo" "$(DEPDIR)/pi-EwaldImagePairAction.Po"; else rm -f "$(DEPDIR)/pi-EwaldImagePairAction.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EwaldImagePairAction.cc' object='pi-EwaldImagePairAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EwaldImagePairAction.obj `if test -f 'EwaldImagePairAction.cc'; then $(CYGPATH_W) 'EwaldImagePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/EwaldImagePairAction.cc'; fi`
 
 pi-EwaldSum.o: EwaldSum.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EwaldSum.o -MD -MP -MF "$(DEPDIR)/pi-EwaldSum.Tpo" -c -o pi-EwaldSum.o `test -f 'EwaldSum.cc' || echo '$(srcdir)/'`EwaldSum.cc; \

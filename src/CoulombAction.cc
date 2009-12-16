@@ -26,6 +26,7 @@
 #include "SimulationInfo.h"
 #include "PairAction.h"
 #include "ImagePairAction.h"
+#include "EwaldImagePairAction.h"
 #include "TradEwaldSum.h"
 #include "OptEwaldSum.h"
 
@@ -33,18 +34,18 @@ CoulombAction::CoulombAction(const double epsilon,
     const SimulationInfo& simInfo, const int norder, double rmin, 
     double rmax, int ngpts, const bool dumpFiles,
     bool useEwald, int ewaldNDim, double ewaldRcut, 
-			     double ewaldKcut, double screenDist, const double kappa)
+			     double ewaldKcut, double screenDist, const double kappa, const int nImages)
   : epsilon(epsilon), tau(simInfo.getTau()), npart(simInfo.getNPart()),
-    pairActionArray(0), screenDist(screenDist), ewaldSum(0), kappa(kappa) {
+    pairActionArray(0), screenDist(screenDist), ewaldSum(0) {
   typedef blitz::TinyVector<int, NDIM> IVec;
   const int nspecies=simInfo.getNSpecies();
   if (useEwald && (NDIM==3||NDIM==2) && ewaldNDim==NDIM) {
     SuperCell &cell(*simInfo.getSuperCell());
     if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
     std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
-    //ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut, kappa);
-    ////////////////////// 
-    ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
+    //
+    ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut, kappa);
+    //////////////////    ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
     rewald.resize(npart);
     EwaldSum::Array &q=ewaldSum->getQArray();  
     for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge;
@@ -76,15 +77,19 @@ CoulombAction::CoulombAction(const double epsilon,
         }
         if (ngpts==0) ngpts=500;
         if (needImages) {
-          pairActionArray.push_back(
-            /// Hack to handle ion-ion interaction properly.
-            new ImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-                           nimage, rmin, rmax, ngpts));
+          pairActionArray.push_back(				    /// Hack to handle ion-ion interaction properly.
+				    new ImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
+							nimage, rmin, rmax, ngpts));
         } else {
-          pairActionArray.push_back(
-            /// Hack to handle ion-ion interaction properly.
+	  if (nImages > 1){
+	    pairActionArray.push_back(new EwaldImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
+							       rmin, rmax, ngpts, nImages));
+	  } else {
+	    pairActionArray.push_back(
+				      /// Hack to handle ion-ion interaction properly.
             new PairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
                            rmin, rmax, ngpts, false));
+	  }
         }
         if (dumpFiles) (*(pairActionArray.end()-1))->write("",0);
       }
