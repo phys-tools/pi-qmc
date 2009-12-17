@@ -27,7 +27,10 @@ void SuperCell::computeRecipricalVectors() {
   b=1./a;
   /// Set the rcut2 to be the square of half the shortest side.
   double l2=a[0]*a[0]; rcut2=l2;
-  for (int i=1; i<NDIM; ++i)  l2=a[i]*a[i]; rcut2=(rcut2>l2)?l2:rcut2;
+  for (int i=1; i<NDIM; ++i)  {
+    l2=a[i]*a[i]; 
+    rcut2=(rcut2>l2)?l2:rcut2;
+  }
   rcut2 *= 0.25;
 }
 
