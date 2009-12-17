@@ -39,7 +39,7 @@ public:
   EwaldCoulombEstimator(const SimulationInfo& simInfo, const Action*, 
        const double epsilon, const double rcut, const double kcut,
        MPIManager *mpi,
-			const std::string& unitName, double scale, double shift, const double kappa, const int nimages);
+			const std::string& unitName, double scale, double shift, const double kappa, const int nImages);
   /// Virtual destructor.
   virtual ~EwaldCoulombEstimator();
   /// Initialize the calculation.
@@ -55,8 +55,11 @@ public:
   virtual void reset() {etot=enorm=0;}
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
+  void findBoxImageVectors(  const SuperCell &a);
 private:
-  const int nimages;
+  double sphereR;
+  std :: vector<std :: vector<double> > boxImageVecs;
+  const int nImages;
   const double kappa;
   /// Ewald sum object.
   EwaldSum &ewaldSum;

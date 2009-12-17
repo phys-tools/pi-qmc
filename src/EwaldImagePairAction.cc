@@ -37,6 +37,7 @@ EwaldImagePairAction::EwaldImagePairAction(const Species& s1, const Species& s2,
     nImages(nImages) {
 
   std :: vector<double> cell(NDIM);
+  sphereR=0.;
   for (int i=0; i< NDIM; i++){
       cell[i] =  (*simInfo.getSuperCell())[i];
       sphereR = (cell[i]>sphereR)?cell[i]:sphereR;
@@ -46,6 +47,7 @@ EwaldImagePairAction::EwaldImagePairAction(const Species& s1, const Species& s2,
   findBoxImageVectors(cell);
   std::cout << "Using Trad Ewald with nImages: " << nImages << std::endl;
 } 
+
 
 double EwaldImagePairAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {
