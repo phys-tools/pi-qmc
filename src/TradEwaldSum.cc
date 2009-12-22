@@ -51,3 +51,4 @@ double TradEwaldSum::evalFK(const double k) const {
 double TradEwaldSum::evalFK0() const {
  return -PI/(kappa*kappa);
 }
+

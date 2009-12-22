@@ -38,7 +38,8 @@ public:
   CoulombAction(const double epsilon, const SimulationInfo&, const int norder,
                 double rmin, double rmax, int ngpts, const bool dumpFiles,
                 bool useEwald, int ewaldNDim, double ewaldRcut, 
-                double ewaldKcut, double screenDist, const double kappa, const int nimages);
+                double ewaldKcut, double screenDist, 
+		const double kappa, const int nimages, const std::string ewaldType);
   /// Virtual destructor.
   virtual ~CoulombAction();
   /// Calculate the difference in action.

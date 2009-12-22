@@ -113,6 +113,11 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       int ngpts=getIntAttribute(actNode,"ngridPoints");
       bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
       bool useEwald=getBoolAttribute(actNode,"useEwald");
+      std::string ewaldType=getStringAttribute(actNode,"ewaldType");
+      if (ewaldType=="") ewaldType="optEwald";
+      if (ewaldType=="opt") ewaldType="optEwald";
+      if (ewaldType=="trad") ewaldType="tradEwald";
+
       int ndim=getIntAttribute(actNode,"ewaldNDim");
       if (ndim==0) ndim=NDIM;
       double rcut=getLengthAttribute(actNode,"ewaldRcut");
@@ -132,7 +137,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double screenDist=getLengthAttribute(actNode,"screenDist");
       composite->addAction(
 			   new CoulombAction(epsilon,simInfo,norder,rmin,rmax,ngpts,dumpFiles,
-					     useEwald,ndim,rcut,kcut,screenDist,kappa,nimages));
+					     useEwald,ndim,rcut,kcut,screenDist,kappa,nimages,ewaldType));
       continue;
     } else if (name=="GaussianAction") {
       double v0=getEnergyAttribute(actNode,"v0");

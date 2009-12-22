@@ -73,6 +73,7 @@ public:
   /// Returns @f$ f(k\rightarrow 0) @f$, used in evalSelfEnergy for interaction
   /// with neutralizing background if system has a net charge.
   virtual double evalFK0() const;
+
 private:
   /// Order of the polynomial.
   const int npoly;

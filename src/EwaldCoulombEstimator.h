@@ -35,12 +35,18 @@ public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<Vec,1> VArray;
-  /// Constructor.
-  EwaldCoulombEstimator(const SimulationInfo& simInfo, const Action*, 
-       const double epsilon, const double rcut, const double kcut,
-       MPIManager *mpi,
-			const std::string& unitName, double scale, double shift, const double kappa, const int nImages);
-  /// Virtual destructor.
+  /// Constructor.trad ewald
+    EwaldCoulombEstimator(const SimulationInfo& simInfo, const Action*, 
+			  const double epsilon, const double rcut, const double kcut,
+			  MPIManager *mpi,
+			  const std::string& unitName, double scale, double shift, 
+			  const double kappa, const int nImages, const bool testEwald);
+ /// Constructor. optewald
+    EwaldCoulombEstimator(const SimulationInfo& simInfo, const Action*, 
+			  const double epsilon, const double rcut, const double kcut,
+			  MPIManager *mpi,
+			  const std::string& unitName, double scale, double shift);
+    /// Virtual destructor.
   virtual ~EwaldCoulombEstimator();
   /// Initialize the calculation.
   virtual void initCalc(const int nslice, const int firstSlice);
@@ -56,11 +62,15 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
   void findBoxImageVectors(  const SuperCell &a);
+  void testEwaldTotalCharge( const Paths& paths);
 private:
+  const bool testEwald;
+  double kappa;
+  double kcut;
   double sphereR;
   std :: vector<std :: vector<double> > boxImageVecs;
   const int nImages;
-  const double kappa;
+  // const double kappa;
   /// Ewald sum object.
   EwaldSum &ewaldSum;
   /// The supercell.

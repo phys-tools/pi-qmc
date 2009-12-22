@@ -80,6 +80,12 @@ public:
   /// Returns @f$ f(k\rightarrow 0) @f$, used in evalSelfEnergy for interaction
   /// with neutralizing background if system has a net charge.
   virtual double evalFK0() const=0;
+
+  double getkvec2(const int index) {return kvec2(index);}
+  int gettotk(){return totk;}
+  Vec getDeltak(){return deltak;}
+  Vec getkvec(int i){return kvec(i);}
+
   /// Evaluate the long range sum.
   double evalLongRange(const VArray& r) const;
   /// Evaluate the self energy using evalFR0 and evalFK0 virtual methods.
