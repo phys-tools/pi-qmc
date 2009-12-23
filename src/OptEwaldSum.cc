@@ -218,14 +218,14 @@ double OptEwaldSum::evalFK(const double k) const {
   double v = 4.*PI/(k*k);
   Complex eikr = exp(Complex(0.,k*rcut));
   Complex temp = (eikr-1.)/Complex(0.,k);
-  double fpioverk = 4.*PI*imag(temp)/k;
-  v -= fpioverk;
+  double fpioverk = 4.*PI/k;
+  v -= fpioverk*imag(temp);
   double rn = rcut;
   for (int n=0; n<2*npoly-1; ++n) {
     temp = (rn*eikr - (n+1.)*temp)/Complex(0.,k);
     rn *= rcut;
     if (n%2 == 0) {
-      v += coef(n/2) * fpioverk;
+      v += coef(n/2) * imag(temp) * fpioverk;
     }
   }
   return v;

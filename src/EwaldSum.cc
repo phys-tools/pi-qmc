@@ -48,7 +48,7 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
     eikx(blitz::shape(ikmax[0]+1,npart)),
     eiky(blitz::shape(-ikmax[1],0), blitz::shape(2*ikmax[1]+1,npart)),
 #endif
-    oneOver2V(0.5/product(cell.a))
+    oneOverV(1.0/product(cell.a))
 {
 #if (NDIM==3) || (NDIM==2)
   // Assume charges are all +1, can be reset if evalSelfEnergy is called again.
@@ -194,13 +194,12 @@ double EwaldSum::evalLongRange(const VArray& r) const {
   } //end of omp parallel section
 #endif
  
- 
-   return sum*oneOver2V + selfEnergy;
+   return sum*oneOverV + selfEnergy;
 }
 
 void EwaldSum::evalSelfEnergy() {
   double Q = sum(q);
-  selfEnergy = -0.5*sum(q*q)*evalFR0() + oneOver2V*evalFK0()*Q*Q;
+  selfEnergy = -0.5*sum(q*q)*evalFR0() + oneOverV*evalFK0()*Q*Q;
 }
 
 const double EwaldSum::PI=3.14159265358979;

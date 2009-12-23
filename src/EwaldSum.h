@@ -128,7 +128,7 @@ protected:
   mutable CArray2 eikx, eiky, eikz;
   /// Calculate the long range part.
   double calcLongRangeUtau(VArray& r) const;
-  /// The prefactor on the k-space sum, 1/2V.
-  double oneOver2V;
+  /// The prefactor on the k-space sum, 1/V.
+  double oneOverV;
 };
 #endif

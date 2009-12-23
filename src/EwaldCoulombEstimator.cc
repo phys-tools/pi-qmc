@@ -136,7 +136,7 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
    }
  
   //check if testing is required.
-  if (mpi->isMain() && testEwald) testEwaldTotalCharge(paths);
+  if (mpi && mpi->isMain() && testEwald) testEwaldTotalCharge(paths);
 }
 
 void EwaldCoulombEstimator::endCalc(const int lnslice) {
