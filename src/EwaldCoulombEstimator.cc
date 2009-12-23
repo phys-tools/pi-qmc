@@ -77,9 +77,9 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
     rcut(rcut), dr(rcut/1000), drinv(1./dr),
     action(action), epsilon(epsilon),q(simInfo.getNPart()),
     r(simInfo.getNPart()), mpi(mpi),nImages(0),
-    testEwald("false"),
+    testEwald(false),
     ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,4*kcut,8)){
-  
+   
   for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
   ewaldSum.getQArray() = q;
   ewaldSum.evalSelfEnergy();
@@ -134,6 +134,7 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
     paths.getSlice(islice,r);
     energy += ewaldSum.evalLongRange(r)/epsilon;
    }
+ 
   //check if testing is required.
   if (mpi->isMain() && testEwald) testEwaldTotalCharge(paths);
 }

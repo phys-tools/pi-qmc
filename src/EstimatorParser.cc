@@ -126,27 +126,29 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	if (ewaldType=="") ewaldType="optEwald";
 	if (ewaldType=="opt") ewaldType="optEwald";
 	if (ewaldType=="trad") ewaldType="tradEwald";
-
+	
 	if (ewaldType=="" || ewaldType=="optEwald"){
 	  manager->add(new EwaldCoulombEstimator(simInfo,action,
 						 epsilon,rcut,kcut,mpi,unitName,scale,shift));
-	} else if ( ewaldType=="tradEwald"){
-	  int nimages=getIntAttribute(estNode, "ewaldImages");
-	  if (nimages ==0) nimages=1;
-	  double kappa=getDoubleAttribute(estNode,"kappa");
-	  if (kappa==0) {
-	    double Lside=1000000000000000.0 ;
-	    for (int i=0; i<NDIM; i++) {
-	      if (Lside > (*simInfo.getSuperCell()).a[i] )
-		Lside = (*simInfo.getSuperCell()).a[i];
+	} else 
+	  if ( ewaldType=="tradEwald"){
+	    int nimages=getIntAttribute(estNode, "ewaldImages");
+	    if (nimages ==0) nimages=1;
+	    double kappa=getDoubleAttribute(estNode,"kappa");
+	    if (kappa==0) {
+	      double Lside=1000000000000000.0 ;
+	      for (int i=0; i<NDIM; i++) {
+		if (Lside > (*simInfo.getSuperCell()).a[i] )
+		  Lside = (*simInfo.getSuperCell()).a[i];
+	      }
+	      kappa = sqrt( pow(3.6*simInfo.getNPart(),(1.0/6.0))*sqrt(3.1415926535897931)/(Lside) );
 	    }
-	    kappa = sqrt( pow(3.6*simInfo.getNPart(),(1.0/6.0))*sqrt(3.1415926535897931)/(Lside) );
+	    std :: cout <<"Estimator Parser :: CoulombEnergyEstimator :: kappa :: "<< kappa<<std :: endl;
+	    bool testEwald=getBoolAttribute(estNode,"testEwald");
+
+	    manager->add(new EwaldCoulombEstimator(simInfo,action,
+						   epsilon,rcut,kcut,mpi,unitName,scale,shift, kappa, nimages,testEwald));
 	  }
-	  std :: cout <<"Estimator Parser :: CoulombEnergyEstimator :: kappa :: "<< kappa<<std :: endl;
-	  bool testEwald=getBoolAttribute(estNode,"testEwald");
-	  manager->add(new EwaldCoulombEstimator(simInfo,action,
-						 epsilon,rcut,kcut,mpi,unitName,scale,shift, kappa, nimages,testEwald));
-	}
       } else {
         manager->add(new CoulombEnergyEstimator(simInfo,action,epsilon,mpi,
                                                 unitName,scale,shift));
