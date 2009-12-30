@@ -66,9 +66,10 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-CompositeDoubleAction.$(OBJEXT) \
 	pi-ConditionalDensityGrid.$(OBJEXT) \
 	pi-ConductanceEstimator.$(OBJEXT) \
-	pi-ConductivityEstimator.$(OBJEXT) pi-CoulombAction.$(OBJEXT) \
-	pi-CoulombEnergyEstimator.$(OBJEXT) pi-CubicLattice.$(OBJEXT) \
-	pi-DampedFreeTensorMover.$(OBJEXT) \
+	pi-ConductivityEstimator.$(OBJEXT) \
+	pi-ConductivityEstimator2D.$(OBJEXT) \
+	pi-CoulombAction.$(OBJEXT) pi-CoulombEnergyEstimator.$(OBJEXT) \
+	pi-CubicLattice.$(OBJEXT) pi-DampedFreeTensorMover.$(OBJEXT) \
 	pi-DensDensEstimator.$(OBJEXT) \
 	pi-DynamicPCFEstimator.$(OBJEXT) \
 	pi-CountCountEstimator.$(OBJEXT) \
@@ -305,8 +306,8 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	BondLengthTwoEstimator.cc BoxEstimator.cc CaoBerneAction.cc \
 	Collect.cc CompositeAction.cc CompositeDoubleAction.cc \
 	ConditionalDensityGrid.cc ConductanceEstimator.cc \
-	ConductivityEstimator.cc CoulombAction.cc \
-	CoulombEnergyEstimator.cc CubicLattice.cc \
+	ConductivityEstimator.cc ConductivityEstimator2D.cc \
+	CoulombAction.cc CoulombEnergyEstimator.cc CubicLattice.cc \
 	DampedFreeTensorMover.cc DensDensEstimator.cc \
 	DynamicPCFEstimator.cc CountCountEstimator.cc \
 	DensCountEstimator.cc DensityEstimator.cc \
@@ -355,7 +356,8 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	BondLengthTwoEstimator.h BoxEstimator.h CaoBerneAction.h \
 	Collect.h CompositeAction.h CompositeAlgorithm.h \
 	CompositeDoubleAction.h ConditionalDensityGrid.h \
-	ConductanceEstimator.h ConductivityEstimator.h CoulombAction.h \
+	ConductanceEstimator.h ConductivityEstimator.h \
+	ConductivityEstimator2D.h CoulombAction.h \
 	CoulombEnergyEstimator.h CubicLattice.h \
 	DampedFreeTensorMover.h DensDensEstimator.h \
 	DensCountEstimator.h DisplaceMoveSampler.h \
@@ -486,6 +488,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ConditionalDensityGrid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ConductanceEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ConductivityEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ConductivityEstimator2D.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CoulombAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CoulombEnergyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CountCountEstimator.Po@am__quote@
@@ -865,6 +868,20 @@ pi-ConductivityEstimator.obj: ConductivityEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ConductivityEstimator.cc' object='pi-ConductivityEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ConductivityEstimator.obj `if test -f 'ConductivityEstimator.cc'; then $(CYGPATH_W) 'ConductivityEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/ConductivityEstimator.cc'; fi`
+
+pi-ConductivityEstimator2D.o: ConductivityEstimator2D.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ConductivityEstimator2D.o -MD -MP -MF "$(DEPDIR)/pi-ConductivityEstimator2D.Tpo" -c -o pi-ConductivityEstimator2D.o `test -f 'ConductivityEstimator2D.cc' || echo '$(srcdir)/'`ConductivityEstimator2D.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pi-ConductivityEstimator2D.Tpo" "$(DEPDIR)/pi-ConductivityEstimator2D.Po"; else rm -f "$(DEPDIR)/pi-ConductivityEstimator2D.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ConductivityEstimator2D.cc' object='pi-ConductivityEstimator2D.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ConductivityEstimator2D.o `test -f 'ConductivityEstimator2D.cc' || echo '$(srcdir)/'`ConductivityEstimator2D.cc
+
+pi-ConductivityEstimator2D.obj: ConductivityEstimator2D.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ConductivityEstimator2D.obj -MD -MP -MF "$(DEPDIR)/pi-ConductivityEstimator2D.Tpo" -c -o pi-ConductivityEstimator2D.obj `if test -f 'ConductivityEstimator2D.cc'; then $(CYGPATH_W) 'ConductivityEstimator2D.cc'; else $(CYGPATH_W) '$(srcdir)/ConductivityEstimator2D.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pi-ConductivityEstimator2D.Tpo" "$(DEPDIR)/pi-ConductivityEstimator2D.Po"; else rm -f "$(DEPDIR)/pi-ConductivityEstimator2D.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ConductivityEstimator2D.cc' object='pi-ConductivityEstimator2D.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ConductivityEstimator2D.obj `if test -f 'ConductivityEstimator2D.cc'; then $(CYGPATH_W) 'ConductivityEstimator2D.cc'; else $(CYGPATH_W) '$(srcdir)/ConductivityEstimator2D.cc'; fi`
 
 pi-CoulombAction.o: CoulombAction.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CoulombAction.o -MD -MP -MF "$(DEPDIR)/pi-CoulombAction.Tpo" -c -o pi-CoulombAction.o `test -f 'CoulombAction.cc' || echo '$(srcdir)/'`CoulombAction.cc; \

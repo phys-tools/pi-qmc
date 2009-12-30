@@ -27,6 +27,7 @@
 #include "AngularMomentumEstimator.h"
 #include "CoulombAction.h"
 #include "ConductivityEstimator.h"
+#include "ConductivityEstimator2D.h"
 #include "ConductanceEstimator.h"
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
@@ -268,6 +269,29 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
               nfreq,nbin,ndbin,nstride,mpi));
         }
       }
+    }
+    if (name=="ConductivityEstimator2D") {
+      int nxbin=getIntAttribute(estNode,"nxbin");
+      if (nxbin==0) nxbin=1;
+      int nybin=getIntAttribute(estNode,"nybin");
+      if (nybin==0) nybin=1;
+      int nxdbin=getIntAttribute(estNode,"nxdbin");
+      if (nxdbin==0) nxdbin=1;
+      int nydbin=getIntAttribute(estNode,"nydbin");
+      if (nydbin==0) nydbin=1;
+      double xmin=getLengthAttribute(estNode,"xmin");
+      double xmax=getLengthAttribute(estNode,"xmax");
+      double ymin=getLengthAttribute(estNode,"ymin");
+      double ymax=getLengthAttribute(estNode,"ymax");
+      int nfreq=getIntAttribute(estNode,"nfreq");
+      if (nfreq==0) nfreq=simInfo.getNSlice();
+      int nstride=getIntAttribute(estNode,"nstride");
+      if (nstride==0) nstride=1;
+//      std::cout<<"xmin="<<xmin<<",xmax="<<xmax<<",ymin="<<ymin<<",ymax="<<ymax;
+//      std::cout<<"nxbin="<<nxbin<<",nybin="<<nybin<<",nxdbin="<<nxdbin<<",nydbin="<<nydbin;
+//      std::cout<<"nfreq="<<nfreq<<",nstride="<<nstride<<std::endl;
+      manager->add(new ConductivityEstimator2D(simInfo, xmin, xmax, ymin, ymax, nfreq,
+                         nxbin, nybin, nxdbin, nydbin, nstride ,mpi));
     }
     if (name=="SpinChargeEstimator") {
       int nbin=getIntAttribute(estNode,"nbin");
