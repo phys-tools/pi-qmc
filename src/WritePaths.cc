@@ -31,7 +31,12 @@
 #include <fstream>
 #include "SimulationInfo.h"
 
-WritePaths::WritePaths(Paths& paths, const std::string& filename, const int dumpFreq, const int maxConfigs,  const bool writeMovie, const SimulationInfo& simInfo, MPIManager *mpi, const BeadFactory& beadFactory)  : filename(filename), paths(paths), mpi(mpi), beadFactory(beadFactory), dumpFreq(dumpFreq), maxConfigs(maxConfigs), writeMovie(writeMovie),simInfo(simInfo) {
+WritePaths::WritePaths(Paths& paths, const std::string& filename, int dumpFreq,
+  int maxConfigs,  bool writeMovie, const SimulationInfo& simInfo, 
+  MPIManager *mpi, const BeadFactory& beadFactory)
+  : filename(filename), paths(paths), mpi(mpi), beadFactory(beadFactory), 
+    dumpFreq(dumpFreq), simInfo(simInfo), maxConfigs(maxConfigs),
+    writeMovie(writeMovie) {
   if (writeMovie) movieFile = new std::ofstream("pathMovie", std::ios::out);
 }
 

@@ -41,7 +41,7 @@ SerialPaths::SerialPaths(int npart, int nslice, double tau,
 
 SerialPaths::~SerialPaths() {
   delete &beads; delete &buffer1; delete &buffer2;
-  delete &permutation, inversePermutation;
+  delete &permutation; delete &inversePermutation;
 }
 
 void SerialPaths::sumOverLinks(LinkSummable& estimator) const {

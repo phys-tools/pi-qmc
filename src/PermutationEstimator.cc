@@ -34,7 +34,7 @@
 PermutationEstimator::PermutationEstimator(const SimulationInfo& simInfo, const std::string& name,
 		       const Species &s1, MPIManager *mpi)
   : BlitzArrayBlkdEst<1>(name, IVecN(s1.count), true), 
-    npart(simInfo.getNPart()),  ifirst(s1.ifirst), nipart(s1.count),
+    ifirst(s1.ifirst), nipart(s1.count), npart(simInfo.getNPart()),
     mpi(mpi) {
   value = 0.;
   norm = 0;

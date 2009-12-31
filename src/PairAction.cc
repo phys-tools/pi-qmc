@@ -42,7 +42,6 @@ PairAction::PairAction(const Species& s1, const Species& s2,
   std::ifstream dmfile((filename+".pidmu").c_str()); 
   std::string temp;
   double r;
-  double junk;
   int ndata=1;// count diagonal term
   if (hasZ) {
     ndata += norder*(norder+3)/2;

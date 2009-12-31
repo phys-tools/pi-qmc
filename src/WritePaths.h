@@ -47,7 +47,9 @@ class SimulationInfo;
 class WritePaths : public Algorithm {
 public:
   /// Construct by providing the paths to write.
-  WritePaths(Paths&, const std::string&, const int dumpFreq, const int maxConfigs, const bool writeMovie, const SimulationInfo& simInfo, MPIManager*, const BeadFactory&);
+  WritePaths(Paths&, const std::string&, int dumpFreq, int maxConfigs, 
+    bool writeMovie, const SimulationInfo& simInfo, MPIManager*, 
+    const BeadFactory&);
   /// Virtual destructor.
   virtual ~WritePaths() {}
   /// Write the paths.

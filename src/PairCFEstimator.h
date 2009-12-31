@@ -134,11 +134,11 @@ private:
   VecN deltaInv;
   IVecN nbin;
   DistN dist;
+  const int nspecies;
   SuperCell cell;
   ArrayN temp;
   int ifirst, nipart;
   IArray jfirst,njpart;
-  const int nspecies;
   MPIManager *mpi;
 #ifdef ENABLE_MPI
   ArrayN mpiBuffer;

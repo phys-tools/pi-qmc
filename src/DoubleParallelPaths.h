@@ -100,6 +100,7 @@ private:
   Beads<NDIM> &buffer1, &buffer2;
   /// Storage for this process's permutation.
   Permutation &permutation1, &permutation2;
+  /// Storage for the global permutation for all processes.
   Permutation &globalPermutation;
   /// Storage for the inverse permutation.
   Permutation &inversePermutation1, &inversePermutation2;

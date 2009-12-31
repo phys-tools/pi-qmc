@@ -79,7 +79,7 @@ double EwaldImagePairAction::getActionDifference(const MultiLevelSampler& sample
       prevDelta-=sectionBeads(j,0); cell.pbc(prevDelta);
       Vec prevMovingDelta=prevDelta;
 
-      for (int img=0; img<boxImageVecs.size(); img++){//////////
+      for (unsigned int img=0; img<boxImageVecs.size(); img++){//////////
 	Vec boxImage;
 	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];
 
@@ -157,7 +157,7 @@ double EwaldImagePairAction::getActionDifference(const Paths &paths,
       cell.pbc(prevMovingDelta);
 
 
-      for (int img=0; img<boxImageVecs.size(); img++){//////////
+      for (unsigned int img=0; img<boxImageVecs.size(); img++){//////////
 	Vec boxImage;
 	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];
 	
@@ -213,7 +213,7 @@ void EwaldImagePairAction::getBeadAction(const Paths& paths, int ipart, int isli
   return; //Particle not in this interaction.
 
 
-      for (int img=0; img<boxImageVecs.size(); img++){//////////
+      for (unsigned int img=0; img<boxImageVecs.size(); img++){//////////
 	Vec boxImage;
 	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];
 
@@ -269,7 +269,7 @@ void EwaldImagePairAction::getBeadAction(const Paths& paths, int ipart, int isli
 void EwaldImagePairAction::findBoxImageVectors(std :: vector<double> a) { 
  // 3D case first... to be extended to 2D and 1D soon...after testing 3D case
   std :: vector<std :: vector<double> > vertices(8); 
-  for (int i=0; i< vertices.size(); i++){
+  for (unsigned int i=0; i< vertices.size(); i++){
     vertices[i].resize(NDIM);
   }
   vertices[0][0]=-a[0]/2;  vertices[0][1]=-a[1]/2;  vertices[0][2]=-a[2]/2;

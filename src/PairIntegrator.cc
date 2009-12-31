@@ -331,7 +331,6 @@ void PairIntegrator::vpolyfit(const Array &x, const CArray3 &y, CArray2 &y0,
     CArray2 &diff, CArray2 &a, CArray3 &c, CArray3 &d) {
   int n=x.size();
   IVec3 shape(y.shape());
-  int n1=shape[1], n2=shape[2];
   blitz::Range all(blitz::Range::all());
   int ntot = 2*n*shape[1]*shape[2];
   int none = 2*shape[1]*shape[2];

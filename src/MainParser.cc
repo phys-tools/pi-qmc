@@ -91,27 +91,7 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
       int nlevel=getIntAttribute(node,"nlevel");
       if (nlevel>maxlevel) maxlevel=nlevel;
     }
-    // in case you have displace moves and fixed node action. Bug. need to fix for no double action case
-        int nslices=1;
-    obj = xmlXPathEval(BAD_CAST"//Temperature",ctxt);
-    nsample=obj->nodesetval->nodeNr;
-    for (int i=0; i<nsample; ++i) {
-      xmlNodePtr& node=obj->nodesetval->nodeTab[i];
-      nslices = getIntAttribute(node,"nslice");
-    }
-    obj = xmlXPathEval(BAD_CAST"//SampleDisplaceMove",ctxt);
-    nsample=obj->nodesetval->nodeNr;
-    for (int i=0; i<nsample; ++i) {
-      xmlNodePtr& node=obj->nodesetval->nodeTab[i];
-      int nrepeat =getIntAttribute(node,"nrepeat");
-      if (mpi){
-//	if (nrepeat>0) maxlevel= log(nslices/mpi->getNWorker())/log(2);
-      }else{
-//	  if (nrepeat>0) maxlevel=log(nslices)/log(2);
-      }
-      }
-    }
-
+  }
   std::cout << "  maxlevel = " << maxlevel << std::endl;
   // Get the simulation info.
   SimInfoParser simInfoParser;

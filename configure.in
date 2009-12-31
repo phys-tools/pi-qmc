@@ -43,8 +43,8 @@ http://www.libxml.org/.]))
 LIBS="$XML_LIBS $LIBS"
 CPPFLAGS="$XML_CFLAGS $CPPFLAGS"
 
-AM_PATH_GSL(1.0,, AC_MSG_ERROR([
-*** Libgsl is required to build pi; Available at http://www.gnu.org/software/gsl/.]))
+AX_PATH_GSL([1.0],[],[AC_MSG_ERROR(
+*** Libgsl is required to build pi; Available at http://www.gnu.org/software/gsl/.)])
 LIBS="$GSL_LIBS $LIBS"
 CPPFLAGS="$GSL_CFLAGS $CPPFLAGS"
 ACX_BLITZ(required)

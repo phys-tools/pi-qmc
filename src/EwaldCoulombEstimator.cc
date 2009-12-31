@@ -38,13 +38,15 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   MPIManager *mpi, const std::string& unitName, double scale, double shift, 
   const double kappa, const int nImages, const bool testEwald)
   : ScalarEstimator("coulomb_energy",unitName,scale,shift),
+    testEwald(testEwald), kappa(kappa), kcut(kcut),
+    ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(), 
+                                simInfo.getNPart(),rcut,kcut,kappa)),
     cell(*simInfo.getSuperCell()),
     energy(0), etot(0), enorm(0), vgrid(1001), nradial(1001),
     rcut(rcut), dr(rcut/1000), drinv(1./dr),
     action(action), epsilon(epsilon),q(simInfo.getNPart()),
-    r(simInfo.getNPart()), mpi(mpi), kcut(kcut),kappa(kappa),
-    ewaldSum(*new TradEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,kappa)),
-    nImages(nImages),testEwald(testEwald){
+    r(simInfo.getNPart()), nImages(nImages), sphereR(0.),
+    mpi(mpi) {
   
   for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
   ewaldSum.getQArray() = q;
@@ -55,7 +57,6 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
   }
   
   // set up for summing over images for trad ewald sum
-  sphereR=0;
   for (int i=0; i< NDIM; i++){
     sphereR = (cell[i]>sphereR)?cell[i]:sphereR;
   }
@@ -67,18 +68,19 @@ EwaldCoulombEstimator::EwaldCoulombEstimator(
 }
 
 // constructor opt ewald
-EwaldCoulombEstimator::EwaldCoulombEstimator(
-					     const SimulationInfo& simInfo, const Action* action, const double epsilon,
-					     const double rcut, const double kcut,
-					     MPIManager *mpi, const std::string& unitName, double scale, double shift)
+EwaldCoulombEstimator::EwaldCoulombEstimator(const SimulationInfo& simInfo,
+  const Action* action, const double epsilon, const double rcut, 
+  const double kcut, MPIManager *mpi, const std::string& unitName, 
+  double scale, double shift)
   : ScalarEstimator("coulomb_energy",unitName,scale,shift),
+    testEwald(false),
+    ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(),
+                               simInfo.getNPart(),rcut,kcut,4*kcut,8)),
     cell(*simInfo.getSuperCell()),
     energy(0), etot(0), enorm(0), vgrid(1001), nradial(1001),
     rcut(rcut), dr(rcut/1000), drinv(1./dr),
     action(action), epsilon(epsilon),q(simInfo.getNPart()),
-    r(simInfo.getNPart()), mpi(mpi),nImages(0),
-    testEwald(false),
-    ewaldSum(*new OptEwaldSum(*simInfo.getSuperCell(), simInfo.getNPart(),rcut,kcut,4*kcut,8)){
+    r(simInfo.getNPart()), nImages(0), mpi(mpi) {
    
   for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
   ewaldSum.getQArray() = q;
@@ -105,7 +107,7 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
 
   if (nImages >1){
     for (int jpart=0; jpart<ipart; ++jpart) {
-      for (int img=0; img<boxImageVecs.size(); img++){
+      for (unsigned int img=0; img<boxImageVecs.size(); img++){
 	Vec boxImage;
 	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];// eventually change data strucure to use tinyvecs.
 		
@@ -156,7 +158,6 @@ void EwaldCoulombEstimator::endCalc(const int lnslice) {
 void EwaldCoulombEstimator::testEwaldTotalCharge( const Paths& paths){
   //test kcut and nImages by calculating total charge in the box. 
   int islice=1; 
-  int ipart=0;
   int n=500;  
   double h=cell.a[0]/n;
   int totk=ewaldSum.gettotk(); 
@@ -166,33 +167,47 @@ void EwaldCoulombEstimator::testEwaldTotalCharge( const Paths& paths){
   std::complex<double> INTqofk=0;
   
   for (int jpart=0; jpart<paths.getNPart(); ++jpart) {
-    for (int img=0; img<boxImageVecs.size(); img++){
+    for (unsigned int img=0; img<boxImageVecs.size(); img++){
       Vec boxImage;
-      for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];// eventually change data strucure to use tinyvecs.
+      for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];
+         // eventually change data strucure to use tinyvecs.
 
-      Vec rj=paths(jpart,islice);double rjmag = sqrt(dot(rj,rj));
-      double rimg=sqrt(dot(rj+boxImage,rj+boxImage));
+      Vec rj=paths(jpart,islice);
       
       Vec rim =rj+boxImage;
       double tmpx;
       tmpx=  exp(-kappa*kappa*(cell.a[0]/2-rim[0])*(cell.a[0]/2-rim[0]) );
       tmpx+=exp(-kappa*kappa*(-cell.a[0]/2-rim[0])*(-cell.a[0]/2-rim[0]) );
-      for (int i=2;i<=n/2;i++)  tmpx+=2* exp(-kappa*kappa*(h*(2*i-2)-rim[0]-cell.a[0]/2  )*(h*(2*i-2)-rim[0]-cell.a[0]/2  ));
-      for (int i=1;i<=n/2;i++)  tmpx+=4* exp(-kappa*kappa*(h*(2*i-1)-rim[0]-cell.a[0]/2 )*(h*(2*i-1)-rim[0]-cell.a[0]/2 ));
+      for (int i=2;i<=n/2;i++)
+        tmpx += 2* exp(-kappa*kappa*(h*(2*i-2)-rim[0]-cell.a[0]/2  )
+                         *(h*(2*i-2)-rim[0]-cell.a[0]/2  ));
+      for (int i=1;i<=n/2;i++)
+        tmpx += 4*exp(-kappa*kappa*(h*(2*i-1)-rim[0]-cell.a[0]/2 )
+                         *(h*(2*i-1)-rim[0]-cell.a[0]/2 ));
       double tmpy;
       tmpy=  exp(-kappa*kappa*(cell.a[1]/2-rim[1])*(cell.a[1]/2-rim[1]) );
       tmpy+=exp(-kappa*kappa*(-cell.a[1]/2-rim[1])*(-cell.a[1]/2-rim[1]) );
-      for (int i=2;i<=n/2;i++)  tmpy+=2* exp(-kappa*kappa*(h*(2*i-2)-rim[1]-cell.a[1]/2  )*(h*(2*i-2)-rim[1]-cell.a[1]/2  ));
-      for (int i=1;i<=n/2;i++)  tmpy+=4* exp(-kappa*kappa*(h*(2*i-1)-rim[1]-cell.a[1]/2 )*(h*(2*i-1)-rim[1]-cell.a[1]/2 ));
+      for (int i=2;i<=n/2;i++)
+        tmpy += 2*exp(-kappa*kappa*(h*(2*i-2)-rim[1]-cell.a[1]/2  )
+                         *(h*(2*i-2)-rim[1]-cell.a[1]/2  ));
+      for (int i=1;i<=n/2;i++)
+        tmpy += 4*exp(-kappa*kappa*(h*(2*i-1)-rim[1]-cell.a[1]/2 )
+                         *(h*(2*i-1)-rim[1]-cell.a[1]/2 ));
       double tmpz;
       tmpz=  exp(-kappa*kappa*(cell.a[2]/2-rim[2])*(cell.a[2]/2-rim[2]) );
       tmpz+= exp(-kappa*kappa*(-cell.a[2]/2-rim[2])*(-cell.a[2]/2-rim[2]) );
-      for (int i=2;i<=n/2;i++)  tmpz+=2* exp(-kappa*kappa*(h*(2*i-2)-rim[2]-cell.a[2]/2  )*(h*(2*i-2)-rim[2]-cell.a[2]/2  ));
-      for (int i=1;i<=n/2;i++)  tmpz+=4* exp(-kappa*kappa*(h*(2*i-1)-rim[2]-cell.a[2]/2 )*(h*(2*i-1)-rim[2]-cell.a[2]/2 ));
-      intqr+=q(jpart)*pow(kappa,3)/pow(3.141592653,1.5)*tmpx*tmpy*tmpz*h*h*h/27;
+      for (int i=2;i<=n/2;i++)
+        tmpz += 2*exp(-kappa*kappa*(h*(2*i-2)-rim[2]-cell.a[2]/2  )
+                         *(h*(2*i-2)-rim[2]-cell.a[2]/2  ));
+      for (int i=1;i<=n/2;i++)
+        tmpz += 4*exp(-kappa*kappa*(h*(2*i-1)-rim[2]-cell.a[2]/2 )
+                         *(h*(2*i-1)-rim[2]-cell.a[2]/2 ));
+      intqr+=q(jpart)*pow(kappa,3)/pow(3.141592653,1.5)
+                     *tmpx*tmpy*tmpz*h*h*h/27.;
     }
   }
-  std :: cout<<" Total Charge from space integral over space charge density ::  "<<intqr<< std :: endl;
+  std::cout << " Total Charge from space integral over space " 
+            << "charge density ::  "<< intqr << std::endl;
 
 #ifdef _OPENMP
 #pragma omp parallel            // reduction(+:INTqofk)
@@ -202,12 +217,12 @@ void EwaldCoulombEstimator::testEwaldTotalCharge( const Paths& paths){
 #ifdef _OPENMP
 #pragma omp parallel for private(l,boxImage,kk)  reduction(+:INTqofk)
 #endif
-      for (int img=0; img<boxImageVecs.size(); img++){
+      for (unsigned int img=0; img<boxImageVecs.size(); img++){
 	Vec boxImage;
-	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];// eventually change data strucure to use tinyvecs.
+	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];
+            // eventually change data strucure to use tinyvecs.
 	
-	Vec rj=paths(jpart,islice);double rjmag = sqrt(dot(rj,rj));
-	double rimg=sqrt(dot(rj+boxImage,rj+boxImage));
+	Vec rj=paths(jpart,islice);
 	
 	Vec rim =rj+boxImage;
 
@@ -215,25 +230,51 @@ void EwaldCoulombEstimator::testEwaldTotalCharge( const Paths& paths){
 	  double h=cell.a[0]/n; 
 	  Vec k=ewaldSum.getkvec(kk)*dk;
 	  std::complex<double>tmpx;
-	  tmpx=  exp(-I*k[0]*cell.a[0]*0.5)*exp(-kappa*kappa*(cell.a[0]*0.5-rim[0])*(cell.a[0]*0.5-rim[0]) );
-	  tmpx+=exp(I*k[0]*cell.a[0]*0.5)*exp(-kappa*kappa*(-cell.a[0]*0.5-rim[0])*(-cell.a[0]*0.5-rim[0]) );
-	  for (int i=2;i<=n*0.5;i++)  tmpx+=2.0* exp( -I*k[0]*( h*(2*i-2)-cell.a[0]*0.5 ))  *exp(-kappa*kappa*(h*(2*i-2)-rim[0]-cell.a[0]*0.5  )*(h*(2*i-2)-rim[0]-cell.a[0]*0.5  ));
-	  for (int i=1;i<=n*0.5;i++)  tmpx+=4.0*exp( -I*k[0]*( h*(2*i-1)-cell.a[0]*0.5))  *exp(-kappa*kappa*(h*(2*i-1)-rim[0]-cell.a[0]*0.5 )*(h*(2*i-1)-rim[0]-cell.a[0]*0.5 ));
-	  std::complex<double>tmpy;
-	  tmpy=  exp(-I*k[1]*cell.a[1]*0.5)*exp(-kappa*kappa*(cell.a[1]*0.5-rim[1])*(cell.a[1]*0.5-rim[1]) );
-	  tmpy+=exp(I*k[1]*cell.a[1]*0.5)*exp(-kappa*kappa*(-cell.a[1]*0.5-rim[1])*(-cell.a[1]*0.5-rim[1]) );
-	  for (int i=2;i<=n*0.5;i++)  tmpy+=2.0*exp( -I*k[1]*( h*(2*i-2)-cell.a[1]*0.5 ))  *exp(-kappa*kappa*(h*(2*i-2)-rim[1]-cell.a[1]*0.5  )*(h*(2*i-2)-rim[1]-cell.a[1]*0.5  ));
-	  for (int i=1;i<=n*0.5;i++)  tmpy+=4.0*exp( -I*k[1]*( h*(2*i-1)-cell.a[1]*0.5))  *exp(-kappa*kappa*(h*(2*i-1)-rim[1]-cell.a[1]*0.5 )*(h*(2*i-1)-rim[1]-cell.a[1]*0.5 ));
+	  tmpx=  exp(-I*k[0]*cell.a[0]*0.5)
+            *exp(-kappa*kappa*(cell.a[0]*0.5-rim[0])*(cell.a[0]*0.5-rim[0]) );
+	  tmpx+=exp(I*k[0]*cell.a[0]*0.5)
+            *exp(-kappa*kappa*(-cell.a[0]*0.5-rim[0])*(-cell.a[0]*0.5-rim[0]) );
+	  for (int i=2;i<=n*0.5;i++)
+            tmpx+=2.0* exp( -I*k[0]*( h*(2*i-2)-cell.a[0]*0.5 ))  
+               *exp(-kappa*kappa*(h*(2*i-2)-rim[0]-cell.a[0]*0.5  )
+                      *(h*(2*i-2)-rim[0]-cell.a[0]*0.5  ));
+	  for (int i=1;i<=n*0.5;i++)
+            tmpx+=4.0*exp( -I*k[0]*( h*(2*i-1)-cell.a[0]*0.5))
+               *exp(-kappa*kappa*(h*(2*i-1)-rim[0]-cell.a[0]*0.5 )
+                      *(h*(2*i-1)-rim[0]-cell.a[0]*0.5 ));
+	  std::complex<double> tmpy;
+	  tmpy=  exp(-I*k[1]*cell.a[1]*0.5)
+            *exp(-kappa*kappa*(cell.a[1]*0.5-rim[1])*(cell.a[1]*0.5-rim[1]) );
+	  tmpy+=exp(I*k[1]*cell.a[1]*0.5)
+            *exp(-kappa*kappa*(-cell.a[1]*0.5-rim[1])*(-cell.a[1]*0.5-rim[1]) );
+	  for (int i=2;i<=n*0.5;i++)
+            tmpy+=2.0*exp( -I*k[1]*( h*(2*i-2)-cell.a[1]*0.5 ))  
+               *exp(-kappa*kappa*(h*(2*i-2)-rim[1]-cell.a[1]*0.5  )
+                       *(h*(2*i-2)-rim[1]-cell.a[1]*0.5  ));
+	  for (int i=1;i<=n*0.5;i++)  
+            tmpy+=4.0*exp( -I*k[1]*( h*(2*i-1)-cell.a[1]*0.5))
+                     *exp(-kappa*kappa*(h*(2*i-1)-rim[1]-cell.a[1]*0.5 )
+                             *(h*(2*i-1)-rim[1]-cell.a[1]*0.5 ));
 	  std::complex<double> tmpz;
-	  tmpz=  exp(-I*k[2]*cell.a[2]*0.5)*exp(-kappa*kappa*(cell.a[2]*0.5-rim[2])*(cell.a[2]*0.5-rim[2]) );
-	  tmpz+=exp(I*k[2]*cell.a[2]*0.5)*exp(-kappa*kappa*(-cell.a[2]*0.5-rim[2])*(-cell.a[2]*0.5-rim[2]) );
-	  for (int i=2;i<=n*0.5;i++)  tmpz+=2.0* exp( -I*k[2]*( h*(2*i-2)-cell.a[2]*0.5 ))  *exp(-kappa*kappa*(h*(2*i-2)-rim[2]-cell.a[2]*0.5  )*(h*(2*i-2)-rim[2]-cell.a[2]*0.5  ));
-	  for (int i=1;i<=n*0.5;i++)  tmpz+=4.0* exp( -I*k[2]*( h*(2*i-1)-cell.a[2]*0.5))  *exp(-kappa*kappa*(h*(2*i-1)-rim[2]-cell.a[2]*0.5 )*(h*(2*i-1)-rim[2]-cell.a[2]*0.5 ));
-	  INTqofk+=q(jpart)*pow(kappa,3)/pow(3.141592653,1.5)/27.0*tmpx*tmpy*tmpz*h*h*h;
+	  tmpz=  exp(-I*k[2]*cell.a[2]*0.5)
+            *exp(-kappa*kappa*(cell.a[2]*0.5-rim[2])*(cell.a[2]*0.5-rim[2]) );
+	  tmpz+=exp(I*k[2]*cell.a[2]*0.5)
+            *exp(-kappa*kappa*(-cell.a[2]*0.5-rim[2])*(-cell.a[2]*0.5-rim[2]) );
+	  for (int i=2;i<=n*0.5;i++)  
+             tmpz+=2.0* exp( -I*k[2]*( h*(2*i-2)-cell.a[2]*0.5 ))  
+               *exp(-kappa*kappa*(h*(2*i-2)-rim[2]-cell.a[2]*0.5  )
+                       *(h*(2*i-2)-rim[2]-cell.a[2]*0.5  ));
+	  for (int i=1;i<=n*0.5;i++)  
+             tmpz+=4.0* exp( -I*k[2]*( h*(2*i-1)-cell.a[2]*0.5))  
+               *exp(-kappa*kappa*(h*(2*i-1)-rim[2]-cell.a[2]*0.5 )
+                       *(h*(2*i-1)-rim[2]-cell.a[2]*0.5 ));
+	  INTqofk+=q(jpart)*pow(kappa,3)/pow(3.141592653,1.5)
+                                        /27.0*tmpx*tmpy*tmpz*h*h*h;
 	}
       }
     } //end of omp parallel section
-    std :: cout<<" Total Charge from k-space integral over k-space charge density ::  "<<INTqofk<< std :: endl;
+    std::cout << " Total Charge from k-space integral over k-space" 
+              << " charge density ::  " << INTqofk <<  std::endl;
   }
   
 }
@@ -241,7 +282,7 @@ void EwaldCoulombEstimator::testEwaldTotalCharge( const Paths& paths){
 void EwaldCoulombEstimator::findBoxImageVectors(const SuperCell &a) { 
  // 3D case first... to be extended to 2D and 1D soon...after testing 3D case
   std :: vector<std :: vector<double> > vertices(8); 
-  for (int i=0; i< vertices.size(); i++){
+  for (unsigned int i=0; i< vertices.size(); i++){
     vertices[i].resize(NDIM);
   }
   vertices[0][0]=-a[0]/2;  vertices[0][1]=-a[1]/2;  vertices[0][2]=-a[2]/2;
@@ -253,8 +294,9 @@ void EwaldCoulombEstimator::findBoxImageVectors(const SuperCell &a) {
   vertices[6][0]=a[0]/2;  vertices[6][1]=a[1]/2;  vertices[6][2]=a[2]/2;
   vertices[7][0]=-a[0]/2;  vertices[7][1]=a[1]/2;  vertices[7][2]=a[2]/2;
 
-  // Check that all the box images are inside the sphere of radius nImages*max(cell side)
-  // and save the location of these boxes (center of box).
+  // Check that all the box images are inside the sphere of radius 
+  // nImages*max(cell side) and save the location of these boxes 
+  // (center of box).
   std :: vector<double> L(NDIM);
   for (int nx=-nImages; nx<=nImages; nx++){
     for (int ny=-nImages; ny<=nImages; ny++){

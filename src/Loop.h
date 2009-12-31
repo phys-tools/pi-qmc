@@ -29,10 +29,12 @@
  * @version $Revision$
  * @author John Shumway */
 class Loop : public CompositeAlgorithm {
- public:
-  Loop(const int nrepeat, const int totalSimTime, const std::string timer,const MPIManager* mpi, const int nsteps=0) 
+public:
+  Loop(const int nrepeat, const int totalSimTime, const std::string timer,
+       const MPIManager* mpi, const int nsteps=0) 
     : CompositeAlgorithm(nsteps), nrepeat(nrepeat), totalSimTime(totalSimTime),
-    timer(timer), mpi(mpi){}
+      timer(timer), mpi(mpi) {
+  }
     
     virtual ~Loop() {}
 
@@ -100,7 +102,6 @@ class Loop : public CompositeAlgorithm {
 	oldTime=dif;
 
 #ifdef ENABLE_MPI
-	double netDt;
 	if ( mpi->isMain()) printAlgorithmTime(dt);
 #else
 	printAlgorithmTime(dt);
@@ -141,9 +142,9 @@ class Loop : public CompositeAlgorithm {
     }
     
  private:
-    const MPIManager* mpi;
     const int nrepeat;
     const int totalSimTime;
     const std::string timer;
+    const MPIManager* mpi;
 };
 #endif

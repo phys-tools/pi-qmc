@@ -67,9 +67,6 @@ private:
   const bool testEwald;
   double kappa;
   double kcut;
-  double sphereR;
-  std :: vector<std :: vector<double> > boxImageVecs;
-  const int nImages;
   // const double kappa;
   /// Ewald sum object.
   EwaldSum &ewaldSum;
@@ -95,6 +92,9 @@ private:
   Array q;
   /// Buffer to hold current particle postions.
   VArray r;
+  std::vector<std::vector<double> > boxImageVecs;
+  const int nImages;
+  double sphereR;
   /// The MPI manager.
   const MPIManager* mpi;
 };

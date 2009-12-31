@@ -33,16 +33,16 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<int,1> IArray;
   /// Constructor.
-  RingLattice(Paths& paths, const double radius, const double angle0, const double anglef, const double anglex, MPIManager*);
+  RingLattice(Paths& paths, double radius, double angle0, double anglef, 
+              double anglex, MPIManager*);
   /// Constructor for placing a single species.
-  RingLattice(Paths& paths, const double radius, const double angle0, const double anglef, const double anglex, const Species&, MPIManager*);
+  RingLattice(Paths& paths, double radius, double angle0, double anglef, 
+              double anglex, const Species&, MPIManager*);
   ///Virtual destructor
   virtual ~RingLattice() {}
   /// Algorithm run method.
   virtual void run();
 private:
-  ///Reference to the Paths.
-  Paths& paths;
   /// Radius of the ring.
   const double radius;
   /// Angle offset
@@ -55,6 +55,8 @@ private:
   const int ifirst;
   /// The number of particles.
   const int npart;
+  ///Reference to the Paths.
+  Paths& paths;
   /// The MPIManager;
   MPIManager *mpi;
 };

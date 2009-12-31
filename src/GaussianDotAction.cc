@@ -40,7 +40,6 @@ double GaussianDotAction::getActionDifference(const MultiLevelSampler& sampler,
   const int nSlice=sectionBeads.getNSlice();
   const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
-  const int nTot=sectionBeads.getNPart();
   double deltaAction=0;
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {

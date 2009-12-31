@@ -25,10 +25,16 @@
 #include "SuperCell.h"
 #include "math.h"
 
-RingLattice::RingLattice(Paths& paths, const double radius, const double angle0, const double anglef, const double anglex, MPIManager *mpi):paths(paths), radius(radius),angle0(angle0), anglef(anglef), anglex(anglex),ifirst(0),npart(paths.getNPart()), mpi(mpi) {
+RingLattice::RingLattice(Paths& paths, double radius, double angle0, 
+  double anglef, double anglex, MPIManager *mpi) 
+  : radius(radius), anglex(anglex), angle0(angle0), anglef(anglef),
+    ifirst(0),npart(paths.getNPart()), paths(paths), mpi(mpi) {
 }
 
-RingLattice::RingLattice(Paths& paths, const double radius, const double angle0, const double anglef, const double anglex, const Species& species, MPIManager *mpi):paths(paths), radius(radius), angle0(angle0), anglef(anglef), anglex(anglex), ifirst(species.ifirst), npart(species.count), mpi(mpi) {
+RingLattice::RingLattice(Paths& paths, double radius, double angle0, 
+  double anglef, double anglex, const Species& species, MPIManager *mpi)
+  : radius(radius), anglex(anglex), angle0(angle0), anglef(anglef), 
+    ifirst(species.ifirst), npart(species.count), paths(paths), mpi(mpi) {
 }
 
 void RingLattice::run() {
