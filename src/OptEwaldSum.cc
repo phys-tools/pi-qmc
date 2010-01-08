@@ -42,7 +42,6 @@ extern "C" void DGESV_F77(const int *n, const int *nrhs,
                           const double *a, const int *lda, int *ipiv,
                           double *b, const int *ldb, int *info);
 
-
 OptEwaldSum::OptEwaldSum(const SuperCell& cell, int npart,
   double rcut, double kcut, double khalo, int npoly)
   : EwaldSum(cell, npart, rcut, kcut), npoly(npoly), coef(npoly) {

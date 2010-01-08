@@ -48,7 +48,7 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
     eikx(blitz::shape(ikmax[0]+1,npart)),
     eiky(blitz::shape(-ikmax[1],0), blitz::shape(2*ikmax[1]+1,npart)),
 #endif
-    oneOverV(1.0/product(cell.a))
+    oneOver2V(0.5/product(cell.a))
 {
 #if (NDIM==3) || (NDIM==2)
   // Assume charges are all +1, can be reset if evalSelfEnergy is called again.
@@ -75,7 +75,7 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
   vk.resize(totk);
   kvec.resize(totk);
   kvec2.resize(totk);
-  // Calculate k-vectors.
+  // Calculate k-vectors (by symmetry, only loop over half of k-space).
   int ikvec=0;
   for (int kx=0; kx<=ikmax[0]; ++kx) {
     double kx2=kx*kx*deltak[0]*deltak[0];
@@ -102,7 +102,7 @@ EwaldSum::EwaldSum(const SuperCell& cell, const int npart,
     }
   }
   // Subclasses should be sure to call setLongRangeArray and
-  // evalSelfEnerrgy in their constructors.
+  // evalSelfEnergy in their constructors.
 #endif
 }
 
@@ -168,7 +168,7 @@ double EwaldSum::evalLongRange(const VArray& r) const {
     }
   }
 #endif
-  // Sum long range action over all k-vectors.
+  // Sum long range action over the k-vectors.
 #ifdef _OPENMP
 #pragma omp parallel
 #endif
@@ -189,17 +189,17 @@ double EwaldSum::evalLongRange(const VArray& r) const {
     }
 
  
-     sum+=vk(ikvec)*abs(csum)*abs(csum);   
+     sum+=2*vk(ikvec)*norm(csum);
   }
   } //end of omp parallel section
 #endif
  
-   return sum*oneOverV + selfEnergy;
+   return sum*oneOver2V + selfEnergy;
 }
 
 void EwaldSum::evalSelfEnergy() {
   double Q = sum(q);
-  selfEnergy = -0.5*sum(q*q)*evalFR0() + oneOverV*evalFK0()*Q*Q;
+  selfEnergy = -0.5*sum(q*q)*evalFR0() + oneOver2V*evalFK0()*Q*Q;
 }
 
 const double EwaldSum::PI=3.14159265358979;
