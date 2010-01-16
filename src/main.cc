@@ -26,7 +26,11 @@ int irank = 0;   // store node rank for MPI environment
 #include "MainParser.h"
 #include "Help.h"
 #include <demo/Demo.h>
-#include <getopt.h>
+#if HAVE_GETOPT_H
+  #include <getopt.h>
+#else
+  #include "gnugetopt.h"
+#endif
 void usage();
 /** @mainpage pi: Path integral quantum Monte Carlo
   * @section usage Usage

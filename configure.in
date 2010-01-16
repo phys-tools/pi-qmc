@@ -56,6 +56,11 @@ AC_DEFINE_UNQUOTED(NDIM,${withval},[The number of physics dimensions.]),
 AC_DEFINE_UNQUOTED(NDIM,3,[The number of physics dimensions.])
 )
 
+AC_CHECK_FUNC(getopt_long,
+[AC_DEFINE(HAVE_GETOPT_H, 1, 
+  [Define this if there is a system getopt.h header])
+], [])
+
 # Checks for header files.
 
 # Checks for typedefs, structures, and compiler characteristics.
