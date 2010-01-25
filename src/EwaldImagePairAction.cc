@@ -78,8 +78,8 @@ double EwaldImagePairAction::getActionDifference(const MultiLevelSampler& sample
       Vec prevDelta =sectionBeads(i,0);
       prevDelta-=sectionBeads(j,0); cell.pbc(prevDelta);
       Vec prevMovingDelta=prevDelta;
-
-      for (unsigned int img=0; img<boxImageVecs.size(); img++){//////////
+      //sum over images
+      for (unsigned int img=0; img<boxImageVecs.size(); img++){
 	Vec boxImage;
 	for (int l=0; l<NDIM; l++) boxImage[l]=boxImageVecs[img][l];
 

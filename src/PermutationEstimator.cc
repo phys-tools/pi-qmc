@@ -47,7 +47,7 @@ PermutationEstimator::~PermutationEstimator() {
 }
 
 void PermutationEstimator::evaluate(const Paths &paths) {
-  const Permutation &perm(paths.getPermutation());
+  const Permutation &perm(paths.getGlobalPermutation());
   //std :: cout << "SAK :: IN PERMUTATION ESTIMATOR"<<std :: endl;
   //std :: cout << perm<<std :: endl;
 

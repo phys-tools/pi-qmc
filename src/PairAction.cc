@@ -183,8 +183,8 @@ PairAction::PairAction(const Species& s1, const Species& s2,
     ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
     npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ) {
-  //std::cout << "constructing PairAction" << std::endl;
-  //std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
+  std::cout << "Constructing PairAction" << std::endl;
+  std::cout << "Species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
   for (int i=0; i<ngpts; ++i) {
     double r=(1./rgridinv)*exp(i/logrratioinv);
