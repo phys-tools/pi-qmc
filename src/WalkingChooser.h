@@ -40,10 +40,12 @@ public:
   virtual bool choosePermutation();
   virtual void chooseParticles();
   virtual void init(); 
+  int iSearch(int part, double x);
   virtual double getLnTranProb() const {return log(prob);}
 private:
   int nsize;
   Mat t;
+  Mat cump;
   const MultiLevelSampler *multiLevelSampler;
   const double mass;
   const double tau;
