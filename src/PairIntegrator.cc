@@ -21,23 +21,32 @@
 #include <iostream>
 #include <fstream>
 
+#include <complex>
 typedef std::complex<double> Complex;
 
-
-extern "C" void dgetrf_(const int*, const int*, double*, const int*, const int*, int*);
-extern "C" void dgetri_(const int*, double*, const int*, const int*, double*, const int*, int*);
-extern "C" void dgesv_(const int *n, const int *nrhs, double *a, const int *lda, int *ipiv, const double *b, const int *ldb, int *info );
-extern "C" void dcopy_(const int *n, const double *x, const int *incx,
+#define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
+extern "C" void DGETRF_F77(const int*, const int*, double*, const int*, const int*, int*);
+#define DGETRI_F77 F77_FUNC(dgetri,DGETRI)
+extern "C" void DGETRI_F77(const int*, double*, const int*, const int*, double*, const int*, int*);
+#define DGESV_F77 F77_FUNC(dgesv,DGESV)
+extern "C" void DGESV_F77(const int *n, const int *nrhs, double *a, const int *lda, int *ipiv, const double *b, const int *ldb, int *info );
+#define DCOPY_F77 F77_FUNC(dcopy,DCOPY)
+extern "C" void DCOPY_F77(const int *n, const double *x, const int *incx,
                                      const double *y, const int *incy);
-extern "C" void dscal_(const int *n, const double *da, const double *dx,
+#define DSCAL_F77 F77_FUNC(dscal,DSCAL)
+extern "C" void DSCAL_F77(const int *n, const double *da, const double *dx,
   const int *incx);
-extern "C" void daxpy_(const int *n, const double *da, const double *dx,
+#define DAXPY_F77 F77_FUNC(daxpy,DAXPY)
+extern "C" void DAXPY_F77(const int *n, const double *da, const double *dx,
   const int *incx, const double *dy, const int *incy);
-extern "C" void zcopy_(const int *n, const Complex *x, const int *incx,
+#define ZCOPY_F77 F77_FUNC(zcopy,ZCOPY)
+extern "C" void ZCOPY_F77(const int *n, const Complex *x, const int *incx,
                                      const Complex *y, const int *incy);
-extern "C" void zdscal_(const int *n, const double *da, const Complex *dx,
+#define ZDSCAL_F77 F77_FUNC(zdscal,ZDSCAL)
+extern "C" void ZDSCAL_F77(const int *n, const double *da, const Complex *dx,
   const int *incx);
-extern "C" void zaxpy_(const int *n, const double *da, const Complex *dx,
+#define ZAXPY_F77 F77_FUNC(zaxpy,ZAXPY)
+extern "C" void ZAXPY_F77(const int *n, const double *da, const Complex *dx,
   const int *incx, const Complex *dy, const int *incy);
 
 PairIntegrator::PairIntegrator(double tau, double mu, double dr,
@@ -231,7 +240,7 @@ void PairIntegrator::integrate(double q, double scaleTau) {
     }
   }
   int info, nrhs=1;
-  dgesv_(&ndata,&nrhs,mat.data(),&ndata,ipiv.data(),u.data(),&ndata,&info);
+  DGESV_F77(&ndata,&nrhs,mat.data(),&ndata,ipiv.data(),u.data(),&ndata,&info);
   //Reset tau value.
   tau = tauSave;
 }
@@ -338,20 +347,20 @@ void PairIntegrator::vpolyfit(const Array &x, const CArray3 &y, CArray2 &y0,
   //y0 = y(n-1,all,all);
   //c(blitz::Range(0,n-1),all,all) = y;
   //d(blitz::Range(0,n-1),all,all) = y;
-  dcopy_(&none,(double*)&y(n-1,0,0),&one,(double*)y0.data(),&one);
-  dcopy_(&ntot,(double*)y.data(),&one,(double*)c.data(),&one);
-  dcopy_(&ntot,(double*)y.data(),&one,(double*)d.data(),&one);
+  DCOPY_F77(&none,(double*)&y(n-1,0,0),&one,(double*)y0.data(),&one);
+  DCOPY_F77(&ntot,(double*)y.data(),&one,(double*)c.data(),&one);
+  DCOPY_F77(&ntot,(double*)y.data(),&one,(double*)d.data(),&one);
   for (int j=1; j<n; ++j) {
     for (int i=0; i<n-j; ++i) {
       double denom=1./(x(i)-x(i+j));
-      dcopy_(&none,(double*)&c(i+1,0,0),&one,(double*)a.data(),&one);
-      dscal_(&none,&denom,(double*)a.data(),&one);
+      DCOPY_F77(&none,(double*)&c(i+1,0,0),&one,(double*)a.data(),&one);
+      DSCAL_F77(&none,&denom,(double*)a.data(),&one);
       denom *= -1;
-      daxpy_(&none,&denom,(double*)&d(i,0,0),&one,(double*)a.data(),&one);
-      dcopy_(&none,(double*)a.data(),&one,(double*)&c(i,0,0),&one);
-      dscal_(&none,&x(i),(double*)&c(i,0,0),&one);
-      dcopy_(&none,(double*)a.data(),&one,(double*)&d(i,0,0),&one);
-      dscal_(&none,&x(i+j),(double*)&d(i,0,0),&one);
+      DAXPY_F77(&none,&denom,(double*)&d(i,0,0),&one,(double*)a.data(),&one);
+      DCOPY_F77(&none,(double*)a.data(),&one,(double*)&c(i,0,0),&one);
+      DSCAL_F77(&none,&x(i),(double*)&c(i,0,0),&one);
+      DCOPY_F77(&none,(double*)a.data(),&one,(double*)&d(i,0,0),&one);
+      DSCAL_F77(&none,&x(i+j),(double*)&d(i,0,0),&one);
 /*      for (int i1=0; i1<n1; ++ i1) {
         for (int i2=0; i2<n2; ++ i2) {
           a(i1,i2) = (c(i+1,i1,i2)-d(i,i1,i2))*denom;
@@ -362,7 +371,7 @@ void PairIntegrator::vpolyfit(const Array &x, const CArray3 &y, CArray2 &y0,
     }
     //y0 += d(n-j-1,all,all);
     double unity=1.;
-    daxpy_(&none,&unity,(double*)&d(n-j-1),&one,(double*)y0.data(),&one);
+    DAXPY_F77(&none,&unity,(double*)&d(n-j-1),&one,(double*)y0.data(),&one);
   }
   diff = d(0,all,all);
 }

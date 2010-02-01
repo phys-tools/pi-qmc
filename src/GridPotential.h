@@ -26,14 +26,14 @@ class SimulationInfo;
 
 /** Class for getting action and potential from a grid.
   * @todo Set up a potential table.
-  * @bug Hard coded for NDIM=3.
   * @version $Revision$
   * @author John Shumway. */
 class GridPotential : public Action {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,3> Array3;
+  typedef blitz::Array<double,NDIM> ArrayN;
+  typedef blitz::TinyVector<int,NDIM> IVecN;
   /// Constructor by providing an HDF5 file name and SimulationInfo.
   GridPotential(const SimulationInfo& simInfo, const std::string& filename);
   /// Virtual destructor.
@@ -52,14 +52,14 @@ private:
   /// The timestep.
   const double tau;
   /// The grid dimensions.
-  int n1,n2,n3;
+  IVecN nvec;
   /// Inverse grid spacing.
   double b;
   /// The potential grids.
-  Array3 vegrid, vhgrid;
+  ArrayN vegrid, vhgrid;
   /// Evaluate the potential at a point.
   double v(Vec, const int ipart) const;
   /// The grid index that associates the particles and grids.
-  std::vector <Array3*> vindex;
+  std::vector <ArrayN*> vindex;
 };
 #endif
