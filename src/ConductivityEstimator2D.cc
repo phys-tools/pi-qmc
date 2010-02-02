@@ -72,8 +72,8 @@ void ConductivityEstimator2D::initCalc(const int lnslice, const int firstSlice) 
 
 void ConductivityEstimator2D::handleLink(const Vec& start, const Vec& end, 
                                     const int ipart, const int islice, const Paths& paths) {
-  if ((start[0]<xmin & end[0]<xmin) | (start[0]>xmax & end[0]>xmax)) return;
-  if ((start[1]<ymin & end[1]<ymin) | (start[1]>ymax & end[1]>ymax)) return;
+  if ((start[0]<xmin && end[0]<xmin) || (start[0]>xmax && end[0]>xmax)) return;
+  if ((start[1]<ymin && end[1]<ymin) || (start[1]>ymax && end[1]>ymax)) return;
   int ibin = ((int)((start[0] - xmin)*dxinv));
   if (ibin < 0) {ibin = 0;}
   else if (ibin > nxbin-1) {ibin = nxbin;}

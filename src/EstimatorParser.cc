@@ -287,9 +287,6 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (nfreq==0) nfreq=simInfo.getNSlice();
       int nstride=getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
-//      std::cout<<"xmin="<<xmin<<",xmax="<<xmax<<",ymin="<<ymin<<",ymax="<<ymax;
-//      std::cout<<"nxbin="<<nxbin<<",nybin="<<nybin<<",nxdbin="<<nxdbin<<",nydbin="<<nydbin;
-//      std::cout<<"nfreq="<<nfreq<<",nstride="<<nstride<<std::endl;
       manager->add(new ConductivityEstimator2D(simInfo, xmin, xmax, ymin, ymax, nfreq,
                          nxbin, nybin, nxdbin, nydbin, nstride ,mpi));
     }
