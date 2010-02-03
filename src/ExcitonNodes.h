@@ -69,7 +69,7 @@ public:
   /// Virtual destructor.
   virtual ~ExcitonNodes();
   /// Evaluate the density matrix function, returning the value.
-  virtual double evaluate(const VArray &r1, const VArray &r2, 
+  virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
                           const int islice);
   /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
   /// Assumes that evaluate has already been called on the slice.

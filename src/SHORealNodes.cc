@@ -65,8 +65,10 @@ SHORealNodes::~SHORealNodes() {
   for (unsigned int i=0; i<matrix.size(); ++i) delete matrix[i];
 }
 
-double SHORealNodes::evaluate(const VArray &r1, const VArray &r2, 
+NodeModel::DetWithFlag
+SHORealNodes::evaluate(const VArray &r1, const VArray &r2, 
                           const int islice) { 
+  DetWithFlag result; result.err=false;
   // First evaluate the inverse slater matrix.
   Matrix& mat(*matrix[islice]);
   for(int jpart=0; jpart<npart; ++jpart) {
@@ -81,15 +83,22 @@ double SHORealNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   int info=0;
   ZGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
-  if (info!=0) std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
+  if (info!=0) {
+    result.err = true;
+    std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
+  }
   det(islice) = 1;
   for (int i=0; i<npart; ++i) {
     det(islice)*= mat(i,i); 
     det(islice) *= (i+1==ipiv(i))?1:-1;
   }
   ZGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
-  if (info!=0) std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
-  return real(det(islice));
+  if (info!=0) {
+    result.err = true;
+    std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
+  }
+  result.det = real(det(islice));
+  return result;
 }
 
 void SHORealNodes::evaluateDistance(const VArray &r1, const VArray &r2, 

@@ -79,8 +79,10 @@ ExcitonNodes::~ExcitonNodes() {
   delete updateObj;
 }
 
-double ExcitonNodes::evaluate(const VArray &r1, const VArray &r2, 
-                          const int islice) {
+NodeModel::DetWithFlag 
+ExcitonNodes::evaluate(const VArray &r1, const VArray &r2, 
+                       const int islice) {
+  DetWithFlag result; result.err=false;
   Matrix& mat(*matrix[islice]);
   mat=0;
   for(int jpart=0; jpart<npart; ++jpart) {
@@ -104,6 +106,7 @@ double ExcitonNodes::evaluate(const VArray &r1, const VArray &r2,
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
   if (info!=0) {
+    result.err=true;
     std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
     nerror++;
     if (nerror>1000) {
@@ -117,7 +120,8 @@ double ExcitonNodes::evaluate(const VArray &r1, const VArray &r2,
     det *= (i+1==ipiv(i))?1:-1;
   }
   DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
-  if (info!=0) {
+  if (info!=0) { 
+    result.err = true;
     std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
     nerror++;
     if (nerror>1000) {
@@ -125,7 +129,8 @@ double ExcitonNodes::evaluate(const VArray &r1, const VArray &r2,
       std::exit(-1);
     }
   }
-  return det;
+  result.det = det;
+  return result;
 }
 
 void ExcitonNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,

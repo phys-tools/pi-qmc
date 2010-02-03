@@ -40,8 +40,8 @@ public:
   /// Virtual destructor.
   virtual ~GroundStateSNode();
   /// Evaluate the density matrix function, returning value.
-  virtual double evaluate(const VArray &r1, const VArray &r2, 
-                          const int islice);
+  virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
+                               const int islice);
   /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
                                 const int islice, Array &d1, Array &d2);

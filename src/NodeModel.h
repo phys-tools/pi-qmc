@@ -33,6 +33,10 @@ public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<Vec,1> VArray;
   typedef blitz::Array<Vec,2> VMatrix;
+  struct DetWithFlag {
+    double det;
+    bool err;
+  };
   /** Base class for matrix updates.
    The trial density matrix is
    @f[
@@ -78,8 +82,8 @@ public:
   /// Virtual destructor.
   virtual ~NodeModel() {}
   /// Evaluate the density matrix function, returning the value.
-  virtual double evaluate(const VArray &r1, const VArray &r2, 
-                          const int islice)=0;
+  virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
+                               const int islice)=0;
   /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
   /// Assumes that evaluate has already been called on the slice.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,

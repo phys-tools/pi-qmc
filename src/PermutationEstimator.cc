@@ -54,7 +54,7 @@ void PermutationEstimator::evaluate(const Paths &paths) {
   for (int k=0; k<nipart; k++){
     int i = ifirst + k;
     if (!visited[k]){
-      int cnt = 1;
+      int cnt = 0;
       visited[k] = true;
       int j = i;
       while(perm[j] !=i){

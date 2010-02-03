@@ -31,13 +31,16 @@ GroundStateSNode::GroundStateSNode(const Species& s, const int icenter,
 GroundStateSNode::~GroundStateSNode() {
 }
 
-double GroundStateSNode::evaluate(const VArray &r1, const VArray &r2, 
+NodeModel::DetWithFlag
+GroundStateSNode::evaluate(const VArray &r1, const VArray &r2, 
                                   const int islice) {
+  DetWithFlag result; result.err=false;
   double f=sqrt(dot(r1(ifirst+1)-r1(icenter),r1(ifirst+1)-r1(icenter))) 
           -sqrt(dot(r1(ifirst)-r1(icenter),r1(ifirst)-r1(icenter)));
   f*=sqrt(dot(r2(ifirst+1)-r2(icenter),r2(ifirst+1)-r2(icenter))) 
     -sqrt(dot(r2(ifirst)-r2(icenter),r2(ifirst)-r2(icenter)));
-  return f;
+  result.det = f;
+  return result;
 }
 
 void GroundStateSNode::evaluateDistance(const VArray &r1, const VArray &r2,

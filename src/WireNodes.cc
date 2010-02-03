@@ -78,8 +78,9 @@ WireNodes::~WireNodes() {
   delete updateObj;
 }
 
-double WireNodes::evaluate(const VArray &r1, const VArray &r2, 
-                          const int islice) {
+NodeModel::DetWithFlag
+WireNodes::evaluate(const VArray &r1, const VArray &r2, const int islice) {
+  DetWithFlag result; result.err=false;
   Matrix& mat(*matrix[islice]);
   mat=0;
   for(int jpart=0; jpart<npart; ++jpart) {
@@ -114,13 +115,13 @@ double WireNodes::evaluate(const VArray &r1, const VArray &r2,
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
   if (info!=0) {
+    result.err = true;
     std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
     nerror++;
     if (nerror>1000) {
       std::cout << "too many errors!!!!" << std::endl;
       std::exit(-1);
     }
-    return 0;
   }
   double det = 1;
   for (int i=0; i<npart; ++i) {
@@ -129,15 +130,16 @@ double WireNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
   if (info!=0) {
+    result.err = true;
     std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
     nerror++;
     if (nerror>1000) {
       std::cout << "too many errors!!!!" << std::endl;
       std::exit(-1);
     }
-    return 0;
   }
-  return det;
+  result.det =  det;
+  return result;
 }
 
 void WireNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
