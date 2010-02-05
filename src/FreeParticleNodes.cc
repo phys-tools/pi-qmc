@@ -50,8 +50,7 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), 
-    dominant((int)(pow(2,maxlevel)+0.1)+1), nerror(0) {
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -108,10 +107,6 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
   ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
              &usum,kwork.data(),&npart);
   for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
-  dominant(islice) = 1.;
-  for (int ipart=0; ipart<npart; ++ipart) {
-    dominant(islice) *= mat(ipart,kindex(islice,ipart));
-  }
   // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
   // or lowest total action.
   // Next calculate determinant and inverse of slater matrix.
@@ -185,7 +180,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (ipart==kindex(islice,jpart)) fgrad=grad;
+      if (jpart==kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -203,7 +198,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (ipart==kindex(islice,jpart)) fgrad = grad/dominant(islice);
+      if (jpart==kindex(islice,ipart)) fgrad = grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -534,8 +529,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/((*fpNodes.pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (ipart==fpNodes.kindex(islice,jpart))
-        fgrad=grad/fpNodes.dominant(islice);
+      if (jpart==fpNodes.kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -553,8 +547,7 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/((*fpNodes.pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (ipart==fpNodes.kindex(islice,jpart))
-        fgrad=grad/fpNodes.dominant(islice);
+      if (jpart==fpNodes.kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
