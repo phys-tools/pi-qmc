@@ -157,6 +157,7 @@ private:
   Matrix uarray;
   IArray2 kindex;
   IArray kwork;
+  Array dominant;
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
 };

@@ -37,7 +37,7 @@ FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
     dmValue((int)(pow(2,maxlevel)+0.1)+1),
     newDMValue((int)(pow(2,maxlevel)+0.1)+1),
     dist((int)(pow(2,maxlevel)+0.1)+1,2,npart),
-    newDist((int)(pow(2,maxlevel+1)+0.1)+1,2,npart), force(npart), 
+    newDist((int)(pow(2,maxlevel)+0.1)+1,2,npart), force(npart), 
     gradd1(npart,npart), gradd2(npart,npart),
     dim1(npart), dip1(npart), di1(npart), dim2(npart), dip2(npart), di2(npart),
     dotdim1(npart),  dotdi1(npart), dotdim2(npart), dotdi2(npart),
@@ -84,7 +84,7 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
       if (sampler.isSamplingBoth()) for (int i=0; i<nMoving; ++i)
                                     r2(index2(i))=movingBeads2(i,islice);
       NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,islice);
-      // if (result.err) REJECT MOVE
+      if (result.err) return deltaAction=2e100;
       newDMValue(islice)=result.det;
     }
     if (newDMValue(islice)*dmValue(0)<=0) return deltaAction=2e100;
