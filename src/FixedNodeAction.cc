@@ -188,6 +188,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
 //    double xip1=dip1(jpart)*di1(jpart);
       double xim1=dim1(jpart)*di1(jpart);
       double dotxim1=dotdim1(jpart)*di1(jpart)+dim1(jpart)*dotdi1(jpart);
+      dotxim1*=tau/(di1(jpart)*dim1(jpart));
 //    double xip2=dip2(jpart)*di2(jpart);
 //    double xim2=dim2(jpart)*di2(jpart);
 //    for (int ipart=0; ipart<npart; ++ipart) {
