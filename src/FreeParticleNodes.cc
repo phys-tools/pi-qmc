@@ -39,7 +39,7 @@ extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n,
 
 FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
   const Species &species, const double temperature, const int maxlevel,
-  const bool useUpdates, const int maxMovers)
+  const bool useUpdates, const int maxMovers, const bool useHungarian)
   : NodeModel("_"+species.name),
     tau(simInfo.getTau()),mass(species.mass),npart(species.count),
     ifirst(species.ifirst), 
@@ -50,7 +50,8 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0) {
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
+    useHungarian(useHungarian) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -102,13 +103,15 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
     }
   }
   // Find dominant contribution to determinant (distroys uarray).
-  const int MODE=1;
-  double usum=0;
-  ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
-             &usum,kwork.data(),&npart);
-  for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
-  // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
-  // or lowest total action.
+  if (useHungarian) {
+    const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
+    double usum=0;
+    ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+               &usum,kwork.data(),&npart);
+    for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+    // Note: mat(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+    // or lowest total action.
+  }
   // Next calculate determinant and inverse of slater matrix.
   int info=0;//LU decomposition
   DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
@@ -123,7 +126,7 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   double det = 1;
   for (int i=0; i<npart; ++i) {
-    det*= mat(i,i); 
+    det*= mat(i,i);
     det *= (i+1==ipiv(i))?1:-1;
   }
   DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
@@ -180,7 +183,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (jpart==kindex(islice,ipart)) fgrad=grad;
+      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -198,7 +201,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (jpart==kindex(islice,ipart)) fgrad = grad;
+      if (useHungarian && jpart==kindex(islice,ipart)) fgrad = grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -529,7 +532,8 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/((*fpNodes.pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (jpart==fpNodes.kindex(islice,ipart)) fgrad=grad;
+      if (fpNodes.useHungarian 
+          && jpart==fpNodes.kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -547,7 +551,8 @@ void FreeParticleNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/((*fpNodes.pg[i])(fabs(delta[i]))+1e-300);
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      if (jpart==fpNodes.kindex(islice,ipart)) fgrad=grad;
+      if (fpNodes.useHungarian 
+          && jpart==fpNodes.kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad;
     }

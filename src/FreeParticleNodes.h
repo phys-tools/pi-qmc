@@ -99,7 +99,7 @@ public:
   /// Constructor.
   FreeParticleNodes(const SimulationInfo&, const Species&, 
     const double temperature, const int maxlevel, 
-    const bool useUpdates, const int maxMovers);
+    const bool useUpdates, const int maxMovers, const bool useHungarian);
   /// Virtual destructor.
   virtual ~FreeParticleNodes();
   /// Evaluate the density matrix function, returning the value.
@@ -160,5 +160,6 @@ private:
   Array dominant;
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
+  const bool useHungarian;
 };
 #endif
