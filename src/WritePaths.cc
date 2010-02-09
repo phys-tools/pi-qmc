@@ -41,7 +41,6 @@ WritePaths::WritePaths(Paths& paths, const std::string& filename, int dumpFreq,
 }
 
 void WritePaths::run() {
-  
   //Write paths (movie) every dumpFreq (dumpMovieCounter) times
   static int dumpPathCounter=0;
   if (dumpPathCounter < dumpFreq) {
@@ -101,143 +100,27 @@ void WritePaths::run() {
   }
 #endif
 
-  /*if (imax-ifirst==nslice) {
-    // Use old method if no chunking.
+  int nslicePerChunk = imax-ifirst-2;
+
+
+  /// Loop over chunks.
+  for (int ichunk=0; ichunk<(int)ceil(nslice*1./nslicePerChunk); ++ichunk) {
+    int lastSlice=(nslice+ifirst)-ichunk*nslicePerChunk;
+    if (lastSlice>nslicePerChunk) lastSlice=nslicePerChunk;
     if (workerID==0){
-      for (int ipart=0; ipart<paths.getNPart(); ++ipart) {
-        Paths::Vec p = paths(ipart,paths.getNSlice()-1,1);
-        for (int i=0; i<NDIM; ++i) *file << p[i] << " ";
-      }
-      *file << std::endl;
-      for (int islice=paths.getNSlice()-1; islice>=0; --islice) {
+      for (int islice=0; islice<lastSlice; ++islice) {
         for (int ipart=0; ipart<paths.getNPart(); ++ipart) {
           Paths::Vec p = paths(ipart,islice);
           for (int i=0; i<NDIM; ++i) *file << p[i] << " ";
+          if (writeMovie)  {
+            for (int i=0; i<NDIM; ++i) *movieFile << p[i] << " ";
+          }
         }
         *file << std::endl;
+        if (writeMovie) *movieFile << std::endl;
       }
     }
-  } else { */
-    int nslicePerChunk = (imax+1-ifirst)/2;
-
-    /// Loop over chunks.
-    for (int ichunk=0; ichunk<ceil(nslice/nslicePerChunk); ++ichunk) {
-      int lastSlice=(nslice+ifirst)-ichunk*nslicePerChunk;
-      if (lastSlice>nslicePerChunk) lastSlice=nslicePerChunk;
-      if (workerID==0){
-        for (int islice=0; islice<lastSlice; ++islice) {
-          for (int ipart=0; ipart<paths.getNPart(); ++ipart) {
-            Paths::Vec p = paths(ipart,islice);
-            for (int i=0; i<NDIM; ++i) *file << p[i] << " ";
-	    if (writeMovie)  for (int i=0; i<NDIM; ++i) *movieFile << p[i] << " ";
-          }
-          *file << std::endl;
-	  if (writeMovie) *movieFile << std::endl;
-        }
-      }
-      paths.shift(lastSlice);
-    }
-
+    paths.shift(lastSlice);
+  }
   if (workerID==0) delete file;
 }
-
-/*void WritePaths::run() {
-  int workerID=(mpi)?mpi->getWorkerID():0;
-  int nclone=(mpi)?mpi->getNClone():1;
-  int nworker=(mpi)?mpi->getNWorker():1;
-  int cloneID=(mpi)?mpi->getCloneID():0;
-  std::ofstream *file=0;
-  if (workerID==0){
-    /// Add cloneID to name if there are clones.
-    std::stringstream ext;
-    if (nclone>1) ext << cloneID;
-    std::cout << "Writting paths to file " << (filename+ext.str()) << std::endl;
-    file = new std::ofstream((filename+ext.str()).c_str());
-    *file << "#Path coordinates: " << paths.getNPart()
-          << " particles in " << NDIM << "-d" << std::endl;
-  }
-  int npart=paths.getNPart();
-  int nslice=paths.getNSlice();
-  Beads<NDIM> &slice(*beadFactory.getNewBeads(npart,1));
-  Permutation p(npart);
-#ifdef ENABLE_MPI
-  //if (mpi) mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
-  if (paths.isProcessorSlice(0) && workerID!=0) {
-     paths.getBeads(0,slice);
-    if (mpi) mpi->getWorkerComm().Send(
-                     &slice(0,0),npart*NDIM,MPI::DOUBLE,0,0);
-  }
-  if (workerID==0) {
-    if (!paths.isProcessorSlice(0)) {
-      if (mpi) mpi->getWorkerComm().Recv(
-                       &slice(0,0),npart*NDIM,MPI::DOUBLE,MPI::ANY_SOURCE,0);
-    } else {
-       paths.getBeads(0,slice);
-    }
-  }
-#endif
-  if (workerID==0){
-    for (int i=0; i<npart; ++i) {
-      for (int idim=0; idim<NDIM; ++idim) *file << slice(i,0)[idim] << " ";
-    }
-    *file << std::endl;
-  }
-  for (int islice=0; islice<(nslice/bfactor)-1; ++islice) { 
-    for (int ib=0; ib<bfactor; ++ib) { //Put the previous slice.
-      int jslice=islice+ib*nfslice;
-      if (paths.isProcessorSlice(jslice)) paths.putBeads(jslice,slice,p);
-    }
-    if (workerID==0){
-    //if (!mpi || mpi->isMain()) {
-      for (int i=0; i<npart; ++i) { //Read the next slice.
-#if NDIM==3
-        double x,y,z; *infile >> x >> y >> z;
-        slice(i,0)=Beads<NDIM>::Vec(x,y,z);
-#else
-        double x,y; *infile >> x >> y;
-        slice(i,0)=Beads<NDIM>::Vec(x,y);
-#endif
-      }
-    }
-#ifdef ENABLE_MPI
-  if (mpi) mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
-//  if (mpi) MPI::COMM_WORLD.Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
-#endif
-  }
-  // Calculate  permuatation for last slice.
-  if (workerID==0){
-  //if (!mpi || mpi->isMain()) {
-    Beads<NDIM> &wrapSlice(*beadFactory.getNewBeads(npart,1));
-    for (int i=0; i<npart; ++i) {
-#if NDIM==3
-      double x,y,z; *infile >> x >> y >> z; 
-      wrapSlice(i,0)=Beads<NDIM>::Vec(x,y,z);
-#else
-      double x,y; *infile >> x >> y; wrapSlice(i,0)=Beads<NDIM>::Vec(x,y);
-#endif
-    }
-    for (int i=0; i<npart; ++i) {
-      for (int j=0; j<npart; ++j) {
-        if (sum(fabs(wrapSlice(i,0)-firstSlice(j,0)))<10e-6) {p[i]=j; }
-      }
-    }
-    delete &wrapSlice;
-  }   
-#ifdef ENABLE_MPI
-  if (mpi) mpi->getWorkerComm().Bcast(&p[0],npart,MPI::INT,0);
-//  if (mpi) MPI::COMM_WORLD.Bcast(&p[0],npart,MPI::INT,0);
-#endif
-  for (int ib=bfactor-1; ib>=0; --ib) {
-    int jslice=nfslice-1+ib*nfslice;
-    if (paths.isProcessorSlice(jslice)) paths.putBeads(jslice,slice,p);
-  }
-  paths.setBuffers();
-  delete file;
-  if (workerID==0){
-  //if (!mpi || mpi->isMain()) {
-    std::cout << "Permuation read in is " << p << std::endl;
-  } 
-  delete &slice;
-}
-*/
- 
