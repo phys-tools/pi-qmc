@@ -17,8 +17,6 @@
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
-#include <stdio.h>
-#include <math.h>
 #endif
 #include "RingGateAction.h"
 #include <blitz/tinyvec.h>
@@ -29,6 +27,8 @@
 #include "Paths.h"
 #include "SimulationInfo.h"
 #include "Species.h"
+#include <stdio.h>
+#include <math.h>
 
 /* 
 This is a potential for a 2d ring mimicking the gate potential in experiments.

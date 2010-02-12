@@ -87,14 +87,14 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-FreeMover.$(OBJEXT) pi-FreeParticleNodes.$(OBJEXT) \
 	pi-FreePartNodesNoUpdate.$(OBJEXT) \
 	pi-FreeTensorMover.$(OBJEXT) pi-FrequencyEstimator.$(OBJEXT) \
-	pi-GaussianAction.$(OBJEXT) pi-GaussianDotAction.$(OBJEXT) \
-	pi-GrapheneAction.$(OBJEXT) pi-GreenDipoleMEstimator.$(OBJEXT) \
-	pi-GridPotential.$(OBJEXT) pi-GroundStateSNode.$(OBJEXT) \
-	pi-GroundStateWFNodes.$(OBJEXT) pi-Hungarian.$(OBJEXT) \
-	pi-HyperbolicAction.$(OBJEXT) pi-HyperbolicMover.$(OBJEXT) \
-	pi-ImagePairAction.$(OBJEXT) pi-JelliumSlab.$(OBJEXT) \
-	pi-JEstimator.$(OBJEXT) pi-main.$(OBJEXT) \
-	pi-MainParser.$(OBJEXT) pi-Measure.$(OBJEXT) \
+	pi-GateAction.$(OBJEXT) pi-GaussianAction.$(OBJEXT) \
+	pi-GaussianDotAction.$(OBJEXT) pi-GrapheneAction.$(OBJEXT) \
+	pi-GreenDipoleMEstimator.$(OBJEXT) pi-GridPotential.$(OBJEXT) \
+	pi-GroundStateSNode.$(OBJEXT) pi-GroundStateWFNodes.$(OBJEXT) \
+	pi-Hungarian.$(OBJEXT) pi-HyperbolicAction.$(OBJEXT) \
+	pi-HyperbolicMover.$(OBJEXT) pi-ImagePairAction.$(OBJEXT) \
+	pi-JelliumSlab.$(OBJEXT) pi-JEstimator.$(OBJEXT) \
+	pi-main.$(OBJEXT) pi-MainParser.$(OBJEXT) pi-Measure.$(OBJEXT) \
 	pi-MultiLevelSampler.$(OBJEXT) \
 	pi-MultiSpeciesParticleChooser.$(OBJEXT) \
 	pi-NodeModel.$(OBJEXT) pi-NodeTester.$(OBJEXT) \
@@ -319,11 +319,12 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	EwaldImagePairAction.cc EwaldSum.cc FixedNodeAction.cc \
 	FixedPhaseAction.cc FreeMover.cc FreeParticleNodes.cc \
 	FreePartNodesNoUpdate.cc FreeTensorMover.cc \
-	FrequencyEstimator.cc GaussianAction.cc GaussianDotAction.cc \
-	GrapheneAction.cc GreenDipoleMEstimator.cc GridPotential.cc \
-	GroundStateSNode.cc GroundStateWFNodes.cc Help.h Hungarian.cc \
-	HyperbolicAction.cc HyperbolicMover.cc ImagePairAction.cc \
-	JelliumSlab.cc JEstimator.cc main.cc MainParser.cc Measure.cc \
+	FrequencyEstimator.cc GateAction.cc GaussianAction.cc \
+	GaussianDotAction.cc GrapheneAction.cc \
+	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
+	GroundStateWFNodes.cc Help.h Hungarian.cc HyperbolicAction.cc \
+	HyperbolicMover.cc ImagePairAction.cc JelliumSlab.cc \
+	JEstimator.cc main.cc MainParser.cc Measure.cc \
 	MultiLevelSampler.cc MultiSpeciesParticleChooser.cc \
 	NodeModel.cc NodeTester.cc OptEwaldSum.cc \
 	OpticalLatticeAction.cc PairAction.cc PrimativePairAction.cc \
@@ -371,13 +372,13 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	EwaldImagePairAction.h EwaldSum.h FixedNodeAction.h \
 	FixedPhaseAction.h FreeMover.h FreeParticleNodes.h \
 	FreePartNodesNoUpdate.h FreeTensorMover.h FrequencyEstimator.h \
-	GaussianAction.h GaussianDotAction.h GrapheneAction.h \
-	GreenDipoleMEstimator.h GridPotential.h GroundStateSNode.h \
-	GroundStateWFNodes.h HyperbolicAction.h HyperbolicMover.h \
-	ImagePairAction.h JelliumSlab.h JEstimator.h LinkSummable.h \
-	Loop.h MainParser.h Measure.h Mover.h MultiLevelSampler.h \
-	MultiSpeciesParticleChooser.h NodeModel.h NodeTester.h \
-	OptEwaldSum.h OpticalLatticeAction.h PairAction.h \
+	GateAction.h GaussianAction.h GaussianDotAction.h \
+	GrapheneAction.h GreenDipoleMEstimator.h GridPotential.h \
+	GroundStateSNode.h GroundStateWFNodes.h HyperbolicAction.h \
+	HyperbolicMover.h ImagePairAction.h JelliumSlab.h JEstimator.h \
+	LinkSummable.h Loop.h MainParser.h Measure.h Mover.h \
+	MultiLevelSampler.h MultiSpeciesParticleChooser.h NodeModel.h \
+	NodeTester.h OptEwaldSum.h OpticalLatticeAction.h PairAction.h \
 	PrimativePairAction.h PairChooser.h PairIntegrator.h \
 	PairPotential.h PairCFEstimator.h PairDistance.h \
 	ParallelPaths.h ParticleChooser.h PathReader.h Paths.h \
@@ -521,6 +522,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreeParticleNodes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreeTensorMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FrequencyEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GateAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GaussianAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GaussianDotAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GrapheneAction.Po@am__quote@
@@ -1325,6 +1327,20 @@ pi-FrequencyEstimator.obj: FrequencyEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FrequencyEstimator.cc' object='pi-FrequencyEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FrequencyEstimator.obj `if test -f 'FrequencyEstimator.cc'; then $(CYGPATH_W) 'FrequencyEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/FrequencyEstimator.cc'; fi`
+
+pi-GateAction.o: GateAction.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-GateAction.o -MD -MP -MF "$(DEPDIR)/pi-GateAction.Tpo" -c -o pi-GateAction.o `test -f 'GateAction.cc' || echo '$(srcdir)/'`GateAction.cc; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pi-GateAction.Tpo" "$(DEPDIR)/pi-GateAction.Po"; else rm -f "$(DEPDIR)/pi-GateAction.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='GateAction.cc' object='pi-GateAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-GateAction.o `test -f 'GateAction.cc' || echo '$(srcdir)/'`GateAction.cc
+
+pi-GateAction.obj: GateAction.cc
+@am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-GateAction.obj -MD -MP -MF "$(DEPDIR)/pi-GateAction.Tpo" -c -o pi-GateAction.obj `if test -f 'GateAction.cc'; then $(CYGPATH_W) 'GateAction.cc'; else $(CYGPATH_W) '$(srcdir)/GateAction.cc'; fi`; \
+@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/pi-GateAction.Tpo" "$(DEPDIR)/pi-GateAction.Po"; else rm -f "$(DEPDIR)/pi-GateAction.Tpo"; exit 1; fi
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='GateAction.cc' object='pi-GateAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-GateAction.obj `if test -f 'GateAction.cc'; then $(CYGPATH_W) 'GateAction.cc'; else $(CYGPATH_W) '$(srcdir)/GateAction.cc'; fi`
 
 pi-GaussianAction.o: GaussianAction.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-GaussianAction.o -MD -MP -MF "$(DEPDIR)/pi-GaussianAction.Tpo" -c -o pi-GaussianAction.o `test -f 'GaussianAction.cc' || echo '$(srcdir)/'`GaussianAction.cc; \

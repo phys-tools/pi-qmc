@@ -33,6 +33,7 @@ extern int irank;
 #include "SpringAction.h"
 #include "SpringTensorAction.h"
 #include "CoulombAction.h"
+#include "GateAction.h"
 #include "GaussianAction.h"
 #include "GaussianDotAction.h"
 #include "OpticalLatticeAction.h"
@@ -346,6 +347,26 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       const Species& species(simInfo.getSpecies(specName));
       if (irank == 0) std::cout << "The ring gate action is set." << std::endl;
       composite->addAction(new RingGateAction(simInfo,GVolt,s,theta0,species));
+      continue;
+    } else if (name == "GateAction") {
+      if (NDIM != 2) {
+        if (irank == 0) { 
+          std::cout<<"The GateAction only works for 2D."<<std::endl;
+          exit(-1);
+        }
+      }
+      double GVolt = getEnergyAttribute(actNode, "Vg");
+      double sx = getDoubleAttribute(actNode, "sx");
+      double sy = getDoubleAttribute(actNode, "sy");
+      double xwidth = getLengthAttribute(actNode, "xwidth");
+      double ywidth = getLengthAttribute(actNode, "ywidth");
+      double xoffset = getLengthAttribute(actNode, "xoffset");
+      double yoffset = getLengthAttribute(actNode, "yoffset");
+      std::string specName = getStringAttribute(actNode, "species");
+      const Species& species(simInfo.getSpecies(specName));
+      if (irank == 0) std::cout<<"The gate action is on."<<std::endl;
+      composite->addAction(new GateAction(simInfo, GVolt, sx, sy, xwidth, 
+                        ywidth, xoffset, yoffset, species));
       continue;
     } else if (name=="SpringTensorAction") {
       composite->addAction(new SpringTensorAction(simInfo));

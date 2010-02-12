@@ -13,8 +13,8 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __RingGateAction_h_
-#define __RingGateAction_h_
+#ifndef __GateAction_h_
+#define __GateAction_h_
 class MultiLevelSampler;
 class Species;
 template <int TDIM> class Beads;
@@ -22,34 +22,37 @@ template <int TDIM> class Beads;
 #include <blitz/array.h>
 class SimulationInfo;
 
-/* Class for calculating the gate action for a ring
+/*  Class for calculating the square gate action
  */
 
-class RingGateAction : public Action {
-public:
+class GateAction : public Action{
+public: 
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   /// Constructor
-  RingGateAction(const SimulationInfo &simInfo, const double GVolt, const double s, const double theta0, const Species&);
+  GateAction(const SimulationInfo &simInfo, const double GVolt, const double sx,
+             const double sy, const double xwidth, const double ywidth,
+             const double xoffset, const double yoffset, const Species&);
   /// Virtual destructor.
-  virtual ~RingGateAction() {}
+  virtual ~GateAction() {};
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&, const int level);
-  /// Calculate the difference in action (NOT IMPLEMENTED YET).
+  /// calculate the difference in action (NOT IMPLEMENTED YET).
   virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
+                                     const int nMoving) {return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
-  virtual void getBeadAction(const Paths&, int ipart, int islice, double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const;
+  virtual void getBeadAction(const Paths&, int ipart, int islice, double& u,
+                       double& utau, double& ulambda, Vec &fm, Vec &fp) const;
 private:
-  /// The timestep.
+  /// The timestep;
   const double tau;
   /// The interaction parameters.
-  const double GVolt, s, theta0;
+  const double GVolt, sx, sy, xwidth, ywidth, xoffset, yoffset;
   /// The first particle in this interaction.
   const int ifirst;
   /// The number of particles with this interaction.
   const int npart;
-}; 
+};
 #endif
