@@ -38,22 +38,22 @@ ConductivityEstimator2D::ConductivityEstimator2D(const SimulationInfo&simInfo,
     nxbin(nxbin), nybin(nybin), nxdbin(nxdbin), nydbin(nydbin),
     xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax),
     dx((xmax-xmin)/nxbin), dy((ymax-ymin)/nybin), dxinv(1./dx), dyinv(1./dy),
-    temp(2*nxdbin-1,nxbin,2*nydbin-1,nybin,2,2,nslice/nstride), jx(2,nxbin,nybin,nslice/nstride),
-    jy(2,nxbin,nybin,nslice/nstride),  mpi(mpi) {
-//  nbin[0]=nxbin; nbin[1]=nybin; 
-//  ndbin[0]=nxdbin; ndbin[1]=nydbin;
-//  min[0]=xmin; min[1]=ymin;
-//  max[0]=xmax; max[1]=xmax;
-//  dx[0]=(xmax-xmin)/nxbin; dx[1]=(ymax-ymin)/nybin;
-//  dxinv[0]=1./(dx[0]); dxinv[1]=1./(dx[1]);
+    ax((simInfo.getSuperCell()->a[0])/2), ay((simInfo.getSuperCell()->a[1])/2),
+    tolxdbin(2*nxdbin-1), tolydbin(2*nydbin-1),
+    temp(tolxdbin,nxbin,tolydbin,nybin,2,2,nslice/nstride),
+    jx(nxbin,nybin,nslice/nstride), jy(nxbin,nybin,nslice/nstride),
+#ifdef ENABLE_MPI
+    j_tmp(nxbin,nybin,nslice/nstride),
+#endif
+     mpi(mpi) {
   fftw_complex *ptrx = (fftw_complex*)jx.data();
   fftw_complex *ptry = (fftw_complex*)jy.data();
   int nsliceEff=nslice/nstride;
-  fwdx = fftw_plan_many_dft(1, &nsliceEff, 2*nxbin*nybin, 
+  fwdx = fftw_plan_many_dft(1, &nsliceEff, nxbin*nybin, 
                             ptrx, 0, 1, nsliceEff,
                             ptrx, 0, 1, nsliceEff,
                             FFTW_FORWARD, FFTW_MEASURE);
-  fwdy = fftw_plan_many_dft(1, &nsliceEff, 2*nxbin*nybin,
+  fwdy = fftw_plan_many_dft(1, &nsliceEff, nxbin*nybin,
                             ptry, 0, 1, nsliceEff,
                             ptry, 0, 1, nsliceEff,
                             FFTW_FORWARD, FFTW_MEASURE);
@@ -68,12 +68,18 @@ ConductivityEstimator2D::~ConductivityEstimator2D() {
 void ConductivityEstimator2D::initCalc(const int lnslice, const int firstSlice) {
   temp=0;
   jx=0; jy=0;
+#ifdef ENABLE_MPI
+  j_tmp=0;
+#endif
 }
 
 void ConductivityEstimator2D::handleLink(const Vec& start, const Vec& end, 
                                     const int ipart, const int islice, const Paths& paths) {
   if ((start[0]<xmin && end[0]<xmin) || (start[0]>xmax && end[0]>xmax)) return;
   if ((start[1]<ymin && end[1]<ymin) || (start[1]>ymax && end[1]>ymax)) return;
+  // Exclude the links crossing the boundary of supercell.
+  if (end[0] - start[0] > ax || start[0] - end[0] > ax) return;
+  if (end[1] - start[1] > ay || start[1] - end[1] > ay) return;
   int ibin = ((int)((start[0] - xmin)*dxinv));
   if (ibin < 0) {ibin = 0;}
   else if (ibin > nxbin-1) {ibin = nxbin;}
@@ -88,7 +94,8 @@ void ConductivityEstimator2D::handleLink(const Vec& start, const Vec& end,
       double x = xmin + (i+1)*dx;
       // The y index in matrix here is not the reverse of y coordinate.
       int ybin = (int)((start[1] + k*(x - start[0]) - ymin)*dyinv);
-      jx(0,i,ybin,islice/nstride)+=idir*q(ipart);
+      if (ybin > nybin-1 || ybin < 0) continue;
+      jx(i,ybin,islice/nstride)+=idir*q(ipart);
     }
   }
   ibin = ((int)((start[1] - ymin)*dyinv));
@@ -104,7 +111,8 @@ void ConductivityEstimator2D::handleLink(const Vec& start, const Vec& end,
     for (int i=ibin; i*idir<jbin*idir; i+=idir) {
       double y = ymin + (i+1)*dy;
       int xbin = (int)((start[0] + kinv*(y - start[1]) - xmin)*dxinv);
-      jy(0,xbin,i,islice/nstride)+=idir*q(ipart);
+      if (xbin > nxbin-1 || xbin < 0) continue;
+      jy(xbin,i,islice/nstride)+=idir*q(ipart);
     }
   }
 } 
@@ -117,12 +125,12 @@ void ConductivityEstimator2D::endCalc(const int lnslice) {
   int workerID = (mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
   if (mpi) {
-    mpi->getWorkerComm().Reduce(&jx(0,0,0,0), &jx(1,0,0,0), 2*nxbin*nybin*nslice/nstride,
+    mpi->getWorkerComm().Reduce(&jx(0,0,0), &j_tmp(0,0,0), 2*nxbin*nybin*nslice/nstride,
                                 MPI::DOUBLE, MPI::SUM, 0);
-    mpi->getWorkerComm().Reduce(&jy(0,0,0,0), &jy(1,0,0,0), 2*nxbin*nybin*nslice/nstride,
+    jx=j_tmp; j_tmp=0;
+    mpi->getWorkerComm().Reduce(&jy(0,0,0), &j_tmp(0,0,0), 2*nxbin*nybin*nslice/nstride,
                                 MPI::DOUBLE, MPI::SUM, 0);
-    jx(0,allBin,allBin,allSlice) = jx(1,allBin,allBin,allSlice);
-    jy(0,allBin,allBin,allSlice) = jy(1,allBin,allBin,allSlice);
+    jy=j_tmp;
   }
 #endif
   // Calculate correlation function using FFT's.
@@ -130,89 +138,73 @@ void ConductivityEstimator2D::endCalc(const int lnslice) {
     fftw_execute(fwdx);
     fftw_execute(fwdy); 
     for (int ibinx=0; ibinx<nxbin; ++ibinx) {
-      for (int jdbinx=1; jdbinx<nxdbin; ++jdbinx) {
+      for (int jdbinx=0; jdbinx<nxdbin; ++jdbinx) {
         int jbinx = (ibinx + jdbinx) % nxbin;
         for(int ibiny=0; ibiny<nybin; ++ibiny) {
-          for(int jdbiny=1; jdbiny<nydbin; ++jdbiny) {
+          for(int jdbiny=0; jdbiny<nydbin; ++jdbiny) {
             // jx-jx
             int jbiny = (ibiny + jdbiny) % nybin;
             temp(jdbinx, ibinx, jdbiny, ibiny, 0, 0, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+             = conj(jx(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 0, 0, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+            temp(jdbinx, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 0, 0, allSlice)
+             = conj(jx(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
             // jy-jy
             jbiny = (ibiny + jdbiny) % nybin;
             temp(jdbinx, ibinx, jdbiny, ibiny, 1, 1, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+             = conj(jy(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 1, 1, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+            temp(jdbinx, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 1, 1, allSlice)
+             = conj(jy(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             // jx-jy
             jbiny = (ibiny + jdbiny) % nybin;
             temp(jdbinx, ibinx, jdbiny, ibiny, 0, 1, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+             = conj(jx(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 0, 1, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+            temp(jdbinx, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 0, 1, allSlice)
+             = conj(jx(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             // jy-jx
             jbiny = (ibiny + jdbiny) % nybin;
             temp(jdbinx, ibinx, jdbiny, ibiny, 1, 0, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+             = conj(jy(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 1, 0, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+            temp(jdbinx, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 1, 0, allSlice)
+             = conj(jy(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
           }
         }
         jbinx = (ibinx - jdbinx + nxbin) % nxbin;
         for(int ibiny=0; ibiny<nybin; ++ibiny) {
-          for(int jdbiny=1; jdbiny<nydbin; ++jdbiny) {
+          for(int jdbiny=0; jdbiny<nydbin; ++jdbiny) {
             // jx-jx
             int jbiny = (ibiny + jdbiny) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, jdbiny, ibiny, 0, 0, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, jdbiny, ibiny, 0, 0, allSlice)
+             = conj(jx(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 0, 0, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 0, 0, allSlice)
+             = conj(jx(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
             // jy-jy
             jbiny = (ibiny + jdbiny) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, jdbiny, ibiny, 1, 1, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, jdbiny, ibiny, 1, 1, allSlice)
+             = conj(jy(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 1, 1, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 1, 1, allSlice)
+             = conj(jy(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             // jx-jy
             jbiny = (ibiny + jdbiny) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, jdbiny, ibiny, 0, 1, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, jdbiny, ibiny, 0, 1, allSlice)
+             = conj(jx(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 0, 1, allSlice)
-             = conj(jx(0,ibinx,ibiny,allSlice)) * jy(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 0, 1, allSlice)
+             = conj(jx(ibinx,ibiny,allSlice)) * jy(jbinx,jbiny,allSlice);
             // jy-jx
             jbiny = (ibiny + jdbiny) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, jdbiny, ibiny, 1, 0, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, jdbiny, ibiny, 1, 0, allSlice)
+             = conj(jy(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
             jbiny = (ibiny - jdbiny + nybin) % nybin;
-            temp(2*nxdbin-1-jdbinx, ibinx, 2*nydbin-1-jdbiny, ibiny, 1, 0, allSlice)
-             = conj(jy(0,ibinx,ibiny,allSlice)) * jx(0,jbinx,jbiny,allSlice);
+            temp((tolxdbin-jdbinx)%tolxdbin, ibinx, (tolydbin-jdbiny)%tolydbin, ibiny, 1, 0, allSlice)
+             = conj(jy(ibinx,ibiny,allSlice)) * jx(jbinx,jbiny,allSlice);
           }
         }
-      }
-    }
-    for (int ibinx=0; ibinx<nxbin; ++ibinx) {
-      for (int ibiny=0; ibiny<nybin; ++ibiny) {
-        // jx-jx
-        temp(0, ibinx, 0, ibiny, 0, 0, allSlice)
-          = conj(jx(0,ibinx,ibiny,allSlice)) * jx(0,ibinx,ibiny,allSlice);
-        // jy-jy
-        temp(0, ibinx, 0, ibiny, 1, 1, allSlice) 
-          = conj(jy(0,ibinx,ibiny,allSlice)) * jy(0,ibinx,ibiny,allSlice);
-        // jx-jy
-        temp(0, ibinx, 0, ibiny, 0, 1, allSlice)
-          = conj(jx(0,ibinx,ibiny,allSlice)) * jy(0,ibinx,ibiny,allSlice);
-        // jy-jx
-        temp(0, ibinx, 0, ibiny, 1, 0, allSlice)
-          = conj(jy(0,ibinx,ibiny,allSlice)) * jx(0,ibinx,ibiny,allSlice);
       }
     }
     value += real(temp(allBin, allBin, allBin, allBin, alldir, alldir, 

@@ -27,7 +27,7 @@ class MPIManager;
 class ConductivityEstimator2D : public BlitzArrayBlkdEst<7>, public LinkSummable {
 public:
   typedef blitz::Array<std::complex<double>,7> CArray7;
-  typedef blitz::Array<std::complex<double>,4> CArray4;
+  typedef blitz::Array<std::complex<double>,3> CArray3;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   /// Constructor.
@@ -49,13 +49,16 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
-  const int npart, nslice, nfreq, nstride, nxbin, nybin, nxdbin, nydbin;
-  const double tau, tauinv, massinv, dx, dy, dxinv, dyinv, xmin, xmax, ymin, ymax;
+  const int npart, nslice, nfreq, nstride, nxbin, nybin, nxdbin, nydbin, tolxdbin, tolydbin;
+  const double tau, tauinv, massinv, dx, dy, dxinv, dyinv, xmin, xmax, ymin, ymax, ax, ay;
 //  double dx[2], dxinv[2], min[2], max[2];
 //  int nbin[2], ndbin[2];
   Array q;
   CArray7 temp;
-  CArray4 jx,jy;
+  CArray3 jx,jy;
+#ifdef ENABLE_MPI
+  CArray3 j_tmp;
+#endif
   fftw_plan fwdx,fwdy;
   MPIManager *mpi;
 };
