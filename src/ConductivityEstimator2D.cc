@@ -125,10 +125,10 @@ void ConductivityEstimator2D::endCalc(const int lnslice) {
   int workerID = (mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
   if (mpi) {
-    mpi->getWorkerComm().Reduce(&jx(0,0,0), &j_tmp(0,0,0), 2*nxbin*nybin*nslice/nstride,
+    mpi->getWorkerComm().Reduce(jx.data(), j_tmp.data(), 2*nxbin*nybin*nslice/nstride,
                                 MPI::DOUBLE, MPI::SUM, 0);
     jx=j_tmp; j_tmp=0;
-    mpi->getWorkerComm().Reduce(&jy(0,0,0), &j_tmp(0,0,0), 2*nxbin*nybin*nslice/nstride,
+    mpi->getWorkerComm().Reduce(jy.data(), j_tmp.data(), 2*nxbin*nybin*nslice/nstride,
                                 MPI::DOUBLE, MPI::SUM, 0);
     jy=j_tmp;
   }
