@@ -42,8 +42,11 @@ Virial -- not works
 @author Jianheng Liu
 */
 
-RingGateAction::RingGateAction(const SimulationInfo &simInfo, const double GVolt, const double s, const double theta0, const Species &species)
-  : tau(simInfo.getTau()), GVolt(GVolt), s(s), theta0(theta0), ifirst(species.ifirst), npart(species.count){
+RingGateAction::RingGateAction(const SimulationInfo &simInfo, const double GVolt, 
+                 const double s, const double theta0, const Species &species)
+  : tau(simInfo.getTau()), GVolt(GVolt), s(s), theta0(theta0), 
+    ifirst(species.ifirst), npart(species.count), 
+    normalConst(tanh(s * theta0) - tanh(s * (-theta0))) {
 }
 
 double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {
@@ -69,14 +72,14 @@ double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, con
       x = delta[0];
       y = delta[1];
       theta = atan2(y,x);
-      deltaAction+=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
+      deltaAction+=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) / normalConst * ktstride;
       // Subtract action for old beads.
       delta = sectionBeads(i,islice);
       cell.pbc(delta);
       x = delta[0];
       y = delta[1];
       theta = atan2(y,x);
-      deltaAction-=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) * ktstride;
+      deltaAction-=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) / normalConst * ktstride;
     }
   }
   return deltaAction;
@@ -94,6 +97,6 @@ void RingGateAction::getBeadAction(const Paths& paths, int ipart, int islice, do
   double y = delta[1];
   double theta = 0;
   theta = atan2(y,x);
-  utau=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0)));
+  utau=GVolt * (tanh(s * (theta + theta0)) - tanh(s * (theta - theta0))) / normalConst;
   u = utau * tau;
 }

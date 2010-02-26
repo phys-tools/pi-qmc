@@ -49,7 +49,7 @@ private:
   /// The timestep;
   const double tau;
   /// The interaction parameters.
-  const double GVolt, sx, sy, xwidth, ywidth, xoffset, yoffset;
+  const double GVolt, sx, sy, xwidth, ywidth, xoffset, yoffset, normalConst;
   /// The first particle in this interaction.
   const int ifirst;
   /// The number of particles with this interaction.

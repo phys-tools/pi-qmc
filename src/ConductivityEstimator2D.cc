@@ -28,6 +28,10 @@
 #include <blitz/tinyvec.h>
 #include "stats/MPIManager.h"
 
+/*
+  To do: take into accout the links crossing the boundary of the supercell.
+*/
+
 ConductivityEstimator2D::ConductivityEstimator2D(const SimulationInfo&simInfo,
   const double xmin, const double xmax, const double ymin, const double ymax, const int nfreq, 
   const int nxbin, const int nybin, const int nxdbin, const int nydbin, const int nstride,

@@ -47,7 +47,8 @@ GateAction::GateAction(const SimulationInfo &simInfo, const double GVolt,
  const double xoffset, const double yoffset, const Species &species)
   : tau(simInfo.getTau()), GVolt(GVolt), sx(sx), sy(sy),  xwidth(xwidth), 
     ywidth(ywidth), xoffset(xoffset), yoffset(yoffset), ifirst(species.ifirst),
-    npart(species.count) {
+    npart(species.count), 
+    normalConst((tanh(sx*xwidth/2)-tanh(sx*(-xwidth)/2))*(tanh(sy*ywidth/2)-tanh(sy*(-ywidth)/2))) {
 }
 
 double GateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {
@@ -62,8 +63,6 @@ double GateAction::getActionDifference(const MultiLevelSampler& sampler, const i
   double ktstride = tau*nStride;
   double xspread = xwidth / 2;
   double yspread = ywidth / 2;
-  double normalConst = (tanh(sx * xspread) - tanh(sx * (-xspread)))
-                     * (tanh(sy * yspread) - tanh(sy * (-yspread)));
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
@@ -106,8 +105,6 @@ void GateAction::getBeadAction(const Paths& paths, int ipart, int islice, double
   double y = delta[1];
   double xspread = xwidth / 2;
   double yspread = ywidth / 2;
-  double normalConst = (tanh(sx * xspread) - tanh(sx * (-xspread)))
-                     * (tanh(sy * yspread) - tanh(sy * (-yspread)));
   utau = GVolt * (tanh(sx * (x - xoffset + xspread)) - 
                           tanh(sx * (x - xoffset - xspread))) *
                          (tanh(sy * (y - yoffset + yspread)) - 
