@@ -57,7 +57,7 @@ SHONodes::~SHONodes() {
 
 NodeModel::DetWithFlag
 SHONodes::evaluate(const VArray &r1, const VArray &r2, 
-                   const int islice) {
+                   const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
   Matrix& mat(*matrix[islice]);
   mat=0;

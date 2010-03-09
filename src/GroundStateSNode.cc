@@ -33,7 +33,7 @@ GroundStateSNode::~GroundStateSNode() {
 
 NodeModel::DetWithFlag
 GroundStateSNode::evaluate(const VArray &r1, const VArray &r2, 
-                                  const int islice) {
+                           const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
   double f=sqrt(dot(r1(ifirst+1)-r1(icenter),r1(ifirst+1)-r1(icenter))) 
           -sqrt(dot(r1(ifirst)-r1(icenter),r1(ifirst)-r1(icenter)));

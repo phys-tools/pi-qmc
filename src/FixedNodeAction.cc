@@ -83,11 +83,11 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
       for (int i=0; i<npart; ++i) r2(i)=sectionBeads2(i,islice);
       if (sampler.isSamplingBoth()) for (int i=0; i<nMoving; ++i)
                                     r2(index2(i))=movingBeads2(i,islice);
-      NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,islice);
+      NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,islice,false);
       if (result.err) return deltaAction=2e100;
       newDMValue(islice)=result.det;
     }
-    if (newDMValue(islice)*dmValue(0)<=0) return deltaAction=2e100;
+    if (newDMValue(islice)*dmValue(0)<=1e-200) return deltaAction=2e100;
   } 
   // Calculate the nodal action if level=0;
   if (withNodalAction && level==0) {
@@ -156,7 +156,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     int jslice=(islice+totNSlice/2)%totNSlice;
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,-1);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,-1);
-    nodeModel->evaluate(r1, r2, 0);
+    nodeModel->evaluate(r1, r2, 0, false);
     nodeModel->evaluateDistance(r1,r2,0,dim1,dim2);
     if (useDistDerivative) {
       nodeModel->evaluateDotDistance(r1,r2,0,dotdim1,dotdim2);
@@ -171,7 +171,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     // Calculate the action and the gradient of the action.
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
-    nodeModel->evaluate(r1, r2, 0);
+    nodeModel->evaluate(r1, r2, 0, false);
     nodeModel->evaluateDistance(r1,r2,0,di1,di2);
     if (useDistDerivative) {
       nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);
@@ -217,9 +217,9 @@ void FixedNodeAction::initialize(const DoubleSectionChooser &chooser) {
   for (int islice=0; islice<nslice; ++islice) {  
     for (int i=0; i<npart; ++i) r1(i)=sectionBeads1(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=sectionBeads2(i,islice);
-    NodeModel::DetWithFlag result = nodeModel->evaluate(r1,r2,islice);
+    NodeModel::DetWithFlag result = nodeModel->evaluate(r1,r2,islice,true);
     dmValue(islice) = result.det;
-    if (result.err || dmValue(islice)*dmValue(0)<=0.0) {
+    if (result.err || dmValue(islice)*dmValue(0)<=1e-200) {
       std::cout << "ERROR - crossed node" << islice << std::endl;
       nerror++;
       if (nerror>1000) {

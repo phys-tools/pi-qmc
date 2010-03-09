@@ -90,7 +90,7 @@ AugmentedNodes::~AugmentedNodes() {
 
 NodeModel::DetWithFlag 
 AugmentedNodes::evaluate(const VArray &r1, const VArray &r2, 
-                         const int islice) {
+                         const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
   Matrix& mat(*matrix[islice]);
   mat=0;
@@ -180,12 +180,12 @@ void AugmentedNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
   // First calculate distance at smaller beta.
   tau = tauSave*(1.-EPSILON);
   for (int i=0; i<NDIM; ++i) pg[i]=pgm[i];
-  evaluate(r1, r2, islice);
+  evaluate(r1, r2, islice, false);
   evaluateDistance(r1, r2, islice, temp1, temp2);
   // Next calculate distance at larger beta.
   tau = tauSave*(1.+EPSILON);
   for (int i=0; i<NDIM; ++i) pg[i]=pgp[i];
-  evaluate(r1, r2, islice);
+  evaluate(r1, r2, islice, false);
   evaluateDistance(r1, r2, islice, d1, d2);
   // Now use finite differences.
   double denom=1./(2*tau*EPSILON);

@@ -69,12 +69,14 @@ void WritePaths::run() {
     *file << std::endl;
     *file << "#Path coordinates: " << paths.getNPart()
 	  << " particles in " << NDIM << "-d" << std::endl;
+    file->precision(15);
   }
   //movie files
   if (cloneID==0 && workerID==0 && writeMovie) {
     if (dumpMovieCounter > maxConfigs) {
-      (*movieFile).close();
-      (*movieFile).open("pathMovie", std::ios::trunc);
+      movieFile->close();
+      movieFile->open("pathMovie", std::ios::trunc);
+      movieFile->precision(15);
       dumpMovieCounter=0;
     }
     /*  

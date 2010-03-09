@@ -51,7 +51,7 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
-    useHungarian(useHungarian) {
+    useHungarian(useHungarian), scale(1.0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -84,62 +84,77 @@ FreeParticleNodes::~FreeParticleNodes() {
 
 NodeModel::DetWithFlag
 FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2, 
-                            const int islice) {
+                            const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
-  Matrix& mat(*matrix[islice]);
-  mat=0;
-  for(int jpart=0; jpart<npart; ++jpart) {
-    for(int ipart=0; ipart<npart; ++ipart) {
-      Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
-      cell.pbc(delta);
-      double ear2=1;
-      for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
-      mat(ipart,jpart)=ear2; //std :: cout << mat(ipart,jpart) <<std :: endl;
+  do { // Loop if scale is wrong to avoid overflow/underflow.
+    Matrix& mat(*matrix[islice]);
+    mat=0;
+    for(int jpart=0; jpart<npart; ++jpart) {
+      for(int ipart=0; ipart<npart; ++ipart) {
+        Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
+        cell.pbc(delta);
+        double ear2=1;
+        for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
+        mat(ipart,jpart)=ear2; //std :: cout << mat(ipart,jpart) <<std :: endl;
+      }
     }
-  }
-  for(int jpart=0; jpart<npart; ++jpart) {
-    for(int ipart=0; ipart<npart; ++ipart) {
-      uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
+    for(int jpart=0; jpart<npart; ++jpart) {
+      for(int ipart=0; ipart<npart; ++ipart) {
+        uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
+      }
     }
-  }
-  // Find dominant contribution to determinant (distroys uarray).
-  if (useHungarian) {
-    const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
-    double usum=0;
-    ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
-               &usum,kwork.data(),&npart);
-    for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
-    // Note: mat(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
-    // or lowest total action.
-  }
-  // Next calculate determinant and inverse of slater matrix.
-  int info=0;//LU decomposition
-  DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
-  if (info!=0) {
-    result.err = true;
-    std::cout << "BAD RETURN FROM ZGETRF!!!! " << islice << std::endl;
-    nerror++;
-    if (nerror>1000) {
-      std::cout << "too many errors!!!!" << std::endl;
-      std::exit(-1);
+    // Find dominant contribution to determinant (distroys uarray).
+    if (useHungarian) {
+      const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
+      double usum=0;
+      ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+                 &usum,kwork.data(),&npart);
+      for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+      // Note: mat(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+      // or lowest total action.
     }
-  }
-  double det = 1;
-  for (int i=0; i<npart; ++i) {
-    det*= mat(i,i);
-    det *= (i+1==ipiv(i))?1:-1;
-  }
-  DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
-  if (info!=0) {
-    result.err = true;
-    std::cout << "BAD RETURN FROM ZGETRI!!!! " << islice << std::endl;
-    nerror++;
-    if (nerror>1000) {
-      std::cout << "too many errors!!!!" << std::endl;
-      std::exit(-1);
+    // Next calculate determinant and inverse of slater matrix.
+    int info=0;//LU decomposition
+    DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
+    if (info!=0) {
+      result.err = true;
+      std::cout << "BAD RETURN FROM ZGETRF!!!! " << islice << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many errors!!!!" << std::endl;
+        std::exit(-1);
+      }
     }
-  }
-  result.det = det;
+    double det = 1;
+    for (int i=0; i<npart; ++i) {
+      det*= mat(i,i);
+      det *= (i+1==ipiv(i))?1:-1;
+    }
+    DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
+    if (info!=0) {
+      result.err = true;
+      std::cout << "BAD RETURN FROM ZGETRI!!!! " << islice << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many errors!!!!" << std::endl;
+        std::exit(-1);
+      }
+    }
+    // watch for overflow or underflow.
+    if (scaleMagnitude && (!result.err
+                           && (fabs(det)<1e-50 || fabs(det)>1e50) )) {
+      if (fabs(det)<1e-250) {
+        scale *= 2;
+      } else {
+        scale *= pow(fabs(det),-1./npart);
+      }
+      std::cout << "Slater determinant rescaled: scale = " 
+                << scale << std::endl;
+    }
+    result.det = det;
+  } 
+  while (scaleMagnitude && (result.err ||
+         (fabs(result.det)<1e-50 || fabs(result.det)>1e50)));
   return result;
 }
 
@@ -152,12 +167,12 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
   // First calculate distance at smaller beta.
   tau = tauSave*(1.-EPSILON);
   for (int i=0; i<NDIM; ++i) pg[i]=pgm[i];
-  evaluate(r1, r2, islice);
+  evaluate(r1, r2, islice, false);
   evaluateDistance(r1, r2, islice, temp1, temp2);
   // Next calculate distance at larger beta.
   tau = tauSave*(1.+EPSILON);
   for (int i=0; i<NDIM; ++i) pg[i]=pgp[i];
-  evaluate(r1, r2, islice);
+  evaluate(r1, r2, islice, false);
   evaluateDistance(r1, r2, islice, d1, d2);
   // Now use finite differences.
   double denom=1./(2*tau*EPSILON);

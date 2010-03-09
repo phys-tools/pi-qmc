@@ -83,7 +83,7 @@ public:
   virtual ~NodeModel() {}
   /// Evaluate the density matrix function, returning the value.
   virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
-                               const int islice)=0;
+                               const int islice, bool scaleMagnitude)=0;
   /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
   /// Assumes that evaluate has already been called on the slice.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,

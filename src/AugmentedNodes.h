@@ -107,7 +107,7 @@ public:
   virtual ~AugmentedNodes();
   /// Evaluate the density matrix function, returning the value.
   virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
-                               const int islice);
+                               const int islice, bool scaleMagnitude);
   /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
   /// Assumes that evaluate has already been called on the slice.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
