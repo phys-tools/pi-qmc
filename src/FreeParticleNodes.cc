@@ -93,7 +93,7 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
       for(int ipart=0; ipart<npart; ++ipart) {
         Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
         cell.pbc(delta);
-        double ear2=1;
+        double ear2=scale;
         for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
         mat(ipart,jpart)=ear2; //std :: cout << mat(ipart,jpart) <<std :: endl;
       }
@@ -200,7 +200,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       }
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
-      logGrad+=mat(jpart,ipart)*grad;
+      logGrad+=mat(jpart,ipart)*grad*scale;
     }
     gradArray1(jpart)=logGrad-fgrad;
     d1(jpart+ifirst)=sqrt(2*mass/
@@ -218,7 +218,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       }
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad = grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
-      logGrad+=mat(jpart,ipart)*grad;
+      logGrad+=mat(jpart,ipart)*grad*scale;
     }
     gradArray2(ipart)=logGrad-fgrad;
     d2(ipart+ifirst)=sqrt(2*mass/
@@ -473,7 +473,7 @@ double FreeParticleNodes::MatrixUpdate::evaluateChange(
       Vec delta(movingBeads1(mindex1(jmoving),islice)
                -sectionBeads2(ipart+fpNodes.ifirst,islice));
       fpNodes.cell.pbc(delta);
-      double ear2=1;
+      double ear2=fpNodes.scale;
       for (int i=0; i<NDIM; ++i) ear2*=(*fpNodes.pg[i])(fabs(delta[i]));
       (*phi[islice])(ipart,jmoving)=ear2;
     }
