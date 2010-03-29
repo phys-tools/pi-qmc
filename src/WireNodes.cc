@@ -215,7 +215,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       if (ipart==kindex(islice,jpart)) {
         fgrad=grad/(ear2*exp(-c*((ri2+rj2)*coshwt-2.0*rirj)));
       }
-      logGrad+=mat(jpart,ipart)*grad;
+      logGrad+=mat(jpart,ipart)*scale*grad;
     }
     gradArray1(jpart)=logGrad-fgrad;
     d1(jpart+ifirst)=sqrt(2*mass/((dot(logGrad,logGrad)+1e-15)*tau));
@@ -246,7 +246,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       if (ipart==kindex(islice,jpart)) {
         fgrad=grad/(ear2*exp(-c*((ri2+rj2)*coshwt-2.0*rirj)));
       }
-      logGrad+=mat(jpart,ipart)*grad;
+      logGrad+=mat(jpart,ipart)*scale*grad;
     }
     gradArray2(ipart)=logGrad-fgrad;
     d2(ipart+ifirst)=sqrt(2*mass/((dot(logGrad,logGrad)+1e-15)*tau));
