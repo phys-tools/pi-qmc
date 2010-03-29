@@ -62,9 +62,8 @@ public:
   typedef blitz::Array<int,2> IArray2;
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Constructor.
-  ExcitonNodes(const SimulationInfo&, const Species&, 
-    const double temperature, const int maxlevel, 
-    const double radius,
+  ExcitonNodes(const SimulationInfo&, const Species&, const Species&, 
+    const double temperature, const int maxlevel, const double radius,
     const bool useUpdates, const int maxMovers);
   /// Virtual destructor.
   virtual ~ExcitonNodes();
@@ -97,6 +96,7 @@ private:
   const int npart;
   /// Index of first particle of this type of fermion.
   const int ifirst;
+  const int jfirst;
   /// Number of slices.
   int nslice;
   /// The inverse slater matricies.

@@ -39,12 +39,13 @@ extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n,
   const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
 ExcitonNodes::ExcitonNodes(const SimulationInfo &simInfo,
-  const Species &species, const double temperature, const int maxlevel,
+  const Species &species1, const Species &species2,
+  const double temperature, const int maxlevel,
   const double radius, const bool useUpdates, const int maxMovers)
-  : NodeModel("_"+species.name),
+  : NodeModel("_"+species1.name+species2.name),
     alpha(1./radius),
-    tau(simInfo.getTau()),mass(species.mass),npart(species.count),
-    ifirst(0), 
+    tau(simInfo.getTau()),mass(species1.mass),npart(species1.count),
+    ifirst(species1.ifirst), jfirst(species2.ifirst),
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()), pg(NDIM), pgp(NDIM), pgm(NDIM),
@@ -87,7 +88,7 @@ ExcitonNodes::evaluate(const VArray &r1, const VArray &r2,
   mat=0;
   for(int jpart=0; jpart<npart; ++jpart) {
     for(int ipart=0; ipart<npart; ++ipart) {
-      Vec delta(r1(jpart)-r1(ipart+npart));
+      Vec delta(r1(jpart+ifirst)-r1(ipart+jfirst));
       cell.pbc(delta);
       double ear=exp(-alpha*sqrt(dot(delta,delta)));
       mat(ipart,jpart)=ear;
@@ -146,7 +147,7 @@ void ExcitonNodes::evaluateDistance(const VArray& r1, const VArray& r2,
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int ipart=0; ipart<npart; ++ipart) {
-      Vec delta(r1(jpart)-r1(ipart+npart));
+      Vec delta(r1(jpart+ifirst)-r1(ipart+jfirst));
       cell.pbc(delta);
       double d=sqrt(dot(delta,delta));
       Vec grad = -alpha*delta/d;
@@ -161,7 +162,7 @@ void ExcitonNodes::evaluateDistance(const VArray& r1, const VArray& r2,
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int jpart=0; jpart<npart; ++jpart) {
-      Vec delta(r1(ipart+npart)-r1(jpart));
+      Vec delta(r1(ipart+jfirst)-r1(jpart+ifirst));
       cell.pbc(delta);
       double d=sqrt(dot(delta,delta));
       Vec grad = -alpha*delta/d;
@@ -170,7 +171,7 @@ void ExcitonNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       logGrad += mat(ipart,jpart)*grad;
     }
     gradArray1(ipart)=logGrad-fgrad;
-    d1(ipart+ifirst+npart)
+    d1(ipart+jfirst)
       =sqrt(2*mass/((dot(gradArray1(ipart),gradArray1(ipart))+1e-15)*tau));
   }
 }

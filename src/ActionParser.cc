@@ -397,11 +397,15 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         nodeModel=new WireNodes(simInfo,species,omega,t,maxlevel,updates,
                                 maxMovers);
       } else if (modelName=="ExcitonNodes") {
+        std::string specName=getStringAttribute(ctxt->node,"species1");
+        const Species& species1(simInfo.getSpecies(specName));
+        specName=getStringAttribute(ctxt->node,"species2");
+        const Species& species2(simInfo.getSpecies(specName));
         const double radius=getLengthAttribute(ctxt->node,"radius");
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         int maxMovers=3;
-        nodeModel=new ExcitonNodes(simInfo,species,t,maxlevel,radius,updates,
-                                        maxMovers);
+        nodeModel=new ExcitonNodes(simInfo,species1,species2,
+                                   t,maxlevel,radius,updates,maxMovers);
       } else if (modelName=="AugmentedNodes") {
         double radius=getLengthAttribute(ctxt->node,"radius");
         if (radius==0) radius=1.0;
