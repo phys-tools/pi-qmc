@@ -85,7 +85,7 @@ double EFieldAction::v(const double z) const {
   } else if (z<a) {
     v=z;
   } else {
-    v=-a*(z-L2)/(a-L2);
+    v=a*(z-L2)/(a-L2);
   }
   return -scale*v;
 /*  const double Z=cell.a[component]/2.;
