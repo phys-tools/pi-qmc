@@ -400,7 +400,8 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	VIndEstimator.h VirialEnergyEstimator.h \
 	VVCorrelationEstimator.h WalkingChooser.h WellImageAction.h \
 	WindingEstimator.h WireNodes.h WorkerShifter.h WritePaths.h \
-	WriteProbDensity.h XMLParser.h XMLUnitParser.h XMLWriter.h
+	WriteProbDensity.h XMLParser.h XMLUnitParser.h XMLWriter.h \
+	ZeroVarDensityEstimator.h
 all: all-am
 
 .SUFFIXES:

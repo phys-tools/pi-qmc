@@ -52,6 +52,7 @@
 #include "PositionEstimator.h"
 #include "BoxEstimator.h"
 #include "PairCFEstimator.h"
+#include "ZeroVarDensityEstimator.h"
 #include "PermutationEstimator.h"
 #include "JEstimator.h"
 #include "stats/MPIManager.h"
@@ -414,6 +415,39 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         case 5: manager->add(parsePairCF<5>(estNode,obj)); break;
       }
     }
+    if (name=="ZeroVarDensityEstimator") {
+      
+      std::string name=getStringAttribute(estNode,"name");
+      int nspecies = getIntAttribute(estNode,"nspecies");  
+
+      if (nspecies == 0) nspecies=2;
+      Species *speciesList = new Species [nspecies];
+      for (int ispec=0; ispec<nspecies; ispec++){
+	std::stringstream sispec;
+	sispec << "species"<<(ispec+1);
+	std::string speciesName=getStringAttribute(estNode,sispec.str());
+	std :: cout<<"Picked species "<< speciesName <<" for Zero Variance pairCF."<<std :: endl;
+	speciesList[ispec]=simInfo.getSpecies(speciesName);
+      }
+      
+      int nbin; double max; double min;
+      ctxt->node = estNode;
+      xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+      int N=obj->nodesetval->nodeNr; 
+      for (int idist=0; idist<N; ++idist) {
+	xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
+	std::string name=getName(distNode);
+	if (name=="Radial") {
+	  min=getDoubleAttribute(distNode,"min");
+	  max=getDoubleAttribute(distNode,"max");
+	  nbin=getIntAttribute(distNode,"nbin");
+	}
+      }
+   
+      // delete [] speciesList;
+      manager->add(new ZeroVarDensityEstimator(simInfo,name,speciesList,nspecies,min,max,nbin,action,doubleAction,mpi));
+    }
+
     if (name=="DynamicPCFEstimator") {
       std::string name=getStringAttribute(estNode,"name");
       std::string species1=getStringAttribute(estNode,"species1");

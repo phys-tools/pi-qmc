@@ -116,10 +116,6 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
         nodeModel->evaluateDistance(r1,r2,islice,d1,d2);
       }
       for (int i=0; i<npart; ++i) {
-//std::cout << dist(islice,0,i) << ", " << dist(islice-1,0,i)  << std::endl;
-//std::cout << newDist(islice,0,i) << ", " << newDist(islice-1,0,i)  << std::endl;
-//std::cout << dist(islice,1,i) << ", " << dist(islice-1,1,i)  << std::endl;
-//std::cout << newDist(islice,1,i) << ", " << newDist(islice-1,1,i)  << std::endl;
         deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
                    /(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
         deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
@@ -164,10 +160,10 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       dotdim1=0.; dotdim2=0.;
     }
     // Calculate d_i+1 (NOTE: commented out calculation of force)
-//  for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,+1);
-//  for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,+1);
-//  nodeModel->evaluate(r1, r2, 0);
-//  nodeModel->evaluateDistance(r1,r2,0,dip1,dip2);
+    for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,+1);//////
+    for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,+1);//////
+    nodeModel->evaluate(r1, r2, 0, false);//////
+    nodeModel->evaluateDistance(r1,r2,0,dip1,dip2);//////
     // Calculate the action and the gradient of the action.
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
@@ -179,24 +175,24 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       dotdi1=0.; dotdi2=0.;
     }
     // Now calculate gradient of log of distance to node.
-//  nodeModel->evaluateGradLogDist(r1,r2,0,gradd1,gradd2,di1,di2);
+    nodeModel->evaluateGradLogDist(r1,r2,0,gradd1,gradd2,di1,di2);//////
     // And calculate the time derivative.
-//  nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);
+    nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);//////
     // Now calulate forces.
     force=0.0;
     for (int jpart=0; jpart<npart; ++jpart) {
-//    double xip1=dip1(jpart)*di1(jpart);
+      double xip1=dip1(jpart)*di1(jpart);//////
       double xim1=dim1(jpart)*di1(jpart);
       double dotxim1=dotdim1(jpart)*di1(jpart)+dim1(jpart)*dotdi1(jpart);
       dotxim1*=tau/(di1(jpart)*dim1(jpart));
-//    double xip2=dip2(jpart)*di2(jpart);
-//    double xim2=dim2(jpart)*di2(jpart);
-//    for (int ipart=0; ipart<npart; ++ipart) {
-//      force(ipart)+=gradd1(ipart,jpart)*(xip1*exp(-xip1)/(1-exp(-xip1))
-//                                        +xim1*exp(-xim1)/(1-exp(-xim1)));
-//      force(ipart)+=gradd2(ipart,jpart)*(xip2*exp(-xip2)/(1-exp(-xip2))
-//                                        +xim2*exp(-xim2)/(1-exp(-xim2)));
-//    }
+    double xip2=dip2(jpart)*di2(jpart);//////
+    double xim2=dim2(jpart)*di2(jpart);//////
+    for (int ipart=0; ipart<npart; ++ipart) {//////
+      force(ipart)+=gradd1(ipart,jpart)*(xip1*exp(-xip1)/(1-exp(-xip1))//////
+                                        +xim1*exp(-xim1)/(1-exp(-xim1)));//////
+      force(ipart)+=gradd2(ipart,jpart)*(xip2*exp(-xip2)/(1-exp(-xip2))//////
+                                        +xim2*exp(-xim2)/(1-exp(-xim2)));//////
+    }
       // Calculate the nodal action.
       u += -log(1-exp(-xim1));
       utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
