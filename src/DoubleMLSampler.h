@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,11 +39,12 @@ class DoubleMLSampler : public MultiLevelSampler {
 public:
   /// Constructor.
   DoubleMLSampler(const int nmoving, Paths&, DoubleSectionChooser&,
-    ParticleChooser&, PermutationChooser&,
-    ParticleChooser&, PermutationChooser&,
-    Mover&, Action*, DoubleAction*, const bool sampleBoth, const int nrepeat,
-    const BeadFactory&);
-  /// Destructor.
+		  ParticleChooser&, PermutationChooser&,
+		  ParticleChooser&, PermutationChooser&,
+		  Mover&, Action*, DoubleAction*, const bool sampleBoth, const int nrepeat,
+		  const BeadFactory&, const bool delayedRejection, const double defaultFactor,
+		  double newFactor);
+/// Destructor.
   virtual ~DoubleMLSampler();
   /// Run the sampler.
   virtual void run();
@@ -79,6 +80,8 @@ private:
   bool tryMove(double);
   /// Reference to all beads in the section.
   Beads<NDIM> *sectionBeads1, *sectionBeads2;
+  ///Storage for the rejected beads
+  Beads<NDIM> *rejectedBeads1, *rejectedBeads2;
   /// Reference the permutation of the in the section.
   Permutation *sectionPermutation1, *sectionPermutation2;
   /// Storage for the moving beads.

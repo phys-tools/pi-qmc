@@ -156,9 +156,10 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     UniformMover* mover(0);
     double dist = getDoubleAttribute(ctxt->node,"dist");
     int nmoving=getIntAttribute(ctxt->node,"npart");
-
     mover = new UniformMover(dist,mpi);
- 
+    bool delayedRejection=getBoolAttribute(ctxt->node,"delayedRejection"); 
+    double newDistFactor=getDoubleAttribute(ctxt->node,"distFactor");
+    if (newDistFactor==0 && delayedRejection) newDistFactor=0.5;
     int nspecies = getIntAttribute(ctxt->node,"nspecies");
 
     ParticleChooser* particleChooser=0;
@@ -219,6 +220,12 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     int iseed = getIntAttribute(ctxt->node,"iseed");
     algorithm=new SeedRandom(iseed);
   } else if (name=="Sample") {
+    // delayed rejection stuff
+    bool delayedRejection=getBoolAttribute(ctxt->node,"delayedRejection");  
+    double defaultFactor=getDoubleAttribute(ctxt->node,"defaultSigmaFactor");
+    if (defaultFactor==0) defaultFactor=1;
+    double newFactor=getDoubleAttribute(ctxt->node,"newSigmaFactor");
+    if (delayedRejection!=0 && newFactor==0) newFactor=0.75;
     Mover* mover(0);
     std::string moverName=getStringAttribute(ctxt->node,"mover");
     if (moverName=="Free" || moverName=="")
@@ -294,7 +301,8 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       if (nrepeat==0) nrepeat=1;
       algorithm=new MultiLevelSampler(nmoving, *paths, *sectionChooser, 
                      *particleChooser, *permutationChooser,
-                     *mover, action, nrepeat, beadFactory);
+                     *mover, action, nrepeat, beadFactory, delayedRejection,
+				      defaultFactor,newFactor);
       permutationChooser->setMLSampler((MultiLevelSampler*)algorithm);
     } else {
       bool both=getBoolAttribute(ctxt->node,"both");
@@ -310,9 +318,10 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
         }
       }
       algorithm = new DoubleMLSampler(nmoving, *paths, *doubleSectionChooser, 
-                        *particleChooser, *permutationChooser,
-                        *particleChooser2, *permutationChooser2, *mover, action,
-                        doubleAction, both, nrepeat, beadFactory);
+				      *particleChooser, *permutationChooser,
+				      *particleChooser2, *permutationChooser2, *mover, action,
+				      doubleAction, both, nrepeat, beadFactory, delayedRejection,
+				      defaultFactor,newFactor);
       permutationChooser->setMLSampler((MultiLevelSampler*)algorithm);
       permutationChooser2->setMLSampler((MultiLevelSampler*)algorithm);
     }

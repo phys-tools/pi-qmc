@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -74,16 +74,18 @@ double FreeMover::makeMove(MultiLevelSampler& sampler, const int level) {
   const SuperCell& cell=sampler.getSuperCell();
   const int nStride=(int)pow(2,level);
   const int nSlice=sectionBeads.getNSlice();
+  double factor = sampler.getFactor(); 
   const blitz::Array<int,1>& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
   blitz::Array<Vec,1> gaussRand(nMoving); gaussRand=0.0;
-  double toldOverTnew=0;
+  double toldOverTnew=0;  
+  forwardProb = 0;
   for (int islice=nStride; islice<nSlice-nStride; islice+=2*nStride) {
     RandomNumGenerator::makeGaussRand(gaussRand);
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
       const int ispec=specIndex(i);
-      double sigma = sqrt(lambda(i)*tau*nStride);
+      double sigma = factor*sqrt(lambda(i)*tau*nStride); 
       double inv2Sigma2 = 0.5/(sigma*sigma);
       // Calculate the new position.
       Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
@@ -92,17 +94,21 @@ double FreeMover::makeMove(MultiLevelSampler& sampler, const int level) {
       Vec delta = gaussRand(iMoving); delta*=sigma;
       (movingBeads(iMoving,islice)=midpoint)+=delta;
       cell.pbc(movingBeads(iMoving,islice));
-      // Add transition probability for move.
+      // Calculate 1/transition probability for move 
       cell.pbc(delta);
       double temp = 1.0;
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
           temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
         } else {
-          toldOverTnew += delta[idim]*delta[idim]*inv2Sigma2;
-        }
+	  double tmp = delta[idim]*delta[idim]*inv2Sigma2;
+	  forwardProb += tmp;
+	  toldOverTnew += tmp;
+	}
       }
-      temp = 1.0/temp;
+      temp = 1.0/temp;    
+      forwardProb +=log(temp);
+
       // Calculate and add reverse transition probability.
       midpoint=sectionBeads.delta(i,islice+nStride,-2*nStride);
       cell.pbc(midpoint)*=0.5;
@@ -119,6 +125,64 @@ double FreeMover::makeMove(MultiLevelSampler& sampler, const int level) {
       toldOverTnew+=log(temp);
     }
   }
-  //toldOverTnew=exp(toldOverTnew);
+  return toldOverTnew; //Return the log of the probability.
+}
+
+
+// Delayed Rejection 
+double FreeMover::makeDelayedMove(MultiLevelSampler& sampler, const int level) {
+  const Beads<NDIM>& rejectedBeads=sampler.getRejectedBeads();
+  Beads<NDIM>& movingBeads=sampler.getMovingBeads();
+  const SuperCell& cell=sampler.getSuperCell();
+  const int nStride=(int)pow(2,level);
+  const int nSlice=movingBeads.getNSlice(); 
+  double factor = sampler.getFactor(); 
+  const blitz::Array<int,1>& index=sampler.getMovingIndex(); 
+  const int nMoving=index.size();
+
+  double toldOverTnew=0; 
+  forwardProb = 0;
+  for (int islice=nStride; islice<nSlice-nStride; islice+=2*nStride) {
+    for (int iMoving=0; iMoving<nMoving; ++iMoving) {
+      const int i=index(iMoving);
+      const int ispec=specIndex(i);
+      double sigma = factor*sqrt(lambda(i)*tau*nStride); 
+      double inv2Sigma2 = 0.5/(sigma*sigma);
+      double temp = 1.0;
+      // Calculate forward transition probability C2B 
+      Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
+      cell.pbc(midpoint)*=0.5;
+      midpoint+=movingBeads(iMoving,islice-nStride);
+      Vec delta=rejectedBeads(iMoving,islice); delta-=midpoint;
+      cell.pbc(delta);
+      for (int idim=0;idim<NDIM;++idim) {
+        if (pg(level,ispec,idim)) {
+          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
+        } else {
+	  double tmp = delta[idim]*delta[idim]*inv2Sigma2;
+	  forwardProb -= tmp;
+          toldOverTnew += tmp;
+        }
+      }
+
+      forwardProb +=log(temp);         
+      temp = 1.0/temp;
+
+      // Calculate inverse transition probability B2C i.e. T(R1->R2)=numerator
+      midpoint=rejectedBeads.delta(iMoving,islice+nStride,-2*nStride);
+      cell.pbc(midpoint)*=0.5;
+      midpoint+=rejectedBeads(iMoving,islice-nStride);
+      delta = movingBeads(iMoving,islice);delta-=midpoint;
+      cell.pbc(delta);
+      for (int idim=0;idim<NDIM;++idim) {
+        if (pg(level,ispec,idim)) {
+          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
+        } else {
+	  toldOverTnew -=  delta[idim]*delta[idim]*inv2Sigma2;
+        }
+      }
+      toldOverTnew+=log(temp);
+    }
+  }
   return toldOverTnew; //Return the log of the probability.
 }

@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -43,7 +43,9 @@ public:
   /// Move the samplers moving beads for a given level, returning
   /// the probability for the old move divided by the probability for the
   /// new move.
-  virtual double makeMove(MultiLevelSampler&, const int level);
+  virtual double makeMove(MultiLevelSampler&, const int level);  
+  virtual double makeDelayedMove(MultiLevelSampler&, const int level) ;
+  virtual double getForwardProb(){return forwardProb;}
 private:
   /// The inverse mass, @f$\lambda=1/2m@f$.
   blitz::Array<double,1> lambda;
@@ -51,6 +53,8 @@ private:
   double tau;
   /// Periodic gaussians.
   PGArray pg;
-  IArray specIndex;
+  IArray specIndex; 
+  /// forward transition prob
+  double forwardProb;
 };
 #endif

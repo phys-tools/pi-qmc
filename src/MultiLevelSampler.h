@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,8 +41,9 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor.
   MultiLevelSampler(const int nmoving, Paths&, SectionChooser&,
-    ParticleChooser&, PermutationChooser&, Mover&, Action*, const int nrepeat,
-    const BeadFactory&);
+		    ParticleChooser&, PermutationChooser&, Mover&, Action*, const int nrepeat,
+		    const BeadFactory&, const bool delayedRejection, const double defaultFactor,
+		    double newFactor);
   /// Destructor.
   virtual ~MultiLevelSampler();
   /// Run the sampler.
@@ -53,6 +54,10 @@ public:
   Beads<NDIM>& getMovingBeads() {return *movingBeads;}
   /// Get const reference to the moving beads.
   const Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
+  const Beads<NDIM>& getRejectedBeads() const {return *rejectedBeads;}
+  Beads<NDIM>& getRejectedBeads() {return *rejectedBeads;}
+  double getFactor(){return factor;}
+
   /// Get reference to the old beads.
   Beads<NDIM>& getSectionBeads() {return *sectionBeads;}
   /// Get const reference to the moving beads.
@@ -106,6 +111,12 @@ protected:
   /// AccRejEstimator.
   AccRejEstimator* accRejEst;
   /// Number of times to repeat.
-  const int nrepeat;
+  const int nrepeat;  
+  Beads<NDIM> *rejectedBeads;
+  ///flag for delayed rejection
+  const bool delayedRejection;
+  const double defaultFactor;
+  double newFactor;
+  double factor;
 };
 #endif

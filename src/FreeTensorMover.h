@@ -40,6 +40,8 @@ public:
   /// the probability for the old move divided by the probability for the
   /// new move.
   virtual double makeMove(MultiLevelSampler&, const int level);
+  virtual double makeDelayedMove(MultiLevelSampler&, const int level) {return 0;} 
+  virtual double getForwardProb() {return 0;}
 private:
   /// The inverse mass, @f$\lambda=1/2m@f$.
   blitz::Array<blitz::TinyVector<double,NDIM>,1> lambda;

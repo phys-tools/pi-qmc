@@ -27,6 +27,8 @@ public:
   /// Move the samplers moving beads for a given level, returning
   /// the probability for the old move divided by the probability for the 
   /// new move.
-  virtual double makeMove(MultiLevelSampler&, const int level)=0;
+  virtual double makeMove(MultiLevelSampler&, const int level)=0; 
+  virtual double makeDelayedMove(MultiLevelSampler&, const int level)=0; 
+  virtual double getForwardProb() = 0;
 };
 #endif

@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,26 +33,23 @@
 #include "DoubleSectionChooser.h"
 #include "BeadFactory.h"
 
-
-//////////////////////////////// delete this when done
-#include <iostream>
-#include <sstream>
-#include <fstream>
-
 DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
-  DoubleSectionChooser &sectionChooser,
-  ParticleChooser& particleChooser, PermutationChooser& permutationChooser,
-  ParticleChooser& particleChooser2, PermutationChooser& permutationChooser2,
-  Mover& mover, Action* action, DoubleAction* doubleAction, const bool both,
-  const int nrepeat, const BeadFactory &beadFactory)
+				 DoubleSectionChooser &sectionChooser,
+				 ParticleChooser& particleChooser, PermutationChooser& permutationChooser,
+				 ParticleChooser& particleChooser2, PermutationChooser& permutationChooser2,
+				 Mover& mover, Action* action, DoubleAction* doubleAction, const bool both,
+				 const int nrepeat, const BeadFactory &beadFactory, const bool delayedRejection, const double defaultFactor,
+				 double newFactor)
   : MultiLevelSampler(nmoving,paths,sectionChooser,particleChooser,
-                      permutationChooser,mover,action,nrepeat,beadFactory),
+                      permutationChooser,mover,action,nrepeat,beadFactory,delayedRejection,defaultFactor,newFactor),
     sectionBeads1(&sectionChooser.getBeads(1)),
     sectionBeads2(&sectionChooser.getBeads(2)),
     sectionPermutation1(&sectionChooser.getPermutation(1)),
     sectionPermutation2(&sectionChooser.getPermutation(2)),
     movingBeads1(movingBeads),
-    movingBeads2(beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice())),
+    movingBeads2(beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice())), 
+    rejectedBeads1(rejectedBeads),
+    rejectedBeads2(delayedRejection?beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice()):0),
     doubleAction(doubleAction),
     movingIndex1(movingIndex), movingIndex2(new IArray(nmoving)),
     pMovingIndex2(nmoving),
@@ -66,7 +63,7 @@ DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
 }
 
 DoubleMLSampler::~DoubleMLSampler() {
-  delete movingBeads2;
+  delete movingBeads2;  delete rejectedBeads2;
   delete movingIndex2;
   delete &permutationChooser2;
   delete &particleChooser2;
@@ -125,23 +122,73 @@ bool DoubleMLSampler::tryMove(double initialLnTranProb) {
   double oldDeltaAction=initialLnTranProb;
   for (int ilevel=nlevel; ilevel>=0; --ilevel) {
     if (accRejEst) accRejEst->tryingMove(ilevel);
-    // Do the trial move for this level.
+  
+    // Make the trial move for this level A2B, and get the acc ratio and transition prob. A2B.
+    factor = defaultFactor;
     double lnTranProb=mover.makeMove(*this,ilevel);
-    // Evaluate the change in action for this level.
+    double transA2B = mover.getForwardProb();
     double deltaAction=(action==0)?0:action->getActionDifference(*this,ilevel);
-    // Repeat for other section.
     if (samplingBoth) {
       activateSection(2);
       lnTranProb+=mover.makeMove(*this,ilevel);
+      transA2B+=mover.getForwardProb();
       deltaAction+=(action==0)?0:action->getActionDifference(*this,ilevel);
       activateSection(1);
     }
-    // Evaluate and add change in DoubleAction. 
     deltaAction+=doubleAction->getActionDifference(*this,ilevel);
-    double acceptProb=exp(lnTranProb-deltaAction+oldDeltaAction);
-      
-    if (RandomNumGenerator::getRand()>acceptProb) return false;
-    oldDeltaAction=deltaAction;
+    double piRatioBoA= -deltaAction+oldDeltaAction;    
+    double acceptProb=exp(lnTranProb+piRatioBoA);
+
+    // If you want to do DelayedRejection
+    if (delayedRejection && ilevel==nlevel){
+      if (RandomNumGenerator::getRand()>acceptProb) {
+       	double accRatioA2B = acceptProb;
+	for (int i=0; i<nmoving; ++i) {
+	  for (int islice=0; islice<sectionBeads->getNSlice(); ++islice) {
+	    (*rejectedBeads1)(i,islice)=(*movingBeads1)(i,islice);
+	    (*rejectedBeads2)(i,islice)=(*movingBeads2)(i,islice);
+	  }
+	}
+	
+	//Make another trial move for this level A2C, and get the acc ratio.
+        factor = newFactor;
+        lnTranProb=mover.makeMove(*this,ilevel);
+	deltaAction=(action==0)?0:action->getActionDifference(*this,ilevel);
+	if (samplingBoth) {
+	  activateSection(2);
+	  lnTranProb+=mover.makeMove(*this,ilevel);
+	  deltaAction+=(action==0)?0:action->getActionDifference(*this,ilevel);
+	  activateSection(1);
+	}
+	deltaAction+=doubleAction->getActionDifference(*this,ilevel);
+	double piRatioCoA = -deltaAction+oldDeltaAction;    
+	double accRatioA2C = exp(lnTranProb+piRatioCoA);
+	
+	//nodal crossing A2C
+	//	if (deltaAction > 2e90) return false;
+	
+	//Make the trial move to the rejected state C2B, and get the acc ratio and transition prob. C2B
+	factor=defaultFactor;
+	lnTranProb=mover.makeDelayedMove(*this,ilevel);
+	double transC2B = mover.getForwardProb();
+	if (samplingBoth) {
+	  activateSection(2);
+	  lnTranProb+=mover.makeDelayedMove(*this,ilevel); 
+	  transC2B += mover.getForwardProb();
+	  activateSection(1);
+	}
+	double accRatioC2B = exp(lnTranProb - piRatioCoA  + piRatioBoA);
+	accRatioC2B=(accRatioC2B>=1)?1:accRatioC2B;
+	double accRatioA2B2C = accRatioA2C*exp(transC2B+transA2B)*(1-accRatioC2B)/(1-accRatioA2B);
+		deltaAction=deltaAction-transC2B-transA2B-log((1-accRatioC2B)/(1-accRatioA2B));
+	if (RandomNumGenerator::getRand()>accRatioA2B2C) return false;
+      }
+    } else {  
+      if (RandomNumGenerator::getRand()>acceptProb) return false;
+    }
+      oldDeltaAction=deltaAction;
+    
+
     if (accRejEst) accRejEst->moveAccepted(ilevel); 
   
   }
@@ -186,11 +233,13 @@ void DoubleMLSampler::activateSection(const int i) {
     sectionPermutation=sectionPermutation1;
     movingBeads=movingBeads1;
     movingIndex=movingIndex1;
+    if (delayedRejection) rejectedBeads=rejectedBeads1;
   } else {
     sectionBeads=sectionBeads2;
     sectionPermutation=sectionPermutation2;
     movingBeads=movingBeads2;
     movingIndex=movingIndex2;
+    if (delayedRejection) rejectedBeads=rejectedBeads2;
   }
 }
 
