@@ -36,13 +36,22 @@
 #include <sstream>
 #include <string>
 
-DoubleDisplaceMoveSampler::DoubleDisplaceMoveSampler(int nmoving, int nrepeat,
-  Paths& paths, ParticleChooser& particleChooser, const UniformMover& mover, 
-  Action* action, DoubleAction* doubleAction, const MPIManager* mpi)
-  : DisplaceMoveSampler(nmoving, nrepeat, paths, particleChooser, mover, 
+DoubleDisplaceMoveSampler::
+DoubleDisplaceMoveSampler(int nmoving, int nrepeat,
+			  Paths& paths, ParticleChooser& particleChooser, 
+			  const UniformMover& mover, 
+			  Action* action, DoubleAction* doubleAction, 
+			  const MPIManager* mpi)
+  : DisplaceMoveSampler(nmoving, nrepeat, paths, 
+			particleChooser, mover, 
                         action, mpi),
     doubleAction(doubleAction),
-    isDoublePaths(paths.isDouble()), nsliceOver2(paths.getNSlice()/2) {
+    nsliceOver2(paths.getNSlice()/2) {
+  iFirstSlice=(paths.getLowestOwnedSlice(true));
+  iLastSlice=(paths.getHighestOwnedSlice(true));
+  std::cout << "In DoubleDisplaceMove :: reassign iFirstSlice = " << iFirstSlice << std::endl;
+  std::cout << "In DoubleDisplaceMove :: reassign iLastSlice  = " << iLastSlice << std::endl;
+  std::cout << "In DoubleDisplaceMove :: nsliceOver2 = " << nsliceOver2 << std::endl;
 }
 
 DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {
@@ -50,23 +59,21 @@ DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {
 
 
 bool DoubleDisplaceMoveSampler::tryMove() {
- 
   accRejEst->tryingMove(0);
   mover.makeMove(displacement,nmoving);
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 
-   : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                 iFirstSlice,iLastSlice);
-  if (isDoublePaths) {
-    deltaAction += (action==0) ?  0 
-     : action->getActionDifference(paths,displacement,nmoving,movingIndex,
-         iFirstSlice+nsliceOver2,iLastSlice+nsliceOver2);
-  }
-  //Saad comment: fixednodeaction returns 0.
+    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
+				  iFirstSlice,iLastSlice); 
+  //Now do the other double section
   deltaAction += (action==0) ?  0 
-   : doubleAction->getActionDifference(paths,displacement,nmoving,movingIndex,
-                                       iFirstSlice,iLastSlice);
-
+    : action->getActionDifference(paths,displacement,nmoving,movingIndex,
+				  iFirstSlice+nsliceOver2,iLastSlice+nsliceOver2);
+  //Now consider nodal action
+  deltaAction += (action==0) ?  0 
+    : doubleAction->getActionDifference(paths,displacement,nmoving,movingIndex,
+					iFirstSlice,iLastSlice);
+  
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {
     double netDeltaAction=0;
@@ -89,20 +96,17 @@ bool DoubleDisplaceMoveSampler::tryMove() {
   
   // Move accepted.
   action->acceptLastMove();
-
+  
   // Put moved beads in paths beads.
   for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
     for (int imoving=0; imoving<nmoving; ++imoving) {
       Vec &bead(paths(movingIndex(imoving),islice));
       bead += displacement(imoving);
       bead = cell.pbc(bead);
-    }
-    if (isDoublePaths) {
-      for (int imoving=0; imoving<nmoving; ++imoving) {
-        Vec &bead2(paths(movingIndex(imoving),islice+nsliceOver2));
-        bead2 += displacement(imoving);
-        bead2 = cell.pbc(bead2);
-      }
+  
+      Vec &bead2(paths(movingIndex(imoving),islice+nsliceOver2));
+      bead2 += displacement(imoving);
+      bead2 = cell.pbc(bead2);
     }
   }
   paths.setBuffers();

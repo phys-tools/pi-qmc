@@ -41,7 +41,7 @@ protected:
   /// Pointer to the double action.
   DoubleAction* doubleAction;
   /// Flag for double paths.
-  const bool isDoublePaths;
+  //const bool isDoublePaths;
   /// Half the total slices.
   const int nsliceOver2;
   /// Method to atempt a Monte Carlo move, return true if accepted.

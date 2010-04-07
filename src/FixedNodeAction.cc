@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "FixedNodeAction.h"
-
+#include "SuperCell.h"
 #include <cstdlib>
 #include "Beads.h"
 #include "DoubleSectionChooser.h"
@@ -127,11 +127,58 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
   return deltaAction;
 }
 
-double FixedNodeAction::getActionDifference(const Paths &paths, 
-   const VArray &displacement, int nmoving, const IArray &movingIndex, 
-   int iFirstSlice, int nslice) {
-  // Get ready to move paths.
-  double deltaAction=0;
+double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &displacement, 
+					    int nMoving, const IArray &movingIndex, 
+					    int iFirstSlice, int nSlice) {
+  int  nsliceOver2=(paths.getNSlice()/2);
+  const SuperCell& cell=paths.getSuperCell();
+  Array3 dist(nSlice+1,2,npart);
+  Array3 newDist(nSlice+1,2,npart);
+  blitz::Range allPart = blitz::Range::all();
+
+  // First check for node crossing.
+  double deltaAction=0;  
+ 
+  for (int islice=iFirstSlice; islice<=nSlice; islice++) {
+    for (int i=0; i<npart; ++i) { 
+      r1(i)=paths(i,islice);
+      r2(i)=paths(i,islice+nsliceOver2);
+    }  
+    Array d1(dist(islice,0,allPart));
+    Array d2(dist(islice,1,allPart));
+    for (int i=0; i<npart; ++i) { 
+      NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
+      nodeModel->evaluateDistance(r1,r2,0,d1,d2);
+    }
+    
+    for (int i=0; i<nMoving; ++i) {
+      r1(movingIndex(i))+=displacement(i);
+      cell.pbc(r1(movingIndex(i)));
+      r2(movingIndex(i))+=displacement(i);
+      cell.pbc(r2(movingIndex(i)));
+    }
+    NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
+    if (result.err) return deltaAction=2e100;
+    newDMValue(islice)=result.det;
+    if (newDMValue(islice)<=1e-200) return deltaAction=2e100;
+    Array newd1(newDist(islice,0,allPart));
+    Array newd2(newDist(islice,1,allPart));
+    for (int i=0; i<npart; ++i) { 
+      NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
+      nodeModel->evaluateDistance(r1,r2,0,newd1,newd2);
+    }
+  } 
+ 
+  // Calculate the nodal action 
+  for (int islice=iFirstSlice+1; islice<=nSlice; islice++) {
+    for (int i=0; i<npart; ++i) {
+      deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
+			/(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
+      deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
+			/(1-exp(-newDist(islice,1,i)*newDist(islice-1,1,i))) );
+    }
+  }
+  
   return deltaAction;
 }
 
