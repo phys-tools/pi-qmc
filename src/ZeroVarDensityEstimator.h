@@ -98,26 +98,24 @@ ZeroVarDensityEstimator(const SimulationInfo& simInfo, const std::string& name,
 	for (int jpart=jfirst(ispec); jpart<(jfirst(ispec)+njpart(ispec)); ++jpart) {
 	  if (ipart!=jpart) {
 	    
-	    Vec gradK = -2*paths.delta(jpart,islice,+1) + 2*paths.delta(jpart,islice,-1) ; // watch for out of bounds
-	    gradK=gradK/(4.0*lambda(jpart)*tau);// keep math simple for debugging. check 2.22. there is minus sign in 2.21 for exp(-S).
-	    
 	    double u(0),utau(0),ulambda(0); 
 	    Vec fm=0.0, fp=0.0, gradU=0.0;
 	    if (action) action->getBeadAction(paths,jpart,islice,u,utau,ulambda,fm,fp);
-	    gradU+=fm+fp;
+	    gradU=fp+fm;
 	    if (doubleAction) {
 	      u=0;utau=0;ulambda=0;fm=0.; fp=0.;
 	      doubleAction->getBeadAction(paths,jpart,islice,u,utau,ulambda,fm,fp);
-	      gradU+=fm+fp;
+	      gradU+=fp+fm;
 	    }
 	   	   
-	    Vec rij = paths(jpart,islice)-end;
+	    Vec rij =start-paths(jpart,islice);
+	    rij=cell.pbc(rij);
 	    double mag_rij = sqrt(dot(rij,rij));
 	    Vec gradInvrij =  (rij)/(mag_rij*mag_rij*mag_rij);
 	    for (int ibin = 0; ibin < nbin; ibin++){
 	      double u = ibin*dh;
 	      if  (mag_rij >=u)
-		temp(ibin) -= dot(gradU+gradK, gradInvrij);
+		temp(ibin) += dot(gradU, gradInvrij);
 	    }
 	  }
 	}
@@ -138,7 +136,7 @@ ZeroVarDensityEstimator(const SimulationInfo& simInfo, const std::string& name,
                                   (nbin),MPI::FLOAT,MPI::SUM,0);
       mpi->getWorkerComm().Reduce(&lnslice,&ibuffer,1,MPI::INT,MPI::SUM,0);
       temp = mpiBuffer;
-      nslice = ibuffer;
+      nslice = ibuffer; 
     }
 #endif
 
