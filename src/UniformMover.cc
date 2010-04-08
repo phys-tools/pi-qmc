@@ -59,7 +59,6 @@ double UniformMover::makeMove(VArray& displacement, const int& nMoving) const {
 
 
 /*double UniformMover::makeMove(DoubleDisplaceMoveSampler& sampler) const {
-/*
   // typedef blitz::TinyVector<double,NDIM> Vec;
   // Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   Beads<NDIM>& movingBeads1=sampler.getMovingBeads(1);
@@ -93,6 +92,6 @@ double UniformMover::makeMove(VArray& displacement, const int& nMoving) const {
   }
   
   delete [] dr;
+  return 0; 
+}
 */
-/*  return 0; 
-/*}

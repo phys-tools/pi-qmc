@@ -151,18 +151,31 @@ void H5ReportBuilder::reportArrayBlockedStep(const ArrayBlockedEstimator& est) {
 
 void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) {
   hsize_t dims[est.getNDim()];
-  for (int i=0; i<est.getNDim(); ++i) dims[i]=est.getExtent(i);
-
+  int maxDim=1, imaxDim=0, size=1; // Find maximum dimension for compression.
+  for (int i=0; i<est.getNDim(); ++i) {
+    dims[i] = est.getExtent(i);
+    size *= dims[i];
+    if (dims[i]>maxDim) {maxDim=dims[i]; imaxDim=i;} 
+  }
   hid_t dataSpaceID = H5Screate_simple(est.getNDim(), dims, NULL);
+  bool useCompression = (size > 10000);
+std::cout << " size= " << size << ", imaxDim= " << imaxDim << ", maxDim=" << maxDim << std::endl;
+  hid_t plist = H5P_DEFAULT;
+  if (useCompression) {
+    plist = H5Pcreate(H5P_DATASET_CREATE);
+    dims[imaxDim] = dims[imaxDim]*10000/size;
+    if (dims[imaxDim] == 0) dims[imaxDim]=1;
+    H5Pset_chunk(plist,est.getNDim(),dims);
+    H5Pset_deflate(plist,1);
+  } 
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
   hid_t dataSetID = H5Dcreate2(writingGroupID, est.getName().c_str(),
                                H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT,
-                               H5P_DEFAULT, H5P_DEFAULT);
+                               plist, H5P_DEFAULT);
 #else
   hid_t dataSetID = H5Dcreate(writingGroupID, est.getName().c_str(),
-                              H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT);
+                              H5T_NATIVE_FLOAT, dataSpaceID, plist);
 #endif
-
   if (est.hasScale()) {
     hsize_t dim=est.getNDim();
     hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);
@@ -201,12 +214,13 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
     hid_t dataSetID = H5Dcreate2(writingGroupID, (est.getName()+"_err").c_str(),
                                 H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT,
-                                H5P_DEFAULT, H5P_DEFAULT);
+                                plist, H5P_DEFAULT);
 #else
     hid_t dataSetID = H5Dcreate(writingGroupID, (est.getName()+"_err").c_str(),
-                                H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT);
+                                H5T_NATIVE_FLOAT, dataSpaceID, plist);
 #endif
     H5Sclose(dataSpaceID);
+    if (useCompression) H5Pclose(plist);
     dataset.push_back(dataSetID);
   }
 }
