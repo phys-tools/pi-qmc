@@ -1,5 +1,5 @@
 //$Id$
-/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,11 +39,12 @@ extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n,
 
 FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
   const Species &species, const double temperature, const int maxlevel,
-  const bool useUpdates, const int maxMovers, const bool useHungarian)
+				     const bool useUpdates, const int maxMovers, const bool useHungarian, const int useIterations)
   : NodeModel("_"+species.name),
     tau(simInfo.getTau()),mass(species.mass),npart(species.count),
     ifirst(species.ifirst), 
-    matrix((int)(pow(2,maxlevel)+0.1)+1),
+    matrix((int)(pow(2,maxlevel)+0.1)+1), 
+    romatrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()), pg(NDIM), pgp(NDIM), pgm(NDIM),
     notMySpecies(false),
@@ -51,9 +52,10 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
-    useHungarian(useHungarian), scale(1.0) {
+    useHungarian(useHungarian), scale(1.0), useIterations(useIterations){
   for (unsigned int i=0; i<matrix.size(); ++i)  {
-    matrix[i] = new Matrix(npart,npart,ColMajor());
+    matrix[i] = new Matrix(npart,npart,ColMajor()); 
+    romatrix[i] = new Matrix(npart,npart,ColMajor());
   }
   std::cout << "FreeParticleNodes with temperature = "
             << temperature << std::endl;
@@ -96,6 +98,7 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
         double ear2=scale;
         for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
         mat(ipart,jpart)=ear2;
+	(*romatrix[islice])(ipart,jpart)=ear2;
       }
     }
     for(int jpart=0; jpart<npart; ++jpart) {
@@ -129,7 +132,8 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
     for (int i=0; i<npart; ++i) {
       det*= mat(i,i);
       det *= (i+1==ipiv(i))?1:-1;
-    }
+    }    
+    
     DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
     if (info!=0) {
       result.err = true;
@@ -182,10 +186,11 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
   for (int i=0; i<NDIM; ++i) pg[i]=pgSave[i];
   tau=tauSave;
 }
-
+////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-  Matrix& mat(*matrix[islice]);
+
+  /*   Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
   d1=200.; d2=200.; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -224,8 +229,158 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     d2(ipart+ifirst)=sqrt(2*mass/
                       ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
+*/
+  newtonRaphson(r1, r2, islice, d1, 1);
+  newtonRaphson(r2, r1, islice, d2, 2);
 }
 
+void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
+  Matrix& mat(*matrix[islice]);	  // Calculate log gradients to estimate distance.
+  VArray gradArray=(section==1)?gradArray1:gradArray2;
+
+
+  if (section==2) mat.transposeSelf(1,0);
+  for (int jpart=0; jpart<npart; ++jpart) {
+    Vec logGrad=0.0, fgrad=0.0;
+    for (int ipart=0; ipart<npart; ++ipart) {
+      Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
+      cell.pbc(delta);
+      Vec grad;
+      for (int i=0; i<NDIM; ++i) {
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
+        if (delta[i]<0) grad[i]=-grad[i];
+      }
+      //if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
+      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
+      logGrad+=mat(jpart,ipart)*grad*scale;
+    }
+    gradArray(jpart)=logGrad-fgrad;
+    d(jpart+ifirst)=sqrt(2*mass/
+			 ((dot(cell.pbc(gradArray(jpart)),cell.pbc(gradArray(jpart)))+1e-15)*tau));
+    // if (jpart>=0 && islice==2)      std :: cout <<"part "<<jpart<<". old logGrad :: "<<logGrad<<". d"<<section<<" :: "<<d(jpart+ifirst)<<". delta :: "<<sqrt(1.0/dot(gradArray(jpart),gradArray(jpart)))<<". Sa "<<-log(1-exp(-d(jpart+ifirst)*dold1))<<std::endl;
+  }
+  if (section==2) mat.transposeSelf(1,0);
+
+  // 2D case.
+ if (useIterations>0){  
+  double initialDet;
+  double invDet;
+  getDet((*romatrix[islice]), initialDet);
+  // std :: cout << " initialDet :: "<<initialDet<<std::endl;
+  invDet=1.0/fabs(initialDet);
+  
+   VArray r1Iter0(npart);
+   Matrix romat(npart,npart); 
+    
+   for (int jpart=0; jpart<npart; ++jpart) {
+     r1Iter0(jpart+ifirst)=r1(jpart+ifirst)-gradArray(jpart)/dot(gradArray(jpart),gradArray(jpart));
+     cell.pbc(r1Iter0(jpart+ifirst));
+     for (int ipart=0; ipart<npart; ++ipart) {
+       Vec delta= r1Iter0(jpart+ifirst)-r2(ipart+ifirst);
+       cell.pbc(delta);
+       double ea2=scale * (*pg[0])(fabs(delta[0])+1e-300);
+       (*romatrix[islice])(ipart,jpart)=ea2;
+       romat(ipart,jpart)=ea2;
+       for (int i=1; i<NDIM; ++i) {
+	 ea2=((*pg[i])(fabs(delta[i])+1e-300));
+	 romat(ipart,jpart)*=ea2;
+	 (*romatrix[islice])(ipart,jpart)*=ea2;
+       }
+     }
+   }
+   Matrix invromat(npart,npart);
+   Vec r1jnext=0.0; 
+   int info=0;
+
+   for (int jpart=0; jpart<npart; ++jpart) {
+     r1jnext=r1Iter0(jpart+ifirst);
+      if (jpart>0){
+	for (int ipart=0;ipart<npart;ipart++)
+	  romat(ipart,jpart-1)=(*romatrix[islice])(ipart,jpart-1);
+      }
+          
+     int iter=0;
+     double det=initialDet;
+     while(iter<useIterations){// && fabs(det*invDet) > 1e-8 ){
+       VArray gradjpart(npart);
+       for (int ipart=0; ipart<npart; ++ipart) {
+	 Vec delta=r1jnext-r2(ipart+ifirst);
+	 cell.pbc(delta);
+	 Vec ea2;
+	 for (int i=0; i<NDIM; ++i) {
+	   ea2[i]=(*pg[i])(fabs(delta[i]+1e-300));
+	   gradjpart(ipart)[i]=(*pg[i]).grad(fabs(delta[i]+1e-300))/ea2[i];
+	   if (delta[i]<0) gradjpart(ipart)[i]=-gradjpart(ipart)[i];
+	 }
+	 
+	 romat(ipart,jpart)=scale;
+	 for (int i=0; i<NDIM; ++i) {
+	   gradjpart(ipart)*=ea2[i]; 
+	   romat(ipart,jpart)*=ea2[i];
+	 }
+       }
+      
+       invromat=romat;
+       getDetInvMat(invromat, det, info);
+       if (info!=0) {std :: cout <<"Breaking in NewtonRaphson Due to BAD RETURN FROM ZGETRF "<<std::endl; break;}
+     
+       Vec gradLogf=0.0;
+       for (int ipart=0; ipart<npart; ++ipart) 
+	 gradLogf+=gradjpart(ipart)*invromat(jpart,ipart);
+       
+           
+       double normGradLogf=dot(gradLogf,gradLogf);    
+       r1jnext=r1jnext-gradLogf/(normGradLogf+1e-15);
+       cell.pbc(r1jnext);
+        
+       /* if (jpart>=0 && islice==2){
+	  Vec tmp = -gradLogf/(normGradLogf+1e-15);
+	  std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<" prevSetpDet  "<<det<<". Scaled det "<<fabs(det*initialDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1]<<" . dist :: "<<  sqrt(2*mass/tau*dot(cell.pbc(tmp), cell.pbc(tmp) )) <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<std::endl;
+	  }*/
+       
+        iter++;
+      }
+     
+     r1jnext =r1jnext-r1(jpart+ifirst);
+     cell.pbc(r1jnext);
+     if (info!=0) d(jpart+ifirst)=sqrt(2*mass/tau*dot(r1jnext, r1jnext) ); 
+     // if (d(jpart+ifirst)<1e-2) std :: cout <<"Iteration "<<iter<<" :: Hey I found one at islice_"<<islice<<" : "<<d(jpart+ifirst)<<". Det : "<<det<<std::endl;
+     // if (jpart>=0 && (islice==2 ))std::cout<<"d"<<section<<"_"<<islice<<" :: "<<d(jpart+ifirst) <<". Total delta :: "<< sqrt(dot(r1jnext, r1jnext) )<<". Sa "<<-log(1-exp(-d(jpart+ifirst)*dold2))<<std::endl<<std::endl;//exit(-1);
+   
+   }
+ }
+}
+///////////////
+void FreeParticleNodes:: getDet( Matrix &romat, double &det){
+    // calculate determinant and inverse of slater matrix.
+    int info=0;//LU decomposition   
+    IArray ipiv(npart);
+      DGETRF_F77(&npart,&npart,romat.data(),&npart,ipiv.data(),&info);
+      
+      if (info!=0) return;
+      det = 1.0;
+      for (int i=0; i<npart; ++i) {
+	det*= romat(i,i);
+	det *= (i+1==ipiv(i))?1:-1;
+      }
+}
+
+void FreeParticleNodes:: getDetInvMat( Matrix &invMat, double &det, int &info){
+    // calculate determinant and inverse of slater matrix.
+    info=0;//LU decomposition   
+    IArray ipiv(npart);
+    DGETRF_F77(&npart,&npart,invMat.data(),&npart,ipiv.data(),&info);
+    if (info!=0) return;
+
+    det = 1.0;
+    for (int i=0; i<npart; ++i) {
+      det*= invMat(i,i);
+      det *= (i+1==ipiv(i))?1:-1;
+    }
+    DGETRI_F77(&npart,invMat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
+
+}
+///////////////
 void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
        const int islice, VMatrix &gradd1, VMatrix &gradd2, 
        const Array& dist1, const Array& dist2) {
@@ -233,6 +388,8 @@ void FreeParticleNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
   const Matrix& mat(*matrix[islice]);
   // ipart is the index of the particle in the gradient.
   // jpart is the index of the particle in the distance.
+
+  
   for (int ipart=0; ipart<npart; ++ipart) {
     for (int jpart=0; jpart<npart; ++jpart) {
       // First treat d1 terms.

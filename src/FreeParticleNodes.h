@@ -99,7 +99,7 @@ public:
   /// Constructor.
   FreeParticleNodes(const SimulationInfo&, const Species&, 
     const double temperature, const int maxlevel, 
-    const bool useUpdates, const int maxMovers, const bool useHungarian);
+		    const bool useUpdates, const int maxMovers, const bool useHungarian, const int useIterations);
   /// Virtual destructor.
   virtual ~FreeParticleNodes();
   /// Evaluate the density matrix function, returning the value.
@@ -109,6 +109,9 @@ public:
   /// Assumes that evaluate has already been called on the slice.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
                                 const int islice, Array &d1, Array &d2);
+  void newtonRaphson(const VArray &r1, const VArray &r1, const int islice, Array &d1, int section);
+  void getDetInvMat( Matrix &invMat, double &det, int &info);
+  void getDet( Matrix &romat, double &det);
   /// Evaluate the time-derivative of the distance to the 
   /// node in units of @f$ \sqrt{\tau/2m}@f$.
   virtual void evaluateDotDistance(const VArray &r1, const VArray &r2,
@@ -131,6 +134,8 @@ private:
   int nslice;
   /// The inverse slater matricies.
   mutable std::vector<Matrix*> matrix;
+  /// The slater matricies. 
+  mutable std::vector<Matrix*> romatrix;
   /// Gradient of the slater determinant.
   mutable VMatrix gradmat;
   /// Matrix diagonalization arrays.
@@ -162,5 +167,6 @@ private:
   int nerror;
   const bool useHungarian;
   double scale;
+  const int useIterations;
 };
 #endif
