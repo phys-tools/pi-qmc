@@ -322,7 +322,9 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
       
        invromat=romat;
        getDetInvMat(invromat, det, info);
-       if (info!=0) {std :: cout <<"Breaking in NewtonRaphson Due to BAD RETURN FROM ZGETRF "<<std::endl; break;}
+       if (info!=0) {
+	 //std :: cout <<"Breaking in NewtonRaphson Due to BAD RETURN FROM ZGETRF "<<std::endl; 
+	 break;}
      
        Vec gradLogf=0.0;
        for (int ipart=0; ipart<npart; ++ipart) 
