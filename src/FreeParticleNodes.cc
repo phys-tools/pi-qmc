@@ -301,7 +301,8 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
           
      int iter=0;
      double det=initialDet;
-     while(iter<useIterations){// && fabs(det*invDet) > 1e-8 ){
+     // 1e-30 to avoid underflow
+     while( iter<useIterations &&  fabs(det)>1e-30 && ( (fabs(initialDet) <1  && fabs(det*invDet) > 1e-8) || ( fabs(initialDet)>1 && fabs(det)>1e-8  )  ) ) {
        VArray gradjpart(npart);
        for (int ipart=0; ipart<npart; ++ipart) {
 	 Vec delta=r1jnext-r2(ipart+ifirst);
@@ -335,19 +336,21 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
        r1jnext=r1jnext-gradLogf/(normGradLogf+1e-15);
        cell.pbc(r1jnext);
         
-       /* if (jpart>=0 && islice==2){
+       /*if (jpart>=0 && islice>0){
 	  Vec tmp = -gradLogf/(normGradLogf+1e-15);
-	  std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<" prevSetpDet  "<<det<<". Scaled det "<<fabs(det*initialDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1]<<" . dist :: "<<  sqrt(2*mass/tau*dot(cell.pbc(tmp), cell.pbc(tmp) )) <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<std::endl;
-	  }*/
-       
+	  std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<". Initial d_iter0 = "<<d(jpart+ifirst)<<". Initial Det_iter0 = "<<initialDet<<". PrevStepDet = "<<det<<". Scaled det = "<<fabs(det*invDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1] <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<std::endl;
+	  }
+       */
         iter++;
       }
      
      r1jnext =r1jnext-r1(jpart+ifirst);
      cell.pbc(r1jnext);
-     if (info!=0) d(jpart+ifirst)=sqrt(2*mass/tau*dot(r1jnext, r1jnext) ); 
-     // if (d(jpart+ifirst)<1e-2) std :: cout <<"Iteration "<<iter<<" :: Hey I found one at islice_"<<islice<<" : "<<d(jpart+ifirst)<<". Det : "<<det<<std::endl;
-     // if (jpart>=0 && (islice==2 ))std::cout<<"d"<<section<<"_"<<islice<<" :: "<<d(jpart+ifirst) <<". Total delta :: "<< sqrt(dot(r1jnext, r1jnext) )<<". Sa "<<-log(1-exp(-d(jpart+ifirst)*dold2))<<std::endl<<std::endl;//exit(-1);
+     d(jpart+ifirst)=sqrt(2*mass/tau*dot(r1jnext, r1jnext) ); 
+     
+     //debug
+     //if (d(jpart+ifirst)<0.9) std :: cout <<"Iteration "<<iter<<" :: Hey I found one at islice_"<<islice<<" : "<<d(jpart+ifirst)<<". Det : "<<det<<std::endl;
+     //if (jpart>=0 && (islice>0 ))std::cout<<"d"<<section<<"_"<<islice<<" :: "<<d(jpart+ifirst) <<". Total delta :: "<< sqrt(dot(r1jnext, r1jnext) )<<std::endl<<std::endl; //exit(-1);
    
    }
  }
