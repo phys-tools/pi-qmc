@@ -146,10 +146,10 @@ double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &di
     }  
     Array d1(dist(islice,0,allPart));
     Array d2(dist(islice,1,allPart));
-    for (int i=0; i<npart; ++i) { 
-      NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
-      nodeModel->evaluateDistance(r1,r2,0,d1,d2);
-    }
+    
+    NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
+    nodeModel->evaluateDistance(r1,r2,0,d1,d2);
+    
     
     for (int i=0; i<nMoving; ++i) {
       r1(movingIndex(i))+=displacement(i);
@@ -157,16 +157,15 @@ double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &di
       r2(movingIndex(i))+=displacement(i);
       cell.pbc(r2(movingIndex(i)));
     }
-    NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
+    result= nodeModel->evaluate(r1,r2,0,false);
     if (result.err) return deltaAction=2e100;
     newDMValue(islice)=result.det;
     if (newDMValue(islice)<=1e-200) return deltaAction=2e100;
     Array newd1(newDist(islice,0,allPart));
     Array newd2(newDist(islice,1,allPart));
-    for (int i=0; i<npart; ++i) { 
-      NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
-      nodeModel->evaluateDistance(r1,r2,0,newd1,newd2);
-    }
+    
+    result= nodeModel->evaluate(r1,r2,0,false);
+    nodeModel->evaluateDistance(r1,r2,0,newd1,newd2);
   } 
  
   // Calculate the nodal action 
