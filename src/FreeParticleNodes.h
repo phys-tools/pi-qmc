@@ -109,7 +109,7 @@ public:
   /// Assumes that evaluate has already been called on the slice.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
                                 const int islice, Array &d1, Array &d2);
-  void newtonRaphson(const VArray &r1, const VArray &r1, const int islice, Array &d1, int section);
+  void newtonRaphson(const VArray &r1, const VArray &r2, const int islice, Array &d1, int section);
   void getDetInvMat( Matrix &invMat, double &det, int &info);
   void getDet( Matrix &romat, double &det);
   /// Evaluate the time-derivative of the distance to the 

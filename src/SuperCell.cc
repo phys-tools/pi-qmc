@@ -37,7 +37,8 @@ void SuperCell::computeRecipricalVectors() {
 SuperCell::Vec& SuperCell::pbc(Vec& v) const {
   if (dot(v,v)>rcut2) {
     for (int idim=0; idim<NDIM; ++idim) {
-      int i = (int)(b[idim]*v[idim]+1000.5)-1000;
+      // int i = (int)(b[idim]*v[idim]+1000.5)-1000;
+      double i = trunc (b[idim]*v[idim]+1000.5)-1000; 
       if (i!=0) v[idim]-=a[idim]*i;
     }
   }

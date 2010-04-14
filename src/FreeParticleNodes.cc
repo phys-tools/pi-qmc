@@ -26,7 +26,7 @@
 #include "Beads.h"
 #include "DoubleMLSampler.h"
 #include <cstdlib>
-
+#include<math.h>
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
                            const int*, int*);
@@ -189,8 +189,8 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-
-  /*   Matrix& mat(*matrix[islice]);
+   
+  Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
   d1=200.; d2=200.; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -200,8 +200,8 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-        if (delta[i]<0) grad[i]=-grad[i];
+	grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
+	if (delta[i]<0) grad[i]=-grad[i];
       }
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
@@ -209,7 +209,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     }
     gradArray1(jpart)=logGrad-fgrad;
     d1(jpart+ifirst)=sqrt(2*mass/
-                      ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
+			  ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
   }
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
@@ -218,8 +218,8 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-        if (delta[i]<0) grad[i]=-grad[i];
+	grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
+	if (delta[i]<0) grad[i]=-grad[i];
       }
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad = grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
@@ -227,11 +227,20 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     }
     gradArray2(ipart)=logGrad-fgrad;
     d2(ipart+ifirst)=sqrt(2*mass/
-                      ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
+			  ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
-*/
+  /*
   newtonRaphson(r1, r2, islice, d1, 1);
   newtonRaphson(r2, r1, islice, d2, 2);
+  */
+  /*db if (islice==2)  std :: cout <<"L1 :: "<<*matrix[2]<<std::endl;
+  std :: cout << "grad1";
+  for (int i=0;i<npart;i++) std :: cout <<i<<" : "<<gradArray1(i)<<std::endl;
+  std :: cout << "grad2"; 
+  for (int i=0;i<npart;i++) std :: cout <<i<<" : "<<gradArray2(i)<<std::endl;
+  */
+
+ 
 }
 
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
@@ -245,10 +254,10 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
     for (int ipart=0; ipart<npart; ++ipart) {
       Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
       cell.pbc(delta);
-      Vec grad;
+      Vec grad; 
       for (int i=0; i<NDIM; ++i) {
         grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-        if (delta[i]<0) grad[i]=-grad[i];
+	if (delta[i]<0) grad[i]=-grad[i];
       }
       //if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
@@ -256,31 +265,31 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
     }
     gradArray(jpart)=logGrad-fgrad;
     d(jpart+ifirst)=sqrt(2*mass/
-			 ((dot(cell.pbc(gradArray(jpart)),cell.pbc(gradArray(jpart)))+1e-15)*tau));
-    // if (jpart>=0 && islice==2)      std :: cout <<"part "<<jpart<<". old logGrad :: "<<logGrad<<". d"<<section<<" :: "<<d(jpart+ifirst)<<". delta :: "<<sqrt(1.0/dot(gradArray(jpart),gradArray(jpart)))<<". Sa "<<-log(1-exp(-d(jpart+ifirst)*dold1))<<std::endl;
+			 ((dot(gradArray(jpart),gradArray(jpart))+1e-15)*tau));
+    // if (jpart>=0 && islice==2)      std :: cout <<"part "<<jpart<<". old logGrad :: "<<logGrad<<". d"<<section<<" :: "<<d(jpart+ifirst)<<". delta :: "<<sqrt(1.0/dot(gradArray(jpart),gradArray(jpart)))<<std::endl;
   }
   if (section==2) mat.transposeSelf(1,0);
 
   // 2D case.
+ 
  if (useIterations>0){  
   double initialDet;
   double invDet;
   getDet((*romatrix[islice]), initialDet);
-  // std :: cout << " initialDet :: "<<initialDet<<std::endl;
   invDet=1.0/fabs(initialDet);
   
    VArray r1Iter0(npart);
    Matrix romat(npart,npart); 
-    
    for (int jpart=0; jpart<npart; ++jpart) {
-     r1Iter0(jpart+ifirst)=r1(jpart+ifirst)-gradArray(jpart)/dot(gradArray(jpart),gradArray(jpart));
-     cell.pbc(r1Iter0(jpart+ifirst));
+     double mag = dot(gradArray(jpart),gradArray(jpart))+1e-200;
+     r1Iter0(jpart+ifirst)=r1(jpart+ifirst)-gradArray(jpart)/mag;
+     cell.pbc(r1Iter0(jpart+ifirst));    
      for (int ipart=0; ipart<npart; ++ipart) {
        Vec delta= r1Iter0(jpart+ifirst)-r2(ipart+ifirst);
        cell.pbc(delta);
        double ea2=scale * (*pg[0])(fabs(delta[0])+1e-300);
        (*romatrix[islice])(ipart,jpart)=ea2;
-       romat(ipart,jpart)=ea2;
+       romat(ipart,jpart)=ea2; 
        for (int i=1; i<NDIM; ++i) {
 	 ea2=((*pg[i])(fabs(delta[i])+1e-300));
 	 romat(ipart,jpart)*=ea2;
@@ -288,6 +297,8 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
        }
      }
    }
+
+
    Matrix invromat(npart,npart);
    Vec r1jnext=0.0; 
    int info=0;
@@ -308,12 +319,12 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	 Vec delta=r1jnext-r2(ipart+ifirst);
 	 cell.pbc(delta);
 	 Vec ea2;
-	 for (int i=0; i<NDIM; ++i) {
+	 for (int i=0; i<NDIM; ++i) { 
 	   ea2[i]=(*pg[i])(fabs(delta[i]+1e-300));
 	   gradjpart(ipart)[i]=(*pg[i]).grad(fabs(delta[i]+1e-300))/ea2[i];
 	   if (delta[i]<0) gradjpart(ipart)[i]=-gradjpart(ipart)[i];
 	 }
-	 
+	
 	 romat(ipart,jpart)=scale;
 	 for (int i=0; i<NDIM; ++i) {
 	   gradjpart(ipart)*=ea2[i]; 
@@ -333,14 +344,14 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
        
            
        double normGradLogf=dot(gradLogf,gradLogf);    
-       r1jnext=r1jnext-gradLogf/(normGradLogf+1e-15);
+       r1jnext=r1jnext-gradLogf/(normGradLogf+1e-50);
        cell.pbc(r1jnext);
         
-       /*if (jpart>=0 && islice>0){
+       /* if (jpart>=0 && islice>0){
 	  Vec tmp = -gradLogf/(normGradLogf+1e-15);
-	  std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<". Initial d_iter0 = "<<d(jpart+ifirst)<<". Initial Det_iter0 = "<<initialDet<<". PrevStepDet = "<<det<<". Scaled det = "<<fabs(det*invDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1] <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<std::endl;
-	  }
-       */
+	 std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<". Initial d_iter0 = "<<d(jpart+ifirst)<<". Initial Det_iter0 = "<<initialDet<<". PrevStepDet = "<<det<<". Scaled det = "<<fabs(det*invDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1] <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<std::endl;
+	 }  */
+       
         iter++;
       }
      
@@ -354,6 +365,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
    
    }
  }
+
 }
 ///////////////
 void FreeParticleNodes:: getDet( Matrix &romat, double &det){

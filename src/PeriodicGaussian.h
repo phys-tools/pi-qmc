@@ -36,7 +36,7 @@ public:
   }
   /// Get the gradient value.
   double grad(const double x) const {
-    const int i=(int)(x*dxInv); 
+    const int i=(int)(x*dxInv);
     const double r=x-i*dx;
     const Vec4 &f=grid(i);
     return f[1]+r*(2.0*f[2]+r*3.0*f[3]);
