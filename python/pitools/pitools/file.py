@@ -18,6 +18,47 @@ from response import ResponseFunction
 from density import Density
 from paircf import PairCF
 
+class estimatorNode(object):
+  """
+  Representation of a node in the estimator group of a pimc.h5 file.
+  """
+  PERMUTATION = 1
+  SCALAR = 64
+  ENERGY = 72
+  THERMO_ENERGY = 73
+  COULOMB_ENERGY = 74
+  VIRIAL_ENERGY = 75
+  DENSITY = 129
+  PAIR_CORRELATION = 130
+  CONDUCTANCE = 257
+  CONDUCTIVITY = 258
+  def __init__(self,node,type=0):
+    self.name = node.name
+    self.type = type
+    self.node = node
+    if type==0:
+      if self.name[:4]=="perm":
+        self.type=estimatorNode.PERMUTATION
+      if self.name[:3]=="rho":
+        self.type=estimatorNode.DENSITY
+      if self.name[:12]=="conductivity":
+        self.type=estimatorNode.CONDUCTIVITY
+      if self.name[:11]=="conductance":
+        self.type=estimatorNode.CONDUCTANCE
+      if self.name[-6:]=="energy":
+        self.type=estimatorNode.ENERGY
+      if self.name=="coulomb_energy":
+        self.type=estimatorNode.COULOMB_ENERGY
+      if self.name=="thermo_energy":
+        self.type=estimatorNode.THERMO_ENERGY
+      if self.name=="virial_energy":
+        self.type=estimatorNode.VIRIAL_ENERGY
+      if self.type==0 and self.name[:1]=="g":
+        self.type=estimatorNode.PAIR_CORRELATION
+    if self.name[-4:]=="_err":
+      self.type = -abs(self.type)
+  
+
 def openFile(name="pimc.h5"):
   return File(name)
 
@@ -98,3 +139,12 @@ class File(object):
   def getAllSpecies(self):
     slist = []
     return slist
+
+  def getEstimatorList(self):
+    elist = []
+    try:
+      for node in self.file.iterNodes("/estimators"):
+        elist.append(estimatorNode(node))
+    except tables.NoSuchNodeError:
+      pass
+    return elist
