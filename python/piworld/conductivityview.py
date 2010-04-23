@@ -12,10 +12,6 @@ class ConductivityView(EstimatorView):
   def __init__(self, estimatorNode, data, parent=None):
     EstimatorView.__init__(self,parent)
 
-    #print
-    #print "Analyzing conductance"
-    #print
-
     h5file = data.file.file
     jj = h5file.getNode("/estimators","conductivity").read()
     jj_err = h5file.getNode("/estimators","conductivity_err").read()
@@ -31,10 +27,6 @@ class ConductivityView(EstimatorView):
     deltax=l/0.05291771208/self.nx
     density=npart/(l/0.05291771208)
 
-    #print "  A total of %i particles in a simulation box with length %.1f nm." \
-    #       % (npart,l)
-    #print "  Temperature is %.6f Ha (%.3f K) and there are %i slices in the path."\
-    #      % (temperature,temperature*315774.65,nslice)
     #print "  Correlation function array has dimensions " + \
     #    ("nx=%i, ndx=%i, nfreq=%i." % (self.nx,self.ndx,self.nfreq))
 
@@ -47,9 +39,6 @@ class ConductivityView(EstimatorView):
     self.sigma0iw = scipy.fftpack.fftshift(self.sigma0iw,[0])
     self.sigma0iw_err = jjw_err[:,1:]*2.*numpy.pi/self.omegan
     self.sigma0iw_err = scipy.fftpack.fftshift(self.sigma0iw_err,[0])
-
-    #print "\n  First few diagonal values of conductance are:"
-    #print "    %f, %f, %f, %f, %f"%tuple(self.sigma0iw[self.ndx/2,:5].tolist())
 
     #Fit sigma
     p0=[0.86,4.*self.omega1,1.0,20.*self.omega1]
@@ -154,7 +143,7 @@ class ConductivityView(EstimatorView):
       maxfreq = math.ceil((self.data.omegan/self.data.omega1).max())
       maxg = math.ceil((self.data.sigma0iw).max())
       omegas = numpy.arange(0,maxfreq+0.4,0.1)*self.data.omega1
-      #self.axes([0.15,0.15,0.83,0.83])
+      self.axes = self.figure.add_axes([0.15,0.15,0.83,0.83])
       #pylab.plot(omegan/omega1,sigmaiw[ndx/2,:nfreq])
       self.axes.errorbar(self.data.omegan[:]/self.data.omega1, 
                          self.data.sigma0iw[self.data.ndx/2,:],

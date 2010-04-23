@@ -8,6 +8,7 @@ from matplotlib.figure import Figure
 from estimatorview import *
 from conductivityview import *
 from scalarview import *
+from densityview import *
 
 class SimulationData:
   def __init__(self):
@@ -22,7 +23,9 @@ class OutputWidget(QtGui.QWidget):
     self.project.oldSelectedEstimatorNames = []
     self.data = [None]*len(self.project.nameList)
 
+    self.setContentsMargins(2,2,2,2)
     vbox = QtGui.QVBoxLayout()
+    vbox.setContentsMargins(0,0,0,0)
     vbox.setSpacing(3)
     self.simInfoWidget = SimInfoWidget(self)
     vbox.addWidget(self.simInfoWidget,1)
@@ -60,9 +63,10 @@ class OutputWidget(QtGui.QWidget):
     self.simInfoWidget.myupdate(data)
     self.estimatorWidget.myupdate(data)
 
-class SimInfoWidget(QtGui.QWidget):
+class SimInfoWidget(QtGui.QGroupBox):
   def __init__(self, parent=None):
     QtGui.QWidget.__init__(self,parent)
+    self.setTitle("Simulation Info")
     hbox = QtGui.QHBoxLayout()
     hbox.setSpacing(3)
     self.labelT = QtGui.QLabel("T=? K (? slices)",self)
@@ -91,15 +95,19 @@ class EstimatorWidget(QtGui.QWidget):
     QtGui.QWidget.__init__(self,parent)
     self.project = project
     self.layout = QtGui.QHBoxLayout()
-    self.layout.setSpacing(3)
+    self.layout.setSpacing(1)
+    self.setContentsMargins(1,1,1,1)
+    splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
     self.listWidget = QtGui.QListWidget(parent) 
-    self.layout.addWidget(self.listWidget,2)
-    self.layout.addStretch(0.2)
+    self.listWidget.setContentsMargins(1,1,1,1)
+    splitter.addWidget(self.listWidget)
     self.estimatorView = QtGui.QStackedWidget(self)
-    self.layout.addWidget(self.estimatorView,7)
+    splitter.addWidget(self.estimatorView)
+    self.layout.addWidget(splitter)
     self.plot = EstimatorView(self)
     self.estimatorView.addWidget(self.plot)
     self.setLayout(self.layout)
+    splitter.setSizes([200,800])
     QtCore.QObject.connect(self.listWidget.selectionModel(),
         QtCore.SIGNAL("selectionChanged(QItemSelection,QItemSelection)"),
         self, QtCore.SLOT("respondToSelection()"))
@@ -157,6 +165,8 @@ class EstimatorWidget(QtGui.QWidget):
         est.view = ConductivityView(est,self.data)
       if est.type >= 64 and est.type <128:
         est.view = ScalarView(est,self.data)
+      if est.type == 129:
+        est.view = DensityView(est,self.data)
       else:
         print est.type
     return est

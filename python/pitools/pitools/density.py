@@ -18,6 +18,7 @@ class Density(object):
     self.origin = origin
     self.scale = scale
     self.extent = scale*data.shape
+    self.rank = numpy.rank(data)
 
   def __str__(self):
     return "Density '%s'" % (self.name)

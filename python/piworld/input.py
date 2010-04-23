@@ -48,8 +48,11 @@ class InputWidget(QtGui.QWidget):
     self.xmlstring = [None]*len(self.project.nameList)
 
     self.text = QtGui.QTextEdit(self)
+    self.text.setContentsMargins(0,0,0,0)
     MyHighlighter(self.text)
+    self.setContentsMargins(0,0,0,0)
     hbox = QtGui.QHBoxLayout()
+    hbox.setSpacing(2)
     hbox.addWidget(self.text)
     self.setLayout(hbox)
 
