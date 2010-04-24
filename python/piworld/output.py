@@ -9,6 +9,7 @@ from estimatorview import *
 from conductivityview import *
 from scalarview import *
 from densityview import *
+from permutationview import *
 
 class SimulationData:
   def __init__(self):
@@ -163,10 +164,12 @@ class EstimatorWidget(QtGui.QWidget):
       est.view = None
       if est.type == 258:
         est.view = ConductivityView(est,self.data)
-      if est.type >= 64 and est.type <128:
+      elif est.type >= 64 and est.type <128:
         est.view = ScalarView(est,self.data)
-      if est.type == 129:
+      elif est.type == 129:
         est.view = DensityView(est,self.data)
+      elif est.type == 1:
+        est.view = PermutationView(est,self.data)
       else:
-        print est.type
+        print "Mising viewer type %i for %s." % (est.type,est.name)
     return est
