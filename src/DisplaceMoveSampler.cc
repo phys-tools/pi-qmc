@@ -53,7 +53,6 @@ DisplaceMoveSampler::~DisplaceMoveSampler() {
   delete &particleChooser;
 }
 
-
 void DisplaceMoveSampler::run() {
   int workerID = (mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI

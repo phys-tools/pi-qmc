@@ -54,8 +54,7 @@ DoubleDisplaceMoveSampler(int nmoving, int nrepeat,
   std::cout << "In DoubleDisplaceMove :: nsliceOver2 = " << nsliceOver2 << std::endl;
 }
 
-DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {
-}
+DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {}
 
 
 bool DoubleDisplaceMoveSampler::tryMove() {
