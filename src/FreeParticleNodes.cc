@@ -26,7 +26,7 @@
 #include "Beads.h"
 #include "DoubleMLSampler.h"
 #include <cstdlib>
-#include<math.h>
+
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
                            const int*, int*);
@@ -190,7 +190,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
    
-  Matrix& mat(*matrix[islice]);
+  /*  Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
   d1=200.; d2=200.; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -229,10 +229,10 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     d2(ipart+ifirst)=sqrt(2*mass/
 			  ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
-  /*
+  */
   newtonRaphson(r1, r2, islice, d1, 1);
   newtonRaphson(r2, r1, islice, d2, 2);
-  */
+  
   /*db if (islice==2)  std :: cout <<"L1 :: "<<*matrix[2]<<std::endl;
   std :: cout << "grad1";
   for (int i=0;i<npart;i++) std :: cout <<i<<" : "<<gradArray1(i)<<std::endl;
@@ -246,7 +246,6 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
   Matrix& mat(*matrix[islice]);	  // Calculate log gradients to estimate distance.
   VArray gradArray=(section==1)?gradArray1:gradArray2;
-
 
   if (section==2) mat.transposeSelf(1,0);
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -263,16 +262,15 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad*scale;
     }
-    gradArray(jpart)=logGrad-fgrad;
-    d(jpart+ifirst)=sqrt(2*mass/
-			 ((dot(gradArray(jpart),gradArray(jpart))+1e-15)*tau));
-    // if (jpart>=0 && islice==2)      std :: cout <<"part "<<jpart<<". old logGrad :: "<<logGrad<<". d"<<section<<" :: "<<d(jpart+ifirst)<<". delta :: "<<sqrt(1.0/dot(gradArray(jpart),gradArray(jpart)))<<std::endl;
+    gradArray(jpart)=logGrad-fgrad;//cell.pbc(gradArray(jpart));
+    d(jpart+ifirst)=sqrt(2*mass/((dot(gradArray(jpart),gradArray(jpart))+1e-15)*tau));
   }
   if (section==2) mat.transposeSelf(1,0);
 
-  // 2D case.
- 
- if (useIterations>0){  
+  if (useIterations>0){ 
+    
+  double *container = new double [useIterations+1]; // debug 
+  double radius2Convergence = tau*0.5/mass;
   double initialDet;
   double invDet;
   getDet((*romatrix[islice]), initialDet);
@@ -283,7 +281,8 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
    for (int jpart=0; jpart<npart; ++jpart) {
      double mag = dot(gradArray(jpart),gradArray(jpart))+1e-200;
      r1Iter0(jpart+ifirst)=r1(jpart+ifirst)-gradArray(jpart)/mag;
-     cell.pbc(r1Iter0(jpart+ifirst));    
+     cell.pbc(r1Iter0(jpart+ifirst));   
+ 
      for (int ipart=0; ipart<npart; ++ipart) {
        Vec delta= r1Iter0(jpart+ifirst)-r2(ipart+ifirst);
        cell.pbc(delta);
@@ -305,15 +304,23 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 
    for (int jpart=0; jpart<npart; ++jpart) {
      r1jnext=r1Iter0(jpart+ifirst);
-      if (jpart>0){
-	for (int ipart=0;ipart<npart;ipart++)
-	  romat(ipart,jpart-1)=(*romatrix[islice])(ipart,jpart-1);
-      }
-          
+     if (jpart>0){
+       for (int ipart=0;ipart<npart;ipart++)
+	 romat(ipart,jpart-1)=(*romatrix[islice])(ipart,jpart-1);
+     }
+     
+     Vec dr = r1jnext - r1(jpart+ifirst);
+     cell.pbc(dr);
+     double rcut2 =dot( dr,dr);
+     container[0]=rcut2;//db
+     // std :: cout <<  "fabs(det)>1e-20 :: "<<fabs(initialDet) <<". rcut2 "<< rcut2 <<" ? "<<" 100*radius2Convergence "<< 100*radius2Convergence<<std::endl;
+     double prevDr=sqrt(rcut2);  
+     double nextDr=0;
      int iter=0;
      double det=initialDet;
-     // 1e-30 to avoid underflow
-     while( iter<useIterations &&  fabs(det)>1e-30 && ( (fabs(initialDet) <1  && fabs(det*invDet) > 1e-8) || ( fabs(initialDet)>1 && fabs(det)>1e-8  )  ) ) {
+     // fabs(det)>1e-30 to avoid underflow
+     while( iter<useIterations &&  fabs(det)>1e-20 &&  rcut2 < radius2Convergence && fabs(nextDr-prevDr) > 1e-4 &&
+	    ( (fabs(initialDet) <1  && fabs(det*invDet) > 1e-8) || ( fabs(initialDet)>1 && fabs(det)>1e-8  )  ) ) {
        VArray gradjpart(npart);
        for (int ipart=0; ipart<npart; ++ipart) {
 	 Vec delta=r1jnext-r2(ipart+ifirst);
@@ -341,29 +348,42 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
        Vec gradLogf=0.0;
        for (int ipart=0; ipart<npart; ++ipart) 
 	 gradLogf+=gradjpart(ipart)*invromat(jpart,ipart);
-       
-           
-       double normGradLogf=dot(gradLogf,gradLogf);    
-       r1jnext=r1jnext-gradLogf/(normGradLogf+1e-50);
-       cell.pbc(r1jnext);
+                  
+       double normGradLogf=dot(gradLogf,gradLogf); 
+       Vec rnext = r1jnext-gradLogf/(normGradLogf+1e-50);
+       cell.pbc(rnext);
         
+       dr = rnext - r1(jpart+ifirst);
+       cell.pbc(dr);
+       rcut2 = dot(dr,dr);
+       if (rcut2 > radius2Convergence) break;
+       prevDr = nextDr;
+       nextDr = sqrt(rcut2);
+       r1jnext=rnext;
+
+       //db
+       container[iter+1]=rcut2;
        /* if (jpart>=0 && islice>0){
+	  Vec dr = r1jnext-r1(jpart+ifirst); cell.pbc(dr);
 	  Vec tmp = -gradLogf/(normGradLogf+1e-15);
-	 std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<". Initial d_iter0 = "<<d(jpart+ifirst)<<". Initial Det_iter0 = "<<initialDet<<". PrevStepDet = "<<det<<". Scaled det = "<<fabs(det*invDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1] <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<std::endl;
-	 }  */
-       
-        iter++;
-      }
+	  std :: cout<<"Part :: "<<jpart<<". Iter :: "<<iter <<". Initial d_iter0 = "<<d(jpart+ifirst)<<". Initial Det_iter0 = "<<initialDet<<". PrevStepDet = "<<det<<". Scaled det = "<<fabs(det*invDet)<<"  r1jnext :: 2 [ "<<r1jnext[0]<< "     "<<r1jnext[1] <<".  delta :: "<< sqrt(dot(cell.pbc(tmp),cell.pbc(tmp)))<<"  Net Delta "<<sqrt( dot(dr,dr))<<std::endl;
+	  }  */
+       iter++;
+     }
+     double debugd= d(jpart+ifirst);//////// initial d debugging tool
      
      r1jnext =r1jnext-r1(jpart+ifirst);
      cell.pbc(r1jnext);
      d(jpart+ifirst)=sqrt(2*mass/tau*dot(r1jnext, r1jnext) ); 
      
      //debug
-     //if (d(jpart+ifirst)<0.9) std :: cout <<"Iteration "<<iter<<" :: Hey I found one at islice_"<<islice<<" : "<<d(jpart+ifirst)<<". Det : "<<det<<std::endl;
-     //if (jpart>=0 && (islice>0 ))std::cout<<"d"<<section<<"_"<<islice<<" :: "<<d(jpart+ifirst) <<". Total delta :: "<< sqrt(dot(r1jnext, r1jnext) )<<std::endl<<std::endl; //exit(-1);
-   
+     if (d(jpart+ifirst)<0.05) 
+       {
+	 std :: cout <<"Iteration "<<iter<<" :: Hey I found one at islice_"<<islice<<" : "<<d(jpart+ifirst)<<" compare to Initial d was :: "<<debugd<<". FinalDet : "<<det<<". Initial Det :: "<<initialDet<<std::endl;
+	 for (int i=0;i<=iter;i++) std :: cout << "At iter : "<<i<<" rnext-r0 is = "<<sqrt(container[i])<< " and d is = "<<sqrt(2*mass/tau*(container[i]) )<<std::endl; 
+       }
    }
+   delete [] container;
  }
 
 }

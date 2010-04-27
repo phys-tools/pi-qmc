@@ -130,6 +130,14 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
 double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &displacement, 
 					    int nMoving, const IArray &movingIndex, 
 					    int iFirstSlice, int nSlice) {
+  //Check if species needs fixed node action
+  if (!nodeModel->dependsOnOtherParticles() ) {
+    for (int i=0; i<nMoving; ++i) {
+      if ( (movingIndex(i)>=ifirst && movingIndex(i)<ifirst+nSpeciesPart)) break;
+      if (i==nMoving-1) {notMySpecies=true; return 0;}
+    }
+  }
+
   int  nsliceOver2=(paths.getNSlice()/2);
   const SuperCell& cell=paths.getSuperCell();
   Array3 dist(nSlice+1,2,npart);
@@ -160,7 +168,9 @@ double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &di
     result= nodeModel->evaluate(r1,r2,0,false);
     if (result.err) return deltaAction=2e100;
     newDMValue(islice)=result.det;
-    if (newDMValue(islice)<=1e-200) return deltaAction=2e100;
+    if (newDMValue(0)*newDMValue(islice)<=1e-200) return deltaAction=2e100;
+
+
     Array newd1(newDist(islice,0,allPart));
     Array newd2(newDist(islice,1,allPart));
     
@@ -206,10 +216,10 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       dotdim1=0.; dotdim2=0.;
     }
     // Calculate d_i+1 (NOTE: commented out calculation of force)
-   ////// for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,+1);//////
-   ////// for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,+1);//////
-   ////// nodeModel->evaluate(r1, r2, 0, false);//////
-   ////// nodeModel->evaluateDistance(r1,r2,0,dip1,dip2);//////
+  //////  for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,+1);//////
+  //////  for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,+1);//////
+  //////  nodeModel->evaluate(r1, r2, 0, false);//////
+ //////   nodeModel->evaluateDistance(r1,r2,0,dip1,dip2);//////
     // Calculate the action and the gradient of the action.
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
@@ -227,18 +237,18 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     // Now calulate forces.
     force=0.0;
     for (int jpart=0; jpart<npart; ++jpart) {
-      ////   double xip1=dip1(jpart)*di1(jpart);//////
+    ////// double xip1=dip1(jpart)*di1(jpart);//////
        double xim1=dim1(jpart)*di1(jpart);
       double dotxim1=dotdim1(jpart)*di1(jpart)+dim1(jpart)*dotdi1(jpart);
       dotxim1*=tau/(di1(jpart)*dim1(jpart));
    ////// double xip2=dip2(jpart)*di2(jpart);//////
    ////// double xim2=dim2(jpart)*di2(jpart);//////
    ////// for (int ipart=0; ipart<npart; ++ipart) {//////
-   //////   force(ipart)+=gradd1(ipart,jpart)*(xip1*exp(-xip1)/(1-exp(-xip1))//////
-   //////                                     +xim1*exp(-xim1)/(1-exp(-xim1)));//////
-   //////   force(ipart)+=gradd2(ipart,jpart)*(xip2*exp(-xip2)/(1-exp(-xip2))//////
-   //////                                     +xim2*exp(-xim2)/(1-exp(-xim2)));//////
-   ////// }
+   //////  force(ipart)+=gradd1(ipart,jpart)*(xip1*exp(-xip1)/(1-exp(-xip1))//////
+   //////                                    +xim1*exp(-xim1)/(1-exp(-xim1)));//////
+    //////  force(ipart)+=gradd2(ipart,jpart)*(xip2*exp(-xip2)/(1-exp(-xip2))//////
+   //////                                    +xim2*exp(-xim2)/(1-exp(-xim2)));//////
+      /////}////
       // Calculate the nodal action.
       u += -log(1-exp(-xim1));
       utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));

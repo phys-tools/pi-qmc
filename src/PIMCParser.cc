@@ -162,9 +162,9 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     if (newDistFactor==0 && delayedRejection) newDistFactor=0.5;
     int nspecies = getIntAttribute(ctxt->node,"nspecies");
 
-    ParticleChooser* particleChooser=0;
+    ParticleChooser* particleChooser=0;std::string speciesName;
     if (nspecies<=1) {                                               
-      std::string speciesName=getStringAttribute(ctxt->node,"species");
+      speciesName=getStringAttribute(ctxt->node,"species");
       std::cout << "Picked species "<< speciesName 
                 << " for displacement." << std::endl;
       if (speciesName=="" || speciesName=="all") {
@@ -173,7 +173,7 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
 	particleChooser 
           = new SpeciesParticleChooser(simInfo.getSpecies(speciesName),nmoving);
       }
-    } else {
+    } /*else {
       Species *speciesList = new Species [nspecies];
       for (int ispec=0; ispec<nspecies; ispec++){
 	std::stringstream sispec;
@@ -186,15 +186,14 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       particleChooser = new MultiSpeciesParticleChooser(
                               speciesList, nspecies, nmoving);
       delete [] speciesList;
-    }
+      }*/
     
     int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
-    
     if (doubleAction) {
-      algorithm = new DoubleDisplaceMoveSampler(
-                        nmoving, nrepeat, *paths, *particleChooser, 
-                        *mover, action, doubleAction, mpi);
-      std :: cout <<"Using DoubleDisplaceMoveSampler."<<std :: endl;
+      algorithm = new DoubleDisplaceMoveSampler(nmoving, nrepeat, 
+						*paths, *particleChooser, 
+						*mover, action, doubleAction, mpi);
+      std :: cout <<"Using DoubleDisplaceMoveSampler for species: "<<speciesName<<std :: endl;
     } else {    
       algorithm = new DisplaceMoveSampler(
                         nmoving, nrepeat, *paths, *particleChooser, 
