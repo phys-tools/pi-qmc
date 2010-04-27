@@ -229,6 +229,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     d2(ipart+ifirst)=sqrt(2*mass/
 			  ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
+
   /*
   newtonRaphson(r1, r2, islice, d1, 1);
   newtonRaphson(r2, r1, islice, d2, 2);
