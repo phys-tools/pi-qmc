@@ -56,3 +56,12 @@ class ProjectWidget(QtGui.QWidget):
         self.nameList.append(file[:-8])
       for file in glob.glob("*/*/pimc.xml"):
         self.nameList.append(file[:-8])
+      for file in glob.glob("*/*/*/pimc.xml"):
+        self.nameList.append(file[:-8])
+      for file in glob.glob("*/*/*/*/pimc.xml"):
+        self.nameList.append(file[:-8])
+      for file in glob.glob("*/*/*/*/*/pimc.xml"):
+        self.nameList.append(file[:-8])
+      for file in glob.glob("*/*/*/*/*/*/pimc.xml"):
+        self.nameList.append(file[:-8])
+      self.nameList.sort()

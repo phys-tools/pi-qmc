@@ -43,9 +43,9 @@ class ConductivityView(EstimatorView):
     #Fit sigma
     p0=[0.86,4.*self.omega1,1.0,20.*self.omega1]
     plsq = leastsq(self.residuals,p0,
-                   args=(self.sigma0iw[self.ndx/2,:20],
-                         self.sigma0iw_err[self.ndx/2,:20],
-                         self.omegan[:20]),maxfev=2000)
+                   args=(self.sigma0iw[self.ndx/2,1:],
+                         self.sigma0iw_err[self.ndx/2,1:],
+                         self.omegan[1:]),maxfev=2000)
     self.pfit_a=plsq[0]
     #print "\n Fitting parameters: σ_0=%f, ℏω_0=%f eV, ℏω_0=%f eV"\
     #      %(self.peval(0,self.pfit_a),

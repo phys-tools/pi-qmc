@@ -26,17 +26,58 @@ class DensityView(EstimatorView):
     def __init__(self, data):
       self.data = data
       self.rho = data.density.data
+      self.origin = self.data.density.origin
+      self.scale = self.data.density.scale
+      self.shape = numpy.shape(self.rho)
+      self.limit = numpy.array([0,self.shape[0],1,self.shape[1]]) 
+      self.extent =  numpy.array(
+          [self.origin[0]+0.5*self.scale[0],
+           self.origin[0]+(self.shape[0]-0.5)*self.scale[0],
+           self.origin[1]+0.5*self.scale[1],
+           self.origin[1]+(self.shape[1]-0.5)*self.scale[1]])
+      self.currentExtent = self.extent.copy()
+      aspect = (self.extent[3]-self.extent[2])/(self.extent[1]-self.extent[0]) 
+      if aspect > 3: #zoom in y direction
+        jmid = self.shape[1]/2
+        self.limit[3] = jmid + self.shape[0]
+        self.limit[2] = jmid - self.shape[0]
+        self.currentExtent[3] = self.origin[1] \
+                              +(self.limit[3]-0.5)*self.scale[1]
+        self.currentExtent[2] = self.origin[1] \
+                              +(self.limit[2]-0.5)*self.scale[1]
+      if aspect < 0.3: #zoom in x direction
+        imid = self.shape[0]/2
+        self.limit[1] = imid + self.shape[1]
+        self.limit[0] = imid - self.shape[1]
+        self.currentExtent[1] = self.origin[0] \
+                              +(self.limit[1]-0.5)*self.scale[0]
+        self.currentExtent[0] = self.origin[0] \
+                              +(self.limit[0]-0.5)*self.scale[0]
       MyMplCanvas.__init__(self)
     def computeInitialFigure(self):
       self.axes = self.figure.add_axes([0.18,0.15,0.80,0.83])
-      origin = self.data.density.origin
-      extent = self.data.density.extent
-      scale = self.data.density.scale
-      shape = numpy.shape(self.rho)
-      self.axes.imshow(self.rho.transpose(), origin='lower',
-          interpolation='bicubic',
-          extent=(origin[0]+0.5*scale[0], origin[0]+(shape[0]-0.5)*scale[0],
-                  origin[1]+0.5*scale[1], origin[1]+(shape[1]-0.5)*scale[1]) )
+      self.axes.imshow(self.rho[self.limit[0]:self.limit[1],
+                                self.limit[2]:self.limit[3]].transpose(),
+          origin='lower', interpolation='bicubic', extent=self.currentExtent)
+      # Show lighter bars at edges when zoomed.
+      if self.currentExtent[0]>self.extent[0]:
+        self.axes.axvspan(
+             self.currentExtent[0],
+             0.980*self.currentExtent[0]+0.020*self.currentExtent[1],
+             color='w',alpha=0.2)
+      if self.currentExtent[1]<self.extent[1]:
+        self.axes.axvspan(
+             0.020*self.currentExtent[0]+0.980*self.currentExtent[1],
+             self.currentExtent[1], color='w',alpha=0.2)
+      if self.currentExtent[2]>self.extent[2]:
+        self.axes.axhspan(self.currentExtent[2],
+             0.980*self.currentExtent[2]+0.020*self.currentExtent[3],
+             color='w',alpha=0.2)
+      if self.currentExtent[3]<self.extent[3]:
+        self.axes.axhspan(
+             0.020*self.currentExtent[2]+0.980*self.currentExtent[3],
+             self.currentExtent[3], color='w',alpha=0.2)
+      self.axes.axis(self.currentExtent)
       self.axes.set_xlabel(r"$x$ (nm)")
       self.axes.set_ylabel(r"$y$ (nm)")
 

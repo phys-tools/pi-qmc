@@ -47,10 +47,10 @@ class ScalarView(EstimatorView):
       times = numpy.arange(len(values))
       # Compute average and error, and plot trace.
       av,err = self.data.scalar.getAverage()
-      ax = self.axes = self.figure.add_axes([0.15,0.15,0.72,0.82])
-      ax.axhspan(av-err,av+err,color='y',alpha=0.2)
-      ax.axhline(y=av,color='k',lw=0.2)
+      ax = self.axes = self.figure.add_axes([0.20,0.15,0.67,0.82])
       ax.plot(times,values)
+      ax.axhspan(av-err,av+err,color='y',alpha=0.4)
+      ax.axhline(y=av,color='k',lw=0.2)
       ax.axis(xmax=len(values)-1)
       ax.set_xlabel(r"Monte Carlo timestep")
       ax.set_ylabel(self.data.scalar.name)
