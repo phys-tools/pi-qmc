@@ -163,13 +163,13 @@ class EstimatorWidget(QtGui.QWidget):
     if getattr(est,"view","missing") == "missing":
       est.view = None
       if est.type == 258:
-        est.view = ConductivityView(est,self.data)
+        est.view = ConductivityView(est,self.data,self)
       elif est.type >= 64 and est.type <128:
-        est.view = ScalarView(est,self.data)
+        est.view = ScalarView(est,self.data,self)
       elif est.type == 129:
-        est.view = DensityView(est,self.data)
+        est.view = DensityView(est,self.data,self)
       elif est.type == 1:
-        est.view = PermutationView(est,self.data)
+        est.view = PermutationView(est,self.data,self)
       else:
         print "Mising viewer type %i for %s." % (est.type,est.name)
     return est

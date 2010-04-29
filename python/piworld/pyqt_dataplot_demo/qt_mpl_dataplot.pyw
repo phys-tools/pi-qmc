@@ -1,3 +1,4 @@
+#/usr/bin/env python
 """
 Series of data are loaded from a .csv file, and their names are
 displayed in a checkable list view. The user can select the series
