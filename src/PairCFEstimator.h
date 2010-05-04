@@ -90,7 +90,7 @@ public:
 	for (int jpart=jfirst(ispec); jpart<(jfirst(ispec)+njpart(ispec)); ++jpart) {
 	 
 	  if (ipart!=jpart) {
-	    Vec r1=start; Vec r2=paths(jpart,islice);
+	    Vec r1=end; Vec r2=paths(jpart,islice);
 	    IVecN ibin=0;
 	    for (int i=0; i<N; ++i) {
 	      double d=(*dist[i])(r1,r2,cell);

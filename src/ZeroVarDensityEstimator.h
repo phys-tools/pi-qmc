@@ -108,7 +108,7 @@ ZeroVarDensityEstimator(const SimulationInfo& simInfo, const std::string& name,
 	      gradU+=fp+fm;
 	    }
 	   	   
-	    Vec rij =start-paths(jpart,islice);
+	    Vec rij =end-paths(jpart,islice);
 	    rij=cell.pbc(rij);
 	    double mag_rij = sqrt(dot(rij,rij));
 	    Vec gradInvrij =  (rij)/(mag_rij*mag_rij*mag_rij);

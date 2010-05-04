@@ -189,7 +189,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-   
+  /*
    Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
   d1=200.; d2=200.; // Initialize distances to a very large value.
@@ -230,10 +230,10 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
 			  ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
 
-  /*
+  */
   newtonRaphson(r1, r2, islice, d1, 1);
   newtonRaphson(r2, r1, islice, d2, 2);
-  */
+  
   /*db if (islice==2)  std :: cout <<"L1 :: "<<*matrix[2]<<std::endl;
   std :: cout << "grad1";
   for (int i=0;i<npart;i++) std :: cout <<i<<" : "<<gradArray1(i)<<std::endl;
@@ -247,7 +247,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
   Matrix& mat(*matrix[islice]);	  // Calculate log gradients to estimate distance.
   VArray gradArray=(section==1)?gradArray1:gradArray2;
-
+  d=200;
   if (section==2) mat.transposeSelf(1,0);
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
@@ -277,7 +277,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
   getDet((*romatrix[islice]), initialDet);
   invDet=1.0/fabs(initialDet);
   
-   VArray r1Iter0(npart);
+   VArray r1Iter0(npart+ifirst);
    Matrix romat(npart,npart); 
    for (int jpart=0; jpart<npart; ++jpart) {
      double mag = dot(gradArray(jpart),gradArray(jpart))+1e-200;
@@ -314,7 +314,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
      cell.pbc(dr);
      double rcut2 =dot( dr,dr);
      container[0]=rcut2;//db
-     // std :: cout <<  "fabs(det)>1e-20 :: "<<fabs(initialDet) <<". rcut2 "<< rcut2 <<" ? "<<" 100*radius2Convergence "<< 100*radius2Convergence<<std::endl;
+     
      double prevDr=sqrt(rcut2);  
      double nextDr=0;
      int iter=0;
