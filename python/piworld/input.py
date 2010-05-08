@@ -1,6 +1,38 @@
 import sys,os,glob
 from PyQt4 import QtGui,QtCore
 
+class InputWidget(QtGui.QWidget):
+  def __init__(self, parent):
+    QtGui.QWidget.__init__(self,parent)
+    self.project = parent
+    self.xmlstring = [None]*len(self.project.nameList)
+
+    self.text = QtGui.QTextEdit(self)
+    self.text.setContentsMargins(0,0,0,0)
+    MyHighlighter(self.text)
+    self.setContentsMargins(0,0,0,0)
+    hbox = QtGui.QHBoxLayout()
+    hbox.setSpacing(2)
+    hbox.addWidget(self.text)
+    self.setLayout(hbox)
+
+  def readXML(self,index=0):
+    if self.xmlstring[index] == None:
+      file = open(self.project.nameList[index]+"pimc.xml","r")
+      self.xmlstring[index] = file.read()
+      file.close
+    self.text.setPlainText(self.xmlstring[index])
+
+  @QtCore.pyqtSlot()
+  def respondToSelection(self):
+    selection = map(QtCore.QModelIndex.row,
+                    self.project.listWidget.selectedIndexes())
+    selection.sort()
+    if len(selection) > 0:
+      self.readXML(selection[0])
+    else:
+      self.text.setPlainText("")
+
 class MyHighlighter(QtGui.QSyntaxHighlighter):
   def __init__(self, parent):
     QtGui.QSyntaxHighlighter.__init__(self,parent)
@@ -39,37 +71,3 @@ class MyHighlighter(QtGui.QSyntaxHighlighter):
       self.setFormat(index, end-index+3, self.commentFmt)
       index = text.indexOf("<!--",end+2)
     self.setCurrentBlockState(state)
-  
-    
-class InputWidget(QtGui.QWidget):
-  def __init__(self, parent):
-    QtGui.QWidget.__init__(self,parent)
-    self.project = parent
-    self.xmlstring = [None]*len(self.project.nameList)
-
-    self.text = QtGui.QTextEdit(self)
-    self.text.setContentsMargins(0,0,0,0)
-    MyHighlighter(self.text)
-    self.setContentsMargins(0,0,0,0)
-    hbox = QtGui.QHBoxLayout()
-    hbox.setSpacing(2)
-    hbox.addWidget(self.text)
-    self.setLayout(hbox)
-
-
-  def readXML(self,index=0):
-    if self.xmlstring[index] == None:
-      file = open(self.project.nameList[index]+"pimc.xml","r")
-      self.xmlstring[index] = file.read()
-      file.close
-    self.text.setPlainText(self.xmlstring[index])
-
-  @QtCore.pyqtSlot()
-  def respondToSelection(self):
-    selection = map(QtCore.QModelIndex.row,
-                    self.project.listWidget.selectedIndexes())
-    selection.sort()
-    if len(selection) > 0:
-      self.readXML(selection[0])
-    else:
-      self.text.setPlainText("")

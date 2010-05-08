@@ -99,7 +99,7 @@ class EstimatorWidget(QtGui.QWidget):
     self.layout.setSpacing(1)
     self.setContentsMargins(1,1,1,1)
     splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
-    self.listWidget = QtGui.QListWidget(parent) 
+    self.listWidget = QtGui.QListWidget(self) 
     self.listWidget.setContentsMargins(1,1,1,1)
     splitter.addWidget(self.listWidget)
     self.estimatorView = QtGui.QStackedWidget(self)

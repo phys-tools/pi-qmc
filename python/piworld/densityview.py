@@ -12,6 +12,8 @@ class DensityView(EstimatorView):
   def __init__(self, estimatorNode, data, parent=None):
     EstimatorView.__init__(self,parent)
 
+    pylab.rc('font', family='serif', size=9)
+
     self.grabGesture(QtCore.Qt.PanGesture)
     self.grabGesture(QtCore.Qt.PinchGesture)
     self.grabGesture(QtCore.Qt.SwipeGesture)
@@ -20,11 +22,20 @@ class DensityView(EstimatorView):
 
     if self.density.rank == 2:
       self.plot =  self.Plot2DWidget(self)
+    elif self.density.rank == 3:
+      self.plot =  self.Plot3DWidget(self)
     vbox = QtGui.QVBoxLayout()
     vbox.setSpacing(0)
     vbox.addWidget(self.plot,10)
 
     self.setLayout(vbox)
+    self.setEnabled(True)
+
+  def mousePressEvent(self, event):
+    print "Mouse press event"
+
+  def wheelEvent(self, event):
+    print "Wheel event"
 
   def event(self, event):
     if event.type() == QtCore.QEvent.Gesture:
@@ -126,18 +137,27 @@ class DensityView(EstimatorView):
   class Plot3DWidget(MyMplCanvas):
     def __init__(self, data):
       self.data = data
+      self.rho = data.density.data
+      self.origin = self.data.density.origin
+      self.scale = self.data.density.scale
+      self.shape = numpy.shape(self.rho)
+      self.limit = numpy.array([0,self.shape[0],0,self.shape[1]]) 
+      self.extent =  numpy.array(
+          [self.origin[0]+0.5*self.scale[0],
+           self.origin[0]+(self.shape[0]-0.5)*self.scale[0],
+           self.origin[1]+0.5*self.scale[1],
+           self.origin[1]+(self.shape[1]-0.5)*self.scale[1]])
+      self.currentExtent = self.extent.copy()
       MyMplCanvas.__init__(self)
     def computeInitialFigure(self):
       self.axes = self.figure.add_axes([0.18,0.15,0.80,0.83])
-      origin = self.data.density.origin
-      extent = self.data.density.extent
-      scale = self.data.density.scale
-      shape = numpy.shape(rho)
-      self.axes.imshow(self.rho.sum(3).transpose(), origin='lower',
-          interpolation='bicubic',
-          extent=(origin[0]+0.5*extent[0], origin[1]+0.5*extent[1],
-                  origin[0]+(shape[0]-0.5)*extent[0],
-                  origin[1]+(shape[1]-0.5)*extent[1]) )
+      self.plotFigure()
+    def plotFigure(self):
+      self.axes.imshow(self.rho.sum(2).transpose(), origin='lower',
+          interpolation='bicubic', extent=self.currentExtent)
+      self.axes.axis(self.currentExtent)
+      self.axes.set_xlabel(r"$x$ (nm)")
+      self.axes.set_ylabel(r"$y$ (nm)")
 
     def swipeTriggered(self,swipe):
       pass

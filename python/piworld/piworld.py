@@ -21,8 +21,10 @@ class MainWindow(QtGui.QMainWindow):
     self.setCentralWidget(projectWidget)
 
     # Set up action objects.
-    exitAction = QtGui.QAction(QtGui.QIcon(icondir+'silk/cancel.png'),
-                               'Exit', self)
+    exitAction = QtGui.QAction(
+        QtGui.QIcon.fromTheme("application-exit",
+        QtGui.QIcon(icondir+'silk/cancel.png')),
+        'Exit', self)
     exitAction.setShortcut('Ctrl+Q')
     exitAction.setStatusTip('Exit application')
     self.connect(exitAction, QtCore.SIGNAL('triggered()'),
