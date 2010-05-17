@@ -472,6 +472,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       std::string species1=getStringAttribute(estNode,"species1");
       //      std::string species1=getStringAttribute(estNode,"species");
       const Species &s1(simInfo.getSpecies(species1));
+      if (name=="") name = "perm_" + species1;
       manager->add(new PermutationEstimator(simInfo, name, s1, mpi));
     }
     if (name=="JEstimator") {

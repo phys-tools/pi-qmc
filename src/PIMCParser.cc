@@ -39,6 +39,7 @@
 #include "CompositeAlgorithm.h"
 #include "SectionChooser.h"
 #include "DoubleSectionChooser.h"
+#include "MiddleSectionChooser.h"
 #include "HyperbolicMover.h"
 #include "Collect.h"
 #include "CubicLattice.h"
@@ -139,12 +140,18 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     
     parseBody(ctxt,loop);
     algorithm=loop;
+  } else if (name=="ChooseMiddleSection") {
+    nlevel = getIntAttribute(ctxt->node,"nlevel");
+    sectionChooser
+      = new MiddleSectionChooser(nlevel,*paths,*action,beadFactory);
+    parseBody(ctxt,sectionChooser);
+    algorithm = sectionChooser;
   } else if (name=="ChooseSection") {
     nlevel=getIntAttribute(ctxt->node,"nlevel");
     if (doubleAction==0) {
-      sectionChooser=new SectionChooser(nlevel,*paths,*action,beadFactory);
+      sectionChooser = new SectionChooser(nlevel,*paths,*action,beadFactory);
       parseBody(ctxt,sectionChooser);
-      algorithm=sectionChooser;
+      algorithm = sectionChooser;
     } else {
       doubleSectionChooser=
         new DoubleSectionChooser(nlevel,*paths,*action,
