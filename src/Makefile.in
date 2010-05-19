@@ -83,7 +83,8 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-EwaldAction.$(OBJEXT) pi-EwaldCoulombEstimator.$(OBJEXT) \
 	pi-EwaldImagePairAction.$(OBJEXT) pi-EwaldSum.$(OBJEXT) \
 	pi-FixedNodeAction.$(OBJEXT) pi-FixedPhaseAction.$(OBJEXT) \
-	pi-FreeMover.$(OBJEXT) pi-FreeParticleNodes.$(OBJEXT) \
+	pi-FreeMover.$(OBJEXT) pi-FreeMoverPBC.$(OBJEXT) \
+	pi-FreeParticleNodes.$(OBJEXT) \
 	pi-FreePartNodesNoUpdate.$(OBJEXT) \
 	pi-FreeTensorMover.$(OBJEXT) pi-FrequencyEstimator.$(OBJEXT) \
 	pi-GateAction.$(OBJEXT) pi-GaussianAction.$(OBJEXT) \
@@ -327,10 +328,10 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	EMARateMover.cc EstimatorParser.cc ExcitonNodes.cc \
 	EwaldAction.cc EwaldCoulombEstimator.cc \
 	EwaldImagePairAction.cc EwaldSum.cc FixedNodeAction.cc \
-	FixedPhaseAction.cc FreeMover.cc FreeParticleNodes.cc \
-	FreePartNodesNoUpdate.cc FreeTensorMover.cc \
-	FrequencyEstimator.cc GateAction.cc GaussianAction.cc \
-	GaussianDotAction.cc GrapheneAction.cc \
+	FixedPhaseAction.cc FreeMover.cc FreeMoverPBC.cc \
+	FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
+	FreeTensorMover.cc FrequencyEstimator.cc GateAction.cc \
+	GaussianAction.cc GaussianDotAction.cc GrapheneAction.cc \
 	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
 	GroundStateWFNodes.cc Help.h Hungarian.cc HyperbolicAction.cc \
 	HyperbolicMover.cc ImagePairAction.cc JelliumSlab.cc \
@@ -381,7 +382,7 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	EMARateEstimator.h EMARateMover.h EstimatorParser.h \
 	ExcitonNodes.h EwaldCoulombEstimator.h EwaldAction.h \
 	EwaldImagePairAction.h EwaldSum.h FixedNodeAction.h \
-	FixedPhaseAction.h FreeMover.h FreeParticleNodes.h \
+	FixedPhaseAction.h FreeMover.h FreeMover.h FreeParticleNodes.h \
 	FreePartNodesNoUpdate.h FreeTensorMover.h FrequencyEstimator.h \
 	GateAction.h GaussianAction.h GaussianDotAction.h \
 	GrapheneAction.h GreenDipoleMEstimator.h GridPotential.h \
@@ -550,6 +551,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FixedNodeAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FixedPhaseAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreeMover.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreeMoverPBC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreePartNodesNoUpdate.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreeParticleNodes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-FreeTensorMover.Po@am__quote@
@@ -1346,6 +1348,20 @@ pi-FreeMover.obj: FreeMover.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeMover.cc' object='pi-FreeMover.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeMover.obj `if test -f 'FreeMover.cc'; then $(CYGPATH_W) 'FreeMover.cc'; else $(CYGPATH_W) '$(srcdir)/FreeMover.cc'; fi`
+
+pi-FreeMoverPBC.o: FreeMoverPBC.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeMoverPBC.o -MD -MP -MF $(DEPDIR)/pi-FreeMoverPBC.Tpo -c -o pi-FreeMoverPBC.o `test -f 'FreeMoverPBC.cc' || echo '$(srcdir)/'`FreeMoverPBC.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreeMoverPBC.Tpo $(DEPDIR)/pi-FreeMoverPBC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeMoverPBC.cc' object='pi-FreeMoverPBC.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeMoverPBC.o `test -f 'FreeMoverPBC.cc' || echo '$(srcdir)/'`FreeMoverPBC.cc
+
+pi-FreeMoverPBC.obj: FreeMoverPBC.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeMoverPBC.obj -MD -MP -MF $(DEPDIR)/pi-FreeMoverPBC.Tpo -c -o pi-FreeMoverPBC.obj `if test -f 'FreeMoverPBC.cc'; then $(CYGPATH_W) 'FreeMoverPBC.cc'; else $(CYGPATH_W) '$(srcdir)/FreeMoverPBC.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreeMoverPBC.Tpo $(DEPDIR)/pi-FreeMoverPBC.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeMoverPBC.cc' object='pi-FreeMoverPBC.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeMoverPBC.obj `if test -f 'FreeMoverPBC.cc'; then $(CYGPATH_W) 'FreeMoverPBC.cc'; else $(CYGPATH_W) '$(srcdir)/FreeMoverPBC.cc'; fi`
 
 pi-FreeParticleNodes.o: FreeParticleNodes.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeParticleNodes.o -MD -MP -MF $(DEPDIR)/pi-FreeParticleNodes.Tpo -c -o pi-FreeParticleNodes.o `test -f 'FreeParticleNodes.cc' || echo '$(srcdir)/'`FreeParticleNodes.cc

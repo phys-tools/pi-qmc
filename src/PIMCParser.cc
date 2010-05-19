@@ -27,6 +27,7 @@
 #include "stats/AccRejEstimator.h"
 #include "SimulationInfo.h"
 #include "FreeMover.h"
+#include "FreeMoverPBC.h"
 #include "UniformMover.h"
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
@@ -236,6 +237,8 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     std::string moverName=getStringAttribute(ctxt->node,"mover");
     if (moverName=="Free" || moverName=="")
       mover = new FreeMover(simInfo,nlevel,10.0);
+    if (moverName=="FreePBC" || moverName=="")
+      mover = new FreeMoverPBC(simInfo,nlevel,10.0);
     else if (moverName=="Spin") mover = new SpinMover(simInfo,nlevel,10.0);
     else if (moverName=="FreeSpin") 
       mover = new FreeSpinMover(simInfo,nlevel,10.0);

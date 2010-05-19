@@ -55,10 +55,12 @@ WireNodes::WireNodes(const SimulationInfo &simInfo, const Species &species,
     uarray(npart,npart,ColMajor()),
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
     scale(1.0) {
-  for (unsigned int i=0; i<matrix.size(); ++i)  {
-    matrix[i] = new Matrix(npart,npart,ColMajor());
+  for (unsigned int islice=0; islice<matrix.size(); ++islice)  {
+    matrix[islice] = new Matrix(npart,npart,ColMajor());
   }
-  for (int i=0; i<npart; ++i) kindex(i)=i;
+  for (int islice=0; islice<kindex.shape()(0); ++islice)  {
+    for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)=ipart;
+  }
   std::cout << "WireNodes with temperature = "
             << temperature << std::endl;
   double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
@@ -430,7 +432,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
         grad[i]=2*wireNodes.c*(rj[i]-wireNodes.coshwt*ri[i])*ear2;
       }
       grad*=exp(-wireNodes.c*((ri2+rj2)*wireNodes.coshwt-2*rirj));
-      if (ipart==wireNodes.kindex(jpart)) {
+      if (ipart==wireNodes.kindex(islice,jpart)) {
         fgrad=grad/(ear2*exp(-wireNodes.c*((ri2+rj2)
                              *wireNodes.coshwt-2.0*rirj)));
       }
