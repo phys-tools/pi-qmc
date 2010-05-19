@@ -27,10 +27,10 @@ class PermutationView(EstimatorView):
       MyMplCanvas.__init__(self)
     def computeInitialFigure(self):
       self.axes = self.figure.add_axes([0.18,0.15,0.80,0.83])
-      x = numpy.arange(len(self.data.permutation))+1
-      nbin = self.data.permutation.sum()
-      prob = self.data.permutation/nbin
+      nbin = len(self.data.permutation)
+      x = numpy.arange(nbin)+1
+      prob = self.data.permutation/self.data.permutation.sum()
       self.axes.bar(x-0.4, prob)
       self.axes.set_xlabel(r"cycle length")
       self.axes.set_ylabel(r"probability")
-      self.axes.axis(xmin=0, xmax=nbin+0.5, ymax=numpy.max(prob)*1.1)
+      self.axes.axis(xmin=0, xmax=nbin+0.495, ymax=numpy.max(prob)*1.1)

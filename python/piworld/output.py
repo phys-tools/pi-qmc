@@ -23,6 +23,7 @@ class OutputWidget(QtGui.QWidget):
     self.project = parent
     self.project.oldSelectedEstimatorNames = []
     self.data = [None]*len(self.project.nameList)
+    self.currentIndex = 0
 
     self.setContentsMargins(2,2,2,2)
     vbox = QtGui.QVBoxLayout()
@@ -35,20 +36,22 @@ class OutputWidget(QtGui.QWidget):
     vbox.addWidget(self.estimatorWidget,10)
     self.setLayout(vbox)
 
-  def readH5(self,index=0):
-    if self.data[index] == None:
-      try:
-        dat = SimulationData()
-        dat.file = pitools.openFile(self.project.nameList[index]+"pimc.h5")
-        dat.temperature = dat.file.getTemperature(Unit.K) 
-        dat.nslice = dat.file.getNSlice() 
-        dat.superCell = dat.file.getSuperCell(Unit.nm) 
-        dat.estimators = dat.file.getEstimatorList()
-        #dat.file.close()
-        self.data[index] = dat
-      except IOError:
-        pass
+  def activate(self,index=0):
+    if self.data[index] == None: self.readH5(index)
     self.myupdate(self.data[index])
+
+  def readH5(self,index=0):
+    try:
+      dat = SimulationData()
+      dat.file = pitools.openFile(self.project.nameList[index]+"pimc.h5")
+      dat.temperature = dat.file.getTemperature(Unit.K) 
+      dat.nslice = dat.file.getNSlice() 
+      dat.superCell = dat.file.getSuperCell(Unit.nm) 
+      dat.estimators = dat.file.getEstimatorList()
+      self.data[index] = dat
+    except IOError:
+      pass
+    self.activate(index)
 
   @QtCore.pyqtSlot()
   def respondToSelection(self):
@@ -56,13 +59,22 @@ class OutputWidget(QtGui.QWidget):
                     self.project.listWidget.selectedIndexes())
     selection.sort()
     if len(selection) > 0:
-      self.readH5(selection[0])
+      self.currentIndex = selection[0]
+      self.activate(selection[0])
     else:
       pass
 
   def myupdate(self,data):
     self.simInfoWidget.myupdate(data)
     self.estimatorWidget.myupdate(data)
+
+  @QtCore.pyqtSlot()
+  def refresh(self):
+    self.data[self.currentIndex].file.file.close()
+    self.estimatorWidget.reset()
+    self.readH5(self.currentIndex)
+    self.myupdate(self.data[self.currentIndex])
+
 
 class SimInfoWidget(QtGui.QGroupBox):
   def __init__(self, parent=None):
@@ -101,7 +113,14 @@ class EstimatorWidget(QtGui.QWidget):
     splitter = QtGui.QSplitter(QtCore.Qt.Horizontal)
     self.listWidget = QtGui.QListWidget(self) 
     self.listWidget.setContentsMargins(1,1,1,1)
-    splitter.addWidget(self.listWidget)
+    panel = QtGui.QWidget()
+    vbox = QtGui.QVBoxLayout()
+    panel.setLayout(vbox)
+    vbox.addWidget(self.listWidget)
+    self.refreshButton = QtGui.QPushButton("&Refresh")
+    vbox.addWidget(self.listWidget)
+    vbox.addWidget(self.refreshButton)
+    splitter.addWidget(panel)
     self.estimatorView = QtGui.QStackedWidget(self)
     splitter.addWidget(self.estimatorView)
     self.layout.addWidget(splitter)
@@ -112,6 +131,9 @@ class EstimatorWidget(QtGui.QWidget):
     QtCore.QObject.connect(self.listWidget.selectionModel(),
         QtCore.SIGNAL("selectionChanged(QItemSelection,QItemSelection)"),
         self, QtCore.SLOT("respondToSelection()"))
+    QtCore.QObject.connect(
+        self.refreshButton, QtCore.SIGNAL("clicked()"),
+        self.parent(), QtCore.SLOT("refresh()"))
 
   def myupdate(self,data):
     # First save name of previously selected estimator.
@@ -173,3 +195,7 @@ class EstimatorWidget(QtGui.QWidget):
       else:
         print "Mising viewer type %i for %s." % (est.type,est.name)
     return est
+
+  def reset(self):
+    for i in range(self.estimatorView.count()):
+      self.estimatorView.removeWidget(self.estimatorView.widget(i))
