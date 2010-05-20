@@ -20,7 +20,7 @@
 
 extern int irank;
 
-#include <Beads.h>
+#include "Beads.h"
 #include "ActionParser.h"
 #include "Action.h"
 #include "AugmentedNodes.h"
