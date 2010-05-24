@@ -104,12 +104,15 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
       Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
       cell.pbc(midpoint)*=0.5;
       midpoint+=movingBeads(iMoving,islice-nStride);
+      cell.pbc(midpoint);
       // Now sample about midpoint
-      Vec delta = gaussRand(iMoving); delta*=sigma;
+      Vec delta = gaussRand(iMoving); 
+      delta*=sigma;      
+      cell.pbc(delta);
       (movingBeads(iMoving,islice)=midpoint)+=delta;
       cell.pbc(movingBeads(iMoving,islice));
       // Calculate 1/transition probability for move 
-      cell.pbc(delta);
+
       double temp = 1.0;
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
@@ -127,7 +130,9 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
       midpoint=sectionBeads.delta(i,islice+nStride,-2*nStride);
       cell.pbc(midpoint)*=0.5;
       midpoint+=sectionBeads(i,islice-nStride);
-      delta=sectionBeads(i,islice); delta-=midpoint;
+      cell.pbc(midpoint);
+      delta=sectionBeads(i,islice); 
+      delta-=midpoint;
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
@@ -144,7 +149,7 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
 
 
 // Delayed Rejection 
-double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level) {
+double FreeMover::makeDelayedMove(MultiLevelSampler& sampler, const int level) {
   const Beads<NDIM>& rejectedBeads=sampler.getRejectedBeads();
   Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();
@@ -167,7 +172,9 @@ double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level
       Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
       cell.pbc(midpoint)*=0.5;
       midpoint+=movingBeads(iMoving,islice-nStride);
-      Vec delta=rejectedBeads(iMoving,islice); delta-=midpoint;
+      cell.pbc(midpoint);
+      Vec delta=rejectedBeads(iMoving,islice); 
+      delta-=midpoint;
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
@@ -186,7 +193,9 @@ double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level
       midpoint=rejectedBeads.delta(iMoving,islice+nStride,-2*nStride);
       cell.pbc(midpoint)*=0.5;
       midpoint+=rejectedBeads(iMoving,islice-nStride);
-      delta = movingBeads(iMoving,islice);delta-=midpoint;
+      cell.pbc(midpoint);
+      delta = movingBeads(iMoving,islice);
+      delta-=midpoint;
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
@@ -200,3 +209,4 @@ double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level
   }
   return toldOverTnew; //Return the log of the probability.
 }
+

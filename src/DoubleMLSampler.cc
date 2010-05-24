@@ -140,7 +140,7 @@ bool DoubleMLSampler::tryMove(double initialLnTranProb) {
     double acceptProb=exp(lnTranProb+piRatioBoA);
 
     // If you want to do DelayedRejection
-    if (delayedRejection && ilevel==nlevel){
+    if (delayedRejection && ilevel==nlevel-1){
       if (RandomNumGenerator::getRand()>acceptProb) {
        	double accRatioA2B = acceptProb;
 	for (int i=0; i<nmoving; ++i) {

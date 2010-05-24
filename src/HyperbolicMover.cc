@@ -111,6 +111,7 @@ double HyperbolicMover::makeMove(MultiLevelSampler& sampler, const int level) {
       Vec delta=sampleDelta(midpoint,teff,level);
       toldOverTnew/=g1g2(midpoint,delta,teff,level);
       midpoint+=movingBeads(iMoving,islice-nStride);
+      cell.pbc(midpoint);
       //Vec delta = gaussRand(iMoving);
       //double r=sqrt(dot(delta,delta));
       //delta*=f(r,level);
@@ -126,7 +127,9 @@ double HyperbolicMover::makeMove(MultiLevelSampler& sampler, const int level) {
       cell.pbc(midpoint)*=0.5;
       Vec center=midpoint;
       midpoint+=sectionBeads(i,islice-nStride);
-      delta=sectionBeads(i,islice); delta-=midpoint;
+      cell.pbc(midpoint)
+      delta=sectionBeads(i,islice); 
+      delta-=midpoint;
       cell.pbc(delta);
       toldOverTnew*=g1g2(center,delta,teff,level);
       //r=sqrt(dot(delta,delta));

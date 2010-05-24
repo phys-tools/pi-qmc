@@ -179,7 +179,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
   evaluate(r1, r2, islice, false);
   evaluateDistance(r1, r2, islice, d1, d2);
   // Now use finite differences.
-  double denom=1./(2*tau*EPSILON);
+  double denom=1./(2*tauSave*EPSILON);
   d1 = denom*(d1-temp1);
   d2 = denom*(d2-temp2);
   // Restore pg and tau to proper temperature.
