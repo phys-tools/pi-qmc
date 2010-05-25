@@ -28,10 +28,8 @@
 #include "SimulationInfo.h"
 #include "PeriodicGaussian.h"
 
-EMARateAction::EMARateAction(const SimulationInfo& simInfo, const int maxlevel,
-  const double deltaPG) 
-  : lambda(simInfo.getNPart()), tau(simInfo.getTau()), 
-    specIndex(simInfo.getNPart()), isStatic(simInfo.getNPart()) {
+EMARateAction::EMARateAction(const SimulationInfo& simInfo) 
+  : tau(simInfo.getTau())  {
 }
 
 EMARateAction::~EMARateAction() {

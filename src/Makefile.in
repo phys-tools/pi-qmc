@@ -75,7 +75,7 @@ am_pi_OBJECTS = pi-ActionParser.$(OBJEXT) \
 	pi-CountCountEstimator.$(OBJEXT) \
 	pi-DensCountEstimator.$(OBJEXT) pi-DensityEstimator.$(OBJEXT) \
 	pi-DipoleMomentEstimator.$(OBJEXT) \
-	pi-DisplaceMoveSampler.$(OBJEXT) \
+	pi-DisplaceMoveSampler.$(OBJEXT) pi-DotGeomAction.$(OBJEXT) \
 	pi-DoubleDisplaceMoveSampler.$(OBJEXT) \
 	pi-DoubleMLSampler.$(OBJEXT) pi-DoubleParallelPaths.$(OBJEXT) \
 	pi-DoubleSectionChooser.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
@@ -315,14 +315,14 @@ pi_SOURCES = ActionParser.cc AngularMomentumEstimator.cc \
 	DynamicPCFEstimator.cc CountCountEstimator.cc \
 	DensCountEstimator.cc DensityEstimator.cc \
 	DipoleMomentEstimator.cc DisplaceMoveSampler.cc \
-	DoubleDisplaceMoveSampler.cc DoubleMLSampler.cc \
-	DoubleParallelPaths.cc DoubleSectionChooser.cc EFieldAction.cc \
-	EIndEstimator.cc EMARateAction.cc EMARateEstimator.cc \
-	EMARateMover.cc EstimatorParser.cc ExcitonNodes.cc \
-	EwaldAction.cc EwaldCoulombEstimator.cc \
-	EwaldImagePairAction.cc EwaldSum.cc FixedNodeAction.cc \
-	FixedPhaseAction.cc FreeMover.cc FreeMoverPBC.cc \
-	FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
+	DotGeomAction.cc DoubleDisplaceMoveSampler.cc \
+	DoubleMLSampler.cc DoubleParallelPaths.cc \
+	DoubleSectionChooser.cc EFieldAction.cc EIndEstimator.cc \
+	EMARateAction.cc EMARateEstimator.cc EMARateMover.cc \
+	EstimatorParser.cc ExcitonNodes.cc EwaldAction.cc \
+	EwaldCoulombEstimator.cc EwaldImagePairAction.cc EwaldSum.cc \
+	FixedNodeAction.cc FixedPhaseAction.cc FreeMover.cc \
+	FreeMoverPBC.cc FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
 	FreeTensorMover.cc FrequencyEstimator.cc GateAction.cc \
 	GaussianAction.cc GaussianDotAction.cc GrapheneAction.cc \
 	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
@@ -365,7 +365,7 @@ noinst_HEADERS = Action.h ActionParser.h Algorithm.h \
 	ConductivityEstimator2D.h CoulombAction.h \
 	CoulombEnergyEstimator.h CubicLattice.h \
 	DampedFreeTensorMover.h DensDensEstimator.h \
-	DensCountEstimator.h DisplaceMoveSampler.h \
+	DensCountEstimator.h DisplaceMoveSampler.h DotGeomAction.h \
 	DoubleDisplaceMoveSampler.h DynamicPCFEstimator.h \
 	CountCountEstimator.h DensityEstimator.h \
 	DipoleMomentEstimator.h Distance.h DoubleAction.h \
@@ -509,6 +509,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DensityEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DipoleMomentEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DisplaceMoveSampler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DotGeomAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleDisplaceMoveSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleMLSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleParallelPaths.Po@am__quote@
@@ -1073,6 +1074,20 @@ pi-DisplaceMoveSampler.obj: DisplaceMoveSampler.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DisplaceMoveSampler.cc' object='pi-DisplaceMoveSampler.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DisplaceMoveSampler.obj `if test -f 'DisplaceMoveSampler.cc'; then $(CYGPATH_W) 'DisplaceMoveSampler.cc'; else $(CYGPATH_W) '$(srcdir)/DisplaceMoveSampler.cc'; fi`
+
+pi-DotGeomAction.o: DotGeomAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DotGeomAction.o -MD -MP -MF $(DEPDIR)/pi-DotGeomAction.Tpo -c -o pi-DotGeomAction.o `test -f 'DotGeomAction.cc' || echo '$(srcdir)/'`DotGeomAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DotGeomAction.Tpo $(DEPDIR)/pi-DotGeomAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DotGeomAction.cc' object='pi-DotGeomAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DotGeomAction.o `test -f 'DotGeomAction.cc' || echo '$(srcdir)/'`DotGeomAction.cc
+
+pi-DotGeomAction.obj: DotGeomAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DotGeomAction.obj -MD -MP -MF $(DEPDIR)/pi-DotGeomAction.Tpo -c -o pi-DotGeomAction.obj `if test -f 'DotGeomAction.cc'; then $(CYGPATH_W) 'DotGeomAction.cc'; else $(CYGPATH_W) '$(srcdir)/DotGeomAction.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DotGeomAction.Tpo $(DEPDIR)/pi-DotGeomAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DotGeomAction.cc' object='pi-DotGeomAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DotGeomAction.obj `if test -f 'DotGeomAction.cc'; then $(CYGPATH_W) 'DotGeomAction.cc'; else $(CYGPATH_W) '$(srcdir)/DotGeomAction.cc'; fi`
 
 pi-DoubleDisplaceMoveSampler.o: DoubleDisplaceMoveSampler.cc
 @am__fastdepCXX_TRUE@	if $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DoubleDisplaceMoveSampler.o -MD -MP -MF "$(DEPDIR)/pi-DoubleDisplaceMoveSampler.Tpo" -c -o pi-DoubleDisplaceMoveSampler.o `test -f 'DoubleDisplaceMoveSampler.cc' || echo '$(srcdir)/'`DoubleDisplaceMoveSampler.cc; \

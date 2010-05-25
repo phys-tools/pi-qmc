@@ -77,7 +77,12 @@ void SpringTensorAction::getBeadAction(const Paths& paths, const int ipart,
     Vec &fm, Vec &fp) const {
   u=utau=ulambda=0; fm=0.; fp=0.; 
   Vec delta = paths.delta(ipart,islice,-1);
-  utau  = 0.5/tau - delta[0]*delta[0]/(4.0*lambda(ipart)[0]*tau*tau);
-  utau += 0.5/tau - delta[1]*delta[1]/(4.0*lambda(ipart)[1]*tau*tau);
-  utau += 0.5/tau - delta[2]*delta[2]/(4.0*lambda(ipart)[2]*tau*tau);
+  for (int i=0; i<NDIM; ++i) {
+    utau += 0.5/tau - delta[i]*delta[i]/(4.0*lambda(ipart)[i]*tau*tau);
+    fm[i] = -delta[i]/(2*lambda(ipart)[i]*tau);
+  }
+  delta = paths.delta(ipart,islice,1);
+  for (int i=0; i<NDIM; ++i) {
+    fp[i] = -delta[i]/(2*lambda(ipart)[i]*tau);
+  }
 }

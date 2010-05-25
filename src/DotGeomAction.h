@@ -1,5 +1,5 @@
-// $Id: EMARateAction.h 185 2009-10-13 06:00:07Z john.shumwayjr $
-/*  Copyright (C) 2010 John B. Shumway, Jr.
+// $Id: DotGeomAction.h 181 2009-09-28 22:48:51Z john.shumwayjr $
+/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,41 +14,40 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __EMARateAction_h_
-#define __EMARateAction_h_
-class MultiLevelSampler;
-class DisplaceMoveSampler;
-class Paths;
-class SimulationInfo;
-class PeriodicGaussian;
-#include "Action.h"
+#ifndef __DotGeomAction_h_
+#define __DotGeomAction_h_
+class MultiLevelSampler;class DisplaceMoveSampler;
+template <int TDIM> class Beads;
 #include <blitz/array.h>
-#include <vector>
+#include "Action.h"
 
-/**
- * @version $Revision: 185 $
- * @author John Shumway */
-class EMARateAction : public Action {
+/** Class for calculating the action for a nanostructure (quantum dot)
+  * with a specified geometry.
+  * @version $Revision: 181 $
+  * @author John Shumway. */
+class DotGeomAction : public Action {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,1> Array;
-  typedef blitz::Array<bool,1> BArray;
-  /// Construct by providing simulation info.
-  EMARateAction(const SimulationInfo&);
+  typedef blitz::TinyVector<double,NDIM> Vec;
+  typedef blitz::Array<Vec,1> VArray;
+  /// Structure class for describing nanostructure geometry.
+  class Structure {
+    virtual double getPotentialDiff(const VArray&, const VArray&, int n)=0;
+  };
+  /// Constructor. 
+  DotGeomAction(const double tau);
   /// Virtual destructor.
-  virtual ~EMARateAction();
+  virtual ~DotGeomAction() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
-  /// Calculate the difference in action.
-  virtual double getActionDifference(const Paths&, const VArray &displacement,
-    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
+ virtual double getActionDifference(const DisplaceMoveSampler&,
+				    const int nMoving){ return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
-  /// Calculate action and derivatives at a bead (defaults to no
-  /// contribution).
-  virtual void getBeadAction(const Paths&, const int ipart, const int islice,
+  /// Calculate the action and derivatives at a bead.
+  virtual void getBeadAction(const Paths&, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
 private:
   /// The timestep.

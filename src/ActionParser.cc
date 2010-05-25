@@ -60,6 +60,7 @@ extern int irank;
 #include "SmoothedGridPotential.h"
 #include "SHOAction.h"
 #include "SHODotAction.h"
+#include "DotGeomAction.h"
 #include "SHONodes.h"
 #include "WireNodes.h"
 #include "SHOPhase.h"
@@ -77,6 +78,7 @@ extern int irank;
 #include "PairIntegrator.h"
 //#include "GrapheneAction.h"
 #include "WellImageAction.h"
+#include "EMARateAction.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -327,6 +329,9 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       double v0=getEnergyAttribute(actNode,"v0");
       double k=getDoubleAttribute(actNode,"k");
       composite->addAction(new SHODotAction(simInfo.getTau(),t,v0,k));
+      continue;
+    } else if (name=="DotGeomAction") {
+      composite->addAction(new DotGeomAction(simInfo.getTau()));
       continue;
     } else if (name == "RingGateAction") {
       if (NDIM != 2) {
@@ -596,6 +601,8 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       composite->addAction(new WellImageAction(simInfo,epsIn,epsOut,width,
                                  z0,delta)); 
       continue;
+    } else if (name=="EMARateAction") {
+      composite->addAction(new EMARateAction(simInfo)); 
     }
   }
   xmlXPathFreeObject(obj);
