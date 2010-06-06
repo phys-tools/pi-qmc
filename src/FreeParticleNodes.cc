@@ -269,7 +269,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
   }
   if (section==2) mat.transposeSelf(1,0);
 
-  if (useIterations>0){ 
+  if (useIterations==1000000){ 
     
   double *container = new double [useIterations+1]; // debug 
   double radius2Convergence = tau*0.5/mass;

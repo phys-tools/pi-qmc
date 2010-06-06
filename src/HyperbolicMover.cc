@@ -127,7 +127,7 @@ double HyperbolicMover::makeMove(MultiLevelSampler& sampler, const int level) {
       cell.pbc(midpoint)*=0.5;
       Vec center=midpoint;
       midpoint+=sectionBeads(i,islice-nStride);
-      cell.pbc(midpoint)
+      cell.pbc(midpoint);
       delta=sectionBeads(i,islice); 
       delta-=midpoint;
       cell.pbc(delta);

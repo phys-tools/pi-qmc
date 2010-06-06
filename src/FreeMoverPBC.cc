@@ -149,7 +149,7 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
 
 
 // Delayed Rejection 
-double FreeMover::makeDelayedMove(MultiLevelSampler& sampler, const int level) {
+double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level) {
   const Beads<NDIM>& rejectedBeads=sampler.getRejectedBeads();
   Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();

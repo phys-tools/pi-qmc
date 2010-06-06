@@ -66,9 +66,9 @@ double FreeTensorMover::makeMove(MultiLevelSampler& sampler, const int level) {
       midpoint+=movingBeads(iMoving,islice-nStride);
       cell.pbc(midpoint);
       Vec delta = gaussRand(iMoving);
-      delta[0]*=sigmax; cell.pbc(delta[0]); 
-      delta[1]*=sigmay; cell.pbc(delta[1]);
-      delta[2]*=sigmaz; cell.pbc(delta[2]);
+      delta[0]*=sigmax;// cell.pbc(delta[0]); 
+      delta[1]*=sigmay;// cell.pbc(delta[1]);
+      delta[2]*=sigmaz; cell.pbc(delta);
       (movingBeads(iMoving,islice)=midpoint)+=delta;
       cell.pbc(movingBeads(iMoving,islice));
       // Add transition probability for move.

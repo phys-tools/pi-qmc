@@ -67,9 +67,9 @@ double DampedFreeTensorMover::makeMove(MultiLevelSampler& sampler,
       midpoint+=movingBeads(iMoving,islice-nStride);
       cell.pbc(midpoint);
       Vec delta = gaussRand(iMoving);
-      delta[0]*=sigmax; cell.pbc(delta[0]); 
-      delta[1]*=sigmay; cell.pbc(delta[1]);
-      delta[2]*=sigmaz; cell.pbc(delta[2]);
+      delta[0]*=sigmax;// cell.pbc(delta[0]); 
+      delta[1]*=sigmay;// cell.pbc(delta[1]);
+      delta[2]*=sigmaz; cell.pbc(delta);
       (movingBeads(iMoving,islice)=midpoint)+=delta;
       cell.pbc(movingBeads(iMoving,islice));
       // Add transition probability for move.
@@ -83,7 +83,7 @@ double DampedFreeTensorMover::makeMove(MultiLevelSampler& sampler,
       cell.pbc(midpoint);
       delta=sectionBeads(i,islice); 
       delta-=midpoint;
-      cell.pbc(delta)l;
+      cell.pbc(delta);
       toldOverTnew-=delta[0]*delta[0]*inv2Sigma2x
                    +delta[1]*delta[1]*inv2Sigma2y
                    +delta[2]*delta[2]*inv2Sigma2z;
