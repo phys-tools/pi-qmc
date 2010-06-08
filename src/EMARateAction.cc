@@ -28,8 +28,9 @@
 #include "SimulationInfo.h"
 #include "PeriodicGaussian.h"
 
-EMARateAction::EMARateAction(const SimulationInfo& simInfo) 
-  : tau(simInfo.getTau())  {
+EMARateAction::EMARateAction(const SimulationInfo& simInfo,
+  const Species& species1, const Species& species2) 
+  : tau(simInfo.getTau()), species1(species1), species2(species2)  {
 }
 
 EMARateAction::~EMARateAction() {

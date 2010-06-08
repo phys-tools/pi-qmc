@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2008 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -602,7 +602,11 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
                                  z0,delta)); 
       continue;
     } else if (name=="EMARateAction") {
-      composite->addAction(new EMARateAction(simInfo)); 
+      std::string specName=getStringAttribute(actNode,"species1");
+      const Species& species1(simInfo.getSpecies(specName));
+      specName=getStringAttribute(actNode,"species2");
+      const Species& species2(simInfo.getSpecies(specName));
+      composite->addAction(new EMARateAction(simInfo,species1,species2)); 
     }
   }
   xmlXPathFreeObject(obj);

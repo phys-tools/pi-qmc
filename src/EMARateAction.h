@@ -20,7 +20,7 @@ class MultiLevelSampler;
 class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
-class PeriodicGaussian;
+class Species;
 #include "Action.h"
 #include <blitz/array.h>
 #include <vector>
@@ -35,7 +35,7 @@ public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<bool,1> BArray;
   /// Construct by providing simulation info.
-  EMARateAction(const SimulationInfo&);
+  EMARateAction(const SimulationInfo&, const Species&, const Species&);
   /// Virtual destructor.
   virtual ~EMARateAction();
   /// Calculate the difference in action.
@@ -53,5 +53,9 @@ public:
 private:
   /// The timestep.
   const double tau;
+  /// The electron species.
+  const Species& species1;
+  /// The hole species.
+  const Species& species2;
 };
 #endif
