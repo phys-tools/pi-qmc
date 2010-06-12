@@ -70,6 +70,23 @@ double XMLUnitParser::getInvLengthAttribute(const xmlNodePtr &node,
   return scale*value;
 }
 
+double XMLUnitParser::getFieldStrengthAttribute(
+    const xmlNodePtr &node, const std::string &attName) {
+  parseUnitAndValue(node,attName);
+  double scale=1;
+  if (unit!="") {
+    std::string::size_type loc = unit.find( "/", 0 );
+    if( loc != std::string::npos ) {
+      std::string eunit = unit.substr(0,loc);
+      std::string lunit = unit.substr(loc+1);
+      scale = units->getEnergyScaleIn(eunit);
+      scale /= units->getLengthScaleIn(lunit);
+    }
+  }
+  return scale*value;
+}
+
+
 void XMLUnitParser::parseUnitAndValue(const xmlNodePtr &node,
                                         const std::string &attName) {
   char* temp = (char*)xmlGetProp(node,BAD_CAST attName.c_str());

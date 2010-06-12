@@ -48,6 +48,9 @@ protected:
   /// Parse a mass with unit conversion.
   double getMassAttribute(const xmlNodePtr &node,
                           const std::string &attName);
+  /// Parse a field strength with unit conversion.
+  double getFieldStrengthAttribute(const xmlNodePtr &node,
+                                   const std::string &attName);
   /// Internal method to parse a unit and value.
   void parseUnitAndValue(const xmlNodePtr &node, const std::string &attName);
   /// The most recently parsed value.

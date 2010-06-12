@@ -25,18 +25,32 @@
 #include "SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include <iostream>
+#include <fstream>
 
 EFieldAction::EFieldAction(const SimulationInfo& simInfo,
-                           const double scale, const int index)
-  : tau(simInfo.getTau()), q(simInfo.getNPart()), scale(scale), 
-component(index),
-    cell(*simInfo.getSuperCell()), a(0.25*cell.a[component]) {
-  std::cout << (component==0 ? "EFieldAction x" : component==1 ? "EFieldAction y" : "EFieldAction z") << std::endl;
-  std::cout << "scale = " << scale << ", ";
-  std::cout << (component==0 ? "X" : component==1 ? "Y" : "Z");
-  std::cout << " = " << cell.a[component] << std::endl;
-  for(int i=0; i<q.size(); i++)
+    double strength, double center, double width, int idir)
+  : tau(simInfo.getTau()), q(simInfo.getNPart()), strength(strength), 
+    center(0.), halfwidth(0.5*width), idir(idir),
+    cell(*simInfo.getSuperCell()),
+    slopeIn(-strength), slopeOut(strength*width/(cell.a[idir]-width)),
+    intercept(0.5*cell.a[idir]*slopeOut) {
+  std::cout << (idir==0 ? "EFieldAction x" 
+              : idir==1 ? "EFieldAction y"
+                        : "EFieldAction z") << std::endl;
+  std::cout << "strength = " << strength << ", ";
+  std::cout << "center = " << center << ", ";
+  std::cout << "width = " << width << ", ";
+  std::cout << (idir==0 ? "X" : idir==1 ? "Y" : "Z") << std::endl;
+  std::cout << slopeIn << ", " << slopeOut << ", " << intercept << std::endl;
+  //std::cout << " = " << cell.a[idir] << std::endl;
+  for(int i=0; i<q.size(); i++) {
     q(i)=simInfo.getPartSpecies(i).charge;
+  }
+  std::ofstream file("efield.out");
+  for (int i=0; i<=1000; ++i) {
+    double x=0.001*(i-500)*cell.a[idir];
+    file << x << " " << v(x) << std::endl;
+  }
 }
 
 double EFieldAction::getActionDifference(const MultiLevelSampler& sampler,
@@ -52,12 +66,12 @@ double EFieldAction::getActionDifference(const MultiLevelSampler& sampler,
     for(int iMoving=0; iMoving<nMoving; iMoving++) {
       const int i=index(iMoving);
       // moving beads.
-      Vec r2=movingBeads(iMoving, islice);
+      Vec r2=movingBeads(iMoving, islice)-center;
       cell.pbc(r2);
       // old beads.
-      Vec r1=sectionBeads(i, islice);
+      Vec r1=sectionBeads(i, islice)-center;
       cell.pbc(r1);
-      deltaAction+=tau*nStride*q(i)*(v(r2(component))-v(r1(component)));
+      deltaAction+=tau*nStride*q(i)*(v(r2(idir))-v(r1(idir)));
     }
   }
   return deltaAction;
@@ -71,30 +85,17 @@ void EFieldAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp)
     const {
     u=utau=ulambda=0; fm=0; fp=0;
-    Vec delta=paths(ipart,islice);
+    Vec delta=paths(ipart,islice)-center;
     cell.pbc(delta);
-    utau=q(ipart)*v(delta(component));
+    utau=q(ipart)*v(delta(idir));
     u=utau*tau;
 }
 
 double EFieldAction::v(const double z) const {
-  double v=0.;
-  const double L2=cell.a[component]/2.;
-  if (z<-a) {
-    v=-a*(L2+z)/(L2-a);
-  } else if (z<a) {
-    v=z;
-  } else {
-    v=a*(z-L2)/(a-L2);
-  }
-  return -scale*v;
-/*  const double Z=cell.a[component]/2.;
-  if(z>=-Z && z<-1.*Z/11.)
-    v=1.1*(z/Z+1.);
-  else if (z>=-1.*Z/11. && z<1.*Z/11.)
-    v=-11.*z/Z;
-  else if (z>=1.*Z/11. && z<Z)
-    v=1.1*(z/Z-1.);
-  return scale*v; */
+  // Calculate all three cases to avoid an if statement.
+  double vmid = slopeIn*z;
+  double vhi =  slopeOut*z-intercept;
+  double vlo =  slopeOut*z+intercept;
+  const double lookup_table[] = {vmid,vhi,vlo};
+  return lookup_table[(z>halfwidth) + (z<-halfwidth)*2];
 }
-

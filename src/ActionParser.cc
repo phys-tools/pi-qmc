@@ -581,12 +581,18 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       const Species& refSpecies(simInfo.getSpecies(specName));
       composite->addAction(new GroundStateWFNodes(species,refSpecies));
     } else if (name=="EFieldAction") {
-      double scale=getDoubleAttribute(actNode,"scale");
-      std::string component=getStringAttribute(actNode,"component");
-      int index=2; //default use z component
-      if (component=="x") index=0;
-      else if (component=="y") index=1;
-      composite->addAction(new EFieldAction(simInfo, scale, index));
+      double strength = getFieldStrengthAttribute(actNode,"strength");
+      if (strength==0.) strength=getDoubleAttribute(actNode,"scale");
+      std::string dir=getStringAttribute(actNode,"dir");
+      if (dir=="") dir=getStringAttribute(actNode,"component");
+      int idir=NDIM-1; //default use z component
+      if (dir=="x") idir=0;
+      else if (dir=="y") idir=1;
+      double width = getLengthAttribute(actNode,"width");
+      if (width==0.) width = 0.25*simInfo.getSuperCell()->a[idir];
+      double center = getLengthAttribute(actNode,"center");
+      composite->addAction(
+        new EFieldAction(simInfo, strength, center ,width, idir));
       continue;
     } else if (name=="EwaldAction" && NDIM==3) {
       ctxt->node=actNode;

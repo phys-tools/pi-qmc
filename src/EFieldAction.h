@@ -1,5 +1,5 @@
 // $Id:
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2006,2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,17 +24,21 @@ class SuperCell;
 #include <blitz/array.h>
 
 /** Class for getting action from stepwise electric field.
+  * 
   * @bug Hard coded for NDIM=3.
   * @version $Revision:
-  * @author Matthew Harowitz. */
+  * @author John Shumway and Matthew Harowitz. */
 class EFieldAction : public Action {
 public:
   /// Typedefs.
   typedef blitz::Array<double, 1> Array;
   typedef blitz::Array<int, 1> IArray;
   typedef blitz::TinyVector<double, NDIM> Vec;
-  /// Constructor by providing SimulationInfo and a scale factor.
-  EFieldAction(const SimulationInfo& simInfo, const double scale=0., const int index=2);
+  /// Constructor by providing SimulationInfo, field strength in
+  /// atomic units (Ha/a0*e), physical region center and width,
+  /// and direction index..
+  EFieldAction(const SimulationInfo& simInfo, double strength,
+     double center, double width, int idir);
   /// Virtual destructor.
   virtual ~EFieldAction() {}
   /// Calculate the difference in action.
@@ -52,15 +56,19 @@ private:
   const double tau;
   /// The charges of the particles.
   Array q;
-  /// The scale factor
-  const double scale;
+  /// The strength of the electric field.
+  const double strength;
+  /// The center of the physical region.
+  Vec center;
+  /// The half width of the physical region.
+  const double halfwidth;
   /// The component of the electric field (0->x, 1->y, 2->z)
-  const int component;
+  const int idir;
   /// The supercell
   SuperCell& cell;
   /// The electric potential
-  double v(const double z) const;
-  /// The size of the physical region.
-  double a;
+  inline double v(const double z) const;
+  /// Parameters for v method.
+  const double slopeIn, slopeOut, intercept;
 };
 #endif

@@ -29,9 +29,15 @@ Units::Units(const std::string& eunit, const std::string& lunit)
   lengthOut["A"] =0.5291772086;
   lengthOut["pm"]=52.91772086;
   lengthOut["um"]=0.05291772086e-3;
+  lengthOut["mm"]=0.05291772086e-6;
+  lengthOut["cm"]=0.05291772086e-7;
+  lengthOut["m"]=0.05291772086e-9;
   lengthOut["a0"]=1.0;
   /// Set conversion from Hartree to common energy units.
+  energyOut["kV"]=0.0272113845;
+  energyOut["keV"]=0.0272113845;
   energyOut["eV"]=27.2113845;
+  energyOut["V"]=27.2113845;
   energyOut["meV"]=27211.3845;
   energyOut["ueV"]=27211384.5;
   energyOut["K"]=3.1577465e5;
