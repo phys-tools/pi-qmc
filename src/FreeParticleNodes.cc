@@ -264,7 +264,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
       for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
       logGrad+=mat(jpart,ipart)*grad*scale;
     }
-    gradArray(jpart)=logGrad-fgrad;cell.pbc(gradArray(jpart));
+    gradArray(jpart)=logGrad-fgrad;//cell.pbc(gradArray(jpart));
     d(jpart+ifirst)=sqrt(2*mass/((dot(gradArray(jpart),gradArray(jpart))+1e-15)*tau));
   }
   if (section==2) mat.transposeSelf(1,0);

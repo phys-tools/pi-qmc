@@ -431,7 +431,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       }
       doubleComposite->addAction(
                new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
-                                   useDistDerivative));
+                                   useDistDerivative,maxlevel));
       continue;
     }  else if (name=="FixedPhaseAction") {
       ctxt->node=actNode;
