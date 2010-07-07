@@ -159,7 +159,6 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
   }
   hid_t dataSpaceID = H5Screate_simple(est.getNDim(), dims, NULL);
   bool useCompression = (size > 10000);
-std::cout << " size= " << size << ", imaxDim= " << imaxDim << ", maxDim=" << maxDim << std::endl;
   hid_t plist = H5P_DEFAULT;
   if (useCompression) {
     plist = H5Pcreate(H5P_DATASET_CREATE);
@@ -176,6 +175,20 @@ std::cout << " size= " << size << ", imaxDim= " << imaxDim << ", maxDim=" << max
   hid_t dataSetID = H5Dcreate(writingGroupID, est.getName().c_str(),
                               H5T_NATIVE_FLOAT, dataSpaceID, plist);
 #endif
+  dataset.push_back(dataSetID);
+  if (est.hasError()) {
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t dataSetID = H5Dcreate2(writingGroupID, (est.getName()+"_err").c_str(),
+                                H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT,
+                                plist, H5P_DEFAULT);
+#else
+    hid_t dataSetID = H5Dcreate(writingGroupID, (est.getName()+"_err").c_str(),
+                                H5T_NATIVE_FLOAT, dataSpaceID, plist);
+#endif
+     dataset.push_back(dataSetID);
+  }
+  H5Sclose(dataSpaceID);
+  if (useCompression) H5Pclose(plist);
   if (est.hasScale()) {
     hsize_t dim=est.getNDim();
     hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);
@@ -206,23 +219,6 @@ std::cout << " size= " << size << ", imaxDim= " << imaxDim << ", maxDim=" << max
     H5Aclose(attrID);
   }
 
-  H5Sclose(dataSpaceID);
-  dataset.push_back(dataSetID);
-
-  if (est.hasError()) {
-    hid_t dataSpaceID = H5Screate_simple(est.getNDim(), dims, NULL);
-#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
-    hid_t dataSetID = H5Dcreate2(writingGroupID, (est.getName()+"_err").c_str(),
-                                H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT,
-                                plist, H5P_DEFAULT);
-#else
-    hid_t dataSetID = H5Dcreate(writingGroupID, (est.getName()+"_err").c_str(),
-                                H5T_NATIVE_FLOAT, dataSpaceID, plist);
-#endif
-    H5Sclose(dataSpaceID);
-    if (useCompression) H5Pclose(plist);
-    dataset.push_back(dataSetID);
-  }
 }
 
 void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
