@@ -128,5 +128,6 @@ private:
   IArray2 kindex;
   IArray kwork;
   int nerror;
+  double scale;
 };
 #endif
