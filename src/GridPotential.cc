@@ -128,6 +128,7 @@ double GridPotential::getActionDifference(const MultiLevelSampler& sampler,
 
 double GridPotential::v(Vec r, const int i) const {
   r*=b;
+  double V=0;
 #if NDIM==3
   int i1=(int)floor(r[0]), i2=(int)floor(r[1]), i3=(int)floor(r[2]);
   double x=r[0]-i1, y=r[1]-i2, z=r[2]-i3;
@@ -137,7 +138,7 @@ double GridPotential::v(Vec r, const int i) const {
   if (i2>nvec[1]-2) {i2=nvec[1]-2; y=1;};
   if (i3>nvec[2]-2) {i3=nvec[2]-2; z=1;};
   const ArrayN& v(*vindex[i]);
-  double V =(1-z)*( (1-y)*( (1-x)*v(i1,i2,  i3  ) + x*v(i1+1,i2,  i3  ) ) 
+  V =(1-z)*( (1-y)*( (1-x)*v(i1,i2,  i3  ) + x*v(i1+1,i2,  i3  ) ) 
                      + y *( (1-x)*v(i1,i2+1,i3  ) + x*v(i1+1,i2+1,i3  ) ))
              + z *( (1-y)*( (1-x)*v(i1,i2,  i3+1) + x*v(i1+1,i2,  i3+1) ) 
                      + y *( (1-x)*v(i1,i2+1,i3+1) + x*v(i1+1,i2+1,i3+1)));
@@ -150,7 +151,7 @@ double GridPotential::v(Vec r, const int i) const {
   if (i1>nvec[0]-2) {i1=nvec[0]-2; x=1;};
   if (i2>nvec[1]-2) {i2=nvec[1]-2; y=1;};
   const ArrayN& v(*vindex[i]);
-  double V = (1-y)*( (1-x)*v(i1,i2  ) + x*v(i1+1,i2  ) ) 
+  V = (1-y)*( (1-x)*v(i1,i2  ) + x*v(i1+1,i2  ) ) 
               + y *( (1-x)*v(i1,i2+1) + x*v(i1+1,i2+1) );
 #endif
   return V;

@@ -187,7 +187,7 @@ void ExcitonNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       logGrad += mat(ipart,jpart)*scale*grad;
     }
     gradArray1(ipart)=logGrad-fgrad;
-    d2(ipart+jfirst)
+    d1(ipart+jfirst)
       =sqrt(2*mass/((dot(gradArray1(ipart),gradArray1(ipart))+1e-15)*tau));
   }
 }
