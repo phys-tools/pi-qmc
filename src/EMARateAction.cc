@@ -29,8 +29,19 @@
 #include "PeriodicGaussian.h"
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
-  const Species& species1, const Species& species2) 
-  : tau(simInfo.getTau()), species1(species1), species2(species2)  {
+  const Species& species1, const Species& species2, double C) 
+  : tau(simInfo.getTau()), species1(species1), species2(species2),
+    index1(species1.ifirst), index2(species2.ifirst), C(C)  {
+  if (species1.anMass) {
+    invMass1 = 1./(*species1.anMass);
+  } else {
+    invMass1 = 1./species1.mass;
+  }
+  if (species2.anMass) {
+    invMass2 = 1./(*species2.anMass);
+  } else {
+    invMass2 = 1./species2.mass;
+  }
 }
 
 EMARateAction::~EMARateAction() {
@@ -49,13 +60,11 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
   return deltaAction;
 }
 
-
 double EMARateAction::getActionDifference(const Paths &paths, 
    const VArray &displacement, int nmoving, const IArray &movingIndex, 
    int iFirstSlice, int nslice) {
  return 0; //No change in action for uniform displacements of particles.
 }
-
 
 double EMARateAction::getTotalAction(const Paths& paths, int level) const {
   return 0;

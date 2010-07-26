@@ -612,7 +612,8 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       const Species& species1(simInfo.getSpecies(specName));
       specName=getStringAttribute(actNode,"species2");
       const Species& species2(simInfo.getSpecies(specName));
-      composite->addAction(new EMARateAction(simInfo,species1,species2)); 
+      const double C=getDoubleAttribute(actNode,"C");
+      composite->addAction(new EMARateAction(simInfo,species1,species2,C)); 
     }
   }
   xmlXPathFreeObject(obj);

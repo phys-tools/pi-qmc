@@ -32,7 +32,7 @@ SHOAction::SHOAction(const double tau, const double omega, const double mass,
 }
 
 double SHOAction::getActionDifference(const MultiLevelSampler& sampler,
-                                         const int level) {
+                                      const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const int nStride=(int)pow(2,level);
@@ -116,4 +116,42 @@ void SHOAction::getBeadAction(const Paths& paths, int ipart, int islice,
   delta=paths.delta(ipart,islice,1);
   fp-= (m*omega*(r1*coshwt-r2)*cschwt-m*delta*tin);
   for (int idim=0; idim<(NDIM-ndim); ++idim) {fm[idim]=0; fp[idim]=0;}
+}
+
+double SHOAction::getActionDifference(const Paths &paths, 
+       const VArray &displacement, int nmoving, const IArray &movingIndex,
+       int iFirstSlice, int nslice) {
+  double deltaAction=0;
+  double wt=omega*tau;
+  double sinhwt=sinh(wt);
+  double coshwt=cosh(wt);
+  double m=mass;
+  double div1=1.0/(2.0*sinhwt);
+  for (int i=0; i<nmoving; ++i) {
+    int ipart = movingIndex(i);
+    if (ipart<ifirst || ipart>=ifirst+npart) break;
+    for (int islice=iFirstSlice; islice<nslice; ++islice) {
+      Vec r1=paths(ipart,islice);
+      Vec r0=paths(ipart,islice,-1);
+      Vec r2=paths(ipart,islice,1);
+      double r0r0=0, r0r1=0, r1r1=0;
+      for (int idim=(NDIM-ndim); idim<NDIM; ++idim) {
+        r0r0+=r0[idim]*r0[idim];
+        r0r1+=r0[idim]*r1[idim];
+        r1r1+=r1[idim]*r1[idim];
+      }
+      deltaAction -= m*omega*((r1r1+r0r0)*coshwt-2.0*r0r1)*div1;
+      r1 += displacement(i);
+      r0 += displacement(i);
+      r2 += displacement(i);
+      r0r0=0; r0r1=0; r1r1=0;
+      for (int idim=(NDIM-ndim); idim<NDIM; ++idim) {
+        r0r0+=r0[idim]*r0[idim];
+        r0r1+=r0[idim]*r1[idim];
+        r1r1+=r1[idim]*r1[idim];
+      }
+      deltaAction += m*omega*((r1r1+r0r0)*coshwt-2.0*r0r1)*div1;
+    }
+  }
+  return deltaAction;
 }

@@ -162,8 +162,9 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     }
   } else if (name=="SampleDisplaceMove") {
     UniformMover* mover(0);
-    double dist = getDoubleAttribute(ctxt->node,"dist");
+    double dist = getLengthAttribute(ctxt->node,"dist");
     int nmoving=getIntAttribute(ctxt->node,"npart");
+    if (nmoving==0) nmoving=1;
     mover = new UniformMover(dist,mpi);
     bool delayedRejection=getBoolAttribute(ctxt->node,"delayedRejection"); 
     double newDistFactor=getDoubleAttribute(ctxt->node,"distFactor");

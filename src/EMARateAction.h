@@ -25,7 +25,16 @@ class Species;
 #include <blitz/array.h>
 #include <vector>
 
-/**
+/** Class to modify the action to allow for electron-hole recombination.
+ * To sample recombination rates, we work with a larger ensemble that
+ * contains recombining paths. This larger ensemble can be described by
+ * an additional action term,
+ * @f[ S_C = -\hbar\ln\left(1+Ce^{-\frac{S_E'-S_E}{\hbar}}\right), @f]
+ * where
+ * @f[ S_E'-S_E = \frac{m_h|r_{e,0}-r_{h,N_{T}-1}|^2}{2\Delta\tau}
+ *              + \frac{m_h|r_{e,1}-r_{h,0}|^2}{2\Delta\tau}
+ *              - \frac{m_h|r_{h,0}-r_{h,N_{T}-1}|^2}{2\Delta\tau}
+ *              - \frac{m_h|r_{e,1}-r_{e,0}|^2}{2\Delta\tau}. @f]
  * @version $Revision: 185 $
  * @author John Shumway */
 class EMARateAction : public Action {
@@ -35,7 +44,8 @@ public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<bool,1> BArray;
   /// Construct by providing simulation info.
-  EMARateAction(const SimulationInfo&, const Species&, const Species&);
+  EMARateAction(const SimulationInfo&, const Species&, const Species&,
+    double C);
   /// Virtual destructor.
   virtual ~EMARateAction();
   /// Calculate the difference in action.
@@ -57,5 +67,15 @@ private:
   const Species& species1;
   /// The hole species.
   const Species& species2;
+  /// The index of the recombining electron.
+  const int index1;
+  /// The index of the recombining hole.
+  const int index2;
+  /// The weight parameter "C" used to optimize sampling.
+  const double C;
+  /// The inverse mass of the electron.
+  Vec invMass1;
+  /// The inverse mass of the hole.
+  Vec invMass2;
 };
 #endif
