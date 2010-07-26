@@ -40,6 +40,6 @@ class ProjectView(QtGui.QWidget):
       self.listWidget.item(0).setSelected(True)
     else:
       hbox.addWidget(tabBar)
-      inputScreen.readXML()
-      outputScreen.readH5()
+      inputScreen.respondToSelection()
+      outputScreen.respondToSelection()
     self.setLayout(hbox)

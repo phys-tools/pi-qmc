@@ -22,8 +22,10 @@ class ProjectModel(QtCore.QObject):
     self.selectionChanged.emit()
 
   def getInputXMLText(self):
-    if len(self.selection) == 0: return ""
-    index = self.selection[0]
+    index = 0
+    if self.hasMultipleSimulations:
+      if len(self.selection) == 0: return ""
+      index = self.selection[0]
     if self.xmlstring[index] == None:
       file = open(self.nameList[index]+"pimc.xml","r")    
       self.xmlstring[index] = file.read()
@@ -31,8 +33,10 @@ class ProjectModel(QtCore.QObject):
     return self.xmlstring[index]
 
   def getSimulationData(self):
-    if len(self.selection) == 0: return None
-    index = self.selection[0]
+    index = 0
+    if self.hasMultipleSimulations:
+      if len(self.selection) == 0: return None
+      index = self.selection[0]
     if self.data[index] == None:
       self.data[index] = dataFromH5File(self,self.nameList[index]+"pimc.h5")
     return self.data[index]
