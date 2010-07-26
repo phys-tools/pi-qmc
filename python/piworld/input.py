@@ -2,10 +2,10 @@ import sys,os,glob
 from PyQt4 import QtGui,QtCore
 
 class InputWidget(QtGui.QWidget):
-  def __init__(self, parent):
+  def __init__(self, parent, project):
     QtGui.QWidget.__init__(self,parent)
-    self.project = parent
-    self.xmlstring = [None]*len(self.project.nameList)
+    self.project = project
+    self.projectView = parent
 
     self.text = QtGui.QTextEdit(self)
     self.text.setContentsMargins(0,0,0,0)
@@ -15,23 +15,14 @@ class InputWidget(QtGui.QWidget):
     hbox.setSpacing(2)
     hbox.addWidget(self.text)
     self.setLayout(hbox)
-
-  def readXML(self,index=0):
-    if self.xmlstring[index] == None:
-      file = open(self.project.nameList[index]+"pimc.xml","r")
-      self.xmlstring[index] = file.read()
-      file.close
-    self.text.setPlainText(self.xmlstring[index])
+    # Watch project model selection.
+    QtCore.QObject.connect(self.project, QtCore.SIGNAL("selectionChanged()"),
+        self, QtCore.SLOT("respondToSelection()"))
+    self.text.setPlainText(self.project.getInputXMLText())
 
   @QtCore.pyqtSlot()
   def respondToSelection(self):
-    selection = map(QtCore.QModelIndex.row,
-                    self.project.listWidget.selectedIndexes())
-    selection.sort()
-    if len(selection) > 0:
-      self.readXML(selection[0])
-    else:
-      self.text.setPlainText("")
+    self.text.setPlainText(self.project.getInputXMLText())
 
 class MyHighlighter(QtGui.QSyntaxHighlighter):
   def __init__(self, parent):
@@ -42,7 +33,6 @@ class MyHighlighter(QtGui.QSyntaxHighlighter):
     self.commentFmt.setFontItalic(True)
     #self.commentFmt.setFontWeight(QtGui.QFont.Bold)
     self.IN_COMMENT = 1024
-    
 
   def highlightBlock(self,text):
     state = self.previousBlockState()

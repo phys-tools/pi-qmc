@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 from input import InputWidget
-from project import ProjectWidget
+from ProjectModel import ProjectModel
+from ProjectView import ProjectView
 from output import OutputWidget
 import sys,os
 from PyQt4 import QtGui,QtCore
@@ -17,8 +18,9 @@ class MainWindow(QtGui.QMainWindow):
     self.setWindowTitle('piWorld')
     self.setWindowIcon(QtGui.QIcon(icondir+'pi-logo.png'))
 
-    projectWidget = ProjectWidget(self)
-    self.setCentralWidget(projectWidget)
+    projectModel = ProjectModel()
+    projectView = ProjectView(projectModel,self)
+    self.setCentralWidget(projectView)
 
     # Set up action objects.
     exitAction = QtGui.QAction(
@@ -38,7 +40,7 @@ class MainWindow(QtGui.QMainWindow):
     helpAction = QtGui.QAction(QtGui.QIcon(icondir+'silk/help.png'),
                                    'Help', self)
     helpAction.setShortcut('Ctrl+H')
-    helpAction.setStatusTip('piDirector help')
+    helpAction.setStatusTip('piworld help')
 
     self.statusBar()
 

@@ -4,7 +4,7 @@ from scipy.fftpack import *
 from scipy.optimize import leastsq
 import tables, pitools
 from pitools import Unit
-from estimatorview import *
+from EstimatorView import *
 
 
 class DensityView(EstimatorView):
