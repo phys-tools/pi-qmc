@@ -1,5 +1,5 @@
 //$Id: AugmentedNodes.cc 52 2009-05-13 18:51:51Z john.shumwayjr $
-/*  Copyright (C) 2009 John B. Shumway, Jr.
+/*  Copyright (C) 2009,2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,15 +39,14 @@ extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n,
 
 AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   const Species &species, const Species &species2,
-  const double temperature, const double radius, const double weight,
-  const int maxlevel, const bool useUpdates, const int maxMovers)
+  const double temperature,
+  const int maxlevel, const bool useUpdates, const int maxMovers,
+  double density, const std::vector<AtomicOrbitalDM*> oribitals,
+  bool useHungarian)
   : NodeModel("_"+species.name),
     tau(simInfo.getTau()),mass(species.mass),mass2(species2.mass),
     npart(species.count), ifirst(species.ifirst), 
     npart2(species2.count), kfirst(species2.ifirst), 
-    fpnorm(pow(4*PI*mass*temperature, -0.5*NDIM)),
-    alpha(1.0/radius), 
-    anorm(weight*pow(alpha,NDIM)/PI*(NDIM==2?2:1)),
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()),
@@ -57,7 +56,9 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
-    kindex2(npart2),kmat(npart2,npart2,ColMajor()) {
+    kindex2(npart2),kmat(npart2,npart2,ColMajor()),
+    useHungarian(useHungarian), scale(1.0),
+    density(density), orbitals(orbitals) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -79,6 +80,13 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   if (useUpdates) {
     updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
   }
+
+  orbitals.push_back(new Atomic1sDM(3.,5,1.));
+  orbitals.push_back(new Atomic2sDM(1.,5,1.));
+  orbitals.push_back(new Atomic2pDM(1.,5,1.));
+  orbitals.push_back(new Atomic1sDM(1.,4,1.));
+
+
 }
 
 AugmentedNodes::~AugmentedNodes() {
@@ -93,81 +101,84 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
                          const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
   Matrix& mat(*matrix[islice]);
-  mat=0;
-  // To avoid double sum over k, find first find closest kindex.
-  kmat=0;
-  for (int ipart=0; ipart<npart2; ++ipart) {
-    for (int jpart=0; jpart<npart2; ++jpart) {
-      Vec delta(r1(jpart+kfirst)-r2(ipart+kfirst));
-      cell.pbc(delta);
-      kmat(jpart,ipart)=dot(delta,delta);
-    }
-  }
-  const int MODE=1;
-  double sum;
-  ASSNDX_F77(&MODE,kmat.data(),&npart2,&npart2,&npart2,kindex2.data(),
-             &sum,kwork.data(),&npart2);
-  kindex2 -= 1;
-  double rcut2=16./(alpha*alpha);
-  double shift=exp(-4.);
-  // Now compute determinant.
-  for(int jpart=0; jpart<npart; ++jpart) {
-    for(int ipart=0; ipart<npart; ++ipart) {
-      Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
-      cell.pbc(delta);
-      double ear2=1;
-      for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
-      mat(ipart,jpart)=fpnorm*ear2;
-      for (int kpart=0; kpart<npart2; ++kpart) {
-        Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
-        cell.pbc(delta1);
-        double d1 = dot(delta1,delta1);
-        if (d1>rcut2) continue;
-        Vec delta2(r2(ipart+ifirst)-r2(kindex2(kpart)+kfirst));
-        cell.pbc(delta2);
-        double d2 = dot(delta2,delta2);
-        if (d2>rcut2) continue;
-        mat(ipart,jpart) += anorm*((exp(-alpha*sqrt(d1))-shift)
-                                  *(exp(-alpha*sqrt(d2))-shift));
+  do { // Loop if scale is wrong to avoid overflow/underflow.
+    mat=0;
+    for(int jpart=0; jpart<npart; ++jpart) {
+      for(int ipart=0; ipart<npart; ++ipart) {
+        Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
+        cell.pbc(delta);
+        double ear2=scale*density;
+        for (int i=0; i<NDIM; ++i) ear2 *= (*pg[i])(fabs(delta[i]));
+        mat(ipart,jpart) = ear2;
+        // Add contribution from orbitals.
+        for (std::vector<const AtomicOrbitalDM*>::iterator orb 
+             = orbitals.begin(); orb != orbitals.end(); ++orb) {
+          int kpart = (*orb)->nuclearIndex;
+          Vec delta1(r1(jpart+ifirst)-r1(kpart));
+          cell.pbc(delta1);
+          double r1 = sqrt(dot(delta1,delta1));
+          Vec delta2(r2(ipart+ifirst)-r2(kpart));
+          cell.pbc(delta2);
+          double r2 = sqrt(dot(delta2,delta2));
+          double costheta = dot(delta1,delta2)/(r1*r2+1e-200);
+          AtomicOrbitalDM::ValueAndGradient result = (**orb)(r1,r2,costheta);
+          mat(ipart,jpart) += scale * result.value;
+        }
+        uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
       }
-      uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
     }
-  }
-  // Find dominant contribution to determinant (distroys uarray).
-  double usum=0;
-  ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
-             &usum,kwork.data(),&npart);
-  for(int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
-  // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
-  // or lowest total action.
-  // Next calculate determinant and inverse of slater matrix.
-  int info=0;//LU decomposition
-  DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
-  if (info!=0) {
-    result.err = true;
-    std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
-    nerror++;
-    if (nerror>1000) {
-      std::cout << "too many errors!!!!" << std::endl;
-      std::exit(-1);
+    // Find dominant contribution to determinant (distroys uarray).
+    if (useHungarian) {
+      const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
+      double usum=0;
+      ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+               &usum,kwork.data(),&npart);
+      for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+      // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+      // or lowest total action.
     }
-  }
-  double det = 1;
-  for (int i=0; i<npart; ++i) {
-    det*= mat(i,i); 
-    det *= (i+1==ipiv(i))?1:-1;
-  }
-  DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
-  if (info!=0) {
-    result.err = true;
-    std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
-    nerror++;
-    if (nerror>1000) {
-      std::cout << "too many errors!!!!" << std::endl;
-      std::exit(-1);
+    // Next calculate determinant and inverse of slater matrix.
+    int info=0;//LU decomposition
+    DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
+    if (info!=0) {
+      result.err = true;
+      std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many errors!!!!" << std::endl;
+        std::exit(-1);
+      }
     }
+    double det = 1;
+    for (int i=0; i<npart; ++i) {
+      det*= mat(i,i); 
+      det *= (i+1==ipiv(i))?1:-1;
+    }
+    DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
+    if (info!=0) {
+      result.err = true;
+      std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many errors!!!!" << std::endl;
+        std::exit(-1);
+      }
+    }
+    // watch for overflow or underflow.
+    if (scaleMagnitude && (!result.err
+                           && (fabs(det)<1e-50 || fabs(det)>1e50) )) {
+      if (fabs(det)<1e-250) {
+        scale *= 2;
+      } else {
+        scale *= pow(fabs(det),-1./npart);
+      }
+      std::cout << "Slater determinant rescaled: scale = " 
+                << scale << std::endl;
+    }
+    result.det = det;
   }
-  result.det = det;
+  while (scaleMagnitude && (result.err ||
+         (fabs(result.det)<1e-50 || fabs(result.det)>1e50)));
   return result;
 }
 
@@ -199,21 +210,6 @@ void AugmentedNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
   Matrix& mat(*matrix[islice]);
-  // To avoid double sum over k, find first find closest kindex.
-  for (int ipart=0; ipart<npart2; ++ipart) {
-    for (int jpart=0; jpart<npart2; ++jpart) {
-      Vec delta(r1(jpart+kfirst)-r2(ipart+kfirst));
-      cell.pbc(delta);
-      kmat(jpart,ipart)=dot(delta,delta);
-    }
-  }
-  const int MODE=1;
-  double sum;
-  ASSNDX_F77(&MODE,kmat.data(),&npart2,&npart2,&npart2,kindex2.data(),
-             &sum,kwork.data(),&npart2);
-  kindex2 -= 1;
-  double rcut2=16./(alpha*alpha);
-  double shift=exp(-4.);
   // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -222,30 +218,32 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
       cell.pbc(delta);
       Vec grad;
-      double value=1;
+      double value=scale*density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-200);
         if (delta[i]<0) grad[i]=-grad[i];
       }
       for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
       grad *= value;
-      // Add contribution from orbital.
-      for (int kpart=0; kpart<npart2; ++kpart) {
-        Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
+      // Add contribution from orbitals.
+      for (std::vector<const AtomicOrbitalDM*>::iterator orb 
+           = orbitals.begin(); orb != orbitals.end(); ++orb) {
+        int kpart = (*orb)->nuclearIndex;
+        Vec delta1(r1(jpart+ifirst)-r1(kpart));
         cell.pbc(delta1);
-        double d1 = dot(delta1,delta1);
-        if (d1>rcut2) continue;
-        Vec delta2(r2(ipart+ifirst)-r2(kindex2(kpart)+kfirst));
+        double r1 = sqrt(dot(delta1,delta1));
+        Vec delta2(r2(ipart+ifirst)-r2(kpart));
         cell.pbc(delta2);
-        double d2 = dot(delta2,delta2);
-        if (d2>rcut2) continue;
-        grad += -alpha*delta1/sqrt(d1) 
-                      *anorm*(exp(-alpha*sqrt(d1))
-                            *(exp(-alpha*sqrt(d2))-shift));
-        value += anorm*((exp(-alpha*sqrt(d1))-shift)
-                       *(exp(-alpha*sqrt(d2))-shift));
+        double r2 = sqrt(dot(delta2,delta2));
+        double costheta = dot(delta1,delta2)/(r1*r2+1e-200);
+        AtomicOrbitalDM::ValueAndGradient result = (**orb)(r1,r2,costheta);
+        value += scale * result.value;
+        grad += scale * (
+          (result.gradr1-costheta*result.gradcostheta/(r1+1e-200))
+            *delta1/(r1+1e-200) 
+         + result.gradcostheta*delta2/(r1*r2+1e-200) );
       }
-      if (ipart==kindex(islice,jpart)) fgrad=grad/value;
+      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/value;
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray1(jpart)=logGrad-fgrad;
@@ -258,30 +256,32 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
       cell.pbc(delta);
       Vec grad;
-      double value=1;
+      double value=scale*density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-200);
         if (delta[i]<0) grad[i]=-grad[i];
       }
       for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
       grad *= value;
-      // Add contribution from orbital.
-      for (int kpart=0; kpart<npart2; ++kpart) {
-        Vec delta1(r1(jpart+ifirst)-r1(kpart+kfirst));
+      // Add contribution from orbitals.
+      for (std::vector<const AtomicOrbitalDM*>::iterator orb 
+           = orbitals.begin(); orb != orbitals.end(); ++orb) {
+        int kpart = (*orb)->nuclearIndex;
+        Vec delta1(r1(jpart+ifirst)-r1(kpart));
         cell.pbc(delta1);
-        double d1 = dot(delta1,delta1);
-        if (d1>rcut2) continue;
-        Vec delta2(r2(ipart+ifirst)-r2(kindex2(kpart)+kfirst));
+        double r1 = sqrt(dot(delta1,delta1));
+        Vec delta2(r2(ipart+ifirst)-r2(kpart));
         cell.pbc(delta2);
-        double d2 = dot(delta2,delta2);
-        if (d2>rcut2) continue;
-        grad += -alpha*delta2/sqrt(d2) 
-                      *anorm*((exp(-alpha*sqrt(d1))-shift)
-                              *exp(-alpha*sqrt(d2)));
-        value += anorm*((exp(-alpha*sqrt(d1))-shift)
-                       *(exp(-alpha*sqrt(d2))-shift));
+        double r2 = sqrt(dot(delta2,delta2));
+        double costheta = dot(delta1,delta2)/(r1*r2+1e-200);
+        AtomicOrbitalDM::ValueAndGradient result = (**orb)(r1,r2,costheta);
+        value += scale * result.value;
+        grad += scale * (
+          (result.gradr2-costheta*result.gradcostheta/(r2+1e-200))
+            *delta2/(r2+1e-200) 
+         + result.gradcostheta*delta1/(r1*r2+1e-200) );
       }
-      if (ipart==kindex(islice,jpart)) fgrad=grad/value;
+      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/value;
       logGrad+=mat(jpart,ipart)*grad;
     }
     gradArray2(ipart)=logGrad-fgrad;
@@ -623,3 +623,60 @@ void AugmentedNodes::MatrixUpdate::acceptLastMove(int nslice) {
 }
 
 const double AugmentedNodes::PI = acos(-1.0);
+
+AugmentedNodes::AtomicOrbitalDM::AtomicOrbitalDM(
+    int nuclearIndex, double weight)
+  : weight(weight), nuclearIndex(nuclearIndex) {
+}
+
+
+AugmentedNodes::Atomic1sDM::Atomic1sDM(
+    double Z, int nuclearIndex, double weight)
+  : AtomicOrbitalDM(nuclearIndex, weight), Z(Z) {
+}
+
+
+AugmentedNodes::Atomic2sDM::Atomic2sDM(
+    double Z, int nuclearIndex, double weight)
+  : AtomicOrbitalDM(nuclearIndex, weight), Z(Z) {
+}
+
+AugmentedNodes::Atomic2pDM::Atomic2pDM(
+    double Z, int nuclearIndex, double weight)
+  : AtomicOrbitalDM(nuclearIndex, weight), Z(Z) {
+}
+
+AugmentedNodes::AtomicOrbitalDM::ValueAndGradient
+AugmentedNodes::Atomic1sDM::operator()(double r1, double r2,
+    double costheta) const {
+  ValueAndGradient result;
+  result.value = weight*exp(-Z*(r1+r2))*Z*Z*Z/PI;
+  result.gradr1 = -Z*result.value;
+  result.gradr2 = -Z*result.value;
+  result.gradcostheta = 0;
+  return result;
+}
+
+AugmentedNodes::AtomicOrbitalDM::ValueAndGradient
+AugmentedNodes::Atomic2sDM::operator()(double r1, double r2,
+    double costheta) const {
+  ValueAndGradient result;
+  double temp  = weight*exp(-0.5*Z*(r1+r2))*Z*Z*Z/(32*PI);
+  result.value = temp*(2.-Z*r1)*(2.-Z*r2);
+  result.gradr1 = 0.5*Z*(Z*r1-4.)*(2.-Z*r2);
+  result.gradr2 = 0.5*Z*(Z*r2-4.)*(2.-Z*r1);
+  result.gradcostheta = 0;
+  return result;
+}
+
+AugmentedNodes::AtomicOrbitalDM::ValueAndGradient
+AugmentedNodes::Atomic2pDM::operator()(double r1, double r2,
+    double costheta) const {
+  ValueAndGradient result;
+  double temp = weight*exp(-0.5*Z*(r1+r2))*Z*Z*Z*Z*Z/(32*PI);
+  result.value = temp*r1*r2*costheta;
+  result.gradr1 = (1.-0.5*Z*r1)*r2*temp*costheta;
+  result.gradr2 = (1.-0.5*Z*r2)*r1*temp*costheta;
+  result.gradcostheta = temp*r1*r2;
+  return result;
+}

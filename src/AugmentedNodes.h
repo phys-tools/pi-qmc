@@ -1,5 +1,5 @@
 //$Id: AugmentedNodes.h 52 2009-05-13 18:51:51Z john.shumwayjr $
-/*  Copyright (C) 2009 John B. Shumway, Jr.
+/*  Copyright (C) 2009,2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,11 +33,13 @@ of single particles,
 @f[\rho_T(R,R')=\operatorname{det}|\rho(r_j,r_i)|.@f]
 The single particle density matrices are taken to be a mixture
 of free particle density matricies plus orbital density matrices,
-@f[\rho(r_j,r_i)=\frac{1}{(2\pi m k_B T)^{N_{\text{dim}}/2}}
-\exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right)
-+ w \sum_k \psi(r_j,r_k)\psi^*(r_i,r_k').@f]
-For periodic boundary conditions, we use must use a PeriodicGaussian.
-Note that the normalization factor is not needed for a NodeModel.
+@f[\rho(r_j,r_i)=n_0 \exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right)
++ w_i\sum_k \psi(r_j)\psi^*(r_i),@f]
+where @f$n_0@f$ is the density of the free particle
+density matrix and the @f$w_k@f$ are the weights of the atomic orbitals.
+For periodic boundary conditions, we use must use a PeriodicGaussian in 
+the free particle density matrix; we assume the atomic orbitals are
+smaller than the periodic box.
 
 We estimate the distance to the node as the inverse log gradient,
 @f$d_i\approx\rho_T/|\nabla_{R_i}\rho_T|@f$.
@@ -55,6 +57,8 @@ of the trial density matrix,
 \frac{\vec{\nabla}'_j\rho}{\rho}.
 @f]
 where the indicies refer to particles.
+
+If this works we will want to rewrite for efficiency!!!
 @author John Shumway */
 class AugmentedNodes : public NodeModel {
 public:
@@ -99,10 +103,44 @@ public:
     IArray index1,mindex1;
     int nMoving;
   };
+  /// Classes for atomic orbital density matricies.
+  class AtomicOrbitalDM {
+  public:
+    AtomicOrbitalDM(int nuclearIndex, double weight);
+    const double weight;
+    const int nuclearIndex;
+    struct ValueAndGradient {
+      double value, gradr1, gradr2, gradcostheta;
+    };
+    virtual ValueAndGradient 
+    operator()(double r1, double r2, double costheta) const=0;
+  };
+  class Atomic1sDM : public AtomicOrbitalDM {
+  public:
+    Atomic1sDM(double Z, int nuclearIndex, double weight);
+    virtual ValueAndGradient 
+    operator()(double r1, double r2, double costheta) const;
+    const double Z;
+  };
+  class Atomic2sDM : public AtomicOrbitalDM {
+  public:
+    Atomic2sDM(double Z, int nuclearIndex, double weight);
+    virtual ValueAndGradient 
+    operator()(double r1, double r2, double costheta) const;
+    const double Z;
+  };
+  class Atomic2pDM : public AtomicOrbitalDM {
+  public:
+    Atomic2pDM(double Z, int nuclearIndex, double weight);
+    virtual ValueAndGradient 
+    operator()(double r1, double r2, double costheta) const;
+    const double Z;
+  };
   /// Constructor.
   AugmentedNodes(const SimulationInfo&, const Species&, const Species&, 
-    const double temperature, const double radius, const double weight,
-    const int maxlevel, const bool useUpdates, const int maxMovers);
+    const double temperature,
+    const int maxlevel, const bool useUpdates, const int maxMovers,
+    double density, std::vector<AtomicOrbitalDM*>, bool useHungarian);
   /// Virtual destructor.
   virtual ~AugmentedNodes();
   /// Evaluate the density matrix function, returning the value.
@@ -135,9 +173,6 @@ private:
   const int ifirst;
   const int npart2;
   const int kfirst;
-  const double fpnorm;
-  const double alpha;
-  const double anorm;
   /// Number of slices.
   int nslice;
   /// The inverse slater matricies.
@@ -172,7 +207,14 @@ private:
   int nerror;
   IArray kindex2;
   Matrix kmat;
+  /// Flag to use Hungarian method to remove largest contribution to det.
+  const bool useHungarian;
+  /// Scale factor to avoid overflow or underflow.
+  double scale;
   /// Constant.
   static const double PI;
+  /// Density of free particle density matrix.
+  const double density;
+  std::vector<const AtomicOrbitalDM*> orbitals;
 };
 #endif

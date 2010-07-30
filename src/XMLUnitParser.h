@@ -45,6 +45,10 @@ protected:
   /// Parse an inverse length with unit conversion.
   double getInvLengthAttribute(const xmlNodePtr &node,
                             const std::string &attName);
+  /// Parse a density with unit conversion.
+  double getDensityAttribute(const xmlNodePtr &node,
+                             const std::string &attName);
+  /// Parse a mass with unit conversion.
   /// Parse a mass with unit conversion.
   double getMassAttribute(const xmlNodePtr &node,
                           const std::string &attName);

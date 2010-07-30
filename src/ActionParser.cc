@@ -415,13 +415,15 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       } else if (modelName=="AugmentedNodes") {
         double radius=getLengthAttribute(ctxt->node,"radius");
         if (radius==0) radius=1.0;
-        const double weight=getDoubleAttribute(ctxt->node,"weight");
+        const double density=getDensityAttribute(ctxt->node,"density");
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
+        const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
         int maxMovers=3;
         std::string spec2Name=getStringAttribute(ctxt->node,"refSpecies");
         const Species& species2(simInfo.getSpecies(spec2Name));
+        std::vector<AugmentedNodes::AtomicOrbitalDM*> orbitals;
         nodeModel=new AugmentedNodes(simInfo,species,species2,
-                        t,radius,weight,maxlevel,updates,maxMovers);
+            t,maxlevel,updates,maxMovers,density,orbitals,useHungarian);
       } else {
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         int maxMovers=0;

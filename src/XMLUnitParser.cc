@@ -70,6 +70,17 @@ double XMLUnitParser::getInvLengthAttribute(const xmlNodePtr &node,
   return scale*value;
 }
 
+double XMLUnitParser::getDensityAttribute(const xmlNodePtr &node,
+                                          const std::string &attName) {
+  parseUnitAndValue(node,attName);
+  double scale=1;
+  if (unit!="") {
+    // Assume units end in "-N".
+    scale=1.0/units->getLengthScaleIn(unit.substr(0,unit.length()-2));
+  }
+  return pow(scale,NDIM)*value;
+}
+
 double XMLUnitParser::getFieldStrengthAttribute(
     const xmlNodePtr &node, const std::string &attName) {
   parseUnitAndValue(node,attName);

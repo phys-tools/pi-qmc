@@ -26,7 +26,6 @@
 #include "NodeModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
-#include "DoubleDisplaceMoveSampler.h"
 
 FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
   const Species &species, NodeModel *nodeModel, 
@@ -127,37 +126,45 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
   return deltaAction;
 }
 
-double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &displacement, 
-					    int nMoving, const IArray &movingIndex, 
-					    int iFirstSlice, int nSlice) {
+double FixedNodeAction::getActionDifference(const Paths &paths,
+    const VArray &displacement, int nMoving, const IArray &movingIndex, 
+    int iFirstSlice, int nSlice) {
   //Check if species needs fixed node action
   if (!nodeModel->dependsOnOtherParticles() ) {
     for (int i=0; i<nMoving; ++i) {
-      if ( (movingIndex(i)>=ifirst && movingIndex(i)<ifirst+nSpeciesPart)) break;
-      if (i==nMoving-1) {notMySpecies=true; return 0;}
+      if ( movingIndex(i)>=ifirst 
+        && movingIndex(i)<ifirst+nSpeciesPart) break;
+      if (i==nMoving-1) return 0;
     }
   }
 
   int  nsliceOver2=(paths.getNSlice()/2);
   const SuperCell& cell=paths.getSuperCell();
-  Array3 dist(nSlice+1,2,npart);
-  Array3 newDist(nSlice+1,2,npart);
-  blitz::Range allPart = blitz::Range::all();
 
-  // First check for node crossing.
+  blitz::Range allPart = blitz::Range::all();
+  Array prevd1(dist(0,0,allPart));
+  Array prevd2(dist(0,1,allPart));
+  Array d1(dist(1,0,allPart));
+  Array d2(dist(1,1,allPart));
+
   double deltaAction=0;  
+  double oldDet = 0.;
  
+  // First check for nodal crossing with new positions 
+  // and calculate new nodal action.
   for (int islice=iFirstSlice; islice<=nSlice; islice++) {
-    for (int i=0; i<npart; ++i) { 
-      r1(i)=paths(i,islice);
-      r2(i)=paths(i,islice+nsliceOver2);
-    }  
-    Array d1(dist(islice,0,allPart));
-    Array d2(dist(islice,1,allPart));
-    
-    NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
-    nodeModel->evaluateDistance(r1,r2,0,d1,d2);
-    
+//std::cout << "Checking node crossing for slice " << islice << std::endl;
+    if (islice<nSlice) {
+      for (int i=0; i<npart; ++i) { 
+        r1(i)=paths(i,islice);
+        r2(i)=paths(i,islice+nsliceOver2);
+      }  
+    } else { // be sure to grab last slice carefully!
+      for (int i=0; i<npart; ++i) { 
+        r1(i)=paths(i,islice-1,1);
+        r2(i)=paths(i,islice+nsliceOver2-1,1);
+      }  
+    }
     
     for (int i=0; i<nMoving; ++i) {
       r1(movingIndex(i))+=displacement(i);
@@ -165,26 +172,47 @@ double FixedNodeAction::getActionDifference(const Paths &paths, const VArray &di
       r2(movingIndex(i))+=displacement(i);
       cell.pbc(r2(movingIndex(i)));
     }
-    result= nodeModel->evaluate(r1,r2,0,false);
-    if (result.err) return deltaAction=2e100;
-    newDMValue(islice)=result.det;
-    if (newDMValue(0)*newDMValue(islice)<=1e-200) return deltaAction=2e100;
 
+    NodeModel::DetWithFlag result = nodeModel->evaluate(r1,r2,0,false);
+    if (result.err) return deltaAction = 2e100;
 
-    Array newd1(newDist(islice,0,allPart));
-    Array newd2(newDist(islice,1,allPart));
+    if (islice==iFirstSlice) oldDet = result.det;
+
+    if (result.det * oldDet < 0.0) return deltaAction=2e100;
+
+    //std::cout << islice << ", " << result.det << std::endl;
+
+    nodeModel->evaluateDistance(r1,r2,0,d1,d2);
     
-    result= nodeModel->evaluate(r1,r2,0,false);
-    nodeModel->evaluateDistance(r1,r2,0,newd1,newd2);
-  } 
- 
-  // Calculate the nodal action 
-  for (int islice=iFirstSlice+1; islice<=nSlice; islice++) {
+    if (islice>iFirstSlice) {
+      for (int i=0; i<npart; ++i) {
+        deltaAction -= log(1-exp(-d1(i)*prevd1(i)));
+                      +log(1-exp(-d2(i)*prevd2(i)));
+      }
+    }
     for (int i=0; i<npart; ++i) {
-      deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
-			/(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
-      deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
-			/(1-exp(-newDist(islice,1,i)*newDist(islice-1,1,i))) );
+      prevd1(i) = d1(i); 
+      prevd2(i) = d2(i); 
+    }
+  }
+  // Then calculate old nodal action.
+  for (int islice=iFirstSlice; islice<=nSlice; islice++) {
+    for (int i=0; i<npart; ++i) { 
+      r1(i)=paths(i,islice);
+      r2(i)=paths(i,islice+nsliceOver2);
+    }
+    NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
+    if (result.err) return deltaAction=2e100;
+    nodeModel->evaluateDistance(r1,r2,0,d1,d2);
+    if (islice>iFirstSlice) {
+      for (int i=0; i<npart; ++i) {
+        deltaAction += log(1-exp(-d1(i)*prevd1(i)));
+                      +log(1-exp(-d2(i)*prevd2(i)));
+      }
+    }
+    for (int i=0; i<npart; ++i) {
+      prevd1(i) = d1(i); 
+      prevd2(i) = d2(i); 
     }
   }
   
