@@ -24,11 +24,19 @@ class SimulationModel(QtCore.QObject):
 
   # Signals
   dataChanged = QtCore.pyqtSignal()
+  # Signals
+  statusMessage = QtCore.pyqtSignal(QtCore.QString,int)
 
   #Slots
   @QtCore.pyqtSlot()
   def reloadData(self):
     self.file.close()
+    # Retreive remote data if needed.
+    if hasattr(self,"hostMachine") and hasattr(self,"hostDirectory"):
+      self.statusMessage.emit("downloaded new data from %s:%s"
+        % (self.hostMachine, self.hostDirectory),5000)
+      os.system('scp "%s:%s/pimc.h5" .'
+                 % (self.hostMachine, self.hostDirectory))
     try:
       self.file = pitools.openFile(self.filename)
       self.temperature = self.file.getTemperature(Unit.K) 
@@ -67,4 +75,3 @@ def dataFromH5File(project, filename):
   except IOError:
     return None
   return data
-

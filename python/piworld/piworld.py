@@ -21,7 +21,7 @@ class StartQT4(QtGui.QMainWindow):
     self.ui.simulationList.hide()
     
     # Set up the project model.
-    self.project = ProjectModel()
+    self.project = ProjectModel(self.ui)
     self.project.prefs['LastSelectedEstimatorNames'] = []
 
     # Set up the simulation list and connect to ProjectModel

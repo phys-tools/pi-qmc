@@ -1,12 +1,14 @@
 import sys,os,glob
 from PyQt4 import QtGui,QtCore
 from SimulationModel import *
+from lxml import etree
 
 class ProjectModel(QtCore.QObject):
-  def __init__(self):
+  def __init__(self,gui):
     QtCore.QObject.__init__(self,None)    
     self.autoOpen()
     self.prefs = {}   
+    self.gui = gui
   
   currentIndex = 0
   selection = []
@@ -38,7 +40,20 @@ class ProjectModel(QtCore.QObject):
       if len(self.selection) == 0: return None
       index = self.selection[0]
     if self.data[index] == None:
+      # Check for remote access info in pimc.xml.
+      xmldoc = etree.fromstring(self.getInputXMLText())
+      hostNode = xmldoc.xpath("Host")
+      if len(hostNode)>0:
+        hostMachine=hostNode[0].attrib.get('machine')
+        hostDirectory=hostNode[0].attrib.get('directory')
+      # Load the data.
       self.data[index] = dataFromH5File(self,self.nameList[index]+"pimc.h5")
+      self.data[index].xmldoc = xmldoc
+      if hostMachine: self.data[index].hostMachine = hostMachine
+      if hostDirectory: self.data[index].hostDirectory = hostDirectory
+      QtCore.QObject.connect(self.data[index],
+        QtCore.SIGNAL('statusMessage(QString,int)'),
+        self.gui.statusbar, QtCore.SLOT('message(QString,int)'))
     return self.data[index]
 
   @QtCore.pyqtSlot()
