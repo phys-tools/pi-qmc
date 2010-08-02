@@ -41,6 +41,10 @@ class ProjectModel(QtCore.QObject):
       self.data[index] = dataFromH5File(self,self.nameList[index]+"pimc.h5")
     return self.data[index]
 
+  @QtCore.pyqtSlot()
+  def respondToDataChange(self):
+    self.selectionChanged.emit()
+
   def autoOpen(self):
     self.nameList = glob.glob("pimc.xml")
     if len(self.nameList)==1:
@@ -61,5 +65,6 @@ class ProjectModel(QtCore.QObject):
       for file in glob.glob("*/*/*/*/*/*/pimc.xml"):
         self.nameList.append(file[:-8])
       self.nameList.sort()
+    if len(self.nameList)>0: self.selection=[0]
     self.xmlstring = [None]*len(self.nameList)
     self.data = [None]*len(self.nameList)

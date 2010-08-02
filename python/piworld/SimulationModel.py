@@ -18,6 +18,9 @@ class SimulationModel(QtCore.QObject):
     self.estimators = []
     self.superCell = None
     self.file = None
+    QtCore.QObject.connect(self, QtCore.SIGNAL("dataChanged()"),
+      self.project, QtCore.SLOT("respondToDataChange()"))
+    
 
   # Signals
   dataChanged = QtCore.pyqtSignal()
@@ -25,7 +28,16 @@ class SimulationModel(QtCore.QObject):
   #Slots
   @QtCore.pyqtSlot()
   def reloadData(self):
-    pass
+    self.file.close()
+    try:
+      self.file = pitools.openFile(self.filename)
+      self.temperature = self.file.getTemperature(Unit.K) 
+      self.nslice = self.file.getNSlice() 
+      self.superCell = self.file.getSuperCell(Unit.nm) 
+      self.estimators = self.file.getEstimatorList()
+    except IOError:
+      return None
+    self.dataChanged.emit()
 
   def getEstimatorViewer(self, name):
     est = (e for e in self.estimators if e.name == name).next() 
@@ -43,14 +55,11 @@ class SimulationModel(QtCore.QObject):
         print "Mising viewer type %i for %s." % (est.type,est.name)
     return est
 
-
-
-
 def dataFromH5File(project, filename):
-  print "Reading data from H5 file."
   data = SimulationModel(project)
+  data.filename = filename
   try:
-    data.file = pitools.openFile(filename)
+    data.file = pitools.openFile(data.filename)
     data.temperature = data.file.getTemperature(Unit.K) 
     data.nslice = data.file.getNSlice() 
     data.superCell = data.file.getSuperCell(Unit.nm) 
@@ -58,5 +67,4 @@ def dataFromH5File(project, filename):
   except IOError:
     return None
   return data
-  #self.dataChanged.emit()
 
