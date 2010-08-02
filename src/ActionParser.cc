@@ -661,8 +661,8 @@ void ActionParser::parseOrbitalDM(
     std::string name=getName(orbNode);
     std::string specName=getStringAttribute(orbNode,"species1");
     const Species& species(simInfo.getSpecies(specName));
-    double Z=getDoubleAttribute(ctxt->node,"Z");
-    double weight=getDoubleAttribute(ctxt->node,"weight");
+    double Z=getDoubleAttribute(orbNode,"Z");
+    double weight=getDoubleAttribute(orbNode,"weight");
     std::cout << "Orbital node: " << name << " on " << specName 
               << " with Z=" << Z << " and weight " << weight << std::endl;
     if (name=="Atomic1s") {
