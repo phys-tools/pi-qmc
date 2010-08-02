@@ -21,6 +21,9 @@ class Action;
 class DoubleAction;
 class SimulationInfo;
 class MPIManager;
+#include "AugmentedNodes.h"
+#include <blitz/array.h>
+#include <vector>
 /** XML Parser for actions.
   * @version $Revision$
   * @author John Shumway */
@@ -50,6 +53,9 @@ private:
   const int maxlevel;
   /// Parse actions for EwaldAction.
   Action* parseEwaldActions(const xmlXPathContextPtr& ctxt);
+  /// Parse atomic orbitals for AugmentedNdoes.
+  void parseOrbitalDM(std::vector<AugmentedNodes::AtomicOrbitalDM*>&,
+                      const xmlXPathContextPtr& ctxt);
   /// Letters associated with directions in input file.
   static const std::string dimName;
   /// MPIManager.

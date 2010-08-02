@@ -79,6 +79,7 @@ extern int irank;
 //#include "GrapheneAction.h"
 #include "WellImageAction.h"
 #include "EMARateAction.h"
+#include "Species.h"
 #include <iostream>
 #include <cstdlib>
 
@@ -422,6 +423,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         std::string spec2Name=getStringAttribute(ctxt->node,"refSpecies");
         const Species& species2(simInfo.getSpecies(spec2Name));
         std::vector<AugmentedNodes::AtomicOrbitalDM*> orbitals;
+        parseOrbitalDM(orbitals, ctxt);
         nodeModel=new AugmentedNodes(simInfo,species,species2,
             t,maxlevel,updates,maxMovers,density,orbitals,useHungarian);
       } else {
@@ -647,6 +649,33 @@ Action* ActionParser::parseEwaldActions(const xmlXPathContextPtr& ctxt) {
   ewald->setup();
 #endif
   return ewald;
+}
+
+void ActionParser::parseOrbitalDM(
+    std::vector<AugmentedNodes::AtomicOrbitalDM*>& orbitals,
+    const xmlXPathContextPtr& ctxt) {
+  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+  int norb=obj->nodesetval->nodeNr;
+  for (int iorb=0; iorb<norb; ++iorb) {
+    xmlNodePtr orbNode=obj->nodesetval->nodeTab[iorb];
+    std::string name=getName(orbNode);
+    std::string specName=getStringAttribute(orbNode,"species1");
+    const Species& species(simInfo.getSpecies(specName));
+    double Z=getDoubleAttribute(ctxt->node,"Z");
+    double weight=getDoubleAttribute(ctxt->node,"weight");
+    std::cout << "Orbital node: " << name << " on " << specName 
+              << " with Z=" << Z << " and weight " << weight << std::endl;
+    if (name=="Atomic1s") {
+      orbitals.push_back(
+        new AugmentedNodes::Atomic1sDM(Z,species.ifirst,weight));
+    } else if (name=="Atomic2s") {
+      orbitals.push_back(
+        new AugmentedNodes::Atomic2sDM(Z,species.ifirst,weight));
+    } else if (name=="Atomic2p") {
+      orbitals.push_back(
+        new AugmentedNodes::Atomic2pDM(Z,species.ifirst,weight));
+    }
+  }
 }
 
 const std::string ActionParser::dimName="xyzklmnopqrstuv";

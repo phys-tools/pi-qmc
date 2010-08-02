@@ -80,13 +80,10 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   if (useUpdates) {
     updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
   }
-
-  orbitals.push_back(new Atomic1sDM(3.,5,1.));
-  orbitals.push_back(new Atomic2sDM(1.,5,1.));
-  orbitals.push_back(new Atomic2pDM(1.,5,1.));
-  orbitals.push_back(new Atomic1sDM(1.,4,1.));
-
-
+  //orbitals.push_back(new Atomic1sDM(2.5,5,1.));
+  //orbitals.push_back(new Atomic2sDM(1.5,5,1.));
+  //orbitals.push_back(new Atomic2pDM(1.5,5,1.));
+  //orbitals.push_back(new Atomic1sDM(1.,4,1.));
 }
 
 AugmentedNodes::~AugmentedNodes() {
