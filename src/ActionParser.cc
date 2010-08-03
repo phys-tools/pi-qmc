@@ -422,7 +422,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         int maxMovers=3;
         std::string spec2Name=getStringAttribute(ctxt->node,"refSpecies");
         const Species& species2(simInfo.getSpecies(spec2Name));
-        std::vector<AugmentedNodes::AtomicOrbitalDM*> orbitals;
+        std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
         parseOrbitalDM(orbitals, ctxt);
         nodeModel=new AugmentedNodes(simInfo,species,species2,
             t,maxlevel,updates,maxMovers,density,orbitals,useHungarian);
@@ -652,14 +652,14 @@ Action* ActionParser::parseEwaldActions(const xmlXPathContextPtr& ctxt) {
 }
 
 void ActionParser::parseOrbitalDM(
-    std::vector<AugmentedNodes::AtomicOrbitalDM*>& orbitals,
+    std::vector<const AugmentedNodes::AtomicOrbitalDM*>& orbitals,
     const xmlXPathContextPtr& ctxt) {
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
   int norb=obj->nodesetval->nodeNr;
   for (int iorb=0; iorb<norb; ++iorb) {
     xmlNodePtr orbNode=obj->nodesetval->nodeTab[iorb];
     std::string name=getName(orbNode);
-    std::string specName=getStringAttribute(orbNode,"species1");
+    std::string specName=getStringAttribute(orbNode,"species");
     const Species& species(simInfo.getSpecies(specName));
     double Z=getDoubleAttribute(orbNode,"Z");
     double weight=getDoubleAttribute(orbNode,"weight");

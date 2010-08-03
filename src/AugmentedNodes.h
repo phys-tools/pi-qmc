@@ -138,9 +138,9 @@ public:
   };
   /// Constructor.
   AugmentedNodes(const SimulationInfo&, const Species&, const Species&, 
-    const double temperature,
-    const int maxlevel, const bool useUpdates, const int maxMovers,
-    double density, std::vector<AtomicOrbitalDM*>, bool useHungarian);
+    const double temperature, const int maxlevel, 
+    const bool useUpdates, const int maxMovers, double density, 
+    const std::vector<const AtomicOrbitalDM*>&, bool useHungarian);
   /// Virtual destructor.
   virtual ~AugmentedNodes();
   /// Evaluate the density matrix function, returning the value.
@@ -215,6 +215,6 @@ private:
   static const double PI;
   /// Density of free particle density matrix.
   const double density;
-  std::vector<const AtomicOrbitalDM*> orbitals;
+  const std::vector<const AtomicOrbitalDM*> orbitals;
 };
 #endif

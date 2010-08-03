@@ -41,7 +41,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   const Species &species, const Species &species2,
   const double temperature,
   const int maxlevel, const bool useUpdates, const int maxMovers,
-  double density, const std::vector<AtomicOrbitalDM*> oribitals,
+  double density, const std::vector<const AtomicOrbitalDM*>& orbitals,
   bool useHungarian)
   : NodeModel("_"+species.name),
     tau(simInfo.getTau()),mass(species.mass),mass2(species2.mass),
@@ -80,10 +80,6 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   if (useUpdates) {
     updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
   }
-  //orbitals.push_back(new Atomic1sDM(2.5,5,1.));
-  //orbitals.push_back(new Atomic2sDM(1.5,5,1.));
-  //orbitals.push_back(new Atomic2pDM(1.5,5,1.));
-  //orbitals.push_back(new Atomic1sDM(1.,4,1.));
 }
 
 AugmentedNodes::~AugmentedNodes() {
@@ -108,7 +104,7 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
         for (int i=0; i<NDIM; ++i) ear2 *= (*pg[i])(fabs(delta[i]));
         mat(ipart,jpart) = ear2;
         // Add contribution from orbitals.
-        for (std::vector<const AtomicOrbitalDM*>::iterator orb 
+        for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
              = orbitals.begin(); orb != orbitals.end(); ++orb) {
           int kpart = (*orb)->nuclearIndex;
           Vec delta1(r1(jpart+ifirst)-r1(kpart));
@@ -176,6 +172,12 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   while (scaleMagnitude && (result.err ||
          (fabs(result.det)<1e-50 || fabs(result.det)>1e50)));
+  //double r10 = sqrt(dot(r1(0),r1(0)));
+  //double r11 = sqrt(dot(r1(1),r1(1)));
+  //double r20 = sqrt(dot(r2(0),r2(0)));
+  //double r21 = sqrt(dot(r2(1),r2(1)));
+  //std::cout << r10 << ", " << r11 << ", " << r20 << ", " 
+  //          << r21 << ": " << result.det << std::endl;
   return result;
 }
 
@@ -223,7 +225,7 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
       grad *= value;
       // Add contribution from orbitals.
-      for (std::vector<const AtomicOrbitalDM*>::iterator orb 
+      for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
            = orbitals.begin(); orb != orbitals.end(); ++orb) {
         int kpart = (*orb)->nuclearIndex;
         Vec delta1(r1(jpart+ifirst)-r1(kpart));
@@ -261,7 +263,7 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
       grad *= value;
       // Add contribution from orbitals.
-      for (std::vector<const AtomicOrbitalDM*>::iterator orb 
+      for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
            = orbitals.begin(); orb != orbitals.end(); ++orb) {
         int kpart = (*orb)->nuclearIndex;
         Vec delta1(r1(jpart+ifirst)-r1(kpart));
@@ -630,17 +632,20 @@ AugmentedNodes::AtomicOrbitalDM::AtomicOrbitalDM(
 AugmentedNodes::Atomic1sDM::Atomic1sDM(
     double Z, int nuclearIndex, double weight)
   : AtomicOrbitalDM(nuclearIndex, weight), Z(Z) {
+  std::cout << "1s: Z="<<Z<<", "<<weight<<", "<<nuclearIndex << std::endl;
 }
 
 
 AugmentedNodes::Atomic2sDM::Atomic2sDM(
     double Z, int nuclearIndex, double weight)
   : AtomicOrbitalDM(nuclearIndex, weight), Z(Z) {
+  std::cout << "2s: Z="<<Z<<", "<<weight<<", "<<nuclearIndex << std::endl;
 }
 
 AugmentedNodes::Atomic2pDM::Atomic2pDM(
     double Z, int nuclearIndex, double weight)
   : AtomicOrbitalDM(nuclearIndex, weight), Z(Z) {
+  std::cout << "2p: Z="<<Z<<", "<<weight<<", "<<nuclearIndex << std::endl;
 }
 
 AugmentedNodes::AtomicOrbitalDM::ValueAndGradient
@@ -671,9 +676,9 @@ AugmentedNodes::Atomic2pDM::operator()(double r1, double r2,
     double costheta) const {
   ValueAndGradient result;
   double temp = weight*exp(-0.5*Z*(r1+r2))*Z*Z*Z*Z*Z/(32*PI);
-  result.value = temp*r1*r2*costheta;
-  result.gradr1 = (1.-0.5*Z*r1)*r2*temp*costheta;
-  result.gradr2 = (1.-0.5*Z*r2)*r1*temp*costheta;
+  result.value = temp*r1*r2*(costheta+1.);
+  result.gradr1 = (1.-0.5*Z*r1)*r2*temp*(costheta+1.);
+  result.gradr2 = (1.-0.5*Z*r2)*r1*temp*(costheta+1.);
   result.gradcostheta = temp*r1*r2;
   return result;
 }

@@ -54,7 +54,7 @@ private:
   /// Parse actions for EwaldAction.
   Action* parseEwaldActions(const xmlXPathContextPtr& ctxt);
   /// Parse atomic orbitals for AugmentedNdoes.
-  void parseOrbitalDM(std::vector<AugmentedNodes::AtomicOrbitalDM*>&,
+  void parseOrbitalDM(std::vector<const AugmentedNodes::AtomicOrbitalDM*>&,
                       const xmlXPathContextPtr& ctxt);
   /// Letters associated with directions in input file.
   static const std::string dimName;
