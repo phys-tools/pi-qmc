@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __FreeParticleNodes_h_
 #define __FreeParticleNodes_h_
-
+  
 #include "NodeModel.h"
 #include <vector>
 #include <blitz/array.h>
@@ -99,7 +99,7 @@ public:
   /// Constructor.
   FreeParticleNodes(const SimulationInfo&, const Species&, 
     const double temperature, const int maxlevel, 
-		    const bool useUpdates, const int maxMovers, const bool useHungarian, const int useIterations);
+		    const bool useUpdates, const int maxMovers, const bool useHungarian, const int useIterations, const double nodalFactor);
   /// Virtual destructor.
   virtual ~FreeParticleNodes();
   /// Evaluate the density matrix function, returning the value.
@@ -110,8 +110,18 @@ public:
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
                                 const int islice, Array &d1, Array &d2);
   void newtonRaphson(const VArray &r1, const VArray &r2, const int islice, Array &d1, int section);
-  void getDetInvMat( Matrix &invMat, double &det, int &info);
+  //  void newtonRaphson(const VArray &r1, const VArray &r2, const int islice, Array &d1, int section);
+  void getDetInvMat( Matrix &invMat, double &det, IArray2 &localKindex, const int &islice, int &info, int &iter);
   void getDet( Matrix &romat, double &det);
+  void getDetAtrnew( const Vec &rnew,  const int& jpart, const VArray& r2, Matrix &matNew, double &det);
+  void getRnew(const Vec &rold,  const Vec &gradArray, Vec &Rnew);
+  void findNormAtr1jnew(const Vec &r1jnew, const int& jpart, const VArray& r2, Matrix &matNew, Vec & norm, IArray2 &localKindex, const int &islice, int &info, int &iter, const int &section);
+  double rootBisectionSearch(const int& jpart, const Vec & xold, Vec& xnew,  
+			     const VArray & r2, Matrix &matNew, const Matrix &matInitial, 
+			     double &detNEW);
+  void getMaxDist2(const VArray& r1, Array& maxDist2);
+  void plotRho2D(const int jpart, const VArray &r1, const VArray& r2, const Matrix &matInitial, const int &iter);
+  void plotNRPoints(const Vec & xprev, const Vec &xnew, const Vec& gradf, const Vec& normal, const int &iter);
   /// Evaluate the time-derivative of the distance to the 
   /// node in units of @f$ \sqrt{\tau/2m}@f$.
   virtual void evaluateDotDistance(const VArray &r1, const VArray &r2,
@@ -168,5 +178,7 @@ private:
   const bool useHungarian;
   double scale;
   const int useIterations;
+  const double nodalFactor;
+  const int maxlevel;
 };
 #endif

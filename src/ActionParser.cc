@@ -387,7 +387,11 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       bool useDistDerivative=getBoolAttribute(actNode,"useDistDerivative");
       bool useHungarian=getBoolAttribute(actNode,"useHungarian");
       int useIterations=getIntAttribute(actNode,"useIterations");
+      double nodalFactor=getDoubleAttribute(actNode,"nodalFactor");
+      if (nodalFactor<=0) nodalFactor=5.0;
+      if (useIterations<0) useIterations=0;
       if (t==0) t=simInfo.getTemperature();
+
       NodeModel *nodeModel=0;
       if (modelName=="SHONodes") {
         const double omega=getEnergyAttribute(ctxt->node,"omega");
@@ -431,7 +435,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
         int maxMovers=0;
         if (updates) maxMovers=3;
         nodeModel=new FreeParticleNodes(simInfo,species,t,maxlevel,updates,
-                                        maxMovers,useHungarian,useIterations);
+                                        maxMovers,useHungarian,useIterations, nodalFactor);
       }
       doubleComposite->addAction(
                new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
