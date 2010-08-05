@@ -83,8 +83,8 @@ public:
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Constructor.
   FixedNodeAction(const SimulationInfo&, const Species&, NodeModel*,
-                  const bool withNodalAction=true,
-                  const bool useDistDerivative=false, const int maxlevel=12);
+    bool withNodalAction, bool useDistDerivative, int maxlevel,
+    bool useManyBodyDistance);
   /// Destructor.
   ~FixedNodeAction();
   /// Calculate the difference in action.
@@ -135,5 +135,6 @@ private:
   /// Flag for calculating time derivative of the distance to the node.
   bool useDistDerivative;
   int nerror;
+  bool useManyBodyDistance;
 };
 #endif

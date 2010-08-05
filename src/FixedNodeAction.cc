@@ -28,8 +28,8 @@
 #include "SimulationInfo.h"
 
 FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
-  const Species &species, NodeModel *nodeModel, 
-  const bool withNodalAction, const bool useDistDerivative, const int maxlevel) 
+  const Species &species, NodeModel *nodeModel, bool withNodalAction,
+  bool useDistDerivative, int maxlevel, bool useManyBodyDistance) 
   : tau(simInfo.getTau()), npart(simInfo.getNPart()),
     nSpeciesPart(species.count), ifirst(species.ifirst), 
     r1(npart), r2(npart),
@@ -43,7 +43,7 @@ FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
     nodeModel(nodeModel), matrixUpdateObj(nodeModel->getUpdateObj()),
     withNodalAction(withNodalAction),
     useDistDerivative(useDistDerivative),
-    nerror(0) {
+    nerror(0), useManyBodyDistance(useManyBodyDistance) {
   std::cout << "FixedNodeAction" << std::endl;
 }
 
@@ -114,11 +114,30 @@ double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
         Array d2(newDist(islice,1,allPart));
         nodeModel->evaluateDistance(r1,r2,islice,d1,d2);
       }
-      for (int i=0; i<npart; ++i) {
-        deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
-                   /(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
-        deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
-                   /(1-exp(-newDist(islice,1,i)*newDist(islice-1,1,i))) );
+      if (useManyBodyDistance) {
+        double d12=0., d22=0., d1p2=0., d2p2=0.;
+        double newd12=0., newd22=0., newd1p2=0., newd2p2=0.;
+        for (int i=0; i<npart; ++i) {
+          d12 += 1./(dist(islice,0,i)*dist(islice,0,i));
+          d22 += 1./(dist(islice,1,i)*dist(islice,1,i));
+          d1p2 += 1./(dist(islice-1,0,i)*dist(islice-1,0,i));
+          d2p2 += 1./(dist(islice-1,1,i)*dist(islice-1,1,i));
+          newd12 += 1./(newDist(islice,0,i)*newDist(islice,0,i));
+          newd22 += 1./(newDist(islice,1,i)*newDist(islice,1,i));
+          newd1p2 += 1./(newDist(islice-1,0,i)*newDist(islice-1,0,i));
+          newd2p2 += 1./(newDist(islice-1,1,i)*newDist(islice-1,1,i));
+        }
+        deltaAction+=log( (1-exp(-1./sqrt(d12*d1p2)))
+                         /(1-exp(-1./sqrt(newd12*newd1p2))));
+        deltaAction+=log( (1-exp(-1./sqrt(d22*d2p2)))
+                         /(1-exp(-1./sqrt(newd22*newd2p2))));
+      } else {
+        for (int i=0; i<npart; ++i) {
+          deltaAction+=log( (1-exp(-dist(islice,0,i)*dist(islice-1,0,i)))
+                     /(1-exp(-newDist(islice,0,i)*newDist(islice-1,0,i))) );
+          deltaAction+=log( (1-exp(-dist(islice,1,i)*dist(islice-1,1,i)))
+                     /(1-exp(-newDist(islice,1,i)*newDist(islice-1,1,i))) );
+        }
       }
     }
   }
@@ -185,9 +204,21 @@ double FixedNodeAction::getActionDifference(const Paths &paths,
     nodeModel->evaluateDistance(r1,r2,0,d1,d2);
     
     if (islice>iFirstSlice) {
-      for (int i=0; i<npart; ++i) {
-        deltaAction -= log(1-exp(-d1(i)*prevd1(i)));
-                      +log(1-exp(-d2(i)*prevd2(i)));
+      if (useManyBodyDistance) {
+        double d02=0., d12=0., d0p2=0., d1p2=0.;
+        for (int i=0; i<npart; ++i) {
+          d02 += 1./(d1(i)*d1(i));
+          d0p2 += 1./(prevd1(i)*prevd1(i));
+          d12 += 1./(d2(i)*d2(i));
+          d1p2 += 1./(prevd2(i)*prevd2(i));
+        }
+        deltaAction-=log( (1-exp(-1./sqrt(d02*d0p2)))
+                         *(1-exp(-1./sqrt(d12*d1p2))));
+      } else {
+        for (int i=0; i<npart; ++i) {
+          deltaAction -= log((1-exp(-d1(i)*prevd1(i)))
+                            *(1-exp(-d2(i)*prevd2(i))));
+        }
       }
     }
     for (int i=0; i<npart; ++i) {
@@ -205,9 +236,21 @@ double FixedNodeAction::getActionDifference(const Paths &paths,
     if (result.err) return deltaAction=2e100;
     nodeModel->evaluateDistance(r1,r2,0,d1,d2);
     if (islice>iFirstSlice) {
-      for (int i=0; i<npart; ++i) {
-        deltaAction += log(1-exp(-d1(i)*prevd1(i)));
-                      +log(1-exp(-d2(i)*prevd2(i)));
+      if (useManyBodyDistance) {
+        double d02=0., d12=0., d0p2=0., d1p2=0.;
+        for (int i=0; i<npart; ++i) {
+          d02 += 1./(d1(i)*d1(i));
+          d0p2 += 1./(prevd1(i)*prevd1(i));
+          d12 += 1./(d2(i)*d2(i));
+          d1p2 += 1./(prevd2(i)*prevd2(i));
+        }
+        deltaAction+=log( (1-exp(-1./sqrt(d02*d0p2)))
+                         *(1-exp(-1./sqrt(d12*d1p2))));
+      } else {
+        for (int i=0; i<npart; ++i) {
+          deltaAction += log((1-exp(-d1(i)*prevd1(i)))
+                            *(1-exp(-d2(i)*prevd2(i))));
+        }
       }
     }
     for (int i=0; i<npart; ++i) {
@@ -264,6 +307,20 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
    ////// nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);//////
     // Now calulate forces.
     force=0.0;
+    if (useManyBodyDistance) {
+      double d12=0., d22=0., d1m2=0., d2m2=0.;
+      for (int i=0; i<npart; ++i) {
+        d12 += 1./(di1(i)*di1(i));
+        d1m2 += 1./(dim1(i)*dim1(i));
+        d22 += 1./(di2(i)*di2(i));
+        d2m2 += 1./(dim2(i)*dim2(i));
+      }
+      double xim1 = 1./sqrt(d12*d1m2);
+      double exim1 = exp(-xim1);
+      u += log( (1-exim1) );
+      utau += xim1*exim1/(tau*(1-exim1)); 
+
+    } else {
     for (int jpart=0; jpart<npart; ++jpart) {
     ////// double xip1=dip1(jpart)*di1(jpart);//////
        double xim1=dim1(jpart)*di1(jpart);
@@ -282,6 +339,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
       utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
 //std :: cout << "FNA :: "<<jpart<<". xim1 "<<xim1<<". dotxim1   "<<dotxim1<<". utau  "<<utau<<". u  "<<u<<". tau  "<<tau<<std ::endl;
+    }
     }
   }
   fm=force(ipart); 

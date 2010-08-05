@@ -387,6 +387,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       bool useDistDerivative=getBoolAttribute(actNode,"useDistDerivative");
       bool useHungarian=getBoolAttribute(actNode,"useHungarian");
       int useIterations=getIntAttribute(actNode,"useIterations");
+      bool useManyBodyDistance=getBoolAttribute(actNode,"useManyBodyDistance");
       double nodalFactor=getDoubleAttribute(actNode,"nodalFactor");
       if (nodalFactor<=0) nodalFactor=5.0;
       if (useIterations<0) useIterations=0;
@@ -438,8 +439,8 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
                                         maxMovers,useHungarian,useIterations, nodalFactor);
       }
       doubleComposite->addAction(
-               new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
-                                   useDistDerivative,maxlevel));
+          new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
+                              useDistDerivative,maxlevel,useManyBodyDistance));
       continue;
     }  else if (name=="FixedPhaseAction") {
       ctxt->node=actNode;
