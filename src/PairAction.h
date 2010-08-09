@@ -71,20 +71,20 @@ public:
   /// Construct by providing the species and squarer pidmu filename.
   PairAction(const Species&, const Species&, const std::string& filename,
              const SimulationInfo&, const int norder, 
-             const bool hasZ);
+             const bool hasZ, int exLevel);
   /// Construct by providing the species and dmu filename.
   PairAction(const Species&, const Species&, const std::string& filename,
              const SimulationInfo&, const int norder, 
-             const bool hasZ, const bool isDMD);
+             const bool hasZ, const bool isDMD, int exLevel);
   /// Construct by providing the species and EmpiricalPairAction.
   PairAction(const Species&, const Species&, const EmpiricalPairAction&,
              const SimulationInfo&, const int norder, 
              const double rmin, const double rmax, const int ngpts,
-             const bool hasZ);
+             const bool hasZ, int exLevel);
   /// Construct by providing the species and PairIntegrator.
   PairAction(const Species&, const Species&, PairIntegrator&,
-             const SimulationInfo&, const int norder, 
-             const double rmin, const double rmax, const int ngpts);
+             const SimulationInfo&, const int norder, const double rmin,
+             const double rmax, const int ngpts, int exLevel);
   /// Virtual destructor.
   virtual ~PairAction() {}
   /// Calculate the difference in action.
@@ -136,6 +136,9 @@ protected:
   bool isDMD;
   /// Flag for including sum over z.
   bool hasZ;
-  
+  /// Level to start evaluating exchange.  
+  const int exLevel;
+  /// Mass of first species, needed for evaluating exchange.
+  const double mass;
 };
 #endif

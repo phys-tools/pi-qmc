@@ -29,8 +29,8 @@
 
 ImagePairAction::ImagePairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
-            const int norder, const IVec nimage, const bool isDMD) 
-  : PairAction(s1, s2, filename, simInfo, norder, false, isDMD), 
+            const int norder, const IVec nimage, const bool isDMD, int exLevel) 
+  : PairAction(s1, s2, filename, simInfo, norder, false, isDMD, exLevel), 
     nimage(nimage) { 
   std::cout << "Using images: " << nimage << std::endl;
 }
@@ -39,8 +39,8 @@ ImagePairAction::ImagePairAction(const Species& s1, const Species& s2,
             const EmpiricalPairAction &action, 
             const SimulationInfo& simInfo, const int norder, const IVec nimage,
             const double rmin, const double rmax,
-            const int ngpts) 
-  : PairAction(s1, s2, action, simInfo, norder, rmin, rmax, ngpts, false),
+            const int ngpts, int exLevel) 
+  : PairAction(s1,s2,action,simInfo,norder,rmin,rmax,ngpts,false,exLevel),
     nimage(nimage) {
   std::cout << "Using images: " << nimage << std::endl;
 } 

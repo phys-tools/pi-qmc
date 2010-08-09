@@ -31,11 +31,10 @@
 #include "OptEwaldSum.h"
 
 CoulombAction::CoulombAction(const double epsilon, 
-			     const SimulationInfo& simInfo, const int norder, double rmin, 
-			     double rmax, int ngpts, const bool dumpFiles,
-			     bool useEwald, int ewaldNDim, double ewaldRcut, 
-			     double ewaldKcut, double screenDist, 
-			     const double kappa, const int nImages, const std::string ewaldType)
+  const SimulationInfo& simInfo, const int norder, double rmin, double rmax,
+  int ngpts, const bool dumpFiles, bool useEwald, int ewaldNDim, 
+  double ewaldRcut, double ewaldKcut, double screenDist, const double kappa, 
+  const int nImages, const std::string ewaldType, int exLevel)
   : epsilon(epsilon), tau(simInfo.getTau()), npart(simInfo.getNPart()),
     pairActionArray(0), screenDist(screenDist), ewaldSum(0) {
   typedef blitz::TinyVector<int, NDIM> IVec;
@@ -78,18 +77,20 @@ CoulombAction::CoulombAction(const double epsilon,
         }
         if (ngpts==0) ngpts=500;
         if (needImages) {
-          pairActionArray.push_back(				    /// Hack to handle ion-ion interaction properly.
-				    new ImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-							nimage, rmin, rmax, ngpts));
+          pairActionArray.push_back(
+            // Hack to handle ion-ion interaction properly.
+            new ImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
+                  nimage, rmin, rmax, ngpts,(i==j)?exLevel:-1));
         } else {
 	  if (nImages > 1 && ewaldType=="tradEwald"){
-	    pairActionArray.push_back(new EwaldImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-							       rmin, rmax, ngpts, nImages));
+	    pairActionArray.push_back(
+              new EwaldImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
+                    rmin, rmax, ngpts, nImages, (i==j)?exLevel:-1));
 	  } else {
 	    pairActionArray.push_back(
-				      /// Hack to handle ion-ion interaction properly.
+              // Hack to handle ion-ion interaction properly.
             new PairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-                           rmin, rmax, ngpts, false));
+                           rmin, rmax, ngpts, false, (i==j)?exLevel:-1));
 	  }
         }
         if (dumpFiles) (*(pairActionArray.end()-1))->write("",0);

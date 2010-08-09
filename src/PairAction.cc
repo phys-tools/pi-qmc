@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,11 +30,11 @@
 #include "DisplaceMoveSampler.h"
 PairAction::PairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
-            const int norder, const bool hasZ) 
+            const int norder, const bool hasZ, int exLevel) 
   : tau(simInfo.getTau()), species1(s1), species2(s2),
     ifirst1(s1.ifirst), ifirst2(s2.ifirst),
     npart1(s1.count), npart2(s2.count), norder(norder),
-    hasZ(hasZ) {
+    hasZ(hasZ), exLevel(exLevel), mass(s1.mass) {
   std::cout << "constructing PairAction";
   std::cout << " : species1= " <<  s1 << "species2= " <<  s2;
   std::cout << " : squarer filename (LOG grid assumed)=" << filename << std::endl;
@@ -112,11 +112,11 @@ PairAction::PairAction(const Species& s1, const Species& s2,
 /////////// 
 PairAction::PairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
-            const int norder, const bool hasZ, const bool isDMD) 
+            const int norder, const bool hasZ, const bool isDMD, int exLevel) 
   : tau(simInfo.getTau()), species1(s1), species2(s2),
     ifirst1(s1.ifirst), ifirst2(s2.ifirst),
     npart1(s1.count), npart2(s2.count), norder(norder), isDMD(isDMD),
-    hasZ(hasZ) {
+    hasZ(hasZ), exLevel(exLevel), mass(s1.mass) {
   //std::cout << "constructing PairAction" << std::endl;
   //std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   //std::cout << "filename=" << filename << std::endl;
@@ -177,12 +177,13 @@ PairAction::PairAction(const Species& s1, const Species& s2,
 PairAction::PairAction(const Species& s1, const Species& s2,
             const EmpiricalPairAction &action, const SimulationInfo& simInfo, 
             const int norder, const double rmin, const double rmax,
-            const int ngpts, const bool hasZ) 
+            const int ngpts, const bool hasZ, int exLevel) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
     logrratioinv((ngpts-1)/log(rmax/rmin)), 
     ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ) {
+    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ), 
+    exLevel(exLevel), mass(s1.mass) {
   std::cout << "Constructing PairAction" << std::endl;
   std::cout << "Species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
@@ -202,12 +203,13 @@ PairAction::PairAction(const Species& s1, const Species& s2,
 PairAction::PairAction(const Species& s1, const Species& s2,
             PairIntegrator &integrator, const SimulationInfo& simInfo, 
             const int norder, const double rmin, const double rmax,
-            const int ngpts) 
+            const int ngpts, int exLevel) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
     logrratioinv((ngpts-1)/log(rmax/rmin)), 
     ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ) {
+    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ),
+    exLevel(exLevel), mass(s1.mass) {
 std::cout << "constructing PairAction" << std::endl;
 std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
   ugrid=0;
@@ -236,6 +238,7 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();
   const int nStride=(int)pow(2,level);
+  const double invTauEff = 1./(tau*nStride);
   const int nSlice=sectionBeads.getNSlice();
   const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
@@ -245,24 +248,27 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
     int jbegin,jend;
     if (i>=ifirst1 && i<ifirst1+npart1) {
       jbegin=ifirst2; jend=ifirst2+npart2;
-    } else
-    if (i>=ifirst2 && i<ifirst2+npart2) {
-      jbegin=ifirst1; jend=ifirst1+npart1;
-    } else 
-    continue; //Particle not in this interaction.
+    } else {
+      if (i>=ifirst2 && i<ifirst2+npart2) {
+        jbegin=ifirst1; jend=ifirst1+npart1;
+       } else  {
+      continue; //Particle not in this interaction.
+      } 
+    }
     for (int j=jbegin; j<jend; ++j) {
       bool isMoving=false; int jMoving=0;
       for (int k=0;k<nMoving;++k) {
         if (j==index(k)) {isMoving=true; jMoving=k; break;}
       }
       if (isMoving && i<=j) continue; //Don't double count moving interactions.
-      Vec prevDelta =sectionBeads(i,0);
-      prevDelta-=sectionBeads(j,0); cell.pbc(prevDelta);
+      Vec prevDelta =sectionBeads(i,0)-sectionBeads(j,0);
+      cell.pbc(prevDelta);
       Vec prevMovingDelta=prevDelta;
       double prevR=sqrt(dot(prevDelta,prevDelta));
       double prevMovingR=prevR;
       for (int islice=nStride; islice<nSlice; islice+=nStride) {
         // Add action for moving beads.
+        double action=0.;
         Vec delta=movingBeads(iMoving,islice);
         delta-=(isMoving)?movingBeads(jMoving,islice):sectionBeads(j,islice);
         cell.pbc(delta);
@@ -272,17 +278,51 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
           Vec svec=delta-prevMovingDelta; double s2=dot(svec,svec)/(q*q);
           if (hasZ) {
             double z=(r-prevMovingR)/q;
-            deltaAction+=uk0(q,s2,z*z);
+            action+=uk0(q,s2,z*z)*nStride;
           } else {
-            deltaAction+=uk0(q,s2);
+            action+=uk0(q,s2)*nStride;
           }
         } else { 
-          deltaAction+=u00(q);
+          action+=u00(q)*nStride;
         }
+       	if (level<=exLevel) {//Include exchange effect if requested.
+          Vec r1  = movingBeads(iMoving,islice);
+          Vec r1p = movingBeads(iMoving,islice-nStride);
+          Vec r2  = (isMoving) ?  movingBeads(jMoving,islice)
+                               : sectionBeads(j,islice);
+          Vec r2p = (isMoving) ?  movingBeads(jMoving,islice-nStride)
+                               : sectionBeads(j,islice-nStride);
+          Vec d1 = r1-r1p; Vec d2 = r2-r2p; Vec e1 = r1-r2p; Vec e2 = r2-r1p;
+          cell.pbc(d1); cell.pbc(d2); cell.pbc(e1); cell.pbc(e2);
+          double g0  = exp(-0.5*mass*(dot(d1,d1)+dot(d2,d2))*invTauEff);
+          double g0X = exp(-0.5*mass*(dot(e1,e1)+dot(e2,e2))*invTauEff);
+          if (g0X/g0 > 1e-100) {
+            double actX=0.;
+       	    if (level<3 && norder>0) {
+              Vec svec=delta+prevMovingDelta; double s2=dot(svec,svec)/(q*q);
+              if (hasZ) {
+                double z=(r-prevMovingR)/q;
+                actX+=uk0(q,s2,z*z)*nStride;
+              } else {
+                actX+=uk0(q,s2)*nStride;
+              }
+            } else { 
+              actX+=u00(q)*nStride;
+            }
+            double gfull = g0*exp(-action)-g0X*exp(-actX);
+            double g0full = g0-g0X;
+            if (gfull>0 && g0full >0 && gfull<g0full) {
+              action = -log(gfull/g0full);
+            } else {
+              action = 0;
+            }
+          }
+        }
+        deltaAction += action;
         prevMovingDelta=delta; prevMovingR=r;
         // Subtract action for old beads.
-        delta=sectionBeads(i,islice);
-        delta-=sectionBeads(j,islice);
+        action=0.;
+        delta=sectionBeads(i,islice)-sectionBeads(j,islice);
         cell.pbc(delta);
         r=sqrt(dot(delta,delta));
         q=0.5*(r+prevR);
@@ -290,18 +330,49 @@ double PairAction::getActionDifference(const MultiLevelSampler& sampler,
           Vec svec=delta-prevDelta; double s2=dot(svec,svec)/(q*q);
           if (hasZ) {
             double z=(r-prevR)/q;
-            deltaAction-=uk0(q,s2,z*z);
+            action+=uk0(q,s2,z*z)*nStride;
           } else {
-            deltaAction-=uk0(q,s2);
+            action+=uk0(q,s2)*nStride;
           }
         } else {
-          deltaAction-=u00(q);
+          action+=u00(q)*nStride;
         }
+       	if (level<=exLevel) {//Include exchange effect if requested.
+          Vec d1 = sectionBeads(i,islice)-sectionBeads(i,islice-nStride);
+          Vec d2 = sectionBeads(j,islice)-sectionBeads(j,islice-nStride);
+          Vec e1 = sectionBeads(i,islice)-sectionBeads(j,islice-nStride);
+          Vec e2 = sectionBeads(j,islice)-sectionBeads(i,islice-nStride);
+          cell.pbc(d1); cell.pbc(d2); cell.pbc(e1); cell.pbc(e2);
+          double g0  = exp(-0.5*mass*(dot(d1,d1)+dot(d2,d2))*invTauEff);
+          double g0X = exp(-0.5*mass*(dot(e1,e1)+dot(e2,e2))*invTauEff);
+          if (g0X/g0 > 1e-100) {
+            double actX=0.;
+       	    if (level<3 && norder>0) {
+              Vec svec=delta+prevDelta; double s2=dot(svec,svec)/(q*q);
+              if (hasZ) {
+                double z=(r-prevR)/q;
+                actX+=uk0(q,s2,z*z)*nStride;
+              } else {
+                actX+=uk0(q,s2)*nStride;
+              }
+            } else { 
+              actX+=u00(q)*nStride;
+            }
+            double gfull = g0*exp(-action)-g0X*exp(-actX);
+            double g0full = g0-g0X;
+            if (gfull>0 && g0full >0 && gfull<g0full) {
+              action = -log(gfull/g0full);
+            } else {
+              action = 0;
+            }
+          }
+        }
+        deltaAction -= action;
         prevDelta=delta; prevR=r;
       }
     }
   }
-  return deltaAction*nStride;
+  return deltaAction;
 }
 
 double PairAction::getActionDifference(const Paths &paths, 
@@ -314,19 +385,21 @@ double PairAction::getActionDifference(const Paths &paths,
     int jbegin,jend;
     if (i>=ifirst1 && i<ifirst1+npart1) {
       jbegin=ifirst2; jend=ifirst2+npart2;
-    } else
-    if (i>=ifirst2 && i<ifirst2+npart2) {
-      jbegin=ifirst1; jend=ifirst1+npart1;
-    } else 
-    continue; //Particle not in this interaction.
+    } else {
+      if (i>=ifirst2 && i<ifirst2+npart2) {
+        jbegin=ifirst1; jend=ifirst1+npart1;
+      } else {
+        continue; //Particle not in this interaction.
+      }
+    }
     for (int j=jbegin; j<jend; ++j) {
       bool isMoving=false; int jMoving=0;
       for (int k=0;k<nmoving;++k) {
         if (j==movingIndex(k)) {isMoving=true; jMoving=k; break;}
       }
       if (isMoving && i<=j) continue; //Don't double count moving interactions.
-      Vec prevDelta =paths(i,iFirstSlice-1);
-      prevDelta-=paths(j,iFirstSlice-1); cell.pbc(prevDelta);
+      Vec prevDelta =paths(i,iFirstSlice,-1);
+      prevDelta-=paths(j,iFirstSlice,-1); cell.pbc(prevDelta);
       Vec prevMovingDelta=prevDelta+displacement(iMoving);
       if (isMoving) prevMovingDelta-=displacement(jMoving);
       cell.pbc(prevMovingDelta);
@@ -334,6 +407,7 @@ double PairAction::getActionDifference(const Paths &paths,
       double prevMovingR=sqrt(dot(prevMovingDelta,prevMovingDelta));
       for (int islice=iFirstSlice; islice<=iLastSlice; islice++) {
         // Add action for moving beads.
+        double action = 0.;
         Vec delta=paths(i,islice);
         delta+=displacement(iMoving);
         delta-=paths(j,islice);
@@ -341,21 +415,102 @@ double PairAction::getActionDifference(const Paths &paths,
         cell.pbc(delta);
         double r=sqrt(dot(delta,delta));
         double q=0.5*(r+prevMovingR);
-      
+       	if (norder>0) {
           Vec svec=delta-prevMovingDelta; double s2=dot(svec,svec)/(q*q);
-          deltaAction+=uk0(q,s2);
-      
+          if (hasZ) {
+            double z=(r-prevMovingR)/q;
+            action+=uk0(q,s2,z*z);
+          } else {
+            action+=uk0(q,s2);
+          }
+        } else {
+          action+=u00(q);
+        }
+       	if (exLevel>=0) {//Include exchange effect if requested.
+          Vec d1 = paths(i,islice)-paths(i,islice,-1);
+          Vec d2 = paths(j,islice)-paths(j,islice,-1);
+          Vec e1 = paths(i,islice)-paths(j,islice,-1)+displacement(iMoving);
+          Vec e2 = paths(j,islice)-paths(i,islice,-1)-displacement(iMoving);
+          if (isMoving) {
+            e1 -= displacement(jMoving);
+            e2 += displacement(jMoving);
+          }
+          cell.pbc(d1); cell.pbc(d2); cell.pbc(e1); cell.pbc(e2);
+          double g0  = exp(-0.5*mass*(dot(d1,d1)+dot(d2,d2))/tau);
+          double g0X = exp(-0.5*mass*(dot(e1,e1)+dot(e2,e2))/tau);
+          if (g0X/g0 > 1e-100) {
+            double actX=0.;
+       	    if (norder>0) {
+              Vec svec=delta+prevMovingDelta; double s2=dot(svec,svec)/(q*q);
+              if (hasZ) {
+                double z=(r-prevMovingR)/q;
+                actX+=uk0(q,s2,z*z);
+              } else {
+                actX+=uk0(q,s2);
+              }
+            } else { 
+              actX+=u00(q);
+            }
+            double gfull = g0*exp(-action)-g0X*exp(-actX);
+            double g0full = g0-g0X;
+            if (gfull>0 && g0full >0 && gfull<g0full) {
+              action = -log(gfull/g0full);
+            } else {
+              action = 0;
+            }
+          }
+        }
+        deltaAction += action;
         prevMovingDelta=delta; prevMovingR=r;
         // Subtract action for old beads.
+        action = 0.;
         delta=paths(i,islice);
         delta-=paths(j,islice);
         cell.pbc(delta);
         r=sqrt(dot(delta,delta));
         q=0.5*(r+prevR);
-      
-          svec=delta-prevDelta;  s2=dot(svec,svec)/(q*q);
-          deltaAction-=uk0(q,s2);
-      
+        if (norder>0) {
+          Vec svec=delta-prevDelta;  double s2=dot(svec,svec)/(q*q);
+          if (hasZ) {
+            double z=(r-prevR)/q;
+            action+=uk0(q,s2,z*z);
+          } else {
+            action+=uk0(q,s2);
+          }
+        } else {
+          action+=u00(q);
+        }
+       	if (exLevel>=0) {//Include exchange effect if requested.
+          Vec d1 = paths(i,islice)-paths(i,islice,-1);
+          Vec d2 = paths(j,islice)-paths(j,islice,-1);
+          Vec e1 = paths(i,islice)-paths(j,islice,-1);
+          Vec e2 = paths(j,islice)-paths(i,islice,-1);
+          cell.pbc(d1); cell.pbc(d2); cell.pbc(e1); cell.pbc(e2);
+          double g0  = exp(-0.5*mass*(dot(d1,d1)+dot(d2,d2))/tau);
+          double g0X = exp(-0.5*mass*(dot(e1,e1)+dot(e2,e2))/tau);
+          if (g0X/g0 > 1e-100) {
+            double actX=0.;
+       	    if (norder>0) {
+              Vec svec=delta+prevDelta; double s2=dot(svec,svec)/(q*q);
+              if (hasZ) {
+                double z=(r-prevR)/q;
+                actX+=uk0(q,s2,z*z);
+              } else {
+                actX+=uk0(q,s2);
+              }
+            } else { 
+              actX+=u00(q);
+            }
+            double gfull = g0*exp(-action)-g0X*exp(-actX);
+            double g0full = g0-g0X;
+            if (gfull>0 && g0full >0 && gfull<g0full) {
+              action = -log(gfull/g0full);
+            } else {
+              action = 0;
+            }
+          }
+        }
+        deltaAction -= action;
         prevDelta=delta; prevR=r;
       }
     }
@@ -377,17 +532,19 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
   } else
   if (ipart>=ifirst2 && ipart<ifirst2+npart2) {
     jbegin=ifirst1; jend=ifirst1+npart1;
-  } else 
-  return; //Particle not in this interaction.
+  } else { 
+    return; //Particle not in this interaction.
+  }
+  SuperCell cell=paths.getSuperCell();
   for (int j=jbegin; j<jend; ++j) {
     if (ipart==j) continue;
     Vec delta=paths(ipart,islice);
     delta-=paths(j,islice);
-    paths.getSuperCell().pbc(delta);
+    cell.pbc(delta);
     double r=sqrt(dot(delta,delta));
     Vec prevDelta=paths(ipart,islice,-1);
     prevDelta-=paths(j,islice,-1);
-    paths.getSuperCell().pbc(prevDelta);
+    cell.pbc(prevDelta);
     double prevR=sqrt(dot(prevDelta,prevDelta));
     double q=0.5*(r+prevR);
     Vec svec=delta-prevDelta; double s2=dot(svec,svec)/(q*q);
@@ -399,16 +556,48 @@ void PairAction::getBeadAction(const Paths& paths, int ipart, int islice,
       uk0CalcDerivatives(q,s2,v,vtau,vq,vs2);
       vz2=0.; z=0;
     }
+    if (exLevel>=0) {//Include exchange effect if requested.
+      Vec d1 = paths(ipart,islice)-paths(ipart,islice,-1);
+      Vec d2 = paths(j,islice)-paths(j,islice,-1);
+      Vec e1 = paths(ipart,islice)-paths(j,islice,-1);
+      Vec e2 = paths(j,islice)-paths(ipart,islice,-1);
+      cell.pbc(d1); cell.pbc(d2); cell.pbc(e1); cell.pbc(e2);
+      double g0  = exp(-mass*(dot(d1,d1)+dot(d2,d2))/(2*tau));
+      double g0X = exp(-mass*(dot(e1,e1)+dot(e2,e2))/(2*tau));
+      if (g0X/g0 > 1e-100) {
+        double vX=0., vtauX=0.;
+        Vec svec=delta+prevDelta; double s2=dot(svec,svec)/(q*q);
+        if (hasZ) {
+          double z=(r-prevR)/q;
+          uk0CalcDerivatives(q,s2,z*z,vX,vtauX,vq,vs2,vz2);
+        } else {
+          uk0CalcDerivatives(q,s2,vX,vtauX,vq,vs2);
+        }
+        double gfull = g0*exp(-v)-g0X*exp(-vX);
+        double g0full = g0-g0X;
+        if (gfull>0 && g0full >0 && gfull<g0full) {
+          double g0tau  = mass*(dot(d1,d1)+dot(d2,d2))/(2*tau*tau)*g0;
+          double g0Xtau = mass*(dot(e1,e1)+dot(e2,e2))/(2*tau*tau)*g0X;
+          vtau = (g0tau-g0Xtau)/(g0-g0X)
+                -((g0tau-g0*vtau)*exp(-v)-(g0Xtau-g0X*vtauX)*exp(-vX))
+                /(g0*exp(-v)-g0X*exp(-vX));
+          v = -log(gfull/g0full);
+        } else {
+          vtau = 0; v = 0;
+        }
+      }
+    }
     u += 0.5*v;
     utau += 0.5*vtau;
 
 
+    // NEEDS TO HAVE EXCHANGE CONTRIBUTION.
     fm -= vq*delta/(2*r) + vs2*(2*svec/(q*q) - s2*delta/(q*r))
          +vz2*z*delta*(2-z)/(q*r);
     // And force contribution from next slice.
     Vec nextDelta=paths(ipart,islice,+1);
     nextDelta-=paths(j,islice,+1);
-    paths.getSuperCell().pbc(nextDelta);
+    cell.pbc(nextDelta);
     double nextR=sqrt(dot(nextDelta,nextDelta));
     q=0.5*(r+nextR);
     svec=delta-nextDelta; s2=dot(svec,svec)/(q*q);

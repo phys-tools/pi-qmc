@@ -29,19 +29,17 @@
 #include "DisplaceMoveSampler.h"
 
 EwaldImagePairAction::EwaldImagePairAction(const Species& s1, const Species& s2,
-					   const EmpiricalPairAction &action, 
-					   const SimulationInfo& simInfo, const int norder,
-					   const double rmin, const double rmax,
-					   const int ngpts,  const int nImages) 
-  : PairAction(s1, s2, action, simInfo, norder, rmin, rmax, ngpts, false),
+  const EmpiricalPairAction &action, const SimulationInfo& simInfo,
+  const int norder, const double rmin, const double rmax, const int ngpts,
+  const int nImages, int exLevel) 
+  : PairAction(s1,s2,action,simInfo,norder,rmin,rmax,ngpts,false,exLevel),
     nImages(nImages) {
-
   std :: vector<double> cell(NDIM);
   sphereR=0.;
   for (int i=0; i< NDIM; i++){
-      cell[i] =  (*simInfo.getSuperCell())[i];
-      sphereR = (cell[i]>sphereR)?cell[i]:sphereR;
-    }
+    cell[i] =  (*simInfo.getSuperCell())[i];
+    sphereR = (cell[i]>sphereR)?cell[i]:sphereR;
+  }
   sphereR *=nImages;
   boxImageVecs.resize(0);
   findBoxImageVectors(cell);

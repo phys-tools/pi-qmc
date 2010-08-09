@@ -36,10 +36,10 @@ public:
   typedef blitz::Array<Vec,1> VArray1;
   /// Constructor by providing the timestep tau.
   CoulombAction(const double epsilon, const SimulationInfo&, const int norder,
-                double rmin, double rmax, int ngpts, const bool dumpFiles,
-                bool useEwald, int ewaldNDim, double ewaldRcut, 
-                double ewaldKcut, double screenDist, 
-		const double kappa, const int nimages, const std::string ewaldType);
+      double rmin, double rmax, int ngpts, const bool dumpFiles,
+      bool useEwald, int ewaldNDim, double ewaldRcut, double ewaldKcut, 
+      double screenDist, const double kappa, const int nimages, 
+      const std::string ewaldType, int exLevel);
   /// Virtual destructor.
   virtual ~CoulombAction();
   /// Calculate the difference in action.

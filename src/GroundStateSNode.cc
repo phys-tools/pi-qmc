@@ -24,7 +24,8 @@
 
 GroundStateSNode::GroundStateSNode(const Species& s, const int icenter, 
                                    const double tau) 
-  : ifirst(s.ifirst), npart(s.count), icenter(icenter), dunit(0.5*tau/s.mass) {
+  : ifirst(s.ifirst), npart(s.count), icenter(icenter), 
+    dunit(sqrt(2.0*s.mass/tau)) {
   std::cout << "GroundState S-Node with center = " << icenter << std::endl;
 }
 
@@ -50,11 +51,11 @@ void GroundStateSNode::evaluateDistance(const VArray &r1, const VArray &r2,
   d1(ifirst) = d1(ifirst+1)
     = fabs(sqrt(dot(r1(ifirst)-r1(icenter),r1(ifirst)-r1(icenter)))
           -sqrt(dot(r1(ifirst+1)-r1(icenter),r1(ifirst+1)-r1(icenter))))
-      /dunit;
+      *dunit;
   d2(ifirst) = d2(ifirst+1)
     = fabs(sqrt(dot(r2(ifirst)-r2(icenter),r2(ifirst)-r2(icenter)))
           -sqrt(dot(r2(ifirst+1)-r2(icenter),r2(ifirst+1)-r2(icenter))))
-      /dunit;
+      *dunit;
 }
 
 void GroundStateSNode::evaluateGradLogDist(const VArray &r1, const VArray &r2,

@@ -31,7 +31,7 @@ public:
     EwaldImagePairAction(const Species&, const Species&, const EmpiricalPairAction&,
 			 const SimulationInfo&, const int norder, 
 			 const double rmin, const double rmax, const int ngpts,
-			 const int nImages);
+			 const int nImages, int exLevel);
     
   /// Virtual destructor.
   virtual ~EwaldImagePairAction() {}

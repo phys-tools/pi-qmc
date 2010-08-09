@@ -58,12 +58,12 @@ public:
   typedef blitz::TinyVector<int,NDIM> IVec;
   /// Construct by providing the species and dmu filename.
   ImagePairAction(const Species&, const Species&, const std::string& filename,
-             const SimulationInfo&, const int norder, const IVec nimage,
-             const bool isDMD);
+    const SimulationInfo&, const int norder, const IVec nimage,
+    const bool isDMD, int exLevel);
   /// Construct by providing the species and dmu filename.
   ImagePairAction(const Species&, const Species&, const EmpiricalPairAction&,
-             const SimulationInfo&, const int norder, const IVec nimage,
-             const double rmin, const double rmax, const int ngpts);
+    const SimulationInfo&, const int norder, const IVec nimage,
+    const double rmin, const double rmax, const int ngpts, int exLevel);
   /// Virtual destructor.
   virtual ~ImagePairAction() {}
   /// Calculate the difference in action.
