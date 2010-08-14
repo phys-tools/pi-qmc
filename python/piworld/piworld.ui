@@ -20,8 +20,8 @@
    <string>piWorld</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>icons/pi-logo.png</normaloff>icons/pi-logo.png</iconset>
+   <iconset resource="icons/icons.qrc">
+    <normaloff>:/icon/pi-logo.png</normaloff>:/icon/pi-logo.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -49,7 +49,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="inputTab">
         <attribute name="title">
@@ -65,12 +65,26 @@
         </layout>
        </widget>
        <widget class="QWidget" name="runTab">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <attribute name="title">
          <string>Run</string>
         </attribute>
         <attribute name="toolTip">
          <string>Setup, Run, and Monitor a Simulation</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QWebView" name="webView">
+           <property name="url">
+            <url>
+             <string>qrc:/doc/index.xhtml</string>
+            </url>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
        <widget class="QWidget" name="outputTab">
         <attribute name="title">
@@ -177,7 +191,7 @@
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>1</number>
              </property>
              <widget class="QWidget" name="emptyEstimatorView"/>
              <widget class="QWidget" name="missingEstimatorView">
@@ -211,7 +225,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -235,8 +249,15 @@
     </property>
     <addaction name="action_Help"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionShowToolbar"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -263,9 +284,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normalon>icons/silk/stop.png</normalon>
-    </iconset>
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icon/silk/stop.png</normaloff>:/icon/silk/stop.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -282,9 +302,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normalon>icons/silk/application_add.png</normalon>
-    </iconset>
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icon/silk/application_add.png</normaloff>:/icon/silk/application_add.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -301,9 +320,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normalon>icons/silk/help.png</normalon>
-    </iconset>
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icon/silk/help.png</normaloff>:/icon/silk/help.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Help</string>
@@ -317,9 +335,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normalon>icons/silk/arrow_refresh.png</normalon>
-    </iconset>
+    <iconset resource="icons/icons.qrc">
+     <normaloff>:/icon/silk/arrow_refresh.png</normaloff>:/icon/silk/arrow_refresh.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Refresh</string>
@@ -331,8 +348,29 @@
     <string>Ctrl+R</string>
    </property>
   </action>
+  <action name="actionShowToolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Toolbar</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../doc/manual/manual.qrc"/>
+  <include location="icons/icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionExit</sender>
@@ -347,6 +385,22 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowToolbar</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>toolBar</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>43</y>
     </hint>
    </hints>
   </connection>

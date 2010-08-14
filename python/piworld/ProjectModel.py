@@ -43,6 +43,8 @@ class ProjectModel(QtCore.QObject):
       # Check for remote access info in pimc.xml.
       xmldoc = etree.fromstring(self.getInputXMLText())
       hostNode = xmldoc.xpath("Host")
+      hostMachine = None
+      hostDirectory = None
       if len(hostNode)>0:
         hostMachine=hostNode[0].attrib.get('machine')
         hostDirectory=hostNode[0].attrib.get('directory')
