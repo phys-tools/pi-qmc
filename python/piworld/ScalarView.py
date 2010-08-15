@@ -94,17 +94,16 @@ class ScalarView(QtGui.QWidget):
       if len(cut)>0:
         cut = cut[0]
         if 5*cut<len(self.autocorr): self.autocorr = self.autocorr[:5*cut]
-      self.actime = sum(self.autocorr)
+      self.actime = 2*sum(self.autocorr)-1
       if self.actime < 1.: self.actime=1.
       self.err = math.sqrt(self.var*self.actime/(self.end-self.start))
       #Do blocking analysis.
       nblock = int(math.log(self.end-self.start+1,2)-3)
       self.blocking = numpy.zeros(nblock+1)
-      self.blocking[0] = self.err
       data = self.values[self.start:self.end+1]
-      for i in range(1,nblock+1):
-        data = 0.5*(data[:-1:2]+data[1::2])
+      for i in range(0,nblock+1):
         self.blocking[i] = math.sqrt(data.var()/(len(data)-1.))
+        data = 0.5*(data[:-1:2]+data[1::2])
 
   class TracePlotWidget(MyMplCanvas):
     def __init__(self, model):
