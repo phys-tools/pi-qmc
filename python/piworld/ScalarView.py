@@ -1,103 +1,172 @@
 #-*- coding: utf-8 -*-
-import math,scipy,numpy,tables,pylab
+from PyQt4 import QtCore, QtGui
+import math,scipy,numpy,tables,matplotlib.pyplot as plt
 from scipy.fftpack import *
 from scipy.optimize import leastsq
 import tables, pitools
 from pitools import Unit
 from EstimatorView import *
+from ScalarViewUI import Ui_ScalarView
 
 
-class ScalarView(EstimatorView):
 
+class ScalarView(QtGui.QWidget):
   def __init__(self, estimatorNode, data, parent=None):
-    EstimatorView.__init__(self,parent)
-
+    QtGui.QWidget.__init__(self,parent)
+    self.ui = Ui_ScalarView()
+    self.ui.setupUi(self)
+    # Read scalar data.
     self.scalar = data.file.getScalar(estimatorNode.name) 
+    self.model = self.ScalarAnalysisModel(self.scalar)
+    # Set up plots in tabs.
+    self.tracePlot =  self.TracePlotWidget(self.model)
+    self.ui.tabWidget.addTab(self.tracePlot,"Trace")
+    self.autocorrPlot =  self.AutocorrPlotWidget(self.model)
+    self.ui.tabWidget.addTab(self.autocorrPlot,"Autocorrelation")
+    self.blockingPlot =  self.BlockingPlotWidget(self.model)
+    self.ui.tabWidget.addTab(self.blockingPlot,"Blocking")
+    # Make connections and update data fields.
+    QtCore.QObject.connect(self.ui.startText,
+      QtCore.SIGNAL("editingFinished()"),
+      self, QtCore.SLOT("respondToStartChange()"))
+    QtCore.QObject.connect(self.ui.endText,
+      QtCore.SIGNAL("editingFinished()"),
+      self, QtCore.SLOT("respondToEndChange()"))
+    self.updateFields()
 
-    pylab.rc('font', family='serif', size=9)
+  def updateFields(self):
+    self.ui.meanText.setText("%g"%self.model.av)
+    self.ui.errorText.setText("%g"%self.model.err)
+    self.ui.sigmaText.setText("%g"%math.sqrt(self.model.sigma))
+    self.ui.autocorrText.setText("%g"%math.sqrt(self.model.actime))
+    self.ui.startText.setText("%g"%self.model.start)
+    self.ui.endText.setText("%g"%self.model.end)
 
-    self.setContentsMargins(1,1,1,1)
+  @QtCore.pyqtSlot()
+  def respondToStartChange(self):
+    oldStart = self.model.start
+    start = int(self.ui.startText.text())
+    if start >= self.model.end: start = self.model.end-1
+    if start < 0: start = 0
+    self.ui.startText.setText("%i"%start)
+    if start != oldStart:
+      self.model.start = start
+      self.model.calculate()
+      self.respondToModelChange()
 
-    self.tabBar = QtGui.QTabWidget(self)
-    self.tabBar.setTabPosition(QtGui.QTabWidget.South)
+  @QtCore.pyqtSlot()
+  def respondToEndChange(self):
+    oldEnd = self.model.end
+    end = int(self.ui.endText.text())
+    if end <= self.model.start: end = self.model.start+1
+    if end >= self.model.ndata: end = self.model.ndata-1
+    self.ui.endText.setText("%i"%end)
+    if end != oldEnd:
+      self.model.end = end
+      self.model.calculate()
+      self.respondToModelChange()
 
-    self.tracePlot =  self.TracePlotWidget(self)
-    self.tabBar.addTab(self.tracePlot,"Trace")
-    self.autocorPlot =  self.PlotWidget(self)
-    self.tabBar.addTab(self.autocorPlot,"Autocorrelation")
-    self.blockingPlot =  self.PlotWidget(self)
-    self.tabBar.addTab(self.blockingPlot,"Blocking")
+  @QtCore.pyqtSlot()
+  def respondToModelChange(self):
+    self.updateFields()
+    self.tracePlot.plotFigure(); self.tracePlot.draw()
+    self.autocorrPlot.plotFigure(); self.autocorrPlot.draw()
+    self.blockingPlot.plotFigure(); self.blockingPlot.draw()
 
-    hbox = QtGui.QHBoxLayout()
-    hbox.setSpacing(0)
-    hbox.addWidget(self.tabBar,15)
-
-    self.info = self.InfoWidget(self)
-    hbox.addWidget(self.info,1)
-
-    self.setLayout(hbox)
-    
+  class ScalarAnalysisModel:
+    def __init__(self, scalar):
+      self.scalar = scalar
+      self.values = self.scalar.data
+      self.ndata = len(self.values)
+      self.start, self.end = 0, self.ndata-1
+      self.times = numpy.arange(self.ndata)
+      self.calculate()
+    def calculate(self):
+      self.av = self.values[self.start:self.end+1].mean()
+      self.var = self.values[self.start:self.end+1].var()
+      self.sigma = math.sqrt(self.var)
+      #Compute autocorrelation
+      aclen = (self.end-self.start+1)/4
+      a = self.values[self.start:self.end+1]-self.av
+      a = numpy.correlate(a,a[aclen:-aclen],'valid')
+      self.autocorr = (a[aclen:]+a[aclen::-1])/(2.*a[aclen])
+      cut = numpy.where(self.autocorr < 0.)[0]
+      if len(cut)>0:
+        cut = cut[0]
+        if 5*cut<len(self.autocorr): self.autocorr = self.autocorr[:5*cut]
+      self.actime = sum(self.autocorr)
+      if self.actime < 1.: self.actime=1.
+      self.err = math.sqrt(self.var*self.actime/(self.end-self.start))
+      #Do blocking analysis.
+      nblock = int(math.log(self.end-self.start+1,2)-3)
+      self.blocking = numpy.zeros(nblock+1)
+      self.blocking[0] = self.err
+      data = self.values[self.start:self.end+1]
+      for i in range(1,nblock+1):
+        data = 0.5*(data[:-1:2]+data[1::2])
+        self.blocking[i] = math.sqrt(data.var()/(len(data)-1.))
 
   class TracePlotWidget(MyMplCanvas):
-    def __init__(self, data):
-      self.data = data
+    def __init__(self, model):
+      self.model = model
       MyMplCanvas.__init__(self)
     def computeInitialFigure(self):
-      values = self.data.scalar.data
-      times = numpy.arange(len(values))
-      # Compute average and error, and plot trace.
-      av,err = self.data.scalar.getAverage()
-      ax = self.axes = self.figure.add_axes([0.20,0.15,0.67,0.82])
-      ax.plot(times,values)
-      ax.axhspan(av-err,av+err,color='y',alpha=0.4)
-      ax.axhline(y=av,color='k',lw=0.2)
-      ax.axis(xmax=len(values)-1)
+      self.axes = self.figure.add_axes([0.20,0.15,0.67,0.82])
+      self.histAxes = self.figure.add_axes([0.87,0.15,0.12,0.82])
+      self.plotFigure()
+    def plotFigure(self):
+      ax = self.axes; hax = self.histAxes
+      ax.cla(); hax.cla()
+      plt.rc('font', family='serif', size=9)
+      # Plot trace.
+      times,values = self.model.times, self.model.values
+      start,end = self.model.start, self.model.end
+      ax.plot(times[start:end+1],values[start:end+1],color='b')
+      av,err = self.model.av, self.model.err
+      ax.axhspan(av-err, av+err, color='y', alpha=0.4)
+      ax.axhline(y=av, color='k', lw=0.2)
+      ax.axis(xmin=start, xmax=end)
       ax.set_xlabel(r"Monte Carlo timestep")
-      ax.set_ylabel(self.data.scalar.name)
-      # Compute histogram.
-      hax = self.histAxes \
-          = self.figure.add_axes([0.87,0.15,0.12,0.82],xticks=[],yticks=[])
-      hax.hist(values,bins=32,orientation='horizontal',
+      ax.set_ylabel(self.model.scalar.name)
+      # Plot histogram.
+      hax.hist(self.model.values[start:end+1],
+               bins=32, orientation='horizontal',
                range=ax.get_ybound())
+      hax.set_ybound(ax.get_ybound())
+      hax.set_xticks([]); hax.set_yticks([])
        
-
-  class PlotWidget(MyMplCanvas):
-    def __init__(self, data):
-      self.data = data
+  class AutocorrPlotWidget(MyMplCanvas):
+    def __init__(self, model):
+      self.model = model
       MyMplCanvas.__init__(self)
     def computeInitialFigure(self):
-      pass
+      ax = self.axes = self.figure.add_axes([0.15,0.15,0.82,0.82])
+      self.plotFigure()
+    def plotFigure(self):
+      plt.rc('font', family='serif', size=9)
+      ax = self.axes
+      ax.cla()
+      autocorr = self.model.autocorr
+      ax.axhline(y=0, color='k', lw=0.3)
+      ax.plot(numpy.arange(len(autocorr)),autocorr)
+      ax.axis(xmax=len(autocorr)-1)
+      ax.set_xlabel(r"simulation time")
+      ax.set_ylabel(r"autocorrelation")
 
-  class InfoWidget(QtGui.QWidget): 
-    def __init__(self, data, parent=None):
-      self.data = data
-      QtGui.QWidget.__init__(self,parent)
- 
-      mean,error = self.data.scalar.getAverage()
-
-      views = []
-      labels = []
-
-      self.meanView = QtGui.QLabel("%g"%mean)
-      labels.append(u"mean"); views.append(self.meanView)
-      self.errorView = QtGui.QLabel("%g"%error)
-      labels.append(u"error of mean"); views.append(self.errorView)
-      self.sigmaView = QtGui.QLabel("???")
-      labels.append(u"σ"); views.append(self.sigmaView)
-      self.autocorView = QtGui.QLabel("???")
-      labels.append(u"T<sub>autocorr.</sub>"); views.append(self.autocorView)
-      self.startView = QtGui.QLabel("0")
-      labels.append(u"start cutoff"); views.append(self.startView)
-      self.endView = QtGui.QLabel("?")
-      labels.append(u"end cutoff"); views.append(self.endView)
-
-      vbox = QtGui.QVBoxLayout()
-      vbox.setSpacing(1)
-
-      for view,label in zip(views,labels):
-        vbox.addWidget(QtGui.QLabel(u"<font size='-1'>%s</font>"%label))
-        vbox.addWidget(view)
-        vbox.addStretch(1)
-
-      vbox.addStretch(1)
-      self.setLayout(vbox)
+  class BlockingPlotWidget(MyMplCanvas):
+    def __init__(self, model):
+      self.model = model
+      MyMplCanvas.__init__(self)
+    def computeInitialFigure(self):
+      self.axes = self.figure.add_axes([0.15,0.15,0.82,0.82])
+      self.plotFigure()
+    def plotFigure(self):
+      plt.rc('font', family='serif', size=9)
+      ax = self.axes
+      ax.cla()
+      blocking = self.model.blocking
+      ax.plot(numpy.arange(len(blocking)),blocking)
+      ax.axhline(y=self.model.err, color='k', lw=1.0)
+      ax.axis(ymin=0)
+      ax.set_xlabel(r"blocking step")
+      ax.set_ylabel(r"error estimate")

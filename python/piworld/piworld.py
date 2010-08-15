@@ -19,6 +19,7 @@ class StartQT4(QtGui.QMainWindow):
     self.ui.estimatorSplitter.setSizes([200,800])
     self.ui.outputSplitter.setSizes([300,700])
     self.ui.simulationList.hide()
+    self.ui.menuView.addAction(self.ui.toolBar.toggleViewAction())
     
     # Set up the project model.
     self.project = ProjectModel(self.ui)
