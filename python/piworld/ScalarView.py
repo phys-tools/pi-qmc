@@ -33,6 +33,7 @@ class ScalarView(QtGui.QWidget):
       QtCore.SIGNAL("editingFinished()"),
       self, QtCore.SLOT("respondToEndChange()"))
     self.updateFields()
+    self.ui.splitter.setSizes([920,80])
 
   def updateFields(self):
     self.ui.meanText.setText("%g"%self.model.av)
@@ -87,8 +88,8 @@ class ScalarView(QtGui.QWidget):
       self.sigma = math.sqrt(self.var)
       #Compute autocorrelation
       aclen = (self.end-self.start+1)/4
-      a = self.values[self.start:self.end+1]-self.av
-      a = numpy.correlate(a,a[aclen:-aclen],'valid')
+      a = self.values[self.start:self.end+1] - self.av
+      a = numpy.correlate(a,a[aclen:-aclen],'valid',old_behavior=False)
       self.autocorr = (a[aclen:]+a[aclen::-1])/(2.*a[aclen])
       cut = numpy.where(self.autocorr < 0.)[0]
       if len(cut)>0:

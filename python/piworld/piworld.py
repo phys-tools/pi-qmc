@@ -16,10 +16,11 @@ class StartQT4(QtGui.QMainWindow):
     # Cosmetic adjustments to gui.
     self.ui.mainTabWidget.setCurrentIndex(0)
     #self.ui.mainTabWidget.setTabEnabled(1,False)
-    self.ui.estimatorSplitter.setSizes([200,800])
-    self.ui.outputSplitter.setSizes([300,700])
+    self.ui.estimatorSplitter.setSizes([150,850])
+    self.ui.outputSplitter.setSizes([200,800])
     self.ui.simulationList.hide()
     self.ui.menuView.addAction(self.ui.toolBar.toggleViewAction())
+    self.ui.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonIconOnly)
     
     # Set up the project model.
     self.project = ProjectModel(self.ui)

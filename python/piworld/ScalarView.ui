@@ -13,27 +13,55 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>3</number>
+   </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="minimumSize">
-        <size>
-         <width>10</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="tabPosition">
-        <enum>QTabWidget::South</enum>
-       </property>
-       <property name="currentIndex">
-        <number>-1</number>
-       </property>
-      </widget>
-     </item>
-     <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>2</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>10</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::South</enum>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+      <property name="elideMode">
+       <enum>Qt::ElideMiddle</enum>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>8</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
        <item>
         <widget class="QGroupBox" name="meanBox">
          <property name="sizePolicy">
@@ -44,7 +72,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>10</pointsize>
            <weight>75</weight>
            <italic>false</italic>
            <bold>true</bold>
@@ -53,12 +81,15 @@
          <property name="title">
           <string>mean</string>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <property name="spacing">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="margin">
-           <number>1</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QLabel" name="meanText">
@@ -70,13 +101,16 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>11</pointsize>
               <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="indent">
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -93,18 +127,23 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="title">
           <string>error of mean</string>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <property name="spacing">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="margin">
-           <number>1</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QLabel" name="errorText">
@@ -116,11 +155,14 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="indent">
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -137,18 +179,23 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="title">
           <string>std. deviation</string>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <property name="spacing">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="margin">
-           <number>1</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QLabel" name="sigmaText">
@@ -160,11 +207,14 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="indent">
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -181,18 +231,23 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="title">
           <string>autocorr. time</string>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0">
           <property name="spacing">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="margin">
-           <number>1</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QLabel" name="autocorrText">
@@ -204,11 +259,14 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="text">
-             <string/>
+             <string>0</string>
+            </property>
+            <property name="indent">
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -225,18 +283,23 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="title">
           <string>start cutoff</string>
          </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <property name="spacing">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="margin">
-           <number>1</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QLineEdit" name="startText">
@@ -248,7 +311,7 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="maxLength">
@@ -269,7 +332,9 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>8</pointsize>
+           <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="title">
@@ -280,10 +345,10 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="spacing">
-           <number>1</number>
+           <number>2</number>
           </property>
           <property name="margin">
-           <number>1</number>
+           <number>2</number>
           </property>
           <item>
            <widget class="QLineEdit" name="endText">
@@ -295,7 +360,7 @@
             </property>
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="text">
@@ -306,27 +371,29 @@
             </property>
            </widget>
           </item>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </widget>
        </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
-     </item>
-    </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
+  <zorder>sigmaBox</zorder>
+  <zorder>splitter</zorder>
  </widget>
  <resources/>
  <connections/>
