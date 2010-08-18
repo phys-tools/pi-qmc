@@ -648,6 +648,13 @@ AugmentedNodes::Atomic2pDM::Atomic2pDM(
   std::cout << "2p: Z="<<Z<<", "<<weight<<", "<<nuclearIndex << std::endl;
 }
 
+AugmentedNodes::Atomic2spDM::Atomic2spDM(
+    double Z, int nuclearIndex, double weight, double alpha)
+  : AtomicOrbitalDM(nuclearIndex, weight), Z(Z), alpha(alpha) {
+  std::cout << "2sp: Z=" << Z << ", " << alpha 
+            << weight << ", " << nuclearIndex << std::endl;
+}
+
 AugmentedNodes::AtomicOrbitalDM::ValueAndGradient
 AugmentedNodes::Atomic1sDM::operator()(double r1, double r2,
     double costheta) const {
@@ -682,3 +689,19 @@ AugmentedNodes::Atomic2pDM::operator()(double r1, double r2,
   result.gradcostheta = temp*r1*r2;
   return result;
 }
+
+AugmentedNodes::AtomicOrbitalDM::ValueAndGradient
+AugmentedNodes::Atomic2spDM::operator()(double r1, double r2,
+    double costheta) const {
+  ValueAndGradient result;
+  double temp  = weight*exp(-0.5*Z*(r1+r2)-alpha*Z*Z*(r1*r1+r2*r2
+                             -2*r1*r2*costheta))*Z*Z*Z/PI;
+  result.value = temp*(1+4*alpha*Z*Z*r1*r2);
+  result.gradr1 = (2*alpha*Z*Z*(r2*costheta-r1)-0.5*Z)*result.value
+                  +4*Z*Z*alpha*r2*temp;
+  result.gradr2 = (2*alpha*Z*Z*(r1*costheta-r2)-0.5*Z)*result.value
+                  +4*Z*Z*alpha*r1*temp;
+  result.gradcostheta = 2*alpha*Z*Z*r1*r2*result.value;
+  return result;
+}
+

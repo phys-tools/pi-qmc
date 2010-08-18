@@ -136,6 +136,14 @@ public:
     operator()(double r1, double r2, double costheta) const;
     const double Z;
   };
+  class Atomic2spDM : public AtomicOrbitalDM {
+  public:
+    Atomic2spDM(double Z, int nuclearIndex, double weight, double alpha);
+    virtual ValueAndGradient 
+    operator()(double r1, double r2, double costheta) const;
+    const double Z;
+    const double alpha;
+  };
   /// Constructor.
   AugmentedNodes(const SimulationInfo&, const Species&, const Species&, 
     const double temperature, const int maxlevel, 

@@ -680,6 +680,10 @@ void ActionParser::parseOrbitalDM(
     } else if (name=="Atomic2p") {
       orbitals.push_back(
         new AugmentedNodes::Atomic2pDM(Z,species.ifirst,weight));
+    } else if (name=="Atomic2sp") {
+      double alpha=getDoubleAttribute(orbNode,"alpha");
+      orbitals.push_back(
+        new AugmentedNodes::Atomic2spDM(Z,species.ifirst,weight,alpha));
     }
   }
 }
