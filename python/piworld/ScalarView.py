@@ -38,8 +38,8 @@ class ScalarView(QtGui.QWidget):
   def updateFields(self):
     self.ui.meanText.setText("%g"%self.model.av)
     self.ui.errorText.setText("%g"%self.model.err)
-    self.ui.sigmaText.setText("%g"%math.sqrt(self.model.sigma))
-    self.ui.autocorrText.setText("%g"%math.sqrt(self.model.actime))
+    self.ui.sigmaText.setText("%g"%self.model.sigma)
+    self.ui.autocorrText.setText("%g"%self.model.actime)
     self.ui.startText.setText("%g"%self.model.start)
     self.ui.endText.setText("%g"%self.model.end)
 

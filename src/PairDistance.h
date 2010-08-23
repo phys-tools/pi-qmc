@@ -19,6 +19,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include "SuperCell.h"
 #include <blitz/array.h>
 #include <blitz/tinyvec-et.h>
 
@@ -92,7 +93,7 @@ class PairDistance {public:
   class PairAngle : public PairDistance { public:
     PairAngle(int idim, int jdim) : idim(idim), jdim(jdim){};
     int idim, jdim;
-    static const double PI=3.14159265358979;
+    static const double PI;
     virtual double operator()(const Vec &r1, const Vec &r2, 
                               const SuperCell &cell)const {
       double angle1=atan2(r1(idim),r1(jdim));

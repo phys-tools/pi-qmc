@@ -43,7 +43,7 @@ SHONodes::SHONodes(const SimulationInfo &simInfo,
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     notMySpecies(false), gradArray(npart), gradMatrix(npart,npart), 
-    mat2(npart,npart), grad2Matrix(npart,npart), nerror(0) {
+    mat2(npart,npart), grad2Matrix(npart,npart), nerror(0), scale(1.) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -59,46 +59,61 @@ NodeModel::DetWithFlag
 SHONodes::evaluate(const VArray &r1, const VArray &r2, 
                    const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
-  Matrix& mat(*matrix[islice]);
-  mat=0;
-  for(int jpart=0; jpart<npart; ++jpart) {
-    Vec rj=r1(jpart+ifirst);
-    double rj2=dot(rj,rj);
-    for(int ipart=0; ipart<npart; ++ipart) {
-      Vec ri=r2(ipart+ifirst);
-      double ri2=dot(ri,ri);
-      double rirj=dot(ri,rj);
-      mat(ipart,jpart)= exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+  do { // Loop if scale is wrong to avoid overflow/underflow.
+    Matrix& mat(*matrix[islice]);
+    mat=0;
+    for(int jpart=0; jpart<npart; ++jpart) {
+      Vec rj=r1(jpart+ifirst);
+      double rj2=dot(rj,rj);
+      for(int ipart=0; ipart<npart; ++ipart) {
+        Vec ri=r2(ipart+ifirst);
+        double ri2=dot(ri,ri);
+        double rirj=dot(ri,rj);
+        mat(ipart,jpart)= scale*exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+      }
     }
-  }
-  // Calculate determinant and inverse.
-  int info=0;//LU decomposition
-  DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
-  if (info!=0) {
-    result.err = true;
-    std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
-    nerror++;
-    if (nerror>1000) {
-      std::cout << "too many errors!!!!" << std::endl;
-      std::exit(-1);
+    // Calculate determinant and inverse.
+    int info=0;//LU decomposition
+    DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
+    if (info!=0) {
+      result.err = true;
+      std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many errors!!!!" << std::endl;
+        std::exit(-1);
+      }
     }
-  }
-  double det = 1;
-  for (int i=0; i<npart; ++i) {
-    det*= mat(i,i); 
-    det *= (i+1==ipiv(i))?1:-1;
-  }
-  DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
-  if (info!=0) {
-    result.err = true;
-    std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
-    nerror++;
-    if (nerror>1000) {
-      std::cout << "too many errors!!!!" << std::endl;
-      std::exit(-1);
+    double det = 1;
+    for (int i=0; i<npart; ++i) {
+      det*= mat(i,i); 
+      det *= (i+1==ipiv(i))?1:-1;
     }
+    DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
+    if (info!=0) {
+      result.err = true;
+      std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
+      nerror++;
+      if (nerror>1000) {
+        std::cout << "too many errors!!!!" << std::endl;
+        std::exit(-1);
+      }
+    }
+    // watch for overflow or underflow.
+    if (scaleMagnitude && (!result.err
+                           && (fabs(det)<1e-50 || fabs(det)>1e50) )) {
+      if (fabs(det)<1e-250) {
+        scale *= 2;
+      } else {
+        scale *= pow(fabs(det),-1./npart);
+      }
+      std::cout << "Slater determinant rescaled: scale = "
+                << scale << std::endl;
+    }
+    result.det = det;
   }
-  result.det = det;
+  while (scaleMagnitude && (result.err ||
+         (fabs(result.det)<1e-50 || fabs(result.det)>1e50)));
   return result;
 }
 
@@ -116,7 +131,7 @@ void SHONodes::evaluateDistance(const VArray &r1, const VArray &r2,
       double ri2=dot(ri,ri);
       double rirj=dot(ri,rj);
       //Vec grad=2*c*ri*exp(-c*(ri2*coshwt-2.0*rirj));
-      Vec grad=2*c*(ri-coshwt*rj)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
+      Vec grad=scale*2*c*(ri-coshwt*rj)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
       logGrad+=mat(jpart,ipart)*grad;
     }
     d2inv+=dot(logGrad,logGrad);
@@ -131,7 +146,7 @@ void SHONodes::evaluateDistance(const VArray &r1, const VArray &r2,
       double rj2=dot(rj,rj);
       double rirj=dot(ri,rj);
       //Vec grad=2*c*rj*exp(-c*(rj2*coshwt-2.0*rirj));
-      Vec grad=2*c*(rj-coshwt*ri)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
+      Vec grad=scale*2*c*(rj-coshwt*ri)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
       logGrad+=mat(jpart,ipart)*grad;
     }
     d2inv+=dot(logGrad,logGrad);

@@ -193,12 +193,12 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-  /*  Matrix& mat(*matrix[islice]);
+  Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
   d1=200.; d2=200.; // Initialize distances to a very large value.
 
- Array maxDist2(npart);
-  maxDist2=2000; getMaxDist2( r1, maxDist2);
+ //Array maxDist2(npart);
+  //maxDist2=2000; getMaxDist2( r1, maxDist2);
 
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
@@ -216,20 +216,19 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     }
     gradArray1(jpart)=logGrad-fgrad;//
 
-cell.pbc( gradArray1(jpart));
+//cell.pbc( gradArray1(jpart));
 
-   double maxDist=sqrt(maxDist2(jpart+ifirst)*.5);
+   //double maxDist=sqrt(maxDist2(jpart)*.5);
     double nodalDist = sqrt(1/((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)));
-    if (nodalDist> maxDist) { nodalDist=maxDist;
-
-    }
+    //if (nodalDist> maxDist) { nodalDist=maxDist;
+    // }
     // d1(jpart+ifirst)=sqrt(2*mass/
     //		  ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
     d1(jpart+ifirst)=sqrt(2*mass/tau)*nodalDist;
 
   }
-  maxDist2=2000; 
-  getMaxDist2( r2, maxDist2); 
+  //maxDist2=2000; 
+  //getMaxDist2( r2, maxDist2); 
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
     for(int jpart=0; jpart<npart; ++jpart) {
@@ -245,19 +244,18 @@ cell.pbc( gradArray1(jpart));
       logGrad+=mat(jpart,ipart)*grad*scale;
     }
     gradArray2(ipart)=logGrad-fgrad; //
-    double maxDist=sqrt(maxDist2(ipart+ifirst)*.5);
+    //double maxDist=sqrt(maxDist2(ipart+ifirst)*.5);
     double nodalDist = sqrt(1/((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)));
-    if (nodalDist> maxDist) nodalDist=maxDist;
+    //if (nodalDist> maxDist) nodalDist=maxDist;
 
-cell.pbc( gradArray2(ipart));
+//cell.pbc( gradArray2(ipart));
 
     // d2(ipart+ifirst)=sqrt(2*mass/
     //		  ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
     d2(ipart+ifirst)=sqrt(2*mass/tau)*nodalDist;
   }
-  */
-  newtonRaphson(r1, r2, islice, d1, 1);
-  newtonRaphson(r2, r1, islice, d2, 2);
+  //newtonRaphson(r1, r2, islice, d1, 1);
+  //newtonRaphson(r2, r1, islice, d2, 2);
 }
 
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
@@ -375,7 +373,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	      }
 	    }
 	  }//(signprev!=signnew)
-	  /*if (nodalDist< maxDist2(jpart+ifirst) && nodalDist < radius2Convergence ) {std :: cout <<"iter :: (nodalDist maxDist) "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart+ifirst)<<".   "<<radius2Convergence<<std::endl;
+	  /*if (nodalDist< maxDist2(jpart) && nodalDist < radius2Convergence ) {std :: cout <<"iter :: (nodalDist maxDist) "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart"<<radius2Convergence<<std::endl;
     	plotNRPoints(r1j, r1jnew, gradf,normal,iter);
 	plotRho2D(jpart, r1, r2, matSav,iter);}*/
 	} else {
@@ -385,13 +383,13 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
       
       //db
       /*
-	if (nodalDist> maxDist2(jpart+ifirst) &&nodalDist < radius2Convergence ) std :: cout <<"iter :: (nodalDist maxDist) "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart+ifirst)<<".   "<<radius2Convergence<<std::endl;
-	if (sqrt(dot(gradf,gradf))<5*sqrt(tau*0.5/mass)  && nodalDist<radius2Convergence &&  radius2Convergence<maxDist2(jpart+ifirst)  ){
-	std :: cout <<"ultra rare case/bug "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart+ifirst)<<".   "<<radius2Convergence<<std::endl; 
+	if (nodalDist> maxDist2(jpart) &&nodalDist < radius2Convergence ) std :: cout <<"iter :: (nodalDist maxDist) "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart)<<".   "<<radius2Convergence<<std::endl;
+	if (sqrt(dot(gradf,gradf))<5*sqrt(tau*0.5/mass)  && nodalDist<radius2Convergence &&  radius2Convergence<maxDist2(jpart)  ){
+	std :: cout <<"ultra rare case/bug "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart)<<".   "<<radius2Convergence<<std::endl; 
 	}
       */
       
-      if (nodalDist> maxDist2(jpart+ifirst))	nodalDist = maxDist2(jpart+ifirst);
+      if (nodalDist> maxDist2(jpart))	nodalDist = maxDist2(jpart);
         
       d(jpart+ifirst)=dfactor*nodalDist;
 
@@ -658,12 +656,12 @@ void FreeParticleNodes::getMaxDist2(const VArray& r, Array& maxDist2){
 	dist=r(i+ifirst)-r(j+ifirst);
 	cell.pbc(dist);
 	tmpDist=dot(dist,dist);
-	if (tmpDist < maxDist2(i+ifirst)){
-	  maxDist2(i+ifirst)=tmpDist;
+	if (tmpDist < maxDist2(i)){
+	  maxDist2(i)=tmpDist;
 	}
       }
     }
-    maxDist2(i+ifirst)= sqrt(maxDist2(i+ifirst)*.5);
+    maxDist2(i)= sqrt(maxDist2(i)*.5);
   }
 }
 

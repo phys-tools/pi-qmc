@@ -121,5 +121,6 @@ private:
   /// Storage for second derivatives needed for forces.
   mutable MMatrix grad2Matrix;
   int nerror;
+  double scale;
 };
 #endif
