@@ -193,69 +193,9 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-  Matrix& mat(*matrix[islice]);
-  // Calculate log gradients to estimate distance.
-  d1=200.; d2=200.; // Initialize distances to a very large value.
 
- //Array maxDist2(npart);
-  //maxDist2=2000; getMaxDist2( r1, maxDist2);
-
-  for (int jpart=0; jpart<npart; ++jpart) {
-    Vec logGrad=0.0, fgrad=0.0;
-    for (int ipart=0; ipart<npart; ++ipart) {
-      Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
-      cell.pbc(delta);
-      Vec grad;
-      for (int i=0; i<NDIM; ++i) {
-	grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-	if (delta[i]<0) grad[i]=-grad[i];
-      }
-      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
-      logGrad+=mat(jpart,ipart)*grad*scale;
-    }
-    gradArray1(jpart)=logGrad-fgrad;//
-
-//cell.pbc( gradArray1(jpart));
-
-   //double maxDist=sqrt(maxDist2(jpart)*.5);
-    double nodalDist = sqrt(1/((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)));
-    //if (nodalDist> maxDist) { nodalDist=maxDist;
-    // }
-    // d1(jpart+ifirst)=sqrt(2*mass/
-    //		  ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
-    d1(jpart+ifirst)=sqrt(2*mass/tau)*nodalDist;
-
-  }
-  //maxDist2=2000; 
-  //getMaxDist2( r2, maxDist2); 
-  for (int ipart=0; ipart<npart; ++ipart) {
-    Vec logGrad=0.0, fgrad=0.0;
-    for(int jpart=0; jpart<npart; ++jpart) {
-      Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
-      cell.pbc(delta);
-      Vec grad;
-      for (int i=0; i<NDIM; ++i) {
-	grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-	if (delta[i]<0) grad[i]=-grad[i];
-      }
-      if (useHungarian && jpart==kindex(islice,ipart)) fgrad = grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
-      logGrad+=mat(jpart,ipart)*grad*scale;
-    }
-    gradArray2(ipart)=logGrad-fgrad; //
-    //double maxDist=sqrt(maxDist2(ipart+ifirst)*.5);
-    double nodalDist = sqrt(1/((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)));
-    //if (nodalDist> maxDist) nodalDist=maxDist;
-
-//cell.pbc( gradArray2(ipart));
-
-    // d2(ipart+ifirst)=sqrt(2*mass/
-    //		  ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
-    d2(ipart+ifirst)=sqrt(2*mass/tau)*nodalDist;
-  }
-  //newtonRaphson(r1, r2, islice, d1, 1);
-  //newtonRaphson(r2, r1, islice, d2, 2);
+  newtonRaphson(r1, r2, islice, d1, 1);
+  newtonRaphson(r2, r1, islice, d2, 2);
 }
 
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
@@ -320,7 +260,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	    for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
 	    logGrad+=invMat(jpart,ipart)*grad*scale;
 	  }
-	  gradArray(jpart)=logGrad-fgrad;
+	  gradArray(jpart)=logGrad-fgrad;//
 	  gradf=gradArray(jpart);
 	} else {
 	  r1j=r1(jpart+ifirst);
@@ -373,7 +313,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	      }
 	    }
 	  }//(signprev!=signnew)
-	  /*if (nodalDist< maxDist2(jpart) && nodalDist < radius2Convergence ) {std :: cout <<"iter :: (nodalDist maxDist) "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart"<<radius2Convergence<<std::endl;
+	  /*if (nodalDist< maxDist2(jpart) && nodalDist < radius2Convergence ) {std :: cout <<"iter :: (nodalDist maxDist) "<<iter<<"  "<<nodalDist<<" "<<maxDist2(jpart)<<".   "<<radius2Convergence<<std::endl;
     	plotNRPoints(r1j, r1jnew, gradf,normal,iter);
 	plotRho2D(jpart, r1, r2, matSav,iter);}*/
 	} else {
@@ -389,7 +329,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	}
       */
       
-      if (nodalDist> maxDist2(jpart))	nodalDist = maxDist2(jpart);
+      if (nodalDist> maxDist2(jpart) ||  nodalDist==0 )	nodalDist = maxDist2(jpart);
         
       d(jpart+ifirst)=dfactor*nodalDist;
 
