@@ -1,10 +1,11 @@
 <RCC>
   <qresource prefix="doc">
+    <file>index.xhtml</file>
+    <file>pi.css</file>
     <file>DensityEstimators.xhtml</file>
     <file>DynamicResponse.xhtml</file>
     <file>Introduction.xhtml</file>
     <file>PairCorrelations.xhtml</file>
     <file>ScalarEstimators.xhtml</file>
-    <file>index.xhtml</file>
   </qresource>
 </RCC>
