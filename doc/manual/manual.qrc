@@ -2,6 +2,7 @@
   <qresource prefix="doc">
     <file>index.xhtml</file>
     <file>pi.css</file>
+    <file>Overview.xhtml</file>
     <file>DensityEstimators.xhtml</file>
     <file>DynamicResponse.xhtml</file>
     <file>Introduction.xhtml</file>
