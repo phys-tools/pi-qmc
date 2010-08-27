@@ -12,6 +12,72 @@
 <body>
 <h1>Density Estimators</h1>
 
+<h2>Real-space on a rectangular grid</h2>
+<p>The simplest way to collect the density is to create a rectangular
+array of bins and histogram the beads of the paths.
+For example, a grid defined by 
+<ul>
+<li><tt>xmin, xmax, nx</tt></li>
+<li><tt>ymin, ymax, ny</tt></li>
+<li><tt>zmin, zmax, nz</tt></li>
+</ul>
+has <tt>nx*ny*nz</tt> rectangular bins,
+each with dimension <tt>dx = (xmax-xmin)/nx</tt> by
+<tt>dy = (ymax-ymin)/nz</tt> by <tt>dz = (zmax-zmin)/nz</tt>.
+The bin with indicies <tt>(i, j, k)</tt> is centered at
+<tt>( xmin+(i+0.5)*dx, ymin+(j+0.5)*dy, zmin+(k+0.5)*dz )</tt>.
+</p>
+<p>Each time a measurement is made, the position of all
+<tt>npart*nslice</tt> beads is checked, where <tt>npart</tt> is
+the number of particles of the species whose density is being measured.
+If a bead is inside one of the bins, that bin is increased by 
+<tt>1./nslice</tt>. If all beads lie in the grid bins, then the 
+bins sum to <tt>npart</tt>. Otherwise the total is less than <tt>npart</tt>;
+this can happen if the grid dimensions do not fill the simulation supercell.
+To convert the measurement to density, divide by the volume of a bin,
+<tt>dx * dy * dz</tt>.
+</p>
+
+
+<h2>Real-space on arbitrary grids</h2>
+
+<h2>Density in k-space</h2>
+<p>
+Since <span class="pi">pi</span> 
+uses a position basis, we often collect density fluctuations in 
+real space.
+However, most textbook descriptions
+of density fluctioans are in k-space, and results for
+homogeneous systems are often best represented in k-space. Here
+we give a brief summary of common definitions for pedagogical purposes.
+For simplicity we write all formulas for spinless particles.
+</p>
+<p>
+The dimensionsless Fourier transform of the density operator
+is (Eqs. 1.11 and 1.66 of Giuliani and Vignale)
+<div class="math">
+n<sub><b>q</b></sub> 
+&nbsp;=&nbsp; Σ<sub>j</sub>
+e<sup>-i<b>k</b>·<b>r</b><sub>j</sub></sup>
+&nbsp;=&nbsp; Σ<sub><b>k</b></sub>
+  a<sup>†</sup><sub><b>k</b>-<b>q</b></sub> a<sub><b>k</b></sub>.
+</div>
+Note that <span class="math">n<sub>0</sub> = N</span>, the total
+number of particles.
+</p>
+<p>The <span class="pi">pi</span> code does not presently calculate
+this expectation value. If it is implemented in the future, it should
+return a complex expectation value for each k-vector.
+The imaginary part of this estimator will be zero for systems with 
+inversion symmetry about the origin.</p>
+<p>Homegeneous systems, such as liquid helium or
+the electron gas, will have 
+<span class="math">〈n<sub><b>q</b></sub>〉 = 0</span>
+for all <span class="math"><b>q</b> ≠ 0</span>.
+In those cases, it is better to calculate the 
+<a href="PairCorrelations.xhtml#sk">static structure factor</a>.
+</p>
+
 </body>
 </html>
 

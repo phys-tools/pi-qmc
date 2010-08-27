@@ -1,7 +1,7 @@
 /* Basic layout and paragraphs */
 body {
   font-size: 1em;
-  font-family: Verdana, sans-serif;
+  font-family: Georgia, Times, "Times new Roman", serif;
   color: #232018;
   background-color:#ffffff;
 }
@@ -9,16 +9,22 @@ a {
   color: inherit;
   text-decoration: underline;
 }
+p {
+  text-align: justify;
+}
 span.pi {
+  font-family: "Tahoma", "Geneva", sans-serif;
   font-weight: bold;
   font-style: italic;
+  font-size: 0.85em;
+  letter-spacing: -0.02em;
 }
 h1 {
   font-family: "Palatino", serif;
   font-weight: lighter;
   font-size: 1.6em;
   font-stretch: wider;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.1em;
   padding: 0.25em 0em 0.5em 0em;
   color: #232018;
 }
@@ -49,9 +55,14 @@ h5 { }
 h6 { }
 
 /* Equations */
-div.equation {
+*.math {
+  font-family: "Unicode Symbols", "Times New Roman", "Apple Symbols",
+               "Arial Unicode MS", serif;
+}
+div.math {
   padding: 1em;
   text-align:center;
+  font-size: 1.1em;
 }
 
 /* TOC formatting */

@@ -13,11 +13,133 @@
 <h1>Dynamic Response Functions</h1>
 
 <p>We define a dynamic correlation function as
-<div class="equation">
+<div class="math">
 χ<sub>AB</sub>(τ) = -(1/ℏ)⟨A(τ)B(0)⟩,
 </div>
-where A and B are operators.
+where <span class="math">A</span> and 
+<span class="math">B</span> are operators.
 </p>
+
+<h2>Density-density response</h2>
+<p>
+Since <span class="pi">pi</span> 
+uses a position basis, we often collect density fluctuations in 
+real space.
+However, most textbook descriptions
+of density fluctioans are in k-space, and results for
+homogeneous systems are often best represented in k-space. Here
+we give a brief summary of common definitions for pedagogical purposes.
+For simplicity we write all formulas for spinless particles.
+</p>
+<p>
+The dimensionsless Fourier transform of the density operator
+is (Eqs. 1.11 and 1.66 of Giuliani and Vignale)
+<div class="math">
+n<sub><b>q</b></sub> 
+&nbsp;=&nbsp; Σ<sub>j</sub>
+e<sup>-i<b>k</b>·<b>r</b><sub>j</sub></sup>
+&nbsp;=&nbsp; Σ<sub><b>k</b></sub>
+  a<sup>†</sup><sub><b>k</b>-<b>q</b></sub> a<sub><b>k</b></sub>.
+</div>
+Note that <span class="math">n<sub>0</sub>=N</span>, the total
+number of particles.
+To get back to real-space density use
+<div class="math">
+n(<b>r</b>) = (1/V) Σ<sub><b>q</b></sub>
+  n<sub><b>q</b></sub> e<sup>i<b>q</b>·<b>r</b></sup>.
+</div>
+</p>
+<p>
+For each of these, we define frequency-dependent density operators,
+<div class="math">
+n(<b>r</b>,iω<sub>n</sub>) =
+  ∫<sub>0</sub><sup>βħ</sup>&nbsp; n(<b>r</b>,τ) e<sup>iω<sub>n</sub>τ</sup> dτ,
+</div>
+and
+<div class="math">
+n<sub><b>q</b></sub>(iω<sub>n</sub>) =
+  ∫<sub>0</sub><sup>βħ</sup>&nbsp; n<sub><b>q</b></sub>(τ) e<sup>iω<sub>n</sub>τ</sup> dτ,
+</div>
+where <span class="math">iω<sub>n</sub> = 2πinkT/ħ</span>
+are the Matsubara frequencies.
+Within the <span class="pi">pi</span> code, these frequency-dependent
+densities are easily calculated
+with fast Fourier transforms, which are most efficient when the number of
+slices is a power of two.
+</p>
+
+<h3>Real-space response</h3>
+<p>The imaginary-frequency 
+response of the density to an external perturbation is
+given by (Ch 3.3 of Guiliani and Vignale),
+<div class="math">
+δn(<b>r</b>,iω<sub>n</sub>)
+ = ∫ d<b>r</b> χ<sub>nn</sub>(<b>r</b>,<b>r</b>', iω<sub>n</sub>) 
+  V<sub>ext</sub>(<b>r</b>', iω<sub>n</sub>).
+</div>
+In k-space this takes the convienent form,
+<div class="math">
+δn(<b>q</b>,iω<sub>n</sub>) =  Σ<sub><b>q</b>'</sub>
+χ<sub>nn</sub>(<b>q</b>,<b>q</b>',iω<sub>n</sub>) V<sub>ext</sub>(<b>q</b>',iω<sub>n</sub>).
+</div>
+where the external potential in k-space satisfies
+<div class="math">
+V<sub>ext</sub>(<b>r</b>') = (1/V) Σ <sub><b>q</b>'</sub>
+  V<sub>ext</sub>(<b>q</b>') e<sup>i<b>q</b>'·<b>r</b>'</sup>,
+</div>
+and
+<div class="math">
+V<sub>ext</sub>(<b>q</b>') 
+  = ∫ d<b>q</b>' e<sup>-i<b>q</b>'·<b>r</b>'</sup> V<sub>ext</sub>(<b>r</b>').
+</div>
+</p>
+<p>
+These response functions are related to imaginary-frequency 
+dynamic correlation functions,
+<div class="math">
+χ<sub>nn</sub>(<b>r</b>,<b>r</b>',iω<sub>n</sub>)
+= -(1/βħ²)〈n(<b>r</b>,iω<sub>n</sub>) n(<b>r</b>',-iω<sub>n</sub>)〉,
+</div>
+and
+<div class="math">
+χ<sub>nn</sub>(<b>q</b>,<b>q</b>',iω<sub>n</sub>)
+= -(1/βħ²V)〈n<sub><b>q</b></sub>(iω<sub>n</sub>) 
+             n<sub>-<b>q</b>'</sub>(-iω<sub>n</sub>)〉.
+</div>
+</p>
+For a homogeneous system, 
+<div class="math">
+χ<sub>nn</sub>(<b>q</b>,<b>q</b>',iω<sub>n</sub>)
+= -(1/βħ²V)〈n<sub><b>q</b></sub>(iω<sub>n</sub>)
+             n<sub>-<b>q</b></sub>(-iω<sub>n</sub>)〉
+δ<sub><b>qq</b>'</sub>.
+</div>
+
+<h3>Structure factor</h3>
+
+<p>
+The dynamic structure factor
+<span class="math">S(<b>k</b>,iω<sub>n</sub>)</span>
+measures the density response of the system,
+<div class="math">
+S(<b>k</b>,iω<sub>n</sub>) = -(V/ħN) 
+χ<sub>nn</sub>(<b>k</b>,<b>k</b>,iω<sub>n</sub>)
+</div>
+The static structure factor is defined for equal time, not for
+<span class="math">ω<sub>n</sub> → 0</span>,
+<div class="math">
+S(<b>k</b>) = (1/N) 
+〈n<sub><b>k</b></sub>(τ=0) n<sub>-<b>k</b></sub>(τ=0)〉.
+</div>
+In terms of <span class="math">χ<sub>nn</sub>(<b>q</b>,<b>q</b>',iω)</span>,
+the static structure factor is given by (<em>prefactor is wrong</em>)
+<div class="math">
+S(<b>k</b>) = -(V/ħN) Σ<sub>ω<sub>n</sub></sub> 
+χ<sub>nn</sub>(<b>k</b>,<b>k</b>,iω<sub>n</sub>)
+   e<sup>-iω<sub>n</sub>τ</sup>.
+</div>
+</p>
+<h3>Polarizability</h3>
 
 </body>
 </html>
