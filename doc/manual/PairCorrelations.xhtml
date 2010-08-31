@@ -4,13 +4,51 @@
  "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-<title>pi-qmc: Scalar Estimators</title>
+<title>pi-qmc: Pair Correlations</title>
 <meta charset="UTF-8" />
 <link rel="stylesheet" href="pi.css" type="text/css"/>
 </head>
 
 <body>
-<h1>Scalar Estimators</h1>
+<h1>Pair Correlations</h1>
+
+<h2>General Pair Correlation Function</h2>
+<p>
+The pair correlation function (PCF) between two species
+α and β is
+<div class="math">
+g<sub>αβ</sub>(<b>r</b>, <b>r</b>')
+= 〈n<sub>α</sub>(<b>r</b>)n<sub>β</sub>(<b>r</b>')〉/
+  &nbsp;〈n(<b>r</b>)〉〈n(<b>r</b>')〉.
+</div>
+When the density fluctations are uncorrelated at large distances, such as
+in a liquid, then <span class="math">g → 1</span>.
+</p>
+
+<h2>Pair Correlations in an Isotropic, Homegeneous System</h2>
+<p>For an isotropic, homegenous system, the PCF becomes a 
+function of <span class="math">r = |<b>r</b> - <b>r</b>'|</span>,
+the distance between 
+<span class="math"><b>r</b></span> and <span class="math"><b>r</b>'</span>.
+</p>
+
+<h2>Static Structure Factor</h2>
+<a name="sk"/>
+<p>
+For a single component with <span class="math">N</span>
+particles in the periodic cell, the static structure factor is
+<div class="math">
+S(<b>k</b>) = (1/N) 〈n<sub><b>k</b></sub>n<sub><b>-k</b></sub>〉,
+</div>
+where <span class="math">n<sub><b>k</b></sub> = Σ<sub>j</sub>
+e<sup>-i<b>k</b>·<b>r</b><sub>j</sub></sup></span>.
+Thus <span class="math">S(<b>k</b>)</span> is related to 
+<span class="math">g(<b>r</b>, <b>r</b>')</span> by
+<div class="math">
+S(<b>k</b>) = ∫e<sup>-i<b>k</b>·(<b>r</b>-<b>r</b>')</sup> 
+ [g(<b>r</b>,<b>r</b>')-1] d<b>r</b>.
+</div>
+</p>
 
 </body>
 </html>
