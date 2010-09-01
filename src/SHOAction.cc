@@ -25,10 +25,11 @@
 #include "Species.h"
 
 SHOAction::SHOAction(const double tau, const double omega, const double mass,
-                     const int ndim, const Species &species) 
+                     const int ndim, const Species &species, const Vec& center) 
   : tau(tau), omega(omega), mass(mass), ndim(ndim),
-    ifirst(species.ifirst), npart(species.count) {
-  std::cout << "SHOAction with omega=" << omega << std::endl;
+    ifirst(species.ifirst), npart(species.count), center(center) {
+  std::cout << "SHOAction with omega=" << omega 
+            << " centered at " << center << std::endl;
 }
 
 double SHOAction::getActionDifference(const MultiLevelSampler& sampler,
@@ -51,8 +52,8 @@ double SHOAction::getActionDifference(const MultiLevelSampler& sampler,
       const int i=index(iMoving);
       if (i<ifirst || i>=ifirst+npart) continue;
       // Add action for moving beads.
-      Vec r1=movingBeads(iMoving,islice); 
-      Vec r0=movingBeads(iMoving,islice-nStride); 
+      Vec r1=movingBeads(iMoving,islice)-center; 
+      Vec r0=movingBeads(iMoving,islice-nStride)-center; 
       Vec delta=r1-r0;
       double r0r0=0, r0r1=0, r1r1=0, delta2=0;
       for (int idim=(NDIM-ndim); idim<NDIM; ++idim) {
@@ -63,7 +64,8 @@ double SHOAction::getActionDifference(const MultiLevelSampler& sampler,
       }
       deltaAction+=m*omega*((r1r1+r0r0)*coshwt-2.0*r0r1)*div1-m*delta2*div2;
       // Subtract action for old beads.
-      r1=sectionBeads(i,islice); r0=sectionBeads(i,islice-nStride);
+      r1=sectionBeads(i,islice)-center;
+      r0=sectionBeads(i,islice-nStride)-center;
       delta=r1-r0;
       r0r0=0; r0r1=0; r1r1=0; delta2=0;
       for (int idim=(NDIM-ndim); idim<NDIM; ++idim) {
@@ -93,9 +95,9 @@ void SHOAction::getBeadAction(const Paths& paths, int ipart, int islice,
   double cothwt=coshwt*cschwt;
   double tin=1.0/tau;
   double m=mass;
-  Vec r1=paths(ipart,islice);
-  Vec r0=paths(ipart,islice,-1);
-  Vec r2=paths(ipart,islice,1);
+  Vec r1=paths(ipart,islice)-center;
+  Vec r0=paths(ipart,islice,-1)-center;
+  Vec r2=paths(ipart,islice,1)-center;
   Vec delta = paths.delta(ipart,islice,-1);
   double r0r0=0, r0r1=0, r1r1=0, delta2=0;
   for (int idim=(NDIM-ndim); idim<NDIM; ++idim) {
@@ -131,9 +133,9 @@ double SHOAction::getActionDifference(const Paths &paths,
     int ipart = movingIndex(i);
     if (ipart<ifirst || ipart>=ifirst+npart) break;
     for (int islice=iFirstSlice; islice<nslice; ++islice) {
-      Vec r1=paths(ipart,islice);
-      Vec r0=paths(ipart,islice,-1);
-      Vec r2=paths(ipart,islice,1);
+      Vec r1=paths(ipart,islice)-center;
+      Vec r0=paths(ipart,islice,-1)-center;
+      Vec r2=paths(ipart,islice,1)-center;
       double r0r0=0, r0r1=0, r1r1=0;
       for (int idim=(NDIM-ndim); idim<NDIM; ++idim) {
         r0r0+=r0[idim]*r0[idim];

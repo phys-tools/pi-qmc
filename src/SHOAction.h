@@ -58,7 +58,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor by providing the timestep tau.
   SHOAction(const double tau, const double omega, const double mass,
-            const int ndim, const Species&);
+            const int ndim, const Species&, const Vec&);
   /// Virtual destructor.
   virtual ~SHOAction() {}
   /// Calculate the difference in action.
@@ -84,5 +84,7 @@ private:
   const int ifirst;
   /// The number of particles with this interaction.
   const int npart;
+  /// The location of the minimum of the potential.
+  const Vec center;
 };
 #endif

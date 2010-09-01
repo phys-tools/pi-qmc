@@ -267,6 +267,11 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       continue;
  } else if (name=="SHOAction") {
       double omega=getEnergyAttribute(actNode,"omega");
+      Vec center;
+      for (int idim=0; idim<NDIM; ++idim) {
+        center[idim]=getLengthAttribute(actNode,
+                                  std::string(dimName).substr(idim,1));
+      }
       if (omega==0) omega=1;
       int ndim=getIntAttribute(actNode,"ndim");
       if (ndim==0) ndim=NDIM;
@@ -274,7 +279,7 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       const Species& species(simInfo.getSpecies(specName));
       const double mass = species.mass;
       composite->addAction(new SHOAction(simInfo.getTau(),
-                               omega,mass,ndim,species));
+                               omega,mass,ndim,species,center));
       continue;
    }  else if (name=="TwoQDAction") {
       const double omega=getEnergyAttribute(actNode,"omega");
