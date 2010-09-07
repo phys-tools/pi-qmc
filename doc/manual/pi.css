@@ -82,3 +82,26 @@ div.toc ol ol {
 div.toc ol ol ol {
   list-style-type: upper-alpha;
 }
+
+/* Page TOC formatting */
+div#innertoc {
+  border-style: outset;
+  width: 35%;
+  font-family: "Lucida Grande", "Lucida Sans Unicdoe", Helvetica, "Helvetica Neue", Arial;
+  font-size: small;
+}
+div#innertoc span#contentheader {
+  color: black;
+  font-weight: bold;
+}
+div#innertoc a.page {
+  display: block;
+  text-decoration: none; 
+}
+div#innertoc a.indent {
+  text-indent: 2em; 
+}
+div#innertoc a.extraindent {
+  text-indent: 4em; 
+}
+
