@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC
+ "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN"
+ "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>pi-qmc: Building pi</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="pi.css" type="text/css"/>
+<script type="text/javascript" src="pagecontents.js"></script>
+</head>
+
+<body>
+<div class="nav">
+<a href="index.xhtml" class="up">Contents</a>
+</div>
+<h1>Building <span class="pi">pi</span></h1>
+<h2>Quick start</h2>
+<p>
+The easiest way to build is to use:
+<div class="code sh">
+./configure
+make
+</div>
+For a parallel build
+<div class="code sh">
+./configure --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77
+</div>
+where you should use the names of your MPI enabled compilers.</p>
+
+<p>
+You can also build for different numbers of physical dimensions 
+(default is <span class="code">NDIM=3</span>)
+<div class="code sh">
+./configure --with-ndim=2
+</div>
+</p>
+
+<h2>Required libraries</h2>
+<p>We use the following libraries in the <span class="pi">pi</span> code:
+<ul>
+<li><a href="http://xmlsoft.org/">libxml2</a></li>
+<li><a href="http://www.oonumerics.org/blitz/">blitz++</a></li>
+<li><a href="http://www.hdfgroup.org/">hdf5</a></li>
+<li><a href="http://www.fftw.org/">fftw3</a></li>
+<li>BLAS/LAPACK</li>
+<li><a href="http://www.gnu.org/software/gsl/">gsl</a></li>
+</ul>
+</p>
+
+<h2>Advanced build using multiple directories</h2>
+
+<p>In research, we often want different versions of the executables, 
+for example, versions with and
+without MPI, or versions compiled for two-dimensional systems. 
+To accomplish this, we make a <tt>pibuilds</tt> directory beside our 
+svn checkout directory (<tt>pi</tt> or <tt>pi-qmc</tt>).
+We then make empty subdirectories for each build, for example 
+<tt>ndim2mpi</tt> for a two dimensional MPI version. 
+A typical directory structure is:
+<div class="code">
+<pre>codes/
+  pi-qmc/
+    configure
+    src/
+    lib/
+  pibuilds/
+    ndim1/
+    ndim2/
+    ndim3/
+    ndim1mpi/
+    ndim2mpi/
+    ndim3mpi/
+    debug/</pre>
+</div>
+</p>
+
+<p>To build, go into the empty build directory,
+<div class="code sh">
+cd ~/codes/pibuilds/ndim2mpi
+</div>
+Then run the configure script with the desired options
+<div class="code sh">
+../../configure --with-ndim=2 --enable-mpi
+</div>
+You will probably want more configure options; see the platform specific 
+instructions below for some examples.
+</p>
+
+<p>Then, make the code in that directory,
+<div class="code sh">
+make -j2
+</div>
+For conveniance, you can make a soft link to the executable
+<div class="code sh">
+ln -sf ~/codes/pibuilds/ndim3mpi ~/bin/pi2Dmpi
+</div>
+</p>
+
+<h2>Platform specific instructions</h2>
+
+<h3>Mac OS X</h3>
+
+<p>
+All the dependencies are available through [http://www.macports.org/ macports]. It is also handy to install
+the latest gcc compilers (with gfortran), openmpi, and python utilities for data analysis and plotting.
+<div class="code">
+<pre>$ port installed
+  libxml2 @2.7.3_0 (active)
+  blitz @0.9_0 (active)
+  hdf5-18 @1.8.3_0 (active)
+  gsl @1.12_0 (active)
+  fftw-3 @3.2.2_0 (active)
+
+  gcc44 @4.4.0_0 (active)
+
+  python26 @2.6.2_3 (active)
+  py26-numpy @1.3.0_0 (active)
+  py26-ipython @0.9.1_0+scientific (active)
+  py26-scipy @0.7.0_0+gcc44 (active)
+  py26-tables @2.1_0 (active)</pre>
+</div>
+</p>
+
+<p>
+The following configure works well on an intel mac:
+<div class="code sh">
+<pre>../../pi/configure CXX=g++-mp-4.4 CC=gcc-mp-4.4 \
+  CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize \
+  -march=native -fomit-frame-pointer -pipe" \ 
+  F77=gfortran-mp-4.4</pre>
+</div>
+or, for an MPI enabled build,
+<div class="code sh">
+<pre>../../pi/configure --enable-mpi CXX=g++-mp-4.4 CC=gcc-mp-4.4 F77=gfortran-mp-4.4 \
+  MPICC=openmpicc MPICXX=openmpicxx MPIF77=openmpif77 \
+  CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize \
+  -march=native -fomit-frame-pointer -pipe"</pre>
+</div>
+</p>
+
+<p>
+On a G5 mac, try:
+<div class="code sh">
+<pre>../../pi/configure --with-ndim=3  F77=gfortran-mp-4.4 CC=gcc-mp-4.4 CXX=g++-mp-4.4\
+  CXXFLAGS="-g -O3 -ffast-math -ftree-vectorize -maltivec -mpowerpc-gpopt \
+  -mpowerpc64 falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -funroll-loops"</pre>
+</div>
+or, for an MPI enabled build,
+<div class="code sh">
+<pre>../../pi/configure --with-ndim=3 --enable-mpi \
+  CXXFLAGS="-g -O3 -ffast-math -ftree-vectorize -maltivec -mpowerpc-gpopt \
+  -mpowerpc64 falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -funroll-loops" \
+  F77=gfortran-mp-4.4 CC=gcc-mp-4.4 CXX=g++-mp-4.4  MPICC=openmpicc MPICXX=openmpicxx MPIF77=openmpif77</pre>
+</div>
+
+<h3>Linux (CentOS 5.3)</h3>
+
+<p>
+You can download dependencies using <tt>yum</tt>. First, you may need to add access to the fedora [http://fedoraproject.org/wiki/EPEL Extra Packages for Enterprise Linux (EPEL)].
+<div class=" code sh">
+sudo rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+</div>
+Then install the required packages for *_pi_*. (You probably want to compile atlas yourself to get automatic performance tuning for your hardware, but the yum install will work if you are impatient.) Note: replace <tt>x86_64</tt> with <tt>i386</tt> if you are on a 32 bit machine.
+<div class="sh">
+<pre>sudo yum install libxml2-devel-versionXXX.x86_64 (here I don't know the correct version)
+sudo yum install blitz-devel.x86_64
+sudo yum install fftw3-devel.x86_64
+sudo yum install hdf5-devel.x86_64
+sudo yum install atlas-sse3-devel.x86_64
+sudo yum install lapack-devel.x86_64
+sudo yum install gsl-devel.x86_64</pre>
+</div>
+</p>
+
+<p>
+It is useful to install the gcc 4.3 compilers.
+<div class="code sh">
+<pre>sudo yum install gcc43.x86_64
+sudo yum install gcc43-c++.x86_64
+sudo yum install gcc43-gfortran.x86_64</pre>
+</div>
+Also, you will want an MPI implementation if you want to run in parallel,
+<div class="code sh">
+sudo yum install openmpi-devel.x86_64
+</div>
+The openmpi package will require that you run <tt>mpi-selector</tt> and open a new terminal to get the executables. Use the <tt>mpi-selector --list</tt> option to see what is available, then set a system-wide default.
+<div class="code sh">
+sudo mpi-selector --system --set openmpi-1.2.7-gcc-x86_64
+</div>
+</p>
+
+<p>
+When you configure <span class="pi">pi</span>, you will probably need to 
+specify the location of your BLAS and LAPACK routines,
+<div class="code sh">
+<pre>../../pi/configure CXX=g++43 CC=gcc43 F77=gfortran43 CXXFLAGS=\
+"-g -O3 -ffast-math -ftree-vectorize -march=native -fomit-frame-pointer -pipe"\
+ --with-blas="-L/usr/lib64/atlas -llapack -lf77blas"</pre>
+</div>
+For mpi, just add <code>--enable-mpi</code>. 
+</p>
+
+<p>
+For the python analysis utilities, you'll want to install ipython and 
+matplotlib.
+<div class="code sh">
+<pre>sudo yum install python-matplotlib
+sudo yum install ipython
+sudo yum install scipy</pre>
+</div>
+The python package <a href="http://www.pytables.org/">pytables</a> 
+for reading HDF5 files is also required for the analysis scripts, but it 
+is not available through yum, so you'll have to download it and install 
+it yourself.
+</p>
+
+<h2>HPC Centers</h2>
+
+<h3>ASU Fulton: saguaro</h3>
+<p>
+For a serial build in two dimensions,
+<div class="code sh">
+../../pi/configure --with-ndim=2 --enable-sprng  CXX=icpc CC=icc CXXFLAGS="-O3 -xP -ipo" \
+--with-blas="-L$MKL_LIB -lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+F77=ifort AR="xild -lib"
+</div>
+or for a parallel version,
+<div class="code sh">
+../../pi/configure --with-ndim=2 --enable-sprng --enable-mpi MPICC=mpicc MPICXX=mpicxx \
+CXX=icpc CC=icc F77=ifort CXXFLAGS="-O3 -xP -ipo" AR="xild -lib" \
+--with-blas="-L$MKL_LIB -lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" 
+</div>
+Omit the <code>--enable-sprng</code> option if you do not have the 
+SPRNG library.
+</p>
+
+<h3>LONI-LSU: queenbee</h3>
+<p>
+You need to add some lines to your <tt>.soft</tt> file to include some required libraries,
+<div class="code sh">
+<pre>#My additions (CPATH mimics -I include directories).
+CPATH += /usr/local/packages/hdf5-1.8.1-intel10.1/include
++gsl-1.9-intel10.1
++sprng4-mvapich-1.1-intel-10.1
++fftw-3.1.2-intel10.1
+CPATH += :/usr/local/packages/fftw-3.1.2-intel10.1/include
++intel-mkl
+CPPFLAGS += -DMPICH_IGNORE_CXX_SEEK</pre>
+</div>
+For an MPI build, use,
+<div class="code sh">
+<pre>../../pi/configure --with-ndim=3 --enable-mpi MPICC=mpicc MPICXX=mpicxx \
+  CXX=icpc CC=icc F77=ifort AR="xild -lib" CXXFLAGS="-O3 -xP -ipo" \
+  --with-blas="-lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core"</pre>
+</div>
+</p>
+
+<h3>NCSA: abe</h3>
+<p>
+You need to add some lines to your <tt>.soft</tt> file to include some required libraries,
+<div class="code sh">
+<pre>#My additions (CPATH mimics -I include directories).
++libxml2-2.6.29
++libxml2
++intel-mkl
++gsl-intel
++hdf5-1.8.2
+CPATH += :/usr/apps/hdf/hdf5/v182/include
+LD_LIBRARY_PATH += /usr/apps/hdf/szip/lib
++fftw-3.1-intel
+LD_LIBRARY_PATH += /usr/apps/math/fftw/fftw-3.1.2/intel10/lib
+CPATH += :/usr/apps/math/fftw/fftw-3.1.2/intel10/include
++intel-mkl
+CPPFLAGS = "${CPPFLAGS} -DMPICH_IGNORE_CXX_SEEK"
+Also have blitz installed locally with --prefix=(your dir choice)</pre>
+</div>
+For an MPI build, use,
+<div class="code sh">
+../../pi/configure --with-ndim=3 --enable-mpi MPICC=mpicc MPICXX=mpicxx CXX=icpc CC=icc \
+CXXFLAGS="-O3 -xP -ipo" LDFLAGS="-lsz" \
+--with-blas="-lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" F77=ifort AR="xild -lib"
+</div>
+</p>
+
+<h3>TACC: Ranger</h3>
+
+<h3>Cornell CNF: nanolab</h3>
+<p>
+The svn client wasn't working for me, so I built one in my 
+<code>~/packages/bin</code> directory. 
+You need to specify the most recent C++ and Fortran compilers by 
+including the following in your .bash_profile,
+<div class="code sh">
+<pre># Version 10 compilers
+source /opt/intel/cc/10.1.017/bin/iccvars.sh
+source /opt/intel/fc/10.1.017/bin/ifortvars.shsource /opt/intel/idb/10.1.017/bin/idbvars.sh
+source /opt/intel/mkl/10.0.4.023/tools/environment/mklvars32.sh</pre>
+</div>
+Also, make sure that <tt>/usr/lam-7.4.1_intelv10/bin</tt> is in your 
+path to get the correct MPI compilers.</p>
+
+<p>
+You need to build blitz (again, in my <code>~/packages</code> directory). 
+For a serial <span class="pi">pi</span> build,
+<div class="code sh">
+<pre>../../pi/configure --with-ndim=3 CXX=icpc CC=icc CXXFLAGS="-O3 -ipo" \
+--with-blas="-Wl,-rpath,$MKLROOT/lib/32 -L/opt$MKLROOT/lib/32 -lmkl_intel \
+-lmkl_sequential -lmkl_core -lpthread -lm" F77=ifort AR="xild -lib"</pre>
+</div>
+<div class="code sh">
+<pre>../../pi/configure --with-ndim=3 CXX=icpc CC=icc CXXFLAGS="-O3 -ipo" \
+--with-blas="-Wl,-rpath,$MKLROOT/lib/32 -L$MKLROOT/lib/32 -lmkl_intel \
+-lmkl_sequential -lmkl_core -lpthread -lm" F77=ifort AR="xild -lib" \
+--enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77</pre>
+</div>
+</p>
+</p>
+
+</body>
+</html>
+

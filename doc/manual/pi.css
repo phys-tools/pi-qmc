@@ -65,6 +65,15 @@ div.math {
   font-size: 1.1em;
 }
 
+/* Code */
+*.code {
+  font-family: Courier, 'Courier New', monospace;
+}
+div.code {
+  font-size: small;
+  margin: 1em;
+}
+
 /* TOC formatting */
 div.toc {
 }
@@ -83,10 +92,17 @@ div.toc ol ol ol {
   list-style-type: upper-alpha;
 }
 
+div.toc ol.appendix {
+  list-style-type: decimal;
+}
+div.toc ol.appendix li:before {
+  content: "Appendix: ";
+}
+
 /* Page TOC formatting */
 div#innertoc {
   border-style: outset;
-  width: 35%;
+  width: 100%;
   font-family: "Lucida Grande", "Lucida Sans Unicdoe", Helvetica, "Helvetica Neue", Arial;
   font-size: small;
 }

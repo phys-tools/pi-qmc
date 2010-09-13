@@ -4,10 +4,12 @@
     <file>pi.css</file>
     <file>pagecontents.js</file>
     <file>Overview.xhtml</file>
+    <file>Introduction.xhtml</file>
+    <file>ExampleSHO.xhtml</file>
+    <file>ScalarEstimators.xhtml</file>
     <file>DensityEstimators.xhtml</file>
     <file>DynamicResponse.xhtml</file>
-    <file>Introduction.xhtml</file>
     <file>PairCorrelations.xhtml</file>
-    <file>ScalarEstimators.xhtml</file>
+    <file>Building.xhtml</file>
   </qresource>
 </RCC>

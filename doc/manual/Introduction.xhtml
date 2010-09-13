@@ -11,7 +11,33 @@
 </head>
 
 <body>
+<div class="nav">
+<a href="index.xhtml" class="up">Contents</a>
+<a href="Overview.xhtml" class="next">Overview</a>
+</div>
 <h1>Introduction</h1>
+<p>
+This is a quantum simulation program from the Shumway Research Group, 
+which focuses on applications to nanoscience and technology. 
+Path integral Monte Carlo (PIMC) simulates particles (often electrons 
+and ions) by directly sampling the canonical partition function. 
+In the path integral formulation of quantum statistical mechanics 
+developed by Richard Feynman, particles get represented by closed 
+imaginary-time trajectories of length ℏ/kT. PIMC simulations are 
+able to compute total energies, correlation functions, charge 
+distribution, and linear response functions for thermal equilibrium. 
+As in many quantum Monte Carlo methods, PIMC has efficient scaling 
+with system size, often order N<sup>2</sup> or N<sup>3</sup>.</p>
+
+<p>Our application, <span class="pi">pi</span> 
+is well suited for modeling conduction electrons and holes 
+in quantum dots, quantum wires, and quantum wells. 
+For quantum dots and wires, we often generate realistic confining 
+potentials using 
+<a href="http://code.google.com/p/qdot-tools">qdot-tools</a>.
+We are also testing and developing 
+<span class="pi">pi</span> for ab initio calculations, but at this point only 
+hydrogen and helium systems work well.</p>
 
 </body>
 </html>
