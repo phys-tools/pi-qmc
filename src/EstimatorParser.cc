@@ -194,8 +194,9 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     if (name=="BondLengthEstimator") {
       std::string species1=getStringAttribute(estNode,"species1");
       std::string species2=getStringAttribute(estNode,"species2");
+      std::string unitName=getStringAttribute(estNode,"unit");
       manager->add(new BondLengthEstimator(simInfo,simInfo.getSpecies(species1)
-			      ,simInfo.getSpecies(species2)));
+			      ,simInfo.getSpecies(species2),unitName));
     }
     if (name=="BondLengthTwoEstimator") {
       std::string species1=getStringAttribute(estNode,"species1");

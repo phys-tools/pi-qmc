@@ -21,16 +21,20 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "Paths.h"
+#include "stats/Units.h"
 #include <blitz/tinyvec-et.h>
+#include "SuperCell.h"
 
 BondLengthEstimator::BondLengthEstimator(const SimulationInfo& simInfo,
-  const Species& species1, const Species& species2)
-  : ScalarEstimator("bond_length_"+species1.name+"-"+species2.name),
+  const Species& species1, const Species& species2, const std::string& unitName)
+  : ScalarEstimator("bond_length_"+species1.name+"-"+species2.name,
+      unitName,1./simInfo.getUnits()->getLengthScaleIn(unitName),0.),
     length(0), norm1(0), norm2(0), avlength(0), names(simInfo.getNPart()),
-    spec1(species1.name), spec2(species2.name) {
+    spec1(species1.name), spec2(species2.name), cell(*simInfo.getSuperCell()) {
   for (int i=0; i<names.size(); ++i)
     names(i)=simInfo.getPartSpecies(i).name;
-  std::cout << "Bond Length Estimator " << spec1 << " " << spec2 << std::endl;
+  std::cout << "Bond Length Estimator "
+            << spec1 << " " << spec2 << std::endl;
 }
 
 void BondLengthEstimator::initCalc(const int nslice, const int firstSlice) {
@@ -43,6 +47,7 @@ void BondLengthEstimator::handleLink(const Vec& start, const Vec& end,
     for (int jpart=0; jpart<names.size(); ++jpart) {
       if(names(jpart)==spec2 && jpart!=ipart) {
         Vec delta=end-paths(jpart,islice);
+        cell.pbc(delta);
         length+=sqrt(dot(delta,delta));
         norm1++;
       }

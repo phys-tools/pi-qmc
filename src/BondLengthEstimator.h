@@ -20,23 +20,25 @@
 #include "LinkSummable.h"
 #include "Paths.h"
 #include <blitz/array.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 class Paths;
 class Action;
 class SimulationInfo;
 class Species;
+class SuperCell;
 /** Bond Length estimator.
  *  @todo add species to header (eg bond_length_a_b, etc)
  *  @version $Revision $ 
- *  @author Matthew Harowitz  */
+ *  @author Matthew Harowitz and John Shumway */
 class BondLengthEstimator : public ScalarEstimator, public LinkSummable {
 public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<std::string,1> SArray;
   /// Constructor.
   BondLengthEstimator(const SimulationInfo& simInfo, 
-                      const Species& species1, const Species& species2);
+    const Species& species1, const Species& species2, 
+    const std::string& unitName);
   /// Virtual destructor.
   virtual ~BondLengthEstimator() {}
   /// Initialize the calculation.
@@ -66,6 +68,8 @@ private:
   ///The species to measure the bond length of.
   std::string spec1;
   std::string spec2;
+  /// The SuperCell, for wrapping periodic boundary conditions.
+  const SuperCell &cell;
 };
 
 #endif
