@@ -50,6 +50,8 @@ public:
   /// Get a pointer to the accept/reject statistic estimator.
   /// (You are responsible for deleting this new object.) 
   virtual AccRejEstimator* getAccRejEstimator(const std::string& name);
+  Permutation getGlobalPermutation();
+  void handleBoundary(int bd1, int bd2, int sign);
 protected:
   /// The number of particles to move together.
   const int nmoving;
@@ -79,5 +81,11 @@ protected:
   const MPIManager* mpi;
   /// Method to atempt a Monte Carlo move, return true if accepted.
   virtual bool tryMove();
+  const int npart;
+  //  IArray * 
+  blitz::Array<int,2> iworkerPerm;
+  const int nworker;
+ 
+  //Permutation localPermutation;
 };
 #endif
