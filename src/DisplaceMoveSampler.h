@@ -57,6 +57,8 @@ protected:
   const int nmoving;
   /// The number of times to try dispace moves.
   const int nrepeat;
+  /// The number of particles.
+  const int npart;
   /// The first slice this worker is moving. 
   int iFirstSlice;
   /// The last slice this worker is moving. 
@@ -81,10 +83,9 @@ protected:
   const MPIManager* mpi;
   /// Method to atempt a Monte Carlo move, return true if accepted.
   virtual bool tryMove();
-  const int npart;
   //  IArray * 
-  blitz::Array<int,2> iworkerPerm;
   const int nworker;
+  blitz::Array<int,2> iworkerPerm;
  
   //Permutation localPermutation;
 };

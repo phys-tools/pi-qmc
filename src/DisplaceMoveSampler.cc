@@ -57,6 +57,7 @@ DisplaceMoveSampler::~DisplaceMoveSampler() {
 Permutation DisplaceMoveSampler::getGlobalPermutation(){
 
   Permutation globalPermutation = paths.getPermutation();
+#ifdef ENABLE_MPI
   if (nworker==1)  return globalPermutation;
 
   int iworker = mpi->getWorkerID(); 
@@ -74,7 +75,7 @@ Permutation DisplaceMoveSampler::getGlobalPermutation(){
   } else {
     mpi->getWorkerComm().Send(&(localPermutation[0]), npart,MPI::INT,0,1);
   }
-
+#endif
   return globalPermutation;
 }
 
