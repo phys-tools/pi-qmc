@@ -34,7 +34,7 @@
 
 #include <sstream>
 #include <string>
-UniformMover::UniformMover(double dist, const MPIManager* mpi)
+UniformMover::UniformMover(const Vec dist, const MPIManager* mpi)
   : dist(dist), mpi(mpi) {
 }
 
@@ -46,8 +46,10 @@ double UniformMover::makeMove(VArray& displacement, const int& nMoving) const {
   const Vec half = 0.5;
   RandomNumGenerator::makeRand(displacement);
   for (int i=0; i<npart; i++){
+   for (int idim=0; idim<NDIM; ++idim){
     displacement(i) -= half;
-    displacement(i) *= dist;
+    displacement(i)[idim] *= dist[idim];
+   }
   }
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {

@@ -162,7 +162,12 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     }
   } else if (name=="SampleDisplaceMove") {
     UniformMover* mover(0);
-    double dist = getLengthAttribute(ctxt->node,"dist");
+    Vec dist;
+    for (int idim=0; idim<NDIM; ++idim) {
+      dist[idim] =getLengthAttribute(ctxt->node,std::string("d")+dimName[idim]);
+    }
+    if (dot(dist,dist)==0)
+      dist =getLengthAttribute(ctxt->node,"dist");
     int nmoving=getIntAttribute(ctxt->node,"npart");
     if (nmoving==0) nmoving=1;
     mover = new UniformMover(dist,mpi);
