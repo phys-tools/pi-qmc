@@ -51,7 +51,7 @@ private:
   inline double polynomial(int, int, double, double, const Array1&);
 #endif
 #if NDIM==3
-  inline double polynomail(int, int, int, double, double, double, const Array1&);
+  inline double polynomial(int, int, int, double, double, double, const Array1&);
 #endif 
   /// The SuperCell.
   const SuperCell cell;
