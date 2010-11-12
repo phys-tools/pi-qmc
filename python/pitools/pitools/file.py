@@ -28,6 +28,7 @@ class estimatorNode(object):
   THERMO_ENERGY = 73
   COULOMB_ENERGY = 74
   VIRIAL_ENERGY = 75
+  BOND_LENGTH = 97
   DENSITY = 129
   PAIR_CORRELATION = 130
   CONDUCTANCE = 257
@@ -55,6 +56,8 @@ class estimatorNode(object):
         self.type=estimatorNode.VIRIAL_ENERGY
       if self.type==0 and self.name[:1]=="g":
         self.type=estimatorNode.PAIR_CORRELATION
+      if self.type==0 and self.name[:12]=="bond_length_":
+        self.type=estimatorNode.BOND_LENGTH
     if self.name[-4:]=="_err":
       self.type = -abs(self.type)
   

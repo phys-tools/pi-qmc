@@ -47,7 +47,7 @@ double UniformMover::makeMove(VArray& displacement, const int& nMoving) const {
   RandomNumGenerator::makeRand(displacement);
   for (int i=0; i<npart; i++){
    for (int idim=0; idim<NDIM; ++idim){
-    displacement(i) -= half;
+    displacement(i)[idim] -= half[idim];
     displacement(i)[idim] *= dist[idim];
    }
   }
