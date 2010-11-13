@@ -6,6 +6,7 @@ from EstimatorView import *
 from ConductivityView import *
 from ScalarView import *
 from DensityView import *
+from PairCFView import *
 from PermutationView import *
 from SimulationModel import *
 
@@ -59,6 +60,8 @@ class SimulationModel(QtCore.QObject):
         est.view = DensityView(est,self)
       elif est.type == 1:
         est.view = PermutationView(est,self)
+      elif est.type == 130:
+        est.view = PairCFView(est,self)
       else:
         print "Mising viewer type %i for %s." % (est.type,est.name)
     return est
