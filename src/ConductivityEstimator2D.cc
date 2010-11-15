@@ -33,12 +33,15 @@
 */
 
 ConductivityEstimator2D::ConductivityEstimator2D(const SimulationInfo&simInfo,
-  const double xmin, const double xmax, const double ymin, const double ymax, const int nfreq, 
-  const int nxbin, const int nybin, const int nxdbin, const int nydbin, const int nstride,
-  MPIManager *mpi)
-  : BlitzArrayBlkdEst<7>("conductivity2D",IVecN(2*nxdbin-1,nxbin,2*nydbin-1,nybin,2,2,nfreq),true),
-    npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), nfreq(nfreq), nstride(nstride),
-    tau(simInfo.getTau()), tauinv(1./tau), massinv(1./simInfo.getSpecies(0).mass), q(npart),
+  const double xmin, const double xmax, const double ymin, 
+  const double ymax, const int nfreq, const int nxbin, const int nybin, 
+  const int nxdbin, const int nydbin, const int nstride, MPIManager *mpi)
+  : BlitzArrayBlkdEst<7>("conductivity2D",
+    IVecN(2*nxdbin-1,nxbin,2*nydbin-1,nybin,2,2,nfreq),true),
+    npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), 
+    nfreq(nfreq), nstride(nstride),
+    tau(simInfo.getTau()), tauinv(1./tau), 
+    massinv(1./simInfo.getSpecies(0).mass), q(npart),
     nxbin(nxbin), nybin(nybin), nxdbin(nxdbin), nydbin(nydbin),
     xmin(xmin), xmax(xmax), ymin(ymin), ymax(ymax),
     dx((xmax-xmin)/nxbin), dy((ymax-ymin)/nybin), dxinv(1./dx), dyinv(1./dy),

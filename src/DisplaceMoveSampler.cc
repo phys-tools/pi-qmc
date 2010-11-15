@@ -81,7 +81,9 @@ Permutation DisplaceMoveSampler::getGlobalPermutation(){
 
 
 void DisplaceMoveSampler::run() {
+#ifdef ENABLE_MPI
   int workerID = (mpi)?mpi->getWorkerID():0;
+#endif
   
   for (int irepeat=0; irepeat<nrepeat; ++irepeat) {
     

@@ -40,23 +40,25 @@ WireEwald::WireEwald(const SuperCell& cell, const double d, const double rmax,
     dy(fitWidth[1] / double(gridSize[1]-1)),
 #if NDIM==3
     dz(fitWidth[2] / double(gridSize[2]-1)),
-    LL(1),
 #endif
     NN(3), MM(1), 
+#if NDIM==3
+    LL(1),
+#endif
 #if NDIM==2
+    polyCoeff((NN+1)*(MM+1)),
     v(gridSize[0]*gridSize[1]), 
     x(gridSize[0]*gridSize[1]), 
-    y(gridSize[0]*gridSize[1]),
-    polyCoeff((NN+1)*(MM+1))
+    y(gridSize[0]*gridSize[1])
 #endif
 #if NDIM==3
+    polyCoeff((NN+1)*(MM+1)*(LL+1)),
     v(gridSize[0]*gridSize[1]*gridSize[2]),
     x(gridSize[0]*gridSize[1]*gridSize[2]),
     y(gridSize[0]*gridSize[1]*gridSize[2]),
-    z(gridSize[0]*gridSize[1]*gridSize[2]),
-    polyCoeff((NN+1)*(MM+1)*(LL+1))
+    z(gridSize[0]*gridSize[1]*gridSize[2])
 #endif
-{
+  {
   double L = cell.a[0];
   int M = ceil(rmax / L);
   v = 0.; x = 0.; y = 0.;

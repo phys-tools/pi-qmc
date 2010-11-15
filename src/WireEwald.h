@@ -59,13 +59,13 @@ private:
   const double d;
   /// The max range of Coulomb interaction.
   const double rmax;
+  /// The size of grid for the Coulomb interaction.
+  const IVec gridSize;
   /// The min separation between particles.
   const double dx, dy;
 #if NDIM==3
   const double dz;
 #endif
-  /// The size of grid for the Coulomb interaction.
-  const IVec gridSize;
   /// Highest order x^NNy^MM.
   int NN,MM;
 #if NDIM==3

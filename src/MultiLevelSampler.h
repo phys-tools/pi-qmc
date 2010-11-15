@@ -112,11 +112,11 @@ protected:
   AccRejEstimator* accRejEst;
   /// Number of times to repeat.
   const int nrepeat;  
-  Beads<NDIM> *rejectedBeads;
   ///flag for delayed rejection
   const bool delayedRejection;
-  const double defaultFactor;
+  Beads<NDIM> *rejectedBeads;
   double newFactor;
+  const double defaultFactor;
   double factor;
 };
 #endif

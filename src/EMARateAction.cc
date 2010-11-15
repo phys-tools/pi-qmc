@@ -49,13 +49,13 @@ EMARateAction::~EMARateAction() {
 
 double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {
-  const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
-  const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-  const SuperCell& cell=sampler.getSuperCell();
-  const int nStride=(int)pow(2,level);
-  const int nSlice=sectionBeads.getNSlice();
-  const IArray& index=sampler.getMovingIndex(); 
-  const int nMoving=index.size();
+  //const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
+  //const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
+  //const SuperCell& cell=sampler.getSuperCell();
+  //const int nStride=(int)pow(2,level);
+  //const int nSlice=sectionBeads.getNSlice();
+  //const IArray& index=sampler.getMovingIndex(); 
+  //const int nMoving=index.size();
   double deltaAction=0;
   return deltaAction;
 }

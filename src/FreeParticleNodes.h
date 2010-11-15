@@ -132,6 +132,7 @@ public:
            const int islice, VMatrix &gradd1, VMatrix &gradd2,
                              const Array &d1, const Array &d2);
 private:
+  const int maxlevel;
   /// The time step.
   double tau;
   /// The mass.
@@ -179,6 +180,5 @@ private:
   double scale;
   const int useIterations;
   const double nodalFactor;
-  const int maxlevel;
 };
 #endif

@@ -40,8 +40,9 @@
 MultiLevelSampler::MultiLevelSampler(int nmoving, Paths& paths,
   SectionChooser &sectionChooser, ParticleChooser& particleChooser,
   PermutationChooser& permutationChooser, Mover& mover, Action* action,
-  const int nrepeat, const BeadFactory& beadFactory, const bool delayedRejection, const double defaultFactor,
-				     double newFactor)
+  const int nrepeat, const BeadFactory& beadFactory, 
+  const bool delayedRejection, const double defaultFactor,
+  double newFactor)
   : nlevel(sectionChooser.getNLevel()),
     nmoving(nmoving), sectionBeads(&sectionChooser.getBeads()),
     sectionPermutation(&sectionChooser.getPermutation()),
@@ -53,7 +54,8 @@ MultiLevelSampler::MultiLevelSampler(int nmoving, Paths& paths,
     permutationChooser(permutationChooser),
     sectionChooser(sectionChooser), paths(paths), accRejEst(0),
     nrepeat(nrepeat), delayedRejection(delayedRejection),
-    rejectedBeads((delayedRejection)?beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice()):0),
+    rejectedBeads((delayedRejection)?
+      beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice()):0),
     newFactor(newFactor),
     defaultFactor(defaultFactor) {
   for (int i=0; i<nmoving; ++i) (*movingIndex)(i)=identityIndex(i)=i;

@@ -42,11 +42,12 @@ Virial -- not works
 @author Jianheng Liu
 */
 
-RingGateAction::RingGateAction(const SimulationInfo &simInfo, const double GVolt, 
-                 const double s, const double theta0, const Species &species)
+RingGateAction::RingGateAction(const SimulationInfo &simInfo, 
+  const double GVolt, const double s, const double theta0, 
+  const Species &species)
   : tau(simInfo.getTau()), GVolt(GVolt), s(s), theta0(theta0), 
-    ifirst(species.ifirst), npart(species.count), 
-    normalConst(tanh(s * theta0) - tanh(s * (-theta0))) {
+    normalConst(tanh(s * theta0) - tanh(s * (-theta0))),
+    ifirst(species.ifirst), npart(species.count) {
 }
 
 double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {

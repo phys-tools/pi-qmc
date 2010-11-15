@@ -151,7 +151,8 @@ void H5ReportBuilder::reportArrayBlockedStep(const ArrayBlockedEstimator& est) {
 
 void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) {
   hsize_t dims[est.getNDim()];
-  int maxDim=1, imaxDim=0, size=1; // Find maximum dimension for compression.
+  unsigned int maxDim=1, imaxDim=0, size=1;
+  // Find maximum dimension for compression.
   for (int i=0; i<est.getNDim(); ++i) {
     dims[i] = est.getExtent(i);
     size *= dims[i];

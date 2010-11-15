@@ -192,7 +192,7 @@ int WalkingChooser::iSearch(int part, double x){
   
   int ilo=0;
   int ihi=npart-2;
-  int mid;
+  int mid=0;
   for (int k=0;k<npart-1;k++){
     if(ihi==ilo+1) return ihi;
     mid=(ilo+ihi)/2;
@@ -202,6 +202,7 @@ int WalkingChooser::iSearch(int part, double x){
       ilo=mid;
     }
   }
+  return mid;
 }
 
 void WalkingChooser::setMLSampler(const MultiLevelSampler *mls) {

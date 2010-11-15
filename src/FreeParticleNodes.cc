@@ -40,9 +40,9 @@ extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n,
 
 FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
   const Species &species, const double temperature, const int maxlevel,
-				     const bool useUpdates, const int maxMovers, 
-				     const bool useHungarian, const int useIterations,
-				     const double nodalFactor)
+  const bool useUpdates, const int maxMovers, 
+  const bool useHungarian, const int useIterations,
+  const double nodalFactor)
   : NodeModel("_"+species.name), maxlevel(maxlevel),
     tau(simInfo.getTau()),mass(species.mass),npart(species.count),
     ifirst(species.ifirst), 
@@ -204,7 +204,6 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
   Matrix invMat(npart,npart);
   Matrix matNew(npart,npart); 
   Matrix matSav(npart,npart); 
-  double det; 
   double initialDet;
  
   VArray gradArray((section==1)?gradArray1:gradArray2);
@@ -217,7 +216,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
   Array maxDist2(npart);
   maxDist2=2000;
   getMaxDist2(r1, maxDist2);
-  double nodalDist; 
+  double nodalDist=1.; 
   if (section==2) mat.transposeSelf(1,0);
   matSav=*romatrix[islice];
   
@@ -255,8 +254,11 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	      grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
 	      if (delta[i]<0) grad[i]=-grad[i];
 	    }
-	    if (useHungarian) if( section==1 && jpart==localKindex(islice,ipart) || 
-				  section==2 && ipart==localKindex(islice,jpart) ) fgrad=grad;
+	    if (useHungarian && 
+                ( (section==1 && jpart==localKindex(islice,ipart)) || 
+		  (section==2 && ipart==localKindex(islice,jpart)) ) ) {
+              fgrad=grad;
+            }
 	    for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
 	    logGrad+=invMat(jpart,ipart)*grad*scale;
 	  }
@@ -285,8 +287,10 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	  int signprev=(initialDet>=0)?1:-1;// can be moved out
 	  int signnew=(detAtr1jnew>=0)?1:-1;//To avoid underflow.
 	  if (signprev!=signnew) {
-	    double dd=rootBisectionSearch(jpart, r1j, r1jnew, 
-					  r2, matNew, matSav, detAtr1jnew);
+	    //double dd=rootBisectionSearch(jpart, r1j, r1jnew, 
+            //   r2, matNew, matSav, detAtr1jnew);
+	    rootBisectionSearch(jpart, r1j, r1jnew, 
+	                        r2, matNew, matSav, detAtr1jnew);
 	    Vec dr = r1(jpart+ifirst)-r1jnew;
 	    nodalDist =sqrt(dot(dr,dr));
 	    
@@ -461,8 +465,11 @@ void  FreeParticleNodes:: findNormAtr1jnew(const Vec &r1j, const int& jpart, con
       grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
       if (delta[i]<0) grad[i]=-grad[i];
     }
-    if (useHungarian) if( section==1 && jpart==localKindex(islice,ipart) || 
-			  section==2 && ipart==localKindex(islice,jpart) ) fgrad=grad;
+    if (useHungarian &&
+        ((section==1 && jpart==localKindex(islice,ipart)) || 
+         (section==2 && ipart==localKindex(islice,jpart)) ) ) {
+      fgrad=grad;
+    }
     for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
     logGrad+=matNew(jpart,ipart)*grad*scale;
   }

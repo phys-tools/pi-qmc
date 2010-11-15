@@ -80,12 +80,12 @@ private:
   bool tryMove(double);
   /// Reference to all beads in the section.
   Beads<NDIM> *sectionBeads1, *sectionBeads2;
-  ///Storage for the rejected beads
-  Beads<NDIM> *rejectedBeads1, *rejectedBeads2;
   /// Reference the permutation of the in the section.
   Permutation *sectionPermutation1, *sectionPermutation2;
   /// Storage for the moving beads.
   Beads<NDIM> *movingBeads1, *movingBeads2;
+  ///Storage for the rejected beads
+  Beads<NDIM> *rejectedBeads1, *rejectedBeads2;
   /// Action function.
   DoubleAction *doubleAction;
   /// Index of moving particles.

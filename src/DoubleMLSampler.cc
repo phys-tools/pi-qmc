@@ -34,14 +34,15 @@
 #include "BeadFactory.h"
 
 DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
-				 DoubleSectionChooser &sectionChooser,
-				 ParticleChooser& particleChooser, PermutationChooser& permutationChooser,
-				 ParticleChooser& particleChooser2, PermutationChooser& permutationChooser2,
-				 Mover& mover, Action* action, DoubleAction* doubleAction, const bool both,
-				 const int nrepeat, const BeadFactory &beadFactory, const bool delayedRejection, const double defaultFactor,
-				 double newFactor)
+  DoubleSectionChooser &sectionChooser,
+  ParticleChooser& particleChooser, PermutationChooser& permutationChooser,
+  ParticleChooser& particleChooser2, PermutationChooser& permutationChooser2,
+  Mover& mover, Action* action, DoubleAction* doubleAction, const bool both,
+  const int nrepeat, const BeadFactory &beadFactory, 
+  const bool delayedRejection, const double defaultFactor, double newFactor)
   : MultiLevelSampler(nmoving,paths,sectionChooser,particleChooser,
-                      permutationChooser,mover,action,nrepeat,beadFactory,delayedRejection,defaultFactor,newFactor),
+      permutationChooser,mover,action,nrepeat,beadFactory,
+      delayedRejection,defaultFactor,newFactor),
     sectionBeads1(&sectionChooser.getBeads(1)),
     sectionBeads2(&sectionChooser.getBeads(2)),
     sectionPermutation1(&sectionChooser.getPermutation(1)),
@@ -49,7 +50,8 @@ DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
     movingBeads1(movingBeads),
     movingBeads2(beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice())), 
     rejectedBeads1(rejectedBeads),
-    rejectedBeads2(delayedRejection?beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice()):0),
+    rejectedBeads2(delayedRejection
+      ?beadFactory.getNewBeads(nmoving,sectionBeads->getNSlice()):0),
     doubleAction(doubleAction),
     movingIndex1(movingIndex), movingIndex2(new IArray(nmoving)),
     pMovingIndex2(nmoving),

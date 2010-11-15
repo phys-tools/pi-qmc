@@ -46,9 +46,10 @@ GateAction::GateAction(const SimulationInfo &simInfo, const double GVolt,
  const double sx, const double sy, const double xwidth, const double ywidth, 
  const double xoffset, const double yoffset, const Species &species)
   : tau(simInfo.getTau()), GVolt(GVolt), sx(sx), sy(sy),  xwidth(xwidth), 
-    ywidth(ywidth), xoffset(xoffset), yoffset(yoffset), ifirst(species.ifirst),
-    npart(species.count), 
-    normalConst((tanh(sx*xwidth/2)-tanh(sx*(-xwidth)/2))*(tanh(sy*ywidth/2)-tanh(sy*(-ywidth)/2))) {
+    ywidth(ywidth), xoffset(xoffset), yoffset(yoffset),
+    normalConst((tanh(sx*xwidth/2)-tanh(sx*(-xwidth)/2))
+               *(tanh(sy*ywidth/2)-tanh(sy*(-ywidth)/2))),
+    ifirst(species.ifirst), npart(species.count) {
 }
 
 double GateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {

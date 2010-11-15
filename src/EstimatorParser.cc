@@ -431,7 +431,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	speciesList[ispec]=simInfo.getSpecies(speciesName);
       }
       
-      int nbin; double max; double min;
+      int nbin=1; double max=1.; double min=0.;
       ctxt->node = estNode;
       xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
       int N=obj->nodesetval->nodeNr; 

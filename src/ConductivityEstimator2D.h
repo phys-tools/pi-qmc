@@ -49,18 +49,23 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
-  const int npart, nslice, nfreq, nstride, nxbin, nybin, nxdbin, nydbin, tolxdbin, tolydbin;
-  const double tau, tauinv, massinv, dx, dy, dxinv, dyinv, xmin, xmax, ymin, ymax, ax, ay;
+  const int npart, nslice, nfreq, nstride;
+  const double tau, tauinv, massinv;
+  Array q;
+  const int nxbin, nybin, nxdbin, nydbin;
+  const double xmin, xmax, ymin, ymax;
+  const double dx, dy, dxinv, dyinv; 
+  const double ax, ay;
+  const int tolxdbin, tolydbin;
 //  double dx[2], dxinv[2], min[2], max[2];
 //  int nbin[2], ndbin[2];
-  Array q;
   CArray7 temp;
   CArray3 jx,jy;
 #ifdef ENABLE_MPI
   CArray3 j_tmp;
 #endif
-  fftw_plan fwdx,fwdy;
   MPIManager *mpi;
+  fftw_plan fwdx,fwdy;
 };
 
 #endif
