@@ -52,7 +52,7 @@ void DoubleSectionChooser::run() {
   int ilo=paths.getLowestOwnedSlice(true)-1;
   int ihi=paths.getHighestSampledSlice(beads->getNSlice()-1,true);
   iFirstSlice1=ilo+(int)((ihi+1-ilo)*x);
-  if (iFirstSlice>ihi) iFirstSlice=ihi;
+  if (iFirstSlice1>ihi) iFirstSlice1=ihi;
   if (RandomNumGenerator::getRand()>=0.5) {
     iFirstSlice1=(iFirstSlice1+paths.getNSlice()/2+1)%paths.getNSlice()-1;
   }

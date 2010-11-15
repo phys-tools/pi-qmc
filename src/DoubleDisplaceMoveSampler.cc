@@ -60,6 +60,10 @@ DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {}
 bool DoubleDisplaceMoveSampler::tryMove() {
   accRejEst->tryingMove(0);
   mover.makeMove(displacement,nmoving);
+  if (nworker>1) {
+    handleBoundary(iFirstSlice-1, iLastSlice+1, +1);
+    handleBoundary(iFirstSlice-1+nsliceOver2, iLastSlice+1+nsliceOver2, +1);
+  }
   // Evaluate the change in action.
   double deltaAction = (action==0) ?  0 
     : action->getActionDifference(paths,displacement,nmoving,movingIndex,
@@ -81,14 +85,32 @@ bool DoubleDisplaceMoveSampler::tryMove() {
     double acceptProb = exp(-netDeltaAction);
     bool acceptReject = RandomNumGenerator::getRand()>acceptProb;
     mpi->getWorkerComm().Bcast(&acceptReject,sizeof(bool),MPI::CHAR,0); 
-    if (acceptReject) return false;
+    if (acceptReject) { 
+      if (nworker>1) {
+	handleBoundary(iFirstSlice-1, iLastSlice+1, -1);
+	handleBoundary(iFirstSlice-1+nsliceOver2, iLastSlice+1+nsliceOver2, -1);
+      }
+      return false;
+    }
   } else {
     double acceptProb=exp(-deltaAction); 
-    if (RandomNumGenerator::getRand()>acceptProb) return false;
+    if (RandomNumGenerator::getRand()>acceptProb)  { 
+      if (nworker>1) {
+	handleBoundary(iFirstSlice-1, iLastSlice+1, -1);
+	handleBoundary(iFirstSlice-1+nsliceOver2, iLastSlice+1+nsliceOver2, -1);
+      }
+      return false;
+    }
   }
 #else
   double acceptProb=exp(-deltaAction);
-  if (RandomNumGenerator::getRand()>acceptProb) return false;
+    if (RandomNumGenerator::getRand()>acceptProb)  { 
+      if (nworker>1) {
+	handleBoundary(iFirstSlice-1, iLastSlice+1, -1);
+	handleBoundary(iFirstSlice-1+nsliceOver2, iLastSlice+1+nsliceOver2, -1);
+      }
+      return false;
+    }
 #endif
   
   accRejEst->moveAccepted(0);
@@ -108,7 +130,6 @@ bool DoubleDisplaceMoveSampler::tryMove() {
       bead2 = cell.pbc(bead2);
     }
   }
-  paths.setBuffers();
-
+  
   return true;
 }
