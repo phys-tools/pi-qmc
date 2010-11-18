@@ -41,12 +41,12 @@ WireEwald::WireEwald(const SuperCell& cell, const double d, const double rmax,
 #if NDIM==3
     dz(fitWidth[2] / double(gridSize[2]-1)),
 #endif
-    NN(3), MM(1), 
+    NN(3), MM(1) 
 #if NDIM==3
-    LL(1),
+    ,LL(1),
 #endif
 #if NDIM==2
-    polyCoeff((NN+1)*(MM+1)),
+    ,polyCoeff((NN+1)*(MM+1)),
     v(gridSize[0]*gridSize[1]), 
     x(gridSize[0]*gridSize[1]), 
     y(gridSize[0]*gridSize[1])
@@ -104,10 +104,13 @@ double WireEwald::operator()(const Vec &r) {
 #endif
 #if NDIM==3
   return polynomial(NN,MM,LL,r[0],r[1],r[2],polyCoeff);
+#else
+  return 0.;
 #endif
 }
 
 double WireEwald::getMaxDiff() {
+#if NDIM==2 or NDIM==3
 #if NDIM==2
   Array1 f(gridSize[0]*gridSize[1]);
 #endif
@@ -129,9 +132,13 @@ double WireEwald::getMaxDiff() {
                  polyCoeff);
 #endif
   return max(abs(v-f)); 
+#else
+  return 0;
+#endif
 }
 
 void WireEwald::curveFit() {
+#if NDIM==2 or NDIM==3
   // Define parameters
   double tau = 1e-3;
   double epsilon1 = 1e-15, epsilon2 = 1e-15, epsilon3 = 1e-15;
@@ -259,6 +266,7 @@ void WireEwald::curveFit() {
   }
   polyCoeff = p;
   std::cout<<polyCoeff<<std::endl;
+#endif
 }
 
 #if NDIM==2
