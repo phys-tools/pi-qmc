@@ -27,12 +27,13 @@ class MPIManager;
 class ConductivityEstimator2D : public BlitzArrayBlkdEst<7>, public LinkSummable {
 public:
   typedef blitz::Array<std::complex<double>,7> CArray7;
-  typedef blitz::Array<std::complex<double>,3> CArray3;
+  typedef blitz::Array<std::complex<double>,4> CArray4;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   /// Constructor.
   ConductivityEstimator2D(const SimulationInfo& simInfo, const double xmin, const double xmax, 
-    const double ymin, const double ymax,  const int nfreq, const int nxbin, const int nybin,
+    const double ymin, const double ymax,  const int nfreq, const std::string dim1,
+    const std::string dim2, const int nxbin, const int nybin,
     const int nxdbin, const int nydbin, const int nstride, MPIManager *mpi);
   /// Virtual destructor.
   virtual ~ConductivityEstimator2D();
@@ -57,15 +58,11 @@ private:
   const double dx, dy, dxinv, dyinv; 
   const double ax, ay;
   const int tolxdbin, tolydbin;
-//  double dx[2], dxinv[2], min[2], max[2];
-//  int nbin[2], ndbin[2];
+  IArray dir1, dir2;
   CArray7 temp;
-  CArray3 jx,jy;
-#ifdef ENABLE_MPI
-  CArray3 j_tmp;
-#endif
+  CArray4 j;
   MPIManager *mpi;
-  fftw_plan fwdx,fwdy;
+  fftw_plan fwdx;
 };
 
 #endif

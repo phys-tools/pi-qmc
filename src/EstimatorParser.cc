@@ -273,6 +273,10 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
     }
     if (name=="ConductivityEstimator2D") {
+      std::string dim1 = getStringAttribute(estNode, "dim1");
+      if(dim1.length()==0) dim1="xy";
+      std::string dim2 = getStringAttribute(estNode, "dim2");
+      if(dim2.length()==0) dim2="xy";
       int nxbin=getIntAttribute(estNode,"nxbin");
       if (nxbin==0) nxbin=1;
       int nybin=getIntAttribute(estNode,"nybin");
@@ -290,7 +294,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       int nstride=getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
       manager->add(new ConductivityEstimator2D(simInfo, xmin, xmax, ymin, ymax, nfreq,
-                         nxbin, nybin, nxdbin, nydbin, nstride ,mpi));
+                       dim1, dim2, nxbin, nybin, nxdbin, nydbin, nstride ,mpi));
     }
     if (name=="SpinChargeEstimator") {
       int nbin=getIntAttribute(estNode,"nbin");
