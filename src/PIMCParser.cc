@@ -31,6 +31,7 @@
 #include "UniformMover.h"
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
+#include "ModelSampler.h"
 #include "spin/SpinMover.h"
 #include "spin/FreeSpinMover.h"
 #include "DampedFreeTensorMover.h"
@@ -52,6 +53,7 @@
 #include "MultiLevelSampler.h"
 #include "DoubleMLSampler.h"
 #include "Action.h"
+#include "ActionChoice.h"
 #include "DoubleAction.h"
 #include "stats/EstimatorManager.h"
 #include "ProbDensityGrid.h"
@@ -73,12 +75,14 @@
 #include "FreeParticleNodes.h"
 
 
-PIMCParser::PIMCParser(const SimulationInfo& simInfo, Action* action,
-  DoubleAction* doubleAction, EstimatorManager* estimators,
+PIMCParser::PIMCParser(const SimulationInfo &simInfo, Action *action,
+  DoubleAction *doubleAction, ActionChoice *actionChoice,
+  EstimatorManager *estimators,
   const BeadFactory &beadFactory, MPIManager *mpi)
   : XMLUnitParser(simInfo.getUnits()),
     paths(0), algorithm(0), simInfo(simInfo), action(action), 
-    doubleAction(doubleAction), estimators(estimators), probDensityGrid(0),
+    doubleAction(doubleAction), actionChoice(actionChoice),
+    estimators(estimators), probDensityGrid(0),
     beadFactory(beadFactory), mpi(mpi) {
 }
 
@@ -114,6 +118,10 @@ void PIMCParser::parse(const xmlXPathContextPtr& ctxt) {
   } else {
     paths=new SerialPaths(simInfo.getNPart(),
                           nslice,tau,*simInfo.getSuperCell(),beadFactory);
+  }
+  if (actionChoice) {
+    paths->setModelState(actionChoice->getModelState());
+    paths->setModelCount(actionChoice->getModelCount());
   }
   // Parse the algorithm.
   algorithm=parseAlgorithm(ctxt);
@@ -218,6 +226,11 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     estimators->add(((DisplaceMoveSampler*)algorithm)->
 		    getAccRejEstimator(accRejName));
 
+  } else if (name=="SampleModel") {
+    algorithm = new ModelSampler(*paths, action, actionChoice, mpi);
+    std::cout << "Using ModelSampler." << std::endl;
+    estimators->add(((ModelSampler*)algorithm)->
+		    getAccRejEstimator("ModelSampler"));
   } else if (name=="ShiftWorkers") {
     int maxShift=getIntAttribute(ctxt->node,"maxShift");
     WorkerShifter *shifter=new WorkerShifter(maxShift,*paths,mpi);

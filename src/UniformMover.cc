@@ -36,6 +36,7 @@
 #include <string>
 UniformMover::UniformMover(const Vec dist, const MPIManager* mpi)
   : dist(dist), mpi(mpi) {
+  std::cout << "Uniform mover with dist=" << dist << std::endl;
 }
 
 UniformMover::~UniformMover() {

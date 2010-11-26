@@ -295,7 +295,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	    nodalDist =sqrt(dot(dr,dr));
 	    
 	    iter++;
-	    if (fabs(prevNodalDist-nodalDist)<10e-8) {
+	    if (fabs(prevNodalDist-nodalDist)<10e-5) {
 	      iter=useIterations+300;
 	    } else {
 	      if (iter <=useIterations){
@@ -307,7 +307,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
 	    
 	  } else {// (signprev!=signnew) no crossing
 	    iter++; 
-	    if (fabs(prevNodalDist-nodalDist)<10e-8) {
+	    if (fabs(prevNodalDist-nodalDist)<10e-5) {
 	      iter=useIterations+200;
 	    } else {
 	      if (iter <=useIterations){
@@ -396,7 +396,7 @@ double FreeParticleNodes::rootBisectionSearch(const int& jpart,  const Vec & xol
 
   double detAta;
   double dist2=dot(b-a,b-a);
-  while( dist2>10e-20){
+  while( dist2>1e-10){
    
     midpt=a+0.5*(b-a); 
 

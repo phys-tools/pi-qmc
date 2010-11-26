@@ -36,6 +36,8 @@ extern int irank;
 #include "EstimatorParser.h"
 #include "spin/MainSpinParser.h"
 #include <ctime>
+class ActionChoice;
+
 MainParser::MainParser(const std::string& filename) 
   : filename(filename), context (0) {
   doc = xmlParseFile((char*)filename.c_str());
@@ -109,14 +111,16 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
   actionParser.parse(ctxt);
   Action* action=actionParser.getAction();
   DoubleAction* doubleAction=actionParser.getDoubleAction();
+  ActionChoice* actionChoice = actionParser.getActionChoice();
   // Set the estimators.
-  EstimatorParser estimatorParser(simInfo,tau,action,doubleAction,mpi);
+  EstimatorParser estimatorParser(simInfo,tau,action,doubleAction,
+    actionChoice,mpi);
   estimatorParser.parse(ctxt);
   EstimatorManager* estimators=estimatorParser.getEstimatorManager();
   estimators->recordInputDocument(filename);
-  // Setup a serial PIMC method.
-  PIMCParser pimcParser(simInfo,action,doubleAction,estimators,
-                        simInfo.getBeadFactory(),mpi);
+  // Setup the PIMC method.
+  PIMCParser pimcParser(simInfo, action, doubleAction, actionChoice,
+      estimators, simInfo.getBeadFactory(),mpi);
   pimcParser.parse(ctxt);
   Algorithm* algorithm=pimcParser.getAlgorithm();
 

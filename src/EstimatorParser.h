@@ -24,6 +24,7 @@ class EstimatorManager;
 class Distance;
 class SimulationInfo;
 class Action;
+class ActionChoice;
 class DoubleAction;
 class MPIManager;
 /// XML Parser for estimators.
@@ -33,7 +34,8 @@ class EstimatorParser : public XMLUnitParser {
 public:
   /// Constructor.
   EstimatorParser(const SimulationInfo&, const double tau, 
-      const Action* action, const DoubleAction* doubleAction,MPIManager *mpi=0);
+      const Action* action, const DoubleAction* doubleAction,
+      const ActionChoice *actionChoice, MPIManager *mpi=0);
   /// Virtual destructor.
   ~EstimatorParser();
   /// Parse some xml.
@@ -51,6 +53,8 @@ private:
   const Action* action;
   /// The double action.
   const DoubleAction* doubleAction;
+  /// A choice of action models.
+  const ActionChoice* actionChoice;
   /// The MPI manager.
   MPIManager *mpi;
   /// Parser for pair correlation estimator.

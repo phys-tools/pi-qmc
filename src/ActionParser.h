@@ -19,8 +19,11 @@
 #include "XMLUnitParser.h"
 class Action;
 class DoubleAction;
+class ActionChoice;
 class SimulationInfo;
 class MPIManager;
+class CompositeAction;
+class CompositeDoubleAction;
 #include "AugmentedNodes.h"
 #include <blitz/array.h>
 #include <vector>
@@ -40,11 +43,18 @@ public:
   Action* getAction() {return action;}
   /// Return the DoubleAction object.
   DoubleAction* getDoubleAction() {return doubleAction;}
+  /// Return the ActionChoice object.
+  ActionChoice* getActionChoice() {return actionChoice;}
 private:
+  /// Function to parse all the action xml tags.
+  void parseActions(const xmlXPathContextPtr& ctxt, xmlXPathObjectPtr& obj,
+    CompositeAction* action, CompositeDoubleAction* doubleComposite);
   /// The Action object.
   Action* action;
   /// The DoubleAction object.
   DoubleAction* doubleAction;
+  /// Choice of actions if different models are being sampled.
+  ActionChoice* actionChoice;
   /// General simulation information.
   const SimulationInfo& simInfo;
   /// The timestep.

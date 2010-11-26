@@ -113,7 +113,7 @@ void SHOAction::getBeadAction(const Paths& paths, int ipart, int islice,
              +2.0*r0r1*coshwt*cschwt*cschwt)
         +0.5*m*delta2*tin*tin-0.5*ndim*tin;
   u=0.5*ndim*log(2*3.14159265358979*sinhwt/(m*omega))+m*omega*((r1r1+r0r0)
-	  *coshwt-2.0*r0r1) -0.5*log(2.0*3.14159265358979*tau/m)
+	  *coshwt-2.0*r0r1)*cschwt*0.5 -0.5*log(2.0*3.14159265358979*tau/m)
 	  -0.5*m*delta2/tau;
   delta=paths.delta(ipart,islice,1);
   fp-= (m*omega*(r1*coshwt-r2)*cschwt-m*delta*tin);

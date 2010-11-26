@@ -26,6 +26,7 @@ class SimulationInfo;
 class Algorithm;
 class CompositeAlgorithm;
 class Action;
+class ActionChoice;
 class DoubleAction;
 class EstimatorManager;
 class ProbDensityGrid;
@@ -41,8 +42,8 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int,NDIM> IVec;
   /// Constructor.
-  PIMCParser(const SimulationInfo&, Action*, DoubleAction*, EstimatorManager*,
-             const BeadFactory&, MPIManager* mpi=0);
+  PIMCParser(const SimulationInfo&, Action*, DoubleAction*, ActionChoice*,
+      EstimatorManager*, const BeadFactory&, MPIManager* mpi=0);
   /// Virtual destructor.
   virtual ~PIMCParser();
   /// Parse some xml.
@@ -68,6 +69,8 @@ private:
   Action* action;
   /// The DoubleAction.
   DoubleAction* doubleAction;
+  /// Pointer to ActionChoice.
+  ActionChoice* actionChoice;
   /// The estimator manager.
   EstimatorManager* estimators;
   /// The probability density grid.

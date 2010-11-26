@@ -20,5 +20,5 @@
 #include "Paths.h"
 
 Paths::Paths(int npart, int nslice, double tau, const SuperCell& cell) 
-  : npart(npart), nslice(nslice), tau(tau), cell(cell) {
+  : npart(npart), nslice(nslice), tau(tau), cell(cell), modelState(0) {
 }

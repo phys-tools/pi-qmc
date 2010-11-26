@@ -22,6 +22,7 @@ extern int irank;
 
 #include "Beads.h"
 #include "ActionParser.h"
+#include "ActionChoice.h"
 #include "Action.h"
 #include "AugmentedNodes.h"
 #include "CaoBerneAction.h"
@@ -86,7 +87,8 @@ extern int irank;
 ActionParser::ActionParser(const SimulationInfo& simInfo, const int maxlevel,
   MPIManager *mpi)
   : XMLUnitParser(simInfo.getUnits()), 
-    action(0), doubleAction(0), simInfo(simInfo), tau(simInfo.getTau()),
+    action(0), doubleAction(0), actionChoice(0),
+    simInfo(simInfo), tau(simInfo.getTau()),
     maxlevel(maxlevel), mpi(mpi) {
 }
 
@@ -96,6 +98,17 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
   CompositeAction* composite=new CompositeAction(naction); action=composite;
   CompositeDoubleAction* doubleComposite=new CompositeDoubleAction(naction);
   doubleAction=doubleComposite;
+  parseActions(ctxt,obj,composite,doubleComposite);
+  xmlXPathFreeObject(obj);
+  if (doubleComposite->getCount()==0) {
+     doubleAction=0; delete doubleComposite;
+  }
+}
+
+void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
+    xmlXPathObjectPtr& obj, CompositeAction* composite,
+    CompositeDoubleAction* doubleComposite) {
+  int naction=obj->nodesetval->nodeNr;
   for (int iaction=0; iaction<naction; ++iaction) {
     xmlNodePtr actNode=obj->nodesetval->nodeTab[iaction];
     std::string name=getName(actNode);
@@ -629,11 +642,24 @@ void ActionParser::parse(const xmlXPathContextPtr& ctxt) {
       const Species& species2(simInfo.getSpecies(specName));
       const double C=getDoubleAttribute(actNode,"C");
       composite->addAction(new EMARateAction(simInfo,species1,species2,C)); 
+      continue;
+    } else if (name=="ActionChoice") {
+      int imodel=getIntAttribute(actNode,"initial");
+      ctxt->node=actNode;
+      xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+      int naction=obj->nodesetval->nodeNr;
+      std::cout << naction << std::endl;
+      ActionChoice* choice=new ActionChoice(naction);
+      CompositeDoubleAction* doubleChoice=new CompositeDoubleAction(naction);
+      parseActions(ctxt,obj,choice,doubleChoice);
+      xmlXPathFreeObject(obj);
+      // if (doubleComposite->getCount()==0) {
+          doubleAction=0; delete doubleComposite;
+      // }
+      actionChoice = choice;
+      choice->setModelState(imodel);
+      composite->addAction(choice);
     }
-  }
-  xmlXPathFreeObject(obj);
-  if (doubleComposite->getCount()==0) {
-     doubleAction=0; delete doubleComposite;
   }
 }
 

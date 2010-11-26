@@ -1,5 +1,5 @@
-// $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+// $Id: ActionChoice.h 185 2009-10-13 06:00:07Z john.shumwayjr $
+/*  Copyright (C) 2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,49 +14,66 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __CompositeAction_h_
-#define __CompositeAction_h_
+#ifndef __ActionChoice_h_
+#define __ActionChoice_h_
 class MultiLevelSampler;
 class DisplaceMoveSampler;
 class SectionChooser;
 class Paths;
-#include "Action.h"
+#include "CompositeAction.h"
+#include "LinkSummable.h"
 #include <vector>
 
-/** Action class for composing multiple Action classes.
-  * @version $Revision$
+/** Action class for representing a choice of action.
+  * Used to compare free energies of two different path integrals.
+  * @version $Revision: 185 $
   * @author John Shumway. */
-class CompositeAction : public Action {
-protected:
-  typedef std::vector<Action*> ActionContainer;
-  typedef ActionContainer::iterator ActionIter;
-  typedef ActionContainer::const_iterator ConstActionIter;
+class ActionChoice : public CompositeAction, public LinkSummable {
 public:
   /// Constructor, optionally providing the number of slots to reserve.
-  CompositeAction(const int nreserve=0);
+  ActionChoice(const int nreserve=0);
   /// Virtual destructor deletes all Action objects.
-  virtual ~CompositeAction();
+  virtual ~ActionChoice();
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
+  /// Calculate the difference in action.
+  double getActionDifference(const Paths&, int jaction);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
-       double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
+       double& u, double& utau, double& ulambda,
+       Action::Vec& fm, Action::Vec& fp) const;
   /// Add an action object.
   void addAction(Action* a) {actions.push_back(a);}
   /// Initialize for a sampling section.
   virtual void initialize(const SectionChooser&);
   /// Accept last move.
   virtual void acceptLastMove();
-  /// Returns pointer to an Action of type type, otherwise returns null pointer.
-  virtual const Action* getAction(const std::type_info &type) const;
-protected:
-  /// Pointers to the Action objects.
-  ActionContainer actions;
+  /// Set the current action model index.
+  void setModelState(int i) {imodel=i;}
+  /// Get the current action model index.
+  int getModelState() {return imodel;}
+  /// Get the number of model choices.
+  int getModelCount() const {return actions.size();}
+  /// Initialize the calculation.
+  virtual void initCalc(const int nslice, const int firstSlice);
+  /// Add contribution from a link.
+  virtual void handleLink(const LinkSummable::Vec& start,
+                          const LinkSummable::Vec& end,
+                          const int ipart, const int islice, const Paths&);
+  /// Finalize the calculation.
+  virtual void endCalc(const int nslice);
+private:
+  /// Action difference acumulated during sum over links.
+  double actionDifference;
+  /// Index of the current action model.
+  int imodel;
+  /// Index of the new action model.
+  int jmodel;
 };
 #endif

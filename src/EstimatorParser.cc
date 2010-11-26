@@ -24,6 +24,7 @@
 #include "stats/EstimatorManager.h"
 #include "SimulationInfo.h"
 #include "Action.h"
+#include "ActionChoice.h"
 #include "AngularMomentumEstimator.h"
 #include "CoulombAction.h"
 #include "ConductivityEstimator.h"
@@ -35,6 +36,7 @@
 #include "DynamicPCFEstimator.h"
 #include "CountCountEstimator.h"
 #include "Distance.h"
+#include "FreeEnergyEstimator.h"
 #include "PairDistance.h"
 #include "CoulombEnergyEstimator.h"
 #include "EwaldCoulombEstimator.h"
@@ -67,16 +69,22 @@
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,
-    MPIManager *mpi)
+    const ActionChoice *actionChoice, MPIManager *mpi)
   : XMLUnitParser(simInfo.getUnits()), manager(0),
     simInfo(simInfo), tau(tau), action(action), doubleAction(doubleAction),
-    mpi(mpi) {
+    actionChoice(actionChoice), mpi(mpi) {
   manager=new EstimatorManager("pimc.h5", mpi, new SimInfoWriter(simInfo));
 }
 
 EstimatorParser::~EstimatorParser() {delete manager;}
 
 void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
+  // First see if we need a FreeEnergyEstimator for ActionChoice.
+  if (actionChoice) {
+    manager->add(new FreeEnergyEstimator(simInfo,
+       actionChoice->getModelCount(), mpi));
+  }
+  // Then parse the xml estimator list.
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);
   int nest=obj->nodesetval->nodeNr;
   for (int iest=0; iest<nest; ++iest) {

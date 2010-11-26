@@ -45,6 +45,8 @@ public:
   int getFirstSliceIndex() const {return iFirstSlice;}
   /// Get the number of levels in the section.
   int getNLevel() const {return nlevel;}
+  /// Get a reference to the paths.
+  const Paths& getPaths() const {return paths;}
 protected:
   /// The paths.
   Paths& paths;
