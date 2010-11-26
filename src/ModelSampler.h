@@ -17,7 +17,7 @@
 #ifndef __ModelSampler_h_
 #define __ModelSampler_h_
 class Action;
-class ActionChoice;
+class ActionChoiceBase;
 class Paths;
 class AccRejEstimator;
 class MPIManager;
@@ -36,7 +36,7 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<Vec,1> VArray;
   /// Constructor.
-  ModelSampler(Paths&, Action*, ActionChoice*, const MPIManager* mpi);
+  ModelSampler(Paths&, Action*, ActionChoiceBase*, const MPIManager* mpi);
   /// Destructor.
   virtual ~ModelSampler();
   /// Run method, performs nrepeat samplings with probability ifreq.
@@ -50,7 +50,7 @@ protected:
   /// The action to be evaluated during the move.
   Action *action;
   /// The action to be evaluated during the move.
-  ActionChoice *actionChoice;
+  ActionChoiceBase *actionChoice;
   /// The number of action models to choose from.
   const int nmodel;
   /// A pointer to the accept-reject estimator.

@@ -76,7 +76,7 @@
 
 
 PIMCParser::PIMCParser(const SimulationInfo &simInfo, Action *action,
-  DoubleAction *doubleAction, ActionChoice *actionChoice,
+  DoubleAction *doubleAction, ActionChoiceBase *actionChoice,
   EstimatorManager *estimators,
   const BeadFactory &beadFactory, MPIManager *mpi)
   : XMLUnitParser(simInfo.getUnits()),
@@ -228,7 +228,6 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
 
   } else if (name=="SampleModel") {
     algorithm = new ModelSampler(*paths, action, actionChoice, mpi);
-    std::cout << "Using ModelSampler." << std::endl;
     estimators->add(((ModelSampler*)algorithm)->
 		    getAccRejEstimator("ModelSampler"));
   } else if (name=="ShiftWorkers") {

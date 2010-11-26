@@ -69,7 +69,7 @@
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,
-    const ActionChoice *actionChoice, MPIManager *mpi)
+    const ActionChoiceBase *actionChoice, MPIManager *mpi)
   : XMLUnitParser(simInfo.getUnits()), manager(0),
     simInfo(simInfo), tau(tau), action(action), doubleAction(doubleAction),
     actionChoice(actionChoice), mpi(mpi) {

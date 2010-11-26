@@ -279,7 +279,8 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     int jslice=(islice+totNSlice/2)%totNSlice;
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,-1);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,-1);
-    nodeModel->evaluate(r1, r2, 0, false);
+    NodeModel::DetWithFlag
+      detm = nodeModel->evaluate(r1, r2, 0, false);
     nodeModel->evaluateDistance(r1,r2,0,dim1,dim2);
     if (useDistDerivative) {
       nodeModel->evaluateDotDistance(r1,r2,0,dotdim1,dotdim2);
@@ -294,7 +295,8 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     // Calculate the action and the gradient of the action.
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
-    nodeModel->evaluate(r1, r2, 0, false);
+    NodeModel::DetWithFlag
+      det = nodeModel->evaluate(r1, r2, 0, false);
     nodeModel->evaluateDistance(r1,r2,0,di1,di2);
     if (useDistDerivative) {
       nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);
@@ -336,6 +338,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       /////}////
       // Calculate the nodal action.
       u += -log(1-exp(-xim1));
+      if (det.err || detm.err || det.det*detm.det<0) u += 1e200;
       utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
       utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
 //std :: cout << "FNA :: "<<jpart<<". xim1 "<<xim1<<". dotxim1   "<<dotxim1<<". utau  "<<utau<<". u  "<<u<<". tau  "<<tau<<std ::endl;

@@ -19,7 +19,7 @@
 #include "XMLUnitParser.h"
 class Action;
 class DoubleAction;
-class ActionChoice;
+class ActionChoiceBase;
 class SimulationInfo;
 class MPIManager;
 class CompositeAction;
@@ -44,7 +44,7 @@ public:
   /// Return the DoubleAction object.
   DoubleAction* getDoubleAction() {return doubleAction;}
   /// Return the ActionChoice object.
-  ActionChoice* getActionChoice() {return actionChoice;}
+  ActionChoiceBase* getActionChoice() {return actionChoice;}
 private:
   /// Function to parse all the action xml tags.
   void parseActions(const xmlXPathContextPtr& ctxt, xmlXPathObjectPtr& obj,
@@ -54,7 +54,7 @@ private:
   /// The DoubleAction object.
   DoubleAction* doubleAction;
   /// Choice of actions if different models are being sampled.
-  ActionChoice* actionChoice;
+  ActionChoiceBase* actionChoice;
   /// General simulation information.
   const SimulationInfo& simInfo;
   /// The timestep.

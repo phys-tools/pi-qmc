@@ -24,11 +24,33 @@ class Paths;
 #include "LinkSummable.h"
 #include <vector>
 
+class ActionChoiceBase {
+public:
+  /// Constructor.
+  ActionChoiceBase() : imodel(0) {}
+  /// Calculate the difference in action.
+  virtual double getActionDifference(const Paths&, int jmodel)=0;
+  /// Set the current action model index.
+  void setModelState(int i) {imodel=i;}
+  /// Get the current action model index.
+  int getModelState() {return imodel;}
+  /// Get the number of model choices.
+  virtual int getModelCount() const=0;
+protected:
+  /// Action difference acumulated during sum over links.
+  double actionDifference;
+  /// Index of the current action model.
+  int imodel;
+  /// Index of the new action model.
+  int jmodel;
+};
+
 /** Action class for representing a choice of action.
   * Used to compare free energies of two different path integrals.
   * @version $Revision: 185 $
   * @author John Shumway. */
-class ActionChoice : public CompositeAction, public LinkSummable {
+class ActionChoice : public CompositeAction, public LinkSummable,
+                     public ActionChoiceBase {
 public:
   /// Constructor, optionally providing the number of slots to reserve.
   ActionChoice(const int nreserve=0);
@@ -41,7 +63,7 @@ public:
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
   /// Calculate the difference in action.
-  double getActionDifference(const Paths&, int jaction);
+  virtual double getActionDifference(const Paths&, int jmodel);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
@@ -54,12 +76,8 @@ public:
   virtual void initialize(const SectionChooser&);
   /// Accept last move.
   virtual void acceptLastMove();
-  /// Set the current action model index.
-  void setModelState(int i) {imodel=i;}
-  /// Get the current action model index.
-  int getModelState() {return imodel;}
   /// Get the number of model choices.
-  int getModelCount() const {return actions.size();}
+  virtual int getModelCount() const {return actions.size();}
   /// Initialize the calculation.
   virtual void initCalc(const int nslice, const int firstSlice);
   /// Add contribution from a link.
@@ -68,12 +86,5 @@ public:
                           const int ipart, const int islice, const Paths&);
   /// Finalize the calculation.
   virtual void endCalc(const int nslice);
-private:
-  /// Action difference acumulated during sum over links.
-  double actionDifference;
-  /// Index of the current action model.
-  int imodel;
-  /// Index of the new action model.
-  int jmodel;
 };
 #endif

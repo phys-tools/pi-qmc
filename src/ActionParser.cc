@@ -30,6 +30,7 @@ extern int irank;
 #include "SphereAction.h"
 #include "CompositeAction.h"
 #include "CompositeDoubleAction.h"
+#include "DoubleActionChoice.h"
 #include "spin/SpinAction.h"
 #include "SpringAction.h"
 #include "SpringTensorAction.h"
@@ -650,15 +651,19 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       int naction=obj->nodesetval->nodeNr;
       std::cout << naction << std::endl;
       ActionChoice* choice=new ActionChoice(naction);
-      CompositeDoubleAction* doubleChoice=new CompositeDoubleAction(naction);
+      DoubleActionChoice* doubleChoice=new DoubleActionChoice(naction);
       parseActions(ctxt,obj,choice,doubleChoice);
       xmlXPathFreeObject(obj);
-      // if (doubleComposite->getCount()==0) {
-          doubleAction=0; delete doubleComposite;
-      // }
-      actionChoice = choice;
-      choice->setModelState(imodel);
-      composite->addAction(choice);
+      if (doubleChoice->getCount()==0) {
+        delete doubleChoice;
+        composite->addAction(choice);
+        actionChoice = choice;
+      } else {
+        delete choice;
+        doubleComposite->addAction(doubleChoice);
+        actionChoice = doubleChoice;
+      }
+      actionChoice->setModelState(imodel);
     }
   }
 }

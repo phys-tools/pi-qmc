@@ -74,6 +74,7 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-DensCountEstimator.$(OBJEXT) pi-DensityEstimator.$(OBJEXT) \
 	pi-DipoleMomentEstimator.$(OBJEXT) \
 	pi-DisplaceMoveSampler.$(OBJEXT) pi-DotGeomAction.$(OBJEXT) \
+	pi-DoubleActionChoice.$(OBJEXT) \
 	pi-DoubleDisplaceMoveSampler.$(OBJEXT) \
 	pi-DoubleMLSampler.$(OBJEXT) pi-DoubleParallelPaths.$(OBJEXT) \
 	pi-DoubleSectionChooser.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
@@ -325,17 +326,17 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	DynamicPCFEstimator.cc CountCountEstimator.cc \
 	DensCountEstimator.cc DensityEstimator.cc \
 	DipoleMomentEstimator.cc DisplaceMoveSampler.cc \
-	DotGeomAction.cc DoubleDisplaceMoveSampler.cc \
-	DoubleMLSampler.cc DoubleParallelPaths.cc \
-	DoubleSectionChooser.cc EFieldAction.cc EIndEstimator.cc \
-	EMARateAction.cc EMARateEstimator.cc EMARateMover.cc \
-	EstimatorParser.cc ExcitonNodes.cc EwaldAction.cc \
-	EwaldCoulombEstimator.cc EwaldImagePairAction.cc EwaldSum.cc \
-	FixedNodeAction.cc FixedPhaseAction.cc FreeEnergyEstimator.cc \
-	FreeMover.cc FreeMoverPBC.cc FreeParticleNodes.cc \
-	FreePartNodesNoUpdate.cc FreeTensorMover.cc \
-	FrequencyEstimator.cc GateAction.cc GaussianAction.cc \
-	GaussianDotAction.cc GrapheneAction.cc \
+	DotGeomAction.cc DoubleActionChoice.cc \
+	DoubleDisplaceMoveSampler.cc DoubleMLSampler.cc \
+	DoubleParallelPaths.cc DoubleSectionChooser.cc EFieldAction.cc \
+	EIndEstimator.cc EMARateAction.cc EMARateEstimator.cc \
+	EMARateMover.cc EstimatorParser.cc ExcitonNodes.cc \
+	EwaldAction.cc EwaldCoulombEstimator.cc \
+	EwaldImagePairAction.cc EwaldSum.cc FixedNodeAction.cc \
+	FixedPhaseAction.cc FreeEnergyEstimator.cc FreeMover.cc \
+	FreeMoverPBC.cc FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
+	FreeTensorMover.cc FrequencyEstimator.cc GateAction.cc \
+	GaussianAction.cc GaussianDotAction.cc GrapheneAction.cc \
 	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
 	GroundStateWFNodes.cc Help.h Hungarian.cc HyperbolicAction.cc \
 	HyperbolicMover.cc ImagePairAction.cc JelliumSlab.cc \
@@ -377,8 +378,8 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	CoulombEnergyEstimator.h CubicLattice.h \
 	DampedFreeTensorMover.h DensDensEstimator.h \
 	DensCountEstimator.h DisplaceMoveSampler.h DotGeomAction.h \
-	DoubleDisplaceMoveSampler.h DynamicPCFEstimator.h \
-	CountCountEstimator.h DensityEstimator.h \
+	DoubleActionChoice.h DoubleDisplaceMoveSampler.h \
+	DynamicPCFEstimator.h CountCountEstimator.h DensityEstimator.h \
 	DipoleMomentEstimator.h Distance.h DoubleAction.h \
 	DisplaceMoveSampler.h DoubleDisplaceMoveSampler.h \
 	DoubleMLSampler.h DoubleParallelPaths.h DoubleSectionChooser.h \
@@ -539,6 +540,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DipoleMomentEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DisplaceMoveSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DotGeomAction.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleActionChoice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleDisplaceMoveSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleMLSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-DoubleParallelPaths.Po@am__quote@
@@ -1135,6 +1137,20 @@ pi-DotGeomAction.obj: DotGeomAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DotGeomAction.cc' object='pi-DotGeomAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DotGeomAction.obj `if test -f 'DotGeomAction.cc'; then $(CYGPATH_W) 'DotGeomAction.cc'; else $(CYGPATH_W) '$(srcdir)/DotGeomAction.cc'; fi`
+
+pi-DoubleActionChoice.o: DoubleActionChoice.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DoubleActionChoice.o -MD -MP -MF $(DEPDIR)/pi-DoubleActionChoice.Tpo -c -o pi-DoubleActionChoice.o `test -f 'DoubleActionChoice.cc' || echo '$(srcdir)/'`DoubleActionChoice.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DoubleActionChoice.Tpo $(DEPDIR)/pi-DoubleActionChoice.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DoubleActionChoice.cc' object='pi-DoubleActionChoice.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DoubleActionChoice.o `test -f 'DoubleActionChoice.cc' || echo '$(srcdir)/'`DoubleActionChoice.cc
+
+pi-DoubleActionChoice.obj: DoubleActionChoice.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DoubleActionChoice.obj -MD -MP -MF $(DEPDIR)/pi-DoubleActionChoice.Tpo -c -o pi-DoubleActionChoice.obj `if test -f 'DoubleActionChoice.cc'; then $(CYGPATH_W) 'DoubleActionChoice.cc'; else $(CYGPATH_W) '$(srcdir)/DoubleActionChoice.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DoubleActionChoice.Tpo $(DEPDIR)/pi-DoubleActionChoice.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DoubleActionChoice.cc' object='pi-DoubleActionChoice.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DoubleActionChoice.obj `if test -f 'DoubleActionChoice.cc'; then $(CYGPATH_W) 'DoubleActionChoice.cc'; else $(CYGPATH_W) '$(srcdir)/DoubleActionChoice.cc'; fi`
 
 pi-DoubleDisplaceMoveSampler.o: DoubleDisplaceMoveSampler.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DoubleDisplaceMoveSampler.o -MD -MP -MF $(DEPDIR)/pi-DoubleDisplaceMoveSampler.Tpo -c -o pi-DoubleDisplaceMoveSampler.o `test -f 'DoubleDisplaceMoveSampler.cc' || echo '$(srcdir)/'`DoubleDisplaceMoveSampler.cc

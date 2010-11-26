@@ -31,7 +31,7 @@
 #include <string>
 
 ModelSampler::ModelSampler(Paths& paths, Action* action, 
-  ActionChoice* actionChoice, const MPIManager* mpi)
+  ActionChoiceBase* actionChoice, const MPIManager* mpi)
   : paths(paths), action(action), actionChoice(actionChoice),
     nmodel(actionChoice->getModelCount()), accRejEst(0),  mpi(mpi) {
 }

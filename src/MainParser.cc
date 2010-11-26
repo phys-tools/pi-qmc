@@ -36,7 +36,7 @@ extern int irank;
 #include "EstimatorParser.h"
 #include "spin/MainSpinParser.h"
 #include <ctime>
-class ActionChoice;
+class ActionChoiceBase;
 
 MainParser::MainParser(const std::string& filename) 
   : filename(filename), context (0) {
@@ -111,7 +111,7 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
   actionParser.parse(ctxt);
   Action* action=actionParser.getAction();
   DoubleAction* doubleAction=actionParser.getDoubleAction();
-  ActionChoice* actionChoice = actionParser.getActionChoice();
+  ActionChoiceBase* actionChoice = actionParser.getActionChoice();
   // Set the estimators.
   EstimatorParser estimatorParser(simInfo,tau,action,doubleAction,
     actionChoice,mpi);
