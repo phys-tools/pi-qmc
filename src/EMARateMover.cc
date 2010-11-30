@@ -1,4 +1,4 @@
-// $Id: EMARateMover.cc 250 2010-04-06 23:12:06Z saadAK $
+// $Id$
 /*  Copyright (C) 2010 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify

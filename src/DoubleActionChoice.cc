@@ -1,4 +1,4 @@
-// $Id: DoubleActionChoice.cc 185 2009-10-13 06:00:07Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: MiddleSectionChooser.cc 211 2009-12-02 21:17:55Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

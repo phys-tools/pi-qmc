@@ -1,4 +1,4 @@
-// $Id: OptEwaldSum.cc 38 2009-04-09 20:01:17Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-// $Id: ZeroVarDensityEstimator.h 166 2009-09-08 03:47:46Z saad A Khairallah $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

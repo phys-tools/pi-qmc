@@ -1,4 +1,4 @@
-// $Id: PrimTorusAction.h 12 2009-02-07 23:32:51Z john.shumwayjr $
+// $Id$
 // Potential Modified on 3/3/2009 17:10 by Peter G McDonald, pgm4@hw.ac.uk
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 

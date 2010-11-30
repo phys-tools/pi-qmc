@@ -1,4 +1,4 @@
-// $Id: FreeEnergyEstimator.cc 234 2010-02-03 21:24:21Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2008 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

@@ -1,4 +1,4 @@
-//$Id: AugmentedNodes.cc 52 2009-05-13 18:51:51Z john.shumwayjr $
+//$Id$
 /*  Copyright (C) 2009,2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

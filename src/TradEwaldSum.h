@@ -1,4 +1,4 @@
-// $Id: TradEwaldSum.h 38 2009-04-09 20:01:17Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2008-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -59,7 +59,7 @@ constant term,
 in <a href="http://dx.doi.org/10.1006/jcph.1995.1054">
 Natoli and Ceperley, J. Comp. Phys. <b>117</b>, 171-178 (1995).</a>
 @bug Only works for NDIM=3.
-@version $Revision: 38 $
+@version $Revision$
 @author John Shumway. */
 class TradEwaldSum : public EwaldSum {
 public:

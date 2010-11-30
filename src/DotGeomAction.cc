@@ -1,4 +1,4 @@
-// $Id: DotGeomAction.cc 22 2009-03-06 13:52:07Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

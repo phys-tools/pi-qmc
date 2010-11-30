@@ -1,4 +1,4 @@
-// $Id: FreeMoverPBC.h 250 2010-04-06 23:12:06Z saadAK $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class PeriodicGaussian;
 /** Select a trial move for beads by free particle sampling.
   * This class treats periodic boundary conditions more carefully, which
   * may help with free fermion sampling.
-  * @version $Revision: 250 $
+  * @version $Revision$
   * @author John Shumway. */
 class FreeMoverPBC : public Mover {
 public:

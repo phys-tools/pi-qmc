@@ -1,4 +1,4 @@
-// $Id: DoubleActionChoice.h 185 2009-10-13 06:00:07Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ class Paths;
 #include <vector>
 
 /** Action class for composing multiple DoubleAction classes.
-  * @version $Revision: 185 $
+  * @version $Revision$
   * @author John Shumway. */
 class DoubleActionChoice : public CompositeDoubleAction, public LinkSummable,
                            public ActionChoiceBase  {

@@ -1,4 +1,4 @@
-// $Id: PrimCosineAction.h 12 2009-02-07 23:32:51Z john.shumwayjr $
+// $Id$
 // Potential Modified on 3/3/2009 17:10 by Peter G McDonald, pgm4@hw.ac.uk
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
@@ -26,7 +26,7 @@ class SimulationInfo;
 /** Class for calculating the primitive action for a simple harmonic
   * oscillator.
   * @f[ V(x) =a*(1+cos((2*pi*x)/b))@f]
-  * @version $Revision: 12 $
+  * @version $Revision$
   * @author John Shumway. 
  * Cosine Potential, Peter McDonald, Heriot Watt University, Scotland, 2009 */
 

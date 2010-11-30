@@ -1,4 +1,4 @@
-// $Id: EwaldImagePairAction.cc 216 2009-12-15 02:09:12Z saadAK $
+// $Id$
 /*  Copyright (C) 2004-2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

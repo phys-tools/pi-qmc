@@ -1,4 +1,4 @@
-// $Id: ModelSampler.h 324 2010-10-21 21:59:18Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify

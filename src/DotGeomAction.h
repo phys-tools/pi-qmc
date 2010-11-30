@@ -1,4 +1,4 @@
-// $Id: DotGeomAction.h 181 2009-09-28 22:48:51Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -23,7 +23,7 @@ template <int TDIM> class Beads;
 
 /** Class for calculating the action for a nanostructure (quantum dot)
   * with a specified geometry.
-  * @version $Revision: 181 $
+  * @version $Revision$
   * @author John Shumway. */
 class DotGeomAction : public Action {
 public:

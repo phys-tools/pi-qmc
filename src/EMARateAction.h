@@ -1,4 +1,4 @@
-// $Id: EMARateAction.h 185 2009-10-13 06:00:07Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@ class Species;
  *              + \frac{m_h|r_{e,1}-r_{h,0}|^2}{2\Delta\tau}
  *              - \frac{m_h|r_{h,0}-r_{h,N_{T}-1}|^2}{2\Delta\tau}
  *              - \frac{m_h|r_{e,1}-r_{e,0}|^2}{2\Delta\tau}. @f]
- * @version $Revision: 185 $
+ * @version $Revision$
  * @author John Shumway */
 class EMARateAction : public Action {
 public:

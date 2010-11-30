@@ -1,4 +1,4 @@
-// $Id: ActionChoice.h 185 2009-10-13 06:00:07Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -47,7 +47,7 @@ protected:
 
 /** Action class for representing a choice of action.
   * Used to compare free energies of two different path integrals.
-  * @version $Revision: 185 $
+  * @version $Revision$
   * @author John Shumway. */
 class ActionChoice : public CompositeAction, public LinkSummable,
                      public ActionChoiceBase {

@@ -1,4 +1,4 @@
-// $Id: OptEwaldSum.h 38 2009-04-09 20:01:17Z john.shumwayjr $
+// $Id$
 /*  Copyright (C) 2009 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ constant term,
 @f[
 -\frac{\pi}{2\kappa^2 V}\left|\sum_j q_j \right|^2.
 @f]
-@version $Revision: 38 $
+@version $Revision$
 @author John Shumway. */
 class OptEwaldSum : public EwaldSum {
 public:
