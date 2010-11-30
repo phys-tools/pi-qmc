@@ -58,7 +58,9 @@ DoubleDisplaceMoveSampler::~DoubleDisplaceMoveSampler() {}
 
 
 bool DoubleDisplaceMoveSampler::tryMove() {
-  accRejEst->tryingMove(0);
+  int workerID = (mpi) ? mpi->getWorkerID() : 0;
+  if (workerID==0) accRejEst->tryingMove(0);
+
   mover.makeMove(displacement,nmoving);
   if (nworker>1) {
     handleBoundary(iFirstSlice-1, iLastSlice+1, +1);
@@ -113,7 +115,7 @@ bool DoubleDisplaceMoveSampler::tryMove() {
     }
 #endif
   
-  accRejEst->moveAccepted(0);
+  if (workerID==0) accRejEst->moveAccepted(0);
   
   // Move accepted.
   action->acceptLastMove();
