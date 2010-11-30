@@ -664,6 +664,25 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
         actionChoice = doubleChoice;
       }
       actionChoice->setModelState(imodel);
+      continue;
+    } else if (name=="ActionGroup") {
+      ctxt->node=actNode;
+      xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+      int naction=obj->nodesetval->nodeNr;
+      CompositeAction* group = new CompositeAction(naction);
+      CompositeDoubleAction* doubleGroup = new CompositeDoubleAction(naction);
+      parseActions(ctxt,obj,group,doubleGroup);
+      xmlXPathFreeObject(obj);
+      if (group->getCount()>0) {
+        composite->addAction(group);
+      } else {
+        delete group;
+      }
+      if (doubleGroup->getCount()>0) {
+        doubleComposite->addAction(doubleGroup);
+      } else {
+        delete doubleGroup;
+      }
     }
   }
 }

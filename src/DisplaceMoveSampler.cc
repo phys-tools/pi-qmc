@@ -178,7 +178,9 @@ void  DisplaceMoveSampler::handleBoundary(int bd1, int bd2, int sign)
 bool DisplaceMoveSampler::tryMove() {
 
  
-  accRejEst->tryingMove(0);
+  int workerID = (mpi) ? mpi->getWorkerID() : 0;
+
+  if (workerID==0) accRejEst->tryingMove(0);
   mover.makeMove(displacement,nmoving);
    if (nworker>1) handleBoundary(iFirstSlice-1, iLastSlice+1, +1);
 
@@ -207,7 +209,7 @@ bool DisplaceMoveSampler::tryMove() {
   if (RandomNumGenerator::getRand()>acceptProb)  { if (nworker>1) handleBoundary(iFirstSlice-1, iLastSlice+1, -1);return false;}
 #endif
   
-  accRejEst->moveAccepted(0);
+  if (workerID==0) accRejEst->moveAccepted(0);
   
   // Move accepted.
   action->acceptLastMove();

@@ -55,6 +55,8 @@ public:
   virtual void acceptLastMove();
   /// Returns pointer to an Action of type type, otherwise returns null pointer.
   virtual const Action* getAction(const std::type_info &type) const;
+  /// Returns the number of action objects.
+  int getCount() {return actions.size();}
 protected:
   /// Pointers to the Action objects.
   ActionContainer actions;

@@ -47,8 +47,9 @@ void ModelSampler::run() {
 
 
 bool ModelSampler::tryMove() {
+  int workerID = (mpi) ? mpi->getWorkerID() : 0;
 
-  accRejEst->tryingMove(0);
+  if (workerID==0) accRejEst->tryingMove(0);
 
   int imodel = actionChoice->getModelState(); 
 
@@ -91,7 +92,7 @@ bool ModelSampler::tryMove() {
 
   actionChoice->setModelState(jmodel);
   paths.setModelState(jmodel);
-  accRejEst->moveAccepted(0);
+  if (workerID==0) accRejEst->moveAccepted(0);
   return true;
 }
 
