@@ -1,5 +1,5 @@
-// $Id: MultiLevelSampler.cc 22 2009-5-18 Saad khairallah$
-/*  Copyright (C) 2009 John B. Shumway, Jr.
+// $Id$
+/*  Copyright (C) 2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "stats/MPIManager.h"
 #include "ModelSampler.h"
 #include "stats/AccRejEstimator.h"
+#include "stats/MPIManager.h"
 #include "Action.h"
 #include "ActionChoice.h"
 #include "RandomNumGenerator.h"
@@ -40,9 +41,6 @@ ModelSampler::~ModelSampler() {
 }
 
 void ModelSampler::run() {
-#ifdef ENABLE_MPI
-  int workerID = (mpi)?mpi->getWorkerID():0;
-#endif
   tryMove();
 
 }
@@ -50,7 +48,6 @@ void ModelSampler::run() {
 
 bool ModelSampler::tryMove() {
 
- 
   accRejEst->tryingMove(0);
 
   int imodel = actionChoice->getModelState(); 
@@ -63,14 +60,34 @@ bool ModelSampler::tryMove() {
       +(nmodel-1.-imodel)/(nmodel-1.)))-1;
   if (jmodel<0 or jmodel>=nmodel) return false;
 
+#ifdef ENABLE_MPI
+  int nworker = (mpi) ? mpi->getNWorker():1;
+  if (mpi && nworker>1) {
+    mpi->getWorkerComm().Bcast(&jmodel,1,MPI::INT,0);
+  }
+#endif 
+
   double tranProb = (jmodel>imodel)
                     ? (nmodel-1.-imodel)/jmodel :imodel/(nmodel-1.-jmodel);
 
   // Evaluate the change in action.
   double deltaAction = actionChoice->getActionDifference(paths,jmodel);
+#ifdef ENABLE_MPI
+  double totalDeltaAction = 0;
+  mpi->getWorkerComm().Reduce(&deltaAction,&totalDeltaAction,
+                              1,MPI::DOUBLE,MPI::SUM,0);
+  deltaAction = totalDeltaAction;
+#endif 
 
   double acceptProb=exp(-deltaAction)/tranProb;
-  if (RandomNumGenerator::getRand()>acceptProb) return false;
+
+  bool reject = RandomNumGenerator::getRand()>acceptProb;
+#ifdef ENABLE_MPI
+    if (nworker > 1) {
+      mpi->getWorkerComm().Bcast(&reject, sizeof(bool), MPI::CHAR, 0); 
+    }
+#endif 
+  if (reject) return false;
 
   actionChoice->setModelState(jmodel);
   paths.setModelState(jmodel);

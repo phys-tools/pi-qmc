@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2009 John B. Shumway, Jr.
+/*  Copyright (C) 2010 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
