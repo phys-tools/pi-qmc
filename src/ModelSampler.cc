@@ -51,7 +51,8 @@ bool ModelSampler::tryMove() {
 
   if (workerID==0) accRejEst->tryingMove(0);
 
-  int imodel = actionChoice->getModelState(); 
+  int imodel = paths.getModelState(); 
+  actionChoice->setModelState(imodel);
 
   // We select the next model so that the end points always
   // try a valid model. This is efficient for two models, but

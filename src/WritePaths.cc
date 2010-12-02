@@ -68,7 +68,13 @@ void WritePaths::run() {
     for (int i=0; i<paths.getNPart(); i++) *file << perm[i]<< " ";
     *file << std::endl;
     *file << "#Path coordinates: " << paths.getNPart()
-	  << " particles in " << NDIM << "-d" << std::endl;
+	  << " particles in " << NDIM << "-d";
+    int modelCount = paths.getModelCount();    
+    if (modelCount>1) {
+      int modelState = paths.getModelState();    
+      *file << ", state " << modelState << " of " << modelCount;
+    }
+    *file << std::endl;
     file->precision(15);
   }
   //movie files

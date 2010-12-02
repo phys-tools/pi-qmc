@@ -50,28 +50,45 @@ void PathReader::run() {
   Beads<NDIM> &slice(*beadFactory.getNewBeads(npart,1));
   Permutation p(npart);   
   bool permutationsFlag = false;
+  int modelCount=0,modelState=0; 
   if (workerID==0){
-    std::string temp; 
-    *infile >> temp; 
-    if (temp.compare("#Permutations") == 0) {
+    std::string firstLine,temp; 
+    *infile >> firstLine; 
+    // First check for permutations.
+    if (firstLine.compare("#Permutations") == 0) {
       std::cout << "Clone ID :: " << cloneID
          << " :: Found a Permutations array in restart file: " << std::endl;
       permutationsFlag = true;
-      std :: cout << temp<<"  ";
+      std :: cout << firstLine<< "  ";
       for (int i=0; i < npart; i++){
 	*infile >>p[i];  
       }
       std :: cout<<p <<std :: endl;      
       getline(*infile,temp); 
-      getline(*infile,temp); 
+      *infile >> firstLine;
     }
     else{
       std::cout << "WARNING :: Did not find #Permutations in the restart file."
                 << std::endl; 
       std::cout << "Automatically set up Permutations from paths."
                 << std::endl; 
-      getline(*infile,temp); 
     }
+    // Check for model state variables.
+    getline(*infile,temp); firstLine += temp;
+    if (paths.getModelCount() > 1) {
+      std::cout << "Checking for model state..." << std::endl;
+      int i = firstLine.find("state");
+      if (i != -1) {
+        i += 6;
+        int j = firstLine.find("of");
+        modelState = atoi(firstLine.substr(i,j-i-1).c_str());
+        modelCount = atoi(firstLine.substr(j+3).c_str());
+        std::cout << "Model state " << modelState << " of " << modelCount
+                  << "." << std::endl;
+      }
+    }
+    // Now read coordinates.
+    //getline(*infile,temp); 
     for (int i=0; i<npart; ++i) {
       Beads<NDIM>::Vec v;
       for (int idim=0; idim<NDIM; ++idim) *infile >> v[idim];
@@ -80,8 +97,12 @@ void PathReader::run() {
   }
 
 #ifdef ENABLE_MPI
-  if (mpi) mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
+  if (mpi) {
+    mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
+    mpi->getWorkerComm().Bcast(&modelState,npart*NDIM,MPI::INT,0);
+  }
 #endif
+  paths.setModelState(modelState);
 
   Beads<NDIM> firstSlice(slice);  Permutation pidentity(npart); 
   for (int islice=0; islice<(nslice/bfactor)-1; ++islice) { 
