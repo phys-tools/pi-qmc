@@ -88,9 +88,9 @@ void PathReader::run() {
       }
       else {
         modelState =paths.getModelState();
-	std::cout << "WARNING :: Did not find Model state in the restart file. Now Using the initial Model state "
-		  <<modelState
-		  << std::endl; 
+        std::cout << "WARNING :: Did not find model state in the restart file."
+                  << "\nNow using the initial model state " << modelState
+		  << " specified in pimc.xml." << std::endl; 
       }
     }
     // Now read coordinates.
@@ -105,7 +105,7 @@ void PathReader::run() {
 #ifdef ENABLE_MPI
   if (mpi) {
     mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
-    mpi->getWorkerComm().Bcast(&modelState,npart*NDIM,MPI::INT,0);
+    mpi->getWorkerComm().Bcast(&modelState,1,MPI::INT,0);
   }
 #endif
   paths.setModelState(modelState);
