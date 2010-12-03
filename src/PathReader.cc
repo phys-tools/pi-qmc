@@ -86,6 +86,12 @@ void PathReader::run() {
         std::cout << "Model state " << modelState << " of " << modelCount
                   << "." << std::endl;
       }
+      else {
+        modelState =paths.getModelState();
+	std::cout << "WARNING :: Did not find Model state in the restart file. Now Using the initial Model state "
+		  <<modelState
+		  << std::endl; 
+      }
     }
     // Now read coordinates.
     //getline(*infile,temp); 
