@@ -724,21 +724,25 @@ void ActionParser::parseOrbitalDM(
     const Species& species(simInfo.getSpecies(specName));
     double Z=getDoubleAttribute(orbNode,"Z");
     double weight=getDoubleAttribute(orbNode,"weight");
-    std::cout << "Orbital node: " << name << " on " << specName 
+    std::cout << "Nodal orbital: " << name << " on " << specName 
               << " with Z=" << Z << " and weight " << weight << std::endl;
     if (name=="Atomic1s") {
-      orbitals.push_back(
-        new AugmentedNodes::Atomic1sDM(Z,species.ifirst,weight));
+      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
+        orbitals.push_back(new AugmentedNodes::Atomic1sDM(Z,i,weight));
+      }
     } else if (name=="Atomic2s") {
-      orbitals.push_back(
-        new AugmentedNodes::Atomic2sDM(Z,species.ifirst,weight));
+      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
+        orbitals.push_back(new AugmentedNodes::Atomic2sDM(Z,i,weight));
+      }
     } else if (name=="Atomic2p") {
-      orbitals.push_back(
-        new AugmentedNodes::Atomic2pDM(Z,species.ifirst,weight));
+      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
+        orbitals.push_back(new AugmentedNodes::Atomic2pDM(Z,i,weight));
+      }
     } else if (name=="Atomic2sp") {
       double alpha=getDoubleAttribute(orbNode,"alpha");
-      orbitals.push_back(
-        new AugmentedNodes::Atomic2spDM(Z,species.ifirst,weight,alpha));
+      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
+        orbitals.push_back(new AugmentedNodes::Atomic2spDM(Z,i,weight,alpha));
+      }
     }
   }
 }
