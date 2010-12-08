@@ -48,7 +48,7 @@
        <enum>Qt::ElideMiddle</enum>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
         <number>8</number>
@@ -154,6 +154,8 @@
             <property name="font">
              <font>
               <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
@@ -206,6 +208,8 @@
             <property name="font">
              <font>
               <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
@@ -258,6 +262,8 @@
             <property name="font">
              <font>
               <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
@@ -310,6 +316,8 @@
             <property name="font">
              <font>
               <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="maxLength">
@@ -359,6 +367,8 @@
             <property name="font">
              <font>
               <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
              </font>
             </property>
             <property name="text">
@@ -390,8 +400,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>sigmaBox</zorder>
-  <zorder>splitter</zorder>
  </widget>
  <resources/>
  <connections/>

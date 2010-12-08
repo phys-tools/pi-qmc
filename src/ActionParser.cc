@@ -84,6 +84,7 @@ extern int irank;
 #include "Species.h"
 #include <iostream>
 #include <cstdlib>
+#include <blitz/tinyvec-et.h>
 
 ActionParser::ActionParser(const SimulationInfo& simInfo, const int maxlevel,
   MPIManager *mpi)
@@ -441,15 +442,16 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       } else if (modelName=="AugmentedNodes") {
         double radius=getLengthAttribute(ctxt->node,"radius");
         if (radius==0) radius=1.0;
-        const double density=getDensityAttribute(ctxt->node,"density");
+        double density=getDensityAttribute(ctxt->node,"density");
+        if (density==0) {
+          density = species.count/product(simInfo.getSuperCell()->a);
+        }
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
         int maxMovers=3;
-        std::string spec2Name=getStringAttribute(ctxt->node,"refSpecies");
-        const Species& species2(simInfo.getSpecies(spec2Name));
         std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
         parseOrbitalDM(orbitals, ctxt);
-        nodeModel=new AugmentedNodes(simInfo,species,species2,
+        nodeModel=new AugmentedNodes(simInfo,species,
             t,maxlevel,updates,maxMovers,density,orbitals,useHungarian);
       } else {
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
@@ -722,27 +724,25 @@ void ActionParser::parseOrbitalDM(
     std::string name=getName(orbNode);
     std::string specName=getStringAttribute(orbNode,"species");
     const Species& species(simInfo.getSpecies(specName));
+    const int ifirst = species.ifirst;
+    const int npart = species.count;
     double Z=getDoubleAttribute(orbNode,"Z");
     double weight=getDoubleAttribute(orbNode,"weight");
     std::cout << "Nodal orbital: " << name << " on " << specName 
               << " with Z=" << Z << " and weight " << weight << std::endl;
     if (name=="Atomic1s") {
-      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
-        orbitals.push_back(new AugmentedNodes::Atomic1sDM(Z,i,weight));
-      }
+      orbitals.push_back(
+        new AugmentedNodes::Atomic1sDM(Z,ifirst,npart,weight));
     } else if (name=="Atomic2s") {
-      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
-        orbitals.push_back(new AugmentedNodes::Atomic2sDM(Z,i,weight));
-      }
+      orbitals.push_back(
+        new AugmentedNodes::Atomic2sDM(Z,ifirst,npart,weight));
     } else if (name=="Atomic2p") {
-      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
-        orbitals.push_back(new AugmentedNodes::Atomic2pDM(Z,i,weight));
-      }
+      orbitals.push_back(
+        new AugmentedNodes::Atomic2pDM(Z,ifirst,npart,weight));
     } else if (name=="Atomic2sp") {
       double alpha=getDoubleAttribute(orbNode,"alpha");
-      for (int i=species.ifirst; i<species.count+species.ifirst; ++i) {
-        orbitals.push_back(new AugmentedNodes::Atomic2spDM(Z,i,weight,alpha));
-      }
+      orbitals.push_back(
+        new AugmentedNodes::Atomic2spDM(Z,ifirst,npart,weight,alpha));
     }
   }
 }

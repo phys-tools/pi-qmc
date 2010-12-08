@@ -89,7 +89,7 @@ class ScalarView(QtGui.QWidget):
       #Compute autocorrelation
       aclen = (self.end-self.start+1)/4
       a = self.values[self.start:self.end+1] - self.av
-      a = numpy.correlate(a,a[aclen:-aclen],'valid',old_behavior=False)
+      a = numpy.correlate(a,a[aclen:-aclen],'valid')
       self.autocorr = (a[aclen:]+a[aclen::-1])/(2.*a[aclen])
       cut = numpy.where(self.autocorr < 0.)[0]
       if len(cut)>0:

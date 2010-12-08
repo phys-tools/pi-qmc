@@ -54,6 +54,8 @@ class estimatorNode(object):
         self.type=estimatorNode.THERMO_ENERGY
       if self.name=="virial_energy":
         self.type=estimatorNode.VIRIAL_ENERGY
+      if self.name[:11]=="bond_length":
+        self.type=estimatorNode.BOND_LENGTH
       if self.type==0 and self.name[:1]=="g":
         self.type=estimatorNode.PAIR_CORRELATION
       if self.type==0 and self.name[:12]=="bond_length_":

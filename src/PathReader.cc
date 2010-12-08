@@ -83,8 +83,7 @@ void PathReader::run() {
         int j = firstLine.find("of");
         modelState = atoi(firstLine.substr(i,j-i-1).c_str());
         modelCount = atoi(firstLine.substr(j+3).c_str());
-        std::cout << "Model state " << modelState << " of " << modelCount
-                  << "." << std::endl;
+        std::cout << "Model state " << modelState << "." << std::endl;
       }
       else {
         modelState =paths.getModelState();

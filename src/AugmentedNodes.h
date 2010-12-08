@@ -68,6 +68,7 @@ public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<int,2> IArray2;
+  typedef blitz::Array<Vec,2> VArray2;
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Class for matrix updates.
   class MatrixUpdate : public NodeModel::MatrixUpdate {
@@ -106,46 +107,51 @@ public:
   /// Classes for atomic orbital density matricies.
   class AtomicOrbitalDM {
   public:
-    AtomicOrbitalDM(int nuclearIndex, double weight);
+    AtomicOrbitalDM(int ifirst, int npart, double weight);
     const double weight;
-    const int nuclearIndex;
+    const int ifirst;
+    const int npart;
+    mutable VArray2 dist1, dist2;
+    VArray2& getD1Array() const {return dist1;}
+    VArray2& getD2Array() const {return dist2;}
     struct ValueAndGradient {
       double value, gradr1, gradr2, gradcostheta;
     };
+    virtual void evaluateValue(Matrix&, double scale) const {;}
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const=0;
   };
   class Atomic1sDM : public AtomicOrbitalDM {
   public:
-    Atomic1sDM(double Z, int nuclearIndex, double weight);
+    Atomic1sDM(double Z, int ifirst, int npart, double weight);
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;
     const double Z;
   };
   class Atomic2sDM : public AtomicOrbitalDM {
   public:
-    Atomic2sDM(double Z, int nuclearIndex, double weight);
+    Atomic2sDM(double Z, int ifirst, int npart, double weight);
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;
     const double Z;
   };
   class Atomic2pDM : public AtomicOrbitalDM {
   public:
-    Atomic2pDM(double Z, int nuclearIndex, double weight);
+    Atomic2pDM(double Z, int ifirst, int npart, double weight);
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;
     const double Z;
   };
   class Atomic2spDM : public AtomicOrbitalDM {
   public:
-    Atomic2spDM(double Z, int nuclearIndex, double weight, double alpha);
+    Atomic2spDM(double Z, int ifirst, int npart, double weight, double alpha);
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;
     const double Z;
     const double alpha;
   };
   /// Constructor.
-  AugmentedNodes(const SimulationInfo&, const Species&, const Species&, 
+  AugmentedNodes(const SimulationInfo&, const Species&,
     const double temperature, const int maxlevel, 
     const bool useUpdates, const int maxMovers, double density, 
     const std::vector<const AtomicOrbitalDM*>&, bool useHungarian);
@@ -174,13 +180,10 @@ private:
   double tau;
   /// The mass.
   const double mass;
-  const double mass2;
   /// Number of particles of this type of fermion.
   const int npart;
   /// Index of first particle of this type of fermion.
   const int ifirst;
-  const int npart2;
-  const int kfirst;
   /// Number of slices.
   int nslice;
   /// The inverse slater matricies.
@@ -213,8 +216,6 @@ private:
   IArray kwork;
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
-  IArray kindex2;
-  Matrix kmat;
   /// Flag to use Hungarian method to remove largest contribution to det.
   const bool useHungarian;
   /// Scale factor to avoid overflow or underflow.
