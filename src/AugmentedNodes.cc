@@ -59,6 +59,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
+  if (density==0.) density = pow(mass*temperature/PI,0.5*NDIM);
   std::cout << "AugmentedNodes with temperature = "
             << temperature << std::endl;
   double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
@@ -107,26 +108,23 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
          = orbitals.begin(); orb != orbitals.end(); ++orb) {
       int kfirst=(*orb)->ifirst, nkpart=(*orb)->npart;
       VArray2& delta1((*orb)->getD1Array());
-      for(int jpart=0; jpart<npart; ++jpart) {
+      for (int kpart=0; kpart<nkpart; ++kpart) {
+        for (int jpart=0; jpart<npart; ++jpart) {
+          Vec delta(r1(jpart+ifirst)-r1(kpart+kfirst));
+          cell.pbc(delta);
+          delta1(kpart,jpart)=delta;
+        }
       }
       VArray2& delta2((*orb)->getD2Array());
-      for(int ipart=0; ipart<npart; ++ipart) {
+      for (int kpart=0; kpart<nkpart; ++kpart) {
+        for(int ipart=0; ipart<npart; ++ipart) {
+          Vec delta(r2(ipart+ifirst)-r2(kpart+kfirst));
+          delta2(kpart,ipart) = delta;
+          cell.pbc(delta);
+          delta2(kpart,ipart)=delta;
+        }
       }
       (*orb)->evaluateValue(mat,scale);
-      //  for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
-      //       = orbitals.begin(); orb != orbitals.end(); ++orb) {
-      //    int kpart = (*orb)->ifirst;
-      //    Vec delta1(r1(jpart+ifirst)-r1(kpart));
-      //    cell.pbc(delta1);
-      //    double r1 = sqrt(dot(delta1,delta1));
-      //    Vec delta2(r2(ipart+ifirst)-r2(kpart));
-      //    cell.pbc(delta2);
-      //    double r2 = sqrt(dot(delta2,delta2));
-      //    double costheta = dot(delta1,delta2)/(r1*r2+1e-200);
-      //    AtomicOrbitalDM::ValueAndGradient result = (**orb)(r1,r2,costheta);
-      //    mat(ipart,jpart) += scale * result.value;
-      //  }
-      //}
     }
     for(int jpart=0; jpart<npart; ++jpart) {
       for(int ipart=0; ipart<npart; ++ipart) {
@@ -185,12 +183,6 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
   }
   while (scaleMagnitude && (result.err ||
          (fabs(result.det)<1e-50 || fabs(result.det)>1e50)));
-  //double r10 = sqrt(dot(r1(0),r1(0)));
-  //double r11 = sqrt(dot(r1(1),r1(1)));
-  //double r20 = sqrt(dot(r2(0),r2(0)));
-  //double r21 = sqrt(dot(r2(1),r2(1)));
-  //std::cout << r10 << ", " << r11 << ", " << r20 << ", " 
-  //          << r21 << ": " << result.det << std::endl;
   return result;
 }
 
@@ -224,90 +216,80 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
   Matrix& mat(*matrix[islice]);
   // Calculate log gradients to estimate distance.
   d1=200; d2=200; // Initialize distances to a very large value.
+  // Set up distances for orbitals.
+  for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
+       = orbitals.begin(); orb != orbitals.end(); ++orb) {
+    int kfirst=(*orb)->ifirst, nkpart=(*orb)->npart;
+    VArray2& delta1((*orb)->getD1Array());
+    for (int kpart=0; kpart<nkpart; ++kpart) {
+      for (int jpart=0; jpart<npart; ++jpart) {
+        Vec delta(r1(jpart+ifirst)-r1(kpart+kfirst));
+        cell.pbc(delta);
+        delta1(kpart,jpart)=delta;
+      }
+    }
+    VArray2& delta2((*orb)->getD2Array());
+    for (int kpart=0; kpart<nkpart; ++kpart) {
+      for(int ipart=0; ipart<npart; ++ipart) {
+        Vec delta(r2(ipart+ifirst)-r2(kpart+kfirst));
+        cell.pbc(delta);
+        delta2(kpart,ipart)=delta;
+      }
+    }
+    (*orb)->evaluateValueAndGrad(0);
+  }
+  // Calculate gradients for slice 1.
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int ipart=0; ipart<npart; ++ipart) {
+      AtomicOrbitalDM::ValAndGrad orbital;
+      for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
+          = orbitals.begin(); orb != orbitals.end(); ++orb) {
+        AtomicOrbitalDM::ValAndGrad temp =  (**orb)(ipart,jpart);
+        orbital += temp;
+      }
       Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
       cell.pbc(delta);
-      Vec grad;
-      double value=scale*density;
+      Vec grad; double val=0.;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-200);
+        grad[i]=(*pg[i]).grad(fabs(delta[i]));
+        val += (*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
-      grad *= value;
+      grad += orbital.grad1;
+      val += orbital.val;
+      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/(val+1e-300);
+      logGrad += mat(jpart,ipart)*grad*scale*density;
     }
+    gradArray1(jpart) = logGrad - fgrad;
+    d1(jpart+ifirst) = sqrt(2*mass/
+                      ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
   }
-  // Add contribution from orbitals.
-  for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
-       = orbitals.begin(); orb != orbitals.end(); ++orb) {
-    for (int jpart=0; jpart<npart; ++jpart) {
-      Vec logGrad=0.0, fgrad=0.0;
-    }
-    for (int ipart=0; ipart<npart; ++ipart) {
-      //Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
-    }
-  }
-
-        //int kpart = (*orb)->ifirst;
-        //Vec delta1(r1(jpart+ifirst)-r1(kpart));
-        //cell.pbc(delta1);
-        //double r1 = sqrt(dot(delta1,delta1));
-        //Vec delta2(r2(ipart+ifirst)-r2(kpart));
-        //cell.pbc(delta2);
-        //double r2 = sqrt(dot(delta2,delta2));
-        //double costheta = dot(delta1,delta2)/(r1*r2+1e-200);
-        //AtomicOrbitalDM::ValueAndGradient result = (**orb)(r1,r2,costheta);
-        //value += scale * result.value;
-        //grad += scale * (
-        //  (result.gradr1-costheta*result.gradcostheta/(r1+1e-200))
-        //    *delta1/(r1+1e-200) 
-        // + result.gradcostheta*delta2/(r1*r2+1e-200) );
-      //}
-      //if (useHungarian && jpart==kindex(islice,ipart)) fgrad = grad/value;
-      //logGrad += mat(jpart,ipart)*grad;
-    //}
-    //gradArray1(jpart)=logGrad-fgrad;
-    //d1(jpart+ifirst)=sqrt(2*mass/
-   //                   ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
-  //}
+  // Calculate gradients for slice 2.
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
-    for(int jpart=0; jpart<npart; ++jpart) {
+    for (int jpart=0; jpart<npart; ++jpart) {
+      AtomicOrbitalDM::ValAndGrad orbital;
+      for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
+          = orbitals.begin(); orb != orbitals.end(); ++orb) {
+        AtomicOrbitalDM::ValAndGrad temp =  (**orb)(ipart,jpart);
+        orbital += temp;
+      }
       Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
       cell.pbc(delta);
-      Vec grad;
-      double value=scale*density;
+      Vec grad; double val=0.;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-200);
+        grad[i]=(*pg[i]).grad(fabs(delta[i]));
+        val += (*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
-      for (int i=0; i<NDIM; ++i) value*=(*pg[i])(fabs(delta[i]));
-      grad *= value;
-      // Add contribution from orbitals.
-      for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
-           = orbitals.begin(); orb != orbitals.end(); ++orb) {
-        int kpart = (*orb)->ifirst;
-        Vec delta1(r1(jpart+ifirst)-r1(kpart));
-        cell.pbc(delta1);
-        double r1 = sqrt(dot(delta1,delta1));
-        Vec delta2(r2(ipart+ifirst)-r2(kpart));
-        cell.pbc(delta2);
-        double r2 = sqrt(dot(delta2,delta2));
-        double costheta = dot(delta1,delta2)/(r1*r2+1e-200);
-        AtomicOrbitalDM::ValueAndGradient result = (**orb)(r1,r2,costheta);
-        value += scale * result.value;
-        grad += scale * (
-          (result.gradr2-costheta*result.gradcostheta/(r2+1e-200))
-            *delta2/(r2+1e-200) 
-         + result.gradcostheta*delta1/(r1*r2+1e-200) );
-      }
-      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/value;
-      logGrad+=mat(jpart,ipart)*grad;
+      grad += orbital.grad2;
+      val += orbital.val;
+      if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/(val+1e-300);
+      logGrad += mat(jpart,ipart)*grad*scale*density;
     }
-    gradArray2(ipart)=logGrad-fgrad;
-    d2(ipart+ifirst)=sqrt(2*mass/
+    gradArray2(ipart) = logGrad - fgrad;
+    d2(ipart+ifirst) = sqrt(2*mass/
                       ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
   }
 }
@@ -647,33 +629,36 @@ void AugmentedNodes::MatrixUpdate::acceptLastMove(int nslice) {
 const double AugmentedNodes::PI = acos(-1.0);
 
 AugmentedNodes::AtomicOrbitalDM::AtomicOrbitalDM(
-    int ifirst, int npart, double weight)
-  : weight(weight), ifirst(ifirst), npart(npart) {
+    int ifirst, int npart, int nfermion, double weight)
+  : weight(weight), ifirst(ifirst), npart(npart),
+    dist1(nfermion,npart), dist2(nfermion,npart) {
 }
 
 
 AugmentedNodes::Atomic1sDM::Atomic1sDM(
-    double Z, int ifirst, int npart, double weight)
-  : AtomicOrbitalDM(ifirst, npart, weight), Z(Z) {
+    double Z, int ifirst, int npart, int nfermion, double weight)
+  : AtomicOrbitalDM(ifirst, npart, nfermion, weight),
+    npart(npart), nfermion(nfermion),
+    work1(nfermion,npart), work2(nfermion,npart), Z(Z) {
   std::cout << "1s: Z="<<Z<<", "<<weight<<", "<<ifirst << std::endl;
 }
 
 
 AugmentedNodes::Atomic2sDM::Atomic2sDM(
     double Z, int ifirst, int npart, double weight)
-  : AtomicOrbitalDM(ifirst, npart, weight), Z(Z) {
+  : AtomicOrbitalDM(ifirst, npart, npart, weight), Z(Z) {
   std::cout << "2s: Z="<<Z<<", "<<weight<<", "<<ifirst << std::endl;
 }
 
 AugmentedNodes::Atomic2pDM::Atomic2pDM(
     double Z, int ifirst, int npart, double weight)
-  : AtomicOrbitalDM(ifirst, npart, weight), Z(Z) {
+  : AtomicOrbitalDM(ifirst, npart, npart, weight), Z(Z) {
   std::cout << "2p: Z="<<Z<<", "<<weight<<", "<<ifirst << std::endl;
 }
 
 AugmentedNodes::Atomic2spDM::Atomic2spDM(
     double Z, int ifirst, int npart, double weight, double alpha)
-  : AtomicOrbitalDM(ifirst, npart, weight), Z(Z), alpha(alpha) {
+  : AtomicOrbitalDM(ifirst, npart, npart, weight), Z(Z), alpha(alpha) {
   std::cout << "2sp: Z=" << Z << ", " << alpha 
             << weight << ", " << ifirst << std::endl;
 }
@@ -728,3 +713,73 @@ AugmentedNodes::Atomic2spDM::operator()(double r1, double r2,
   return result;
 }
 
+void
+AugmentedNodes::Atomic1sDM::evaluateValue(Matrix &mat, double scale) const {
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<npart; ++j) {
+      work1(i,j) = sqrt(dot(dist1(i,j),dist1(i,j)));
+      work2(i,j) = sqrt(dot(dist2(i,j),dist2(i,j)));
+    }
+  }
+  double coef=weight*Z*Z*Z/PI;
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<npart; ++j) {
+      work1(i,j) = coef*exp(-Z*work1(i,j));
+      work2(i,j) = coef*exp(-Z*work2(i,j));
+    }
+  }
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<nfermion; ++j) {
+      for (int k=0; k<npart; ++k) {
+        mat(i,j) = scale*work1(j,k)*work2(i,k);
+      }
+    }
+  }
+}
+
+void
+AugmentedNodes::Atomic1sDM::evaluateValueAndGrad(double scale) const {
+  // First set the work arrays to the scalar distances.
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<npart; ++j) {
+      work1(i,j) = sqrt(dot(dist1(i,j),dist1(i,j)));
+      work2(i,j) = sqrt(dot(dist2(i,j),dist2(i,j)));
+    }
+  }
+  // Then rescale the distance arrays to their unit vectors.
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<npart; ++j) {
+      dist1(i,j) /= (work1(i,j)+1e-300);
+      dist2(i,j) /= (work2(i,j)+1e-300);
+    }
+  }
+  // Then evaluate the orbitals.
+  double coef=weight*Z*Z*Z/PI;
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<npart; ++j) {
+      work1(i,j) = coef*exp(-Z*work1(i,j));
+      work2(i,j) = coef*exp(-Z*work2(i,j));
+    }
+  }
+  // Finally, set the distance arrays to the gradients.
+  for (int i=0; i<nfermion; ++i) {
+    for (int j=0; j<npart; ++j) {
+      dist1(i,j) *= -Z*work1(i,j);
+      dist2(i,j) *= -Z*work2(i,j);
+    }
+  }
+}
+
+AugmentedNodes::AtomicOrbitalDM::ValAndGrad
+AugmentedNodes::Atomic1sDM::operator()(int i, int j) const {
+  ValAndGrad result;
+  result.val = 0.;
+  result.grad1 = 0.;
+  result.grad2 = 0.;
+  for (int k=0; k<npart; ++k) {
+    result.val += work1(j,k)*work2(i,k);
+    result.grad1 += dist1(j,k)*work2(i,k);
+    result.grad2 += work1(j,k)*dist2(i,k);
+  }
+  return result;
+}

@@ -68,6 +68,7 @@ public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<int,2> IArray2;
+  typedef blitz::Array<double,2> Array2;
   typedef blitz::Array<Vec,2> VArray2;
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Class for matrix updates.
@@ -107,7 +108,7 @@ public:
   /// Classes for atomic orbital density matricies.
   class AtomicOrbitalDM {
   public:
-    AtomicOrbitalDM(int ifirst, int npart, double weight);
+    AtomicOrbitalDM(int ifirst, int npart, int nfermion, double weight);
     const double weight;
     const int ifirst;
     const int npart;
@@ -117,15 +118,30 @@ public:
     struct ValueAndGradient {
       double value, gradr1, gradr2, gradcostheta;
     };
+    struct ValAndGrad {
+      ValAndGrad() : val(0.), grad1(0.), grad2(0.) {}
+      double val; Vec grad1, grad2;
+      ValAndGrad operator+=(ValAndGrad& s) {
+        val += s.val; grad1 += s.grad1; grad2 += s.grad2; return *this;
+      }
+    };
     virtual void evaluateValue(Matrix&, double scale) const {;}
-    virtual ValueAndGradient 
+    virtual void evaluateValueAndGrad(double scale) const {;}
+    virtual ValueAndGradient
     operator()(double r1, double r2, double costheta) const=0;
+    virtual ValAndGrad operator()(int i, int j) const {
+      ValAndGrad temp; return temp;}
   };
   class Atomic1sDM : public AtomicOrbitalDM {
   public:
-    Atomic1sDM(double Z, int ifirst, int npart, double weight);
+    Atomic1sDM(double Z, int ifirst, int npart, int nfermion, double weight);
+    const int npart, nfermion;
+    mutable Array2 work1, work2;
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;
+    virtual void evaluateValue(Matrix&, double scale) const;
+    virtual void evaluateValueAndGrad(double scale) const;
+    virtual ValAndGrad operator()(int i, int j) const;
     const double Z;
   };
   class Atomic2sDM : public AtomicOrbitalDM {

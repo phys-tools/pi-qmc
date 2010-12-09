@@ -443,14 +443,11 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
         double radius=getLengthAttribute(ctxt->node,"radius");
         if (radius==0) radius=1.0;
         double density=getDensityAttribute(ctxt->node,"density");
-        if (density==0) {
-          density = species.count/product(simInfo.getSuperCell()->a);
-        }
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
         int maxMovers=3;
         std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
-        parseOrbitalDM(orbitals, ctxt);
+        parseOrbitalDM(orbitals, species, ctxt);
         nodeModel=new AugmentedNodes(simInfo,species,
             t,maxlevel,updates,maxMovers,density,orbitals,useHungarian);
       } else {
@@ -716,7 +713,7 @@ Action* ActionParser::parseEwaldActions(const xmlXPathContextPtr& ctxt) {
 
 void ActionParser::parseOrbitalDM(
     std::vector<const AugmentedNodes::AtomicOrbitalDM*>& orbitals,
-    const xmlXPathContextPtr& ctxt) {
+    const Species& fSpecies, const xmlXPathContextPtr& ctxt) {
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
   int norb=obj->nodesetval->nodeNr;
   for (int iorb=0; iorb<norb; ++iorb) {
@@ -732,7 +729,7 @@ void ActionParser::parseOrbitalDM(
               << " with Z=" << Z << " and weight " << weight << std::endl;
     if (name=="Atomic1s") {
       orbitals.push_back(
-        new AugmentedNodes::Atomic1sDM(Z,ifirst,npart,weight));
+        new AugmentedNodes::Atomic1sDM(Z,ifirst,npart,fSpecies.count,weight));
     } else if (name=="Atomic2s") {
       orbitals.push_back(
         new AugmentedNodes::Atomic2sDM(Z,ifirst,npart,weight));
