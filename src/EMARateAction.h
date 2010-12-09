@@ -61,8 +61,8 @@ public:
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
 private:
-  /// The timestep.
-  const double tau;
+  /// The inverse of the timestep.
+  const double invTau;
   /// The electron species.
   const Species& species1;
   /// The hole species.
@@ -73,9 +73,9 @@ private:
   const int index2;
   /// The weight parameter "C" used to optimize sampling.
   const double C;
-  /// The inverse mass of the electron.
-  Vec invMass1;
-  /// The inverse mass of the hole.
-  Vec invMass2;
+  /// The mass of the electron.
+  Vec mass1;
+  /// The mass of the hole.
+  Vec mass2;
 };
 #endif

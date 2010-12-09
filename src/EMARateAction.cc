@@ -30,17 +30,17 @@
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
   const Species& species1, const Species& species2, double C) 
-  : tau(simInfo.getTau()), species1(species1), species2(species2),
+  : invTau(1./simInfo.getTau()), species1(species1), species2(species2),
     index1(species1.ifirst), index2(species2.ifirst), C(C)  {
   if (species1.anMass) {
-    invMass1 = 1./(*species1.anMass);
+    mass1 = *species1.anMass;
   } else {
-    invMass1 = 1./species1.mass;
+    mass1 = species1.mass;
   }
   if (species2.anMass) {
-    invMass2 = 1./(*species2.anMass);
+    mass2 = *species2.anMass;
   } else {
-    invMass2 = 1./species2.mass;
+    mass2 = species2.mass;
   }
 }
 
@@ -57,6 +57,8 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
   //const IArray& index=sampler.getMovingIndex(); 
   //const int nMoving=index.size();
   double deltaAction=0;
+  if (level==0) {
+  }
   return deltaAction;
 }
 
