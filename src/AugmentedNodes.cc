@@ -93,7 +93,7 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
   DetWithFlag result; result.err=false;
   Matrix& mat(*matrix[islice]);
   do { // Loop if scale is wrong to avoid overflow/underflow.
-    mat=0;
+    mat=0.;
     for(int jpart=0; jpart<npart; ++jpart) {
       for(int ipart=0; ipart<npart; ++ipart) {
         Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
@@ -108,20 +108,19 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
          = orbitals.begin(); orb != orbitals.end(); ++orb) {
       int kfirst=(*orb)->ifirst, nkpart=(*orb)->npart;
       VArray2& delta1((*orb)->getD1Array());
-      for (int kpart=0; kpart<nkpart; ++kpart) {
-        for (int jpart=0; jpart<npart; ++jpart) {
+      for (int jpart=0; jpart<npart; ++jpart) {
+        for (int kpart=0; kpart<nkpart; ++kpart) {
           Vec delta(r1(jpart+ifirst)-r1(kpart+kfirst));
           cell.pbc(delta);
-          delta1(kpart,jpart)=delta;
+          delta1(jpart,kpart)=delta;
         }
       }
       VArray2& delta2((*orb)->getD2Array());
-      for (int kpart=0; kpart<nkpart; ++kpart) {
-        for(int ipart=0; ipart<npart; ++ipart) {
+      for(int ipart=0; ipart<npart; ++ipart) {
+        for (int kpart=0; kpart<nkpart; ++kpart) {
           Vec delta(r2(ipart+ifirst)-r2(kpart+kfirst));
-          delta2(kpart,ipart) = delta;
           cell.pbc(delta);
-          delta2(kpart,ipart)=delta;
+          delta2(ipart,kpart)=delta;
         }
       }
       (*orb)->evaluateValue(mat,scale);
@@ -146,7 +145,7 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
     DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
     if (info!=0) {
       result.err = true;
-      std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
+      std::cout << "BAD RETURN FROM ZGETRF!?!!" << std::endl;
       nerror++;
       if (nerror>1000) {
         std::cout << "too many errors!!!!" << std::endl;
@@ -161,7 +160,7 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
     DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
     if (info!=0) {
       result.err = true;
-      std::cout << "BAD RETURN FROM ZGETRI!!!!" << std::endl;
+      std::cout << "BAD RETURN FROM ZGETRI!?!!" << std::endl;
       nerror++;
       if (nerror>1000) {
         std::cout << "too many errors!!!!" << std::endl;
@@ -221,19 +220,19 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
        = orbitals.begin(); orb != orbitals.end(); ++orb) {
     int kfirst=(*orb)->ifirst, nkpart=(*orb)->npart;
     VArray2& delta1((*orb)->getD1Array());
-    for (int kpart=0; kpart<nkpart; ++kpart) {
-      for (int jpart=0; jpart<npart; ++jpart) {
+    for (int jpart=0; jpart<npart; ++jpart) {
+      for (int kpart=0; kpart<nkpart; ++kpart) {
         Vec delta(r1(jpart+ifirst)-r1(kpart+kfirst));
         cell.pbc(delta);
-        delta1(kpart,jpart)=delta;
+        delta1(jpart,kpart)=delta;
       }
     }
     VArray2& delta2((*orb)->getD2Array());
-    for (int kpart=0; kpart<nkpart; ++kpart) {
-      for(int ipart=0; ipart<npart; ++ipart) {
+    for(int ipart=0; ipart<npart; ++ipart) {
+      for (int kpart=0; kpart<nkpart; ++kpart) {
         Vec delta(r2(ipart+ifirst)-r2(kpart+kfirst));
         cell.pbc(delta);
-        delta2(kpart,ipart)=delta;
+        delta2(ipart,kpart)=delta;
       }
     }
     (*orb)->evaluateValueAndGrad(0);
@@ -716,22 +715,22 @@ AugmentedNodes::Atomic2spDM::operator()(double r1, double r2,
 void
 AugmentedNodes::Atomic1sDM::evaluateValue(Matrix &mat, double scale) const {
   for (int i=0; i<nfermion; ++i) {
-    for (int j=0; j<npart; ++j) {
-      work1(i,j) = sqrt(dot(dist1(i,j),dist1(i,j)));
-      work2(i,j) = sqrt(dot(dist2(i,j),dist2(i,j)));
+    for (int k=0; k<npart; ++k) {
+      work1(i,k) = sqrt(dot(dist1(i,k),dist1(i,k)));
+      work2(i,k) = sqrt(dot(dist2(i,k),dist2(i,k)));
     }
   }
-  double coef=weight*Z*Z*Z/PI;
+  double coef=sqrt(weight*Z*Z*Z/PI);
   for (int i=0; i<nfermion; ++i) {
-    for (int j=0; j<npart; ++j) {
-      work1(i,j) = coef*exp(-Z*work1(i,j));
-      work2(i,j) = coef*exp(-Z*work2(i,j));
+    for (int k=0; k<npart; ++k) {
+      work1(i,k) = coef*exp(-Z*work1(i,k));
+      work2(i,k) = coef*exp(-Z*work2(i,k));
     }
   }
   for (int i=0; i<nfermion; ++i) {
     for (int j=0; j<nfermion; ++j) {
       for (int k=0; k<npart; ++k) {
-        mat(i,j) = scale*work1(j,k)*work2(i,k);
+        mat(i,j) += scale*work1(j,k)*work2(i,k);
       }
     }
   }
@@ -754,7 +753,7 @@ AugmentedNodes::Atomic1sDM::evaluateValueAndGrad(double scale) const {
     }
   }
   // Then evaluate the orbitals.
-  double coef=weight*Z*Z*Z/PI;
+  double coef=sqrt(weight*Z*Z*Z/PI);
   for (int i=0; i<nfermion; ++i) {
     for (int j=0; j<npart; ++j) {
       work1(i,j) = coef*exp(-Z*work1(i,j));
