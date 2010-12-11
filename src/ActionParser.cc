@@ -440,8 +440,6 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
         nodeModel=new ExcitonNodes(simInfo,species1,species2,
                                    t,maxlevel,radius,updates,maxMovers);
       } else if (modelName=="AugmentedNodes") {
-        double radius=getLengthAttribute(ctxt->node,"radius");
-        if (radius==0) radius=1.0;
         double density=getDensityAttribute(ctxt->node,"density");
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");

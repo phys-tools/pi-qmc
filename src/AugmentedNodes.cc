@@ -55,14 +55,14 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     uarray(npart,npart,ColMajor()), 
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
     useHungarian(useHungarian), scale(1.0),
-    density(density), orbitals(orbitals) {
+    density((density==0.)?pow(mass*temperature/PI,0.5*NDIM):density),
+    orbitals(orbitals) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
-  if (density==0.) density = pow(mass*temperature/PI,0.5*NDIM);
   std::cout << "AugmentedNodes with temperature = "
             << temperature << std::endl;
-  std::cout << "density = " << density << std::endl;
+  std::cout << "density = " << this->density << std::endl;
   double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
   double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
   if (temperature!=simInfo.getTemperature()) {
@@ -177,7 +177,7 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
         scale *= pow(fabs(det),-1./npart);
       }
       std::cout << "Slater determinant rescaled: scale = " 
-                << scale << std::endl;
+                << scale <<  std::endl;
     }
     result.det = det;
   }
@@ -252,7 +252,7 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad; double val=density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-300);
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         val *= (*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
@@ -280,7 +280,7 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad; double val=density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-300);
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
         val *= (*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
