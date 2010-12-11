@@ -136,6 +136,7 @@ public:
   public:
     Atomic1sDM(double Z, int ifirst, int npart, int nfermion, double weight);
     const int npart, nfermion;
+    const double coef;
     mutable Array2 work1, work2;
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;

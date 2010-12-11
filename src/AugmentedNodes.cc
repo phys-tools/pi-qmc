@@ -62,6 +62,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   if (density==0.) density = pow(mass*temperature/PI,0.5*NDIM);
   std::cout << "AugmentedNodes with temperature = "
             << temperature << std::endl;
+  std::cout << "density = " << density << std::endl;
   double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
   double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
   if (temperature!=simInfo.getTemperature()) {
@@ -249,16 +250,17 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       }
       Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
       cell.pbc(delta);
-      Vec grad; double val=0.;
+      Vec grad; double val=density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]));
-        val += (*pg[i])(fabs(delta[i]));
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-300);
+        val *= (*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
+      grad *= val;
       grad += orbital.grad1;
       val += orbital.val;
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/(val+1e-300);
-      logGrad += mat(jpart,ipart)*grad*scale*density;
+      logGrad += mat(jpart,ipart)*grad*scale;
     }
     gradArray1(jpart) = logGrad - fgrad;
     d1(jpart+ifirst) = sqrt(2*mass/
@@ -276,16 +278,17 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       }
       Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
       cell.pbc(delta);
-      Vec grad; double val=0.;
+      Vec grad; double val=density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]));
-        val += (*pg[i])(fabs(delta[i]));
+        grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i])+1e-300);
+        val *= (*pg[i])(fabs(delta[i]));
         if (delta[i]<0) grad[i]=-grad[i];
       }
+      grad *= val;
       grad += orbital.grad2;
       val += orbital.val;
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/(val+1e-300);
-      logGrad += mat(jpart,ipart)*grad*scale*density;
+      logGrad += mat(jpart,ipart)*grad*scale;
     }
     gradArray2(ipart) = logGrad - fgrad;
     d2(ipart+ifirst) = sqrt(2*mass/
@@ -637,7 +640,7 @@ AugmentedNodes::AtomicOrbitalDM::AtomicOrbitalDM(
 AugmentedNodes::Atomic1sDM::Atomic1sDM(
     double Z, int ifirst, int npart, int nfermion, double weight)
   : AtomicOrbitalDM(ifirst, npart, nfermion, weight),
-    npart(npart), nfermion(nfermion),
+    npart(npart), nfermion(nfermion), coef(sqrt(weight*Z*Z*Z/PI)),
     work1(nfermion,npart), work2(nfermion,npart), Z(Z) {
   std::cout << "1s: Z="<<Z<<", "<<weight<<", "<<ifirst << std::endl;
 }
@@ -720,7 +723,6 @@ AugmentedNodes::Atomic1sDM::evaluateValue(Matrix &mat, double scale) const {
       work2(i,k) = sqrt(dot(dist2(i,k),dist2(i,k)));
     }
   }
-  double coef=sqrt(weight*Z*Z*Z/PI);
   for (int i=0; i<nfermion; ++i) {
     for (int k=0; k<npart; ++k) {
       work1(i,k) = coef*exp(-Z*work1(i,k));
@@ -753,7 +755,6 @@ AugmentedNodes::Atomic1sDM::evaluateValueAndGrad(double scale) const {
     }
   }
   // Then evaluate the orbitals.
-  double coef=sqrt(weight*Z*Z*Z/PI);
   for (int i=0; i<nfermion; ++i) {
     for (int j=0; j<npart; ++j) {
       work1(i,j) = coef*exp(-Z*work1(i,j));
