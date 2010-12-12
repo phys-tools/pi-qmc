@@ -227,6 +227,10 @@ private:
   static const double EPSILON;
   /// Storage for calculating derivatives.
   Array temp1, temp2;
+  /// Cache storage for calculating distances.
+  Array cache;
+  /// Cache storage for calculating distances.
+  VArray2 cacheV;
   /// Storage for calculating dominant contribution to determinant.
   Matrix uarray;
   IArray2 kindex;

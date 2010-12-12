@@ -52,6 +52,7 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
+    cache(npart,npart), cacheV(npart,npart),
     uarray(npart,npart,ColMajor()), 
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
     useHungarian(useHungarian), scale(1.0),
@@ -248,6 +249,8 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         AtomicOrbitalDM::ValAndGrad temp =  (**orb)(ipart,jpart);
         orbital += temp;
       }
+      cache(jpart,ipart) = orbital.val;
+      cacheV(jpart,ipart) = orbital.grad2;
       Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
       cell.pbc(delta);
       Vec grad; double val=density;
@@ -264,18 +267,18 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
     }
     gradArray1(jpart) = logGrad - fgrad;
     d1(jpart+ifirst) = sqrt(2*mass/
-                      ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
+                      ((dot(gradArray1(jpart),gradArray1(jpart))+1e-300)*tau));
   }
   // Calculate gradients for slice 2.
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
     for (int jpart=0; jpart<npart; ++jpart) {
-      AtomicOrbitalDM::ValAndGrad orbital;
-      for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
-          = orbitals.begin(); orb != orbitals.end(); ++orb) {
-        AtomicOrbitalDM::ValAndGrad temp =  (**orb)(ipart,jpart);
-        orbital += temp;
-      }
+      //AtomicOrbitalDM::ValAndGrad orbital;
+      //for (std::vector<const AtomicOrbitalDM*>::const_iterator orb 
+      //    = orbitals.begin(); orb != orbitals.end(); ++orb) {
+      //  AtomicOrbitalDM::ValAndGrad temp =  (**orb)(ipart,jpart);
+      //  orbital += temp;
+      //}
       Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
       cell.pbc(delta);
       Vec grad; double val=density;
@@ -285,14 +288,14 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         if (delta[i]<0) grad[i]=-grad[i];
       }
       grad *= val;
-      grad += orbital.grad2;
-      val += orbital.val;
+      grad += cacheV(jpart,ipart);
+      val += cache(jpart,ipart);
       if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad/(val+1e-300);
       logGrad += mat(jpart,ipart)*grad*scale;
     }
     gradArray2(ipart) = logGrad - fgrad;
     d2(ipart+ifirst) = sqrt(2*mass/
-                      ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
+                      ((dot(gradArray2(ipart),gradArray2(ipart))+1e-300)*tau));
   }
 }
 
@@ -742,30 +745,30 @@ void
 AugmentedNodes::Atomic1sDM::evaluateValueAndGrad(double scale) const {
   // First set the work arrays to the scalar distances.
   for (int i=0; i<nfermion; ++i) {
-    for (int j=0; j<npart; ++j) {
-      work1(i,j) = sqrt(dot(dist1(i,j),dist1(i,j)));
-      work2(i,j) = sqrt(dot(dist2(i,j),dist2(i,j)));
+    for (int k=0; k<npart; ++k) {
+      work1(i,k) = sqrt(dot(dist1(i,k),dist1(i,k)));
+      work2(i,k) = sqrt(dot(dist2(i,k),dist2(i,k)));
     }
   }
   // Then rescale the distance arrays to their unit vectors.
   for (int i=0; i<nfermion; ++i) {
-    for (int j=0; j<npart; ++j) {
-      dist1(i,j) /= (work1(i,j)+1e-300);
-      dist2(i,j) /= (work2(i,j)+1e-300);
+    for (int k=0; k<npart; ++k) {
+      dist1(i,k) /= (work1(i,k)+1e-300);
+      dist2(i,k) /= (work2(i,k)+1e-300);
     }
   }
   // Then evaluate the orbitals.
   for (int i=0; i<nfermion; ++i) {
-    for (int j=0; j<npart; ++j) {
-      work1(i,j) = coef*exp(-Z*work1(i,j));
-      work2(i,j) = coef*exp(-Z*work2(i,j));
+    for (int k=0; k<npart; ++k) {
+      work1(i,k) = coef*exp(-Z*work1(i,k));
+      work2(i,k) = coef*exp(-Z*work2(i,k));
     }
   }
   // Finally, set the distance arrays to the gradients.
   for (int i=0; i<nfermion; ++i) {
-    for (int j=0; j<npart; ++j) {
-      dist1(i,j) *= -Z*work1(i,j);
-      dist2(i,j) *= -Z*work2(i,j);
+    for (int k=0; k<npart; ++k) {
+      dist1(i,k) *= -Z*work1(i,k);
+      dist2(i,k) *= -Z*work2(i,k);
     }
   }
 }
