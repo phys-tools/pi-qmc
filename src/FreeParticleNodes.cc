@@ -193,9 +193,52 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
-
-  newtonRaphson(r1, r2, islice, d1, 1);
-  newtonRaphson(r2, r1, islice, d2, 2);
+  if (useIterations>0) {
+    newtonRaphson(r1, r2, islice, d1, 1);
+    newtonRaphson(r2, r1, islice, d2, 2);
+  } else {
+    Matrix& mat(*matrix[islice]);
+    // Calculate log gradients to estimate distance.
+    d1=200.; d2=200.; // Initialize distances to a very large value.
+    for (int jpart=0; jpart<npart; ++jpart) {
+      Vec logGrad=0.0, fgrad=0.0;
+      for (int ipart=0; ipart<npart; ++ipart) {
+        Vec delta=r1(jpart+ifirst)-r2(ipart+ifirst);
+        cell.pbc(delta);
+        Vec grad;
+        for (int i=0; i<NDIM; ++i) {
+          grad[i] =
+            (*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
+          if (delta[i]<0) grad[i]=-grad[i];
+      }
+        if (useHungarian && jpart==kindex(islice,ipart)) fgrad=grad;
+        for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
+        logGrad+=mat(jpart,ipart)*grad*scale;
+      }
+      gradArray1(jpart)=logGrad-fgrad;
+      d1(jpart+ifirst)=sqrt(2*mass/
+                        ((dot(gradArray1(jpart),gradArray1(jpart))+1e-15)*tau));
+    }
+    for (int ipart=0; ipart<npart; ++ipart) {
+      Vec logGrad=0.0, fgrad=0.0;
+      for(int jpart=0; jpart<npart; ++jpart) {
+        Vec delta=r2(ipart+ifirst)-r1(jpart+ifirst);
+        cell.pbc(delta);
+        Vec grad;
+        for (int i=0; i<NDIM; ++i) {
+          grad[i] =
+            (*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
+          if (delta[i]<0) grad[i]=-grad[i];
+        }
+        if (useHungarian && jpart==kindex(islice,ipart)) fgrad = grad;
+        for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]))+1e-300;
+        logGrad+=mat(jpart,ipart)*grad*scale;
+      }
+      gradArray2(ipart)=logGrad-fgrad;
+      d2(ipart+ifirst)=sqrt(2*mass/
+                        ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
+    }
+  }
 }
 
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {
