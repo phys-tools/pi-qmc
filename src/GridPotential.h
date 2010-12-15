@@ -35,7 +35,7 @@ public:
   typedef blitz::Array<double,NDIM> ArrayN;
   typedef blitz::TinyVector<int,NDIM> IVecN;
   /// Constructor by providing an HDF5 file name and SimulationInfo.
-  GridPotential(const SimulationInfo& simInfo, const std::string& filename);
+  GridPotential(const SimulationInfo& simInfo, const std::string& filename, bool usePiezo);
   /// Virtual destructor.
   virtual ~GridPotential() {}
   /// Calculate the difference in action.

@@ -28,7 +28,7 @@
 #include <fstream>
 
 GridPotential::GridPotential(const SimulationInfo& simInfo,
-                             const std::string& filename)
+                             const std::string& filename, bool usePiezo)
   : tau(simInfo.getTau()), 
     vindex(simInfo.getNPart(),(ArrayN*)0) {
   int nn;
@@ -75,6 +75,26 @@ GridPotential::GridPotential(const SimulationInfo& simInfo,
   H5Dclose(dataSetID);
   b=1.0/a;
   H5Gclose(groupID);
+  if (usePiezo) {
+   ArrayN piezogrid(nvec);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+     hid_t groupID = H5Gopen2(fileID, (filename=="emagrids.h5"?"piezo":"/"),
+                           H5P_DEFAULT);
+#else
+  hid_t groupID = H5Gopen(fileID, (filename=="emagrids.h5"?"piezo":"/"));
+#endif
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+  dataSetID = H5Dopen2(groupID, "Varary", H5P_DEFAULT);
+#else
+  dataSetID = H5Dopen(groupID, "Varary");
+#endif
+  H5Dread(dataSetID, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT,
+          piezogrid.data());
+  H5Dclose(dataSetID);
+  H5Gclose(groupID);
+  vegrid -=piezogrid;
+  vhgrid -=piezogrid;
+}
   H5Fclose(fileID);
   // Convert grids from eV to Ha.
   const double eVtoHa=1./27.211396;

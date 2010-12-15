@@ -166,8 +166,9 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       continue;
     } else if (name=="GridPotential") {
       std::string fileName=getStringAttribute(actNode,"file");
+      bool usePiezo=getBoolAttribute(actNode,"usePiezo");
       if (fileName=="") fileName="emagrids.h5";
-      composite->addAction(new GridPotential(simInfo,fileName));
+      composite->addAction(new GridPotential(simInfo,fileName,usePiezo));
       continue;
     } else if (name=="SmoothedGridPotential") {
       std::string fileName=getStringAttribute(actNode,"file");
