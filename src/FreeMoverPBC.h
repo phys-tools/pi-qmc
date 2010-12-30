@@ -23,8 +23,14 @@ class SimulationInfo;
 class PeriodicGaussian;
 /** Select a trial move for beads by free particle sampling.
   * This class treats periodic boundary conditions more carefully, which
-  * may help with free fermion sampling.
+  * is necessary for very small box sizes.
+  *
+  * The difficulty, is that the bisection algorithm has 2**NDIM midpoints
+  * when you consider periodic boundary conditions. If these are not sampled
+  * carefully, some windings or permutations may be missed, raising the energy.
+  *
   * @version $Revision$
+  * @bug Delayed rejection move not properly coded.
   * @author John Shumway. */
 class FreeMoverPBC : public Mover {
 public:
@@ -59,8 +65,5 @@ private:
   IArray specIndex; 
   /// forward transition prob
   double forwardProb;
-  /// Array for sampling periodic images.
-  int maxNImage; 
-  Array weight;
 };
 #endif

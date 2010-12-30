@@ -49,8 +49,13 @@ SpringAction::SpringAction(const SimulationInfo& simInfo, const int maxlevel,
       for (int idim=0; idim<NDIM; ++idim) {
         double l=(*simInfo.getSuperCell())[idim];
         if (l*l*alpha<60) {
-          pg(ilevel,ispec,idim)=new PeriodicGaussian(alpha,l,
-                                                     (int)(100*l*sqrt(alpha)));
+          int ngridpts = (int)(100*l*sqrt(alpha));
+          pg(ilevel,ispec,idim) = new PeriodicGaussian(alpha,l,ngridpts);
+          if (ilevel==0) {
+            std::cout << "WARNING: Periodic Gaussian will give incorrect"
+              << " energy.\n         Decrease tau or fix SpringAction."
+              << std::endl;
+          }
         } else {
           pg(ilevel,ispec,idim)=0;
         }
