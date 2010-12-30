@@ -126,7 +126,7 @@ public:
       }
     };
     virtual void evaluateValue(Matrix&, double scale) const {;}
-    virtual void evaluateValueAndGrad(double scale) const {;}
+    virtual void evaluateValueAndGrad() const {;}
     virtual ValueAndGradient
     operator()(double r1, double r2, double costheta) const=0;
     virtual ValAndGrad operator()(int i, int j) const {
@@ -141,7 +141,7 @@ public:
     virtual ValueAndGradient 
     operator()(double r1, double r2, double costheta) const;
     virtual void evaluateValue(Matrix&, double scale) const;
-    virtual void evaluateValueAndGrad(double scale) const;
+    virtual void evaluateValueAndGrad() const;
     virtual ValAndGrad operator()(int i, int j) const;
     const double Z;
   };
@@ -228,7 +228,7 @@ private:
   /// Storage for calculating derivatives.
   Array temp1, temp2;
   /// Cache storage for calculating distances.
-  Array cache;
+  Array2 cache;
   /// Cache storage for calculating distances.
   VArray2 cacheV;
   /// Storage for calculating dominant contribution to determinant.

@@ -237,7 +237,7 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
         delta2(ipart,kpart)=delta;
       }
     }
-    (*orb)->evaluateValueAndGrad(0);
+    (*orb)->evaluateValueAndGrad();
   }
   // Calculate gradients for slice 1.
   for (int jpart=0; jpart<npart; ++jpart) {
@@ -742,7 +742,7 @@ AugmentedNodes::Atomic1sDM::evaluateValue(Matrix &mat, double scale) const {
 }
 
 void
-AugmentedNodes::Atomic1sDM::evaluateValueAndGrad(double scale) const {
+AugmentedNodes::Atomic1sDM::evaluateValueAndGrad() const {
   // First set the work arrays to the scalar distances.
   for (int i=0; i<nfermion; ++i) {
     for (int k=0; k<npart; ++k) {

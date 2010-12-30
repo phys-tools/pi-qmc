@@ -72,7 +72,8 @@ void WritePaths::run() {
     int modelCount = paths.getModelCount();    
     if (modelCount>1) {
       int modelState = paths.getModelState();    
-      *file << ", state " << modelState << " of " << modelCount;
+      *file << ", state " << modelState+1 
+            << " of " << modelCount << ".";
     }
     *file << std::endl;
     file->precision(15);
