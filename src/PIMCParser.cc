@@ -71,6 +71,7 @@
 #include "RandomPermutationChooser.h"
 #include "WalkingChooser.h"
 #include "PairChooser.h"
+#include "TwoPairChooser.h"
 #include "NodeTester.h"
 #include "FreeParticleNodes.h"
 
@@ -286,6 +287,21 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       if (doubleAction) {
         particleChooser2=new SpeciesParticleChooser(
                                simInfo.getSpecies(speciesName),nmoving);
+      }
+    } else if (chooserName=="twoPair") {
+      std::string species2Name=getStringAttribute(ctxt->node,"species2");
+      if (species2Name=="") species2Name=speciesName;
+      TwoPairChooser* chooser
+        = new TwoPairChooser(simInfo.getSpecies(speciesName),
+                             simInfo.getSpecies(species2Name));
+      particleChooser = chooser;
+      permutationChooser = chooser;
+      if (doubleAction) {
+        TwoPairChooser* chooser
+          = new TwoPairChooser(simInfo.getSpecies(speciesName),
+                               simInfo.getSpecies(species2Name));
+        particleChooser2 = chooser;
+        permutationChooser2 = chooser;
       }
     } else if (chooserName=="pair") {
       std::string species2Name=getStringAttribute(ctxt->node,"species2");
