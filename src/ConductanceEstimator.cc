@@ -125,15 +125,19 @@ void ConductanceEstimator::endCalc(const int lnslice) {
           for (int i=0; i<nspecies; ++i) { 
             for (int j=0; j<nspecies; ++j) { 
               if (iorder%2==0) {
+                // Terms like xzz, xxx
                 for (int ifreq=0; ifreq<nnfreq; ++ifreq) {
                   temp(iorder-1,id,jd,i,j,ifreq) = imag(
-                     pow(temp(0,jd,jd,j,j,ifreq),iorder)
+                     pow(temp(0,jd,jd,j,j,ifreq),iorder/2+1)
+                    *pow(temp(0,id,id,i,i,ifreq),iorder/2-1)
                    *conj(temp(0,id,id,i,i,iorder*ifreq)));
                 }
               } else {
+                // Terms like xxzz, xxxx
                 for (int ifreq=0; ifreq<nnfreq; ++ifreq) {
                   temp(iorder-1,id,jd,i,j,ifreq) = real(
-                     pow(temp(0,jd,jd,j,j,ifreq),iorder)
+                     pow(temp(0,jd,jd,j,j,ifreq),iorder/2+1)
+                    *pow(temp(0,id,id,i,i,ifreq),iorder/2)
                    *conj(temp(0,id,id,i,i,iorder*ifreq)));
                 }
               }
