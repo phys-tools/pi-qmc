@@ -70,6 +70,7 @@ extern int irank;
 #include "PrimSHOAction.h"
 #include "PrimCosineAction.h"
 #include "PrimShellAction.h"
+#include "PrimColloidalAction.h"
 #include "PrimTorusAction.h"
 #include "PrimAnisSHOAction.h"
 #include "EFieldAction.h"
@@ -250,6 +251,19 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
 	  if (ndim==0) ndim=3;
           composite->addAction(new PrimShellAction(a,b,simInfo,ndim,species));
 	  continue;
+     } else if (name=="PrimColloidalAction") {
+          double B1=getLengthAttribute(actNode,"B1");
+          double B2=getLengthAttribute(actNode,"B2");
+          double V_lig=getEnergyAttribute(actNode,"V_ext");
+          double V_cdte=getEnergyAttribute(actNode,"V_core");
+          double V_cdse=getEnergyAttribute(actNode,"V_shell");
+          std::string specName=getStringAttribute(actNode,"species");
+          const Species& species(simInfo.getSpecies(specName));
+          const double mass = species.mass;
+          int ndim=getIntAttribute(actNode,"ndim");
+          if (ndim==0) ndim=3;
+          composite->addAction(new PrimColloidalAction(B1,B2,V_lig,V_cdte,V_cdse,simInfo,ndim,species));
+          continue;
       } else if (name=="PrimAnisSHOAction") {
 		double a=getDoubleAttribute(actNode,"a");
 		double b=getDoubleAttribute(actNode,"c");
