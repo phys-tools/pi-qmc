@@ -33,6 +33,7 @@
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
 #include "DensCountEstimator.h"
+#include "DiamagneticEstimator.h"
 #include "DynamicPCFEstimator.h"
 #include "CountCountEstimator.h"
 #include "Distance.h"
@@ -495,6 +496,10 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       int nBField=getIntAttribute(estNode,"nBField");
       double bmax=getDoubleAttribute(estNode,"bmax");
       manager->add(new JEstimator(simInfo,nBField,bmax,mpi));
+    }
+    if (name=="DiamagneticEstimator") {
+        int sus=0.;  
+      manager->add(new DiamagneticEstimator(simInfo,simInfo.getTemperature()));
     }
     if (name=="WindingEstimator") {
       int nmax=getIntAttribute(estNode,"nmax");
