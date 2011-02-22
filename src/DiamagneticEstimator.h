@@ -55,14 +55,21 @@ public:
 private:
   /// The diamagnetic susceptibility.
   double value;
+  /// The area of the path.
   double area;
+  /// The higher order term to average, Eq. (24).
+  double term2;
   /// The normalization.
   double norm;
   /// temperature, for calculating susceptibility.
   const double temperature;
-  // charges..
+  /// charges..
   Array q;
-  // The speed of light.
+  /// Mass coefficents.
+  Array coef;
+  /// Constant term in Eq. (24).
+  double tauTerm;
+  /// The speed of light.
   static const double C;
 };
 
