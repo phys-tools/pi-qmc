@@ -40,7 +40,6 @@ void DiamagneticEstimator::initCalc(const int nslice, const int firstSlice) {
 void DiamagneticEstimator::handleLink(const Vec& start, const Vec& end,
           const int ipart, const int islice, const Paths& paths) {
 #if NDIM>=2
-  if (ipart==0)
   area += 0.5*q(ipart)*(start[0]*(end[1]-start[1])-start[1]*(end[0]-start[0]));
 #endif
 }

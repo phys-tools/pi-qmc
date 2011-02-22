@@ -500,7 +500,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     if (name=="DiamagneticEstimator") {
       std::string unitName=getStringAttribute(estNode,"unit");
       double perN=getDoubleAttribute(estNode,"perN");
-      double scale = 1.;
+      double scale = getDoubleAttribute(estNode,"scale");
       if (perN > 0.) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getLengthScaleIn(unitName,3);
       manager->add(new DiamagneticEstimator(simInfo,simInfo.getTemperature(),
