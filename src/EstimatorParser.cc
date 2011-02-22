@@ -498,8 +498,13 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       manager->add(new JEstimator(simInfo,nBField,bmax,mpi));
     }
     if (name=="DiamagneticEstimator") {
-        int sus=0.;  
-      manager->add(new DiamagneticEstimator(simInfo,simInfo.getTemperature()));
+      std::string unitName=getStringAttribute(estNode,"unit");
+      double perN=getDoubleAttribute(estNode,"perN");
+      double scale = 1.;
+      if (perN > 0.) scale/=perN;
+      if (unitName!="") scale/=simInfo.getUnits()->getLengthScaleIn(unitName,3);
+      manager->add(new DiamagneticEstimator(simInfo,simInfo.getTemperature(),
+                                            unitName,scale));
     }
     if (name=="WindingEstimator") {
       int nmax=getIntAttribute(estNode,"nmax");

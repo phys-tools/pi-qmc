@@ -16,6 +16,8 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
+#include <cstdlib>
+#include <cmath>
 #endif
 #include "Units.h"
 #include <iostream>
@@ -60,13 +62,23 @@ Units::Units(const std::string& eunit, const std::string& lunit)
   massOut["m_e"]=1.0;
 }
 
-double Units::getLengthScaleIn(const std::string& unit) const {
-  unitMap::const_iterator i=lengthOut.find(unit);
+double Units::getLengthScaleIn(const std::string& unit, int factor) const {
+  // First remove power at end of unit, like 2 on nm2.
+  std::string unitbase = unit; 
+  if (factor>1) {
+    if (factor != atoi(unitbase.substr(unitbase.length()-1).c_str())) {
+      std::cout << "WARNING :: power not right in unit, may want to throw error"
+                << std::endl;
+    }
+    unitbase = unitbase.substr(0,unitbase.length()-1);
+  } 
+  unitMap::const_iterator i=lengthOut.find(unitbase);
   if (i==lengthOut.end()) {
-    std :: cout<<"WARNING :: Length Unit not found, may want to throw error."<<std :: endl;//Unit not found, may want to throw error.
+    std::cout << "WARNING :: Length Unit not found, may want to throw error."
+              << std::endl; //Unit not found, may want to throw error.
     return 1;  
   } else {
-    return 1.0/i->second;
+    return 1.0/pow(i->second,factor);
   }
 }
 

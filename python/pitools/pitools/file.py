@@ -60,6 +60,8 @@ class estimatorNode(object):
         self.type=estimatorNode.PAIR_CORRELATION
       if self.type==0 and self.name[:12]=="bond_length_":
         self.type=estimatorNode.BOND_LENGTH
+      if self.name=="chiM":
+        self.type=estimatorNode.SCALAR
     if self.name[-4:]=="_err":
       self.type = -abs(self.type)
   

@@ -29,7 +29,7 @@ public:
   /// Destructor.
   ~Units();
   /// Get conversion factor for length input with unit.
-  double getLengthScaleIn(const std::string& unit) const;
+  double getLengthScaleIn(const std::string& unit, int factor=1) const;
   /// Get conversion factor for energy input with unit.
   double getEnergyScaleIn(const std::string& unit) const;
   /// Get conversion factor for mass input with unit.

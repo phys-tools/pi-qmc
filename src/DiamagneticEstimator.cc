@@ -24,26 +24,31 @@
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 
-DiamagneticEstimator::DiamagneticEstimator(const SimulationInfo& simInfo, const double temperature)
-  : ScalarEstimator("<area**2>"),
-    sus(0), area(0), norm(0),temperature(temperature),q(simInfo.getNPart()){
-    for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
-    std::cout << "Area Squared Estimator Testing...." << std::endl;
+DiamagneticEstimator::DiamagneticEstimator(const SimulationInfo& simInfo,
+  double temperature, const std::string& unitName, double scale)
+  : ScalarEstimator("chiM",unitName,scale,0.),
+    value(0.), area(0), norm(0),
+    temperature(temperature),q(simInfo.getNPart()){
+  for (int i=0; i<q.size(); ++i) q(i)=simInfo.getPartSpecies(i).charge;
+  std::cout << "Area Squared Estimator Testing...." << std::endl;
 }
 
 void DiamagneticEstimator::initCalc(const int nslice, const int firstSlice) {
-  area=0;
+  area=0.;
 }
 
 void DiamagneticEstimator::handleLink(const Vec& start, const Vec& end,
           const int ipart, const int islice, const Paths& paths) {
-  area += 0.5*(start[0]*(end[1]-start[1])-start[1]*(end[0]-start[0]));
+#if NDIM>=2
+  if (ipart==0)
+  area += 0.5*q(ipart)*(start[0]*(end[1]-start[1])-start[1]*(end[0]-start[0]));
+#endif
 }
 
 void DiamagneticEstimator::endCalc(const int nslice) {
-//calculates <area*area>, below converts to units of metres^3  
-sus+=((temperature*4.3597E-18*2.5664E-38*1.26E-6)*(area*area)*7.3116E-42)/1.1122E-68; 
-//See, Pollock and Runge: Study of diamagnetic response. J Chem Phys Vol 96, No 1. 1 Jan 1992
-//Equation 7 (above equation) & Equation 26 (which includes time-step error)
-norm+=1;
+  /// Needs code for parallel workers!!!
+  value += temperature*(area*area)/(C*C);
+  norm+=1.;
 }
+
+const double DiamagneticEstimator::C = 137.035999679;

@@ -24,13 +24,19 @@
 #include <iostream>
 class Paths;
 class SimulationInfo;
-//testing estimator for diamagnetic sus.
+/** Testing estimator for diamagnetic sus.
+ * See Pollock and Runge, "Study of diamagnetic response,"
+ * J Chem Phys Vol 96, pp. ????? (1992).
+ * Eq. (7) (above equation) & Eq. 26 (which includes time-step error)
+ * @bug Needs to treat particles correct at periodic boundaries.
+ **/ 
 class DiamagneticEstimator : public ScalarEstimator, public LinkSummable {
 public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::TinyVector<double,NDIM> Vec;
   /// Constructor.
-  DiamagneticEstimator(const SimulationInfo& simInfo, const double temperature);
+  DiamagneticEstimator(const SimulationInfo& simInfo, double temperature,
+                       const std::string& unitName, double scale);
   /// Virtual destructor.
   virtual ~DiamagneticEstimator() {}
   /// Initialize the calculation.
@@ -41,21 +47,23 @@ public:
   /// Finalize the calculation.
   virtual void endCalc(const int nslice);
   /// Get value of coulomb energy estimator.
-  virtual double calcValue() {return value=sus/norm;}
+  virtual double calcValue() {return value/norm;}
   /// Clear value of dipole energy estimator.
-  virtual void reset() {sus=norm=0;}
+  virtual void reset() {value=norm=0;}
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
-  /// temperature, for calculating sus
-const double temperature;
+  /// The diamagnetic susceptibility.
+  double value;
   double area;
-  /// The diamagnetic sus
-  double sus;
   /// The normalization.
   double norm;
-//charges..
+  /// temperature, for calculating susceptibility.
+  const double temperature;
+  // charges..
   Array q;
+  // The speed of light.
+  static const double C;
 };
 
 #endif
