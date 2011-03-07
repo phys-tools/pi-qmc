@@ -259,7 +259,7 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
           double V_cdse=getEnergyAttribute(actNode,"V_shell");
           std::string specName=getStringAttribute(actNode,"species");
           const Species& species(simInfo.getSpecies(specName));
-          const double mass = species.mass;
+          //const double mass = species.mass;
           int ndim=getIntAttribute(actNode,"ndim");
           if (ndim==0) ndim=3;
           composite->addAction(new PrimColloidalAction(B1,B2,V_lig,V_cdte,V_cdse,simInfo,ndim,species));
@@ -455,14 +455,13 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
         nodeModel=new ExcitonNodes(simInfo,species1,species2,
                                    t,maxlevel,radius,updates,maxMovers);
       } else if (modelName=="AugmentedNodes") {
-        double density=getDensityAttribute(ctxt->node,"density");
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
         int maxMovers=3;
         std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
         parseOrbitalDM(orbitals, species, ctxt);
         nodeModel=new AugmentedNodes(simInfo,species,
-            t,maxlevel,updates,maxMovers,density,orbitals,useHungarian);
+            t,maxlevel,updates,maxMovers,orbitals,useHungarian);
       } else {
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
         int maxMovers=0;
@@ -743,16 +742,11 @@ void ActionParser::parseOrbitalDM(
     if (name=="Atomic1s") {
       orbitals.push_back(
         new AugmentedNodes::Atomic1sDM(Z,ifirst,npart,fSpecies.count,weight));
-    } else if (name=="Atomic2s") {
-      orbitals.push_back(
-        new AugmentedNodes::Atomic2sDM(Z,ifirst,npart,weight));
-    } else if (name=="Atomic2p") {
-      orbitals.push_back(
-        new AugmentedNodes::Atomic2pDM(Z,ifirst,npart,weight));
     } else if (name=="Atomic2sp") {
-      double alpha=getDoubleAttribute(orbNode,"alpha");
+      double pweight=getDoubleAttribute(orbNode,"pweight");
       orbitals.push_back(
-        new AugmentedNodes::Atomic2spDM(Z,ifirst,npart,weight,alpha));
+        new AugmentedNodes::Atomic2spDM(Z,ifirst,npart,fSpecies.count,
+                                        pweight,weight));
     }
   }
 }

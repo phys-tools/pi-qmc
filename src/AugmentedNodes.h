@@ -27,16 +27,16 @@ class SimulationInfo;
 class Species;
 class SuperCell;
 
-/** Augmented free particle nodes.
+/*! Augmented free particle nodes.
 We define the node model as a slater determinant of density matricies
 of single particles,
 @f[\rho_T(R,R')=\operatorname{det}|\rho(r_j,r_i)|.@f]
 The single particle density matrices are taken to be a mixture
 of free particle density matricies plus orbital density matrices,
-@f[\rho(r_j,r_i)=n_0 \exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right)
+@f[\rho(r_j,r_i)=n_0 \frac{1}{(2\pi m k \tau)^{N/2}}
+\exp\left(-\frac{m|r_j-r_i|^2}{2\tau}\right)
 + w_i\sum_k \psi(r_j)\psi^*(r_i),@f]
-where @f$n_0@f$ is the density of the free particle
-density matrix and the @f$w_k@f$ are the weights of the atomic orbitals.
+where the @f$w_k@f$ are the weights of the atomic orbitals.
 For periodic boundary conditions, we use must use a PeriodicGaussian in 
 the free particle density matrix; we assume the atomic orbitals are
 smaller than the periodic box.
@@ -106,18 +106,22 @@ public:
     int nMoving;
   };
   /// Classes for atomic orbital density matricies.
+  /// These are optimized to work for vectors of identical orbitals.
   class AtomicOrbitalDM {
   public:
     AtomicOrbitalDM(int ifirst, int npart, int nfermion, double weight);
     const double weight;
     const int ifirst;
     const int npart;
-    mutable VArray2 dist1, dist2;
+    /// Vector displacement of particle i from orbital center j in section 1.
+    mutable VArray2 dist1;
+    /// Vector displacement of particle i from orbital center j in section 2.
+    mutable VArray2 dist2;
+    /// Get the array of vector distances for section 1.
     VArray2& getD1Array() const {return dist1;}
+    /// Get the array of vector distances for section 2.
     VArray2& getD2Array() const {return dist2;}
-    struct ValueAndGradient {
-      double value, gradr1, gradr2, gradcostheta;
-    };
+    /// Structure for value and gradient.
     struct ValAndGrad {
       ValAndGrad() : val(0.), grad1(0.), grad2(0.) {}
       double val; Vec grad1, grad2;
@@ -125,72 +129,89 @@ public:
         val += s.val; grad1 += s.grad1; grad2 += s.grad2; return *this;
       }
     };
+    /// Calculate matrix values using vector distance arrays.
+    /// On exit, mat(i,j) has matrix elements for particles ri and rj'.
     virtual void evaluateValue(Matrix&, double scale) const {;}
+    /// Calculate matrix values using vector distance arrays.
+    /// On exit work and distance arrays are setup for ValAndGrad operator().
     virtual void evaluateValueAndGrad() const {;}
-    virtual ValueAndGradient
-    operator()(double r1, double r2, double costheta) const=0;
+    /// Return value and gradients of matrix element between ri  and rj'.
+    /// Must call evaluateValueAndGrad() first to initialize work arrays.
     virtual ValAndGrad operator()(int i, int j) const {
       ValAndGrad temp; return temp;}
   };
+  /// Normalized density matrix for 1s orbital.
+  /// @f[\rho(r,r') = C^2 e^{-Z(r+r')},@f] where @f$C=\sqrt{Z^3/\pi}@f$.
   class Atomic1sDM : public AtomicOrbitalDM {
   public:
     Atomic1sDM(double Z, int ifirst, int npart, int nfermion, double weight);
-    const int npart, nfermion;
+    const int nfermion;
+    /// Coefficient before the exponential, @f$ C = \sqrt{Z^3/\pi} @f$.
     const double coef;
-    mutable Array2 work1, work2;
-    virtual ValueAndGradient 
-    operator()(double r1, double r2, double costheta) const;
+    /// Storage for @f$ \psi_k(r_i) @f$.
+    mutable Array2 work1;
+    /// Storage for @f$ \psi^*_k(r_i) @f$.
+    mutable Array2 work2;
     virtual void evaluateValue(Matrix&, double scale) const;
     virtual void evaluateValueAndGrad() const;
     virtual ValAndGrad operator()(int i, int j) const;
     const double Z;
   };
-  class Atomic2sDM : public AtomicOrbitalDM {
-  public:
-    Atomic2sDM(double Z, int ifirst, int npart, double weight);
-    virtual ValueAndGradient 
-    operator()(double r1, double r2, double costheta) const;
-    const double Z;
-  };
-  class Atomic2pDM : public AtomicOrbitalDM {
-  public:
-    Atomic2pDM(double Z, int ifirst, int npart, double weight);
-    virtual ValueAndGradient 
-    operator()(double r1, double r2, double costheta) const;
-    const double Z;
-  };
+
+  /// Unnormalized density matrix for 2s and 2p orbital.
+  /// To avoid negative regions, this does not include the radial
+  /// node in the 2s orbital, and there is enough 2s contribution
+  /// to avoid an angular node (provided @f$0<p_{\text{angle}}@f<1$).
+  /// @f[\rho(r,r') = C^2 rr' e^{-Z(r+r')/2}
+  ///                  (1+\hat{\mathbf{r}}\cdot\hat{\mathbf{r}}'),@f]
+  /// where @f$C=\sqrt{Z^5/32\pi}@f$.
+  /// and @f$0<p_{\text{angle}}@f<1$ controls the strength
+  /// angular dependence (@f$p_{\text{angle}}=0@f$ for s-only).
   class Atomic2spDM : public AtomicOrbitalDM {
   public:
-    Atomic2spDM(double Z, int ifirst, int npart, double weight, double alpha);
-    virtual ValueAndGradient 
-    operator()(double r1, double r2, double costheta) const;
+    Atomic2spDM(double Z, int ifirst, int npart, int nfermion, 
+                double pweight, double weight);
+    const int nfermion;
+    /// Coefficient before the exponential, @f$ C = \sqrt{Z^5/32\pi} @f$.
+    const double coef;
+    /// Storage for @f$ \psi_k(r_i) @f$.
+    mutable Array2 work1;
+    /// Storage for @f$ \psi^*_k(r_i) @f$.
+    mutable Array2 work2;
+    /// Storage for unit vector r_ik.
+    mutable VArray2 work3;
+    /// Storage for unit vector r'_ik.
+    mutable VArray2 work4;
+    virtual void evaluateValue(Matrix&, double scale) const;
+    virtual void evaluateValueAndGrad() const;
+    virtual ValAndGrad operator()(int i, int j) const;
+    const double pweight;
     const double Z;
-    const double alpha;
   };
-  /// Constructor.
+
+  /** Constructor. */
   AugmentedNodes(const SimulationInfo&, const Species&,
-    const double temperature, const int maxlevel, 
-    const bool useUpdates, const int maxMovers, double density, 
+    double temperature, int maxlevel, bool useUpdates, int maxMovers, 
     const std::vector<const AtomicOrbitalDM*>&, bool useHungarian);
-  /// Virtual destructor.
+  /** Virtual destructor. */
   virtual ~AugmentedNodes();
-  /// Evaluate the density matrix function, returning the value.
+  /** Evaluate the density matrix function, returning the value. */
   virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
                                const int islice, bool scaleMagnitude);
-  /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
-  /// Assumes that evaluate has already been called on the slice.
+  // Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
+  // Assumes that evaluate has already been called on the slice.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
                                 const int islice, Array &d1, Array &d2);
-  /// Evaluate the time-derivative of the distance to the 
-  /// node in units of @f$ \sqrt{\tau/2m}@f$.
+  // Evaluate the time-derivative of the distance to the 
+  // node in units of @f$ \sqrt{\tau/2m}@f$.
   virtual void evaluateDotDistance(const VArray &r1, const VArray &r2,
                                    const int islice, Array &d1, Array &d2);
-  /// Evaluate gradient of log of the distance to the node
-  /// in units of @f$ \sqrt{\tau/2m}@f$.
+  // Evaluate gradient of log of the distance to the node
+  // in units of @f$ \sqrt{\tau/2m}@f$.
   virtual void evaluateGradLogDist(const VArray &r1, const VArray &r2,
            const int islice, VMatrix &gradd1, VMatrix &gradd2,
                              const Array &d1, const Array &d2);
-  /// Returns true if action depends on other particle coordinates.
+  // Returns true if action depends on other particle coordinates.
   virtual bool dependsOnOtherParticles() {return true;}
 private:
   /// The time step.
@@ -219,10 +240,6 @@ private:
   bool notMySpecies;
   /// Storage for first derivatives needed for forces.
   mutable VArray gradArray1, gradArray2;
-  //mutable VArray gradArray;
-  //mutable VMatrix gradMatrix, mat2;
-  /// Storage for second derivatives needed for forces.
-  //mutable MMatrix grad2Matrix;
   /// Step for finite difference calculation of time derivative.
   static const double EPSILON;
   /// Storage for calculating derivatives.
@@ -243,7 +260,7 @@ private:
   double scale;
   /// Constant.
   static const double PI;
-  /// Density of free particle density matrix.
+  /// Density coefficient in front of free particle density matrix.
   const double density;
   const std::vector<const AtomicOrbitalDM*> orbitals;
 };
