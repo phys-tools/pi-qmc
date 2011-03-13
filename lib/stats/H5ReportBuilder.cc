@@ -73,6 +73,23 @@ void H5ReportBuilder::startScalarReport(const ScalarEstimator& est) {
                               H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT);
 #endif
   H5Sclose(dataSpaceID);
+  {
+    const std::string& typeString(est.getTypeString());
+    hsize_t dims=1;
+    hid_t dataSpaceID = H5Screate_simple(1, &dims, NULL);
+    hid_t strType = H5Tcopy(H5T_C_S1);
+    H5Tset_size(strType, typeString.length());
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "type", strType, dataSpaceID,
+                              H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "type", strType, dataSpaceID,
+                             H5P_DEFAULT);
+#endif
+    H5Awrite(attrID, strType, typeString.c_str());
+    H5Sclose(dataSpaceID);
+    H5Aclose(attrID);
+  }
   const std::string& unitName(est.getUnitName());
   if (unitName!="") {
     hsize_t dims=1;
@@ -176,6 +193,23 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
   hid_t dataSetID = H5Dcreate(writingGroupID, est.getName().c_str(),
                               H5T_NATIVE_FLOAT, dataSpaceID, plist);
 #endif
+  {
+    const std::string& typeString(est.getTypeString());
+    hsize_t dims=1;
+    hid_t dataSpaceID = H5Screate_simple(1, &dims, NULL);
+    hid_t strType = H5Tcopy(H5T_C_S1);
+    H5Tset_size(strType, typeString.length());
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "type", strType, dataSpaceID,
+                              H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "type", strType, dataSpaceID,
+                             H5P_DEFAULT);
+#endif
+    H5Awrite(attrID, strType, typeString.c_str());
+    H5Sclose(dataSpaceID);
+    H5Aclose(attrID);
+  }
   dataset.push_back(dataSetID);
   if (est.hasError()) {
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
@@ -190,6 +224,23 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
   }
   H5Sclose(dataSpaceID);
   if (useCompression) H5Pclose(plist);
+  {
+    const std::string& typeString(est.getTypeString());
+    hsize_t dims=1;
+    hid_t dataSpaceID = H5Screate_simple(1, &dims, NULL);
+    hid_t strType = H5Tcopy(H5T_C_S1);
+    H5Tset_size(strType, typeString.length());
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "type", strType, dataSpaceID,
+                              H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "type", strType, dataSpaceID,
+                             H5P_DEFAULT);
+#endif
+    H5Awrite(attrID, strType, typeString.c_str());
+    H5Sclose(dataSpaceID);
+    H5Aclose(attrID);
+  }
   if (est.hasScale()) {
     hsize_t dim=est.getNDim();
     hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);

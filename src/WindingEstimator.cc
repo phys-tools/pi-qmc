@@ -32,7 +32,7 @@
 
 WindingEstimator::WindingEstimator(const SimulationInfo& simInfo,
   int nmax, MPIManager *mpi)
-  : BlitzArrayBlkdEst<4>("winding",
+  : BlitzArrayBlkdEst<4>("winding","histogram/winding",
                          IVecN(2*nmax+1,2*nmax+1,2*nmax+1,2*nmax+1), true), 
     mpi(mpi), nmax(nmax), npart(simInfo.getNPart()),
     cell(*simInfo.getSuperCell()) {

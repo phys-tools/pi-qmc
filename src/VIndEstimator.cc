@@ -30,7 +30,8 @@
 VIndEstimator::VIndEstimator(const SimulationInfo& simInfo,
   const CoulombAction* coulAction, const int nfreq, 
   const int nbin, const int nstride, MPIManager *mpi)
-  : BlitzArrayBlkdEst<2>("vind",IVecN(nbin,nfreq),true), 
+  : BlitzArrayBlkdEst<2>("vind","dynamic-array/induced-voltage",
+                         IVecN(nbin,nfreq),true), 
     coulAction(coulAction), npart(simInfo.getNPart()), 
     nslice(simInfo.getNSlice()), nfreq(nfreq), nbin(nbin), 
     nstride(nstride), tau(simInfo.getTau()), tauinv(1./tau), 

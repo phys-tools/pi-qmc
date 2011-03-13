@@ -47,7 +47,8 @@ ZeroVarDensityEstimator(const SimulationInfo& simInfo,
    const int nspecies, const double &min, const double &max, 
    const int &nbin, const Action * action, 
    const DoubleAction * doubleAction, MPIManager *mpi) 
-  : BlitzArrayBlkdEst<1>(name,IVecN(nbin),false), lambda(simInfo.getNPart()),
+  : BlitzArrayBlkdEst<1>(name,"array/zero-var-density",IVecN(nbin),false),
+    lambda(simInfo.getNPart()),
     tau(simInfo.getTau()), dh((max-min)/nbin), nbin(nbin), nspecies(nspecies),
     cell(*simInfo.getSuperCell()), temp(nbin), action(action), 
     doubleAction(doubleAction),mpi(mpi) { 

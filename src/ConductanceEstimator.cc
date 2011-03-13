@@ -31,7 +31,7 @@
 ConductanceEstimator::ConductanceEstimator(const SimulationInfo& simInfo, 
     const int nfreq, Species* species, bool useSpeciesTensor,
     int idim, bool useCharge, MPIManager *mpi, int norder)
-  : BlitzArrayBlkdEst<6>("conductance", 
+  : BlitzArrayBlkdEst<6>("conductance","dynamic-array/conductance", 
       IVecN(norder, (idim==-1)?NDIM:1, (idim==-1)?NDIM:1,
             useSpeciesTensor?simInfo.getNSpecies():1,
             useSpeciesTensor?simInfo.getNSpecies():1,nfreq),true),

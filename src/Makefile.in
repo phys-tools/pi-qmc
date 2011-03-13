@@ -58,70 +58,69 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-AnisotropicNodes.$(OBJEXT) pi-AperiodicGaussian.$(OBJEXT) \
 	pi-AugmentedNodes.$(OBJEXT) pi-BeadFactory.$(OBJEXT) \
 	pi-BinProbDensity.$(OBJEXT) pi-BondLengthEstimator.$(OBJEXT) \
-	pi-BondLengthTwoEstimator.$(OBJEXT) pi-BoxEstimator.$(OBJEXT) \
-	pi-CaoBerneAction.$(OBJEXT) pi-Collect.$(OBJEXT) \
-	pi-CompositeAction.$(OBJEXT) \
+	pi-BoxEstimator.$(OBJEXT) pi-CaoBerneAction.$(OBJEXT) \
+	pi-Collect.$(OBJEXT) pi-CompositeAction.$(OBJEXT) \
 	pi-CompositeDoubleAction.$(OBJEXT) \
 	pi-ConditionalDensityGrid.$(OBJEXT) \
 	pi-ConductanceEstimator.$(OBJEXT) \
 	pi-ConductivityEstimator.$(OBJEXT) \
 	pi-ConductivityEstimator2D.$(OBJEXT) \
 	pi-CoulombAction.$(OBJEXT) pi-CoulombEnergyEstimator.$(OBJEXT) \
-	pi-CubicLattice.$(OBJEXT) pi-DampedFreeTensorMover.$(OBJEXT) \
-	pi-DensDensEstimator.$(OBJEXT) \
+	pi-CountCountEstimator.$(OBJEXT) pi-CubicLattice.$(OBJEXT) \
+	pi-DampedFreeTensorMover.$(OBJEXT) \
+	pi-DensCountEstimator.$(OBJEXT) pi-DensDensEstimator.$(OBJEXT) \
+	pi-DensityEstimator.$(OBJEXT) \
 	pi-DiamagneticEstimator.$(OBJEXT) \
-	pi-DynamicPCFEstimator.$(OBJEXT) \
-	pi-CountCountEstimator.$(OBJEXT) \
-	pi-DensCountEstimator.$(OBJEXT) pi-DensityEstimator.$(OBJEXT) \
 	pi-DipoleMomentEstimator.$(OBJEXT) \
 	pi-DisplaceMoveSampler.$(OBJEXT) pi-DotGeomAction.$(OBJEXT) \
 	pi-DoubleActionChoice.$(OBJEXT) \
 	pi-DoubleDisplaceMoveSampler.$(OBJEXT) \
 	pi-DoubleMLSampler.$(OBJEXT) pi-DoubleParallelPaths.$(OBJEXT) \
-	pi-DoubleSectionChooser.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
+	pi-DoubleSectionChooser.$(OBJEXT) \
+	pi-DynamicPCFEstimator.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
 	pi-EIndEstimator.$(OBJEXT) pi-EMARateAction.$(OBJEXT) \
 	pi-EMARateEstimator.$(OBJEXT) pi-EMARateMover.$(OBJEXT) \
-	pi-EstimatorParser.$(OBJEXT) pi-ExcitonNodes.$(OBJEXT) \
-	pi-EwaldAction.$(OBJEXT) pi-EwaldCoulombEstimator.$(OBJEXT) \
+	pi-EstimatorParser.$(OBJEXT) pi-EwaldAction.$(OBJEXT) \
+	pi-EwaldCoulombEstimator.$(OBJEXT) \
 	pi-EwaldImagePairAction.$(OBJEXT) pi-EwaldSum.$(OBJEXT) \
-	pi-FixedNodeAction.$(OBJEXT) pi-FixedPhaseAction.$(OBJEXT) \
-	pi-FreeEnergyEstimator.$(OBJEXT) pi-FreeMover.$(OBJEXT) \
-	pi-FreeMoverPBC.$(OBJEXT) pi-FreeParticleNodes.$(OBJEXT) \
+	pi-ExcitonNodes.$(OBJEXT) pi-FixedNodeAction.$(OBJEXT) \
+	pi-FixedPhaseAction.$(OBJEXT) pi-FreeEnergyEstimator.$(OBJEXT) \
+	pi-FreeMover.$(OBJEXT) pi-FreeMoverPBC.$(OBJEXT) \
 	pi-FreePartNodesNoUpdate.$(OBJEXT) \
-	pi-FreeTensorMover.$(OBJEXT) pi-FrequencyEstimator.$(OBJEXT) \
-	pi-GateAction.$(OBJEXT) pi-GaussianAction.$(OBJEXT) \
-	pi-GaussianDotAction.$(OBJEXT) pi-GrapheneAction.$(OBJEXT) \
-	pi-GreenDipoleMEstimator.$(OBJEXT) pi-GridPotential.$(OBJEXT) \
+	pi-FreeParticleNodes.$(OBJEXT) pi-FreeTensorMover.$(OBJEXT) \
+	pi-FrequencyEstimator.$(OBJEXT) pi-GateAction.$(OBJEXT) \
+	pi-GaussianAction.$(OBJEXT) pi-GaussianDotAction.$(OBJEXT) \
+	pi-GrapheneAction.$(OBJEXT) pi-GridPotential.$(OBJEXT) \
 	pi-GroundStateSNode.$(OBJEXT) pi-GroundStateWFNodes.$(OBJEXT) \
 	pi-Hungarian.$(OBJEXT) pi-HyperbolicAction.$(OBJEXT) \
 	pi-HyperbolicMover.$(OBJEXT) pi-ImagePairAction.$(OBJEXT) \
-	pi-JelliumSlab.$(OBJEXT) pi-JEstimator.$(OBJEXT) \
-	pi-main.$(OBJEXT) pi-MainParser.$(OBJEXT) pi-Measure.$(OBJEXT) \
+	pi-JEstimator.$(OBJEXT) pi-JelliumSlab.$(OBJEXT) \
+	pi-MainParser.$(OBJEXT) pi-Measure.$(OBJEXT) \
 	pi-MiddleSectionChooser.$(OBJEXT) pi-ModelSampler.$(OBJEXT) \
 	pi-MultiLevelSampler.$(OBJEXT) \
 	pi-MultiSpeciesParticleChooser.$(OBJEXT) \
 	pi-NodeModel.$(OBJEXT) pi-NodeTester.$(OBJEXT) \
 	pi-OptEwaldSum.$(OBJEXT) pi-OpticalLatticeAction.$(OBJEXT) \
-	pi-PairAction.$(OBJEXT) pi-PairDistance.$(OBJEXT) \
-	pi-PrimativePairAction.$(OBJEXT) pi-PairChooser.$(OBJEXT) \
+	pi-PIMCParser.$(OBJEXT) pi-PairAction.$(OBJEXT) \
+	pi-PairChooser.$(OBJEXT) pi-PairDistance.$(OBJEXT) \
 	pi-PairIntegrator.$(OBJEXT) pi-PairPotential.$(OBJEXT) \
 	pi-ParallelPaths.$(OBJEXT) pi-ParticleChooser.$(OBJEXT) \
 	pi-PathReader.$(OBJEXT) pi-Paths.$(OBJEXT) \
 	pi-PeriodicGaussian.$(OBJEXT) pi-Permutation.$(OBJEXT) \
 	pi-PermutationChooser.$(OBJEXT) \
-	pi-PermutationEstimator.$(OBJEXT) pi-PIMCParser.$(OBJEXT) \
-	pi-PositionEstimator.$(OBJEXT) pi-PrimSHOAction.$(OBJEXT) \
-	pi-PrimAnisSHOAction.$(OBJEXT) pi-PrimCosineAction.$(OBJEXT) \
-	pi-PrimTorusAction.$(OBJEXT) pi-PrimShellAction.$(OBJEXT) \
-	pi-PrimColloidalAction.$(OBJEXT) pi-ProbDensityGrid.$(OBJEXT) \
-	pi-QPCAction.$(OBJEXT) pi-QuadrupoleMomentEstimator.$(OBJEXT) \
+	pi-PermutationEstimator.$(OBJEXT) \
+	pi-PositionEstimator.$(OBJEXT) pi-PrimAnisSHOAction.$(OBJEXT) \
+	pi-PrimColloidalAction.$(OBJEXT) pi-PrimCosineAction.$(OBJEXT) \
+	pi-PrimSHOAction.$(OBJEXT) pi-PrimShellAction.$(OBJEXT) \
+	pi-PrimTorusAction.$(OBJEXT) pi-PrimativePairAction.$(OBJEXT) \
+	pi-ProbDensityGrid.$(OBJEXT) pi-QPCAction.$(OBJEXT) \
 	pi-RandomNumGenerator.$(OBJEXT) \
 	pi-RandomPermutationChooser.$(OBJEXT) \
 	pi-RingGateAction.$(OBJEXT) pi-RingLattice.$(OBJEXT) \
-	pi-SectionChooser.$(OBJEXT) pi-SeedRandom.$(OBJEXT) \
-	pi-SerialPaths.$(OBJEXT) pi-SHOAction.$(OBJEXT) \
-	pi-SHODotAction.$(OBJEXT) pi-SHONodes.$(OBJEXT) \
-	pi-SHOPhase.$(OBJEXT) pi-SHORealNodes.$(OBJEXT) \
+	pi-SHOAction.$(OBJEXT) pi-SHODotAction.$(OBJEXT) \
+	pi-SHONodes.$(OBJEXT) pi-SHOPhase.$(OBJEXT) \
+	pi-SHORealNodes.$(OBJEXT) pi-SectionChooser.$(OBJEXT) \
+	pi-SeedRandom.$(OBJEXT) pi-SerialPaths.$(OBJEXT) \
 	pi-SimInfoParser.$(OBJEXT) pi-SimInfoWriter.$(OBJEXT) \
 	pi-SimpleParticleChooser.$(OBJEXT) pi-SimulationInfo.$(OBJEXT) \
 	pi-SmoothedGridPotential.$(OBJEXT) pi-Species.$(OBJEXT) \
@@ -129,19 +128,17 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-Spin4DPhase.$(OBJEXT) pi-SpinChargeEstimator.$(OBJEXT) \
 	pi-SpringAction.$(OBJEXT) pi-SpringTensorAction.$(OBJEXT) \
 	pi-StillWebAction.$(OBJEXT) pi-StructReader.$(OBJEXT) \
-	pi-SuperCell.$(OBJEXT) pi-TradEwaldSum.$(OBJEXT) \
-	pi-ThermoEnergyEstimator.$(OBJEXT) pi-TimpQPC.$(OBJEXT) \
+	pi-SuperCell.$(OBJEXT) pi-ThermoEnergyEstimator.$(OBJEXT) \
+	pi-TimpQPC.$(OBJEXT) pi-TradEwaldSum.$(OBJEXT) \
 	pi-TwoPairChooser.$(OBJEXT) pi-TwoQDAction.$(OBJEXT) \
 	pi-UniformMover.$(OBJEXT) pi-VIndEstimator.$(OBJEXT) \
-	pi-VirialEnergyEstimator.$(OBJEXT) \
-	pi-VVCorrelationEstimator.$(OBJEXT) \
-	pi-WalkingChooser.$(OBJEXT) pi-WellImageAction.$(OBJEXT) \
-	pi-WindingEstimator.$(OBJEXT) pi-WireEwald.$(OBJEXT) \
-	pi-WireNodes.$(OBJEXT) pi-WorkerShifter.$(OBJEXT) \
-	pi-WritePaths.$(OBJEXT) pi-WriteProbDensity.$(OBJEXT) \
-	pi-XMLParser.$(OBJEXT) pi-XMLUnitParser.$(OBJEXT) \
-	pi-XMLWriter.$(OBJEXT) assndx.$(OBJEXT) getopt.$(OBJEXT) \
-	getopt1.$(OBJEXT)
+	pi-VirialEnergyEstimator.$(OBJEXT) pi-WalkingChooser.$(OBJEXT) \
+	pi-WellImageAction.$(OBJEXT) pi-WindingEstimator.$(OBJEXT) \
+	pi-WireEwald.$(OBJEXT) pi-WireNodes.$(OBJEXT) \
+	pi-WorkerShifter.$(OBJEXT) pi-WritePaths.$(OBJEXT) \
+	pi-WriteProbDensity.$(OBJEXT) pi-XMLParser.$(OBJEXT) \
+	pi-XMLUnitParser.$(OBJEXT) pi-XMLWriter.$(OBJEXT) \
+	pi-main.$(OBJEXT) assndx.$(OBJEXT)
 pi_OBJECTS = $(am_pi_OBJECTS)
 pi_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(pi_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
@@ -150,15 +147,6 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -318,119 +306,113 @@ pi_CXXFLAGS = -I$(top_srcdir)/lib
 pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	AngularMomentumEstimator.cc AnisotropicNodes.cc \
 	AperiodicGaussian.cc AugmentedNodes.cc BeadFactory.cc \
-	BinProbDensity.cc BondLengthEstimator.cc \
-	BondLengthTwoEstimator.cc BoxEstimator.cc CaoBerneAction.cc \
-	Collect.cc CompositeAction.cc CompositeDoubleAction.cc \
-	ConditionalDensityGrid.cc ConductanceEstimator.cc \
-	ConductivityEstimator.cc ConductivityEstimator2D.cc \
-	CoulombAction.cc CoulombEnergyEstimator.cc CubicLattice.cc \
-	DampedFreeTensorMover.cc DensDensEstimator.cc \
-	DiamagneticEstimator.cc DynamicPCFEstimator.cc \
-	CountCountEstimator.cc DensCountEstimator.cc \
-	DensityEstimator.cc DipoleMomentEstimator.cc \
+	BinProbDensity.cc BondLengthEstimator.cc BoxEstimator.cc \
+	CaoBerneAction.cc Collect.cc CompositeAction.cc \
+	CompositeDoubleAction.cc ConditionalDensityGrid.cc \
+	ConductanceEstimator.cc ConductivityEstimator.cc \
+	ConductivityEstimator2D.cc CoulombAction.cc \
+	CoulombEnergyEstimator.cc CountCountEstimator.cc \
+	CubicLattice.cc DampedFreeTensorMover.cc DensCountEstimator.cc \
+	DensDensEstimator.cc DensityEstimator.cc \
+	DiamagneticEstimator.cc DipoleMomentEstimator.cc \
 	DisplaceMoveSampler.cc DotGeomAction.cc DoubleActionChoice.cc \
 	DoubleDisplaceMoveSampler.cc DoubleMLSampler.cc \
-	DoubleParallelPaths.cc DoubleSectionChooser.cc EFieldAction.cc \
-	EIndEstimator.cc EMARateAction.cc EMARateEstimator.cc \
-	EMARateMover.cc EstimatorParser.cc ExcitonNodes.cc \
-	EwaldAction.cc EwaldCoulombEstimator.cc \
-	EwaldImagePairAction.cc EwaldSum.cc FixedNodeAction.cc \
-	FixedPhaseAction.cc FreeEnergyEstimator.cc FreeMover.cc \
-	FreeMoverPBC.cc FreeParticleNodes.cc FreePartNodesNoUpdate.cc \
-	FreeTensorMover.cc FrequencyEstimator.cc GateAction.cc \
-	GaussianAction.cc GaussianDotAction.cc GrapheneAction.cc \
-	GreenDipoleMEstimator.cc GridPotential.cc GroundStateSNode.cc \
-	GroundStateWFNodes.cc Help.h Hungarian.cc HyperbolicAction.cc \
-	HyperbolicMover.cc ImagePairAction.cc JelliumSlab.cc \
-	JEstimator.cc main.cc MainParser.cc Measure.cc \
+	DoubleParallelPaths.cc DoubleSectionChooser.cc \
+	DynamicPCFEstimator.cc EFieldAction.cc EIndEstimator.cc \
+	EMARateAction.cc EMARateEstimator.cc EMARateMover.cc \
+	EstimatorParser.cc EwaldAction.cc EwaldCoulombEstimator.cc \
+	EwaldImagePairAction.cc EwaldSum.cc ExcitonNodes.cc \
+	FixedNodeAction.cc FixedPhaseAction.cc FreeEnergyEstimator.cc \
+	FreeMover.cc FreeMoverPBC.cc FreePartNodesNoUpdate.cc \
+	FreeParticleNodes.cc FreeTensorMover.cc FrequencyEstimator.cc \
+	GateAction.cc GaussianAction.cc GaussianDotAction.cc \
+	GrapheneAction.cc GridPotential.cc GroundStateSNode.cc \
+	GroundStateWFNodes.cc Hungarian.cc HyperbolicAction.cc \
+	HyperbolicMover.cc ImagePairAction.cc JEstimator.cc \
+	JelliumSlab.cc MainParser.cc Measure.cc \
 	MiddleSectionChooser.cc ModelSampler.cc MultiLevelSampler.cc \
 	MultiSpeciesParticleChooser.cc NodeModel.cc NodeTester.cc \
-	OptEwaldSum.cc OpticalLatticeAction.cc PairAction.cc \
-	PairDistance.cc PrimativePairAction.cc PairChooser.cc \
-	PairIntegrator.cc PairPotential.cc ParallelPaths.cc \
-	ParticleChooser.cc PathReader.cc Paths.cc PeriodicGaussian.cc \
-	Permutation.cc PermutationChooser.cc PermutationEstimator.cc \
-	PIMCParser.cc PositionEstimator.cc PrimSHOAction.cc \
-	PrimAnisSHOAction.cc PrimCosineAction.cc PrimTorusAction.cc \
-	PrimShellAction.cc PrimColloidalAction.cc ProbDensityGrid.cc \
-	QPCAction.cc QuadrupoleMomentEstimator.cc \
-	RandomNumGenerator.cc RandomPermutationChooser.cc \
-	RingGateAction.cc RingLattice.cc SectionChooser.cc \
-	SeedRandom.cc SerialPaths.cc SHOAction.cc SHODotAction.cc \
-	SHONodes.cc SHOPhase.cc SHORealNodes.cc SimInfoParser.cc \
-	SimInfoWriter.cc SimpleParticleChooser.cc SimulationInfo.cc \
-	SmoothedGridPotential.cc Species.cc SpeciesParticleChooser.cc \
-	SphereAction.cc Spin4DPhase.cc SpinChargeEstimator.cc \
-	SpringAction.cc SpringTensorAction.cc StillWebAction.cc \
-	StructReader.cc SuperCell.cc TradEwaldSum.cc \
-	ThermoEnergyEstimator.cc TimpQPC.cc TwoPairChooser.cc \
-	TwoQDAction.cc UniformMover.cc VIndEstimator.cc \
-	VirialEnergyEstimator.cc VVCorrelationEstimator.cc \
-	WalkingChooser.cc WellImageAction.cc WindingEstimator.cc \
-	WireEwald.cc WireNodes.cc WorkerShifter.cc WritePaths.cc \
+	OptEwaldSum.cc OpticalLatticeAction.cc PIMCParser.cc \
+	PairAction.cc PairChooser.cc PairDistance.cc PairIntegrator.cc \
+	PairPotential.cc ParallelPaths.cc ParticleChooser.cc \
+	PathReader.cc Paths.cc PeriodicGaussian.cc Permutation.cc \
+	PermutationChooser.cc PermutationEstimator.cc \
+	PositionEstimator.cc PrimAnisSHOAction.cc \
+	PrimColloidalAction.cc PrimCosineAction.cc PrimSHOAction.cc \
+	PrimShellAction.cc PrimTorusAction.cc PrimativePairAction.cc \
+	ProbDensityGrid.cc QPCAction.cc RandomNumGenerator.cc \
+	RandomPermutationChooser.cc RingGateAction.cc RingLattice.cc \
+	SHOAction.cc SHODotAction.cc SHONodes.cc SHOPhase.cc \
+	SHORealNodes.cc SectionChooser.cc SeedRandom.cc SerialPaths.cc \
+	SimInfoParser.cc SimInfoWriter.cc SimpleParticleChooser.cc \
+	SimulationInfo.cc SmoothedGridPotential.cc Species.cc \
+	SpeciesParticleChooser.cc SphereAction.cc Spin4DPhase.cc \
+	SpinChargeEstimator.cc SpringAction.cc SpringTensorAction.cc \
+	StillWebAction.cc StructReader.cc SuperCell.cc \
+	ThermoEnergyEstimator.cc TimpQPC.cc TradEwaldSum.cc \
+	TwoPairChooser.cc TwoQDAction.cc UniformMover.cc \
+	VIndEstimator.cc VirialEnergyEstimator.cc WalkingChooser.cc \
+	WellImageAction.cc WindingEstimator.cc WireEwald.cc \
+	WireNodes.cc WorkerShifter.cc WritePaths.cc \
 	WriteProbDensity.cc XMLParser.cc XMLUnitParser.cc XMLWriter.cc \
-	assndx.f getopt.c getopt1.c
+	main.cc assndx.f
 noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	AngularMomentumEstimator.h AnisotropicNodes.h \
 	AperiodicGaussian.h AugmentedNodes.h BeadFactory.h Beads.h \
-	BinProbDensity.h BondLengthEstimator.h \
-	BondLengthTwoEstimator.h BoxEstimator.h CaoBerneAction.h \
-	Collect.h CompositeAction.h CompositeAlgorithm.h \
-	CompositeDoubleAction.h ConditionalDensityGrid.h \
-	ConductanceEstimator.h ConductivityEstimator.h \
-	ConductivityEstimator2D.h CoulombAction.h \
-	CoulombEnergyEstimator.h CubicLattice.h \
-	DampedFreeTensorMover.h DensDensEstimator.h \
-	DensCountEstimator.h DisplaceMoveSampler.h DotGeomAction.h \
-	DoubleActionChoice.h DoubleDisplaceMoveSampler.h \
-	DiamagneticEstimator.h DynamicPCFEstimator.h \
-	CountCountEstimator.h DensityEstimator.h \
-	DipoleMomentEstimator.h Distance.h DoubleAction.h \
-	DisplaceMoveSampler.h DoubleDisplaceMoveSampler.h \
-	DoubleMLSampler.h DoubleParallelPaths.h DoubleSectionChooser.h \
-	EFieldAction.h EIndEstimator.h EMARateAction.h \
-	EMARateEstimator.h EMARateMover.h EstimatorParser.h \
-	ExcitonNodes.h EwaldCoulombEstimator.h EwaldAction.h \
-	EwaldImagePairAction.h EwaldSum.h FixedNodeAction.h \
-	FixedPhaseAction.h FreeEnergyEstimator.h FreeMover.h \
-	FreeMover.h FreeParticleNodes.h FreePartNodesNoUpdate.h \
-	FreeTensorMover.h FrequencyEstimator.h GateAction.h \
-	GaussianAction.h GaussianDotAction.h GrapheneAction.h \
-	GreenDipoleMEstimator.h GridPotential.h GroundStateSNode.h \
-	GroundStateWFNodes.h HyperbolicAction.h HyperbolicMover.h \
-	ImagePairAction.h JelliumSlab.h JEstimator.h LinkSummable.h \
-	Loop.h MainParser.h Measure.h MiddleSectionChooser.h Mover.h \
-	ModelSampler.h MultiLevelSampler.h \
-	MultiSpeciesParticleChooser.h NodeModel.h NodeTester.h \
-	OptEwaldSum.h OpticalLatticeAction.h PairAction.h \
-	PrimativePairAction.h PairChooser.h PairIntegrator.h \
-	PairPotential.h PairCFEstimator.h PairDistance.h \
-	ParallelPaths.h ParticleChooser.h PathReader.h Paths.h \
-	PeriodicGaussian.h PermutationChooser.h Permutation.h \
-	PhaseModel.h PermutationEstimator.h PIMCParser.h Positioner.h \
-	PositionEstimator.h PrimSHOAction.h PrimAnisSHOAction.h \
-	PrimCosineAction.h PrimTorusAction.h PrimShellAction.h \
-	PrimColloidalAction.h ProbDensityGrid.h QPCAction.h \
-	QuadrupoleMomentEstimator.h RandomNumGenerator.h \
-	RandomPermutationChooser.h RingGateAction.h RingLattice.h \
-	SectionChooser.h SeedRandom.h SerialPaths.h SHOAction.h \
-	SHODotAction.h SHONodes.h SHOPhase.h SHORealNodes.h \
-	SimInfoParser.h SimInfoWriter.h SimpleParticleChooser.h \
-	SimulationInfo.h SmoothedGridPotential.h Species.h \
-	SpeciesParticleChooser.h SphereAction.h Spin4DPhase.h \
-	SpinChargeEstimator.h SpringAction.h SpringTensorAction.h \
-	StillWebAction.h StructReader.h SuperCell.h TradEwaldSum.h \
-	ThermoEnergyEstimator.h TimpQPC.h TwoPairChooser.h \
-	TwoQDAction.h UniformMover.h VIndEstimator.h \
-	VirialEnergyEstimator.h VVCorrelationEstimator.h \
-	WalkingChooser.h WellImageAction.h WindingEstimator.h \
-	WireEwald.h WireNodes.h WorkerShifter.h WritePaths.h \
-	WriteProbDensity.h XMLParser.h XMLUnitParser.h XMLWriter.h \
-	ZeroVarDensityEstimator.h
+	BinProbDensity.h BondLengthEstimator.h BoxEstimator.h \
+	CaoBerneAction.h Collect.h CompositeAction.h \
+	CompositeAlgorithm.h CompositeDoubleAction.h \
+	ConditionalDensityGrid.h ConductanceEstimator.h \
+	ConductivityEstimator.h ConductivityEstimator2D.h \
+	CoulombAction.h CoulombEnergyEstimator.h CountCountEstimator.h \
+	CubicLattice.h DampedFreeTensorMover.h DensCountEstimator.h \
+	DensDensEstimator.h DensityEstimator.h DiamagneticEstimator.h \
+	DipoleMomentEstimator.h DisplaceMoveSampler.h Distance.h \
+	DotGeomAction.h DoubleAction.h DoubleActionChoice.h \
+	DoubleDisplaceMoveSampler.h DoubleMLSampler.h \
+	DoubleParallelPaths.h DoubleSectionChooser.h \
+	DynamicPCFEstimator.h EFieldAction.h EIndEstimator.h \
+	EMARateAction.h EMARateEstimator.h EMARateMover.h \
+	EstimatorParser.h EwaldAction.h EwaldCoulombEstimator.h \
+	EwaldImagePairAction.h EwaldSum.h ExcitonNodes.h \
+	FixedNodeAction.h FixedPhaseAction.h FreeEnergyEstimator.h \
+	FreeMover.h FreeMoverPBC.h FreePartNodesNoUpdate.h \
+	FreeParticleNodes.h FreeTensorMover.h FrequencyEstimator.h \
+	GateAction.h GaussianAction.h GaussianDotAction.h \
+	GrapheneAction.h GridPotential.h GroundStateSNode.h \
+	GroundStateWFNodes.h Help.h HyperbolicAction.h \
+	HyperbolicMover.h ImagePairAction.h JEstimator.h JelliumSlab.h \
+	LinkSummable.h Loop.h MainParser.h Measure.h \
+	MiddleSectionChooser.h ModelSampler.h Mover.h \
+	MultiLevelSampler.h MultiSpeciesParticleChooser.h NodeModel.h \
+	NodeTester.h OptEwaldSum.h OpticalLatticeAction.h PIMCParser.h \
+	PairAction.h PairCFEstimator.h PairChooser.h PairDistance.h \
+	PairIntegrator.h PairPotential.h ParallelPaths.h \
+	ParticleChooser.h PathReader.h Paths.h PeriodicGaussian.h \
+	Permutation.h PermutationChooser.h PermutationEstimator.h \
+	PhaseModel.h PositionEstimator.h Positioner.h \
+	PrimAnisSHOAction.h PrimColloidalAction.h PrimCosineAction.h \
+	PrimSHOAction.h PrimShellAction.h PrimTorusAction.h \
+	PrimativePairAction.h ProbDensityGrid.h QPCAction.h \
+	RandomNumGenerator.h RandomPermutationChooser.h \
+	RingGateAction.h RingLattice.h SHOAction.h SHODotAction.h \
+	SHONodes.h SHOPhase.h SHORealNodes.h SectionChooser.h \
+	SeedRandom.h SerialPaths.h SimInfoParser.h SimInfoWriter.h \
+	SimpleParticleChooser.h SimulationInfo.h \
+	SmoothedGridPotential.h Species.h SpeciesParticleChooser.h \
+	SphereAction.h Spin4DPhase.h SpinChargeEstimator.h \
+	SpringAction.h SpringTensorAction.h StillWebAction.h \
+	StructReader.h SuperCell.h ThermoEnergyEstimator.h TimpQPC.h \
+	TradEwaldSum.h TwoPairChooser.h TwoQDAction.h UniformMover.h \
+	VIndEstimator.h VirialEnergyEstimator.h WalkingChooser.h \
+	WellImageAction.h WindingEstimator.h WireEwald.h WireNodes.h \
+	WorkerShifter.h WritePaths.h WriteProbDensity.h XMLParser.h \
+	XMLUnitParser.h XMLWriter.h ZeroVarDensityEstimator.h \
+	gnugetopt.h
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .cc .f .lo .o .obj
+.SUFFIXES: .cc .f .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -514,8 +496,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getopt1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ActionChoice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ActionParser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-AngularMomentumEstimator.Po@am__quote@
@@ -525,7 +505,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-BeadFactory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-BinProbDensity.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-BondLengthEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-BondLengthTwoEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-BoxEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CaoBerneAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-Collect.Po@am__quote@
@@ -577,7 +556,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GaussianAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GaussianDotAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GrapheneAction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GreenDipoleMEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GridPotential.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GroundStateSNode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-GroundStateWFNodes.Po@am__quote@
@@ -621,7 +599,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PrimativePairAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ProbDensityGrid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-QPCAction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-QuadrupoleMomentEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-RandomNumGenerator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-RandomPermutationChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-RingGateAction.Po@am__quote@
@@ -656,7 +633,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-TwoQDAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-UniformMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-VIndEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-VVCorrelationEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-VirialEnergyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WalkingChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-WellImageAction.Po@am__quote@
@@ -670,27 +646,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-XMLUnitParser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-XMLWriter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-main.Po@am__quote@
-
-.c.o:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c $<
-
-.c.obj:
-@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -838,20 +793,6 @@ pi-BondLengthEstimator.obj: BondLengthEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='BondLengthEstimator.cc' object='pi-BondLengthEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-BondLengthEstimator.obj `if test -f 'BondLengthEstimator.cc'; then $(CYGPATH_W) 'BondLengthEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/BondLengthEstimator.cc'; fi`
-
-pi-BondLengthTwoEstimator.o: BondLengthTwoEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-BondLengthTwoEstimator.o -MD -MP -MF $(DEPDIR)/pi-BondLengthTwoEstimator.Tpo -c -o pi-BondLengthTwoEstimator.o `test -f 'BondLengthTwoEstimator.cc' || echo '$(srcdir)/'`BondLengthTwoEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-BondLengthTwoEstimator.Tpo $(DEPDIR)/pi-BondLengthTwoEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='BondLengthTwoEstimator.cc' object='pi-BondLengthTwoEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-BondLengthTwoEstimator.o `test -f 'BondLengthTwoEstimator.cc' || echo '$(srcdir)/'`BondLengthTwoEstimator.cc
-
-pi-BondLengthTwoEstimator.obj: BondLengthTwoEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-BondLengthTwoEstimator.obj -MD -MP -MF $(DEPDIR)/pi-BondLengthTwoEstimator.Tpo -c -o pi-BondLengthTwoEstimator.obj `if test -f 'BondLengthTwoEstimator.cc'; then $(CYGPATH_W) 'BondLengthTwoEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/BondLengthTwoEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-BondLengthTwoEstimator.Tpo $(DEPDIR)/pi-BondLengthTwoEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='BondLengthTwoEstimator.cc' object='pi-BondLengthTwoEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-BondLengthTwoEstimator.obj `if test -f 'BondLengthTwoEstimator.cc'; then $(CYGPATH_W) 'BondLengthTwoEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/BondLengthTwoEstimator.cc'; fi`
 
 pi-BoxEstimator.o: BoxEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-BoxEstimator.o -MD -MP -MF $(DEPDIR)/pi-BoxEstimator.Tpo -c -o pi-BoxEstimator.o `test -f 'BoxEstimator.cc' || echo '$(srcdir)/'`BoxEstimator.cc
@@ -1007,6 +948,20 @@ pi-CoulombEnergyEstimator.obj: CoulombEnergyEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CoulombEnergyEstimator.obj `if test -f 'CoulombEnergyEstimator.cc'; then $(CYGPATH_W) 'CoulombEnergyEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CoulombEnergyEstimator.cc'; fi`
 
+pi-CountCountEstimator.o: CountCountEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CountCountEstimator.o -MD -MP -MF $(DEPDIR)/pi-CountCountEstimator.Tpo -c -o pi-CountCountEstimator.o `test -f 'CountCountEstimator.cc' || echo '$(srcdir)/'`CountCountEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CountCountEstimator.Tpo $(DEPDIR)/pi-CountCountEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CountCountEstimator.cc' object='pi-CountCountEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CountCountEstimator.o `test -f 'CountCountEstimator.cc' || echo '$(srcdir)/'`CountCountEstimator.cc
+
+pi-CountCountEstimator.obj: CountCountEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CountCountEstimator.obj -MD -MP -MF $(DEPDIR)/pi-CountCountEstimator.Tpo -c -o pi-CountCountEstimator.obj `if test -f 'CountCountEstimator.cc'; then $(CYGPATH_W) 'CountCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CountCountEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CountCountEstimator.Tpo $(DEPDIR)/pi-CountCountEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CountCountEstimator.cc' object='pi-CountCountEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CountCountEstimator.obj `if test -f 'CountCountEstimator.cc'; then $(CYGPATH_W) 'CountCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CountCountEstimator.cc'; fi`
+
 pi-CubicLattice.o: CubicLattice.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CubicLattice.o -MD -MP -MF $(DEPDIR)/pi-CubicLattice.Tpo -c -o pi-CubicLattice.o `test -f 'CubicLattice.cc' || echo '$(srcdir)/'`CubicLattice.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CubicLattice.Tpo $(DEPDIR)/pi-CubicLattice.Po
@@ -1035,62 +990,6 @@ pi-DampedFreeTensorMover.obj: DampedFreeTensorMover.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DampedFreeTensorMover.obj `if test -f 'DampedFreeTensorMover.cc'; then $(CYGPATH_W) 'DampedFreeTensorMover.cc'; else $(CYGPATH_W) '$(srcdir)/DampedFreeTensorMover.cc'; fi`
 
-pi-DensDensEstimator.o: DensDensEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensDensEstimator.o -MD -MP -MF $(DEPDIR)/pi-DensDensEstimator.Tpo -c -o pi-DensDensEstimator.o `test -f 'DensDensEstimator.cc' || echo '$(srcdir)/'`DensDensEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DensDensEstimator.Tpo $(DEPDIR)/pi-DensDensEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DensDensEstimator.cc' object='pi-DensDensEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensDensEstimator.o `test -f 'DensDensEstimator.cc' || echo '$(srcdir)/'`DensDensEstimator.cc
-
-pi-DensDensEstimator.obj: DensDensEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensDensEstimator.obj -MD -MP -MF $(DEPDIR)/pi-DensDensEstimator.Tpo -c -o pi-DensDensEstimator.obj `if test -f 'DensDensEstimator.cc'; then $(CYGPATH_W) 'DensDensEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensDensEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DensDensEstimator.Tpo $(DEPDIR)/pi-DensDensEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DensDensEstimator.cc' object='pi-DensDensEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensDensEstimator.obj `if test -f 'DensDensEstimator.cc'; then $(CYGPATH_W) 'DensDensEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensDensEstimator.cc'; fi`
-
-pi-DiamagneticEstimator.o: DiamagneticEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DiamagneticEstimator.o -MD -MP -MF $(DEPDIR)/pi-DiamagneticEstimator.Tpo -c -o pi-DiamagneticEstimator.o `test -f 'DiamagneticEstimator.cc' || echo '$(srcdir)/'`DiamagneticEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DiamagneticEstimator.Tpo $(DEPDIR)/pi-DiamagneticEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DiamagneticEstimator.cc' object='pi-DiamagneticEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DiamagneticEstimator.o `test -f 'DiamagneticEstimator.cc' || echo '$(srcdir)/'`DiamagneticEstimator.cc
-
-pi-DiamagneticEstimator.obj: DiamagneticEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DiamagneticEstimator.obj -MD -MP -MF $(DEPDIR)/pi-DiamagneticEstimator.Tpo -c -o pi-DiamagneticEstimator.obj `if test -f 'DiamagneticEstimator.cc'; then $(CYGPATH_W) 'DiamagneticEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DiamagneticEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DiamagneticEstimator.Tpo $(DEPDIR)/pi-DiamagneticEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DiamagneticEstimator.cc' object='pi-DiamagneticEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DiamagneticEstimator.obj `if test -f 'DiamagneticEstimator.cc'; then $(CYGPATH_W) 'DiamagneticEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DiamagneticEstimator.cc'; fi`
-
-pi-DynamicPCFEstimator.o: DynamicPCFEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DynamicPCFEstimator.o -MD -MP -MF $(DEPDIR)/pi-DynamicPCFEstimator.Tpo -c -o pi-DynamicPCFEstimator.o `test -f 'DynamicPCFEstimator.cc' || echo '$(srcdir)/'`DynamicPCFEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DynamicPCFEstimator.Tpo $(DEPDIR)/pi-DynamicPCFEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicPCFEstimator.cc' object='pi-DynamicPCFEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DynamicPCFEstimator.o `test -f 'DynamicPCFEstimator.cc' || echo '$(srcdir)/'`DynamicPCFEstimator.cc
-
-pi-DynamicPCFEstimator.obj: DynamicPCFEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DynamicPCFEstimator.obj -MD -MP -MF $(DEPDIR)/pi-DynamicPCFEstimator.Tpo -c -o pi-DynamicPCFEstimator.obj `if test -f 'DynamicPCFEstimator.cc'; then $(CYGPATH_W) 'DynamicPCFEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DynamicPCFEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DynamicPCFEstimator.Tpo $(DEPDIR)/pi-DynamicPCFEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicPCFEstimator.cc' object='pi-DynamicPCFEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DynamicPCFEstimator.obj `if test -f 'DynamicPCFEstimator.cc'; then $(CYGPATH_W) 'DynamicPCFEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DynamicPCFEstimator.cc'; fi`
-
-pi-CountCountEstimator.o: CountCountEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CountCountEstimator.o -MD -MP -MF $(DEPDIR)/pi-CountCountEstimator.Tpo -c -o pi-CountCountEstimator.o `test -f 'CountCountEstimator.cc' || echo '$(srcdir)/'`CountCountEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CountCountEstimator.Tpo $(DEPDIR)/pi-CountCountEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CountCountEstimator.cc' object='pi-CountCountEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CountCountEstimator.o `test -f 'CountCountEstimator.cc' || echo '$(srcdir)/'`CountCountEstimator.cc
-
-pi-CountCountEstimator.obj: CountCountEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CountCountEstimator.obj -MD -MP -MF $(DEPDIR)/pi-CountCountEstimator.Tpo -c -o pi-CountCountEstimator.obj `if test -f 'CountCountEstimator.cc'; then $(CYGPATH_W) 'CountCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CountCountEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CountCountEstimator.Tpo $(DEPDIR)/pi-CountCountEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CountCountEstimator.cc' object='pi-CountCountEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CountCountEstimator.obj `if test -f 'CountCountEstimator.cc'; then $(CYGPATH_W) 'CountCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/CountCountEstimator.cc'; fi`
-
 pi-DensCountEstimator.o: DensCountEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensCountEstimator.o -MD -MP -MF $(DEPDIR)/pi-DensCountEstimator.Tpo -c -o pi-DensCountEstimator.o `test -f 'DensCountEstimator.cc' || echo '$(srcdir)/'`DensCountEstimator.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DensCountEstimator.Tpo $(DEPDIR)/pi-DensCountEstimator.Po
@@ -1105,6 +1004,20 @@ pi-DensCountEstimator.obj: DensCountEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensCountEstimator.obj `if test -f 'DensCountEstimator.cc'; then $(CYGPATH_W) 'DensCountEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensCountEstimator.cc'; fi`
 
+pi-DensDensEstimator.o: DensDensEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensDensEstimator.o -MD -MP -MF $(DEPDIR)/pi-DensDensEstimator.Tpo -c -o pi-DensDensEstimator.o `test -f 'DensDensEstimator.cc' || echo '$(srcdir)/'`DensDensEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DensDensEstimator.Tpo $(DEPDIR)/pi-DensDensEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DensDensEstimator.cc' object='pi-DensDensEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensDensEstimator.o `test -f 'DensDensEstimator.cc' || echo '$(srcdir)/'`DensDensEstimator.cc
+
+pi-DensDensEstimator.obj: DensDensEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensDensEstimator.obj -MD -MP -MF $(DEPDIR)/pi-DensDensEstimator.Tpo -c -o pi-DensDensEstimator.obj `if test -f 'DensDensEstimator.cc'; then $(CYGPATH_W) 'DensDensEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensDensEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DensDensEstimator.Tpo $(DEPDIR)/pi-DensDensEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DensDensEstimator.cc' object='pi-DensDensEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensDensEstimator.obj `if test -f 'DensDensEstimator.cc'; then $(CYGPATH_W) 'DensDensEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensDensEstimator.cc'; fi`
+
 pi-DensityEstimator.o: DensityEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DensityEstimator.o -MD -MP -MF $(DEPDIR)/pi-DensityEstimator.Tpo -c -o pi-DensityEstimator.o `test -f 'DensityEstimator.cc' || echo '$(srcdir)/'`DensityEstimator.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DensityEstimator.Tpo $(DEPDIR)/pi-DensityEstimator.Po
@@ -1118,6 +1031,20 @@ pi-DensityEstimator.obj: DensityEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DensityEstimator.cc' object='pi-DensityEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DensityEstimator.obj `if test -f 'DensityEstimator.cc'; then $(CYGPATH_W) 'DensityEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DensityEstimator.cc'; fi`
+
+pi-DiamagneticEstimator.o: DiamagneticEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DiamagneticEstimator.o -MD -MP -MF $(DEPDIR)/pi-DiamagneticEstimator.Tpo -c -o pi-DiamagneticEstimator.o `test -f 'DiamagneticEstimator.cc' || echo '$(srcdir)/'`DiamagneticEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DiamagneticEstimator.Tpo $(DEPDIR)/pi-DiamagneticEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DiamagneticEstimator.cc' object='pi-DiamagneticEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DiamagneticEstimator.o `test -f 'DiamagneticEstimator.cc' || echo '$(srcdir)/'`DiamagneticEstimator.cc
+
+pi-DiamagneticEstimator.obj: DiamagneticEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DiamagneticEstimator.obj -MD -MP -MF $(DEPDIR)/pi-DiamagneticEstimator.Tpo -c -o pi-DiamagneticEstimator.obj `if test -f 'DiamagneticEstimator.cc'; then $(CYGPATH_W) 'DiamagneticEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DiamagneticEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DiamagneticEstimator.Tpo $(DEPDIR)/pi-DiamagneticEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DiamagneticEstimator.cc' object='pi-DiamagneticEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DiamagneticEstimator.obj `if test -f 'DiamagneticEstimator.cc'; then $(CYGPATH_W) 'DiamagneticEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DiamagneticEstimator.cc'; fi`
 
 pi-DipoleMomentEstimator.o: DipoleMomentEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DipoleMomentEstimator.o -MD -MP -MF $(DEPDIR)/pi-DipoleMomentEstimator.Tpo -c -o pi-DipoleMomentEstimator.o `test -f 'DipoleMomentEstimator.cc' || echo '$(srcdir)/'`DipoleMomentEstimator.cc
@@ -1231,6 +1158,20 @@ pi-DoubleSectionChooser.obj: DoubleSectionChooser.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DoubleSectionChooser.obj `if test -f 'DoubleSectionChooser.cc'; then $(CYGPATH_W) 'DoubleSectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/DoubleSectionChooser.cc'; fi`
 
+pi-DynamicPCFEstimator.o: DynamicPCFEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DynamicPCFEstimator.o -MD -MP -MF $(DEPDIR)/pi-DynamicPCFEstimator.Tpo -c -o pi-DynamicPCFEstimator.o `test -f 'DynamicPCFEstimator.cc' || echo '$(srcdir)/'`DynamicPCFEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DynamicPCFEstimator.Tpo $(DEPDIR)/pi-DynamicPCFEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicPCFEstimator.cc' object='pi-DynamicPCFEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DynamicPCFEstimator.o `test -f 'DynamicPCFEstimator.cc' || echo '$(srcdir)/'`DynamicPCFEstimator.cc
+
+pi-DynamicPCFEstimator.obj: DynamicPCFEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-DynamicPCFEstimator.obj -MD -MP -MF $(DEPDIR)/pi-DynamicPCFEstimator.Tpo -c -o pi-DynamicPCFEstimator.obj `if test -f 'DynamicPCFEstimator.cc'; then $(CYGPATH_W) 'DynamicPCFEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DynamicPCFEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-DynamicPCFEstimator.Tpo $(DEPDIR)/pi-DynamicPCFEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DynamicPCFEstimator.cc' object='pi-DynamicPCFEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-DynamicPCFEstimator.obj `if test -f 'DynamicPCFEstimator.cc'; then $(CYGPATH_W) 'DynamicPCFEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/DynamicPCFEstimator.cc'; fi`
+
 pi-EFieldAction.o: EFieldAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EFieldAction.o -MD -MP -MF $(DEPDIR)/pi-EFieldAction.Tpo -c -o pi-EFieldAction.o `test -f 'EFieldAction.cc' || echo '$(srcdir)/'`EFieldAction.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-EFieldAction.Tpo $(DEPDIR)/pi-EFieldAction.Po
@@ -1315,20 +1256,6 @@ pi-EstimatorParser.obj: EstimatorParser.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EstimatorParser.obj `if test -f 'EstimatorParser.cc'; then $(CYGPATH_W) 'EstimatorParser.cc'; else $(CYGPATH_W) '$(srcdir)/EstimatorParser.cc'; fi`
 
-pi-ExcitonNodes.o: ExcitonNodes.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ExcitonNodes.o -MD -MP -MF $(DEPDIR)/pi-ExcitonNodes.Tpo -c -o pi-ExcitonNodes.o `test -f 'ExcitonNodes.cc' || echo '$(srcdir)/'`ExcitonNodes.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-ExcitonNodes.Tpo $(DEPDIR)/pi-ExcitonNodes.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ExcitonNodes.cc' object='pi-ExcitonNodes.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ExcitonNodes.o `test -f 'ExcitonNodes.cc' || echo '$(srcdir)/'`ExcitonNodes.cc
-
-pi-ExcitonNodes.obj: ExcitonNodes.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ExcitonNodes.obj -MD -MP -MF $(DEPDIR)/pi-ExcitonNodes.Tpo -c -o pi-ExcitonNodes.obj `if test -f 'ExcitonNodes.cc'; then $(CYGPATH_W) 'ExcitonNodes.cc'; else $(CYGPATH_W) '$(srcdir)/ExcitonNodes.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-ExcitonNodes.Tpo $(DEPDIR)/pi-ExcitonNodes.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ExcitonNodes.cc' object='pi-ExcitonNodes.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ExcitonNodes.obj `if test -f 'ExcitonNodes.cc'; then $(CYGPATH_W) 'ExcitonNodes.cc'; else $(CYGPATH_W) '$(srcdir)/ExcitonNodes.cc'; fi`
-
 pi-EwaldAction.o: EwaldAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EwaldAction.o -MD -MP -MF $(DEPDIR)/pi-EwaldAction.Tpo -c -o pi-EwaldAction.o `test -f 'EwaldAction.cc' || echo '$(srcdir)/'`EwaldAction.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-EwaldAction.Tpo $(DEPDIR)/pi-EwaldAction.Po
@@ -1384,6 +1311,20 @@ pi-EwaldSum.obj: EwaldSum.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EwaldSum.cc' object='pi-EwaldSum.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EwaldSum.obj `if test -f 'EwaldSum.cc'; then $(CYGPATH_W) 'EwaldSum.cc'; else $(CYGPATH_W) '$(srcdir)/EwaldSum.cc'; fi`
+
+pi-ExcitonNodes.o: ExcitonNodes.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ExcitonNodes.o -MD -MP -MF $(DEPDIR)/pi-ExcitonNodes.Tpo -c -o pi-ExcitonNodes.o `test -f 'ExcitonNodes.cc' || echo '$(srcdir)/'`ExcitonNodes.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-ExcitonNodes.Tpo $(DEPDIR)/pi-ExcitonNodes.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ExcitonNodes.cc' object='pi-ExcitonNodes.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ExcitonNodes.o `test -f 'ExcitonNodes.cc' || echo '$(srcdir)/'`ExcitonNodes.cc
+
+pi-ExcitonNodes.obj: ExcitonNodes.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ExcitonNodes.obj -MD -MP -MF $(DEPDIR)/pi-ExcitonNodes.Tpo -c -o pi-ExcitonNodes.obj `if test -f 'ExcitonNodes.cc'; then $(CYGPATH_W) 'ExcitonNodes.cc'; else $(CYGPATH_W) '$(srcdir)/ExcitonNodes.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-ExcitonNodes.Tpo $(DEPDIR)/pi-ExcitonNodes.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ExcitonNodes.cc' object='pi-ExcitonNodes.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ExcitonNodes.obj `if test -f 'ExcitonNodes.cc'; then $(CYGPATH_W) 'ExcitonNodes.cc'; else $(CYGPATH_W) '$(srcdir)/ExcitonNodes.cc'; fi`
 
 pi-FixedNodeAction.o: FixedNodeAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FixedNodeAction.o -MD -MP -MF $(DEPDIR)/pi-FixedNodeAction.Tpo -c -o pi-FixedNodeAction.o `test -f 'FixedNodeAction.cc' || echo '$(srcdir)/'`FixedNodeAction.cc
@@ -1455,20 +1396,6 @@ pi-FreeMoverPBC.obj: FreeMoverPBC.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeMoverPBC.obj `if test -f 'FreeMoverPBC.cc'; then $(CYGPATH_W) 'FreeMoverPBC.cc'; else $(CYGPATH_W) '$(srcdir)/FreeMoverPBC.cc'; fi`
 
-pi-FreeParticleNodes.o: FreeParticleNodes.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeParticleNodes.o -MD -MP -MF $(DEPDIR)/pi-FreeParticleNodes.Tpo -c -o pi-FreeParticleNodes.o `test -f 'FreeParticleNodes.cc' || echo '$(srcdir)/'`FreeParticleNodes.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreeParticleNodes.Tpo $(DEPDIR)/pi-FreeParticleNodes.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeParticleNodes.cc' object='pi-FreeParticleNodes.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeParticleNodes.o `test -f 'FreeParticleNodes.cc' || echo '$(srcdir)/'`FreeParticleNodes.cc
-
-pi-FreeParticleNodes.obj: FreeParticleNodes.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeParticleNodes.obj -MD -MP -MF $(DEPDIR)/pi-FreeParticleNodes.Tpo -c -o pi-FreeParticleNodes.obj `if test -f 'FreeParticleNodes.cc'; then $(CYGPATH_W) 'FreeParticleNodes.cc'; else $(CYGPATH_W) '$(srcdir)/FreeParticleNodes.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreeParticleNodes.Tpo $(DEPDIR)/pi-FreeParticleNodes.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeParticleNodes.cc' object='pi-FreeParticleNodes.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeParticleNodes.obj `if test -f 'FreeParticleNodes.cc'; then $(CYGPATH_W) 'FreeParticleNodes.cc'; else $(CYGPATH_W) '$(srcdir)/FreeParticleNodes.cc'; fi`
-
 pi-FreePartNodesNoUpdate.o: FreePartNodesNoUpdate.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreePartNodesNoUpdate.o -MD -MP -MF $(DEPDIR)/pi-FreePartNodesNoUpdate.Tpo -c -o pi-FreePartNodesNoUpdate.o `test -f 'FreePartNodesNoUpdate.cc' || echo '$(srcdir)/'`FreePartNodesNoUpdate.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreePartNodesNoUpdate.Tpo $(DEPDIR)/pi-FreePartNodesNoUpdate.Po
@@ -1482,6 +1409,20 @@ pi-FreePartNodesNoUpdate.obj: FreePartNodesNoUpdate.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreePartNodesNoUpdate.cc' object='pi-FreePartNodesNoUpdate.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreePartNodesNoUpdate.obj `if test -f 'FreePartNodesNoUpdate.cc'; then $(CYGPATH_W) 'FreePartNodesNoUpdate.cc'; else $(CYGPATH_W) '$(srcdir)/FreePartNodesNoUpdate.cc'; fi`
+
+pi-FreeParticleNodes.o: FreeParticleNodes.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeParticleNodes.o -MD -MP -MF $(DEPDIR)/pi-FreeParticleNodes.Tpo -c -o pi-FreeParticleNodes.o `test -f 'FreeParticleNodes.cc' || echo '$(srcdir)/'`FreeParticleNodes.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreeParticleNodes.Tpo $(DEPDIR)/pi-FreeParticleNodes.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeParticleNodes.cc' object='pi-FreeParticleNodes.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeParticleNodes.o `test -f 'FreeParticleNodes.cc' || echo '$(srcdir)/'`FreeParticleNodes.cc
+
+pi-FreeParticleNodes.obj: FreeParticleNodes.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeParticleNodes.obj -MD -MP -MF $(DEPDIR)/pi-FreeParticleNodes.Tpo -c -o pi-FreeParticleNodes.obj `if test -f 'FreeParticleNodes.cc'; then $(CYGPATH_W) 'FreeParticleNodes.cc'; else $(CYGPATH_W) '$(srcdir)/FreeParticleNodes.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-FreeParticleNodes.Tpo $(DEPDIR)/pi-FreeParticleNodes.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeParticleNodes.cc' object='pi-FreeParticleNodes.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-FreeParticleNodes.obj `if test -f 'FreeParticleNodes.cc'; then $(CYGPATH_W) 'FreeParticleNodes.cc'; else $(CYGPATH_W) '$(srcdir)/FreeParticleNodes.cc'; fi`
 
 pi-FreeTensorMover.o: FreeTensorMover.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-FreeTensorMover.o -MD -MP -MF $(DEPDIR)/pi-FreeTensorMover.Tpo -c -o pi-FreeTensorMover.o `test -f 'FreeTensorMover.cc' || echo '$(srcdir)/'`FreeTensorMover.cc
@@ -1566,20 +1507,6 @@ pi-GrapheneAction.obj: GrapheneAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='GrapheneAction.cc' object='pi-GrapheneAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-GrapheneAction.obj `if test -f 'GrapheneAction.cc'; then $(CYGPATH_W) 'GrapheneAction.cc'; else $(CYGPATH_W) '$(srcdir)/GrapheneAction.cc'; fi`
-
-pi-GreenDipoleMEstimator.o: GreenDipoleMEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-GreenDipoleMEstimator.o -MD -MP -MF $(DEPDIR)/pi-GreenDipoleMEstimator.Tpo -c -o pi-GreenDipoleMEstimator.o `test -f 'GreenDipoleMEstimator.cc' || echo '$(srcdir)/'`GreenDipoleMEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-GreenDipoleMEstimator.Tpo $(DEPDIR)/pi-GreenDipoleMEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='GreenDipoleMEstimator.cc' object='pi-GreenDipoleMEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-GreenDipoleMEstimator.o `test -f 'GreenDipoleMEstimator.cc' || echo '$(srcdir)/'`GreenDipoleMEstimator.cc
-
-pi-GreenDipoleMEstimator.obj: GreenDipoleMEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-GreenDipoleMEstimator.obj -MD -MP -MF $(DEPDIR)/pi-GreenDipoleMEstimator.Tpo -c -o pi-GreenDipoleMEstimator.obj `if test -f 'GreenDipoleMEstimator.cc'; then $(CYGPATH_W) 'GreenDipoleMEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/GreenDipoleMEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-GreenDipoleMEstimator.Tpo $(DEPDIR)/pi-GreenDipoleMEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='GreenDipoleMEstimator.cc' object='pi-GreenDipoleMEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-GreenDipoleMEstimator.obj `if test -f 'GreenDipoleMEstimator.cc'; then $(CYGPATH_W) 'GreenDipoleMEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/GreenDipoleMEstimator.cc'; fi`
 
 pi-GridPotential.o: GridPotential.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-GridPotential.o -MD -MP -MF $(DEPDIR)/pi-GridPotential.Tpo -c -o pi-GridPotential.o `test -f 'GridPotential.cc' || echo '$(srcdir)/'`GridPotential.cc
@@ -1679,20 +1606,6 @@ pi-ImagePairAction.obj: ImagePairAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-ImagePairAction.obj `if test -f 'ImagePairAction.cc'; then $(CYGPATH_W) 'ImagePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/ImagePairAction.cc'; fi`
 
-pi-JelliumSlab.o: JelliumSlab.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-JelliumSlab.o -MD -MP -MF $(DEPDIR)/pi-JelliumSlab.Tpo -c -o pi-JelliumSlab.o `test -f 'JelliumSlab.cc' || echo '$(srcdir)/'`JelliumSlab.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-JelliumSlab.Tpo $(DEPDIR)/pi-JelliumSlab.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='JelliumSlab.cc' object='pi-JelliumSlab.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-JelliumSlab.o `test -f 'JelliumSlab.cc' || echo '$(srcdir)/'`JelliumSlab.cc
-
-pi-JelliumSlab.obj: JelliumSlab.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-JelliumSlab.obj -MD -MP -MF $(DEPDIR)/pi-JelliumSlab.Tpo -c -o pi-JelliumSlab.obj `if test -f 'JelliumSlab.cc'; then $(CYGPATH_W) 'JelliumSlab.cc'; else $(CYGPATH_W) '$(srcdir)/JelliumSlab.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-JelliumSlab.Tpo $(DEPDIR)/pi-JelliumSlab.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='JelliumSlab.cc' object='pi-JelliumSlab.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-JelliumSlab.obj `if test -f 'JelliumSlab.cc'; then $(CYGPATH_W) 'JelliumSlab.cc'; else $(CYGPATH_W) '$(srcdir)/JelliumSlab.cc'; fi`
-
 pi-JEstimator.o: JEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-JEstimator.o -MD -MP -MF $(DEPDIR)/pi-JEstimator.Tpo -c -o pi-JEstimator.o `test -f 'JEstimator.cc' || echo '$(srcdir)/'`JEstimator.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-JEstimator.Tpo $(DEPDIR)/pi-JEstimator.Po
@@ -1707,19 +1620,19 @@ pi-JEstimator.obj: JEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-JEstimator.obj `if test -f 'JEstimator.cc'; then $(CYGPATH_W) 'JEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/JEstimator.cc'; fi`
 
-pi-main.o: main.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-main.o -MD -MP -MF $(DEPDIR)/pi-main.Tpo -c -o pi-main.o `test -f 'main.cc' || echo '$(srcdir)/'`main.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-main.Tpo $(DEPDIR)/pi-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cc' object='pi-main.o' libtool=no @AMDEPBACKSLASH@
+pi-JelliumSlab.o: JelliumSlab.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-JelliumSlab.o -MD -MP -MF $(DEPDIR)/pi-JelliumSlab.Tpo -c -o pi-JelliumSlab.o `test -f 'JelliumSlab.cc' || echo '$(srcdir)/'`JelliumSlab.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-JelliumSlab.Tpo $(DEPDIR)/pi-JelliumSlab.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='JelliumSlab.cc' object='pi-JelliumSlab.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-main.o `test -f 'main.cc' || echo '$(srcdir)/'`main.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-JelliumSlab.o `test -f 'JelliumSlab.cc' || echo '$(srcdir)/'`JelliumSlab.cc
 
-pi-main.obj: main.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-main.obj -MD -MP -MF $(DEPDIR)/pi-main.Tpo -c -o pi-main.obj `if test -f 'main.cc'; then $(CYGPATH_W) 'main.cc'; else $(CYGPATH_W) '$(srcdir)/main.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-main.Tpo $(DEPDIR)/pi-main.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cc' object='pi-main.obj' libtool=no @AMDEPBACKSLASH@
+pi-JelliumSlab.obj: JelliumSlab.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-JelliumSlab.obj -MD -MP -MF $(DEPDIR)/pi-JelliumSlab.Tpo -c -o pi-JelliumSlab.obj `if test -f 'JelliumSlab.cc'; then $(CYGPATH_W) 'JelliumSlab.cc'; else $(CYGPATH_W) '$(srcdir)/JelliumSlab.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-JelliumSlab.Tpo $(DEPDIR)/pi-JelliumSlab.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='JelliumSlab.cc' object='pi-JelliumSlab.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-main.obj `if test -f 'main.cc'; then $(CYGPATH_W) 'main.cc'; else $(CYGPATH_W) '$(srcdir)/main.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-JelliumSlab.obj `if test -f 'JelliumSlab.cc'; then $(CYGPATH_W) 'JelliumSlab.cc'; else $(CYGPATH_W) '$(srcdir)/JelliumSlab.cc'; fi`
 
 pi-MainParser.o: MainParser.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-MainParser.o -MD -MP -MF $(DEPDIR)/pi-MainParser.Tpo -c -o pi-MainParser.o `test -f 'MainParser.cc' || echo '$(srcdir)/'`MainParser.cc
@@ -1861,6 +1774,20 @@ pi-OpticalLatticeAction.obj: OpticalLatticeAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-OpticalLatticeAction.obj `if test -f 'OpticalLatticeAction.cc'; then $(CYGPATH_W) 'OpticalLatticeAction.cc'; else $(CYGPATH_W) '$(srcdir)/OpticalLatticeAction.cc'; fi`
 
+pi-PIMCParser.o: PIMCParser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PIMCParser.o -MD -MP -MF $(DEPDIR)/pi-PIMCParser.Tpo -c -o pi-PIMCParser.o `test -f 'PIMCParser.cc' || echo '$(srcdir)/'`PIMCParser.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PIMCParser.Tpo $(DEPDIR)/pi-PIMCParser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PIMCParser.cc' object='pi-PIMCParser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PIMCParser.o `test -f 'PIMCParser.cc' || echo '$(srcdir)/'`PIMCParser.cc
+
+pi-PIMCParser.obj: PIMCParser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PIMCParser.obj -MD -MP -MF $(DEPDIR)/pi-PIMCParser.Tpo -c -o pi-PIMCParser.obj `if test -f 'PIMCParser.cc'; then $(CYGPATH_W) 'PIMCParser.cc'; else $(CYGPATH_W) '$(srcdir)/PIMCParser.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PIMCParser.Tpo $(DEPDIR)/pi-PIMCParser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PIMCParser.cc' object='pi-PIMCParser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PIMCParser.obj `if test -f 'PIMCParser.cc'; then $(CYGPATH_W) 'PIMCParser.cc'; else $(CYGPATH_W) '$(srcdir)/PIMCParser.cc'; fi`
+
 pi-PairAction.o: PairAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairAction.o -MD -MP -MF $(DEPDIR)/pi-PairAction.Tpo -c -o pi-PairAction.o `test -f 'PairAction.cc' || echo '$(srcdir)/'`PairAction.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PairAction.Tpo $(DEPDIR)/pi-PairAction.Po
@@ -1875,34 +1802,6 @@ pi-PairAction.obj: PairAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PairAction.obj `if test -f 'PairAction.cc'; then $(CYGPATH_W) 'PairAction.cc'; else $(CYGPATH_W) '$(srcdir)/PairAction.cc'; fi`
 
-pi-PairDistance.o: PairDistance.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairDistance.o -MD -MP -MF $(DEPDIR)/pi-PairDistance.Tpo -c -o pi-PairDistance.o `test -f 'PairDistance.cc' || echo '$(srcdir)/'`PairDistance.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PairDistance.Tpo $(DEPDIR)/pi-PairDistance.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairDistance.cc' object='pi-PairDistance.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PairDistance.o `test -f 'PairDistance.cc' || echo '$(srcdir)/'`PairDistance.cc
-
-pi-PairDistance.obj: PairDistance.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairDistance.obj -MD -MP -MF $(DEPDIR)/pi-PairDistance.Tpo -c -o pi-PairDistance.obj `if test -f 'PairDistance.cc'; then $(CYGPATH_W) 'PairDistance.cc'; else $(CYGPATH_W) '$(srcdir)/PairDistance.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PairDistance.Tpo $(DEPDIR)/pi-PairDistance.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairDistance.cc' object='pi-PairDistance.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PairDistance.obj `if test -f 'PairDistance.cc'; then $(CYGPATH_W) 'PairDistance.cc'; else $(CYGPATH_W) '$(srcdir)/PairDistance.cc'; fi`
-
-pi-PrimativePairAction.o: PrimativePairAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimativePairAction.o -MD -MP -MF $(DEPDIR)/pi-PrimativePairAction.Tpo -c -o pi-PrimativePairAction.o `test -f 'PrimativePairAction.cc' || echo '$(srcdir)/'`PrimativePairAction.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimativePairAction.Tpo $(DEPDIR)/pi-PrimativePairAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimativePairAction.cc' object='pi-PrimativePairAction.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimativePairAction.o `test -f 'PrimativePairAction.cc' || echo '$(srcdir)/'`PrimativePairAction.cc
-
-pi-PrimativePairAction.obj: PrimativePairAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimativePairAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimativePairAction.Tpo -c -o pi-PrimativePairAction.obj `if test -f 'PrimativePairAction.cc'; then $(CYGPATH_W) 'PrimativePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimativePairAction.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimativePairAction.Tpo $(DEPDIR)/pi-PrimativePairAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimativePairAction.cc' object='pi-PrimativePairAction.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimativePairAction.obj `if test -f 'PrimativePairAction.cc'; then $(CYGPATH_W) 'PrimativePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimativePairAction.cc'; fi`
-
 pi-PairChooser.o: PairChooser.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairChooser.o -MD -MP -MF $(DEPDIR)/pi-PairChooser.Tpo -c -o pi-PairChooser.o `test -f 'PairChooser.cc' || echo '$(srcdir)/'`PairChooser.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PairChooser.Tpo $(DEPDIR)/pi-PairChooser.Po
@@ -1916,6 +1815,20 @@ pi-PairChooser.obj: PairChooser.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairChooser.cc' object='pi-PairChooser.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PairChooser.obj `if test -f 'PairChooser.cc'; then $(CYGPATH_W) 'PairChooser.cc'; else $(CYGPATH_W) '$(srcdir)/PairChooser.cc'; fi`
+
+pi-PairDistance.o: PairDistance.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairDistance.o -MD -MP -MF $(DEPDIR)/pi-PairDistance.Tpo -c -o pi-PairDistance.o `test -f 'PairDistance.cc' || echo '$(srcdir)/'`PairDistance.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PairDistance.Tpo $(DEPDIR)/pi-PairDistance.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairDistance.cc' object='pi-PairDistance.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PairDistance.o `test -f 'PairDistance.cc' || echo '$(srcdir)/'`PairDistance.cc
+
+pi-PairDistance.obj: PairDistance.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairDistance.obj -MD -MP -MF $(DEPDIR)/pi-PairDistance.Tpo -c -o pi-PairDistance.obj `if test -f 'PairDistance.cc'; then $(CYGPATH_W) 'PairDistance.cc'; else $(CYGPATH_W) '$(srcdir)/PairDistance.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PairDistance.Tpo $(DEPDIR)/pi-PairDistance.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairDistance.cc' object='pi-PairDistance.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PairDistance.obj `if test -f 'PairDistance.cc'; then $(CYGPATH_W) 'PairDistance.cc'; else $(CYGPATH_W) '$(srcdir)/PairDistance.cc'; fi`
 
 pi-PairIntegrator.o: PairIntegrator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PairIntegrator.o -MD -MP -MF $(DEPDIR)/pi-PairIntegrator.Tpo -c -o pi-PairIntegrator.o `test -f 'PairIntegrator.cc' || echo '$(srcdir)/'`PairIntegrator.cc
@@ -2057,20 +1970,6 @@ pi-PermutationEstimator.obj: PermutationEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PermutationEstimator.obj `if test -f 'PermutationEstimator.cc'; then $(CYGPATH_W) 'PermutationEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/PermutationEstimator.cc'; fi`
 
-pi-PIMCParser.o: PIMCParser.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PIMCParser.o -MD -MP -MF $(DEPDIR)/pi-PIMCParser.Tpo -c -o pi-PIMCParser.o `test -f 'PIMCParser.cc' || echo '$(srcdir)/'`PIMCParser.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PIMCParser.Tpo $(DEPDIR)/pi-PIMCParser.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PIMCParser.cc' object='pi-PIMCParser.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PIMCParser.o `test -f 'PIMCParser.cc' || echo '$(srcdir)/'`PIMCParser.cc
-
-pi-PIMCParser.obj: PIMCParser.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PIMCParser.obj -MD -MP -MF $(DEPDIR)/pi-PIMCParser.Tpo -c -o pi-PIMCParser.obj `if test -f 'PIMCParser.cc'; then $(CYGPATH_W) 'PIMCParser.cc'; else $(CYGPATH_W) '$(srcdir)/PIMCParser.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PIMCParser.Tpo $(DEPDIR)/pi-PIMCParser.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PIMCParser.cc' object='pi-PIMCParser.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PIMCParser.obj `if test -f 'PIMCParser.cc'; then $(CYGPATH_W) 'PIMCParser.cc'; else $(CYGPATH_W) '$(srcdir)/PIMCParser.cc'; fi`
-
 pi-PositionEstimator.o: PositionEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PositionEstimator.o -MD -MP -MF $(DEPDIR)/pi-PositionEstimator.Tpo -c -o pi-PositionEstimator.o `test -f 'PositionEstimator.cc' || echo '$(srcdir)/'`PositionEstimator.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PositionEstimator.Tpo $(DEPDIR)/pi-PositionEstimator.Po
@@ -2084,20 +1983,6 @@ pi-PositionEstimator.obj: PositionEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PositionEstimator.cc' object='pi-PositionEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PositionEstimator.obj `if test -f 'PositionEstimator.cc'; then $(CYGPATH_W) 'PositionEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/PositionEstimator.cc'; fi`
-
-pi-PrimSHOAction.o: PrimSHOAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimSHOAction.o -MD -MP -MF $(DEPDIR)/pi-PrimSHOAction.Tpo -c -o pi-PrimSHOAction.o `test -f 'PrimSHOAction.cc' || echo '$(srcdir)/'`PrimSHOAction.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimSHOAction.Tpo $(DEPDIR)/pi-PrimSHOAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimSHOAction.cc' object='pi-PrimSHOAction.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimSHOAction.o `test -f 'PrimSHOAction.cc' || echo '$(srcdir)/'`PrimSHOAction.cc
-
-pi-PrimSHOAction.obj: PrimSHOAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimSHOAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimSHOAction.Tpo -c -o pi-PrimSHOAction.obj `if test -f 'PrimSHOAction.cc'; then $(CYGPATH_W) 'PrimSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimSHOAction.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimSHOAction.Tpo $(DEPDIR)/pi-PrimSHOAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimSHOAction.cc' object='pi-PrimSHOAction.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimSHOAction.obj `if test -f 'PrimSHOAction.cc'; then $(CYGPATH_W) 'PrimSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimSHOAction.cc'; fi`
 
 pi-PrimAnisSHOAction.o: PrimAnisSHOAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimAnisSHOAction.o -MD -MP -MF $(DEPDIR)/pi-PrimAnisSHOAction.Tpo -c -o pi-PrimAnisSHOAction.o `test -f 'PrimAnisSHOAction.cc' || echo '$(srcdir)/'`PrimAnisSHOAction.cc
@@ -2113,6 +1998,20 @@ pi-PrimAnisSHOAction.obj: PrimAnisSHOAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimAnisSHOAction.obj `if test -f 'PrimAnisSHOAction.cc'; then $(CYGPATH_W) 'PrimAnisSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimAnisSHOAction.cc'; fi`
 
+pi-PrimColloidalAction.o: PrimColloidalAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimColloidalAction.o -MD -MP -MF $(DEPDIR)/pi-PrimColloidalAction.Tpo -c -o pi-PrimColloidalAction.o `test -f 'PrimColloidalAction.cc' || echo '$(srcdir)/'`PrimColloidalAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimColloidalAction.Tpo $(DEPDIR)/pi-PrimColloidalAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimColloidalAction.cc' object='pi-PrimColloidalAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimColloidalAction.o `test -f 'PrimColloidalAction.cc' || echo '$(srcdir)/'`PrimColloidalAction.cc
+
+pi-PrimColloidalAction.obj: PrimColloidalAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimColloidalAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimColloidalAction.Tpo -c -o pi-PrimColloidalAction.obj `if test -f 'PrimColloidalAction.cc'; then $(CYGPATH_W) 'PrimColloidalAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimColloidalAction.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimColloidalAction.Tpo $(DEPDIR)/pi-PrimColloidalAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimColloidalAction.cc' object='pi-PrimColloidalAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimColloidalAction.obj `if test -f 'PrimColloidalAction.cc'; then $(CYGPATH_W) 'PrimColloidalAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimColloidalAction.cc'; fi`
+
 pi-PrimCosineAction.o: PrimCosineAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimCosineAction.o -MD -MP -MF $(DEPDIR)/pi-PrimCosineAction.Tpo -c -o pi-PrimCosineAction.o `test -f 'PrimCosineAction.cc' || echo '$(srcdir)/'`PrimCosineAction.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimCosineAction.Tpo $(DEPDIR)/pi-PrimCosineAction.Po
@@ -2127,19 +2026,19 @@ pi-PrimCosineAction.obj: PrimCosineAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimCosineAction.obj `if test -f 'PrimCosineAction.cc'; then $(CYGPATH_W) 'PrimCosineAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimCosineAction.cc'; fi`
 
-pi-PrimTorusAction.o: PrimTorusAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimTorusAction.o -MD -MP -MF $(DEPDIR)/pi-PrimTorusAction.Tpo -c -o pi-PrimTorusAction.o `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimTorusAction.Tpo $(DEPDIR)/pi-PrimTorusAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='pi-PrimTorusAction.o' libtool=no @AMDEPBACKSLASH@
+pi-PrimSHOAction.o: PrimSHOAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimSHOAction.o -MD -MP -MF $(DEPDIR)/pi-PrimSHOAction.Tpo -c -o pi-PrimSHOAction.o `test -f 'PrimSHOAction.cc' || echo '$(srcdir)/'`PrimSHOAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimSHOAction.Tpo $(DEPDIR)/pi-PrimSHOAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimSHOAction.cc' object='pi-PrimSHOAction.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimTorusAction.o `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimSHOAction.o `test -f 'PrimSHOAction.cc' || echo '$(srcdir)/'`PrimSHOAction.cc
 
-pi-PrimTorusAction.obj: PrimTorusAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimTorusAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimTorusAction.Tpo -c -o pi-PrimTorusAction.obj `if test -f 'PrimTorusAction.cc'; then $(CYGPATH_W) 'PrimTorusAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimTorusAction.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimTorusAction.Tpo $(DEPDIR)/pi-PrimTorusAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='pi-PrimTorusAction.obj' libtool=no @AMDEPBACKSLASH@
+pi-PrimSHOAction.obj: PrimSHOAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimSHOAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimSHOAction.Tpo -c -o pi-PrimSHOAction.obj `if test -f 'PrimSHOAction.cc'; then $(CYGPATH_W) 'PrimSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimSHOAction.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimSHOAction.Tpo $(DEPDIR)/pi-PrimSHOAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimSHOAction.cc' object='pi-PrimSHOAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimTorusAction.obj `if test -f 'PrimTorusAction.cc'; then $(CYGPATH_W) 'PrimTorusAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimTorusAction.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimSHOAction.obj `if test -f 'PrimSHOAction.cc'; then $(CYGPATH_W) 'PrimSHOAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimSHOAction.cc'; fi`
 
 pi-PrimShellAction.o: PrimShellAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimShellAction.o -MD -MP -MF $(DEPDIR)/pi-PrimShellAction.Tpo -c -o pi-PrimShellAction.o `test -f 'PrimShellAction.cc' || echo '$(srcdir)/'`PrimShellAction.cc
@@ -2155,19 +2054,33 @@ pi-PrimShellAction.obj: PrimShellAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimShellAction.obj `if test -f 'PrimShellAction.cc'; then $(CYGPATH_W) 'PrimShellAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimShellAction.cc'; fi`
 
-pi-PrimColloidalAction.o: PrimColloidalAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimColloidalAction.o -MD -MP -MF $(DEPDIR)/pi-PrimColloidalAction.Tpo -c -o pi-PrimColloidalAction.o `test -f 'PrimColloidalAction.cc' || echo '$(srcdir)/'`PrimColloidalAction.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimColloidalAction.Tpo $(DEPDIR)/pi-PrimColloidalAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimColloidalAction.cc' object='pi-PrimColloidalAction.o' libtool=no @AMDEPBACKSLASH@
+pi-PrimTorusAction.o: PrimTorusAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimTorusAction.o -MD -MP -MF $(DEPDIR)/pi-PrimTorusAction.Tpo -c -o pi-PrimTorusAction.o `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimTorusAction.Tpo $(DEPDIR)/pi-PrimTorusAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='pi-PrimTorusAction.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimColloidalAction.o `test -f 'PrimColloidalAction.cc' || echo '$(srcdir)/'`PrimColloidalAction.cc
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimTorusAction.o `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
 
-pi-PrimColloidalAction.obj: PrimColloidalAction.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimColloidalAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimColloidalAction.Tpo -c -o pi-PrimColloidalAction.obj `if test -f 'PrimColloidalAction.cc'; then $(CYGPATH_W) 'PrimColloidalAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimColloidalAction.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimColloidalAction.Tpo $(DEPDIR)/pi-PrimColloidalAction.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimColloidalAction.cc' object='pi-PrimColloidalAction.obj' libtool=no @AMDEPBACKSLASH@
+pi-PrimTorusAction.obj: PrimTorusAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimTorusAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimTorusAction.Tpo -c -o pi-PrimTorusAction.obj `if test -f 'PrimTorusAction.cc'; then $(CYGPATH_W) 'PrimTorusAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimTorusAction.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimTorusAction.Tpo $(DEPDIR)/pi-PrimTorusAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='pi-PrimTorusAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimColloidalAction.obj `if test -f 'PrimColloidalAction.cc'; then $(CYGPATH_W) 'PrimColloidalAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimColloidalAction.cc'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimTorusAction.obj `if test -f 'PrimTorusAction.cc'; then $(CYGPATH_W) 'PrimTorusAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimTorusAction.cc'; fi`
+
+pi-PrimativePairAction.o: PrimativePairAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimativePairAction.o -MD -MP -MF $(DEPDIR)/pi-PrimativePairAction.Tpo -c -o pi-PrimativePairAction.o `test -f 'PrimativePairAction.cc' || echo '$(srcdir)/'`PrimativePairAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimativePairAction.Tpo $(DEPDIR)/pi-PrimativePairAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimativePairAction.cc' object='pi-PrimativePairAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimativePairAction.o `test -f 'PrimativePairAction.cc' || echo '$(srcdir)/'`PrimativePairAction.cc
+
+pi-PrimativePairAction.obj: PrimativePairAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-PrimativePairAction.obj -MD -MP -MF $(DEPDIR)/pi-PrimativePairAction.Tpo -c -o pi-PrimativePairAction.obj `if test -f 'PrimativePairAction.cc'; then $(CYGPATH_W) 'PrimativePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimativePairAction.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-PrimativePairAction.Tpo $(DEPDIR)/pi-PrimativePairAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimativePairAction.cc' object='pi-PrimativePairAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-PrimativePairAction.obj `if test -f 'PrimativePairAction.cc'; then $(CYGPATH_W) 'PrimativePairAction.cc'; else $(CYGPATH_W) '$(srcdir)/PrimativePairAction.cc'; fi`
 
 pi-ProbDensityGrid.o: ProbDensityGrid.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ProbDensityGrid.o -MD -MP -MF $(DEPDIR)/pi-ProbDensityGrid.Tpo -c -o pi-ProbDensityGrid.o `test -f 'ProbDensityGrid.cc' || echo '$(srcdir)/'`ProbDensityGrid.cc
@@ -2196,20 +2109,6 @@ pi-QPCAction.obj: QPCAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='QPCAction.cc' object='pi-QPCAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-QPCAction.obj `if test -f 'QPCAction.cc'; then $(CYGPATH_W) 'QPCAction.cc'; else $(CYGPATH_W) '$(srcdir)/QPCAction.cc'; fi`
-
-pi-QuadrupoleMomentEstimator.o: QuadrupoleMomentEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-QuadrupoleMomentEstimator.o -MD -MP -MF $(DEPDIR)/pi-QuadrupoleMomentEstimator.Tpo -c -o pi-QuadrupoleMomentEstimator.o `test -f 'QuadrupoleMomentEstimator.cc' || echo '$(srcdir)/'`QuadrupoleMomentEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-QuadrupoleMomentEstimator.Tpo $(DEPDIR)/pi-QuadrupoleMomentEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='QuadrupoleMomentEstimator.cc' object='pi-QuadrupoleMomentEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-QuadrupoleMomentEstimator.o `test -f 'QuadrupoleMomentEstimator.cc' || echo '$(srcdir)/'`QuadrupoleMomentEstimator.cc
-
-pi-QuadrupoleMomentEstimator.obj: QuadrupoleMomentEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-QuadrupoleMomentEstimator.obj -MD -MP -MF $(DEPDIR)/pi-QuadrupoleMomentEstimator.Tpo -c -o pi-QuadrupoleMomentEstimator.obj `if test -f 'QuadrupoleMomentEstimator.cc'; then $(CYGPATH_W) 'QuadrupoleMomentEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/QuadrupoleMomentEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-QuadrupoleMomentEstimator.Tpo $(DEPDIR)/pi-QuadrupoleMomentEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='QuadrupoleMomentEstimator.cc' object='pi-QuadrupoleMomentEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-QuadrupoleMomentEstimator.obj `if test -f 'QuadrupoleMomentEstimator.cc'; then $(CYGPATH_W) 'QuadrupoleMomentEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/QuadrupoleMomentEstimator.cc'; fi`
 
 pi-RandomNumGenerator.o: RandomNumGenerator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-RandomNumGenerator.o -MD -MP -MF $(DEPDIR)/pi-RandomNumGenerator.Tpo -c -o pi-RandomNumGenerator.o `test -f 'RandomNumGenerator.cc' || echo '$(srcdir)/'`RandomNumGenerator.cc
@@ -2266,48 +2165,6 @@ pi-RingLattice.obj: RingLattice.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='RingLattice.cc' object='pi-RingLattice.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-RingLattice.obj `if test -f 'RingLattice.cc'; then $(CYGPATH_W) 'RingLattice.cc'; else $(CYGPATH_W) '$(srcdir)/RingLattice.cc'; fi`
-
-pi-SectionChooser.o: SectionChooser.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SectionChooser.o -MD -MP -MF $(DEPDIR)/pi-SectionChooser.Tpo -c -o pi-SectionChooser.o `test -f 'SectionChooser.cc' || echo '$(srcdir)/'`SectionChooser.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SectionChooser.Tpo $(DEPDIR)/pi-SectionChooser.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SectionChooser.cc' object='pi-SectionChooser.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SectionChooser.o `test -f 'SectionChooser.cc' || echo '$(srcdir)/'`SectionChooser.cc
-
-pi-SectionChooser.obj: SectionChooser.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SectionChooser.obj -MD -MP -MF $(DEPDIR)/pi-SectionChooser.Tpo -c -o pi-SectionChooser.obj `if test -f 'SectionChooser.cc'; then $(CYGPATH_W) 'SectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/SectionChooser.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SectionChooser.Tpo $(DEPDIR)/pi-SectionChooser.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SectionChooser.cc' object='pi-SectionChooser.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SectionChooser.obj `if test -f 'SectionChooser.cc'; then $(CYGPATH_W) 'SectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/SectionChooser.cc'; fi`
-
-pi-SeedRandom.o: SeedRandom.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SeedRandom.o -MD -MP -MF $(DEPDIR)/pi-SeedRandom.Tpo -c -o pi-SeedRandom.o `test -f 'SeedRandom.cc' || echo '$(srcdir)/'`SeedRandom.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SeedRandom.Tpo $(DEPDIR)/pi-SeedRandom.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SeedRandom.cc' object='pi-SeedRandom.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SeedRandom.o `test -f 'SeedRandom.cc' || echo '$(srcdir)/'`SeedRandom.cc
-
-pi-SeedRandom.obj: SeedRandom.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SeedRandom.obj -MD -MP -MF $(DEPDIR)/pi-SeedRandom.Tpo -c -o pi-SeedRandom.obj `if test -f 'SeedRandom.cc'; then $(CYGPATH_W) 'SeedRandom.cc'; else $(CYGPATH_W) '$(srcdir)/SeedRandom.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SeedRandom.Tpo $(DEPDIR)/pi-SeedRandom.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SeedRandom.cc' object='pi-SeedRandom.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SeedRandom.obj `if test -f 'SeedRandom.cc'; then $(CYGPATH_W) 'SeedRandom.cc'; else $(CYGPATH_W) '$(srcdir)/SeedRandom.cc'; fi`
-
-pi-SerialPaths.o: SerialPaths.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SerialPaths.o -MD -MP -MF $(DEPDIR)/pi-SerialPaths.Tpo -c -o pi-SerialPaths.o `test -f 'SerialPaths.cc' || echo '$(srcdir)/'`SerialPaths.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SerialPaths.Tpo $(DEPDIR)/pi-SerialPaths.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SerialPaths.cc' object='pi-SerialPaths.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SerialPaths.o `test -f 'SerialPaths.cc' || echo '$(srcdir)/'`SerialPaths.cc
-
-pi-SerialPaths.obj: SerialPaths.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SerialPaths.obj -MD -MP -MF $(DEPDIR)/pi-SerialPaths.Tpo -c -o pi-SerialPaths.obj `if test -f 'SerialPaths.cc'; then $(CYGPATH_W) 'SerialPaths.cc'; else $(CYGPATH_W) '$(srcdir)/SerialPaths.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SerialPaths.Tpo $(DEPDIR)/pi-SerialPaths.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SerialPaths.cc' object='pi-SerialPaths.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SerialPaths.obj `if test -f 'SerialPaths.cc'; then $(CYGPATH_W) 'SerialPaths.cc'; else $(CYGPATH_W) '$(srcdir)/SerialPaths.cc'; fi`
 
 pi-SHOAction.o: SHOAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SHOAction.o -MD -MP -MF $(DEPDIR)/pi-SHOAction.Tpo -c -o pi-SHOAction.o `test -f 'SHOAction.cc' || echo '$(srcdir)/'`SHOAction.cc
@@ -2378,6 +2235,48 @@ pi-SHORealNodes.obj: SHORealNodes.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SHORealNodes.cc' object='pi-SHORealNodes.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SHORealNodes.obj `if test -f 'SHORealNodes.cc'; then $(CYGPATH_W) 'SHORealNodes.cc'; else $(CYGPATH_W) '$(srcdir)/SHORealNodes.cc'; fi`
+
+pi-SectionChooser.o: SectionChooser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SectionChooser.o -MD -MP -MF $(DEPDIR)/pi-SectionChooser.Tpo -c -o pi-SectionChooser.o `test -f 'SectionChooser.cc' || echo '$(srcdir)/'`SectionChooser.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SectionChooser.Tpo $(DEPDIR)/pi-SectionChooser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SectionChooser.cc' object='pi-SectionChooser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SectionChooser.o `test -f 'SectionChooser.cc' || echo '$(srcdir)/'`SectionChooser.cc
+
+pi-SectionChooser.obj: SectionChooser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SectionChooser.obj -MD -MP -MF $(DEPDIR)/pi-SectionChooser.Tpo -c -o pi-SectionChooser.obj `if test -f 'SectionChooser.cc'; then $(CYGPATH_W) 'SectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/SectionChooser.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SectionChooser.Tpo $(DEPDIR)/pi-SectionChooser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SectionChooser.cc' object='pi-SectionChooser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SectionChooser.obj `if test -f 'SectionChooser.cc'; then $(CYGPATH_W) 'SectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/SectionChooser.cc'; fi`
+
+pi-SeedRandom.o: SeedRandom.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SeedRandom.o -MD -MP -MF $(DEPDIR)/pi-SeedRandom.Tpo -c -o pi-SeedRandom.o `test -f 'SeedRandom.cc' || echo '$(srcdir)/'`SeedRandom.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SeedRandom.Tpo $(DEPDIR)/pi-SeedRandom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SeedRandom.cc' object='pi-SeedRandom.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SeedRandom.o `test -f 'SeedRandom.cc' || echo '$(srcdir)/'`SeedRandom.cc
+
+pi-SeedRandom.obj: SeedRandom.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SeedRandom.obj -MD -MP -MF $(DEPDIR)/pi-SeedRandom.Tpo -c -o pi-SeedRandom.obj `if test -f 'SeedRandom.cc'; then $(CYGPATH_W) 'SeedRandom.cc'; else $(CYGPATH_W) '$(srcdir)/SeedRandom.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SeedRandom.Tpo $(DEPDIR)/pi-SeedRandom.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SeedRandom.cc' object='pi-SeedRandom.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SeedRandom.obj `if test -f 'SeedRandom.cc'; then $(CYGPATH_W) 'SeedRandom.cc'; else $(CYGPATH_W) '$(srcdir)/SeedRandom.cc'; fi`
+
+pi-SerialPaths.o: SerialPaths.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SerialPaths.o -MD -MP -MF $(DEPDIR)/pi-SerialPaths.Tpo -c -o pi-SerialPaths.o `test -f 'SerialPaths.cc' || echo '$(srcdir)/'`SerialPaths.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SerialPaths.Tpo $(DEPDIR)/pi-SerialPaths.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SerialPaths.cc' object='pi-SerialPaths.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SerialPaths.o `test -f 'SerialPaths.cc' || echo '$(srcdir)/'`SerialPaths.cc
+
+pi-SerialPaths.obj: SerialPaths.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SerialPaths.obj -MD -MP -MF $(DEPDIR)/pi-SerialPaths.Tpo -c -o pi-SerialPaths.obj `if test -f 'SerialPaths.cc'; then $(CYGPATH_W) 'SerialPaths.cc'; else $(CYGPATH_W) '$(srcdir)/SerialPaths.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SerialPaths.Tpo $(DEPDIR)/pi-SerialPaths.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SerialPaths.cc' object='pi-SerialPaths.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SerialPaths.obj `if test -f 'SerialPaths.cc'; then $(CYGPATH_W) 'SerialPaths.cc'; else $(CYGPATH_W) '$(srcdir)/SerialPaths.cc'; fi`
 
 pi-SimInfoParser.o: SimInfoParser.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SimInfoParser.o -MD -MP -MF $(DEPDIR)/pi-SimInfoParser.Tpo -c -o pi-SimInfoParser.o `test -f 'SimInfoParser.cc' || echo '$(srcdir)/'`SimInfoParser.cc
@@ -2589,20 +2488,6 @@ pi-SuperCell.obj: SuperCell.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SuperCell.obj `if test -f 'SuperCell.cc'; then $(CYGPATH_W) 'SuperCell.cc'; else $(CYGPATH_W) '$(srcdir)/SuperCell.cc'; fi`
 
-pi-TradEwaldSum.o: TradEwaldSum.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-TradEwaldSum.o -MD -MP -MF $(DEPDIR)/pi-TradEwaldSum.Tpo -c -o pi-TradEwaldSum.o `test -f 'TradEwaldSum.cc' || echo '$(srcdir)/'`TradEwaldSum.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-TradEwaldSum.Tpo $(DEPDIR)/pi-TradEwaldSum.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='TradEwaldSum.cc' object='pi-TradEwaldSum.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-TradEwaldSum.o `test -f 'TradEwaldSum.cc' || echo '$(srcdir)/'`TradEwaldSum.cc
-
-pi-TradEwaldSum.obj: TradEwaldSum.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-TradEwaldSum.obj -MD -MP -MF $(DEPDIR)/pi-TradEwaldSum.Tpo -c -o pi-TradEwaldSum.obj `if test -f 'TradEwaldSum.cc'; then $(CYGPATH_W) 'TradEwaldSum.cc'; else $(CYGPATH_W) '$(srcdir)/TradEwaldSum.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-TradEwaldSum.Tpo $(DEPDIR)/pi-TradEwaldSum.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='TradEwaldSum.cc' object='pi-TradEwaldSum.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-TradEwaldSum.obj `if test -f 'TradEwaldSum.cc'; then $(CYGPATH_W) 'TradEwaldSum.cc'; else $(CYGPATH_W) '$(srcdir)/TradEwaldSum.cc'; fi`
-
 pi-ThermoEnergyEstimator.o: ThermoEnergyEstimator.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-ThermoEnergyEstimator.o -MD -MP -MF $(DEPDIR)/pi-ThermoEnergyEstimator.Tpo -c -o pi-ThermoEnergyEstimator.o `test -f 'ThermoEnergyEstimator.cc' || echo '$(srcdir)/'`ThermoEnergyEstimator.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-ThermoEnergyEstimator.Tpo $(DEPDIR)/pi-ThermoEnergyEstimator.Po
@@ -2630,6 +2515,20 @@ pi-TimpQPC.obj: TimpQPC.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='TimpQPC.cc' object='pi-TimpQPC.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-TimpQPC.obj `if test -f 'TimpQPC.cc'; then $(CYGPATH_W) 'TimpQPC.cc'; else $(CYGPATH_W) '$(srcdir)/TimpQPC.cc'; fi`
+
+pi-TradEwaldSum.o: TradEwaldSum.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-TradEwaldSum.o -MD -MP -MF $(DEPDIR)/pi-TradEwaldSum.Tpo -c -o pi-TradEwaldSum.o `test -f 'TradEwaldSum.cc' || echo '$(srcdir)/'`TradEwaldSum.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-TradEwaldSum.Tpo $(DEPDIR)/pi-TradEwaldSum.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='TradEwaldSum.cc' object='pi-TradEwaldSum.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-TradEwaldSum.o `test -f 'TradEwaldSum.cc' || echo '$(srcdir)/'`TradEwaldSum.cc
+
+pi-TradEwaldSum.obj: TradEwaldSum.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-TradEwaldSum.obj -MD -MP -MF $(DEPDIR)/pi-TradEwaldSum.Tpo -c -o pi-TradEwaldSum.obj `if test -f 'TradEwaldSum.cc'; then $(CYGPATH_W) 'TradEwaldSum.cc'; else $(CYGPATH_W) '$(srcdir)/TradEwaldSum.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-TradEwaldSum.Tpo $(DEPDIR)/pi-TradEwaldSum.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='TradEwaldSum.cc' object='pi-TradEwaldSum.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-TradEwaldSum.obj `if test -f 'TradEwaldSum.cc'; then $(CYGPATH_W) 'TradEwaldSum.cc'; else $(CYGPATH_W) '$(srcdir)/TradEwaldSum.cc'; fi`
 
 pi-TwoPairChooser.o: TwoPairChooser.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-TwoPairChooser.o -MD -MP -MF $(DEPDIR)/pi-TwoPairChooser.Tpo -c -o pi-TwoPairChooser.o `test -f 'TwoPairChooser.cc' || echo '$(srcdir)/'`TwoPairChooser.cc
@@ -2700,20 +2599,6 @@ pi-VirialEnergyEstimator.obj: VirialEnergyEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='VirialEnergyEstimator.cc' object='pi-VirialEnergyEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-VirialEnergyEstimator.obj `if test -f 'VirialEnergyEstimator.cc'; then $(CYGPATH_W) 'VirialEnergyEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/VirialEnergyEstimator.cc'; fi`
-
-pi-VVCorrelationEstimator.o: VVCorrelationEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-VVCorrelationEstimator.o -MD -MP -MF $(DEPDIR)/pi-VVCorrelationEstimator.Tpo -c -o pi-VVCorrelationEstimator.o `test -f 'VVCorrelationEstimator.cc' || echo '$(srcdir)/'`VVCorrelationEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-VVCorrelationEstimator.Tpo $(DEPDIR)/pi-VVCorrelationEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='VVCorrelationEstimator.cc' object='pi-VVCorrelationEstimator.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-VVCorrelationEstimator.o `test -f 'VVCorrelationEstimator.cc' || echo '$(srcdir)/'`VVCorrelationEstimator.cc
-
-pi-VVCorrelationEstimator.obj: VVCorrelationEstimator.cc
-@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-VVCorrelationEstimator.obj -MD -MP -MF $(DEPDIR)/pi-VVCorrelationEstimator.Tpo -c -o pi-VVCorrelationEstimator.obj `if test -f 'VVCorrelationEstimator.cc'; then $(CYGPATH_W) 'VVCorrelationEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/VVCorrelationEstimator.cc'; fi`
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-VVCorrelationEstimator.Tpo $(DEPDIR)/pi-VVCorrelationEstimator.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='VVCorrelationEstimator.cc' object='pi-VVCorrelationEstimator.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-VVCorrelationEstimator.obj `if test -f 'VVCorrelationEstimator.cc'; then $(CYGPATH_W) 'VVCorrelationEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/VVCorrelationEstimator.cc'; fi`
 
 pi-WalkingChooser.o: WalkingChooser.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-WalkingChooser.o -MD -MP -MF $(DEPDIR)/pi-WalkingChooser.Tpo -c -o pi-WalkingChooser.o `test -f 'WalkingChooser.cc' || echo '$(srcdir)/'`WalkingChooser.cc
@@ -2868,6 +2753,20 @@ pi-XMLWriter.obj: XMLWriter.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='XMLWriter.cc' object='pi-XMLWriter.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-XMLWriter.obj `if test -f 'XMLWriter.cc'; then $(CYGPATH_W) 'XMLWriter.cc'; else $(CYGPATH_W) '$(srcdir)/XMLWriter.cc'; fi`
+
+pi-main.o: main.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-main.o -MD -MP -MF $(DEPDIR)/pi-main.Tpo -c -o pi-main.o `test -f 'main.cc' || echo '$(srcdir)/'`main.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-main.Tpo $(DEPDIR)/pi-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cc' object='pi-main.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-main.o `test -f 'main.cc' || echo '$(srcdir)/'`main.cc
+
+pi-main.obj: main.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-main.obj -MD -MP -MF $(DEPDIR)/pi-main.Tpo -c -o pi-main.obj `if test -f 'main.cc'; then $(CYGPATH_W) 'main.cc'; else $(CYGPATH_W) '$(srcdir)/main.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-main.Tpo $(DEPDIR)/pi-main.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='main.cc' object='pi-main.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-main.obj `if test -f 'main.cc'; then $(CYGPATH_W) 'main.cc'; else $(CYGPATH_W) '$(srcdir)/main.cc'; fi`
 
 .f.o:
 	$(F77COMPILE) -c -o $@ $<

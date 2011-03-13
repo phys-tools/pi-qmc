@@ -34,14 +34,17 @@ public:
   /// Construct by giving the name of the estimator.
   Estimator(const std::string& name) : name(name) {}
   /// Construct by giving the name of the estimator.
-  Estimator(const std::string& name, const std::string& unitName) 
-    : name(name), unitName(unitName) {}
+  Estimator(const std::string &name, const std::string &typeString,
+            const std::string &unitName) 
+    : name(name), typeString(typeString), unitName(unitName) {}
   /// Virtual destructor.
   virtual ~Estimator() {}
   /// Get the name of the estimator.
   const std::string& getName() const {return name;}
   /// Get the name of the unit for the estimator.
   const std::string& getUnitName() const {return unitName;}
+  /// Get the type string for this estimators.
+  const std::string& getTypeString() const {return typeString;}
   /// Evaluate estimator for a path configuration.
   virtual void evaluate(const Paths&)=0;
   /// Average over clones.
@@ -53,7 +56,9 @@ public:
 private:
   /// The name of the estimator.
   const std::string name;
-  /// The unit name;
+  /// The type string.
+  const std::string typeString;
+  /// The unit name.
   const std::string unitName;
 };
 #endif

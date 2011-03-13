@@ -34,9 +34,9 @@ public:
   typedef blitz::Array<double, 1> Array;
   typedef blitz::Array<int, 1> IArray;
   typedef blitz::TinyVector<double, NDIM> Vec;
-  /// Constructor by providing SimulationInfo, field strength in
-  /// atomic units (Ha/a0*e), physical region center and width,
-  /// and direction index..
+  /// Construct by providing SimulationInfo, field strength in
+  /// atomic units @f$\mathrm{Ha}/a_0 e@f$, physical region center and width,
+  /// and direction index.
   EFieldAction(const SimulationInfo& simInfo, double strength,
      double center, double width, int idir);
   /// Virtual destructor.

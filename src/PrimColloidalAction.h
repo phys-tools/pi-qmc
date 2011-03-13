@@ -48,7 +48,7 @@ private:
   /// The timestep.
   const double tau;
   /// The interaction parameters.
-  const double B1, B2, V_lig, V_cdse, V_cdte;
+  const double B1, B2, V_lig, V_cdte, V_cdse;
   /// The number of dimensions (can be less than NDIM, i.e., to make a wire).
   const int ndim;
   /// The first particle in this interaction.

@@ -45,11 +45,7 @@
 #include "ThermoEnergyEstimator.h"
 #include "VirialEnergyEstimator.h"
 #include "DipoleMomentEstimator.h"
-#include "GreenDipoleMEstimator.h"
-#include "QuadrupoleMomentEstimator.h"
-#include "VVCorrelationEstimator.h"
 #include "BondLengthEstimator.h"
-#include "BondLengthTwoEstimator.h"
 #include "FrequencyEstimator.h"
 #include "spin/SpinEstimator.h"
 #include "PositionEstimator.h"
@@ -179,40 +175,12 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       else if (component=="y") index=1;
       manager->add(new DipoleMomentEstimator(simInfo, index));
     }
-    if (name=="GreenDipoleMEstimator") {
-      std::string component=getStringAttribute(estNode,"component");
-      int index=2; //default use z component
-      if (component=="x") index=0;
-      else if (component=="y") index=1;
-      manager->add(new GreenDipoleMEstimator(simInfo, index, mpi));
-    }	
-    if (name=="QuadrupoleMomentEstimator") {
-      std::string component=getStringAttribute(estNode,"component");
-      int index=5; //default use zz component (Q33)
-      if (component=="xx") index=0;
-      else if (component=="xy") index=1;
-      else if (component=="xz") index=2;
-      else if (component=="yy") index=3;
-      else if (component=="yz") index=4;
-      else if (component=="zz") index=5;
-      manager->add(new QuadrupoleMomentEstimator(simInfo, index));
-    }
-    if (name=="VVCorrelationEstimator") {
-      manager->add(new VVCorrelationEstimator(simInfo));
-    }
     if (name=="BondLengthEstimator") {
       std::string species1=getStringAttribute(estNode,"species1");
       std::string species2=getStringAttribute(estNode,"species2");
       std::string unitName=getStringAttribute(estNode,"unit");
       manager->add(new BondLengthEstimator(simInfo,simInfo.getSpecies(species1)
 			      ,simInfo.getSpecies(species2),unitName));
-    }
-    if (name=="BondLengthTwoEstimator") {
-      std::string species1=getStringAttribute(estNode,"species1");
-      std::string species2=getStringAttribute(estNode,"species2");
-      manager->add(new BondLengthTwoEstimator(simInfo,
-                               simInfo.getSpecies(species1),
-			       simInfo.getSpecies(species2)));
     }
     if (name=="FrequencyEstimator") {
       std::string species1=getStringAttribute(estNode,"species1");

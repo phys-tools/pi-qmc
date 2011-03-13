@@ -25,7 +25,8 @@
 
 AngularMomentumEstimator::AngularMomentumEstimator(
   const SimulationInfo& simInfo, PhaseModel* phase)
-  : ScalarEstimator("angular_momentum"), angM(0), angMtot(0), angMnorm(0),
+  : ScalarEstimator("angular_momentum","scalar/angular-momentum","",1.,0.),
+    angM(0), angMtot(0), angMnorm(0),
     phaseModel(phase), npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), 
     r1(npart), r2(npart), grad(npart) {
 }

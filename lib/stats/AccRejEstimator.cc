@@ -24,7 +24,8 @@
 #include "MPIManager.h"
 
 AccRejEstimator::AccRejEstimator(const std::string& name, const int nlevel)
-  : Estimator(name), nlevel(nlevel), naccept(nlevel), ntrial(nlevel),
+  : Estimator(name,"acc-rej/multilevel",""),
+    nlevel(nlevel), naccept(nlevel), ntrial(nlevel),
     sum(nlevel) {
   naccept=0; ntrial=0; sum=0;
 }

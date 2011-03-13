@@ -32,8 +32,8 @@ public:
   typedef blitz::TinyVector<int,N> IVecN;
   typedef blitz::TinyVector<double,N> VecN;
   /// Construct by giving the name and size.
-  BlitzArrayBlkdEst(const std::string& name, const IVecN& n,
-                    bool hasError);
+  BlitzArrayBlkdEst(const std::string &name, const std::string &typeString,
+                    const IVecN &n, bool hasError);
   /// Virtual destructor.
   virtual ~BlitzArrayBlkdEst() {}
   /// Clear the value.
@@ -84,8 +84,9 @@ protected:
 
 template <int N>
 BlitzArrayBlkdEst<N>::BlitzArrayBlkdEst(const std::string& name, 
-  const IVecN& n, bool hasError)
- : ArrayBlockedEstimator(name,hasError), n(n), value(n), accumvalue(n),
+  const std::string& typeString, const IVecN& n, bool hasError)
+ : ArrayBlockedEstimator(name,typeString,hasError),
+   n(n), value(n), accumvalue(n),
    accumvalue2(hasError?n:n*0), norm(0), accumnorm(0),
    hasError(hasError), iblock(0), scale(0), origin(0) {
   value=0; accumvalue=0; accumvalue2=0;

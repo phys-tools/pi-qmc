@@ -53,7 +53,7 @@ public:
                   const Species *speciesList, const int nspecies, const VecN &min, 
                   const VecN &max, const IVecN &nbin, const DistN &dist,
                   MPIManager *mpi) 
-    : BlitzArrayBlkdEst<N>(name,nbin,true), 
+    : BlitzArrayBlkdEst<N>(name,"array/pair-correlation",nbin,true), 
     min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist), nspecies(nspecies),
       cell(*simInfo.getSuperCell()), temp(nbin), mpi(mpi) {
   

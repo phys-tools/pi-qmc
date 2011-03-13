@@ -36,7 +36,7 @@ DensCountEstimator::DensCountEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species *spec,
     const Vec &min, const Vec &max, const IVec &nbin, const IVecN &nbinN,
     const DistArray &dist, MPIManager *mpi) 
-  : BlitzArrayBlkdEst<NDIM+1>(name,nbinN,false),
+  : BlitzArrayBlkdEst<NDIM+1>(name,"dynamic-array/density-count",nbinN,false),
     min(min), deltaInv(nbin/(max-min)), nbin(nbin), nbinN(nbinN), dist(dist),
     cell(*simInfo.getSuperCell()),temp(nbinN),count(nbin), 
     ifirst(spec->ifirst), npart(spec->count), mpi(mpi) {

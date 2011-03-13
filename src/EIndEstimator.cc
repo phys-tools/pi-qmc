@@ -30,7 +30,7 @@
 EIndEstimator::EIndEstimator(const SimulationInfo& simInfo,
   const CoulombAction* coulAction, const int nfreq, 
   const int nbin, const int ndbin, const int nstride, MPIManager *mpi)
-  : BlitzArrayBlkdEst<3>("eind",
+  : BlitzArrayBlkdEst<3>("eind","dynamic-array/induced-e-field",
                          IVecN(2*ndbin-1,nbin,nfreq),true), 
     coulAction(coulAction), npart(simInfo.getNPart()), 
     nslice(simInfo.getNSlice()), nfreq(nfreq), nbin(nbin), ndbin(ndbin),

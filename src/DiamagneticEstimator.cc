@@ -26,7 +26,7 @@
 
 DiamagneticEstimator::DiamagneticEstimator(const SimulationInfo& simInfo,
   double temperature, const std::string& unitName, double scale)
-  : ScalarEstimator("chiM",unitName,scale,0.),
+  : ScalarEstimator("chiM","scalar/diamagnetism",unitName,scale,0.),
     value(0.), area(0.), term2(0.), norm(0.),
     temperature(temperature),q(simInfo.getNPart()),
     coef(simInfo.getNPart()), tauTerm(0) {

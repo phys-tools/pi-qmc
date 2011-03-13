@@ -19,9 +19,9 @@
 #endif
 #include "ArrayBlockedEstimator.h"
 
-ArrayBlockedEstimator::ArrayBlockedEstimator(const std::string& name,
-   bool hasError)
- : Estimator(name), hasErrorFlag(hasError) {
+ArrayBlockedEstimator::ArrayBlockedEstimator(const std::string &name,
+   const std::string &typeString, bool hasError)
+ : Estimator(name,typeString,""), hasErrorFlag(hasError) {
 }
 
 ArrayBlockedEstimator::~ArrayBlockedEstimator() {}

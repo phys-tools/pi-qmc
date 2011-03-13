@@ -35,11 +35,14 @@ void AsciiReportBuilder::startWritingGroup(EstimatorManager& manager) {
   file << "#";
   for (EstimatorManager::EstimatorIter est=manager.estimator.begin();
        est!=manager.estimator.end(); ++est) {
-    file << "\"" << (*est)->getName();
+    const std::string typeString = (*est)->getTypeString();
+    if (typeString.substr(0,6)=="scalar") {
+      file << "\"" << (*est)->getName();
    
-    const std::string& unitName((*est)->getUnitName());
-    if (unitName!="") file << " (" << unitName << ")";
-    file << "\" ";
+      const std::string& unitName((*est)->getUnitName());
+      if (unitName!="") file << " (" << unitName << ")";
+      file << "\" ";
+    }
   }
   file << std::endl;
 }

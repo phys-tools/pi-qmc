@@ -31,7 +31,8 @@ ThermoEnergyEstimator::ThermoEnergyEstimator(
   const SimulationInfo& simInfo, const Action* action,
   const DoubleAction* doubleAction, MPIManager *mpi,
   const std::string& unitName, double scale, double shift)
-  : ScalarEstimator("thermo_energy",unitName,scale,shift),
+  : ScalarEstimator("thermo_energy","scalar-energy/thermo-energy",
+                    unitName,scale,shift),
     energy(0), etot(0), enorm(0), action(action), doubleAction(doubleAction),
     mpi(mpi) {
 }

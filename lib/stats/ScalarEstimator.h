@@ -28,8 +28,8 @@ public:
   /// Construct by giving the name.
   ScalarEstimator(const std::string& name);
   /// Construct by giving the name.
-  ScalarEstimator(const std::string& name, const std::string& unitName,
-                  double shift, double scale);
+  ScalarEstimator(const std::string &name, const std::string &typeString,
+                  const std::string &unitName, double shift, double scale);
   /// Virtual destructor.
   virtual ~ScalarEstimator() {}
   /// Get the value.

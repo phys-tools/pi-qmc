@@ -23,7 +23,9 @@
 PositionEstimator::PositionEstimator(const SimulationInfo& simInfo, const Species& species,
                                      const int index)
   : ScalarEstimator(index==0 ? "position_x_"+species.name : 
-                    index==1 ? "position_y_"+species.name : "position_z_"+species.name),
+                    index==1 ? "position_y_"+species.name 
+                             : "position_z_"+species.name,
+                    "scalar-length/position","",1.,0.),
     position(0), ptot(0), pnorm(0), index(index),
     names(simInfo.getNPart()), spec(species.name) {
     for (int i=0; i<names.size(); ++i)

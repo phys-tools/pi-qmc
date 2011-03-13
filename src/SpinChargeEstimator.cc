@@ -30,7 +30,7 @@
 SpinChargeEstimator::SpinChargeEstimator(const SimulationInfo& simInfo,
   const Species &sup, const Species &sdn, const int nfreq,
   const int nbin, const int ndbin, const int nstride, MPIManager *mpi)
-  : BlitzArrayBlkdEst<5>("spincharge",
+  : BlitzArrayBlkdEst<5>("spincharge","dynamic-array/spin-charge",
                          IVecN(2*ndbin-1,nbin,2,2,nfreq),true), 
     npart(simInfo.getNPart()), nslice(simInfo.getNSlice()),
     nfreq(nfreq), nbin(nbin), ndbin(ndbin), nstride(nstride),

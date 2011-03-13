@@ -31,7 +31,8 @@
 
 JEstimator::JEstimator(const SimulationInfo& simInfo, int nbfield,
     double bmax, MPIManager *mpi)
-  : BlitzArrayBlkdEst<2>("exchange", IVecN(2,nbfield), true), 
+  : BlitzArrayBlkdEst<2>("exchange", "array/singlet-triplet",
+                         IVecN(2,nbfield), true), 
     npart(simInfo.getNPart()),
     mpi(mpi), bstep(bmax/(nbfield-1.)), nbfield(nbfield) {
   value = 0.;

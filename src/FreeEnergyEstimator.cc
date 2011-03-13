@@ -33,7 +33,8 @@
 #include <iostream>
 FreeEnergyEstimator::FreeEnergyEstimator(const SimulationInfo& simInfo,
   int nmodel, MPIManager *mpi)
-  : BlitzArrayBlkdEst<1>("free_energy", IVecN(nmodel), true), 
+  : BlitzArrayBlkdEst<1>("free_energy", "histogram/free-energy",
+                         IVecN(nmodel), true), 
     mpi(mpi) {
   value = 0.;
   norm = 0;

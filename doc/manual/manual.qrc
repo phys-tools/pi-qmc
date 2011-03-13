@@ -7,6 +7,7 @@
     <file>Introduction.xhtml</file>
     <file>Interactions.xhtml</file>
     <file>CoulombAction.xhtml</file>
+    <file>Estimators.xhtml</file>
     <file>ScalarEstimators.xhtml</file>
     <file>DensityEstimators.xhtml</file>
     <file>DynamicResponse.xhtml</file>

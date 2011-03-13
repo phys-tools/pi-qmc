@@ -33,7 +33,8 @@
 FrequencyEstimator::FrequencyEstimator(const SimulationInfo& simInfo,
   const Species& species1, const Species& species2, 
   int nfreq, int nstride, MPIManager *mpi)
-  : BlitzArrayBlkdEst<1>("frequency", IVecN(nfreq),true),
+  : BlitzArrayBlkdEst<1>("frequency", "dynamic-scalar/frequency",
+                         IVecN(nfreq),true),
     npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), 
     nfreq(nfreq), nstride(nstride), tau(simInfo.getTau()),
     ipart(species1.ifirst), jpart(species2.ifirst+species2.count-1),

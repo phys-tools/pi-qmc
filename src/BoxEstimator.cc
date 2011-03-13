@@ -23,7 +23,8 @@
 BoxEstimator::BoxEstimator(const SimulationInfo& simInfo, const Species& species,
                            const double lower, const double upper, const int index)
   : ScalarEstimator(index==0 ? "box_x_"+species.name : 
-                    index==1 ? "box_y_"+species.name : "box_z_"+species.name),
+                    index==1 ? "box_y_"+species.name : "box_z_"+species.name,
+                    "scalar/in-box","",1.,0.),
     in(0.), intot(0.), innorm(0), low(lower), up(upper), index(index),
     names(simInfo.getNPart()), spec(species.name) {
     for (int i=0; i<names.size(); ++i)

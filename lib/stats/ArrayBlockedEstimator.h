@@ -26,7 +26,8 @@ class Paths;
 class ArrayBlockedEstimator : public Estimator {
 public:
   /// Construct by giving the name.
-  ArrayBlockedEstimator(const std::string& name, bool hasError);
+  ArrayBlockedEstimator(const std::string &name, 
+                        const std::string &typeString, bool hasError);
   /// Virtual destructor.
   virtual ~ArrayBlockedEstimator();
   /// Clear the value.

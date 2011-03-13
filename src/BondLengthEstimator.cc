@@ -28,7 +28,8 @@
 BondLengthEstimator::BondLengthEstimator(const SimulationInfo& simInfo,
   const Species& species1, const Species& species2, const std::string& unitName)
   : ScalarEstimator("bond_length_"+species1.name+"-"+species2.name,
-      unitName,1./simInfo.getUnits()->getLengthScaleIn(unitName),0.),
+      unitName, "scalar-length/bondlength",
+      1./simInfo.getUnits()->getLengthScaleIn(unitName),0.),
     length(0), norm1(0), norm2(0), avlength(0), names(simInfo.getNPart()),
     spec1(species1.name), spec2(species2.name), cell(*simInfo.getSuperCell()) {
   for (int i=0; i<names.size(); ++i)

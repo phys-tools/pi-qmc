@@ -36,7 +36,7 @@ CountCountEstimator::CountCountEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species *spec,
     const Vec &min, const Vec &max, const IVec &nbin, const IVecN &nbinN,
     const DistArray &dist, int nstride, MPIManager *mpi) 
-  : BlitzArrayBlkdEst<2*NDIM+3>(name,nbinN,false),
+  : BlitzArrayBlkdEst<2*NDIM+3>(name,"dynamic-array/count-count",nbinN,false),
     nslice(simInfo.getNSlice()), nfreq(nbinN[2*NDIM+2]), 
     nstride(nstride), maxc(nbinN[2*NDIM]), ntot(product(nbin)),
     min(min), deltaInv(nbin/(max-min)), nbin(nbin), nbinN(nbinN), dist(dist),

@@ -31,7 +31,7 @@
 ConductivityEstimator::ConductivityEstimator(const SimulationInfo& simInfo,
   const int nfreq, const int nbin, const int ndbin, const int nstride,
   MPIManager *mpi)
-  : BlitzArrayBlkdEst<3>("conductivity",
+  : BlitzArrayBlkdEst<3>("conductivity","dynamic-array/conductivity",
                          IVecN(2*ndbin-1,nbin,nfreq),true), 
     npart(simInfo.getNPart()), nslice(simInfo.getNSlice()), 
     nfreq(nfreq), nbin(nbin), ndbin(ndbin), nstride(nstride),

@@ -38,6 +38,7 @@ RingLattice::RingLattice(Paths& paths, double radius, double angle0,
 }
 
 void RingLattice::run() {
+#if NDIM==2 || NDIM==3
   int nslice = paths.getNSlice();
   // Place the particles on the ring.
   int ifirstSlice = paths.getLowestOwnedSlice(false);
@@ -82,4 +83,5 @@ void RingLattice::run() {
     }
   }
   paths.setBuffers();
+#endif
 }

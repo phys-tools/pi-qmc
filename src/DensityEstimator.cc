@@ -36,7 +36,7 @@ DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species *spec,
     const Vec &min, const Vec &max, const IVec &nbin,
     const DistArray &dist, MPIManager *mpi) 
-  : BlitzArrayBlkdEst<NDIM>(name,nbin,false),
+  : BlitzArrayBlkdEst<NDIM>(name,"array/density",nbin,false),
     min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
     cell(*simInfo.getSuperCell()),temp(nbin),
 #ifdef ENABLE_MPI

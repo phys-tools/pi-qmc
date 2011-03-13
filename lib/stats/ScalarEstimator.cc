@@ -24,12 +24,13 @@
 #include "MPIManager.h"
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
-  : Estimator(name,""), scale(1.), shift(0.) {
+  : Estimator(name,"","scalar"), scale(1.), shift(0.) {
 }
 
-ScalarEstimator::ScalarEstimator(const std::string& name,
-  const std::string& unitName, double scale, double shift)
-  : Estimator(name,unitName), scale(scale), shift(shift) {
+ScalarEstimator::ScalarEstimator(const std::string &name,
+  const std::string &typeString, const std::string &unitName,
+  double scale, double shift)
+  : Estimator(name,typeString,unitName), scale(scale), shift(shift) {
 }
 
 void ScalarEstimator::averageOverClones(const MPIManager* mpi) {

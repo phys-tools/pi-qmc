@@ -33,7 +33,8 @@ VirialEnergyEstimator::VirialEnergyEstimator(
   const SimulationInfo& simInfo, const Action* action,
   const DoubleAction* doubleAction, const int nwindow, MPIManager *mpi,
   const std::string& unitName, double scale, double shift)
-  : ScalarEstimator("virial_energy",unitName,scale,shift), 
+  : ScalarEstimator("virial_energy","scalar-energy/virial-energy",
+                    unitName,scale,shift), 
     tau(simInfo.getTau()), energy(0), etot(0), enorm(0), 
     npart(simInfo.getNPart()), action(action), doubleAction(doubleAction),
     r0(npart), rav(npart), fav(npart), cell(*simInfo.getSuperCell()),

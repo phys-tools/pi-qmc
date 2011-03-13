@@ -33,7 +33,7 @@
 #include <iostream>
 PermutationEstimator::PermutationEstimator(const SimulationInfo& simInfo, const std::string& name,
 		       const Species &s1, MPIManager *mpi)
-  : BlitzArrayBlkdEst<1>(name, IVecN(s1.count), true), 
+  : BlitzArrayBlkdEst<1>(name, "histogram/permutation", IVecN(s1.count), true), 
     ifirst(s1.ifirst), nipart(s1.count), npart(simInfo.getNPart()),
     mpi(mpi) {
   value = 0.;

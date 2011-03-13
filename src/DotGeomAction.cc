@@ -30,6 +30,8 @@ DotGeomAction::DotGeomAction(const double tau)
 
 double DotGeomAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {
+  double deltaAction=0;
+#if NDIM==3
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();
@@ -38,9 +40,6 @@ double DotGeomAction::getActionDifference(const MultiLevelSampler& sampler,
   const int npart=sectionBeads.getNPart();
   const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
-  double deltaAction=0;
-#if NDIM==3
-#endif
   const double thickness = 30.23563; // 1.6 nm
   const double height = 75.589075; // 4.0 nm
   const double diameter = 755.89075; // 40.0 nm
@@ -54,7 +53,6 @@ double DotGeomAction::getActionDifference(const MultiLevelSampler& sampler,
       // Add action for moving beads.
       Vec r=movingBeads(iMoving,islice);
       cell.pbc(r);
-#if NDIM==3
       if (r[2]<0) {
         if (r[2]>-thickness) {
           deltaAction += tau * nStride * ((i<npart/2)?ve:-vh); 
@@ -68,12 +66,9 @@ double DotGeomAction::getActionDifference(const MultiLevelSampler& sampler,
           deltaAction += tau * nStride * ((i<npart/2)?egap:0.); 
         }
       }
-#else
-#endif
       // Subtract action for old beads.
       r=sectionBeads(i,islice);
       cell.pbc(r);
-#if NDIM==3
       if (r[2]<0) {
         if (r[2]>-thickness) {
           deltaAction -= tau * nStride * ((i<npart/2)?ve:-vh); 
@@ -87,10 +82,9 @@ double DotGeomAction::getActionDifference(const MultiLevelSampler& sampler,
           deltaAction -= tau * nStride * ((i<npart/2)?egap:0.); 
         }
       }
-#else
-#endif
     }
   }
+#endif
   return deltaAction;
 }
 
@@ -103,6 +97,7 @@ void DotGeomAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
   Vec r=paths(ipart,islice);
   utau = 0;
+#if NDIM==3
   const double thickness = 30.23563; // 1.6 nm
   const double height = 75.589075; // 4.0 nm
   const double diameter = 755.89075; // 40.0 nm
@@ -111,7 +106,6 @@ void DotGeomAction::getBeadAction(const Paths& paths, int ipart, int islice,
   const double vh = 0.004409917; // 0.120 eV
   const double d2over4h = 0.25*diameter*diameter/height;
   const int npart = paths.getNPart();
-#if NDIM==3
   if (r[2]<0) {
     if (r[2]>-thickness) {
       utau += (ipart<npart/2)?ve:-vh; 
@@ -125,7 +119,6 @@ void DotGeomAction::getBeadAction(const Paths& paths, int ipart, int islice,
       utau += (ipart<npart/2)?egap:0.; 
     }
   }
-#else
 #endif
   u=utau*tau;
 }
