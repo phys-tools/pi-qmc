@@ -88,15 +88,19 @@ class ScalarView(QtGui.QWidget):
       self.sigma = math.sqrt(self.var)
       #Compute autocorrelation
       aclen = (self.end-self.start+1)/4
-      a = self.values[self.start:self.end+1] - self.av
-      a = numpy.correlate(a,a[aclen:-aclen],'valid')
-      self.autocorr = (a[aclen:]+a[aclen::-1])/(2.*a[aclen])
-      cut = numpy.where(self.autocorr < 0.)[0]
-      if len(cut)>0:
-        cut = cut[0]
-        if 5*cut<len(self.autocorr): self.autocorr = self.autocorr[:5*cut]
-      self.actime = 2*sum(self.autocorr)-1
-      if self.actime < 1.: self.actime=1.
+      if aclen>1:
+        a = self.values[self.start:self.end+1] - self.av
+        a = numpy.correlate(a,a[aclen:-aclen],'valid')
+        self.autocorr = (a[aclen:]+a[aclen::-1])/(2.*a[aclen])
+        cut = numpy.where(self.autocorr < 0.)[0]
+        if len(cut)>0:
+          cut = cut[0]
+          if 5*cut<len(self.autocorr): self.autocorr = self.autocorr[:5*cut]
+        self.actime = 2*sum(self.autocorr)-1
+        if self.actime < 1.: self.actime=1.
+      else:
+        self.autocorr = numpy.array([1.,0.])
+        self.actime = 1.
       self.err = math.sqrt(self.var*self.actime/(self.end-self.start))
       #Do blocking analysis.
       nblock = int(math.log(self.end-self.start+1,2)-3)

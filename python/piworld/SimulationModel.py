@@ -7,6 +7,7 @@ from ConductivityView import *
 from ScalarView import *
 from DensityView import *
 from PairCFView import *
+from FreeEnergyView import *
 from PermutationView import *
 from SimulationModel import *
 
@@ -52,18 +53,20 @@ class SimulationModel(QtCore.QObject):
     est = (e for e in self.estimators if e.name == name).next() 
     if getattr(est,"view","missing") == "missing":
       est.view = None
-      if est.type == 258:
+      if est.typeString == "dynamic-array/conductivity":
         est.view = ConductivityView(est,self)
-      elif est.type >= 64 and est.type <128:
+      elif est.typeString[:6] == "scalar":
         est.view = ScalarView(est,self)
-      elif est.type == 129:
+      elif est.typeString == "array/density":
         est.view = DensityView(est,self)
-      elif est.type == 1:
+      elif est.typeString == "histogram/permutation":
         est.view = PermutationView(est,self)
-      elif est.type == 130:
+      elif est.typeString == "histogram/free-energy":
+        est.view = FreeEnergyView(est,self)
+      elif est.typeString == "array/pair-correlation":
         est.view = PairCFView(est,self)
       else:
-        print "Mising viewer type %i for %s." % (est.type,est.name)
+        print "Missing viewer type %s for %s." % (est.typeString,est.name)
     return est
 
 def dataFromH5File(project, filename):

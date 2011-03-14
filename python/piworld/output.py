@@ -109,7 +109,7 @@ class EstimatorWidget(QtGui.QWidget):
         for i in range(self.listWidget.count()-1,-1,-1):
           self.listWidget.takeItem(i)
       for node in data.estimators:
-        if node.type >= 0:
+        if node.typeString[-4:] != "-err":
           self.listWidget.addItem(node.name)
     # If name matches previously selected estimator, select it.
     self.listWidget.setSelectionMode(QtGui.QListWidget.SingleSelection)

@@ -22,48 +22,48 @@ class estimatorNode(object):
   """
   Representation of a node in the estimator group of a pimc.h5 file.
   """
-  PERMUTATION = 1
-  SCALAR = 64
-  ENERGY = 72
-  THERMO_ENERGY = 73
-  COULOMB_ENERGY = 74
-  VIRIAL_ENERGY = 75
-  BOND_LENGTH = 97
-  DENSITY = 129
-  PAIR_CORRELATION = 130
-  CONDUCTANCE = 257
-  CONDUCTIVITY = 258
-  def __init__(self,node,type=0):
+  def __init__(self,node,typeString=""):
     self.name = node.name
-    self.type = type
+    self.typeString = typeString
     self.node = node
-    if type==0:
+    # Hack to add type strings to old files.
+    if typeString=="":
       if self.name[:4]=="perm":
-        self.type=estimatorNode.PERMUTATION
+        self.typeString="histogram/permutation"
       if self.name[:3]=="rho":
-        self.type=estimatorNode.DENSITY
+        if self.name[-3:]=="(r)":
+          self.typeString="array/pair-correlation"
+        else:
+          self.typeString="array/density"
       if self.name[:12]=="conductivity":
-        self.type=estimatorNode.CONDUCTIVITY
+        self.typeString="dynamic-array/conductivity"
       if self.name[:11]=="conductance":
-        self.type=estimatorNode.CONDUCTANCE
+        self.typeString="dynamic-array/conductance"
       if self.name[-6:]=="energy":
-        self.type=estimatorNode.ENERGY
+        self.typeString="scalar-energy"
       if self.name=="coulomb_energy":
-        self.type=estimatorNode.COULOMB_ENERGY
+        self.typeString="scalar-energy/coulomb-energy"
       if self.name=="thermo_energy":
-        self.type=estimatorNode.THERMO_ENERGY
+        self.typeString="scalar-energy/thermo-energy"
       if self.name=="virial_energy":
-        self.type=estimatorNode.VIRIAL_ENERGY
+        self.typeString="scalar-energy/virial-energy"
+      if self.name=="free_energy":
+        self.typeString="histogram/free-energy"
       if self.name[:11]=="bond_length":
-        self.type=estimatorNode.BOND_LENGTH
-      if self.type==0 and self.name[:1]=="g":
-        self.type=estimatorNode.PAIR_CORRELATION
-      if self.type==0 and self.name[:12]=="bond_length_":
-        self.type=estimatorNode.BOND_LENGTH
+        self.typeString="scalar-length/bond-length"
+      if self.typeString=="" and (self.name[:1]=="g"or 
+                                  self.name=="bondlength"):
+        self.typeString="array/pair-correlation"
+      if self.typeString=="" and self.name[:12]=="bond_length_":
+        self.typeString="scalar-length/bond-length"
+      if self.name=="winding":
+        self.typeString="histogram/winding"
       if self.name=="chiM":
-        self.type=estimatorNode.SCALAR
+        self.typeString="scalar/diamagnetism"
+      if self.name[:13]=="dipole_moment":
+        self.typeString="scalar"
     if self.name[-4:]=="_err":
-      self.type = -abs(self.type)
+      self.typeString += "-err" 
   
 
 def openFile(name="pimc.h5"):

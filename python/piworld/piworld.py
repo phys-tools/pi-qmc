@@ -99,7 +99,7 @@ class StartQT4(QtGui.QMainWindow):
         self.ui.estimatorList.takeItem(i)
     if data:
       for node in data.estimators:
-        if node.type >= 0:
+        if node.typeString[-4:] != "-err":
           self.ui.estimatorList.addItem(node.name)
     # Remove estimator views from the estimatorViewStack.
     while self.ui.estimatorViewStack.count()>2:
