@@ -440,10 +440,15 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       } else if (modelName=="WireNodes") {
         const double omega=getEnergyAttribute(ctxt->node,"omega");
         const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
+        Vec center;
+        for (int idim=0; idim<NDIM; ++idim) {
+          center[idim]=getLengthAttribute(ctxt->node,
+                                    std::string(dimName).substr(idim,1));
+        }
         int maxMovers=0;
         if (updates) maxMovers=3;
-        nodeModel=new WireNodes(simInfo,species,omega,t,maxlevel,updates,
-                                maxMovers);
+        nodeModel=new WireNodes(simInfo,species,omega,t,center,maxlevel,
+                                updates,maxMovers);
       } else if (modelName=="ExcitonNodes") {
         std::string specName=getStringAttribute(ctxt->node,"species1");
         const Species& species1(simInfo.getSpecies(specName));

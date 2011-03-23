@@ -127,7 +127,7 @@ class ScalarView(QtGui.QWidget):
       start,end = self.model.start, self.model.end
       ax.plot(times[start:end+1],values[start:end+1],color='b')
       av,err = self.model.av, self.model.err
-      ax.axhspan(av-err, av+err, color='y', alpha=0.4)
+      #ax.axhspan(av-err, av+err, color='y', alpha=0.4)
       ax.axhline(y=av, color='k', lw=0.2)
       ax.axis(xmin=start, xmax=end)
       ax.set_xlabel(r"Monte Carlo timestep")

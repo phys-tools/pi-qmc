@@ -39,15 +39,16 @@ extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n,
   const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
 WireNodes::WireNodes(const SimulationInfo &simInfo, const Species &species,
-    const double omega, const double temperature, const int maxlevel,
-    const bool useUpdates, const int maxMovers)
+    const double omega, const double temperature, const Vec &center,
+    const int maxlevel, const bool useUpdates, const int maxMovers)
   : NodeModel("_"+species.name),
     tau(simInfo.getTau()),mass(species.mass),npart(species.count),
     ifirst(species.ifirst), 
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()), pg(0), pgp(0), pgm(0),
-    omega(omega), coshwt(cosh(omega*0.5/temperature)),
+    center(center), omega(omega),
+    coshwt(cosh(omega*0.5/temperature)),
     sinhwt(sinh(omega*0.5/temperature)), c(mass*0.5*omega/sinhwt),
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
@@ -62,7 +63,7 @@ WireNodes::WireNodes(const SimulationInfo &simInfo, const Species &species,
     for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)=ipart;
   }
   std::cout << "WireNodes with temperature = "
-            << temperature << std::endl;
+            << temperature << "and center " << center << std::endl;
   double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
   double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
   pg=new PeriodicGaussian(mass*temperature,cell.a[0],
@@ -89,7 +90,7 @@ WireNodes::evaluate(const VArray &r1, const VArray &r2, const int islice,
     Matrix& mat(*matrix[islice]);
     mat=0;
     for(int jpart=0; jpart<npart; ++jpart) {
-      Vec rj=r1(jpart+ifirst);
+      Vec rj=r1(jpart+ifirst)-center;
       double rj2=0; for (int i=1; i<NDIM; ++i) rj2+=rj[i]*rj[i];
       for(int ipart=0; ipart<npart; ++ipart) {
         // Free particle in idim=0.
@@ -98,7 +99,7 @@ WireNodes::evaluate(const VArray &r1, const VArray &r2, const int islice,
         double ear2=(*pg)(fabs(delta[0]));
         mat(ipart,jpart)=scale*ear2+1e-100;
         // SHO in idim>0.
-        Vec ri=r2(ipart+ifirst);
+        Vec ri=r2(ipart+ifirst)-center;
         double ri2=0, rirj=0;
         for (int i=1; i<NDIM; ++i) {
           ri2+=ri[i]*ri[i];
@@ -193,7 +194,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
   const Matrix& mat(*matrix[islice]);
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
-    Vec rj=r1(jpart+ifirst);
+    Vec rj=r1(jpart+ifirst)-center;
     double rj2=0; for (int i=1; i<NDIM; ++i) rj2+=rj[i]*rj[i];
     for (int ipart=0; ipart<npart; ++ipart) {
       // Free particle in idim=0.
@@ -203,7 +204,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       grad[0]=(*pg).grad(fabs(delta[0]));
       if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
-      Vec ri=r2(ipart+ifirst);
+      Vec ri=r2(ipart+ifirst)-center;
       double ri2=0, rirj=0;
       for (int i=1; i<NDIM; ++i) {
         ri2+=ri[i]*ri[i];
@@ -224,7 +225,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
   }
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
-    Vec ri=r2(ipart+ifirst);
+    Vec ri=r2(ipart+ifirst)-center;
     double ri2=0; for (int i=1; i<NDIM; ++i) ri2+=ri[i]*ri[i];
     for(int jpart=0; jpart<npart; ++jpart) {
       // Free particle in idim=0.
@@ -234,7 +235,7 @@ void WireNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       grad[0]=(*pg).grad(fabs(delta[0]));
       if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
-      Vec rj=r1(jpart+ifirst);
+      Vec rj=r1(jpart+ifirst)-center;
       double rj2=0, rirj=0;
       for (int i=1; i<NDIM; ++i) {
         rj2+=rj[i]*rj[i];
@@ -378,7 +379,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
   const Matrix& mat(*newMatrix[islice]);
   for (int jpart=0; jpart<npart; ++jpart) {
     Vec logGrad=0.0, fgrad=0.0;
-    Vec rj=r1(jpart+wireNodes.ifirst);
+    Vec rj=r1(jpart+wireNodes.ifirst)-wireNodes.center;
     double rj2=0; for (int i=1; i<NDIM; ++i) rj2+=rj[i]*rj[i];
     for (int ipart=0; ipart<npart; ++ipart) {
       // Free particle in idim=0.
@@ -388,7 +389,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
       grad[0]=(*wireNodes.pg).grad(fabs(delta[0]));
       if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
-      Vec ri=r2(ipart+wireNodes.ifirst);
+      Vec ri=r2(ipart+wireNodes.ifirst)-wireNodes.center;
       double ri2=0, rirj=0;
       for (int i=1; i<NDIM; ++i) {
         ri2+=ri[i]*ri[i];
@@ -411,7 +412,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
   }
   for (int ipart=0; ipart<npart; ++ipart) {
     Vec logGrad=0.0, fgrad=0.0;
-    Vec ri=r2(ipart+wireNodes.ifirst);
+    Vec ri=r2(ipart+wireNodes.ifirst)-wireNodes.center;
     double ri2=0; for (int i=1; i<NDIM; ++i) ri2+=ri[i]*ri[i];
     for(int jpart=0; jpart<npart; ++jpart) {
       // Free particle in idim=0.
@@ -421,7 +422,7 @@ void WireNodes::MatrixUpdate::evaluateNewDistance(
       grad[0]=(*wireNodes.pg).grad(fabs(delta[0]));
       if (delta[0]<0) grad[0]=-grad[0];
       // SHO in idim>0.
-      Vec rj=r1(jpart+wireNodes.ifirst);
+      Vec rj=r1(jpart+wireNodes.ifirst)-wireNodes.center;
       double rj2=0, rirj=0;
       for (int i=1; i<NDIM; ++i) {
         rj2+=rj[i]*rj[i];

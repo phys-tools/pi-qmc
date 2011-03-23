@@ -97,7 +97,7 @@ public:
   };
   /// Constructor.
   WireNodes(const SimulationInfo&, const Species&, const double omega,
-            const double temperature, const int maxlevel,
+            const double temperature, const Vec& center, const int maxlevel,
             const bool useUpdates, const int maxMovers);
   /// Virtual destructor.
   virtual ~WireNodes();
@@ -140,6 +140,8 @@ private:
   SuperCell& cell;
   /// A periodic gaussian.
   PeriodicGaussian *pg, *pgp, *pgm;
+  /// The center of the harmonic potential.
+  const Vec center;
   /// The wire confinement strength.
   const double omega; 
   /// More parameters.
