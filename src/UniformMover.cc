@@ -42,7 +42,7 @@ UniformMover::UniformMover(const Vec dist, const MPIManager* mpi)
 UniformMover::~UniformMover() {
  }
 
-double UniformMover::makeMove(VArray& displacement, const int& nMoving) const {
+double UniformMover::makeMove(VArray& displacement, const IArray& movingIndex) const {
   int npart=displacement.size();
   const Vec half = 0.5;
   RandomNumGenerator::makeRand(displacement);

@@ -181,7 +181,7 @@ bool DisplaceMoveSampler::tryMove() {
   int workerID = (mpi) ? mpi->getWorkerID() : 0;
 
   if (workerID==0) accRejEst->tryingMove(0);
-  mover.makeMove(displacement,nmoving);
+  mover.makeMove(displacement,movingIndex);
    if (nworker>1) handleBoundary(iFirstSlice-1, iLastSlice+1, +1);
 
 

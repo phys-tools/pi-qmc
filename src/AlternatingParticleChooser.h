@@ -1,4 +1,3 @@
-// $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,30 +13,27 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __UniformMover_h_
-#define __UniformMover_h_
-#include <blitz/array.h>
-#include <vector>
+#ifndef __AlternatingParticleChooser_h_
+#define __AlternatingParticleChooser_h_
 
-class MPIManager;
-class DisplaceMoveSampler;
-class DoubleDisplaceMoveSampler;
+#include "ParticleChooser.h"
+class Species;
+class SimulationInfo;
 
-class UniformMover {
-public:
-  /// Typedefs.
-  typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,1> Array;
-  typedef blitz::TinyVector<double,NDIM> Vec;
-  typedef blitz::Array<Vec,1> VArray;
+/// Class for choosing particles from different species in an alternating way.
 
-  UniformMover(const Vec dist, const MPIManager *mpi);
-  virtual ~UniformMover();
-  virtual double makeMove(VArray&, const IArray&) const;
-  // virtual double makeMove(DoubleDisplaceMoveSampler&) const;
-protected:
-  const MPIManager* mpi;
-private:
-  const Vec dist;
+class AlternatingParticleChooser : public ParticleChooser {
+  public:
+    /// Construct by giving 2 Species.
+    AlternatingParticleChooser(const Species&, const Species&, const int);
+    /// Virtual destructor.
+    virtual ~AlternatingParticleChooser();
+    /// Choose a pair of particles.
+    virtual void chooseParticles();
+  protected:
+    /// The number of particles in each species.
+    const int npart1, npart2;
+    /// The index of the first particle in each species.
+    const int ifirst1, ifirst2;
 };
 #endif

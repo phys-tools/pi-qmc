@@ -1,4 +1,4 @@
-// $Id$
+// $Id: ExchangeMover.h $
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,16 +14,17 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __UniformMover_h_
-#define __UniformMover_h_
+#ifndef __ExchangeMover_h_
+#define __ExchangeMover_h_
 #include <blitz/array.h>
 #include <vector>
+#include "UniformMover.h"
 
-class MPIManager;
-class DisplaceMoveSampler;
-class DoubleDisplaceMoveSampler;
+class Paths;
+//class VectorDisplaceMoveSampler;
+//class DoubleVectorDisplaceMoveSampler;
 
-class UniformMover {
+class ExchangeMover : public UniformMover {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
@@ -31,13 +32,12 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<Vec,1> VArray;
 
-  UniformMover(const Vec dist, const MPIManager *mpi);
-  virtual ~UniformMover();
+  ExchangeMover(Paths& paths, const int& iFirstSlice,
+		  const Vec dist, const MPIManager *mpi);
+  virtual ~ExchangeMover();
   virtual double makeMove(VArray&, const IArray&) const;
-  // virtual double makeMove(DoubleDisplaceMoveSampler&) const;
-protected:
-  const MPIManager* mpi;
 private:
-  const Vec dist;
+  Paths& paths;
+  const int iFirstSlice;
 };
 #endif

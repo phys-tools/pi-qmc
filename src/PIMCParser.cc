@@ -29,6 +29,7 @@
 #include "FreeMover.h"
 #include "FreeMoverPBC.h"
 #include "UniformMover.h"
+#include "ExchangeMover.h"
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
 #include "ModelSampler.h"
@@ -62,6 +63,7 @@
 #include "SimpleParticleChooser.h"
 #include "SpeciesParticleChooser.h"
 #include "MultiSpeciesParticleChooser.h"
+#include "AlternatingParticleChooser.h"
 #include "PathReader.h"
 #include "StructReader.h"
 #include "WorkerShifter.h"
@@ -170,7 +172,9 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       algorithm=doubleSectionChooser;
     }
   } else if (name=="SampleDisplaceMove") {
+    std::string moverName=getStringAttribute(ctxt->node, "mover");
     UniformMover* mover(0);
+    ParticleChooser* particleChooser=0;
     Vec dist;
     for (int idim=0; idim<NDIM; ++idim) {
       dist[idim] =getLengthAttribute(ctxt->node,std::string("d")+dimName[idim]);
@@ -179,24 +183,37 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       dist =getLengthAttribute(ctxt->node,"dist");
     int nmoving=getIntAttribute(ctxt->node,"npart");
     if (nmoving==0) nmoving=1;
-    mover = new UniformMover(dist,mpi);
-    bool delayedRejection=getBoolAttribute(ctxt->node,"delayedRejection"); 
-    double newDistFactor=getDoubleAttribute(ctxt->node,"distFactor");
-    if (newDistFactor==0 && delayedRejection) newDistFactor=0.5;
-    int nspecies = getIntAttribute(ctxt->node,"nspecies");
-
-    ParticleChooser* particleChooser=0;std::string speciesName;
-    if (nspecies<=1) {                                               
-      speciesName=getStringAttribute(ctxt->node,"species");
-      std::cout << "Picked species "<< speciesName 
-                << " for displacement." << std::endl;
-      if (speciesName=="" || speciesName=="all") {
- 	particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
-      }else{ 
-	particleChooser 
-          = new SpeciesParticleChooser(simInfo.getSpecies(speciesName),nmoving);
-      }
-    } /*else {
+    std::string speciesName;
+    if (moverName=="Exchange") {
+      nmoving = 2;
+      int iFirstSlice=0;
+      if (doubleAction)
+        iFirstSlice=paths->getLowestOwnedSlice(true);
+      else
+        iFirstSlice=paths->getLowestOwnedSlice(false);
+      mover = new ExchangeMover(*paths, iFirstSlice, dist, mpi);
+      std::string species1Name, species2Name;
+      species1Name = getStringAttribute(ctxt->node,"species1");
+      species2Name = getStringAttribute(ctxt->node,"species2");
+      particleChooser = new AlternatingParticleChooser(
+                             simInfo.getSpecies(species1Name),
+                             simInfo.getSpecies(species2Name), nmoving);
+      std::cout<<"Picked species1 "<<species1Name<<" and species2 "
+               <<species2Name<<" for ExchangeMover."<<std::endl;
+    } else {
+      mover = new UniformMover(dist,mpi);
+      int nspecies = getIntAttribute(ctxt->node,"nspecies");
+      if (nspecies<=1) {                                               
+        speciesName=getStringAttribute(ctxt->node,"species");
+        std::cout << "Picked species "<< speciesName 
+                  << " for displacement." << std::endl;
+        if (speciesName=="" || speciesName=="all") {
+ 	  particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
+        }else{ 
+	  particleChooser 
+            = new SpeciesParticleChooser(simInfo.getSpecies(speciesName),nmoving);
+        }
+      } /*else {
       Species *speciesList = new Species [nspecies];
       for (int ispec=0; ispec<nspecies; ispec++){
 	std::stringstream sispec;
@@ -210,6 +227,10 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
                               speciesList, nspecies, nmoving);
       delete [] speciesList;
       }*/
+    }
+    bool delayedRejection=getBoolAttribute(ctxt->node,"delayedRejection"); 
+    double newDistFactor=getDoubleAttribute(ctxt->node,"distFactor");
+    if (newDistFactor==0 && delayedRejection) newDistFactor=0.5;
     
     int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
     if (doubleAction) {
