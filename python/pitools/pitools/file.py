@@ -22,12 +22,15 @@ class estimatorNode(object):
   """
   Representation of a node in the estimator group of a pimc.h5 file.
   """
-  def __init__(self,node,typeString=""):
-    self.name = node.name
-    self.typeString = typeString
+  def __init__(self,node):
     self.node = node
+    self.name = node.name
+    try:
+      self.typeString = node.getAttr("type")[0]
+    except:
+      self.typeString = ""
     # Hack to add type strings to old files.
-    if typeString=="":
+    if self.typeString=="":
       if self.name[:4]=="perm":
         self.typeString="histogram/permutation"
       if self.name[:3]=="rho":
