@@ -1,4 +1,4 @@
-// $Id: ExchangeMover.h $
+// $Id: CollectiveMover.h $
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,15 +14,16 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __ExchangeMover_h_
-#define __ExchangeMover_h_
+#ifndef __CollectiveMover_h_
+#define __CollectiveMover_h_
 #include <blitz/array.h>
+#include <blitz/tinyvec.h>
 #include <vector>
 #include "UniformMover.h"
 
 class Paths;
 
-class ExchangeMover : public UniformMover {
+class CollectiveMover : public UniformMover {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
@@ -30,12 +31,13 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<Vec,1> VArray;
 
-  ExchangeMover(Paths& paths, const int& iFirstSlice,
-		  const Vec dist, const MPIManager *mpi);
-  virtual ~ExchangeMover();
+  CollectiveMover(Paths& paths, const int& iFirstSlice, const Vec kvec,
+		  const Vec amp, const MPIManager *mpi);
+  virtual ~CollectiveMover();
   virtual double makeMove(VArray&, const IArray&) const;
 private:
   Paths& paths;
   const int iFirstSlice;
+  const Vec kvec, amp;
 };
 #endif

@@ -60,7 +60,8 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-AugmentedNodes.$(OBJEXT) pi-BeadFactory.$(OBJEXT) \
 	pi-BinProbDensity.$(OBJEXT) pi-BondLengthEstimator.$(OBJEXT) \
 	pi-BoxEstimator.$(OBJEXT) pi-CaoBerneAction.$(OBJEXT) \
-	pi-Collect.$(OBJEXT) pi-CompositeAction.$(OBJEXT) \
+	pi-Collect.$(OBJEXT) pi-CollectiveMover.$(OBJEXT) \
+	pi-CompositeAction.$(OBJEXT) \
 	pi-CompositeDoubleAction.$(OBJEXT) \
 	pi-ConditionalDensityGrid.$(OBJEXT) \
 	pi-ConductanceEstimator.$(OBJEXT) \
@@ -309,7 +310,7 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	AnisotropicNodes.cc AperiodicGaussian.cc AugmentedNodes.cc \
 	BeadFactory.cc BinProbDensity.cc BondLengthEstimator.cc \
 	BoxEstimator.cc CaoBerneAction.cc Collect.cc \
-	CompositeAction.cc CompositeDoubleAction.cc \
+	CollectiveMover.cc CompositeAction.cc CompositeDoubleAction.cc \
 	ConditionalDensityGrid.cc ConductanceEstimator.cc \
 	ConductivityEstimator.cc ConductivityEstimator2D.cc \
 	CoulombAction.cc CoulombEnergyEstimator.cc \
@@ -363,8 +364,8 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	AlternatingParticleChooser.h AngularMomentumEstimator.h \
 	AnisotropicNodes.h AperiodicGaussian.h AugmentedNodes.h \
 	BeadFactory.h Beads.h BinProbDensity.h BondLengthEstimator.h \
-	BoxEstimator.h CaoBerneAction.h Collect.h CompositeAction.h \
-	CompositeAlgorithm.h CompositeDoubleAction.h \
+	BoxEstimator.h CaoBerneAction.h Collect.h CollectiveMover.h \
+	CompositeAction.h CompositeAlgorithm.h CompositeDoubleAction.h \
 	ConditionalDensityGrid.h ConductanceEstimator.h \
 	ConductivityEstimator.h ConductivityEstimator2D.h \
 	CoulombAction.h CoulombEnergyEstimator.h CountCountEstimator.h \
@@ -512,6 +513,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-BoxEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CaoBerneAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-Collect.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CollectiveMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CompositeAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-CompositeDoubleAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-ConditionalDensityGrid.Po@am__quote@
@@ -854,6 +856,20 @@ pi-Collect.obj: Collect.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Collect.cc' object='pi-Collect.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-Collect.obj `if test -f 'Collect.cc'; then $(CYGPATH_W) 'Collect.cc'; else $(CYGPATH_W) '$(srcdir)/Collect.cc'; fi`
+
+pi-CollectiveMover.o: CollectiveMover.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CollectiveMover.o -MD -MP -MF $(DEPDIR)/pi-CollectiveMover.Tpo -c -o pi-CollectiveMover.o `test -f 'CollectiveMover.cc' || echo '$(srcdir)/'`CollectiveMover.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CollectiveMover.Tpo $(DEPDIR)/pi-CollectiveMover.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CollectiveMover.cc' object='pi-CollectiveMover.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CollectiveMover.o `test -f 'CollectiveMover.cc' || echo '$(srcdir)/'`CollectiveMover.cc
+
+pi-CollectiveMover.obj: CollectiveMover.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CollectiveMover.obj -MD -MP -MF $(DEPDIR)/pi-CollectiveMover.Tpo -c -o pi-CollectiveMover.obj `if test -f 'CollectiveMover.cc'; then $(CYGPATH_W) 'CollectiveMover.cc'; else $(CYGPATH_W) '$(srcdir)/CollectiveMover.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-CollectiveMover.Tpo $(DEPDIR)/pi-CollectiveMover.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CollectiveMover.cc' object='pi-CollectiveMover.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-CollectiveMover.obj `if test -f 'CollectiveMover.cc'; then $(CYGPATH_W) 'CollectiveMover.cc'; else $(CYGPATH_W) '$(srcdir)/CollectiveMover.cc'; fi`
 
 pi-CompositeAction.o: CompositeAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-CompositeAction.o -MD -MP -MF $(DEPDIR)/pi-CompositeAction.Tpo -c -o pi-CompositeAction.o `test -f 'CompositeAction.cc' || echo '$(srcdir)/'`CompositeAction.cc

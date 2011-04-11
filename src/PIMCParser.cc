@@ -21,6 +21,7 @@
 #include <mpi.h>
 #endif
 #include "PIMCParser.h"
+#include "SuperCell.h"
 #include "SerialPaths.h"
 #include "ParallelPaths.h"
 #include "DoubleParallelPaths.h"
@@ -30,6 +31,7 @@
 #include "FreeMoverPBC.h"
 #include "UniformMover.h"
 #include "ExchangeMover.h"
+#include "CollectiveMover.h"
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
 #include "ModelSampler.h"
@@ -200,6 +202,22 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
                              simInfo.getSpecies(species2Name), nmoving);
       std::cout<<"Picked species1 "<<species1Name<<" and species2 "
                <<species2Name<<" for ExchangeMover."<<std::endl;
+    } else if (moverName=="Collective") {
+      nmoving = simInfo.getNPart();
+      int iFirstSlice=0;
+      if (doubleAction)
+        iFirstSlice=paths->getLowestOwnedSlice(true);
+      else
+        iFirstSlice=paths->getLowestOwnedSlice(false);
+      Vec k;
+      SuperCell* cell = simInfo.getSuperCell();
+      for (int idim=0; idim<NDIM; ++idim) {
+        k[idim] = getDoubleAttribute(ctxt->node,std::string("k")+dimName[idim]);
+	k[idim] *= (2*3.141592654/(cell->a[idim]));
+      }
+      mover = new CollectiveMover(*paths, iFirstSlice, k, dist, mpi);
+      particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
+      std::cout<<"Picked "<<nmoving<<" particles for CollectiveMover."<<std::endl;
     } else {
       mover = new UniformMover(dist,mpi);
       int nspecies = getIntAttribute(ctxt->node,"nspecies");

@@ -20,6 +20,7 @@
 #include <blitz/tinyvec.h>
 #include <vector>
 class Paths;
+class SuperCell;
 class SectionChooser;
 class DoubleSectionChooser;
 class SimulationInfo;

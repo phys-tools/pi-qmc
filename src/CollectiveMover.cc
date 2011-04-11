@@ -1,4 +1,4 @@
-// $Id: ExchangeMover.cc $
+// $Id: CollectiveMover.cc $
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -21,33 +21,42 @@
 #include <mpi.h>
 #endif
 #include "stats/MPIManager.h"
-#include "ExchangeMover.h"
+#include "CollectiveMover.h"
 #include "Paths.h"
 #include "Beads.h"
 #include "RandomNumGenerator.h"
 #include "SuperCell.h"
 #include "SimulationInfo.h"
 #include <cmath>
+
 #include <sstream>
 #include <string>
 
-ExchangeMover::ExchangeMover(Paths& paths, const int& iFirstSlice,
-		 const Vec dist, const MPIManager* mpi)
-  : UniformMover(dist,mpi), paths(paths),
+CollectiveMover::CollectiveMover(Paths& paths, const int& iFirstSlice,
+                 const Vec kvec, const Vec amp, const MPIManager* mpi)
+  : UniformMover(amp,mpi), paths(paths), amp(amp), kvec(kvec),
     iFirstSlice(iFirstSlice) {
+  std::cout<<"CollectiveMover: Amplitude = "<<amp<<", k = "<<kvec<<std::endl;
 }
 
-ExchangeMover::~ExchangeMover() {
+CollectiveMover::~CollectiveMover() {
  }
 
-double ExchangeMover::makeMove(VArray& displacement, const IArray& movingIndex) const {
-  const Vec& bead1 = paths(movingIndex(0), iFirstSlice);
-  const Vec& bead2 = paths(movingIndex(1), iFirstSlice);
-  displacement(0) = bead2-bead1;
-  displacement(1) = bead1-bead2;
+double CollectiveMover::makeMove(VArray& displacement, const IArray& movingIndex) const {
+  int npart = displacement.size();
+  const Vec &referBead = paths(movingIndex(0), iFirstSlice);
+//#ifdef ENABLE_MPI
+//  if (mpi && (mpi->getNWorker())>1) {
+//    mpi->getWorkerComm().Bcast(&(referBead[0]),NDIM,MPI::DOUBLE,0);
+// }
+//#endif
+  for (int ipart=0;ipart<npart;++ipart) {
+    displacement(ipart) = amp * 
+           cos(dot(kvec, paths(ipart,iFirstSlice) - referBead));
+  }
 #ifdef ENABLE_MPI
   if (mpi && (mpi->getNWorker())>1) {
-    mpi->getWorkerComm().Bcast(displacement.data(),2*NDIM,MPI::DOUBLE,0);
+    mpi->getWorkerComm().Bcast(displacement.data(),npart*NDIM,MPI::DOUBLE,0);
  }
 #endif
   return 0; 
