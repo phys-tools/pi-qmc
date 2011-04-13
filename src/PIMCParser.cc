@@ -213,9 +213,19 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       SuperCell* cell = simInfo.getSuperCell();
       for (int idim=0; idim<NDIM; ++idim) {
         k[idim] = getDoubleAttribute(ctxt->node,std::string("k")+dimName[idim]);
-	k[idim] *= (2*3.141592654/(cell->a[idim]));
+	k[idim] *= (2*3.1415926535897/(cell->a[idim]));
       }
-      mover = new CollectiveMover(*paths, iFirstSlice, k, dist, mpi);
+      Vec center;
+      for (int idim=0; idim<NDIM; ++idim) {
+        center[idim]=getLengthAttribute(ctxt->node,dimName.substr(idim,1));
+      }
+      IVec random;
+      for (int idim=0; idim<NDIM; ++idim) {
+        random[idim]=getBoolAttribute(ctxt->node,
+                                      std::string("rand")+dimName[idim])?1:0;
+      }
+      mover = new CollectiveMover(*paths, iFirstSlice, k, dist, center, 
+                                  random, mpi);
       particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
       std::cout<<"Picked "<<nmoving<<" particles for CollectiveMover."<<std::endl;
     } else {
@@ -430,7 +440,7 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     IVec n;
     Vec center;
     for (int idim=0; idim<NDIM; ++idim) {
-      n=getIntAttribute(ctxt->node,std::string("n")+dimName[idim]);
+      n[idim]=getIntAttribute(ctxt->node,std::string("n")+dimName[idim]);
       center[idim]=getLengthAttribute(ctxt->node,
                                       std::string(dimName).substr(idim,1));
     }

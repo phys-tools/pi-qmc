@@ -181,7 +181,7 @@ bool DisplaceMoveSampler::tryMove() {
   int workerID = (mpi) ? mpi->getWorkerID() : 0;
 
   if (workerID==0) accRejEst->tryingMove(0);
-  mover.makeMove(displacement,movingIndex);
+  double logTranProb = mover.makeMove(displacement,movingIndex);
    if (nworker>1) handleBoundary(iFirstSlice-1, iLastSlice+1, +1);
 
 
@@ -201,11 +201,11 @@ bool DisplaceMoveSampler::tryMove() {
     if (acceptReject) { if (nworker>1)  handleBoundary(iFirstSlice-1, iLastSlice+1, -1);return false;}
 
   } else {
-    double acceptProb=exp(-deltaAction); 
+    double acceptProb=exp(-deltaAction+logTranProb); 
     if (RandomNumGenerator::getRand()>acceptProb)  { if (nworker>1) handleBoundary(iFirstSlice-1, iLastSlice+1, -1);return false;}
   }
 #else
-  double acceptProb=exp(-deltaAction);
+  double acceptProb=exp(-deltaAction+logTranProb); 
   if (RandomNumGenerator::getRand()>acceptProb)  { if (nworker>1) handleBoundary(iFirstSlice-1, iLastSlice+1, -1);return false;}
 #endif
   

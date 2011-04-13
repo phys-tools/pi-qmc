@@ -25,7 +25,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -54,7 +54,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="inputTab">
         <attribute name="title">
@@ -69,15 +69,15 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="runTab">
+       <widget class="QWidget" name="docTab">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <attribute name="title">
-         <string>Run</string>
+         <string>Doc</string>
         </attribute>
         <attribute name="toolTip">
-         <string>Setup, Run, and Monitor a Simulation</string>
+         <string>Documentation for the pi Code</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
@@ -87,6 +87,59 @@
              <string>qrc:/doc/index.xhtml</string>
             </url>
            </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="runTab">
+        <attribute name="title">
+         <string>Run</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>Setup, Run, and Monitor a Simulation</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="pathsTab">
+        <attribute name="title">
+         <string>Paths</string>
+        </attribute>
+        <attribute name="toolTip">
+         <string>View Input or Output Paths</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QComboBox" name="pathSelect"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="viewSelect">
+             <item>
+              <property name="text">
+               <string>WorldlineView</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>180</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QStackedWidget" name="pathViewStack">
+           <widget class="QWidget" name="page"/>
+           <widget class="QWidget" name="page_2"/>
           </widget>
          </item>
         </layout>
