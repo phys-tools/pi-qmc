@@ -578,7 +578,7 @@ void EstimatorParser::parseDistance(xmlNodePtr estNode,
     std::string name=getName(distNode);
     if (name=="Cartesian") {
       std::string dirName = getStringAttribute(distNode,"dir");
-      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1));
+      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
       darray.push_back(new Cart(idir));
       min.push_back(getLengthAttribute(distNode,"min"));
       max.push_back(getLengthAttribute(distNode,"max"));

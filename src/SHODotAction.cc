@@ -23,10 +23,13 @@
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
+#include "Species.h"
 
-SHODotAction::SHODotAction(const double tau, const double t, const double v0,
-                           const double k)
-  : tau(tau), t(t), v0(v0), k(k) {
+SHODotAction::SHODotAction(double tau, double t, double v0,
+                           double omega, const Species &species)
+  : tau(tau), t(t), v0(v0), k(species.mass*omega*omega),
+    ifirst(species.ifirst), npart(species.count) {
+std::cout << "SHODotAction: " << species << std::endl;
 std::cout << "thick,v0,mw2: " << t << "," << v0 << "," << k << std::endl;
 }
 
@@ -45,6 +48,7 @@ double SHODotAction::getActionDifference(const MultiLevelSampler& sampler,
 #endif
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
+      if (index(iMoving)<ifirst || index(iMoving)>ifirst+npart) continue;
       const int i=index(iMoving);
       // Add action for moving beads.
       Vec delta=movingBeads(iMoving,islice);
@@ -76,6 +80,7 @@ double SHODotAction::getTotalAction(const Paths& paths,
 
 void SHODotAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
+  if (ipart<ifirst || ipart>ifirst+npart) return;
   Vec delta=paths(ipart,islice);
 #if NDIM==3
   utau=0.5*k*(delta[0]*delta[0]+delta[1]*delta[1]);

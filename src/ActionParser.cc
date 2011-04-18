@@ -364,8 +364,11 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
     } else if (name=="SHODotAction") {
       double t=getLengthAttribute(actNode,"thickness");
       double v0=getEnergyAttribute(actNode,"v0");
-      double k=getDoubleAttribute(actNode,"k");
-      composite->addAction(new SHODotAction(simInfo.getTau(),t,v0,k));
+      double omega=getEnergyAttribute(actNode,"omega");
+      std::string specName=getStringAttribute(actNode,"species");
+      const Species& species(simInfo.getSpecies(specName));
+      composite->addAction(
+        new SHODotAction(simInfo.getTau(),t,v0,omega,species));
       continue;
     } else if (name=="DotGeomAction") {
       composite->addAction(new DotGeomAction(simInfo.getTau()));

@@ -17,6 +17,7 @@
 #ifndef __SHODotAction_h_
 #define __SHODotAction_h_
 class MultiLevelSampler;class DisplaceMoveSampler;
+class Species;
 template <int TDIM> class Beads;
 #include <blitz/array.h>
 #include "Action.h"
@@ -30,8 +31,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor by providing the timestep tau, thickness t, potenial
   /// v0 and spring constant k.
-  SHODotAction(const double tau, const double t, const double v0,
-            const double omega);
+  SHODotAction(double tau, double t, double v0, double omega, const Species&);
   /// Virtual destructor.
   virtual ~SHODotAction() {}
   /// Calculate the difference in action.
@@ -53,5 +53,7 @@ private:
   const double v0;
   /// The spring constant.
   const double k;
+  /// The first particle and particle count for this species.
+  const int ifirst, npart;
 };
 #endif
