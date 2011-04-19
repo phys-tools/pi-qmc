@@ -1,5 +1,5 @@
 //$Id$
-/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2009, 2011 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -287,11 +287,6 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     } else {
       dotdim1=0.; dotdim2=0.;
     }
-    // Calculate d_i+1 (NOTE: commented out calculation of force)
-  //////  for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,+1);//////
-  //////  for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,+1);//////
-  //////  nodeModel->evaluate(r1, r2, 0, false);//////
- //////   nodeModel->evaluateDistance(r1,r2,0,dip1,dip2);//////
     // Calculate the action and the gradient of the action.
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice);
     for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
@@ -303,50 +298,37 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     } else {
       dotdi1=0.; dotdi2=0.;
     }
-    // Now calculate gradient of log of distance to node.
-   ////// nodeModel->evaluateGradLogDist(r1,r2,0,gradd1,gradd2,di1,di2);//////
-    // And calculate the time derivative.
-   ////// nodeModel->evaluateDotDistance(r1,r2,0,dotdi1,dotdi2);//////
-    // Now calulate forces.
+    // For now, forces are zero, so we cannot use the virial estimator.
     force=0.0;
+    // Calculate u and utau.
     if (useManyBodyDistance) {
-      double d12=0., d22=0., d1m2=0., d2m2=0.;
+      double d12=0., d1m2=0., dotd12=0., dotd1m2=0.;
       for (int i=0; i<npart; ++i) {
         d12 += 1./(di1(i)*di1(i));
         d1m2 += 1./(dim1(i)*dim1(i));
-        d22 += 1./(di2(i)*di2(i));
-        d2m2 += 1./(dim2(i)*dim2(i));
+        dotd12 += 1./(dotdi1(i)*dotdi1(i));
+        dotd1m2 += 1./(dotdim1(i)*dotdim1(i));
       }
       double xim1 = 1./sqrt(d12*d1m2);
       double exim1 = exp(-xim1);
       u += log( (1-exim1) );
       utau += xim1*exim1/(tau*(1-exim1)); 
-
+      double dotxim1 = 1./sqrt(dotd1m2*d12)+1./sqrt(d1m2*dotd12);
+      utau -= dotxim1*exim1/(1-exim1); 
     } else {
-    for (int jpart=0; jpart<npart; ++jpart) {
-    ////// double xip1=dip1(jpart)*di1(jpart);//////
-       double xim1=dim1(jpart)*di1(jpart);
-      double dotxim1=dotdim1(jpart)*di1(jpart)+dim1(jpart)*dotdi1(jpart);
-      dotxim1*=tau/(di1(jpart)*dim1(jpart));
-   ////// double xip2=dip2(jpart)*di2(jpart);//////
-   ////// double xim2=dim2(jpart)*di2(jpart);//////
-   ////// for (int ipart=0; ipart<npart; ++ipart) {//////
-   //////  force(ipart)+=gradd1(ipart,jpart)*(xip1*exp(-xip1)/(1-exp(-xip1))//////
-   //////                                    +xim1*exp(-xim1)/(1-exp(-xim1)));//////
-    //////  force(ipart)+=gradd2(ipart,jpart)*(xip2*exp(-xip2)/(1-exp(-xip2))//////
-   //////                                    +xim2*exp(-xim2)/(1-exp(-xim2)));//////
-      /////}////
-      // Calculate the nodal action.
-      u += -log(1-exp(-xim1));
-      if (det.err || detm.err || det.det*detm.det<0) u += 1e200;
-      utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
-      utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
-//std :: cout << "FNA :: "<<jpart<<". xim1 "<<xim1<<". dotxim1   "<<dotxim1<<". utau  "<<utau<<". u  "<<u<<". tau  "<<tau<<std ::endl;
-    }
+      for (int jpart=0; jpart<npart; ++jpart) {
+        double xim1=dim1(jpart)*di1(jpart);
+        double dotxim1=dotdim1(jpart)*di1(jpart)+dim1(jpart)*dotdi1(jpart);
+        dotxim1*=tau/(di1(jpart)*dim1(jpart));
+        // Calculate the nodal action.
+        u += -log(1-exp(-xim1));
+        if (det.err || detm.err || det.det*detm.det<0) u += 1e200;
+        utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
+        utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
+      }
     }
   }
   fm=force(ipart); 
-  //std :: cout << "FNA :: "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
 }
 
 void FixedNodeAction::initialize(const DoubleSectionChooser &chooser) {
