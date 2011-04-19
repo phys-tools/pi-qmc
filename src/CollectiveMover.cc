@@ -135,7 +135,8 @@ void CollectiveMover::calcInverseShift(const Vec &r) const {
   Vec delta = -value;
   calcShift(r+delta);
   calcJacobian(r+delta);
-  double error2 = dot(value+delta,value+delta);
+  double error2 = dot(value+delta,value+delta)
+                    /(dot(value,value)+dot(delta,delta));
   int niter = 0;
   while (error2 > 1e-26) { 
     // Solve linear equations for Newton's method. 
@@ -159,7 +160,8 @@ void CollectiveMover::calcInverseShift(const Vec &r) const {
     delta -= value;
     calcShift(r+delta);
     calcJacobian(r+delta);
-    error2 = dot(value+delta,value+delta);
+    error2 = dot(value+delta,value+delta)
+               /(dot(value,value)+dot(delta,delta));
   }
   value = delta; 
 }
