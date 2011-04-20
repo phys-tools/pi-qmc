@@ -302,19 +302,22 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
     force=0.0;
     // Calculate u and utau.
     if (useManyBodyDistance) {
-      double d12=0., d1m2=0., dotd12=0., dotd1m2=0.;
+      double d12=0., d1m2=0., dotd11=0., dotd1m1=0.;
       for (int i=0; i<npart; ++i) {
         d12 += 1./(di1(i)*di1(i));
         d1m2 += 1./(dim1(i)*dim1(i));
-        dotd12 += 1./(dotdi1(i)*dotdi1(i));
-        dotd1m2 += 1./(dotdim1(i)*dotdim1(i));
+        dotd11 += dotdi1(i)/(di1(i)*di1(i)*di1(i));
+        dotd1m1 += dotdim1(i)/(dim1(i)*dim1(i)*dim1(i));
       }
-      double xim1 = 1./sqrt(d12*d1m2);
+      d12 = 1./sqrt(d12);
+      d1m2 = 1./sqrt(d1m2);
+      dotd11 *= d12*d12*d12;
+      dotd1m1 *= d1m2*d1m2*d1m2;
+      double xim1 = d12*d1m2;
       double exim1 = exp(-xim1);
       u += log( (1-exim1) );
       utau += xim1*exim1/(tau*(1-exim1)); 
-      double dotxim1 = 1./sqrt(dotd1m2*d12)+1./sqrt(d1m2*dotd12);
-      utau -= dotxim1*exim1/(1-exim1); 
+      utau -= (dotd11*d1m2 + d12*dotd1m1)*exim1/(1-exim1); 
     } else {
       for (int jpart=0; jpart<npart; ++jpart) {
         double xim1=dim1(jpart)*di1(jpart);
