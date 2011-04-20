@@ -315,18 +315,15 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
       dotd1m1 *= d1m2*d1m2*d1m2;
       double xim1 = d12*d1m2;
       double exim1 = exp(-xim1);
-      u += log( (1-exim1) );
-      utau += xim1*exim1/(tau*(1-exim1)); 
+      u -= log( (1-exim1) );
       utau -= (dotd11*d1m2 + d12*dotd1m1)*exim1/(1-exim1); 
     } else {
       for (int jpart=0; jpart<npart; ++jpart) {
         double xim1=dim1(jpart)*di1(jpart);
         double dotxim1=dotdim1(jpart)*di1(jpart)+dim1(jpart)*dotdi1(jpart);
-        dotxim1*=tau/(di1(jpart)*dim1(jpart));
         // Calculate the nodal action.
         u += -log(1-exp(-xim1));
         if (det.err || detm.err || det.det*detm.det<0) u += 1e200;
-        utau += xim1*exp(-xim1)/(tau*(1-exp(-xim1)));
         utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
       }
     }
