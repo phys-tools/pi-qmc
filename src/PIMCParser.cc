@@ -203,7 +203,6 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       std::cout<<"Picked species1 "<<species1Name<<" and species2 "
                <<species2Name<<" for ExchangeMover."<<std::endl;
     } else if (moverName=="Collective") {
-      nmoving = simInfo.getNPart();
       int iFirstSlice=0;
       if (doubleAction)
         iFirstSlice=paths->getLowestOwnedSlice(true);
@@ -226,8 +225,18 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
       }
       mover = new CollectiveMover(*paths, iFirstSlice, k, dist, center, 
                                   random, mpi);
-      particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
-      std::cout<<"Picked "<<nmoving<<" particles for CollectiveMover."<<std::endl;
+      speciesName = getStringAttribute(ctxt->node,"species");
+   // particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);
+      if (speciesName=="" || speciesName=="all") {
+          nmoving = simInfo.getNPart();
+          particleChooser = new SimpleParticleChooser(simInfo.getNPart(),nmoving);    
+      }else{
+      nmoving = simInfo.getSpecies(speciesName).count; 
+          particleChooser
+            = new SpeciesParticleChooser(simInfo.getSpecies(speciesName),nmoving);
+      }
+
+      std::cout<<"Picked "<<nmoving<<" species "<<speciesName<<" particles for CollectiveMover."<<std::endl;
     } else {
       mover = new UniformMover(dist,mpi);
       int nspecies = getIntAttribute(ctxt->node,"nspecies");

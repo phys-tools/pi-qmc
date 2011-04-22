@@ -142,7 +142,7 @@ void CollectiveMover::calcInverseShift(const Vec &r) const {
     // Solve linear equations for Newton's method. 
     ++niter;
     if (niter>20) {
-      std::cout << "ERROR: Too many Newton iterations in CollectiveMover!"
+      std::cout << "WARNING: Too many Newton iterations in CollectiveMover!"
                 << std::endl;
       std::cout<<"CollectiveMover: Amplitude = " << amp
                <<"\n  k = "<<kvec<<std::endl;
@@ -150,7 +150,7 @@ void CollectiveMover::calcInverseShift(const Vec &r) const {
       std::cout << "phase=" << phase << std::endl; 
       std::cout << "amplitude=" << amplitude << std::endl; 
       std::cout << "delta=" << delta << std::endl; 
-      exit(-1);
+      break;
     }
     const int N=NDIM, ONE=1;
     int info;
