@@ -17,7 +17,7 @@
 #ifndef __MainSpinParser_h_
 #define __MainSpinParser_h_
 
-#include "XMLParser.h"
+#include "../src/XMLParser.h"
 #include <blitz/tinyvec.h>
 class SimulationInfo;
 

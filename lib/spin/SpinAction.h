@@ -20,7 +20,7 @@ class Paths;
 class MultiLevelSampler;
 class DisplaceMoveSampler;
 template <int TDIM> class Beads;
-#include "Action.h"
+#include "../src/Action.h"
 #include <blitz/tinyvec.h>
 #include <blitz/array.h>
 #include <vector>

@@ -17,7 +17,7 @@
 #ifndef __SpinFixedPhaseAction_h_
 #define __SpinFixedPhaseAction_h_
 
-#include "DoubleAction.h"
+#include "../src/DoubleAction.h"
 #include <blitz/array.h>
 #include <blitz/tinymat.h>
 #include <vector>

@@ -17,8 +17,8 @@
 #ifndef __SpinEstimator_h_
 #define __SpinEstimator_h_
 #include "stats/ScalarEstimator.h"
-#include "LinkSummable.h"
-#include "Paths.h"
+#include "../src/LinkSummable.h"
+#include "../src/Paths.h"
 class Paths;
 class Action;
 class DoubleAction;

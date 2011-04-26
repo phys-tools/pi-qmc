@@ -87,7 +87,7 @@ double CollectiveMover::makeMove(VArray& displacement,
   bool forward = (RandomNumGenerator::getRand()>0.5);
   int npart = displacement.size();
   for (int ipart=0;ipart<npart;++ipart) {
-    Vec r = paths(ipart,iFirstSlice);
+    Vec r = paths(movingIndex(ipart),iFirstSlice);
     if (forward) calcShift(r); else calcInverseShift(r);
     displacement(ipart) = value;
 #if NDIM==1

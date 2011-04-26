@@ -18,8 +18,8 @@
 #define __SpinMover_h_
 #include <blitz/array.h>
 #include <vector>
-#include "Mover.h"
-#include "FreeMover.h"
+#include "../src/Mover.h"
+#include "../src/FreeMover.h"
 class SimulationInfo;
 /** Select a trial move for beads by free particle sampling.
   * @todo May want to make this a subclass of Action, with a flag
