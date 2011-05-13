@@ -42,5 +42,12 @@ void AlternatingParticleChooser::chooseParticles() {
   i = (int)(npart2 * RandomNumGenerator::getRand() + ifirst2);
   if (i==ifirst2+npart2) i=ifirst2+npart2-1;
   index(1) = i;
+  if (RandomNumGenerator::getRand()<0.5) {
+    int temp = index(0);
+    index(0) = index(1);
+    index(1) = temp;
+  }
+//  std::cout<<"index(0) = "<<index(0)<<", index(1) = "<<index(1)<<std::endl;
+//  std::cin.ignore();
 }
 

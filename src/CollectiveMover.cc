@@ -138,7 +138,7 @@ void CollectiveMover::calcInverseShift(const Vec &r) const {
   double error2 = dot(value+delta,value+delta)
                     /(dot(value,value)+dot(delta,delta));
   int niter = 0;
-  while (error2 > 1e-26) { 
+  while (error2 > 1e-20) { 
     // Solve linear equations for Newton's method. 
     ++niter;
     if (niter>20) {
