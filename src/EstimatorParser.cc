@@ -311,6 +311,14 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       std::string species=getStringAttribute(estNode,"species");
       const Species *spec = 0;
       if (species!="" && species!="all") spec=&simInfo.getSpecies(species);
+      std::string species1=getStringAttribute(estNode,"species1");
+      const Species *spec1 = 0;
+      if (species1!="" && species1!="all") spec1=&simInfo.getSpecies(species1);
+      std::string species2=getStringAttribute(estNode,"species2");
+      const Species *spec2 = 0;
+      if (species2!="" && species2!="all") spec2=&simInfo.getSpecies(species2);
+      if (spec1==0) spec1=spec;
+      if (spec2==0) spec2=spec;
       std::string estName=getStringAttribute(estNode,"name");
       if (estName=="") {
         if (name=="DensityEstimator") {
@@ -357,8 +365,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
           nbinN[i+NDIM]=nbin[i];
         }
         nbinN[2*NDIM]=nfreq;
-        manager->add(new DensDensEstimator(simInfo,estName,spec,min,max,nbin,
-                                           nbinN,dist,nstride,mpi));
+        manager->add(new DensDensEstimator(simInfo,estName,spec1,spec2,
+                                  min,max,nbin, nbinN,dist,nstride,mpi));
       } else {
         int maxCount=getIntAttribute(estNode,"maxCount");
         if (maxCount==0) maxCount=1;

@@ -52,7 +52,8 @@ public:
 
   /// Constructor.
   DensDensEstimator(const SimulationInfo& simInfo, const std::string& name,
-      const Species *s, const Vec &min, const Vec &max, const IVec &nbin,
+      const Species *s1, const Species *s2,
+      const Vec &min, const Vec &max, const IVec &nbin,
       const IVecN &nbinN, const DistArray &dist, int nstride,
       MPIManager *mpi); 
 
@@ -84,11 +85,13 @@ private:
   const DistArray dist;
   SuperCell cell;
   const double tau;
-  blitz::Array<Complex,NDIM+1> temp;
-  int ifirst, npart;
-  fftw_plan fwd;
+  blitz::Array<Complex,NDIM+1> temp1;
+  blitz::Array<Complex,NDIM+1> temp2;
+  int ifirst1, npart1, ifirst2, npart2;
+  fftw_plan fwd1, fwd2;
   MPIManager *mpi;
-  blitz::Array<Complex,2>* temp2;
-  blitz::Array<float,3>* value2;
+  blitz::Array<Complex,2>* temp1_;
+  blitz::Array<Complex,2>* temp2_;
+  blitz::Array<float,3>* value_;
 };
 #endif
