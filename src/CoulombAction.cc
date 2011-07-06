@@ -283,6 +283,19 @@ double CoulombAction::u(double r, int order) const {
     u1_4 = pow(reff,6)*(a+b*reff*reff)
           /(1+reff*reff*reff*(c+reff*reff*(d+reff*reff*(e+reff*reff*f))));
   }
+#if NDIM==1
+  if (order==0) {
+    u = u1_0;
+  } else if (order==1) {
+    u = u1_1;
+  } else if (order==2) {
+    u = u1_2;
+  } else if (order==3) {
+    u = u1_3;
+  } else if (order==4) {
+    u = u1_4;
+  }
+#endif
 #if NDIM==3
   double a=2.*taueff/(reff*reff);
   double b=exp(-2./a);
