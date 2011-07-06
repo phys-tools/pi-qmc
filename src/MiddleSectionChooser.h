@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2010 John B. Shumway, Jr.
+/*  Copyright (C) 2011 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 #define __MiddleSectionChooser_h_
 
 #include "SectionChooser.h"
-#include <gsl/gsl_qrng.h>
 
 /// Algorithm class for choosing a section.
 /// @version $Revision$

@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2010 John B. Shumway, Jr.
+/*  Copyright (C) 2010-11 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,11 +27,13 @@
 #include "SuperCell.h"
 #include "SimulationInfo.h"
 #include "PeriodicGaussian.h"
+#include "SectionChooser.h"
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
   const Species& species1, const Species& species2, double C) 
   : invTau(1./simInfo.getTau()), species1(species1), species2(species2),
-    index1(species1.ifirst), index2(species2.ifirst), C(C)  {
+    index1(species1.ifirst), index2(species2.ifirst), C(C),
+    nPathSlice(simInfo.getNSlice()) {
   if (species1.anMass) {
     mass1 = *species1.anMass;
   } else {
@@ -42,6 +44,7 @@ EMARateAction::EMARateAction(const SimulationInfo& simInfo,
   } else {
     mass2 = species2.mass;
   }
+  
 }
 
 EMARateAction::~EMARateAction() {
@@ -49,16 +52,97 @@ EMARateAction::~EMARateAction() {
 
 double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {
-  //const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
-  //const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-  //const SuperCell& cell=sampler.getSuperCell();
-  //const int nStride=(int)pow(2,level);
-  //const int nSlice=sectionBeads.getNSlice();
-  //const IArray& index=sampler.getMovingIndex(); 
-  //const int nMoving=index.size();
-  double deltaAction=0;
-  if (level==0) {
-  }
+  // Only evaluate if we are aligned with slice 0 in the middle.
+  const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
+  const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
+  const SuperCell& cell=sampler.getSuperCell();
+  const int nStride=(int)pow(2,level);
+  const int nSlice=sectionBeads.getNSlice();
+  const IArray& index=sampler.getMovingIndex(); 
+  const int nMoving=index.size();
+
+  const int iFirstSlice = sampler.getSectionChooser().getFirstSliceIndex();
+  if (iFirstSlice + nSlice != nPathSlice) return 0.;
+  
+  // For now, we'll assume that the only two radiating particles are being moved.
+  int iMoving1 = index(0);
+  int iMoving2 = index(1);
+
+  double oldDiagAction = 0.;
+  double oldRadAction = 0.;
+  double newDiagAction = 0.;
+  double newRadAction = 0.;
+
+  const Vec inv2Sigma21 = 0.25*mass1*invTau/nStride;
+  const Vec inv2Sigma22 = 0.25*mass2*invTau/nStride;
+  Vec rePrev = movingBeads(0,0);
+  Vec rhPrev = movingBeads(1,0);
+  Vec reRadPrev = rePrev;
+  Vec rhRadPrev = rhPrev;
+  Vec rePrevOld = movingBeads(iMoving1,0);
+  Vec rhPrevOld = movingBeads(iMoving2,0);
+  Vec reRadPrevOld = rePrevOld;
+  Vec rhRadPrevOld = rhPrevOld;
+  for (int islice=nStride; islice<nSlice; islice+=nStride) {
+
+    // Calculate action for moving beads.
+    Vec re = movingBeads(iMoving1,islice);
+    Vec rh = movingBeads(iMoving2,islice);
+
+    Vec reRad = re;
+    Vec rhRad = (islice==nSlice/2)?re:rh;
+
+    Vec delta=re-rePrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newDiagAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rh-rhPrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newDiagAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+    delta=reRad-reRadPrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newRadAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rhRad-rhRadPrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newRadAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+    // Calculate action for old beads.
+    Vec reOld = sectionBeads(iMoving1,islice);
+    Vec rhOld = sectionBeads(iMoving2,islice);
+
+    Vec reRadOld = re;
+    Vec rhRadOld = (islice==nSlice/2)?re:rh;
+
+    delta=reOld-rePrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldDiagAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rhOld-rhPrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldDiagAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+    delta=reRadOld-reRadPrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldRadAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rhRadOld-rhRadPrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldRadAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+
+    // Set the previous positions.
+    rePrev = re;
+    rhPrev = re;
+    reRadPrev = (islice==nSlice/2)?rhPrev:rePrev;
+    rhRadPrev = rhPrev;
+  } 
+
+  double oldAction = -log(1+C*exp(oldRadAction-oldDiagAction));
+  double newAction = -log(1+C*exp(newRadAction-newDiagAction));
+  double deltaAction = newAction-oldAction;
+
   return deltaAction;
 }
 

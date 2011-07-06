@@ -102,14 +102,14 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-MultiLevelSampler.$(OBJEXT) \
 	pi-MultiSpeciesParticleChooser.$(OBJEXT) \
 	pi-NodeModel.$(OBJEXT) pi-NodeTester.$(OBJEXT) \
-	pi-OptEwaldSum.$(OBJEXT) pi-OpticalLatticeAction.$(OBJEXT) \
-	pi-PIMCParser.$(OBJEXT) pi-PairAction.$(OBJEXT) \
-	pi-PairChooser.$(OBJEXT) pi-PairDistance.$(OBJEXT) \
-	pi-PairIntegrator.$(OBJEXT) pi-PairPotential.$(OBJEXT) \
-	pi-ParallelPaths.$(OBJEXT) pi-ParticleChooser.$(OBJEXT) \
-	pi-PathReader.$(OBJEXT) pi-Paths.$(OBJEXT) \
-	pi-PeriodicGaussian.$(OBJEXT) pi-Permutation.$(OBJEXT) \
-	pi-PermutationChooser.$(OBJEXT) \
+	pi-NonZeroSectionChooser.$(OBJEXT) pi-OptEwaldSum.$(OBJEXT) \
+	pi-OpticalLatticeAction.$(OBJEXT) pi-PIMCParser.$(OBJEXT) \
+	pi-PairAction.$(OBJEXT) pi-PairChooser.$(OBJEXT) \
+	pi-PairDistance.$(OBJEXT) pi-PairIntegrator.$(OBJEXT) \
+	pi-PairPotential.$(OBJEXT) pi-ParallelPaths.$(OBJEXT) \
+	pi-ParticleChooser.$(OBJEXT) pi-PathReader.$(OBJEXT) \
+	pi-Paths.$(OBJEXT) pi-PeriodicGaussian.$(OBJEXT) \
+	pi-Permutation.$(OBJEXT) pi-PermutationChooser.$(OBJEXT) \
 	pi-PermutationEstimator.$(OBJEXT) \
 	pi-PositionEstimator.$(OBJEXT) pi-PrimAnisSHOAction.$(OBJEXT) \
 	pi-PrimColloidalAction.$(OBJEXT) pi-PrimCosineAction.$(OBJEXT) \
@@ -335,9 +335,9 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	ImagePairAction.cc JEstimator.cc JelliumSlab.cc MainParser.cc \
 	Measure.cc MiddleSectionChooser.cc ModelSampler.cc \
 	MultiLevelSampler.cc MultiSpeciesParticleChooser.cc \
-	NodeModel.cc NodeTester.cc OptEwaldSum.cc \
-	OpticalLatticeAction.cc PIMCParser.cc PairAction.cc \
-	PairChooser.cc PairDistance.cc PairIntegrator.cc \
+	NodeModel.cc NodeTester.cc NonZeroSectionChooser.cc \
+	OptEwaldSum.cc OpticalLatticeAction.cc PIMCParser.cc \
+	PairAction.cc PairChooser.cc PairDistance.cc PairIntegrator.cc \
 	PairPotential.cc ParallelPaths.cc ParticleChooser.cc \
 	PathReader.cc Paths.cc PeriodicGaussian.cc Permutation.cc \
 	PermutationChooser.cc PermutationEstimator.cc \
@@ -389,8 +389,9 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	JEstimator.h JelliumSlab.h LinkSummable.h Loop.h MainParser.h \
 	Measure.h MiddleSectionChooser.h ModelSampler.h Mover.h \
 	MultiLevelSampler.h MultiSpeciesParticleChooser.h NodeModel.h \
-	NodeTester.h OptEwaldSum.h OpticalLatticeAction.h PIMCParser.h \
-	PairAction.h PairCFEstimator.h PairChooser.h PairDistance.h \
+	NodeTester.h NonZeroSectionChooser.h OptEwaldSum.h \
+	OpticalLatticeAction.h PIMCParser.h PairAction.h \
+	PairCFEstimator.h PairChooser.h PairDistance.h \
 	PairIntegrator.h PairPotential.h ParallelPaths.h \
 	ParticleChooser.h PathReader.h Paths.h PeriodicGaussian.h \
 	Permutation.h PermutationChooser.h PermutationEstimator.h \
@@ -580,6 +581,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-MultiSpeciesParticleChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-NodeModel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-NodeTester.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-NonZeroSectionChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-OptEwaldSum.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-OpticalLatticeAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-PIMCParser.Po@am__quote@
@@ -1794,6 +1796,20 @@ pi-NodeTester.obj: NodeTester.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NodeTester.cc' object='pi-NodeTester.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-NodeTester.obj `if test -f 'NodeTester.cc'; then $(CYGPATH_W) 'NodeTester.cc'; else $(CYGPATH_W) '$(srcdir)/NodeTester.cc'; fi`
+
+pi-NonZeroSectionChooser.o: NonZeroSectionChooser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-NonZeroSectionChooser.o -MD -MP -MF $(DEPDIR)/pi-NonZeroSectionChooser.Tpo -c -o pi-NonZeroSectionChooser.o `test -f 'NonZeroSectionChooser.cc' || echo '$(srcdir)/'`NonZeroSectionChooser.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-NonZeroSectionChooser.Tpo $(DEPDIR)/pi-NonZeroSectionChooser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NonZeroSectionChooser.cc' object='pi-NonZeroSectionChooser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-NonZeroSectionChooser.o `test -f 'NonZeroSectionChooser.cc' || echo '$(srcdir)/'`NonZeroSectionChooser.cc
+
+pi-NonZeroSectionChooser.obj: NonZeroSectionChooser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-NonZeroSectionChooser.obj -MD -MP -MF $(DEPDIR)/pi-NonZeroSectionChooser.Tpo -c -o pi-NonZeroSectionChooser.obj `if test -f 'NonZeroSectionChooser.cc'; then $(CYGPATH_W) 'NonZeroSectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/NonZeroSectionChooser.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-NonZeroSectionChooser.Tpo $(DEPDIR)/pi-NonZeroSectionChooser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='NonZeroSectionChooser.cc' object='pi-NonZeroSectionChooser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-NonZeroSectionChooser.obj `if test -f 'NonZeroSectionChooser.cc'; then $(CYGPATH_W) 'NonZeroSectionChooser.cc'; else $(CYGPATH_W) '$(srcdir)/NonZeroSectionChooser.cc'; fi`
 
 pi-OptEwaldSum.o: OptEwaldSum.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-OptEwaldSum.o -MD -MP -MF $(DEPDIR)/pi-OptEwaldSum.Tpo -c -o pi-OptEwaldSum.o `test -f 'OptEwaldSum.cc' || echo '$(srcdir)/'`OptEwaldSum.cc

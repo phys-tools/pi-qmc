@@ -77,5 +77,7 @@ private:
   Vec mass1;
   /// The mass of the hole.
   Vec mass2;
+  /// The total number of slices in the path.
+  const int nPathSlice;
 };
 #endif

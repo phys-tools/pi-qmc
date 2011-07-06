@@ -156,9 +156,6 @@ double CoulombAction::getActionDifference(const Paths &paths,
 
 
 
-
-
-
 double CoulombAction::getTotalAction(const Paths& paths, int level) const {
   return 0;
 }

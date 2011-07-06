@@ -77,6 +77,8 @@ public:
   /// Get a pointer to the accept/reject statistic estimator.
   /// (You are responsible for deleting this new object.) 
   virtual AccRejEstimator* getAccRejEstimator(const std::string& name);
+  /// Get const reference to the SectionChooser.
+  const SectionChooser& getSectionChooser() const {return sectionChooser;}
 protected:
   /// Attempt a move on the beads.
   bool tryMove(double initialTranProb);

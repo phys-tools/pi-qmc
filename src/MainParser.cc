@@ -86,11 +86,14 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
 
   // Find the maximum level for any sampling.
   int maxlevel=1;
-  { xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//ChooseSection",ctxt);
+  { // Find all tags that start with Choose and end with Section. 
+    xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//*[starts-with(name(),'Choose') and (substring(name(),string-length(name())-6) = 'Section')]",ctxt);
+    //xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//*[starts-with(name(),'Choose') and ends-with(name(),'Section')]",ctxt);
     int nsample=obj->nodesetval->nodeNr;
     for (int i=0; i<nsample; ++i) {
       xmlNodePtr& node=obj->nodesetval->nodeTab[i];
       int nlevel=getIntAttribute(node,"nlevel");
+std::cout << "Level = " << nlevel << std::endl;
       if (nlevel>maxlevel) maxlevel=nlevel;
     }
   }
