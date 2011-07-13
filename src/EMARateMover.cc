@@ -30,42 +30,17 @@
 #include "PeriodicGaussian.h"
 #include <cmath>
 
-EMARateMover::EMARateMover(const double lam, const int npart, const double tau)
-  : lambda(npart), tau(tau) {
-  lambda=lam; 
-}
-
 EMARateMover::EMARateMover(const SimulationInfo& simInfo, const int maxlevel,
   const double pgDelta)
-  : lambda(simInfo.getNPart()), tau(simInfo.getTau()),
-    pg(maxlevel+1,simInfo.getNSpecies(),NDIM), specIndex(simInfo.getNPart()) {
+  : PermutationChooser(2), ParticleChooser(2),
+    lambda(simInfo.getNPart()), tau(simInfo.getTau()) {
   for (int i=0; i<simInfo.getNPart(); ++i) {
     const Species* species=&simInfo.getPartSpecies(i);
     lambda(i)=0.5/species->mass;
-    for (int j=0; j<simInfo.getNSpecies(); ++j) {
-      if (species==&simInfo.getSpecies(j)) {specIndex(i)=j; break;}
-    }
-  }
-  const int nspec=simInfo.getNSpecies();
-  pg.resize(maxlevel+1,nspec,NDIM);
-  for (int ilevel=0; ilevel<=maxlevel; ++ilevel) {
-    for (int ispec=0; ispec<nspec; ++ispec) {
-      double alpha=simInfo.getSpecies(ispec).mass/(tau*pow(2,ilevel));
-      for (int idim=0; idim<NDIM; ++idim) {
-        double l=(*simInfo.getSuperCell())[idim];
-        if (l*l*alpha<60) {
-          pg(ilevel,ispec,idim)=new PeriodicGaussian(alpha,l,
-                                                     (int)(100*l*sqrt(alpha)));
-        } else {
-          pg(ilevel,ispec,idim)=0;
-        }
-      }
-    }
   }
 }
 
 EMARateMover::~EMARateMover() {
-  for (PGArray::iterator i=pg.begin();  i!=pg.end(); ++i) delete *i;
 }
 
 double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
@@ -74,18 +49,48 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
   const SuperCell& cell=sampler.getSuperCell();
   const int nStride=(int)pow(2,level);
   const int nSlice=sectionBeads.getNSlice();
-  double factor = sampler.getFactor(); 
   const blitz::Array<int,1>& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
   blitz::Array<Vec,1> gaussRand(nMoving); gaussRand=0.0;
   double toldOverTnew=0;  
   forwardProb = 0;
+  // Make radiating vs. direct choice at highest level.
+  std::cout << nStride << ", " << nSlice << std::endl;
+  if (nStride+1==nSlice) {
+    std::cout << "Choosing radiating vs. diagonal." << std::endl; 
+    double i = index(0);
+    double j = index(1);
+    Vec re1 = movingBeads(0,0);
+    Vec re2 = movingBeads(0,nSlice-1);
+    Vec rh1 = movingBeads(1,0);
+    Vec rh2 = movingBeads(1,nSlice-1);
+    Vec deltae = re2-re1; cell.pbc(deltae);
+    Vec deltah = rh2-rh1; cell.pbc(deltah);
+    Vec delta1 = re1-rh1; cell.pbc(delta1);
+    Vec delta2 = re2-rh2; cell.pbc(delta2);
+    double inv2sigma2e = 0.5/(lambda(i)*tau*nStride); 
+    double inv2sigma2h = 0.5/(lambda(j)*tau*nStride); 
+    double inv2sigma21 = 1./((lambda(i)+lambda(j))*tau*nStride); 
+    double te = dot(deltae,deltae)*inv2sigma2e;
+    double th = dot(deltah,deltah)*inv2sigma2h;
+    double t1 = dot(delta1,delta1)*inv2sigma21;
+    double t2 = dot(delta2,delta2)*inv2sigma21;
+    std::cout << t1 << ", " << t2 << ", " << te << ", " << th << std::endl;
+    double pRad = exp(-(t1+t2));
+    double pDiag = exp(-(te+te));
+    std::cout << pRad << ", " << pDiag << std::endl;
+    if (RandomNumGenerator::getRand()>pDiag/(pDiag+pRad)) {
+      std::cout << "Trying radiating move." << std::endl;
+    } else {
+      std::cout << "Trying diagonal move." << std::endl;
+    }
+  } {
+
   for (int islice=nStride; islice<nSlice-nStride; islice+=2*nStride) {
     RandomNumGenerator::makeGaussRand(gaussRand);
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
-      const int ispec=specIndex(i);
-      double sigma = factor*sqrt(lambda(i)*tau*nStride); 
+      double sigma = sqrt(lambda(i)*tau*nStride); 
       double inv2Sigma2 = 0.5/(sigma*sigma);
       // Calculate the new position.
       Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
@@ -96,18 +101,11 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
       cell.pbc(movingBeads(iMoving,islice));
       // Calculate 1/transition probability for move 
       cell.pbc(delta);
-      double temp = 1.0;
       for (int idim=0;idim<NDIM;++idim) {
-        if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
-        } else {
-	  double tmp = delta[idim]*delta[idim]*inv2Sigma2;
-	  forwardProb += tmp;
-	  toldOverTnew += tmp;
-	}
+        double tmp = delta[idim]*delta[idim]*inv2Sigma2;
+        forwardProb += tmp;
+        toldOverTnew += tmp;
       }
-      temp = 1.0/temp;    
-      forwardProb +=log(temp);
 
       // Calculate and add reverse transition probability.
       midpoint=sectionBeads.delta(i,islice+nStride,-2*nStride);
@@ -116,14 +114,10 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
       delta=sectionBeads(i,islice); delta-=midpoint;
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
-        if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
-        } else {
-          toldOverTnew -= delta[idim]*delta[idim]*inv2Sigma2;
-        }
+        toldOverTnew -= delta[idim]*delta[idim]*inv2Sigma2;
       }
-      toldOverTnew+=log(temp);
     }
+  }
   }
   return toldOverTnew; //Return the log of the probability.
 }

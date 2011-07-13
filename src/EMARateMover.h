@@ -19,20 +19,21 @@
 #include <blitz/array.h>
 #include <vector>
 #include "Mover.h"
+#include "PermutationChooser.h"
+#include "ParticleChooser.h"
 class SimulationInfo;
 class PeriodicGaussian;
 /** 
   * @version $Revision$
   * @author John Shumway. */
-class EMARateMover : public Mover {
+class EMARateMover : public Mover, public PermutationChooser,
+                     public ParticleChooser {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<PeriodicGaussian*,3> PGArray;
   typedef blitz::TinyVector<double,NDIM> Vec;
-  /// Construct by providing lambda (@f$\lambda=1/2m@f$) timestep @f$\tau@f$.
-  EMARateMover(const double lambda, const int npart, const double tau);
   /// Construct by providing simInfo.
   EMARateMover(const SimulationInfo&, const int maxlevel, const double pgDelta);
   /// Virtual destructor.
@@ -43,14 +44,12 @@ public:
   virtual double makeMove(MultiLevelSampler&, const int level);  
   virtual double makeDelayedMove(MultiLevelSampler&, const int level) ;
   virtual double getForwardProb() {return forwardProb;}
+  virtual void chooseParticles() {}
 private:
   /// The inverse mass, @f$\lambda=1/2m@f$.
   blitz::Array<double,1> lambda;
   /// The timestep.
   double tau;
-  /// Periodic gaussians.
-  PGArray pg;
-  IArray specIndex; 
   /// forward transition prob
   double forwardProb;
 };

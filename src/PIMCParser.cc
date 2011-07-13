@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2011 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
 #include "ModelSampler.h"
+#include "EMARateMover.h"
 #include "spin/SpinMover.h"
 #include "spin/FreeSpinMover.h"
 #include "DampedFreeTensorMover.h"
@@ -320,6 +321,12 @@ std::cout << "doubleAction!=0" << std::endl;
     double newFactor=getDoubleAttribute(ctxt->node,"newSigmaFactor");
     if (delayedRejection!=0 && newFactor==0) newFactor=0.75;
     Mover* mover(0);
+    ParticleChooser* particleChooser=0;
+    ParticleChooser* particleChooser2=0;
+    PermutationChooser* permutationChooser=0;
+    PermutationChooser* permutationChooser2=0;
+    int nmoving=0;
+    bool noPerm=true;
     std::string moverName=getStringAttribute(ctxt->node,"mover");
     if (moverName=="Free" || moverName=="")
       mover = new FreeMover(simInfo,nlevel,10.0);
@@ -334,14 +341,20 @@ std::cout << "doubleAction!=0" << std::endl;
       mover = new DampedFreeTensorMover(simInfo,saturationLevel);
     } else if (moverName=="Hyperbolic") {
       mover = new HyperbolicMover(simInfo,nlevel);
+    } else if (moverName=="EMARate") {
+      double c=getDoubleAttribute(ctxt->node,"c");
+      std::string speciesName1=getStringAttribute(ctxt->node,"species1");
+      std::string speciesName2=getStringAttribute(ctxt->node,"species2");
+      EMARateMover* emaRateMover = new EMARateMover(simInfo,nlevel,c);
+      mover = emaRateMover;
+      particleChooser = emaRateMover;
+      permutationChooser = emaRateMover;
+      nmoving = 2;
     }   
+    if (!particleChooser) {
     std::string chooserName=getStringAttribute(ctxt->node,"chooser");
-    int nmoving=getIntAttribute(ctxt->node,"npart");
+    nmoving=getIntAttribute(ctxt->node,"npart");
     std::string speciesName=getStringAttribute(ctxt->node,"species");
-    ParticleChooser* particleChooser=0;
-    ParticleChooser* particleChooser2=0;
-    PermutationChooser* permutationChooser=0;
-    PermutationChooser* permutationChooser2=0;
     bool noPerm=getBoolAttribute(ctxt->node,"noPermutation");
     if (speciesName=="" || speciesName=="all") {
       particleChooser=new SimpleParticleChooser(simInfo.getNPart(),nmoving);
@@ -398,6 +411,7 @@ std::cout << "doubleAction!=0" << std::endl;
         particleChooser2 = chooser;
         permutationChooser2 = chooser;
       }
+    }
     }
     if (doubleAction==0) {
       if (!permutationChooser) {
