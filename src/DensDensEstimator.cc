@@ -98,26 +98,28 @@ void DensDensEstimator::initCalc(const int nslice,
 
 void DensDensEstimator::handleLink(const Vec& start, const Vec& end,
     const int ipart, const int islice, const Paths &paths) {
-  if (islice%nstride==0 && ipart>=ifirst1 && ipart<ifirst1+npart1) {
-    Vec r=start;
-    blitz::TinyVector<int,NDIM+1> ibin=0;
-    ibin[NDIM]=islice/nstride;
-    for (int i=0; i<NDIM; ++i) {
-      double d=(*dist[i])(r);
-      ibin[i]=int(floor((d-min[i])*deltaInv[i]));
-      if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
-      if (i==NDIM-1) temp1(ibin) += 1.0;
+  if (islice%nstride==0) {
+    if (ipart>=ifirst1 && ipart<ifirst1+npart1) {
+      Vec r=start;
+      blitz::TinyVector<int,NDIM+1> ibin=0;
+      ibin[NDIM]=islice/nstride;
+      for (int i=0; i<NDIM; ++i) {
+        double d=(*dist[i])(r);
+        ibin[i]=int(floor((d-min[i])*deltaInv[i]));
+        if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
+        if (i==NDIM-1) temp1(ibin) += 1.0;
+      }
     }
-  }
-  if (ipart>=ifirst2 && ipart<ifirst2+npart2) {
-    Vec r=start;
-    blitz::TinyVector<int,NDIM+1> ibin=0;
-    ibin[NDIM]=islice/nstride;
-    for (int i=0; i<NDIM; ++i) {
-      double d=(*dist[i])(r);
-      ibin[i]=int(floor((d-min[i])*deltaInv[i]));
-      if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
-      if (i==NDIM-1) temp2(ibin) += 1.0;
+    if (ipart>=ifirst2 && ipart<ifirst2+npart2) {
+      Vec r=start;
+      blitz::TinyVector<int,NDIM+1> ibin=0;
+      ibin[NDIM]=islice/nstride;
+      for (int i=0; i<NDIM; ++i) {
+        double d=(*dist[i])(r);
+        ibin[i]=int(floor((d-min[i])*deltaInv[i]));
+        if (ibin[i]<0 || ibin[i]>=nbin[i]) break;
+        if (i==NDIM-1) temp2(ibin) += 1.0;
+      }
     }
   }
 }
