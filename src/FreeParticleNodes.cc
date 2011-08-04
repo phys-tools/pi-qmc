@@ -17,6 +17,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 #include "FreeParticleNodes.h"
 #include "PeriodicGaussian.h"
@@ -25,7 +26,6 @@
 #include "SuperCell.h"
 #include "Beads.h"
 #include "DoubleMLSampler.h"
-#include <cstdlib>
 
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)

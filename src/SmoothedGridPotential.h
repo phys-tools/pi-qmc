@@ -24,6 +24,7 @@
 #include "Action.h"
 #include "PeriodicGaussian.h"
 #include <hdf5.h>
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>

@@ -18,6 +18,7 @@
 #define __RingLattice_h_
 
 #include "Positioner.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class Paths;
 class Species;

@@ -18,6 +18,7 @@
 #define __ArrayBlockedEstimator_h_
 #include "Estimator.h"
 #include "EstimatorReportBuilder.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 class Paths;
 /// Base class for scalar estimators.

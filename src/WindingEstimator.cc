@@ -24,6 +24,7 @@
 #include "SimulationInfo.h"
 #include "Paths.h"
 #include "SuperCell.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"

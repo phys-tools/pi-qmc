@@ -17,6 +17,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
 #include "Spin4DPhase.h"

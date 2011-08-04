@@ -20,6 +20,7 @@
 #include <config.h>
 #endif
 class Species;
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// Class for setting up empirical pair action between particles.

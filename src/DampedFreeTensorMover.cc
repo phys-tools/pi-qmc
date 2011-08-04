@@ -21,6 +21,7 @@
 #include "DampedFreeTensorMover.h"
 #include "Beads.h"
 #include "MultiLevelSampler.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "SuperCell.h"
 #include "SimulationInfo.h"

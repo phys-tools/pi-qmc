@@ -22,6 +22,7 @@ template <int TDIM> class Beads;
 class SimulationInfo;
 class SuperCell;
 #include "Action.h"
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for calculating the primitive action for image charges around

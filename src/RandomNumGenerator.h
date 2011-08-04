@@ -30,6 +30,7 @@
 
 #include <cstdlib>
 #include <cmath>
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// The random number generator. 

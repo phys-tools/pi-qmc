@@ -16,6 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __Beads_h_
 #define __Beads_h_
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec-et.h>
 #include <iostream>

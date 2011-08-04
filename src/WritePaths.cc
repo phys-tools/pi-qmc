@@ -1,4 +1,3 @@
- 
 // $Id$
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 

@@ -19,6 +19,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <cstdlib>
 #include <blitz/array.h>
 #include <fstream>
 class DoubleMLSampler;

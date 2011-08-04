@@ -21,6 +21,7 @@ class SectionChooser;
 class Paths;
 class SuperCell;
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <complex>

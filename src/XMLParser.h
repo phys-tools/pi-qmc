@@ -19,6 +19,7 @@
 #include <string>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 
 /** Base class for classes that parse XML data.  

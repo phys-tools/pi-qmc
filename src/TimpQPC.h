@@ -19,6 +19,7 @@
 class MultiLevelSampler;class DisplaceMoveSampler;
 template <int TDIM> class Beads;
 class SuperCell;
+#include <cstdlib>
 #include <blitz/array.h>
 #include "Action.h"
 class MPIManager;

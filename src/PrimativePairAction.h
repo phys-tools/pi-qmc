@@ -22,6 +22,7 @@ class Species;
 class SimulationInfo;
 class PairPotential;
 #include "PairAction.h"
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for setting up empirical pair action between particles.

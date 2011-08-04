@@ -19,6 +19,7 @@
 
 #include "NodeModel.h"
 #include <vector>
+#include <cstdlib>
 #include <blitz/tinymat.h>
 class PeriodicGaussian;
 class SimulationInfo;

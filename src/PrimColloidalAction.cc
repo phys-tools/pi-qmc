@@ -20,6 +20,7 @@
 #include <math.h>
 #endif
 #include "PrimColloidalAction.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "MultiLevelSampler.h"

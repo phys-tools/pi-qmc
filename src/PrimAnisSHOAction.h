@@ -20,6 +20,7 @@ class MultiLevelSampler;class DisplaceMoveSampler;
 class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class SimulationInfo;
 

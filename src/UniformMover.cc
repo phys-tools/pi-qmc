@@ -26,7 +26,6 @@
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
 #include "RandomNumGenerator.h"
-//#include <blitz/tinyvec.h>
 #include "SuperCell.h"
 #include "SimulationInfo.h"
 #include <cmath>

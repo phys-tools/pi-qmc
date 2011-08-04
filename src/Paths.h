@@ -21,6 +21,7 @@ class SuperCell;
 template <int TDIM> class Beads;
 class Permutation;
 class LinkSummable;
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// Class for Paths, including Beads, connectivity (including any Permutation),

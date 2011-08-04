@@ -21,6 +21,7 @@
 #endif
 class Species;
 class PairPotential;
+#include <cstdlib>
 #include <blitz/array.h>
 #include <fftw3.h>
 

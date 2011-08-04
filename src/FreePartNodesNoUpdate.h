@@ -18,6 +18,7 @@
 #define __FreePartNodesNoUpdate_h_
 
 #include "DoubleAction.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinymat.h>
 #include <vector>

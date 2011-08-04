@@ -23,6 +23,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 
 /** Class for storing species information.

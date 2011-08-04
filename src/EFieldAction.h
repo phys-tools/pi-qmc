@@ -21,6 +21,7 @@ class Paths;
 class SimulationInfo;
 class SuperCell;
 #include "Action.h"
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for getting action from stepwise electric field.

@@ -18,6 +18,7 @@
 #define __SpinSetter_h_
 
 #include "../src/Positioner.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class Paths;
 class Species;

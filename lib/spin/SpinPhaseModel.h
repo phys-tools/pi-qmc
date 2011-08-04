@@ -17,6 +17,7 @@
 #ifndef __SpinPhaseModel_h_
 #define __SpinPhaseModel_h_
 
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Base class for phase models used in the fixed phase method. 

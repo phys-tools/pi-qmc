@@ -17,6 +17,7 @@
 #ifndef __ParticleChooser_h_
 #define __ParticleChooser_h_
 
+#include <cstdlib>
 #include <blitz/array.h>
 #include <string>
 /// Base class for algorithms for choosing particles to move.

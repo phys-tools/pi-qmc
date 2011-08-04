@@ -25,6 +25,7 @@ class MPIManager;
 class CompositeAction;
 class CompositeDoubleAction;
 #include "AugmentedNodes.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
 /** XML Parser for actions.

@@ -26,6 +26,7 @@
 #include "Beads.h"
 #include "SuperCell.h"
 #include <iostream>
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)

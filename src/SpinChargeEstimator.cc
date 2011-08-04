@@ -24,6 +24,7 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "SuperCell.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "stats/MPIManager.h"
 

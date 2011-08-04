@@ -22,6 +22,7 @@ class Species;
 class SimulationInfo;
 class PairIntegrator;
 #include "Action.h"
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for calculating pair action between particles.

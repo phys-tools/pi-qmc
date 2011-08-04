@@ -16,6 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __CollectiveMover_h_
 #define __CollectiveMover_h_
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <blitz/tinymat.h>

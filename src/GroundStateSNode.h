@@ -17,6 +17,7 @@
 #ifndef __GroundStateSNode_h_
 #define __GroundStateSNode_h_
 
+#include <cstdlib>
 #include <blitz/array.h>
 #include "NodeModel.h"
 class Species;

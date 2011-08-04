@@ -18,6 +18,7 @@
 #define __FreeTensorMover_h_
 #include "Mover.h"
 class SimulationInfo;
+#include <cstdlib>
 #include <blitz/array.h>
 /** Select a trial move for beads by free particle sampling.
   * @todo May want to make this a subclass of Action, with a flag

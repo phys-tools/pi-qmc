@@ -19,6 +19,7 @@
 #include "stats/ScalarEstimator.h"
 #include "LinkSummable.h"
 #include "Paths.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class Action;
 class DoubleAction;

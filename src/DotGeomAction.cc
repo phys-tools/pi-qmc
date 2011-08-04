@@ -18,6 +18,7 @@
 #include <config.h>
 #endif
 #include "DotGeomAction.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "MultiLevelSampler.h"
 #include "Beads.h"

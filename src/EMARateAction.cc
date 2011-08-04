@@ -18,6 +18,7 @@
 #include <config.h>
 #endif
 #include "EMARateAction.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "MultiLevelSampler.h"

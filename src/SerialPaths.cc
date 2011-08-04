@@ -25,6 +25,7 @@
 #include "SuperCell.h"
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 
 SerialPaths::SerialPaths(int npart, int nslice, double tau,

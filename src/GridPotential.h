@@ -22,6 +22,7 @@ class SimulationInfo;
 #include "Action.h"
 #include <string>
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for getting action and potential from a grid.

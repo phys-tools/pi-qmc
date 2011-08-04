@@ -18,6 +18,7 @@
 #define __SimInfoParser_h_
 
 #include "XMLUnitParser.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 class SimulationInfo;
 

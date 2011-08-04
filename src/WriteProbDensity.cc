@@ -24,6 +24,7 @@
 #include "ProbDensityGrid.h"
 #include "SimulationInfo.h"
 #include <hdf5.h>
+#include <cstdlib>
 #include <blitz/array.h>
 
 WriteProbDensity::WriteProbDensity(const SimulationInfo& simInfo,

@@ -22,6 +22,7 @@
 #include "Beads.h"
 #include "BeadFactory.h"
 #include <vector>
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 
 MainSpinParser::~MainSpinParser() {

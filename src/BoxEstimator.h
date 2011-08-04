@@ -22,6 +22,7 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "Paths.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>

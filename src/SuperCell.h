@@ -17,6 +17,7 @@
 #ifndef __SuperCell_h_
 #define __SuperCell_h_
 
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <iostream>
 

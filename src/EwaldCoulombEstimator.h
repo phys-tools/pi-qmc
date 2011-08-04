@@ -20,6 +20,7 @@
 #include "LinkSummable.h"
 #include "Paths.h"
 #include "EwaldSum.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class Paths;
 class Action;

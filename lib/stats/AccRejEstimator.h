@@ -18,6 +18,7 @@
 #define __AccRejEstimator_h_
 #include "Estimator.h"
 #include "EstimatorReportBuilder.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class Paths;
 /// Base class for scalar estimators.

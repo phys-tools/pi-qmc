@@ -16,6 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __FreeMover_h_
 #define __FreeMover_h_
+#include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
 #include "Mover.h"

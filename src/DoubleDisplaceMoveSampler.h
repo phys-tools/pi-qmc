@@ -20,6 +20,7 @@ class DoubleAction;
 
 #include "DisplaceMoveSampler.h"
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 #include <iostream>
 

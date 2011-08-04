@@ -17,6 +17,7 @@
 #ifndef __Permutation_h_
 #define __Permutation_h_
 
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// Class for representing a permuation.

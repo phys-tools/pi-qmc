@@ -19,6 +19,7 @@
 #include "ArrayBlockedEstimator.h"
 #include "EstimatorReportBuilder.h"
 #include "MPIManager.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec-et.h>
 class Paths;

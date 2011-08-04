@@ -18,6 +18,7 @@
 
 #include "PermutationChooser.h"
 #include "SpeciesParticleChooser.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 class MultiLevelSampler;

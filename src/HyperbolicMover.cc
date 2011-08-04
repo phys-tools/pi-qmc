@@ -24,6 +24,7 @@
 #include "Beads.h"
 #include "MultiLevelSampler.h"
 #include "RandomNumGenerator.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "SuperCell.h"
 #include "SimulationInfo.h"

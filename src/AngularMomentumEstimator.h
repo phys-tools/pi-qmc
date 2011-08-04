@@ -21,6 +21,7 @@
 #include "Paths.h"
 #include <string.h>
 #include <math.h>
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>

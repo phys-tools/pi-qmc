@@ -29,6 +29,7 @@ class AccRejEstimator;
 class BeadFactory;
 #include "Algorithm.h"
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 #include <iostream>
 

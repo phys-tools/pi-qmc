@@ -19,6 +19,7 @@
   
 #include "NodeModel.h"
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>

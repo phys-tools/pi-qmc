@@ -21,6 +21,7 @@
 #include <mpi.h>
 #endif
 #include "VirialEnergyEstimator.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "SimulationInfo.h"

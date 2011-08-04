@@ -22,6 +22,7 @@
 #include "StructReader.h"
 #include "Paths.h"
 #include "Species.h"
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 #include "SuperCell.h"
 #include <hdf5.h>

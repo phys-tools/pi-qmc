@@ -20,6 +20,7 @@
 #include "SpinPhaseModel.h"
 #include <vector>
 #include <complex>
+#include <cstdlib>
 #include <blitz/array.h>
 class SimulationInfo;
 class Species;

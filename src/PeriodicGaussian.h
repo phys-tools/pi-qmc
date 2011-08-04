@@ -16,6 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PeriodicGaussian_h_
 #define __PeriodicGaussian_h_
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Function object for a periodic gaussian.

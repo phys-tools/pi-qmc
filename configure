@@ -20242,6 +20242,7 @@ else
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+#include <cstdlib>
 #include <blitz/array.h>
 
 #ifdef F77_DUMMY_MAIN

@@ -22,6 +22,7 @@ class Paths;
 class SimulationInfo;
 class PeriodicGaussian;
 #include "Action.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
 

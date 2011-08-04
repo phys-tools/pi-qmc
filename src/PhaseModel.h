@@ -17,6 +17,7 @@
 #ifndef __PhaseModel_h_
 #define __PhaseModel_h_
 
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Base class for phase models used in the fixed phase method. 

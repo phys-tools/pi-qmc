@@ -17,6 +17,7 @@
 #ifndef __PIMCParser_h_
 #define __PIMCParser_h_
 #include "XMLUnitParser.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <vector>
 class Paths;

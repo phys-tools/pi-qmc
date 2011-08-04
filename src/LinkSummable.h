@@ -17,6 +17,7 @@
 #ifndef __LinkSummable_h_
 #define __LinkSummable_h_
 #include "stats/Estimator.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 class Paths;
 /// Interface class for ojects that can be summed over links.

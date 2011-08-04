@@ -20,6 +20,7 @@
 #include <config.h>
 #endif
 #include "SuperCell.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec-et.h>
 

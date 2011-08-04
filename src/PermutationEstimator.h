@@ -19,6 +19,7 @@
 #include "stats/BlitzArrayBlkdEst.h"
 #include "Paths.h"
 #include <fftw3.h>
+#include <cstdlib>
 #include <blitz/array.h>
 #include "Species.h"
 class Paths;

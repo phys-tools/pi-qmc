@@ -17,6 +17,7 @@
 #ifndef __WireEwald
 #define __WireEwald
 class SuperCell;
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/array.h>
 

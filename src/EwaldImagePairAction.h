@@ -22,6 +22,7 @@ class Paths;
 class Species;
 class SimulationInfo;
 #include "PairAction.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
 

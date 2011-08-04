@@ -19,6 +19,7 @@
 class DoubleMLSampler;class DoubleDisplaceMoveSampler;
 class DoubleSectionChooser;
 class Paths;
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// Virtual base class for calculating the fermi action that depends

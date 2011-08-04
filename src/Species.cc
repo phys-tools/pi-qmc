@@ -18,6 +18,7 @@
 #include <config.h>
 #endif
 #include "Species.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 
 Species::Species() 

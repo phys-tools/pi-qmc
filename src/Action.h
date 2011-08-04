@@ -20,6 +20,7 @@ class MultiLevelSampler;
 class DisplaceMoveSampler; 
 class SectionChooser;
 class Paths;
+#include <cstdlib>
 #include <blitz/array.h>
 #include <typeinfo>
 

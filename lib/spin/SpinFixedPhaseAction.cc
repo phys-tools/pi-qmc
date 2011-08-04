@@ -25,6 +25,7 @@
 #include "SpinPhaseModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 
 SpinFixedPhaseAction::SpinFixedPhaseAction(const SimulationInfo &simInfo,

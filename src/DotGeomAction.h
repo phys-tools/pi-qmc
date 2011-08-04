@@ -18,6 +18,7 @@
 #define __DotGeomAction_h_
 class MultiLevelSampler;class DisplaceMoveSampler;
 template <int TDIM> class Beads;
+#include <cstdlib>
 #include <blitz/array.h>
 #include "Action.h"
 

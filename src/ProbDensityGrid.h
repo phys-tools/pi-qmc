@@ -20,6 +20,7 @@
 #include <vector>
 #include "Algorithm.h"
 #include "LinkSummable.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class SimulationInfo;
 class Paths;

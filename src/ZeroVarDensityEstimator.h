@@ -26,6 +26,7 @@
 #include "stats/MPIManager.h"
 #include "LinkSummable.h"
 #include "Paths.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include "SimulationInfo.h"
 #include "Species.h"

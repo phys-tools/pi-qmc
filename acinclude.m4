@@ -210,6 +210,7 @@ if test "$withval" != no ; then
         AC_LANG_CPLUSPLUS
         AC_RUN_IFELSE(
         [AC_LANG_PROGRAM([[
+#include <cstdlib>
 #include <blitz/array.h>
 ]],[[
 blitz::Array<int,1> x(10);

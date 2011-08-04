@@ -19,6 +19,7 @@
 
 #include <vector>
 #include "ProbDensityGrid.h"
+#include <cstdlib>
 #include <blitz/array.h>
 class SimulationInfo;
 class Paths;

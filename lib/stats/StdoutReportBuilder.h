@@ -20,6 +20,7 @@
 #include "EstimatorReportBuilder.h"
 #include <string>
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for reporting estimators to standard output.

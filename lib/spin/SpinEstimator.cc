@@ -21,6 +21,7 @@
 #include "SimulationInfo.h"
 #include "Action.h"
 #include "DoubleAction.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 
 SpinEstimator::SpinEstimator(

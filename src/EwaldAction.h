@@ -23,6 +23,7 @@ class SuperCell;
 #include "PairAction.h"
 #include "Action.h"
 #include <vector>
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <complex>
 

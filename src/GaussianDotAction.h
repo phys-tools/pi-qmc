@@ -20,6 +20,7 @@ class MultiLevelSampler;class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 #include "Action.h"
+#include <cstdlib>
 #include <blitz/array.h>
 
 /** Class for calculating an attractive Gaussian potenial.

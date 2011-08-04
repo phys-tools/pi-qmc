@@ -22,6 +22,7 @@ class SimulationInfo;
 #include "Algorithm.h"
 #include <string>
 #include <vector>
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// Class for writing the probability density to a hdf5 file.

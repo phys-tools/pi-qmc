@@ -18,6 +18,7 @@
 #include "config.h"
 #endif
 
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 #include "GroundStateSNode.h"
 #include "Species.h"

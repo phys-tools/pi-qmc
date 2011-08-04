@@ -19,6 +19,7 @@
 
 #include "Action.h"
 class Wavefunction;
+#include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
 class SimulationInfo;

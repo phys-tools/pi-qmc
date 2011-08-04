@@ -85,6 +85,7 @@ extern int irank;
 #include "Species.h"
 #include <iostream>
 #include <cstdlib>
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 
 ActionParser::ActionParser(const SimulationInfo& simInfo, const int maxlevel,

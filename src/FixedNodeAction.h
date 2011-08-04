@@ -19,6 +19,7 @@
 
 #include "DoubleAction.h"
 #include "NodeModel.h"
+#include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinymat.h>
 #include <vector>

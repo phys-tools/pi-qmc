@@ -22,6 +22,7 @@ class MPIManager;
 class BeadFactory;
 class SuperCell;
 #include "Paths.h"
+#include <cstdlib>
 #include <blitz/array.h>
 
 /// Storage for paths in a serial process.

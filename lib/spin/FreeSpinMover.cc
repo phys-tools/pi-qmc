@@ -21,6 +21,7 @@
 #include "FreeSpinMover.h"
 #include "Beads.h"
 #include "MultiLevelSampler.h"
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "SimulationInfo.h"
 #include <cmath>

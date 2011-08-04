@@ -20,6 +20,7 @@
 #include <cmath>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
 #include "SuperCell.h"
 #include "WireEwald.h"
