@@ -92,18 +92,20 @@ DensDensEstimator::~DensDensEstimator() {
 
 void DensDensEstimator::initCalc(const int nslice,
     const int firstSlice) {
-  temp1=0;
-  temp2=0;
+  temp1=0.;
+  temp2=0.;
 }
 
 
 void DensDensEstimator::handleLink(const Vec& start, const Vec& end,
     const int ipart, const int islice, const Paths &paths) {
   if (islice%nstride==0) {
+    int neffSlice = nslice/nstride;
+    int isliceBin = (islice/nstride+neffSlice)%neffSlice;
     if (ipart>=ifirst1 && ipart<ifirst1+npart1) {
       Vec r=start;
       blitz::TinyVector<int,NDIM+1> ibin=0;
-      ibin[NDIM]=islice/nstride;
+      ibin[NDIM]=isliceBin;
       for (int i=0; i<NDIM; ++i) {
         double d=(*dist[i])(r);
         ibin[i]=int(floor((d-min[i])*deltaInv[i]));
@@ -114,7 +116,7 @@ void DensDensEstimator::handleLink(const Vec& start, const Vec& end,
     if (ipart>=ifirst2 && ipart<ifirst2+npart2) {
       Vec r=start;
       blitz::TinyVector<int,NDIM+1> ibin=0;
-      ibin[NDIM]=islice/nstride;
+      ibin[NDIM]=isliceBin;
       for (int i=0; i<NDIM; ++i) {
         double d=(*dist[i])(r);
         ibin[i]=int(floor((d-min[i])*deltaInv[i]));
@@ -127,8 +129,6 @@ void DensDensEstimator::handleLink(const Vec& start, const Vec& end,
 
 
 void DensDensEstimator::endCalc(const int nslice) {
-  temp1/=nstride;
-  temp2/=nstride;
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
   ///Need code for multiple workers!
@@ -147,11 +147,11 @@ void DensDensEstimator::endCalc(const int nslice) {
     // Calculate autocorrelation function using FFT for convolution.
     fftw_execute(fwd1);
     fftw_execute(fwd2);
-    double betaInv=1./(tau*nslice);
+    double scale= tau*nstride/nslice;
     for (int i=0; i<ntot; ++i) 
       for (int j=0; j<ntot; ++j) 
         for (int ifreq=0; ifreq<nfreq; ++ifreq)
-          (*value_)(i,j,ifreq) += betaInv
+          (*value_)(i,j,ifreq) += scale
             *real((*temp1_)(i,ifreq)*conj((*temp2_)(j,ifreq)));
     norm+=1;
   }
