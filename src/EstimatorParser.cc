@@ -61,6 +61,7 @@
 #include "VIndEstimator.h"
 #include "EIndEstimator.h"
 #include "SimInfoWriter.h"
+#include "SKOmegaEstimator.h"
 #include "WindingEstimator.h"
 #include "stats/Units.h"
 
@@ -485,6 +486,18 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     if (name=="WindingEstimator") {
       int nmax=getIntAttribute(estNode,"nmax");
       manager->add(new WindingEstimator(simInfo,nmax,mpi));
+    }
+    if (name=="SKOmegaEstimator") {
+      IVec nbin = getIVecAttribute(estNode,"n");
+      blitz::TinyVector<int,NDIM+3> nbinN;
+      nbinN[0] = nbinN[1] = simInfo.getNSpecies();
+      for (int i=0; i<NDIM; ++i) nbinN[i+2] = (nbin[i]==0)?1:nbin[i];
+      nbinN[NDIM+2] = getIntAttribute(estNode,"nfreq"); 
+      int nstride = getIntAttribute(estNode,"nstride"); 
+      if (nstride==0) nstride=1;
+      std::string name=getStringAttribute(estNode,"name");
+      if (name=="") name="skomega";
+      manager->add(new SKOmegaEstimator(simInfo,name,nbin,nbinN,nstride,mpi));
     }
   }
   xmlXPathFreeObject(obj);

@@ -125,6 +125,7 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-SeedRandom.$(OBJEXT) pi-SerialPaths.$(OBJEXT) \
 	pi-SimInfoParser.$(OBJEXT) pi-SimInfoWriter.$(OBJEXT) \
 	pi-SimpleParticleChooser.$(OBJEXT) pi-SimulationInfo.$(OBJEXT) \
+	pi-SKOmegaEstimator.$(OBJEXT) \
 	pi-SmoothedGridPotential.$(OBJEXT) pi-Species.$(OBJEXT) \
 	pi-SpeciesParticleChooser.$(OBJEXT) pi-SphereAction.$(OBJEXT) \
 	pi-Spin4DPhase.$(OBJEXT) pi-SpinChargeEstimator.$(OBJEXT) \
@@ -349,15 +350,15 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	SHOAction.cc SHODotAction.cc SHONodes.cc SHOPhase.cc \
 	SHORealNodes.cc SectionChooser.cc SeedRandom.cc SerialPaths.cc \
 	SimInfoParser.cc SimInfoWriter.cc SimpleParticleChooser.cc \
-	SimulationInfo.cc SmoothedGridPotential.cc Species.cc \
-	SpeciesParticleChooser.cc SphereAction.cc Spin4DPhase.cc \
-	SpinChargeEstimator.cc SpringAction.cc SpringTensorAction.cc \
-	StillWebAction.cc StructReader.cc SuperCell.cc \
-	ThermoEnergyEstimator.cc TimpQPC.cc TradEwaldSum.cc \
-	TwoPairChooser.cc TwoQDAction.cc UniformMover.cc \
-	VIndEstimator.cc VirialEnergyEstimator.cc WalkingChooser.cc \
-	WellImageAction.cc WindingEstimator.cc WireEwald.cc \
-	WireNodes.cc WorkerShifter.cc WritePaths.cc \
+	SimulationInfo.cc SKOmegaEstimator.cc SmoothedGridPotential.cc \
+	Species.cc SpeciesParticleChooser.cc SphereAction.cc \
+	Spin4DPhase.cc SpinChargeEstimator.cc SpringAction.cc \
+	SpringTensorAction.cc StillWebAction.cc StructReader.cc \
+	SuperCell.cc ThermoEnergyEstimator.cc TimpQPC.cc \
+	TradEwaldSum.cc TwoPairChooser.cc TwoQDAction.cc \
+	UniformMover.cc VIndEstimator.cc VirialEnergyEstimator.cc \
+	WalkingChooser.cc WellImageAction.cc WindingEstimator.cc \
+	WireEwald.cc WireNodes.cc WorkerShifter.cc WritePaths.cc \
 	WriteProbDensity.cc XMLParser.cc XMLUnitParser.cc XMLWriter.cc \
 	main.cc assndx.f
 noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
@@ -403,7 +404,7 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	RingGateAction.h RingLattice.h SHOAction.h SHODotAction.h \
 	SHONodes.h SHOPhase.h SHORealNodes.h SectionChooser.h \
 	SeedRandom.h SerialPaths.h SimInfoParser.h SimInfoWriter.h \
-	SimpleParticleChooser.h SimulationInfo.h \
+	SimpleParticleChooser.h SimulationInfo.h SKOmegaEstimator.h \
 	SmoothedGridPotential.h Species.h SpeciesParticleChooser.h \
 	SphereAction.h Spin4DPhase.h SpinChargeEstimator.h \
 	SpringAction.h SpringTensorAction.h StillWebAction.h \
@@ -617,6 +618,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SHONodes.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SHOPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SHORealNodes.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SKOmegaEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SectionChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SeedRandom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SerialPaths.Po@am__quote@
@@ -2398,6 +2400,20 @@ pi-SimulationInfo.obj: SimulationInfo.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SimulationInfo.cc' object='pi-SimulationInfo.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SimulationInfo.obj `if test -f 'SimulationInfo.cc'; then $(CYGPATH_W) 'SimulationInfo.cc'; else $(CYGPATH_W) '$(srcdir)/SimulationInfo.cc'; fi`
+
+pi-SKOmegaEstimator.o: SKOmegaEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SKOmegaEstimator.o -MD -MP -MF $(DEPDIR)/pi-SKOmegaEstimator.Tpo -c -o pi-SKOmegaEstimator.o `test -f 'SKOmegaEstimator.cc' || echo '$(srcdir)/'`SKOmegaEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SKOmegaEstimator.Tpo $(DEPDIR)/pi-SKOmegaEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SKOmegaEstimator.cc' object='pi-SKOmegaEstimator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SKOmegaEstimator.o `test -f 'SKOmegaEstimator.cc' || echo '$(srcdir)/'`SKOmegaEstimator.cc
+
+pi-SKOmegaEstimator.obj: SKOmegaEstimator.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SKOmegaEstimator.obj -MD -MP -MF $(DEPDIR)/pi-SKOmegaEstimator.Tpo -c -o pi-SKOmegaEstimator.obj `if test -f 'SKOmegaEstimator.cc'; then $(CYGPATH_W) 'SKOmegaEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/SKOmegaEstimator.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SKOmegaEstimator.Tpo $(DEPDIR)/pi-SKOmegaEstimator.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SKOmegaEstimator.cc' object='pi-SKOmegaEstimator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SKOmegaEstimator.obj `if test -f 'SKOmegaEstimator.cc'; then $(CYGPATH_W) 'SKOmegaEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/SKOmegaEstimator.cc'; fi`
 
 pi-SmoothedGridPotential.o: SmoothedGridPotential.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SmoothedGridPotential.o -MD -MP -MF $(DEPDIR)/pi-SmoothedGridPotential.Tpo -c -o pi-SmoothedGridPotential.o `test -f 'SmoothedGridPotential.cc' || echo '$(srcdir)/'`SmoothedGridPotential.cc
