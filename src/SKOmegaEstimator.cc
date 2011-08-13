@@ -124,7 +124,7 @@ void SKOmegaEstimator::endCalc(const int nslice) {
   if (workerID==0) {
     // Calculate autocorrelation function using FFT for convolution.
     fftw_execute(fwd);
-    double scale= tau*nstride/nslice;
+    double scale= tau*nstride*nstride/nslice;
     for (int ispec=0; ispec<nspec; ++ispec)
       for (int jspec=0; jspec<nspec; ++jspec)
         for (int k=0; k<ntot; ++k) 
