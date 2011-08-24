@@ -8,6 +8,8 @@ from ScalarView import *
 from DensityView import *
 from PairCFView import *
 from FreeEnergyView import *
+from WindingView import *
+from SKOmegaView import *
 from PermutationView import *
 from SimulationModel import *
 
@@ -55,6 +57,8 @@ class SimulationModel(QtCore.QObject):
       est.view = None
       if est.typeString == "dynamic-array/conductivity":
         est.view = ConductivityView(est,self)
+      if est.typeString == "dynamic-array/structure-factor":
+        est.view = SKOmegaView(est,self)
       elif est.typeString[:6] == "scalar":
         est.view = ScalarView(est,self)
       elif est.typeString == "array/density":
@@ -63,6 +67,8 @@ class SimulationModel(QtCore.QObject):
         est.view = PermutationView(est,self)
       elif est.typeString == "histogram/free-energy":
         est.view = FreeEnergyView(est,self)
+      elif est.typeString == "histogram/winding":
+        est.view = WindingView(est,self)
       elif est.typeString == "array/pair-correlation":
         est.view = PairCFView(est,self)
       else:
