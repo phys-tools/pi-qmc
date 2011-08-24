@@ -28,10 +28,11 @@ class WindingView(EstimatorView):
       MyMplCanvas.__init__(self)
     def computeInitialFigure(self):
       self.axes = self.figure.add_axes([0.14,0.15,0.69,0.83])
+      plt.rc('font', family='serif', size=9)
       self.cbaxes = self.figure.add_axes([0.84,0.15,0.05,0.83])
       nmax = int(self.data.histogram.shape[0]/2)
       im =  self.axes.imshow(self.data.histogram,
-              extent=[-2*nmax,2*nmax,-2*nmax,2*nmax],
+              extent=[-nmax,nmax,-nmax,nmax],
               origin="lower", interpolation="nearest",
-	      vmax=1.0,vmin=0.0)
+	      vmin=0.0)
       plt.colorbar(im,cax=self.cbaxes)
