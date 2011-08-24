@@ -485,7 +485,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="WindingEstimator") {
       int nmax=getIntAttribute(estNode,"nmax");
-      bool isChargeCoupled = getIntAttribute(estNode,"isChargeCoupled");
+      bool isChargeCoupled = getBoolAttribute(estNode,"isChargeCoupled");
       std::string name = getStringAttribute(estNode,"name");
       if (name=="") name = isChargeCoupled ? "charge_winding" : "winding";
       manager->add(new WindingEstimator(simInfo,nmax,name,isChargeCoupled,mpi));
