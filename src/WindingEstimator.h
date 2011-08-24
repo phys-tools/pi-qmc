@@ -18,21 +18,22 @@
 #define __WindingEstimator_h_
 #include "LinkSummable.h"
 #include "stats/BlitzArrayBlkdEst.h"
+#include <blitz/array.h>
 class Paths;
 class SuperCell;
 class SimulationInfo;
 class MPIManager;
 /** Estimator for winding around periodic boundary conditions.
  *  @version $Revision$
- *  @bug Hard coded for two particles and no MPI.
  *  @author John Shumway  */
-class WindingEstimator : public BlitzArrayBlkdEst<4>, public LinkSummable {
+class WindingEstimator : public BlitzArrayBlkdEst<NDIM>, public LinkSummable {
 public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int,NDIM> IVec;
+  typedef blitz::Array<int,1> IArray;
   /// Constructor.
   WindingEstimator(const SimulationInfo& simInfo, int nmax,
-    MPIManager *mpi);
+    const std::string &name, bool isChargeCoupled, MPIManager *mpi);
   /// Virtual destructor.
   virtual ~WindingEstimator();
   /// Clear value of the estimator.
@@ -48,11 +49,13 @@ public:
   virtual void endCalc(int nslice);
 private:
   ///
-  MPIManager *mpi;
   int nmax;
   int npart;
-  Vec winding1, winding2;
+  Vec winding;
   SuperCell &cell;
+  IArray charge;
+  bool isChargeCoupled;
+  MPIManager *mpi;
 };
 
 #endif

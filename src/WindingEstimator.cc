@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2009 John B. Shumway, Jr.
+/*  Copyright (C) 2009, 2011 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,13 +32,16 @@
 #include <blitz/tinyvec-et.h>
 
 WindingEstimator::WindingEstimator(const SimulationInfo& simInfo,
-  int nmax, MPIManager *mpi)
-  : BlitzArrayBlkdEst<4>("winding","histogram/winding",
-                         IVecN(2*nmax+1,2*nmax+1,2*nmax+1,2*nmax+1), true), 
-    mpi(mpi), nmax(nmax), npart(simInfo.getNPart()),
-    cell(*simInfo.getSuperCell()) {
+  int nmax, const std::string &name, bool isChargeCoupled, MPIManager *mpi)
+  : BlitzArrayBlkdEst<NDIM>(name,"histogram/winding", IVecN(2*nmax+1), true), 
+    nmax(nmax), npart(simInfo.getNPart()), cell(*simInfo.getSuperCell()),
+    charge(npart), isChargeCoupled(isChargeCoupled), mpi(mpi) {
   value = 0.;
   norm = 0;
+  charge = 1.;
+  if (isChargeCoupled) {
+    for (int i=0; i<npart; ++i) charge(i)=simInfo.getPartSpecies(i).charge;
+  }
 }
 
 WindingEstimator::~WindingEstimator() {
@@ -49,39 +52,29 @@ void WindingEstimator::evaluate(const Paths &paths) {
 }
 
 void WindingEstimator::initCalc(const int nslice, const int firstSlice) {
-  winding1 = 0.;
-  winding2 = 0.;
+  winding = 0.;
 };
 
 void WindingEstimator::handleLink(const Vec& start, const Vec& end,
                           int ipart, int islice, const Paths&) {
   Vec delta = start-end;
   cell.pbc(delta);
-  if (ipart<npart/2) {
-    winding1 += delta;
-  } else {
-    winding2 += delta;
-  }
+  winding += delta*charge(ipart);
 }
 
 void WindingEstimator::endCalc(int nslice) {
   #ifdef ENABLE_MPI
   if (mpi) {
-    Vec buffer1, buffer2;
-    mpi->getWorkerComm().Reduce(&winding1,&buffer1,NDIM,MPI::DOUBLE,MPI::SUM,0);
-    mpi->getWorkerComm().Reduce(&winding2,&buffer2,NDIM,MPI::DOUBLE,MPI::SUM,0);
-    winding1 = buffer1; winding2 = buffer2;
+    Vec buffer;
+    mpi->getWorkerComm().Reduce(&winding,&buffer,NDIM,MPI::DOUBLE,MPI::SUM,0);
+    winding = buffer;
   }
   #endif
-  IVec iwind1 = rint(winding1*cell.b);
-  IVec iwind2 = rint(winding2*cell.b);
-#if NDIM>1
-  if (iwind1[0]>=-nmax && iwind1[0]<=nmax &&
-      iwind1[1]>=-nmax && iwind1[1]<=nmax &&
-      iwind2[0]>=-nmax && iwind2[0]<=nmax &&
-      iwind2[1]>=-nmax && iwind2[1]<=nmax)
-    ++value(iwind1[0]+nmax,iwind1[1]+nmax,iwind2[0]+nmax,iwind2[1]+nmax);
-#endif
+  IVec iwind = rint(winding*cell.b)+nmax;
+  for (int idim=0; idim<NDIM; ++idim) {
+    if (iwind[idim]<0 || iwind[idim]>2*nmax+1) break;
+    if (idim==NDIM-1) ++value(iwind);
+  }
   ++norm;
 }
 

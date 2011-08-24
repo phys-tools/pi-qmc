@@ -485,7 +485,10 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="WindingEstimator") {
       int nmax=getIntAttribute(estNode,"nmax");
-      manager->add(new WindingEstimator(simInfo,nmax,mpi));
+      bool isChargeCoupled = getIntAttribute(estNode,"isChargeCoupled");
+      std::string name = getStringAttribute(estNode,"name");
+      if (name=="") name = isChargeCoupled ? "charge_winding" : "winding";
+      manager->add(new WindingEstimator(simInfo,nmax,name,isChargeCoupled,mpi));
     }
     if (name=="SKOmegaEstimator") {
       IVec nbin = getIVecAttribute(estNode,"n");
