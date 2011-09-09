@@ -1,0 +1,20 @@
+We want a schema for our pimc.xml files.
+
+Run with:
+
+xmllint --schema pimcSchema.xml --noout pimc.xml
+
+
+It's handy to set some environment variables and aliases:
+
+export PIHOME="$HOME/Documents/Codes/pi"
+alias valpimcxml='xmllint --schema $PIHOME/schema/schema.xml --noout'
+
+That PIHOME variable can also be used for piworld.
+export PYTHONPATH=$PIHOME/python/pitools:$PIHOME/python:$PYTHONPATH
+alias piworld=$PIHOME/python/piworld/piworld.py
+
+
+To parse units, the schema makes use of a regular expressin to match a floating point number:
+
+(\+|-)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?

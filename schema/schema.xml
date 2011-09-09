@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:element name="Simulation">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="SuperCell" type="superCell"/>
+      <xsd:sequence minOccurs = "1" maxOccurs="unbounded">
+        <xsd:element name = "Species" type="species"/>
+      </xsd:sequence>
+      <xsd:element name="Temperature" type="temperature"/>
+      <xsd:element name="Action" type="actionSection"/>
+      <xsd:element name="Estimators" type="estimatorSection"/>
+      <xsd:element name="PIMC" type="pimcSection"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:complexType name="superCell">
+  <xsd:attribute name="a" type="positiveLength" use="optional"/>
+  <xsd:attribute name="x" type="xsd:string" use="optional"/>
+  <xsd:attribute name="y" type="xsd:string" use="optional"/>
+  <xsd:attribute name="z" type="xsd:string" use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="species">
+  <xsd:attribute name="name" type="xsd:string"/>
+  <xsd:attribute name="count" type="xsd:positiveInteger"/>
+  <xsd:attribute name="charge" type="xsd:float"/>
+  <xsd:attribute name="mass" type="mass"/>
+</xsd:complexType>
+
+<xsd:complexType name="temperature">
+  <xsd:attribute name="value" type="positiveEnergy"/>
+  <xsd:attribute name="nslice" type="xsd:string" use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="actionSection">
+  <xsd:choice minOccurs = "0" maxOccurs="unbounded">
+    <xsd:element name="ActionGroup"/>
+    <xsd:element name="ActionChoice"/>
+    <xsd:element name="CoulombAction"/>
+    <xsd:element name="SpringAction"/>
+  </xsd:choice>
+</xsd:complexType>
+
+<xsd:complexType name="estimatorSection">
+  <xsd:choice minOccurs = "0" maxOccurs="unbounded">
+    <xsd:element name="CoulombEnergyEstimator"/>
+    <xsd:element name="PairCFEstimator"/>
+    <xsd:element name="PermutationEstimator"/>
+    <xsd:element name="ThermoEnergyEstimator"/>
+  </xsd:choice>
+</xsd:complexType>
+
+<xsd:complexType name="pimcSection">
+  <xsd:choice minOccurs = "0" maxOccurs="unbounded">
+    <xsd:element name="RandomGenerator"/>
+    <xsd:element name="ReadPaths"/>
+    <xsd:element name="Loop"/>
+  </xsd:choice>
+  <xsd:attribute name="nclone" type="xsd:positiveInteger" use="optional"/>
+  <xsd:attribute name="nworker" type="xsd:positiveInteger" use="optional"/>
+</xsd:complexType>
+
+<xsd:simpleType name="positiveLength">
+  <xsd:restriction base="xsd:token">
+    <xsd:whiteSpace value="preserve"/>
+    <xsd:pattern value="(\+)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?( (A|fm|pm|nm|um|mm|cm|m))?"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="positiveEnergy">
+  <xsd:restriction base="xsd:token">
+    <xsd:whiteSpace value="preserve"/>
+    <xsd:pattern value="(\+)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?( (kV|keV|eV|V|meV|ueV|K|mK|uK|nK|Ha|Ry|cm\-1|kcal/mol|Hz|kHz|MHz|GHz|THz|PHz))?"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="mass">
+  <xsd:restriction base="xsd:token">
+    <xsd:whiteSpace value="preserve"/>
+    <xsd:pattern value="(\+)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?( (amu|m_p|m_e))?"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+
+</xsd:schema>
