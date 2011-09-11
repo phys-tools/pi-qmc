@@ -37,12 +37,42 @@
 
 <xsd:complexType name="actionSection">
   <xsd:choice minOccurs = "0" maxOccurs="unbounded">
-    <xsd:element name="ActionGroup"/>
-    <xsd:element name="ActionChoice"/>
-    <xsd:element name="CoulombAction"/>
-    <xsd:element name="SpringAction"/>
+    <xsd:element name="ActionChoice" type="actionChoice"/>
+    <xsd:element name="CoulombAction" type="coulombAction"/>
+    <xsd:element name="FixedNodeAction" type="fixedNodeAction"/>
+    <xsd:element name="SpringAction" type="springAction"/>
   </xsd:choice>
 </xsd:complexType>
+
+<xsd:complexType name="actionChoice">
+  <xsd:choice minOccurs = "0" maxOccurs="unbounded">
+    <xsd:element name="ActionGroup" type="actionSection"/>
+  </xsd:choice>
+  <xsd:attribute name="initial" type="xsd:nonNegativeInteger" use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="fixedNodeAction">
+  <xsd:choice minOccurs = "0" maxOccurs="unbounded">
+    <xsd:element name="Atomic1s"/>
+  </xsd:choice>
+  <xsd:attribute name="species" type="xsd:string" use="required"/>
+  <xsd:attribute name="model" type="xsd:string" use="optional"/>
+  <xsd:attribute name="density" type="xsd:decimal" use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="coulombAction">
+  <xsd:attribute name="norder" type="xsd:nonNegativeInteger" use="required"/>
+  <xsd:attribute name="rmin" type="positiveLength" use="optional"/>
+  <xsd:attribute name="rmax" type="positiveLength" use="optional"/>
+  <xsd:attribute name="ngridPoints" type="xsd:nonNegativeInteger"
+    use="required"/>
+  <xsd:attribute name="dumpFiles" type="boolean" use="optional"/>
+  <xsd:attribute name="useEwald" type="boolean" use="optional"/>
+  <xsd:attribute name="ewaldKcut" type="positiveInverseLength"
+    use="optional"/>
+</xsd:complexType>
+
+<xsd:complexType name="springAction"/>
 
 <xsd:complexType name="estimatorSection">
   <xsd:choice minOccurs = "0" maxOccurs="unbounded">
@@ -63,10 +93,23 @@
   <xsd:attribute name="nworker" type="xsd:positiveInteger" use="optional"/>
 </xsd:complexType>
 
+<xsd:simpleType name="positiveNumber">
+  <xsd:restriction base="xsd:decimal">
+    <xsd:minExclusive value="0"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
 <xsd:simpleType name="positiveLength">
   <xsd:restriction base="xsd:token">
     <xsd:whiteSpace value="preserve"/>
     <xsd:pattern value="(\+)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?( (A|fm|pm|nm|um|mm|cm|m))?"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="positiveInverseLength">
+  <xsd:restriction base="xsd:token">
+    <xsd:whiteSpace value="preserve"/>
+    <xsd:pattern value="(\+)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?( (A-1|fm-1|pm-1|nm-1|um-1|mm-1|cm-1|m-1))?"/>
   </xsd:restriction>
 </xsd:simpleType>
 
@@ -81,6 +124,19 @@
   <xsd:restriction base="xsd:token">
     <xsd:whiteSpace value="preserve"/>
     <xsd:pattern value="(\+)?([0-9]+\.?[0-9]*|\.[0-9]+)([eE](\+|-)?[0-9]+)?( (amu|m_p|m_e))?"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="boolean">
+  <xsd:restriction base="xsd:string">
+    <xsd:enumeration value="True"/>
+    <xsd:enumeration value="true"/>
+    <xsd:enumeration value="T"/>
+    <xsd:enumeration value="t"/>
+    <xsd:enumeration value="False"/>
+    <xsd:enumeration value="false"/>
+    <xsd:enumeration value="F"/>
+    <xsd:enumeration value="f"/>
   </xsd:restriction>
 </xsd:simpleType>
 
