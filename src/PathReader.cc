@@ -21,6 +21,7 @@
 #include <mpi.h>
 #endif
 #include "PathReader.h"
+#include "ModelState.h"
 #include "Paths.h"
 #include <iostream>
 #include <fstream>
@@ -75,25 +76,8 @@ void PathReader::run() {
     }
     // Check for model state variables.
     getline(*infile,temp); firstLine += temp;
-    if (paths.getModelCount() > 1) {
-      std::cout << "Checking for model state..." << std::endl;
-      int i = firstLine.find("state");
-      if (i != -1) {
-        i += 6;
-        int j = firstLine.find("of");
-        modelState = atoi(firstLine.substr(i,j-i-1).c_str());
-        modelCount = atoi(firstLine.substr(j+3).c_str());
-        // Hack to handle old and new indexing of model states.
-        // New convention is to start from 1 and end line with "."
-        if (firstLine[firstLine.size()-1]=='.') --modelState;
-        std::cout << "Model state " << modelState << "." << std::endl;
-      }
-      else {
-        modelState =paths.getModelState();
-        std::cout << "WARNING :: Did not find model state in the restart file."
-                  << "\nNow using the initial model state " << modelState
-		  << " specified in pimc.xml." << std::endl; 
-      }
+    if (paths.hasModelState()) {
+      paths.getModelState()->read(firstLine);
     }
     // Now read coordinates.
     //getline(*infile,temp); 
@@ -104,13 +88,14 @@ void PathReader::run() {
     }
   }
 
+  // BUG HERE, BREAKS PARALLEL VERSION WHEN SAMPLING NODE MODEL.
 #ifdef ENABLE_MPI
   if (mpi) {
     mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
-    mpi->getWorkerComm().Bcast(&modelState,1,MPI::INT,0);
+    //mpi->getWorkerComm().Bcast(&modelState,1,MPI::INT,0);
   }
 #endif
-  paths.setModelState(modelState);
+  //paths.setModelState(modelState);
 
   Beads<NDIM> firstSlice(slice);  Permutation pidentity(npart); 
   for (int islice=0; islice<(nslice/bfactor)-1; ++islice) { 
@@ -173,4 +158,3 @@ void PathReader::run() {
     }
 */
 }
- 

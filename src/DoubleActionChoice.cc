@@ -20,6 +20,7 @@
 #include "DoubleActionChoice.h"
 #include "DoubleMLSampler.h"
 #include "DoubleSectionChooser.h"
+#include "EnumeratedModelState.h"
 #include "Paths.h"
 
 DoubleActionChoice::DoubleActionChoice(const int n)
@@ -31,7 +32,10 @@ DoubleActionChoice::~DoubleActionChoice() {
 
 double DoubleActionChoice::getActionDifference(
     const DoubleMLSampler& sampler, const int level) {
-  imodel = sampler.getPaths().getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*>
+        (sampler.getPaths().getModelState());
+  imodel = modelState->getModelState();
   double diff = actions[imodel]->getActionDifference(sampler,level);
   return diff;
 }
@@ -39,7 +43,9 @@ double DoubleActionChoice::getActionDifference(
 double DoubleActionChoice::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
     int iFirstSlice, int nslice) {
-  imodel = paths.getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
+  imodel = modelState->getModelState();
   double diff = actions[imodel]->getActionDifference(paths,displacement,nmoving,
                                            movingIndex,iFirstSlice,nslice);
   return diff;
@@ -59,7 +65,10 @@ void DoubleActionChoice::getBeadAction(const Paths& paths,
 
 void DoubleActionChoice::initialize(const DoubleSectionChooser& 
                                              sectionChooser) {
-  imodel = sectionChooser.getPaths().getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*>
+        (sectionChooser.getPaths().getModelState());
+  imodel = modelState->getModelState();
   actions[imodel]->initialize(sectionChooser);
 }
 

@@ -36,6 +36,7 @@
 #include "DoubleDisplaceMoveSampler.h"
 #include "ModelSampler.h"
 #include "EMARateMover.h"
+#include "EnumeratedModelState.h"
 #include "spin/SpinMover.h"
 #include "spin/FreeSpinMover.h"
 #include "DampedFreeTensorMover.h"
@@ -127,8 +128,10 @@ void PIMCParser::parse(const xmlXPathContextPtr& ctxt) {
                           nslice,tau,*simInfo.getSuperCell(),beadFactory);
   }
   if (actionChoice) {
-    paths->setModelState(actionChoice->getModelState());
-    paths->setModelCount(actionChoice->getModelCount());
+    EnumeratedModelState* modelState 
+      =  new EnumeratedModelState(actionChoice->getModelCount());
+    modelState->setModelState(actionChoice->getModelState());
+    paths->setModelState(modelState);
   }
   // Parse the algorithm.
   algorithm=parseAlgorithm(ctxt);

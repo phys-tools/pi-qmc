@@ -29,6 +29,7 @@
 #include "stats/MPIManager.h"
 #include <fstream>
 #include "Species.h"
+#include "EnumeratedModelState.h"
 //sak
 #include <iostream>
 FreeEnergyEstimator::FreeEnergyEstimator(const SimulationInfo& simInfo,
@@ -44,7 +45,11 @@ FreeEnergyEstimator::~FreeEnergyEstimator() {
 }
 
 void FreeEnergyEstimator::evaluate(const Paths &paths) {
-  value(paths.getModelState()) += 1.;
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
+  int imodel = modelState->getModelState();
+
+  value(imodel) += 1.;
   norm += 1.;
 }
 

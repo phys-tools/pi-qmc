@@ -25,6 +25,7 @@
 #include "Beads.h"
 #include "BeadFactory.h"
 #include "stats/MPIManager.h"
+#include "ModelState.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -68,11 +69,8 @@ void WritePaths::run() {
     *file << std::endl;
     *file << "#Path coordinates: " << paths.getNPart()
 	  << " particles in " << NDIM << "-d";
-    int modelCount = paths.getModelCount();    
-    if (modelCount>1) {
-      int modelState = paths.getModelState();    
-      *file << ", state " << modelState+1 
-            << " of " << modelCount << ".";
+    if (paths.hasModelState()) {
+      paths.getModelState()->write(*file);
     }
     *file << std::endl;
     file->precision(15);

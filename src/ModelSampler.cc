@@ -28,6 +28,7 @@
 #include "ActionChoice.h"
 #include "RandomNumGenerator.h"
 #include "Paths.h"
+#include "EnumeratedModelState.h"
 #include <sstream>
 #include <string>
 
@@ -51,7 +52,10 @@ bool ModelSampler::tryMove() {
 
   if (workerID==0) accRejEst->tryingMove(0);
 
-  int imodel = paths.getModelState(); 
+  EnumeratedModelState *modelState 
+    = dynamic_cast<EnumeratedModelState*> (paths.getModelState());
+  int imodel = modelState->getModelState();
+
   actionChoice->setModelState(imodel);
 
   // We select the next model so that the end points always
@@ -92,7 +96,9 @@ bool ModelSampler::tryMove() {
   if (reject) return false;
 
   actionChoice->setModelState(jmodel);
-  paths.setModelState(jmodel);
+
+  modelState->setModelState(jmodel);
+
   if (workerID==0) accRejEst->moveAccepted(0);
   return true;
 }

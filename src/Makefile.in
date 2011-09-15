@@ -82,8 +82,8 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-DynamicPCFEstimator.$(OBJEXT) pi-EFieldAction.$(OBJEXT) \
 	pi-EIndEstimator.$(OBJEXT) pi-EMARateAction.$(OBJEXT) \
 	pi-EMARateEstimator.$(OBJEXT) pi-EMARateMover.$(OBJEXT) \
-	pi-EstimatorParser.$(OBJEXT) pi-EwaldAction.$(OBJEXT) \
-	pi-EwaldCoulombEstimator.$(OBJEXT) \
+	pi-EnumeratedModelState.$(OBJEXT) pi-EstimatorParser.$(OBJEXT) \
+	pi-EwaldAction.$(OBJEXT) pi-EwaldCoulombEstimator.$(OBJEXT) \
 	pi-EwaldImagePairAction.$(OBJEXT) pi-EwaldSum.$(OBJEXT) \
 	pi-ExchangeMover.$(OBJEXT) pi-ExcitonNodes.$(OBJEXT) \
 	pi-FixedNodeAction.$(OBJEXT) pi-FixedPhaseAction.$(OBJEXT) \
@@ -324,11 +324,11 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	DoubleParallelPaths.cc DoubleSectionChooser.cc \
 	DynamicPCFEstimator.cc EFieldAction.cc EIndEstimator.cc \
 	EMARateAction.cc EMARateEstimator.cc EMARateMover.cc \
-	EstimatorParser.cc EwaldAction.cc EwaldCoulombEstimator.cc \
-	EwaldImagePairAction.cc EwaldSum.cc ExchangeMover.cc \
-	ExcitonNodes.cc FixedNodeAction.cc FixedPhaseAction.cc \
-	FreeEnergyEstimator.cc FreeMover.cc FreeMoverPBC.cc \
-	FreePartNodesNoUpdate.cc FreeParticleNodes.cc \
+	EnumeratedModelState.cc EstimatorParser.cc EwaldAction.cc \
+	EwaldCoulombEstimator.cc EwaldImagePairAction.cc EwaldSum.cc \
+	ExchangeMover.cc ExcitonNodes.cc FixedNodeAction.cc \
+	FixedPhaseAction.cc FreeEnergyEstimator.cc FreeMover.cc \
+	FreeMoverPBC.cc FreePartNodesNoUpdate.cc FreeParticleNodes.cc \
 	FreeTensorMover.cc FrequencyEstimator.cc GateAction.cc \
 	GaussianAction.cc GaussianDotAction.cc GrapheneAction.cc \
 	GridPotential.cc GroundStateSNode.cc GroundStateWFNodes.cc \
@@ -378,19 +378,19 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	DoubleParallelPaths.h DoubleSectionChooser.h \
 	DynamicPCFEstimator.h EFieldAction.h EIndEstimator.h \
 	EMARateAction.h EMARateEstimator.h EMARateMover.h \
-	EstimatorParser.h EwaldAction.h EwaldCoulombEstimator.h \
-	EwaldImagePairAction.h EwaldSum.h ExchangeMover.h \
-	ExcitonNodes.h FixedNodeAction.h FixedPhaseAction.h \
-	FreeEnergyEstimator.h FreeMover.h FreeMoverPBC.h \
-	FreePartNodesNoUpdate.h FreeParticleNodes.h FreeTensorMover.h \
-	FrequencyEstimator.h GateAction.h GaussianAction.h \
-	GaussianDotAction.h GrapheneAction.h GridPotential.h \
-	GroundStateSNode.h GroundStateWFNodes.h Help.h \
+	EnumeratedModelState.h EstimatorParser.h EwaldAction.h \
+	EwaldCoulombEstimator.h EwaldImagePairAction.h EwaldSum.h \
+	ExchangeMover.h ExcitonNodes.h FixedNodeAction.h \
+	FixedPhaseAction.h FreeEnergyEstimator.h FreeMover.h \
+	FreeMoverPBC.h FreePartNodesNoUpdate.h FreeParticleNodes.h \
+	FreeTensorMover.h FrequencyEstimator.h GateAction.h \
+	GaussianAction.h GaussianDotAction.h GrapheneAction.h \
+	GridPotential.h GroundStateSNode.h GroundStateWFNodes.h Help.h \
 	HyperbolicAction.h HyperbolicMover.h ImagePairAction.h \
 	JEstimator.h JelliumSlab.h LinkSummable.h Loop.h MainParser.h \
-	Measure.h MiddleSectionChooser.h ModelSampler.h Mover.h \
-	MultiLevelSampler.h MultiSpeciesParticleChooser.h NodeModel.h \
-	NodeTester.h NonZeroSectionChooser.h OptEwaldSum.h \
+	Measure.h MiddleSectionChooser.h ModelSampler.h ModelState.h \
+	Mover.h MultiLevelSampler.h MultiSpeciesParticleChooser.h \
+	NodeModel.h NodeTester.h NonZeroSectionChooser.h OptEwaldSum.h \
 	OpticalLatticeAction.h PIMCParser.h PairAction.h \
 	PairCFEstimator.h PairChooser.h PairDistance.h \
 	PairIntegrator.h PairPotential.h ParallelPaths.h \
@@ -545,6 +545,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EMARateAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EMARateEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EMARateMover.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EnumeratedModelState.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EstimatorParser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EwaldAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-EwaldCoulombEstimator.Po@am__quote@
@@ -1280,6 +1281,20 @@ pi-EMARateMover.obj: EMARateMover.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EMARateMover.cc' object='pi-EMARateMover.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EMARateMover.obj `if test -f 'EMARateMover.cc'; then $(CYGPATH_W) 'EMARateMover.cc'; else $(CYGPATH_W) '$(srcdir)/EMARateMover.cc'; fi`
+
+pi-EnumeratedModelState.o: EnumeratedModelState.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EnumeratedModelState.o -MD -MP -MF $(DEPDIR)/pi-EnumeratedModelState.Tpo -c -o pi-EnumeratedModelState.o `test -f 'EnumeratedModelState.cc' || echo '$(srcdir)/'`EnumeratedModelState.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-EnumeratedModelState.Tpo $(DEPDIR)/pi-EnumeratedModelState.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EnumeratedModelState.cc' object='pi-EnumeratedModelState.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EnumeratedModelState.o `test -f 'EnumeratedModelState.cc' || echo '$(srcdir)/'`EnumeratedModelState.cc
+
+pi-EnumeratedModelState.obj: EnumeratedModelState.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EnumeratedModelState.obj -MD -MP -MF $(DEPDIR)/pi-EnumeratedModelState.Tpo -c -o pi-EnumeratedModelState.obj `if test -f 'EnumeratedModelState.cc'; then $(CYGPATH_W) 'EnumeratedModelState.cc'; else $(CYGPATH_W) '$(srcdir)/EnumeratedModelState.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-EnumeratedModelState.Tpo $(DEPDIR)/pi-EnumeratedModelState.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EnumeratedModelState.cc' object='pi-EnumeratedModelState.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-EnumeratedModelState.obj `if test -f 'EnumeratedModelState.cc'; then $(CYGPATH_W) 'EnumeratedModelState.cc'; else $(CYGPATH_W) '$(srcdir)/EnumeratedModelState.cc'; fi`
 
 pi-EstimatorParser.o: EstimatorParser.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-EstimatorParser.o -MD -MP -MF $(DEPDIR)/pi-EstimatorParser.Tpo -c -o pi-EstimatorParser.o `test -f 'EstimatorParser.cc' || echo '$(srcdir)/'`EstimatorParser.cc

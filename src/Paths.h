@@ -21,6 +21,7 @@ class SuperCell;
 template <int TDIM> class Beads;
 class Permutation;
 class LinkSummable;
+class ModelState;
 #include <cstdlib>
 #include <blitz/array.h>
 
@@ -114,10 +115,10 @@ public:
   virtual void setBuffers() {}
   virtual bool isDouble() const {return false;}
   virtual void clearPermutation()=0;
-  int getModelState() const {return modelState;}
-  void setModelState(int i) {modelState=i;}
-  int getModelCount() const {return modelCount;}
-  void setModelCount(int i) {modelCount=i;}
+  ModelState* getModelState() {return modelState;}
+  const ModelState* getModelState() const {return modelState;}
+  void setModelState(ModelState *m) {modelState=m;}
+  bool hasModelState() {return modelState != 0;}
 protected:
   /// Number of particles.
   const int npart;
@@ -127,9 +128,7 @@ protected:
   const double tau;
   /// The supercell.
   const SuperCell& cell;
-  /// State variable for sampling different action models.
-  int modelState;
-  /// The number of different action models.
-  int modelCount;
+
+  ModelState *modelState;
 };
 #endif

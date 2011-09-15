@@ -21,6 +21,7 @@
 #include "MultiLevelSampler.h"
 #include "SectionChooser.h"
 #include "Paths.h"
+#include "EnumeratedModelState.h"
 
 ActionChoice::ActionChoice(const int n) : CompositeAction(n) {
 }
@@ -30,7 +31,10 @@ ActionChoice::~ActionChoice() {
 
 double ActionChoice::getActionDifference(
     const MultiLevelSampler& sampler, const int level) {
-  imodel = sampler.getPaths().getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*>
+        (sampler.getPaths().getModelState());
+  imodel = modelState->getModelState();
   double diff = actions[imodel]->getActionDifference(sampler,level);
   return diff;
 }
@@ -38,14 +42,18 @@ double ActionChoice::getActionDifference(
 double ActionChoice::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
     int iFirstSlice, int nslice) {
-  imodel = paths.getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
+  imodel = modelState->getModelState();
   double diff = actions[imodel]->getActionDifference(paths,displacement,
       nmoving, movingIndex,iFirstSlice,nslice);
   return diff;
 }
 
 double ActionChoice::getTotalAction(const Paths& paths, int level) const {
-  int imodel = paths.getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
+  int imodel = modelState->getModelState();
   double total=actions[imodel]->getTotalAction(paths,level);
   return total;
 }
@@ -53,13 +61,18 @@ double ActionChoice::getTotalAction(const Paths& paths, int level) const {
 void ActionChoice::getBeadAction(const Paths& paths, int ipart, int islice,
        double& u, double& utau, double& ulambda, Action::Vec& fm, 
        Action::Vec& fp) const {
-  int imodel = paths.getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
   u=utau=ulambda=0; fm=0.; fp=0.;
+  int imodel = modelState->getModelState();
   actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
 }
 
 void ActionChoice::initialize(const SectionChooser& sectionChooser) {
-  imodel = sectionChooser.getPaths().getModelState();
+  const EnumeratedModelState *modelState 
+    = dynamic_cast<const EnumeratedModelState*>
+        (sectionChooser.getPaths().getModelState());
+  imodel = modelState->getModelState();
   actions[imodel]->initialize(sectionChooser);
 }
 
