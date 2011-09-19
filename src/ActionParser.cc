@@ -19,6 +19,7 @@
 #endif
 
 extern int irank;
+#include "EnumeratedModelState.h"
 
 #include "Beads.h"
 #include "ActionParser.h"
@@ -683,7 +684,10 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
         doubleComposite->addAction(doubleChoice);
         actionChoice = doubleChoice;
       }
-      actionChoice->setModelState(imodel);
+      EnumeratedModelState *modelState
+        = dynamic_cast<EnumeratedModelState*>(&actionChoice->getModelState());
+      modelState->setModelState(imodel);
+
       continue;
     } else if (name=="ActionGroup") {
       ctxt->node=actNode;

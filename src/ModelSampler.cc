@@ -35,7 +35,9 @@
 ModelSampler::ModelSampler(Paths& paths, Action* action, 
   ActionChoiceBase* actionChoice, const MPIManager* mpi)
   : paths(paths), action(action), actionChoice(actionChoice),
-    nmodel(actionChoice->getModelCount()), accRejEst(0),  mpi(mpi) {
+    modelState(dynamic_cast<EnumeratedModelState&>
+                 (actionChoice->getModelState())),
+    nmodel(modelState.getModelCount()), accRejEst(0),  mpi(mpi) {
 }
 
 ModelSampler::~ModelSampler() {
@@ -52,11 +54,9 @@ bool ModelSampler::tryMove() {
 
   if (workerID==0) accRejEst->tryingMove(0);
 
-  EnumeratedModelState *modelState 
-    = dynamic_cast<EnumeratedModelState*> (paths.getModelState());
-  int imodel = modelState->getModelState();
+  int imodel = modelState.getModelState();
 
-  actionChoice->setModelState(imodel);
+  modelState.setModelState(imodel);
 
   // We select the next model so that the end points always
   // try a valid model. This is efficient for two models, but
@@ -95,9 +95,7 @@ bool ModelSampler::tryMove() {
 #endif 
   if (reject) return false;
 
-  actionChoice->setModelState(jmodel);
-
-  modelState->setModelState(jmodel);
+  modelState.setModelState(jmodel);
 
   if (workerID==0) accRejEst->moveAccepted(0);
   return true;

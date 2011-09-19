@@ -1,4 +1,4 @@
-// $Id: EnumeratedModelState.h 338 2010-11-30 18:56:16Z john.shumwayjr $
+// $Id: SpinModelState.h 338 2010-11-30 18:56:16Z john.shumwayjr $
 /*  Copyright (C) 2011 John B. Shumway, Jr and Jianheng Liu.
 
     This program is free software; you can redistribute it and/or modify
@@ -14,25 +14,28 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-#ifndef __EnumeratedModelState_h_
-#define __EnumeratedModelState_h_
+#ifndef __SpinModelState_h_
+#define __SpinModelState_h_
 
 #include "ModelState.h"
+#include <cstdlib>
+#include <blitz/array.h>
 
-///Base class for model state.
+///Model state for spin up and spin down.
 /// @version $Revision: 338 $
 /// @author John Shumway and Jianheng Liu
-class EnumeratedModelState : public ModelState {
+class SpinModelState : public ModelState {
 public:
-  EnumeratedModelState(int modelCount);
-  virtual ~EnumeratedModelState() {};
+  typedef blitz::Array<int,1> IArray;
+  SpinModelState(int npart);
+  virtual ~SpinModelState() {};
   virtual void write(std::ostream &os) const;
   virtual bool read(const std::string &line);
-  int getModelState() const {return modelState;}
-  void setModelState(int i) {modelState = i;}
-  virtual int getModelCount() const {return modelCount;}
+  const IArray& getModelState() const {return modelState;}
+  IArray& getModelState() {return modelState;}
+  virtual int getModelCount() const {return npart+1;}
 private:
-  const int modelCount;
-  int modelState;
+  const int npart;
+  IArray modelState;
 };
 #endif

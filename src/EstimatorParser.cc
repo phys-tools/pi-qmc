@@ -64,6 +64,7 @@
 #include "SKOmegaEstimator.h"
 #include "WindingEstimator.h"
 #include "stats/Units.h"
+#include "ModelState.h"
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,
@@ -80,7 +81,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
   // First see if we need a FreeEnergyEstimator for ActionChoice.
   if (actionChoice) {
     manager->add(new FreeEnergyEstimator(simInfo,
-       actionChoice->getModelCount(), mpi));
+       actionChoice->getModelState().getModelCount(), mpi));
   }
   // Then parse the xml estimator list.
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);

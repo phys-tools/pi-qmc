@@ -21,6 +21,7 @@ class ActionChoiceBase;
 class Paths;
 class AccRejEstimator;
 class MPIManager;
+class EnumeratedModelState;
 
 #include "Algorithm.h"
 #include <vector>
@@ -52,7 +53,7 @@ protected:
   Action *action;
   /// The action to be evaluated during the move.
   ActionChoiceBase *actionChoice;
-  /// The number of action models to choose from.
+  EnumeratedModelState &modelState; 
   const int nmodel;
   /// A pointer to the accept-reject estimator.
   AccRejEstimator* accRejEst;

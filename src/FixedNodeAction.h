@@ -87,7 +87,7 @@ public:
     bool withNodalAction, bool useDistDerivative, int maxlevel,
     bool useManyBodyDistance);
   /// Destructor.
-  ~FixedNodeAction();
+  virtual ~FixedNodeAction();
   /// Calculate the difference in action.
   virtual double getActionDifference(const DoubleMLSampler&,int level);
   /// Calculate the difference in action.

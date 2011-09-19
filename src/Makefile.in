@@ -129,6 +129,8 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-SmoothedGridPotential.$(OBJEXT) pi-Species.$(OBJEXT) \
 	pi-SpeciesParticleChooser.$(OBJEXT) pi-SphereAction.$(OBJEXT) \
 	pi-Spin4DPhase.$(OBJEXT) pi-SpinChargeEstimator.$(OBJEXT) \
+	pi-SpinModelState.$(OBJEXT) \
+	pi-SpinChoiceFixedNodeAction.$(OBJEXT) \
 	pi-SpringAction.$(OBJEXT) pi-SpringTensorAction.$(OBJEXT) \
 	pi-StillWebAction.$(OBJEXT) pi-StructReader.$(OBJEXT) \
 	pi-SuperCell.$(OBJEXT) pi-ThermoEnergyEstimator.$(OBJEXT) \
@@ -352,7 +354,8 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	SimInfoParser.cc SimInfoWriter.cc SimpleParticleChooser.cc \
 	SimulationInfo.cc SKOmegaEstimator.cc SmoothedGridPotential.cc \
 	Species.cc SpeciesParticleChooser.cc SphereAction.cc \
-	Spin4DPhase.cc SpinChargeEstimator.cc SpringAction.cc \
+	Spin4DPhase.cc SpinChargeEstimator.cc SpinModelState.cc \
+	SpinChoiceFixedNodeAction.cc SpringAction.cc \
 	SpringTensorAction.cc StillWebAction.cc StructReader.cc \
 	SuperCell.cc ThermoEnergyEstimator.cc TimpQPC.cc \
 	TradEwaldSum.cc TwoPairChooser.cc TwoQDAction.cc \
@@ -407,14 +410,14 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	SimpleParticleChooser.h SimulationInfo.h SKOmegaEstimator.h \
 	SmoothedGridPotential.h Species.h SpeciesParticleChooser.h \
 	SphereAction.h Spin4DPhase.h SpinChargeEstimator.h \
-	SpringAction.h SpringTensorAction.h StillWebAction.h \
-	StructReader.h SuperCell.h ThermoEnergyEstimator.h TimpQPC.h \
-	TradEwaldSum.h TwoPairChooser.h TwoQDAction.h UniformMover.h \
-	VIndEstimator.h VirialEnergyEstimator.h WalkingChooser.h \
-	WellImageAction.h WindingEstimator.h WireEwald.h WireNodes.h \
-	WorkerShifter.h WritePaths.h WriteProbDensity.h XMLParser.h \
-	XMLUnitParser.h XMLWriter.h ZeroVarDensityEstimator.h \
-	gnugetopt.h
+	SpinModelState.h SpinChoiceFixedNodeAction.h SpringAction.h \
+	SpringTensorAction.h StillWebAction.h StructReader.h \
+	SuperCell.h ThermoEnergyEstimator.h TimpQPC.h TradEwaldSum.h \
+	TwoPairChooser.h TwoQDAction.h UniformMover.h VIndEstimator.h \
+	VirialEnergyEstimator.h WalkingChooser.h WellImageAction.h \
+	WindingEstimator.h WireEwald.h WireNodes.h WorkerShifter.h \
+	WritePaths.h WriteProbDensity.h XMLParser.h XMLUnitParser.h \
+	XMLWriter.h ZeroVarDensityEstimator.h gnugetopt.h
 all: all-am
 
 .SUFFIXES:
@@ -633,6 +636,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SphereAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-Spin4DPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinChargeEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinChoiceFixedNodeAction.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinModelState.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpringAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpringTensorAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-StillWebAction.Po@am__quote@
@@ -2513,6 +2518,34 @@ pi-SpinChargeEstimator.obj: SpinChargeEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinChargeEstimator.cc' object='pi-SpinChargeEstimator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinChargeEstimator.obj `if test -f 'SpinChargeEstimator.cc'; then $(CYGPATH_W) 'SpinChargeEstimator.cc'; else $(CYGPATH_W) '$(srcdir)/SpinChargeEstimator.cc'; fi`
+
+pi-SpinModelState.o: SpinModelState.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpinModelState.o -MD -MP -MF $(DEPDIR)/pi-SpinModelState.Tpo -c -o pi-SpinModelState.o `test -f 'SpinModelState.cc' || echo '$(srcdir)/'`SpinModelState.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SpinModelState.Tpo $(DEPDIR)/pi-SpinModelState.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinModelState.cc' object='pi-SpinModelState.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinModelState.o `test -f 'SpinModelState.cc' || echo '$(srcdir)/'`SpinModelState.cc
+
+pi-SpinModelState.obj: SpinModelState.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpinModelState.obj -MD -MP -MF $(DEPDIR)/pi-SpinModelState.Tpo -c -o pi-SpinModelState.obj `if test -f 'SpinModelState.cc'; then $(CYGPATH_W) 'SpinModelState.cc'; else $(CYGPATH_W) '$(srcdir)/SpinModelState.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SpinModelState.Tpo $(DEPDIR)/pi-SpinModelState.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinModelState.cc' object='pi-SpinModelState.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinModelState.obj `if test -f 'SpinModelState.cc'; then $(CYGPATH_W) 'SpinModelState.cc'; else $(CYGPATH_W) '$(srcdir)/SpinModelState.cc'; fi`
+
+pi-SpinChoiceFixedNodeAction.o: SpinChoiceFixedNodeAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpinChoiceFixedNodeAction.o -MD -MP -MF $(DEPDIR)/pi-SpinChoiceFixedNodeAction.Tpo -c -o pi-SpinChoiceFixedNodeAction.o `test -f 'SpinChoiceFixedNodeAction.cc' || echo '$(srcdir)/'`SpinChoiceFixedNodeAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SpinChoiceFixedNodeAction.Tpo $(DEPDIR)/pi-SpinChoiceFixedNodeAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinChoiceFixedNodeAction.cc' object='pi-SpinChoiceFixedNodeAction.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinChoiceFixedNodeAction.o `test -f 'SpinChoiceFixedNodeAction.cc' || echo '$(srcdir)/'`SpinChoiceFixedNodeAction.cc
+
+pi-SpinChoiceFixedNodeAction.obj: SpinChoiceFixedNodeAction.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpinChoiceFixedNodeAction.obj -MD -MP -MF $(DEPDIR)/pi-SpinChoiceFixedNodeAction.Tpo -c -o pi-SpinChoiceFixedNodeAction.obj `if test -f 'SpinChoiceFixedNodeAction.cc'; then $(CYGPATH_W) 'SpinChoiceFixedNodeAction.cc'; else $(CYGPATH_W) '$(srcdir)/SpinChoiceFixedNodeAction.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SpinChoiceFixedNodeAction.Tpo $(DEPDIR)/pi-SpinChoiceFixedNodeAction.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinChoiceFixedNodeAction.cc' object='pi-SpinChoiceFixedNodeAction.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinChoiceFixedNodeAction.obj `if test -f 'SpinChoiceFixedNodeAction.cc'; then $(CYGPATH_W) 'SpinChoiceFixedNodeAction.cc'; else $(CYGPATH_W) '$(srcdir)/SpinChoiceFixedNodeAction.cc'; fi`
 
 pi-SpringAction.o: SpringAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpringAction.o -MD -MP -MF $(DEPDIR)/pi-SpringAction.Tpo -c -o pi-SpringAction.o `test -f 'SpringAction.cc' || echo '$(srcdir)/'`SpringAction.cc

@@ -20,29 +20,21 @@ class MultiLevelSampler;
 class DisplaceMoveSampler;
 class SectionChooser;
 class Paths;
+class ModelState;
+class EnumeratedModelState;
 #include "CompositeAction.h"
 #include "LinkSummable.h"
 #include <vector>
 
 class ActionChoiceBase {
 public:
-  /// Constructor.
-  ActionChoiceBase() : imodel(0) {}
-  /// Calculate the difference in action.
+  ActionChoiceBase() : modelState(0) {}
   virtual double getActionDifference(const Paths&, int jmodel)=0;
-  /// Set the current action model index.
-  void setModelState(int i) {imodel=i;}
-  /// Get the current action model index.
-  int getModelState() {return imodel;}
-  /// Get the number of model choices.
-  virtual int getModelCount() const=0;
+  ModelState& getModelState() {return *modelState;}
+  const ModelState& getModelState() const {return *modelState;}
 protected:
-  /// Action difference acumulated during sum over links.
   double actionDifference;
-  /// Index of the current action model.
-  int imodel;
-  /// Index of the new action model.
-  int jmodel;
+  ModelState *modelState;
 };
 
 /** Action class for representing a choice of action.
@@ -86,5 +78,8 @@ public:
                           const int ipart, const int islice, const Paths&);
   /// Finalize the calculation.
   virtual void endCalc(const int nslice);
+private:
+  EnumeratedModelState *enumModelState;
+  int jmodel;
 };
 #endif

@@ -1,4 +1,4 @@
-// $Id: EnumeratedModelState.cc 338 2010-11-30 18:56:16Z john.shumwayjr $
+// $Id: SpinModelState.cc 338 2010-11-30 18:56:16Z john.shumwayjr $
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -17,30 +17,30 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "EnumeratedModelState.h"
+#include "SpinModelState.h"
 #include <cstdlib>
 
-EnumeratedModelState::EnumeratedModelState(int modelCount)
-  : modelCount(modelCount), modelState(0) {
+SpinModelState::SpinModelState(int npart)
+  : npart(npart), modelState(npart) {
+  for (int i=0; i<npart; ++i) modelState(i) = (i<npart/2) ? 0 : 1;
 }
 
-void EnumeratedModelState::write(std::ostream &os) const {
-  os << ", state " << modelState+1 << " of " << modelCount << ".";
+void SpinModelState::write(std::ostream &os) const {
+  // Writes ", state: 0 1 0 0 1 1 0" to stream os.
+  os << ", state:";
+  for (int i=0; i<npart; ++i) os << " " << modelState(i);
 }
 
-bool EnumeratedModelState::read(const std::string &line) {
+bool SpinModelState::read(const std::string &line) {
+  // Reads "..., state: 0 1 0 0 1 1 0" from string line.
   std::cout << "Checking for model state..." << std::endl;
   int i = line.find("state");
   bool didRead = false;
   if (i != -1) {
-    i += 6;
-    int j = line.find("of");
-    modelState = atoi(line.substr(i,j-i-1).c_str());
-    //modelCount = atoi(line.substr(j+3).c_str());
-    // Hack to handle old and new indexing of model states.
-    // New convention is to start from 1 and end line with "."
-    if (line[line.size()-1]=='.') --modelState;
-    std::cout << "Model state " << modelState << "." << std::endl;
+    int offset = i+7;
+    for (int j=0; j<npart; ++j) {
+      modelState(j) = int(line[offset+2*j]-'0');
+    }
     didRead = true;
   }
   return didRead;

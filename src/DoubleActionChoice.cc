@@ -25,17 +25,17 @@
 
 DoubleActionChoice::DoubleActionChoice(const int n)
   : CompositeDoubleAction(n) {
+  enumModelState = new EnumeratedModelState(n);
+  modelState = enumModelState;
 }
 
 DoubleActionChoice::~DoubleActionChoice() {
+  delete modelState;
 }
 
 double DoubleActionChoice::getActionDifference(
     const DoubleMLSampler& sampler, const int level) {
-  const EnumeratedModelState *modelState 
-    = dynamic_cast<const EnumeratedModelState*>
-        (sampler.getPaths().getModelState());
-  imodel = modelState->getModelState();
+  int imodel = enumModelState->getModelState();
   double diff = actions[imodel]->getActionDifference(sampler,level);
   return diff;
 }
@@ -43,15 +43,14 @@ double DoubleActionChoice::getActionDifference(
 double DoubleActionChoice::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
     int iFirstSlice, int nslice) {
-  const EnumeratedModelState *modelState 
-    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
-  imodel = modelState->getModelState();
+  int imodel = enumModelState->getModelState();
   double diff = actions[imodel]->getActionDifference(paths,displacement,nmoving,
                                            movingIndex,iFirstSlice,nslice);
   return diff;
 }
 
 double DoubleActionChoice::getTotalAction(const Paths& paths, int level) const {
+  int imodel = enumModelState->getModelState();
   double total = actions[imodel]->getTotalAction(paths,level);
   return total;
 }
@@ -60,19 +59,18 @@ void DoubleActionChoice::getBeadAction(const Paths& paths,
        int ipart, int islice, double& u, double& utau, double& ulambda,
        Action::Vec& fm, Action::Vec& fp) const {
   u=utau=ulambda=0; fm=0.; fp=0.;
+  int imodel = enumModelState->getModelState();
   actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
 }
 
 void DoubleActionChoice::initialize(const DoubleSectionChooser& 
                                              sectionChooser) {
-  const EnumeratedModelState *modelState 
-    = dynamic_cast<const EnumeratedModelState*>
-        (sectionChooser.getPaths().getModelState());
-  imodel = modelState->getModelState();
+  int imodel = enumModelState->getModelState();
   actions[imodel]->initialize(sectionChooser);
 }
 
 void DoubleActionChoice::acceptLastMove() {
+  int imodel = enumModelState->getModelState();
   actions[imodel]->acceptLastMove();
 }
 
@@ -91,6 +89,7 @@ void DoubleActionChoice::handleLink(const LinkSummable::Vec &start,
     const Paths &paths) {
   double u=0., utau=0, ulambda=0;
   LinkSummable::Vec fm=0.; LinkSummable::Vec fp=0.;
+  int imodel = enumModelState->getModelState();
   actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
   actionDifference -= u;
   actions[jmodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);

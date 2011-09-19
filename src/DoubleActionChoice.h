@@ -62,6 +62,9 @@ public:
                           const int ipart, const int islice, const Paths&);
   /// Finalize the calculation.
   virtual void endCalc(const int nslice);
+private:
+  EnumeratedModelState *enumModelState;
+  int jmodel;
 };
 
 #endif

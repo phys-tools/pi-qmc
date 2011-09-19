@@ -128,10 +128,7 @@ void PIMCParser::parse(const xmlXPathContextPtr& ctxt) {
                           nslice,tau,*simInfo.getSuperCell(),beadFactory);
   }
   if (actionChoice) {
-    EnumeratedModelState* modelState 
-      =  new EnumeratedModelState(actionChoice->getModelCount());
-    modelState->setModelState(actionChoice->getModelState());
-    paths->setModelState(modelState);
+    paths->setModelState(&actionChoice->getModelState());
   }
   // Parse the algorithm.
   algorithm=parseAlgorithm(ctxt);

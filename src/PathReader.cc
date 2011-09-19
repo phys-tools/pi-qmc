@@ -51,7 +51,6 @@ void PathReader::run() {
   Beads<NDIM> &slice(*beadFactory.getNewBeads(npart,1));
   Permutation p(npart);   
   bool permutationsFlag = false;
-  int modelCount=0,modelState=0; 
   if (workerID==0){
     std::string firstLine,temp; 
     *infile >> firstLine; 
