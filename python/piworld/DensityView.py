@@ -85,6 +85,7 @@ class DensityView(EstimatorView):
       self.axes.cla()
       self.axes.imshow(self.rho[self.limit[0]:self.limit[1],
                                 self.limit[2]:self.limit[3]].transpose(),
+          vmin = 0.,
           origin='lower', interpolation='bicubic', extent=self.currentExtent)
       # Show lighter bars at edges when zoomed.
       if self.limit[0]>0:

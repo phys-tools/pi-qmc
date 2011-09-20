@@ -16,10 +16,17 @@ class PairCFView(EstimatorView):
 
     self.pcf = data.file.getPairCF(estimatorNode.name)#,Unit.nm)
 
-    self.plot =  self.Plot1DWidget(self)
+
+    self.plot = None
+    if self.pcf.data.ndim==1:
+      self.plot =  self.Plot1DWidget(self)
+    elif self.pcf.data.ndim==2:
+      self.plot =  self.Plot2DWidget(self)
+
     vbox = QtGui.QVBoxLayout()
     vbox.setSpacing(0)
-    vbox.addWidget(self.plot,10)
+    if self.plot:
+      vbox.addWidget(self.plot,10)
 
     self.setLayout(vbox)
     self.setEnabled(True)
@@ -60,5 +67,21 @@ class PairCFView(EstimatorView):
                                    self.error/self.vol)
       self.axes.axis(xmax=self.rmax)
       self.axes.set_yticks([])
-      self.axes.set_xlabel(r"$x$ (pm)")
+      self.axes.set_xlabel(r"$x$ ($a_0$)")
+
+  class Plot2DWidget(MyMplCanvas):
+    def __init__(self, data):
+      self.data = data
+      self.pcf = data.pcf.data
+      MyMplCanvas.__init__(self)
+    def computeInitialFigure(self):
+      self.axes = self.figure.add_axes([0.01,0.15,0.98,0.83])
+      self.plotFigure()
+    def plotFigure(self):
+      self.axes.cla()
+      self.axes.imshow(self.pcf.transpose(),
+          origin='lower', interpolation='bicubic')
+      
+      self.axes.set_xlabel(r"$x$ ($a_0$)")
+      self.axes.set_ylabel(r"$x$ ($a_0$)")
 
