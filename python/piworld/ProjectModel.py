@@ -50,6 +50,7 @@ class ProjectModel(QtCore.QObject):
         hostDirectory=hostNode[0].attrib.get('directory')
       # Load the data.
       self.data[index] = dataFromH5File(self,self.nameList[index]+"pimc.h5")
+      self.data[index].index = index
       self.data[index].xmldoc = xmldoc
       if hostMachine: self.data[index].hostMachine = hostMachine
       if hostDirectory: self.data[index].hostDirectory = hostDirectory

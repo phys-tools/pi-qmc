@@ -39,8 +39,9 @@ class SimulationModel(QtCore.QObject):
     if hasattr(self,"hostMachine") and hasattr(self,"hostDirectory"):
       self.statusMessage.emit("downloaded new data from %s:%s"
         % (self.hostMachine, self.hostDirectory),5000)
-      os.system('scp "%s:%s/pimc.h5" .'
-                 % (self.hostMachine, self.hostDirectory))
+      os.system('scp "%s:%s/pimc.h5" %s'
+                 % (self.hostMachine, self.hostDirectory,
+                    self.project.nameList[self.index]))
     try:
       self.file = pitools.openFile(self.filename)
       self.temperature = self.file.getTemperature(Unit.K) 
