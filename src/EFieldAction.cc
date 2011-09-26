@@ -99,3 +99,32 @@ double EFieldAction::v(const double z) const {
   const double lookup_table[] = {vmid,vhi,vlo};
   return lookup_table[(z>halfwidth) + (z<-halfwidth)*2];
 }
+
+double EFieldAction::getActionDifference(const Paths &paths,
+       const VArray &displacement, int nmoving, const IArray &movingIndex,
+       int iFirstSlice, int nslice) {
+
+  const SuperCell& cell=paths.getSuperCell();
+  double deltaAction=0;
+  for (int iMoving=0; iMoving<nmoving; ++iMoving) {
+    int ipart = movingIndex(iMoving);
+
+    for (int islice=iFirstSlice; islice<nslice; ++islice) {
+      // Subtract action for old positions. (Evaluate v at midpoint)
+      
+      Vec r = paths(ipart,islice,-1)-center;
+      cell.pbc(r);
+      Vec delta = paths(ipart,islice);
+      delta-=r; cell.pbc(delta);delta*=0.5; r+=delta;
+      cell.pbc(r);
+      deltaAction -= v(r(idir))*q(ipart)*tau;
+
+      // Add action for displaced position.
+      r += displacement(iMoving);
+      cell.pbc(r);
+      deltaAction += v(r(idir))*q(ipart)*tau;
+
+    }
+  }
+  return deltaAction;
+}
