@@ -52,4 +52,4 @@ class SKOmegaView(EstimatorView):
                          marker=".",ms=1.5)
       self.axes.set_xlabel(r"$q$")
       self.axes.set_ylabel(r"$\chi_{nn}$")
-      #self.axes.axis(xmin=1e-9)
+      self.axes.axis(xmax=16*math.pi/self.data.boxl[0])
