@@ -104,6 +104,7 @@ class ScalarView(QtGui.QWidget):
       self.err = math.sqrt(self.var*self.actime/(self.end-self.start))
       #Do blocking analysis.
       nblock = int(math.log(self.end-self.start+1,2)-3)
+      if nblock<0: nblock=0
       self.blocking = numpy.zeros(nblock+1)
       data = self.values[self.start:self.end+1]
       for i in range(0,nblock+1):
