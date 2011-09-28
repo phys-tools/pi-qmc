@@ -669,11 +669,19 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
     } else if (name=="SpinChoiceFixedNodeAction") {
       std::string specName = getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
-      double omega=getEnergyAttribute(ctxt->node,"omega");
-      if (omega<1e-10) omega=1.;
+      int useIterations=getIntAttribute(actNode,"useIterations");
+      double nodalFactor=getDoubleAttribute(actNode,"nodalFactor");
+      if (nodalFactor<=0) nodalFactor=5.0;
       double t=getEnergyAttribute(actNode,"temperature");
       if (t==0) t=simInfo.getTemperature();
-      NodeModel *nodeModel=new SHONodes(simInfo,species,omega,t,maxlevel);
+      if (useIterations<0) useIterations=0;
+      const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
+      const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
+      int maxMovers=0;
+      if (updates) maxMovers=3;
+      NodeModel *nodeModel
+          =new FreeParticleNodes(simInfo,species,t,maxlevel,updates,
+                    maxMovers,useHungarian,useIterations, nodalFactor);
       SpinChoiceFixedNodeAction *action 
         = new SpinChoiceFixedNodeAction(simInfo, species, nodeModel,
                 true, true, maxlevel, true);
