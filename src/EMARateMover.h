@@ -30,14 +30,11 @@ class PeriodicGaussian;
 class EMARateMover : public Mover, public PermutationChooser,
                      public ParticleChooser {
 public:
-  /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<PeriodicGaussian*,3> PGArray;
   typedef blitz::TinyVector<double,NDIM> Vec;
-  /// Construct by providing simInfo.
   EMARateMover(const SimulationInfo&, const int maxlevel, const double pgDelta);
-  /// Virtual destructor.
   virtual ~EMARateMover();
   /// Move the samplers moving beads for a given level, returning
   /// the probability for the old move divided by the probability for the
@@ -49,9 +46,8 @@ public:
 private:
   /// The inverse mass, @f$\lambda=1/2m@f$.
   blitz::Array<double,1> lambda;
-  /// The timestep.
   double tau;
-  /// forward transition prob
   double forwardProb;
+  bool isSamplingRadiating;
 };
 #endif

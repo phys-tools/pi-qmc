@@ -57,7 +57,7 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
   forwardProb = 0;
   // Make radiating vs. direct choice at highest level.
   std::cout << nStride << ", " << nSlice << std::endl;
-  if (nStride+1==nSlice) {
+  if (nStride+1 == nSlice) {
     std::cout << "Choosing radiating vs. diagonal." << std::endl; 
     double i = index(0);
     double j = index(1);
@@ -79,43 +79,101 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     std::cout << t1 << ", " << t2 << ", " << te << ", " << th << std::endl;
     double pRad = exp(-(t1+t2));
     double pDiag = exp(-(te+te));
-    std::cout << pRad << ", " << pDiag << std::endl;
+    std::cout << pRad << ", " << pDiag << "; " 
+              << pDiag/(pDiag+pRad) << std::endl;
     if (RandomNumGenerator::getRand()>pDiag/(pDiag+pRad)) {
       std::cout << "Trying radiating move." << std::endl;
+        isSamplingRadiating=true;
     } else {
-      std::cout << "Trying diagonal move." << std::endl;
+        std::cout << "Trying diagonal move." << std::endl;
+        isSamplingRadiating=false;
     }
   } {
 
   for (int islice=nStride; islice<nSlice-nStride; islice+=2*nStride) {
     RandomNumGenerator::makeGaussRand(gaussRand);
-    for (int iMoving=0; iMoving<nMoving; ++iMoving) {
-      const int i=index(iMoving);
-      double sigma = sqrt(lambda(i)*tau*nStride); 
-      double inv2Sigma2 = 0.5/(sigma*sigma);
-      // Calculate the new position.
-      Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
-      cell.pbc(midpoint)*=0.5;
-      midpoint+=movingBeads(iMoving,islice-nStride);
-      Vec delta = gaussRand(iMoving); delta*=sigma;
-      (movingBeads(iMoving,islice)=midpoint)+=delta;
-      cell.pbc(movingBeads(iMoving,islice));
-      // Calculate 1/transition probability for move 
-      cell.pbc(delta);
+    if (isSamplingRadiating) { // NEED TO CODE AND TEST THIS
+      int iMoving1 = 0;
+      int iMoving2 = 1;
+      int i1 = index(0);
+      int i2 = index(1);
+      Vec mass1 = 0.5/lambda(i1);
+      Vec mass2 = 0.5/lambda(i2);
+      Vec prev1 = (islice-nStride <= nSlice/2)
+                  ? movingBeads(i1, islice-nStride)
+                  : movingBeads(i2, nSlice-(islice-nStride));
+      Vec prev2 = (islice-nStride <= nSlice/2)
+                  ? movingBeads(i1, nSlice-(islice-nStride))
+                  : movingBeads(i2, islice-nStride);
+      Vec next1 = (islice+nStride <= nSlice/2)
+                  ? movingBeads(i1, islice+nStride)
+                  : movingBeads(i2, nSlice-(islice+nStride));
+      Vec next2 = (islice+nStride <= nSlice/2)
+                  ? movingBeads(i1, nSlice-(islice+nStride))
+                  : movingBeads(i2, islice+nStride);
+      Vec midpoint1, midpoint2;
+      // Should be rewritten to use PBC.
+      if ((islice-nStride < nSlice/2) && (islice+nStride > nSlice/2)) {
+        midpoint1 = (mass1*prev1 + mass2*next1)/(mass1+mass2);
+        midpoint2 = (mass1*prev2 + mass2*next2)/(mass1+mass2);
+      } else {
+        midpoint1 = 0.5*(prev1 + next1);
+        midpoint2 = 0.5*(prev2 + next2);
+      }
+      Vec sigma1, sigma2;
+      if (islice-nStride < nSlice/2) {
+        if (islice+nStride > nSlice/2) {
+          sigma1 = sqrt((lambda(i1)+lambda(i2))*tau*nStride); 
+          sigma2 = sigma1;
+        } else {
+          sigma1 = sqrt(lambda(i1)*tau*nStride); 
+          sigma2 = sqrt(lambda(i1)*tau*nStride); 
+        }
+      } else {
+        sigma1 = sqrt(lambda(i2)*tau*nStride); 
+        sigma2 = sqrt(lambda(i2)*tau*nStride); 
+      }
+      Vec delta1 = gaussRand(iMoving1) * sigma1;
+      Vec delta2 = gaussRand(iMoving2) * sigma2;
+      movingBeads(iMoving1,islice)=midpoint1+delta1;
+      movingBeads(iMoving2,islice)=midpoint2+delta2;
+      // This transition probability needs to be combined with that below.
       for (int idim=0;idim<NDIM;++idim) {
-        double tmp = delta[idim]*delta[idim]*inv2Sigma2;
+        double tmp = delta1[idim]*delta1[idim]/(sigma1[idim]*sigma1[idim]);
+        tmp += delta2[idim]*delta2[idim]/(sigma2[idim]*sigma2[idim]);
         forwardProb += tmp;
         toldOverTnew += tmp;
       }
-
       // Calculate and add reverse transition probability.
-      midpoint=sectionBeads.delta(i,islice+nStride,-2*nStride);
-      cell.pbc(midpoint)*=0.5;
-      midpoint+=sectionBeads(i,islice-nStride);
-      delta=sectionBeads(i,islice); delta-=midpoint;
-      cell.pbc(delta);
-      for (int idim=0;idim<NDIM;++idim) {
-        toldOverTnew -= delta[idim]*delta[idim]*inv2Sigma2;
+
+    } else { // THIS IS CORRECT
+      for (int iMoving=0; iMoving<nMoving; ++iMoving) {
+        const int i=index(iMoving);
+        double sigma = sqrt(lambda(i)*tau*nStride); 
+        double inv2Sigma2 = 0.5/(sigma*sigma);
+        // Calculate the new position.
+        Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
+        cell.pbc(midpoint)*=0.5;
+        midpoint+=movingBeads(iMoving,islice-nStride);
+        Vec delta = gaussRand(iMoving); delta*=sigma;
+        (movingBeads(iMoving,islice)=midpoint)+=delta;
+        cell.pbc(movingBeads(iMoving,islice));
+        // Calculate 1/transition probability for move 
+        cell.pbc(delta);
+        for (int idim=0;idim<NDIM;++idim) {
+          double tmp = delta[idim]*delta[idim]*inv2Sigma2;
+          forwardProb += tmp;
+          toldOverTnew += tmp;
+        }
+        // Calculate and add reverse transition probability.
+        midpoint=sectionBeads.delta(i,islice+nStride,-2*nStride);
+        cell.pbc(midpoint)*=0.5;
+        midpoint+=sectionBeads(i,islice-nStride);
+        delta=sectionBeads(i,islice); delta-=midpoint;
+        cell.pbc(delta);
+        for (int idim=0;idim<NDIM;++idim) {
+          toldOverTnew -= delta[idim]*delta[idim]*inv2Sigma2;
+        }
       }
     }
   }

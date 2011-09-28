@@ -63,7 +63,8 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
   const int nMoving=index.size();
 
   const int iFirstSlice = sampler.getSectionChooser().getFirstSliceIndex();
-  if (iFirstSlice + nSlice != nPathSlice) return 0.;
+  if (iFirstSlice + nSlice/2 != nPathSlice) return 0.;
+  std::cout << "Evaluating EMARateAction" << std::endl;
   
   // For now, we'll assume that the only two radiating particles are being moved.
   int iMoving1 = index(0);
@@ -135,7 +136,7 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
 
     // Set the previous positions.
     rePrev = re;
-    rhPrev = re;
+    rhPrev = rh;
     reRadPrev = (islice==nSlice/2)?rhPrev:rePrev;
     rhRadPrev = rhPrev;
   } 
