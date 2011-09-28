@@ -31,11 +31,12 @@ public:
   virtual ~SpinModelState() {};
   virtual void write(std::ostream &os) const;
   virtual bool read(const std::string &line);
-  const IArray& getModelState() const {return modelState;}
-  IArray& getModelState() {return modelState;}
+  const IArray& getSpinState() const {return spinState;}
+  IArray& getModelState() {return spinState;}
   virtual int getModelCount() const {return npart+1;}
+  virtual int getModelState() const;
 private:
   const int npart;
-  IArray modelState;
+  IArray spinState;
 };
 #endif

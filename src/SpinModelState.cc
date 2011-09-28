@@ -21,27 +21,32 @@
 #include <cstdlib>
 
 SpinModelState::SpinModelState(int npart)
-  : npart(npart), modelState(npart) {
-  for (int i=0; i<npart; ++i) modelState(i) = (i<npart/2) ? 0 : 1;
+  : npart(npart), spinState(npart) {
+  for (int i=0; i<npart; ++i) spinState(i) = (i<npart/2) ? 0 : 1;
 }
 
 void SpinModelState::write(std::ostream &os) const {
   // Writes ", state: 0 1 0 0 1 1 0" to stream os.
   os << ", state:";
-  for (int i=0; i<npart; ++i) os << " " << modelState(i);
+  for (int i=0; i<npart; ++i) os << " " << spinState(i);
 }
 
 bool SpinModelState::read(const std::string &line) {
   // Reads "..., state: 0 1 0 0 1 1 0" from string line.
-  std::cout << "Checking for model state..." << std::endl;
+  std::cout << "Checking for spin model state..." << std::endl;
   int i = line.find("state");
   bool didRead = false;
   if (i != -1) {
     int offset = i+7;
     for (int j=0; j<npart; ++j) {
-      modelState(j) = int(line[offset+2*j]-'0');
+      spinState(j) = int(line[offset+2*j]-'0');
     }
     didRead = true;
   }
   return didRead;
+}
+
+int SpinModelState::getModelState() const {
+  int sztot =  blitz::sum(spinState);
+  return sztot;
 }

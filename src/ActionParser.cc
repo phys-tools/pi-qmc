@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2010 John B. Shumway, Jr.
+/*  Copyright (C) 2004-2011 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -84,6 +84,7 @@ extern int irank;
 #include "WellImageAction.h"
 #include "EMARateAction.h"
 #include "Species.h"
+#include "SpinChoiceFixedNodeAction.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstdlib>
@@ -664,6 +665,20 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       const Species& species2(simInfo.getSpecies(specName));
       const double C=getDoubleAttribute(actNode,"c");
       composite->addAction(new EMARateAction(simInfo,species1,species2,C)); 
+      continue;
+    } else if (name=="SpinChoiceFixedNodeAction") {
+      std::string specName = getStringAttribute(actNode,"species");
+      const Species& species(simInfo.getSpecies(specName));
+      double omega=getEnergyAttribute(ctxt->node,"omega");
+      if (omega<1e-10) omega=1.;
+      double t=getEnergyAttribute(actNode,"temperature");
+      if (t==0) t=simInfo.getTemperature();
+      NodeModel *nodeModel=new SHONodes(simInfo,species,omega,t,maxlevel);
+      SpinChoiceFixedNodeAction *action 
+        = new SpinChoiceFixedNodeAction(simInfo, species, nodeModel,
+                true, true, maxlevel, true);
+      actionChoice = action;
+      doubleComposite->addAction(action);
       continue;
     } else if (name=="ActionChoice") {
       int imodel=getIntAttribute(actNode,"initial");

@@ -18,20 +18,16 @@
 #include <config.h>
 #endif
 #include "SpinChoiceFixedNodeAction.h"
-#include "SuperCell.h"
-#include <cstdlib>
-#include "Beads.h"
-#include "DoubleSectionChooser.h"
-#include "DoubleMLSampler.h"
-#include "NodeModel.h"
-#include "Paths.h"
-#include "SimulationInfo.h"
+#include "SpinModelState.h"
 
-SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(const SimulationInfo &simInfo,
+SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
+  const SimulationInfo &simInfo,
   const Species &species, NodeModel *nodeModel, bool withNodalAction,
   bool useDistDerivative, int maxlevel, bool useManyBodyDistance) 
   : FixedNodeAction(simInfo,species,nodeModel,withNodalAction,
       useDistDerivative,maxlevel,useManyBodyDistance) {
+  std::cout << "nSpeciesPart" << nSpeciesPart << std::endl;
+  modelState = new SpinModelState(nSpeciesPart);
 }
 
 SpinChoiceFixedNodeAction::~SpinChoiceFixedNodeAction() {

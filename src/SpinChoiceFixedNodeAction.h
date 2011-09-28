@@ -1,5 +1,5 @@
 //$Id: SpinChoiceFixedNodeAction.h 393 2011-08-04 14:39:41Z john.shumwayjr $
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
+/*  Copyright (C) 2011 John B. Shumway, Jr. and Jianheng Liu
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,18 +17,9 @@
 #ifndef __SpinChoiceFixedNodeAction_h_
 #define __SpinChoiceFixedNodeAction_h_
 
-#include "DoubleAction.h"
-#include "NodeModel.h"
-#include <cstdlib>
-#include <blitz/array.h>
-#include <blitz/tinymat.h>
-#include <vector>
 #include "FixedNodeAction.h"
 #include "ActionChoice.h"
 #include "LinkSummable.h"
-class SimulationInfo;
-class Paths;
-class Species;
 
 /**
 @version $Revision: 393 $
@@ -38,11 +29,20 @@ class SpinChoiceFixedNodeAction : public FixedNodeAction,
                                   public LinkSummable {
 public:
 
-  SpinChoiceFixedNodeAction(const SimulationInfo&, const Species&, NodeModel*,
-    bool withNodalAction, bool useDistDerivative, int maxlevel,
-    bool useManyBodyDistance);
+    SpinChoiceFixedNodeAction(const SimulationInfo&, const Species&, NodeModel*,
+        bool withNodalAction, bool useDistDerivative, int maxlevel,
+        bool useManyBodyDistance);
 
-  virtual ~SpinChoiceFixedNodeAction();
-private:
+    virtual ~SpinChoiceFixedNodeAction();
+
+    virtual double getActionDifference(const Paths &paths, int jmodel) {
+        return 0;
+    }
+
+    virtual void handleLink(const LinkSummable::Vec &start, 
+        const LinkSummable::Vec &end, int ipart, 
+        int islice, const Paths &paths) {
+    }
+
 };
 #endif

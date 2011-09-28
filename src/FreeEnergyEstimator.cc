@@ -45,9 +45,7 @@ FreeEnergyEstimator::~FreeEnergyEstimator() {
 }
 
 void FreeEnergyEstimator::evaluate(const Paths &paths) {
-  const EnumeratedModelState *modelState 
-    = dynamic_cast<const EnumeratedModelState*> (paths.getModelState());
-  int imodel = modelState->getModelState();
+  int imodel = paths.getModelState()->getModelState();
 
   value(imodel) += 1.;
   norm += 1.;

@@ -29,5 +29,6 @@ public:
   virtual void write(std::ostream &os) const=0;
   virtual bool read(const std::string&)=0;
   virtual int getModelCount() const=0;
+  virtual int getModelState() const=0;
 };
 #endif

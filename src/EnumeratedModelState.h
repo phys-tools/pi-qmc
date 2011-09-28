@@ -28,9 +28,9 @@ public:
   virtual ~EnumeratedModelState() {};
   virtual void write(std::ostream &os) const;
   virtual bool read(const std::string &line);
-  int getModelState() const {return modelState;}
   void setModelState(int i) {modelState = i;}
   virtual int getModelCount() const {return modelCount;}
+  virtual int getModelState() const {return modelState;}
 private:
   const int modelCount;
   int modelState;

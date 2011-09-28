@@ -102,7 +102,7 @@ public:
   virtual void initialize(const DoubleSectionChooser&);
   /// Accept last move.
   virtual void acceptLastMove();
-private:
+protected:
   /// The time step.
   const double tau;
   /// Total number of particles.
