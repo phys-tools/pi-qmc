@@ -26,6 +26,7 @@
 #include <hdf5.h>
 #include <cstdlib>
 #include <blitz/array.h>
+#include <iostream>
 
 WriteProbDensity::WriteProbDensity(const SimulationInfo& simInfo,
   const ProbDensityGrid* grid, const std::string& filename)
@@ -39,6 +40,7 @@ WriteProbDensity::~WriteProbDensity() {}
 
 void WriteProbDensity::run() {
   int rank=0;
+  std::cout << "WARNING :: WriteProbDensity is obsolete. Please use DensityEstimator instead!!!" << std::endl;
 #ifdef ENABLE_MPI
   rank=MPI::COMM_WORLD.Get_rank();
 #endif
@@ -67,7 +69,8 @@ void WriteProbDensity::run() {
     if (rank==0) {
       hsize_t dims[NDIM];
       for (int idim=0; idim<NDIM; ++idim) dims[idim]=n[idim];
-      hid_t dataSpaceID = H5Screate_simple(3, dims, NULL);
+      //hid_t dataSpaceID = H5Screate_simple(3, dims, NULL);
+      hid_t dataSpaceID = H5Screate_simple(NDIM, dims, NULL);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
       hid_t dataSetID = H5Dcreate2(fileID, name[i].c_str(), H5T_NATIVE_FLOAT,
                                    dataSpaceID, H5P_DEFAULT,

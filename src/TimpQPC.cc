@@ -30,7 +30,10 @@ TimpQPC::TimpQPC(const SuperCell& cell, const double tau,
               const double z, MPIManager *mpi)
   : tau(tau), width(width), length(length), vG(vG), z(z),
     lx(cell[0]), ly(cell[1]) {
-  if (mpi && mpi->isMain()) {
+#ifdef ENABLE_MPI
+  if (mpi && mpi->isMain())
+#endif
+  {
     std::cout << "Timp QPC with w=" << width << ", l=" << length
               << ", vG=" << vG << ", z=" << z << std::endl;
     std::ofstream file("timp.dat");
@@ -40,6 +43,7 @@ TimpQPC::TimpQPC(const SuperCell& cell, const double tau,
       }
       file << std::endl;
     }
+    file.close();
   }
 }
 
