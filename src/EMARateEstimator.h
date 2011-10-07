@@ -25,30 +25,29 @@
 #include <iostream>
 class Paths;
 class SimulationInfo;
+class SuperCell;
 /** 
  *  @author John Shumway  */
 class EMARateEstimator : public ScalarEstimator, public LinkSummable {
 public:
   typedef blitz::Array<double,1> Array;
   typedef blitz::TinyVector<double,NDIM> Vec;
-  /// Constructor.
   EMARateEstimator(const SimulationInfo& simInfo, const int index=2);
-  /// Virtual destructor.
   virtual ~EMARateEstimator() {}
-  /// Initialize the calculation.
   virtual void initCalc(const int nslice, const int firstSlice);
-  /// Add contribution from a link.
   virtual void handleLink(const Vec& start, const Vec& end,
                           const int ipart, const int islice, const Paths&);
-  /// Finalize the calculation.
   virtual void endCalc(const int nslice);
-  /// Get value of coulomb energy estimator.
-  virtual double calcValue() {return 0;}
-  /// Clear value of dipole energy estimator.
-  virtual void reset() {}
-  /// Evaluate for Paths configuration.
+  virtual double calcValue() {return sum/norm;}
+  virtual void reset() {sum=norm=0.;}
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
+  const double dtau;
+  const double masse;
+  const double massh;
+  const SuperCell& cell;
+  double actionDifference;
+  double sum, norm;
 };
 
 #endif

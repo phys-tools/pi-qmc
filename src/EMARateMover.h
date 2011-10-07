@@ -49,5 +49,6 @@ private:
   double tau;
   double forwardProb;
   bool isSamplingRadiating;
+  double earlierTransitions;
 };
 #endif

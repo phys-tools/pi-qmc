@@ -37,6 +37,7 @@
 #include "DynamicPCFEstimator.h"
 #include "CountCountEstimator.h"
 #include "Distance.h"
+#include "EMARateEstimator.h"
 #include "FreeEnergyEstimator.h"
 #include "PairDistance.h"
 #include "CoulombEnergyEstimator.h"
@@ -502,6 +503,9 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       std::string name=getStringAttribute(estNode,"name");
       if (name=="") name="skomega";
       manager->add(new SKOmegaEstimator(simInfo,name,nbin,nbinN,nstride,mpi));
+    }
+    if (name=="EMARateEstimator") {
+      manager->add(new EMARateEstimator(simInfo,0));
     }
   }
   xmlXPathFreeObject(obj);

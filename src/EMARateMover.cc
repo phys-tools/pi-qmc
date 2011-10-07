@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2010 John B. Shumway, Jr. and Saad A. Khairallah
+/*  Copyright (C) 2011 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,9 +56,10 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
   double toldOverTnew=0;  
   forwardProb = 0;
   // Make radiating vs. direct choice at highest level.
-  std::cout << nStride << ", " << nSlice << std::endl;
+  //std::cout << nStride << ", " << nSlice << std::endl;
   if (nStride+1 == nSlice) {
-    std::cout << "Choosing radiating vs. diagonal." << std::endl; 
+    earlierTransitions = 0.;
+    //std::cout << "Choosing radiating vs. diagonal." << std::endl; 
     double i = index(0);
     double j = index(1);
     Vec re1 = movingBeads(0,0);
@@ -76,16 +77,16 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     double th = dot(deltah,deltah)*inv2sigma2h;
     double t1 = dot(delta1,delta1)*inv2sigma21;
     double t2 = dot(delta2,delta2)*inv2sigma21;
-    std::cout << t1 << ", " << t2 << ", " << te << ", " << th << std::endl;
+    //std::cout << t1 << ", " << t2 << ", " << te << ", " << th << std::endl;
     double pRad = exp(-(t1+t2));
-    double pDiag = exp(-(te+te));
-    std::cout << pRad << ", " << pDiag << "; " 
-              << pDiag/(pDiag+pRad) << std::endl;
+    double pDiag = exp(-(te+th));
+    //std::cout << pRad << ", " << pDiag << "; " 
+    //          << pDiag/(pDiag+pRad) << std::endl;
     if (RandomNumGenerator::getRand()>pDiag/(pDiag+pRad)) {
-      std::cout << "Trying radiating move." << std::endl;
+      //std::cout << "Trying radiating move." << std::endl;
         isSamplingRadiating=true;
     } else {
-        std::cout << "Trying diagonal move." << std::endl;
+        //std::cout << "Trying diagonal move." << std::endl;
         isSamplingRadiating=false;
     }
   } {
@@ -99,18 +100,22 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
       int i2 = index(1);
       Vec mass1 = 0.5/lambda(i1);
       Vec mass2 = 0.5/lambda(i2);
+//std::cout << islice-nStride << ", "
+//          << islice+nStride << ", " << nSlice/2 << std::endl;
       Vec prev1 = (islice-nStride <= nSlice/2)
-                  ? movingBeads(i1, islice-nStride)
-                  : movingBeads(i2, nSlice-(islice-nStride));
-      Vec prev2 = (islice-nStride <= nSlice/2)
-                  ? movingBeads(i1, nSlice-(islice-nStride))
-                  : movingBeads(i2, islice-nStride);
+                  ? movingBeads(iMoving1, islice-nStride)
+                  : movingBeads(iMoving2, nSlice-1-(islice-nStride));
+      Vec prev2 = (islice-nStride < nSlice/2)
+                  ? movingBeads(iMoving1, nSlice-1-(islice-nStride))
+                  : movingBeads(iMoving2, islice-nStride);
       Vec next1 = (islice+nStride <= nSlice/2)
-                  ? movingBeads(i1, islice+nStride)
-                  : movingBeads(i2, nSlice-(islice+nStride));
-      Vec next2 = (islice+nStride <= nSlice/2)
-                  ? movingBeads(i1, nSlice-(islice+nStride))
-                  : movingBeads(i2, islice+nStride);
+                  ? movingBeads(iMoving1, islice+nStride)
+                  : movingBeads(iMoving2, nSlice-1-(islice+nStride));
+      Vec next2 = (islice+nStride < nSlice/2)
+                  ? movingBeads(iMoving1, nSlice-1-(islice+nStride))
+                  : movingBeads(iMoving2, islice+nStride);
+//std::cout << prev1 << next1 << std::endl;
+//std::cout << prev2 << next2 << std::endl;
       Vec midpoint1, midpoint2;
       // Should be rewritten to use PBC.
       if ((islice-nStride < nSlice/2) && (islice+nStride > nSlice/2)) {
@@ -135,17 +140,16 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
       }
       Vec delta1 = gaussRand(iMoving1) * sigma1;
       Vec delta2 = gaussRand(iMoving2) * sigma2;
-      movingBeads(iMoving1,islice)=midpoint1+delta1;
-      movingBeads(iMoving2,islice)=midpoint2+delta2;
-      // This transition probability needs to be combined with that below.
-      for (int idim=0;idim<NDIM;++idim) {
-        double tmp = delta1[idim]*delta1[idim]/(sigma1[idim]*sigma1[idim]);
-        tmp += delta2[idim]*delta2[idim]/(sigma2[idim]*sigma2[idim]);
-        forwardProb += tmp;
-        toldOverTnew += tmp;
+      if (islice < nSlice/2) {
+        movingBeads(iMoving1,islice)=midpoint1+delta1;
+        movingBeads(iMoving1,nSlice-1-islice)=midpoint2+delta2;
+      } else if (islice==nSlice/2) {
+        movingBeads(iMoving1,islice)=midpoint1+delta1;
+        movingBeads(iMoving2,islice)=midpoint2+delta2;
+      } else {
+        movingBeads(iMoving2,nSlice-1-islice)=midpoint1+delta1;
+        movingBeads(iMoving2,islice)=midpoint2+delta2;
       }
-      // Calculate and add reverse transition probability.
-
     } else { // THIS IS CORRECT
       for (int iMoving=0; iMoving<nMoving; ++iMoving) {
         const int i=index(iMoving);
@@ -158,27 +162,109 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
         Vec delta = gaussRand(iMoving); delta*=sigma;
         (movingBeads(iMoving,islice)=midpoint)+=delta;
         cell.pbc(movingBeads(iMoving,islice));
-        // Calculate 1/transition probability for move 
-        cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-          double tmp = delta[idim]*delta[idim]*inv2Sigma2;
-          forwardProb += tmp;
-          toldOverTnew += tmp;
-        }
-        // Calculate and add reverse transition probability.
-        midpoint=sectionBeads.delta(i,islice+nStride,-2*nStride);
-        cell.pbc(midpoint)*=0.5;
-        midpoint+=sectionBeads(i,islice-nStride);
-        delta=sectionBeads(i,islice); delta-=midpoint;
-        cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-          toldOverTnew -= delta[idim]*delta[idim]*inv2Sigma2;
-        }
       }
     }
+
   }
+
+  // Calculate 1/transition probability for move 
+
+  // For now, we'll assume that the only two radiating particles are being moved.
+  int iMoving1 = index(0);
+  int iMoving2 = index(1);
+
+  double oldDiagAction = 0.;
+  double oldRadAction = 0.;
+  double newDiagAction = 0.;
+  double newRadAction = 0.;
+
+  Vec mass1 = 0.5/lambda(iMoving1);
+  Vec mass2 = 0.5/lambda(iMoving2);
+  double C=1.;
+
+  const Vec inv2Sigma21 = 0.5*mass1/(tau*nStride);
+  const Vec inv2Sigma22 = 0.5*mass2/(tau*nStride);
+  Vec rePrev = movingBeads(0,0);
+  Vec rhPrev = movingBeads(1,0);
+  Vec reRadPrev = rePrev;
+  Vec rhRadPrev = rhPrev;
+  Vec rePrevOld = sectionBeads(iMoving1,0);
+  Vec rhPrevOld = sectionBeads(iMoving2,0);
+  Vec reRadPrevOld = rePrevOld;
+  Vec rhRadPrevOld = rhPrevOld;
+  for (int islice=nStride; islice<nSlice; islice+=nStride) {
+
+    // Calculate action for moving beads.
+    Vec re = movingBeads(0,islice);
+    Vec rh = movingBeads(1,islice);
+
+    Vec reRad = re;
+    Vec rhRad = (islice==nSlice/2)?re:rh;
+
+    Vec delta=re-rePrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newDiagAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rh-rhPrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newDiagAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+    delta=reRad-reRadPrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newRadAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rhRad-rhRadPrev; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      newRadAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+    // Calculate action for old beads.
+    Vec reOld = sectionBeads(iMoving1,islice);
+    Vec rhOld = sectionBeads(iMoving2,islice);
+
+    Vec reRadOld = re;
+    Vec rhRadOld = (islice==nSlice/2)?re:rh;
+
+    delta=reOld-rePrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldDiagAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rhOld-rhPrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldDiagAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+    delta=reRadOld-reRadPrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldRadAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+    }
+    delta=rhRadOld-rhRadPrevOld; cell.pbc(delta);
+    for (int idim=0;idim<NDIM;++idim) {
+      oldRadAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+    }
+
+    // Set the previous positions.
+    rePrev = re;
+    rhPrev = rh;
+    reRadPrev = (islice==nSlice/2)?rhPrev:rePrev;
+    rhRadPrev = rhPrev;
+    rePrevOld = reOld;
+    rhPrevOld = rhOld;
+    reRadPrevOld = (islice==nSlice/2)?rhPrevOld:rePrevOld;
+    rhRadPrevOld = rhPrevOld;
+  } 
+
+  //double oldAction = -log(exp(oldDiagAction)+C*exp(oldRadAction));
+  //double newAction = -log(exp(newDiagAction)+C*exp(newRadAction));
+  double oldAction = oldDiagAction;
+  double newAction = newDiagAction;
+
+  toldOverTnew = newAction-oldAction;
+
   }
-  return toldOverTnew; //Return the log of the probability.
+  double returnValue = toldOverTnew - earlierTransitions;
+  earlierTransitions = toldOverTnew;
+
+  return returnValue;
+  //return toldOverTnew; //Return the log of the probability.
 }
 
 
