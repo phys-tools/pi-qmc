@@ -505,7 +505,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       manager->add(new SKOmegaEstimator(simInfo,name,nbin,nbinN,nstride,mpi));
     }
     if (name=="EMARateEstimator") {
-      manager->add(new EMARateEstimator(simInfo,0));
+      double C = getDoubleAttribute(estNode,"c");
+      manager->add(new EMARateEstimator(simInfo,C));
     }
   }
   xmlXPathFreeObject(obj);

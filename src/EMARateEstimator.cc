@@ -25,10 +25,9 @@
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 
-EMARateEstimator::EMARateEstimator(const SimulationInfo& simInfo,
-  const int index)
+EMARateEstimator::EMARateEstimator(const SimulationInfo& simInfo, double C)
   : ScalarEstimator("ema_rate","scalar/ema-rate","",1.,0.),
-    dtau(simInfo.getTau()), masse(1.), massh(1.),
+    dtau(simInfo.getTau()), masse(1.), massh(1.), C(C), 
     cell(*simInfo.getSuperCell()), sum(0), norm(0) {
 }
 
@@ -62,6 +61,10 @@ void EMARateEstimator::handleLink(const Vec& start, const Vec& end,
 
 void EMARateEstimator::endCalc(const int nslice) {
 //std::cout << 1./(1.+exp(-actionDifference)) << std::endl;
-  sum += 1./(1.+exp(-actionDifference));
+  if (C>0. && actionDifference-log(C) > -40) {
+    sum += 1./(1.+C*exp(-actionDifference));
+  } else {
+    sum += 0.;
+  }
   norm += 1;
 }

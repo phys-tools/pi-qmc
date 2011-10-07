@@ -74,8 +74,8 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
   double newDiagAction = 0.;
   double newRadAction = 0.;
 
-  const Vec inv2Sigma21 = 0.25*mass1*invTau/nStride;
-  const Vec inv2Sigma22 = 0.25*mass2*invTau/nStride;
+  const Vec inv2Sigma21 = 0.5*mass1*invTau/nStride;
+  const Vec inv2Sigma22 = 0.5*mass2*invTau/nStride;
   Vec rePrev = movingBeads(0,0);
   Vec rhPrev = movingBeads(1,0);
   Vec reRadPrev = rePrev;
@@ -143,9 +143,6 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
     reRadPrevOld = (islice==nSlice/2)?rhPrevOld:rePrevOld;
     rhRadPrevOld = rhPrevOld;
   } 
-
-  //double oldAction = -log(1+C*exp(oldRadAction-oldDiagAction));
-  //double newAction = -log(1+C*exp(newRadAction-newDiagAction));
 
   double oldAction = -log(1+C*exp(-oldRadAction+oldDiagAction));
   double newAction = -log(1+C*exp(-newRadAction+newDiagAction));

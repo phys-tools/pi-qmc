@@ -82,7 +82,7 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     double pDiag = exp(-(te+th));
     //std::cout << pRad << ", " << pDiag << "; " 
     //          << pDiag/(pDiag+pRad) << std::endl;
-    if (RandomNumGenerator::getRand()>pDiag/(pDiag+pRad)) {
+    if (RandomNumGenerator::getRand()>pDiag/(pDiag+C*pRad)) {
       //std::cout << "Trying radiating move." << std::endl;
         isSamplingRadiating=true;
     } else {
@@ -251,17 +251,14 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     rhRadPrevOld = rhPrevOld;
   } 
 
-  //double oldAction = -log(exp(-oldDiagAction)+C*exp(-oldRadAction));
-  //double newAction = -log(exp(-newDiagAction)+C*exp(-newRadAction));
-
   double oldAction = oldDiagAction-log(1+C*exp(-oldRadAction+oldDiagAction));
   double newAction = newDiagAction-log(1+C*exp(-newRadAction+newDiagAction));
   if (C > 0.) {
-    if (log(C)*(oldRadAction-newDiagAction) > 40) {
-      oldAction = log(C)+oldRadAction;
+    if (log(C)-oldRadAction+newDiagAction > 40) {
+      oldAction = -log(C)+oldRadAction;
     }
-    if (log(C)*(newRadAction-newDiagAction) > 40) {
-      newAction = log(C)+newRadAction;
+    if (log(C)-newRadAction+newDiagAction > 40) {
+      newAction = -log(C)+newRadAction;
     }
   }
 
