@@ -87,8 +87,8 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
   for (int islice=nStride; islice<nSlice; islice+=nStride) {
 
     // Calculate action for moving beads.
-    Vec re = movingBeads(iMoving1,islice);
-    Vec rh = movingBeads(iMoving2,islice);
+    Vec re = movingBeads(0,islice);
+    Vec rh = movingBeads(1,islice);
 
     Vec reRad = re;
     Vec rhRad = (islice==nSlice/2)?re:rh;
@@ -144,8 +144,20 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
     rhRadPrevOld = rhPrevOld;
   } 
 
-  double oldAction = -log(1+C*exp(oldRadAction-oldDiagAction));
-  double newAction = -log(1+C*exp(newRadAction-newDiagAction));
+  //double oldAction = -log(1+C*exp(oldRadAction-oldDiagAction));
+  //double newAction = -log(1+C*exp(newRadAction-newDiagAction));
+
+  double oldAction = -log(1+C*exp(-oldRadAction+oldDiagAction));
+  double newAction = -log(1+C*exp(-newRadAction+newDiagAction));
+  if (C > 0.) {
+    if (log(C)-oldRadAction+oldDiagAction > 40) {
+      oldAction = -log(C)+oldRadAction-oldDiagAction;
+    }
+    if (log(C)-newRadAction+newDiagAction > 40) {
+      newAction = -log(C)+newRadAction-newDiagAction;
+    }
+  }
+
   double deltaAction = newAction-oldAction;
 
   return deltaAction;

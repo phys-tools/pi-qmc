@@ -50,5 +50,6 @@ private:
   double forwardProb;
   bool isSamplingRadiating;
   double earlierTransitions;
+  const double C;
 };
 #endif

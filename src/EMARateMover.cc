@@ -32,9 +32,9 @@
 #include <cmath>
 
 EMARateMover::EMARateMover(const SimulationInfo& simInfo, const int maxlevel,
-  const double pgDelta)
+  double C)
   : PermutationChooser(2), ParticleChooser(2),
-    lambda(simInfo.getNPart()), tau(simInfo.getTau()) {
+    lambda(simInfo.getNPart()), tau(simInfo.getTau()), C(C) {
   for (int i=0; i<simInfo.getNPart(); ++i) {
     const Species* species=&simInfo.getPartSpecies(i);
     lambda(i)=0.5/species->mass;
@@ -180,7 +180,6 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
 
   Vec mass1 = 0.5/lambda(iMoving1);
   Vec mass2 = 0.5/lambda(iMoving2);
-  double C=1.;
 
   const Vec inv2Sigma21 = 0.5*mass1/(tau*nStride);
   const Vec inv2Sigma22 = 0.5*mass2/(tau*nStride);
@@ -252,10 +251,19 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     rhRadPrevOld = rhPrevOld;
   } 
 
-  //double oldAction = -log(exp(oldDiagAction)+C*exp(oldRadAction));
-  //double newAction = -log(exp(newDiagAction)+C*exp(newRadAction));
-  double oldAction = oldDiagAction;
-  double newAction = newDiagAction;
+  //double oldAction = -log(exp(-oldDiagAction)+C*exp(-oldRadAction));
+  //double newAction = -log(exp(-newDiagAction)+C*exp(-newRadAction));
+
+  double oldAction = oldDiagAction-log(1+C*exp(-oldRadAction+oldDiagAction));
+  double newAction = newDiagAction-log(1+C*exp(-newRadAction+newDiagAction));
+  if (C > 0.) {
+    if (log(C)*(oldRadAction-newDiagAction) > 40) {
+      oldAction = log(C)+oldRadAction;
+    }
+    if (log(C)*(newRadAction-newDiagAction) > 40) {
+      newAction = log(C)+newRadAction;
+    }
+  }
 
   toldOverTnew = newAction-oldAction;
 
