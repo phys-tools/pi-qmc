@@ -20,6 +20,7 @@
 #include "FixedNodeAction.h"
 #include "ActionChoice.h"
 #include "LinkSummable.h"
+class SpinModelState;
 
 /**
 @version $Revision: 393 $
@@ -44,5 +45,8 @@ public:
         int islice, const Paths &paths) {
     }
 
+
+private:
+    SpinModelState *spinModelState;
 };
 #endif

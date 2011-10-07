@@ -25,6 +25,7 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "SuperCell.h"
+#include "SpinModelState.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
@@ -70,6 +71,14 @@ SHONodes::evaluate(const VArray &r1, const VArray &r2,
         double ri2=dot(ri,ri);
         double rirj=dot(ri,rj);
         mat(ipart,jpart)= scale*exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+      }
+    }
+    if (hasSpinModelState()) {
+      SpinModelState::IArray spin=(spinModelState->getSpinState());
+      for(int jpart=0; jpart<npart; ++jpart) {
+        for(int ipart=0; ipart<npart; ++ipart) {
+          if (spin(ipart) != spin(jpart)) mat(ipart,jpart) = 0.;
+        }
       }
     }
     // Calculate determinant and inverse.

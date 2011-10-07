@@ -27,8 +27,11 @@ SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
   : FixedNodeAction(simInfo,species,nodeModel,withNodalAction,
       useDistDerivative,maxlevel,useManyBodyDistance) {
   std::cout << "nSpeciesPart" << nSpeciesPart << std::endl;
-  modelState = new SpinModelState(nSpeciesPart);
+  spinModelState = new SpinModelState(nSpeciesPart);
+  modelState = spinModelState;
+  nodeModel->setSpinModelState(spinModelState);
 }
 
 SpinChoiceFixedNodeAction::~SpinChoiceFixedNodeAction() {
+  delete spinModelState;
 }

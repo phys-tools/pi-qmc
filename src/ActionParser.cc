@@ -422,64 +422,11 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
     }  else if (name=="FixedNodeAction") {
       ctxt->node=actNode;
       std::string specName=getStringAttribute(ctxt->node,"species");
-      std::string modelName=getStringAttribute(ctxt->node,"model");
       const Species& species(simInfo.getSpecies(specName));
-      double t=getEnergyAttribute(actNode,"temperature");
       bool noNodalAction=getBoolAttribute(actNode,"noNodalAction");
       bool useDistDerivative=getBoolAttribute(actNode,"useDistDerivative");
-      bool useHungarian=getBoolAttribute(actNode,"useHungarian");
-      int useIterations=getIntAttribute(actNode,"useIterations");
       bool useManyBodyDistance=getBoolAttribute(actNode,"useManyBodyDistance");
-      double nodalFactor=getDoubleAttribute(actNode,"nodalFactor");
-      if (nodalFactor<=0) nodalFactor=5.0;
-      if (useIterations<0) useIterations=0;
-      if (t==0) t=simInfo.getTemperature();
-
-      NodeModel *nodeModel=0;
-      if (modelName=="SHONodes") {
-        const double omega=getEnergyAttribute(ctxt->node,"omega");
-        nodeModel=new SHONodes(simInfo,species,omega,t,maxlevel);
-      } else if (modelName=="GSSNode" || modelName=="GroundStateSNode") {
-        std::string centerName=getStringAttribute(ctxt->node,"center");
-        const int icenter=simInfo.getSpecies(centerName).ifirst;
-        nodeModel=new GroundStateSNode(species,icenter,simInfo.getTau());
-      } else if (modelName=="WireNodes") {
-        const double omega=getEnergyAttribute(ctxt->node,"omega");
-        const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
-        Vec center;
-        for (int idim=0; idim<NDIM; ++idim) {
-          center[idim]=getLengthAttribute(ctxt->node,
-                                    std::string(dimName).substr(idim,1));
-        }
-        int maxMovers=0;
-        if (updates) maxMovers=3;
-        nodeModel=new WireNodes(simInfo,species,omega,t,center,maxlevel,
-                                updates,maxMovers);
-      } else if (modelName=="ExcitonNodes") {
-        std::string specName=getStringAttribute(ctxt->node,"species1");
-        const Species& species1(simInfo.getSpecies(specName));
-        specName=getStringAttribute(ctxt->node,"species2");
-        const Species& species2(simInfo.getSpecies(specName));
-        const double radius=getLengthAttribute(ctxt->node,"radius");
-        const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
-        int maxMovers=3;
-        nodeModel=new ExcitonNodes(simInfo,species1,species2,
-                                   t,maxlevel,radius,updates,maxMovers);
-      } else if (modelName=="AugmentedNodes") {
-        const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
-        const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
-        int maxMovers=3;
-        std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
-        parseOrbitalDM(orbitals, species, ctxt);
-        nodeModel=new AugmentedNodes(simInfo,species,
-            t,maxlevel,updates,maxMovers,orbitals,useHungarian);
-      } else {
-        const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
-        int maxMovers=0;
-        if (updates) maxMovers=3;
-        nodeModel=new FreeParticleNodes(simInfo,species,t,maxlevel,updates,
-                                        maxMovers,useHungarian,useIterations, nodalFactor);
-      }
+      NodeModel *nodeModel = parseNodeModel(ctxt,actNode,species);
       doubleComposite->addAction(
           new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
                               useDistDerivative,maxlevel,useManyBodyDistance));
@@ -667,24 +614,15 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       composite->addAction(new EMARateAction(simInfo,species1,species2,C)); 
       continue;
     } else if (name=="SpinChoiceFixedNodeAction") {
-      std::string specName = getStringAttribute(actNode,"species");
+      std::string specName=getStringAttribute(ctxt->node,"species");
       const Species& species(simInfo.getSpecies(specName));
-      int useIterations=getIntAttribute(actNode,"useIterations");
-      double nodalFactor=getDoubleAttribute(actNode,"nodalFactor");
-      if (nodalFactor<=0) nodalFactor=5.0;
-      double t=getEnergyAttribute(actNode,"temperature");
-      if (t==0) t=simInfo.getTemperature();
-      if (useIterations<0) useIterations=0;
-      const bool updates=getBoolAttribute(ctxt->node,"useUpdates");
-      const bool useHungarian=getBoolAttribute(ctxt->node,"useHungarian");
-      int maxMovers=0;
-      if (updates) maxMovers=3;
-      NodeModel *nodeModel
-          =new FreeParticleNodes(simInfo,species,t,maxlevel,updates,
-                    maxMovers,useHungarian,useIterations, nodalFactor);
+      bool noNodalAction=getBoolAttribute(actNode,"noNodalAction");
+      bool useDistDerivative=getBoolAttribute(actNode,"useDistDerivative");
+      bool useManyBodyDistance=getBoolAttribute(actNode,"useManyBodyDistance");
+      NodeModel *nodeModel = parseNodeModel(ctxt,actNode,species);
       SpinChoiceFixedNodeAction *action 
-        = new SpinChoiceFixedNodeAction(simInfo, species, nodeModel,
-                true, true, maxlevel, true);
+        = new SpinChoiceFixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
+                            useDistDerivative,maxlevel,useManyBodyDistance);
       actionChoice = action;
       doubleComposite->addAction(action);
       continue;
@@ -787,4 +725,61 @@ void ActionParser::parseOrbitalDM(
   }
 }
 
+NodeModel* ActionParser::parseNodeModel(const xmlXPathContextPtr& ctxt,
+  xmlNodePtr &actNode, const Species &species) {
+      NodeModel *nodeModel=0;
+      bool useHungarian=getBoolAttribute(actNode,"useHungarian");
+      int useIterations=getIntAttribute(actNode,"useIterations");
+      double nodalFactor=getDoubleAttribute(actNode,"nodalFactor");
+      if (nodalFactor<=0) nodalFactor=5.0;
+      if (useIterations<0) useIterations=0;
+      double t=getEnergyAttribute(actNode,"temperature");
+      if (t==0) t=simInfo.getTemperature();
+      std::string modelName=getStringAttribute(actNode,"model");
+      if (modelName=="SHONodes") {
+        const double omega=getEnergyAttribute(actNode,"omega");
+        nodeModel=new SHONodes(simInfo,species,omega,t,maxlevel);
+      } else if (modelName=="GSSNode" || modelName=="GroundStateSNode") {
+        std::string centerName=getStringAttribute(actNode,"center");
+        const int icenter=simInfo.getSpecies(centerName).ifirst;
+        nodeModel=new GroundStateSNode(species,icenter,simInfo.getTau());
+      } else if (modelName=="WireNodes") {
+        const double omega=getEnergyAttribute(actNode,"omega");
+        const bool updates=getBoolAttribute(actNode,"useUpdates");
+        Vec center;
+        for (int idim=0; idim<NDIM; ++idim) {
+          center[idim]=getLengthAttribute(actNode,
+                                    std::string(dimName).substr(idim,1));
+        }
+        int maxMovers=0;
+        if (updates) maxMovers=3;
+        nodeModel=new WireNodes(simInfo,species,omega,t,center,maxlevel,
+                                updates,maxMovers);
+      } else if (modelName=="ExcitonNodes") {
+        std::string specName=getStringAttribute(actNode,"species1");
+        const Species& species1(simInfo.getSpecies(specName));
+        specName=getStringAttribute(actNode,"species2");
+        const Species& species2(simInfo.getSpecies(specName));
+        const double radius=getLengthAttribute(actNode,"radius");
+        const bool updates=getBoolAttribute(actNode,"useUpdates");
+        int maxMovers=3;
+        nodeModel=new ExcitonNodes(simInfo,species1,species2,
+                                   t,maxlevel,radius,updates,maxMovers);
+      } else if (modelName=="AugmentedNodes") {
+        const bool updates=getBoolAttribute(actNode,"useUpdates");
+        const bool useHungarian=getBoolAttribute(actNode,"useHungarian");
+        int maxMovers=3;
+        std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
+        parseOrbitalDM(orbitals, species, ctxt);
+        nodeModel=new AugmentedNodes(simInfo,species,
+            t,maxlevel,updates,maxMovers,orbitals,useHungarian);
+      } else {
+        const bool updates=getBoolAttribute(actNode,"useUpdates");
+        int maxMovers=0;
+        if (updates) maxMovers=3;
+        nodeModel=new FreeParticleNodes(simInfo,species,t,maxlevel,updates,
+                                        maxMovers,useHungarian,useIterations, nodalFactor);
+      }
+      return nodeModel;
+}
 const std::string ActionParser::dimName="xyzklmnopqrstuv";

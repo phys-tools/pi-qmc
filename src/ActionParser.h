@@ -67,6 +67,8 @@ private:
   /// Parse atomic orbitals for AugmentedNdoes.
   void parseOrbitalDM(std::vector<const AugmentedNodes::AtomicOrbitalDM*>&,
     const Species&, const xmlXPathContextPtr& ctxt);
+  NodeModel* parseNodeModel(const xmlXPathContextPtr& ctxt, xmlNodePtr &actNode,
+    const Species &species);
   /// Letters associated with directions in input file.
   static const std::string dimName;
   /// MPIManager.

@@ -23,6 +23,7 @@
 #include <blitz/array.h>
 #include <fstream>
 class DoubleMLSampler;
+class SpinModelState;
 
 /** Base class for node models used in the fixed node approximation. 
 The NodeModel is a function @f$\rho_0(R(t),R(t+\beta/2)@f$ that is
@@ -108,13 +109,14 @@ public:
                         const int islice, VMatrix &gradd1, VMatrix &gradd2,
                         const Array &d1, const Array &d2, 
                         const int npart, const int ifirst);
-  /// Get a pointer to the update object (null if no updates).
   MatrixUpdate* getUpdateObj() const {return updateObj;}
+  void setSpinModelState(SpinModelState *s) {spinModelState = s;}
+  bool hasSpinModelState() const {return spinModelState != 0;}
 protected:
 #ifdef NODE_DIST_DEBUG
   std::ofstream logFile; 
 #endif
-  /// Pointer to update object.
   MatrixUpdate *updateObj;
+  SpinModelState *spinModelState;
 };
 #endif

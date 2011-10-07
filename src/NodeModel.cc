@@ -20,7 +20,7 @@ NodeModel::NodeModel(const std::string& name) :
 #ifdef NODE_DIST_DEBUG
    logFile(std::string("logGradDist"+name+".test").c_str())
 #endif
-   updateObj(0) {
+   updateObj(0), spinModelState(0) {
 }
 
 void NodeModel::testGradLogDist( const VArray &r1, const VArray &r2,
