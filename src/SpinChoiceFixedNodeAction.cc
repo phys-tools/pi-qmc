@@ -35,3 +35,13 @@ SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
 SpinChoiceFixedNodeAction::~SpinChoiceFixedNodeAction() {
   delete spinModelState;
 }
+
+
+double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
+    int ipart) {
+  double oldAction = getTotalAction(paths,0);
+  spinModelState->flipSpin(ipart);
+  double newAction = getTotalAction(paths,0);
+  spinModelState->flipSpin(ipart);
+  return newAction-oldAction;
+}

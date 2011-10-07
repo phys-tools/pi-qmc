@@ -35,6 +35,7 @@ public:
   IArray& getModelState() {return spinState;}
   virtual int getModelCount() const {return npart+1;}
   virtual int getModelState() const;
+  void flipSpin(int i) {spinState(i) = 1-spinState(i);}
 private:
   const int npart;
   IArray spinState;

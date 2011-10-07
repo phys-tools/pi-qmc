@@ -36,9 +36,8 @@ public:
 
     virtual ~SpinChoiceFixedNodeAction();
 
-    virtual double getActionDifference(const Paths &paths, int jmodel) {
-        return 0;
-    }
+    virtual double getActionDifference(const Paths &paths, int ipart);
+    
 
     virtual void handleLink(const LinkSummable::Vec &start, 
         const LinkSummable::Vec &end, int ipart, 

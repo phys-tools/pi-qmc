@@ -35,6 +35,7 @@
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
 #include "ModelSampler.h"
+#include "SpinModelSampler.h"
 #include "EMARateMover.h"
 #include "EnumeratedModelState.h"
 #include "spin/SpinMover.h"
@@ -298,6 +299,10 @@ std::cout << "doubleAction!=0" << std::endl;
   } else if (name=="SampleModel") {
     algorithm = new ModelSampler(*paths, action, actionChoice, mpi);
     estimators->add(((ModelSampler*)algorithm)->
+		    getAccRejEstimator("ModelSampler"));
+  } else if (name=="SampleSpinModel") {
+    algorithm = new SpinModelSampler(*paths, action, actionChoice, mpi);
+    estimators->add(((SpinModelSampler*)algorithm)->
 		    getAccRejEstimator("ModelSampler"));
   } else if (name=="ShiftWorkers") {
     int maxShift=getIntAttribute(ctxt->node,"maxShift");
