@@ -37,13 +37,14 @@ public:
     virtual ~SpinChoiceFixedNodeAction();
 
     virtual double getActionDifference(const Paths &paths, int ipart);
-    
 
+//    virtual double getTotalAction(const Paths& paths) const;
+
+    virtual void initCalc(const int nslice, const int firstSlice);
+    
     virtual void handleLink(const LinkSummable::Vec &start, 
         const LinkSummable::Vec &end, int ipart, 
-        int islice, const Paths &paths) {
-    }
-
+        int islice, const Paths &paths);
 
 private:
     SpinModelState *spinModelState;
