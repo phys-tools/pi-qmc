@@ -22,6 +22,8 @@
 #include "AccRejEstimator.h"
 #include "ArrayBlockedEstimator.h"
 #include "EstimatorManager.h"
+#include <ctime>
+#include <string.h>
 #include <iostream>
 
 void StdoutReportBuilder::startWritingGroup(EstimatorManager& manager) {
@@ -33,8 +35,12 @@ void StdoutReportBuilder::startWritingGroup(EstimatorManager& manager) {
 }
 
 void StdoutReportBuilder::writeStep(EstimatorManager& manager) {
-  std::cout << "********** Block " << istep+1 << " of "
-            << nstep << " blocks **********" << std::endl;
+  std::time_t rawtime;
+  std::time ( &rawtime );
+  char * myTime = std::ctime (&rawtime);
+  myTime[strlen(myTime)-1] = '\0'; //Hackish, gets rid of a trailing newline
+  std::cout << "********** Block " << istep+1 << " of " << nstep << " blocks **********" ; //<< std::endl;
+  std::cout << " (" << myTime << ")" << std::endl; 
   iscalar=0;
   for (EstimatorManager::EstimatorIter est=manager.estimator.begin();
        est!=manager.estimator.end(); ++est) {
