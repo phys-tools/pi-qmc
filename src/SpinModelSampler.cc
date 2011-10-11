@@ -73,7 +73,7 @@ std::cout << ipart << ", " << nmodel << std::endl;
 
   bool reject = RandomNumGenerator::getRand()>acceptProb;
 #ifdef ENABLE_MPI
-	int nworker=(mpi)?mpi->getNWorker():1;
+    int nworker=(mpi)?mpi->getNWorker():1;
     if (nworker > 1) {
       mpi->getWorkerComm().Bcast(&reject, sizeof(bool), MPI::CHAR, 0); 
     }
