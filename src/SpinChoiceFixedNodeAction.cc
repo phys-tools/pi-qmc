@@ -29,7 +29,7 @@ SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
   bool useDistDerivative, int maxlevel, bool useManyBodyDistance) 
   : FixedNodeAction(simInfo,species,nodeModel,withNodalAction,
       useDistDerivative,maxlevel,useManyBodyDistance) {
-  std::cout << "nSpeciesPart" << nSpeciesPart << std::endl;
+  std::cout << "npart for spin flip is " << nSpeciesPart << std::endl;
   spinModelState = new SpinModelState(nSpeciesPart);
   modelState = spinModelState;
   nodeModel->setSpinModelState(spinModelState);
@@ -54,7 +54,7 @@ double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
   double newAction = totalAction;
   spinModelState->flipSpin(ipart);
 
-  std::cout << "newAction, oldAction " << newAction << ", " << oldAction << std::endl; 
+//  std::cout << "newAction, oldAction " << newAction << ", " << oldAction << std::endl; 
 
   return newAction-oldAction;
 }
@@ -68,49 +68,3 @@ void SpinChoiceFixedNodeAction::handleLink(const LinkSummable::Vec &start,
   totalAction += u;
 }
 
-/*
-double SpinChoiceFixedNodeAction::getTotalAction(const Paths& paths) const {
-  double totalAction = 0.;
-  blitz::Range allPart = blitz::Range::all();
-  FixedNodeAction::Array prevd1(dist(0,0,allPart));
-  FixedNodeAction::Array prevd2(dist(0,1,allPart));
-  FixedNodeAction::Array d1(dist(1,0,allPart));
-  FixedNodeAction::Array d2(dist(1,1,allPart));
-  int nsliceOver2 = paths.getNSlice()/2;
-  int npart = paths.getNPart();
-  int nSlice = paths.getNSlice();
-  for (int islice=0; islice<nSlice; islice++) {
-    for (int i=0; i<npart; ++i) { 
-      r1(i)=paths(i,islice);
-      r2(i)=paths(i,(islice+nsliceOver2)%nSlice);
-    }
-    NodeModel::DetWithFlag result= nodeModel->evaluate(r1,r2,0,false);
-    if (result.err) return totalAction=2e100;
-    nodeModel->evaluateDistance(r1,r2,0,d1,d2);
-    if (islice>0) {
-      if (FixedNodeAction::useManyBodyDistance) {
-        double d02=0., d12=0., d0p2=0., d1p2=0.;
-        for (int i=0; i<npart; ++i) {
-          d02 += 1./(d1(i)*d1(i));
-          d0p2 += 1./(prevd1(i)*prevd1(i));
-          d12 += 1./(d2(i)*d2(i));
-          d1p2 += 1./(prevd2(i)*prevd2(i));
-        }
-        totalAction += log( (1-exp(-1./sqrt(d02*d0p2)))
-                               *(1-exp(-1./sqrt(d12*d1p2))));
-      } else {
-        for (int i=0; i<npart; ++i) {
-          totalAction += log((1-exp(-d1(i)*prevd1(i)))
-                                 *(1-exp(-d2(i)*prevd2(i))));
-        }
-      }
-    }
-    for (int i=0; i<npart; ++i) {
-      prevd1(i) = d1(i); 
-      prevd2(i) = d2(i); 
-    }
-  }
-  std::cout<<totalAction<<std::endl;
-  return totalAction;
-}
-*/

@@ -43,6 +43,8 @@ bool SpinModelState::read(const std::string &line) {
     }
     didRead = true;
   }
+  if (didRead == true)
+    std::cout << "Found spin model state: " <<spinState<<std::endl;
   return didRead;
 }
 

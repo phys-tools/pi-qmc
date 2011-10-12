@@ -57,11 +57,12 @@ bool SpinModelSampler::tryMove() {
   int ipart = nmodel;
   do {
     ipart  = RandomNumGenerator::getRand() * (nmodel-1);
-std::cout << ipart << ", " << nmodel << std::endl;
+//std::cout << ipart << ", " << nmodel << std::endl;
   } while (! (ipart < nmodel-1));
 
   // Evaluate the change in action.
   double deltaAction = actionChoice->getActionDifference(paths,ipart);
+
 #ifdef ENABLE_MPI
   double totalDeltaAction = 0;
   mpi->getWorkerComm().Reduce(&deltaAction,&totalDeltaAction,
@@ -80,10 +81,7 @@ std::cout << ipart << ", " << nmodel << std::endl;
 #endif 
   if (reject) return false;
 
-  std::cout << modelState.getSpinState() << std::endl;
   modelState.flipSpin(ipart);
-  std::cout << modelState.getSpinState() << std::endl;
-
 
   if (workerID==0) accRejEst->moveAccepted(0);
   return true;

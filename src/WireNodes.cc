@@ -27,6 +27,7 @@
 #include "SuperCell.h"
 #include "Beads.h"
 #include "DoubleMLSampler.h"
+#include "SpinModelState.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
@@ -109,6 +110,15 @@ WireNodes::evaluate(const VArray &r1, const VArray &r2, const int islice,
         uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
       }
     }
+    if (hasSpinModelState()) {
+      SpinModelState::IArray spin=(spinModelState->getSpinState());
+      for(int jpart=0; jpart<npart; ++jpart) {
+        for(int ipart=0; ipart<npart; ++ipart) {
+          if (spin(ipart) != spin(jpart)) mat(ipart,jpart) = 0.;
+        }
+      }
+    }
+
     // Find dominant contribution to determinant (distroys uarray).
     const int MODE=1;
     double usum=0;
