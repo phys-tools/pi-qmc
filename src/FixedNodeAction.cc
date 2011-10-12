@@ -327,6 +327,18 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
         utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
       }
     }
+  } else {
+    // Just check for node crossing.
+    int jslice=(islice+totNSlice/2)%totNSlice;
+    for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,-1);
+    for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice,-1);
+    NodeModel::DetWithFlag
+      detm = nodeModel->evaluate(r1, r2, 0, false);
+    for (int i=0; i<npart; ++i) r1(i)=paths(i,islice);
+    for (int i=0; i<npart; ++i) r2(i)=paths(i,jslice);
+    NodeModel::DetWithFlag
+      det = nodeModel->evaluate(r1, r2, 0, false);
+    if (det.err || detm.err ||det.det*detm.det < 0) u = 1e200; 
   }
   fm=force(ipart); 
 }

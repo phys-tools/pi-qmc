@@ -48,5 +48,6 @@ public:
 
 private:
     SpinModelState *spinModelState;
+    double totalAction;
 };
 #endif

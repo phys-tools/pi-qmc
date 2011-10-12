@@ -68,6 +68,7 @@ public:
   typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<int,2> IArray2;
   typedef blitz::Array<double,2> Matrix;
   typedef blitz::Array<Vec,2> VMatrix;
   typedef blitz::Array<Mat,2> MMatrix;
@@ -120,6 +121,9 @@ private:
   mutable VMatrix gradMatrix, mat2;
   /// Storage for second derivatives needed for forces.
   mutable MMatrix grad2Matrix;
+  Matrix uarray;
+  IArray2 kindex;
+  IArray kwork;
   int nerror;
   double scale;
 };

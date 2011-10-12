@@ -33,6 +33,10 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 #define DGETRI_F77 F77_FUNC(dgetri,DGETRI)
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
+#define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
+extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n, 
+  const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
+
 
 SHONodes::SHONodes(const SimulationInfo &simInfo,
   const Species &species, const double omega, const double temperature,
@@ -44,9 +48,15 @@ SHONodes::SHONodes(const SimulationInfo &simInfo,
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     notMySpecies(false), gradArray(npart), gradMatrix(npart,npart), 
-    mat2(npart,npart), grad2Matrix(npart,npart), nerror(0), scale(1.) {
+    mat2(npart,npart), grad2Matrix(npart,npart), 
+    uarray(npart,npart,ColMajor()),
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6),
+    nerror(0), scale(1.) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
+  }
+  for (int islice=0; islice<kindex.shape()(0); ++islice)  {
+    for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)=ipart;
   }
   std::cout << "SHONodes with temperature = " << temperature
             << " for species " << species.name 
@@ -71,6 +81,7 @@ SHONodes::evaluate(const VArray &r1, const VArray &r2,
         double ri2=dot(ri,ri);
         double rirj=dot(ri,rj);
         mat(ipart,jpart)= scale*exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+        uarray(ipart,jpart) = -log(fabs(mat(ipart,jpart))+1e-100);
       }
     }
     if (hasSpinModelState()) {
@@ -81,6 +92,15 @@ SHONodes::evaluate(const VArray &r1, const VArray &r2,
         }
       }
     }
+    // Find dominant contribution to determinant (distroys uarray).
+    const int MODE=1;
+    double usum=0;
+    ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
+               &usum,kwork.data(),&npart);
+    for(int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+    // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
+    // or lowest total action.
+
     // Calculate determinant and inverse.
     int info=0;//LU decomposition
     DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
@@ -128,11 +148,11 @@ SHONodes::evaluate(const VArray &r1, const VArray &r2,
 
 void SHONodes::evaluateDistance(const VArray &r1, const VArray &r2,
                      const int islice, Array& d1, Array& d2) {
+  d1=200; d2=200;
   const Matrix& mat(*matrix[islice]);
-  double d2inv=0; 
   // Calculate the nodal distance from jpart particles.
   for (int jpart=0; jpart<npart; ++jpart) {
-    Vec logGrad=0.0;
+    Vec logGrad=0.0, fgrad=0.0;
     Vec rj=r1(jpart+ifirst);
     double rj2=dot(rj,rj);
     for (int ipart=0; ipart<npart; ++ipart) {
@@ -140,14 +160,17 @@ void SHONodes::evaluateDistance(const VArray &r1, const VArray &r2,
       double ri2=dot(ri,ri);
       double rirj=dot(ri,rj);
       //Vec grad=2*c*ri*exp(-c*(ri2*coshwt-2.0*rirj));
-      Vec grad=scale*2*c*(ri-coshwt*rj)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
-      logGrad+=mat(jpart,ipart)*grad;
+      Vec grad=2*c*(ri-coshwt*rj)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
+      if (ipart==kindex(islice,jpart)) {
+        fgrad = grad / exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+      }
+      logGrad+=mat(jpart,ipart)*scale*grad;
     }
-    d2inv+=dot(logGrad,logGrad);
+    d1(jpart+ifirst) = sqrt(2*mass/((dot(logGrad,logGrad)+1e-15)*tau));
   }
   // And calculate the nodal distance from ipart particles.
   for (int ipart=0; ipart<npart; ++ipart) {
-    Vec logGrad=0.0;
+    Vec logGrad=0.0, fgrad=0.0;
     Vec ri=r2(ipart+ifirst);
     double ri2=dot(ri,ri);
     for(int jpart=0; jpart<npart; ++jpart) {
@@ -155,12 +178,14 @@ void SHONodes::evaluateDistance(const VArray &r1, const VArray &r2,
       double rj2=dot(rj,rj);
       double rirj=dot(ri,rj);
       //Vec grad=2*c*rj*exp(-c*(rj2*coshwt-2.0*rirj));
-      Vec grad=scale*2*c*(rj-coshwt*ri)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
-      logGrad+=mat(jpart,ipart)*grad;
+      Vec grad=2*c*(rj-coshwt*ri)*exp(-c*((ri2+rj2)*coshwt-2*rirj));
+      if (ipart==kindex(islice,jpart)) {
+        fgrad = grad / exp(-c*((ri2+rj2)*coshwt-2.0*rirj));
+      }
+      logGrad+=mat(jpart,ipart)*scale*grad;
     }
-    d2inv+=dot(logGrad,logGrad);
+    d2(ipart+ifirst) = sqrt(2*mass/((dot(logGrad,logGrad)+1e-15)*tau));
   }
-  //return sqrt(2*mass/(d2inv*tau));
 }
 
 void SHONodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,

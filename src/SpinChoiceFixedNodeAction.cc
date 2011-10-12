@@ -1,5 +1,5 @@
 //$Id: SpinChoiceFixedNodeAction.cc 383 2011-04-20 16:56:02Z john.shumwayjr $
-/*  Copyright (C) 2004-2009, 2011 John B. Shumway, Jr.
+/*  Copyright (C) 2011 John B. Shumway, Jr. and Jianheng Liu
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,25 +39,24 @@ SpinChoiceFixedNodeAction::~SpinChoiceFixedNodeAction() {
   delete spinModelState;
 }
 
-void SpinChoiceFixedNodeAction::initCalc(const int nslice, const int firstSlice) {
-  actionDifference = 0.;
+void SpinChoiceFixedNodeAction::initCalc(const int nslice, 
+    const int firstSlice) {
+  totalAction = 0.;
 }
 
 double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
     int ipart) {
-//  double oldAction = this->getTotalAction(paths);
-//  std::cout<<"Old action = "<<oldAction<<std::endl;
-//  std::exit(-1);
-//  spinModelState->flipSpin(ipart);
-//  double newAction = this->getTotalAction(paths);
-//  spinModelState->flipSpin(ipart);
-//  return newAction-oldAction;
   paths.sumOverLinks(*this);
-  double oldAction = actionDifference;
+  double oldAction = totalAction;
+
   spinModelState->flipSpin(ipart);
   paths.sumOverLinks(*this);
+  double newAction = totalAction;
   spinModelState->flipSpin(ipart);
-  return (actionDifference-oldAction);
+
+  std::cout << "newAction, oldAction " << newAction << ", " << oldAction << std::endl; 
+
+  return newAction-oldAction;
 }
 
 void SpinChoiceFixedNodeAction::handleLink(const LinkSummable::Vec &start,
@@ -66,7 +65,7 @@ void SpinChoiceFixedNodeAction::handleLink(const LinkSummable::Vec &start,
   double u=0., utau=0., ulambda=0;
   FixedNodeAction::Vec fm=0., fp=0.;
   this->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
-  actionDifference += u;
+  totalAction += u;
 }
 
 /*

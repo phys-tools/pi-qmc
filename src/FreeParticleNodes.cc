@@ -26,7 +26,7 @@
 #include "SuperCell.h"
 #include "Beads.h"
 #include "DoubleMLSampler.h"
-
+#include "SpinModelState.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
@@ -103,6 +103,14 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
         for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
         mat(ipart,jpart)=ear2;
 	(*romatrix[islice])(ipart,jpart)=ear2;
+      }
+    }
+    if (hasSpinModelState()) {
+      SpinModelState::IArray spin=(spinModelState->getSpinState());
+      for(int jpart=0; jpart<npart; ++jpart) {
+        for(int ipart=0; ipart<npart; ++ipart) {
+          if (spin(ipart) != spin(jpart)) mat(ipart,jpart) = 0.;
+        }
       }
     }
     for(int jpart=0; jpart<npart; ++jpart) {
