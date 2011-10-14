@@ -42,7 +42,6 @@ public:
 
       // std :: cout << mpi->getCloneID()<<" cid. "<<mpi->getWorkerID()<<" iw. "<<timer<<" "<<totalSimTime<<std :: endl;
 
-      //mpi->getWorkerComm().Barrier();
       
       // print out timeinfo for Main or sub loops. totalsimtime default value is 12hrs in case it is not set.
       if (timer =="Main" || totalSimTime>0){
@@ -53,14 +52,6 @@ public:
 	double dt = 0;
 	for(int i=0; (dif+dt) < totalSimTime && i<nrepeat; ++i ){
 
-#ifdef ENABLE_MPI
-	  if (mpi) {
-	    mpi->getWorkerComm().Barrier();
-	    if (mpi->isCloneMain())  {
-	      mpi->getCloneComm().Barrier();
-	    }
-	  }
-#endif
 	  CompositeAlgorithm::run();
 	  time (&elapsedTime);
 	  dif = difftime (elapsedTime,startSim);
@@ -86,15 +77,6 @@ public:
 	double dif=0;
 	double oldTime=0;
 	double dt = 0;
-#ifdef ENABLE_MPI
-	  //db sak
-	  if (mpi) {
-	    mpi->getWorkerComm().Barrier();
-	    if (mpi->isCloneMain())  {
-	      mpi->getCloneComm().Barrier();
-	    }
-	  }
-#endif
 	for(int i=0; i<nrepeat; ++i )  CompositeAlgorithm::run();
 	time (&elapsedTime);
 	dif = difftime (elapsedTime,startSim);
@@ -109,15 +91,6 @@ public:
       }else {
  	//No timeinfo printed. timer not used. Just use nrepeat
       	if (timer=="" && totalSimTime==0){
-#ifdef ENABLE_MPI
-	    //db sak
-	    if (mpi) {
-	      mpi->getWorkerComm().Barrier();
-	      if (mpi->isCloneMain())  {
-		mpi->getCloneComm().Barrier();
-	      }
-	    }
-#endif
 	  for(int i=0;  i<nrepeat; ++i )	 {
 	    CompositeAlgorithm::run();
 

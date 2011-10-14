@@ -87,14 +87,14 @@ void PathReader::run() {
     }
   }
 
-  // BUG HERE, BREAKS PARALLEL VERSION WHEN SAMPLING NODE MODEL.
 #ifdef ENABLE_MPI
   if (mpi) {
     mpi->getWorkerComm().Bcast(&slice(0,0),npart*NDIM,MPI::DOUBLE,0);
-    //mpi->getWorkerComm().Bcast(&modelState,1,MPI::INT,0);
+    if (paths.hasModelState()) {
+      paths.getModelState()->broadcastToMPIWorkers(mpi);
+    }
   }
 #endif
-  //paths.setModelState(modelState);
 
   Beads<NDIM> firstSlice(slice);  Permutation pidentity(npart); 
   for (int islice=0; islice<(nslice/bfactor)-1; ++islice) { 

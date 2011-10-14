@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <string>
+class MPIManager;
 
 ///Base class for model state.
 /// @version $Revision: 338 $
@@ -30,5 +31,6 @@ public:
   virtual bool read(const std::string&)=0;
   virtual int getModelCount() const=0;
   virtual int getModelState() const=0;
+  virtual void broadcastToMPIWorkers(MPIManager *mpi) {}
 };
 #endif

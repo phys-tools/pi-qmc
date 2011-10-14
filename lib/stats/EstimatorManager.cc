@@ -79,6 +79,14 @@ void EstimatorManager::writeStep() {
   }
   // Avoid a race condition.
 #ifdef ENABLE_MPI
+  //char buffer[256];
+  //int namelength;
+  //MPI::Get_processor_name (buffer, namelength);
+  //std::string name(buffer, namelength); 
+  //std::time_t rawtime;
+  //std::time(&rawtime);
+  //std::cout << "Barrier reached by " << name << " at " 
+  //          << ctime(&rawtime) << std::endl;
   if (mpi) {
     mpi->getWorkerComm().Barrier();
     if (mpi->isCloneMain())  {

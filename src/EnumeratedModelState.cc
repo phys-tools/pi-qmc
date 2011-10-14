@@ -17,7 +17,11 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
 #include "EnumeratedModelState.h"
+#include "stats/MPIManager.h"
 #include <cstdlib>
 
 EnumeratedModelState::EnumeratedModelState(int modelCount)
@@ -44,4 +48,12 @@ bool EnumeratedModelState::read(const std::string &line) {
     didRead = true;
   }
   return didRead;
+}
+
+void EnumeratedModelState::broadcastToMPIWorkers(MPIManager *mpi) {
+#ifdef ENABLE_MPI
+  if (mpi) {
+    mpi->getWorkerComm().Bcast(&modelState,1,MPI::INT,0);
+  }
+#endif
 }
