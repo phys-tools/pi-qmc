@@ -28,6 +28,7 @@
 #include "ActionChoice.h"
 #include "RandomNumGenerator.h"
 #include "Paths.h"
+#include "Permutation.h"
 #include "SpinModelState.h"
 #include <sstream>
 #include <string>
@@ -37,7 +38,12 @@ SpinModelSampler::SpinModelSampler(Paths& paths, Action* action,
   : paths(paths), action(action), actionChoice(actionChoice),
     modelState(dynamic_cast<SpinModelState&>
                  (actionChoice->getModelState())),
-    nmodel(modelState.getModelCount()), accRejEst(0),  mpi(mpi) {
+    nmodel(modelState.getModelCount()), accRejEst(0),  mpi(mpi) 
+#ifdef ENABLE_MPI
+    ,npart(paths.getNPart()), nworker((mpi)?mpi->getNWorker():1),
+    iworkerPerm((mpi)?mpi->getNWorker():1,paths.getNPart())
+#endif
+{
 }
 
 SpinModelSampler::~SpinModelSampler() {
@@ -60,6 +66,10 @@ bool SpinModelSampler::tryMove() {
 //std::cout << ipart << ", " << nmodel << std::endl;
   } while (! (ipart < nmodel-1));
 
+  // Check if ipart is part of a permutation, reject if yes.
+  Permutation permutation = getGlobalPermutation();
+  if (ipart != permutation[ipart]) return false;
+
   // Evaluate the change in action.
   double deltaAction = actionChoice->getActionDifference(paths,ipart);
 
@@ -74,7 +84,6 @@ bool SpinModelSampler::tryMove() {
 
   bool reject = RandomNumGenerator::getRand()>acceptProb;
 #ifdef ENABLE_MPI
-    int nworker=(mpi)?mpi->getNWorker():1;
     if (nworker > 1) {
       mpi->getWorkerComm().Bcast(&reject, sizeof(bool), MPI::CHAR, 0); 
     }
@@ -91,3 +100,25 @@ AccRejEstimator*
 SpinModelSampler::getAccRejEstimator(const std::string& name) {
   return accRejEst=new AccRejEstimator(name.c_str(),1);
 }
+
+Permutation SpinModelSampler::getGlobalPermutation(){
+    Permutation globalPermutation = paths.getPermutation();
+#ifdef ENABLE_MPI
+    if (nworker==1)  return globalPermutation;
+    int iworker = mpi->getWorkerID(); 
+    Permutation localPermutation = paths.getPermutation();
+    for (int i=0;i<npart;i++) iworkerPerm(iworker,i)=localPermutation[i];
+    Permutation recvp(npart);
+    if (iworker ==0) {
+      for (int src =1; src < nworker; ++src){
+        mpi->getWorkerComm().Recv(&recvp[0], npart,MPI::INT,src,1);
+        globalPermutation.append(recvp);
+        for (int i=0;i<npart;i++) iworkerPerm(src,i)=recvp[i];
+      }
+    } else {
+      mpi->getWorkerComm().Send(&(localPermutation[0]), npart,MPI::INT,0,1);
+    }
+#endif
+  return globalPermutation;
+}
+

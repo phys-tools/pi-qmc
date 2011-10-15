@@ -32,5 +32,6 @@ public:
   virtual int getModelCount() const=0;
   virtual int getModelState() const=0;
   virtual void broadcastToMPIWorkers(MPIManager *mpi) {}
+  virtual bool isSpinModelState() {return false;}
 };
 #endif

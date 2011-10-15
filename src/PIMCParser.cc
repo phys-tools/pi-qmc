@@ -77,6 +77,7 @@
 #include "WritePaths.h"
 #include <iostream>
 #include "RandomPermutationChooser.h"
+#include "SpinStatePermutationChooser.h"
 #include "WalkingChooser.h"
 #include "PairChooser.h"
 #include "TwoPairChooser.h"
@@ -406,17 +407,35 @@ std::cout << "doubleAction!=0" << std::endl;
       }
       nmoving*=2;
     } else {
-      WalkingChooser* chooser
-        = new WalkingChooser(nmoving,simInfo.getSpecies(speciesName),
-                             nlevel,simInfo);
-      particleChooser = chooser;
-      permutationChooser = chooser;
-      if (doubleAction) {
+      if (actionChoice && (paths->getModelState()->isSpinModelState())) {
+	  SpinStatePermutationChooser* chooser 
+	    = new SpinStatePermutationChooser(nmoving,
+		simInfo.getSpecies(speciesName),nlevel,simInfo,
+		actionChoice->getModelState());
+          particleChooser = chooser;
+          permutationChooser = chooser;
+      } else {
         WalkingChooser* chooser
           = new WalkingChooser(nmoving,simInfo.getSpecies(speciesName),
                                nlevel,simInfo);
-        particleChooser2 = chooser;
-        permutationChooser2 = chooser;
+        particleChooser = chooser;
+        permutationChooser = chooser;
+      }
+      if (doubleAction) {
+        if (actionChoice && (paths->getModelState()->isSpinModelState())) {
+	  SpinStatePermutationChooser* chooser 
+	    = new SpinStatePermutationChooser(nmoving,
+		simInfo.getSpecies(speciesName),nlevel,simInfo,
+		actionChoice->getModelState());
+          particleChooser2 = chooser;
+          permutationChooser2 = chooser;
+	} else {
+          WalkingChooser* chooser
+            = new WalkingChooser(nmoving,simInfo.getSpecies(speciesName),
+                                 nlevel,simInfo);
+          particleChooser2 = chooser;
+          permutationChooser2 = chooser;
+	}
       }
     }
     }

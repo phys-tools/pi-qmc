@@ -1,4 +1,4 @@
-//$Id$
+//$Id: SpinStatePermutationChooser.cc 338 2010-11-30 18:56:16Z john.shumwayjr $
 /*  Copyright (C) 2004-2006 John B. Shumway, Jr.
 
     This program is free software; you can redistribute it and/or modify
@@ -20,23 +20,29 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "WalkingChooser.h"
+#include "SpinStatePermutationChooser.h"
 #include "RandomNumGenerator.h"
 #include "Permutation.h"
+#include "Paths.h"
 #include "MultiLevelSampler.h"
 #include "Species.h"
 #include "SuperCell.h"
 #include "Beads.h"
 #include "SimulationInfo.h"
 #include "PeriodicGaussian.h"
+#include "ModelState.h"
+#include "SpinModelState.h"
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
+//#include <blitz/array.h>
 
-WalkingChooser::WalkingChooser(const int nsize, const Species &species,
-  const int nlevel, const SimulationInfo& simInfo) 
+SpinStatePermutationChooser::SpinStatePermutationChooser(const int nsize, const Species &species,
+  const int nlevel, const SimulationInfo& simInfo, ModelState& modelState)
   : PermutationChooser(nsize), SpeciesParticleChooser(species,nsize),
     nsize(nsize), t(npart,npart), cump(npart,npart),mass(species.mass), 
     tau(simInfo.getTau()),
-    pg(NDIM) {
+    pg(NDIM), spinState(dynamic_cast<SpinModelState&>(modelState).getSpinState()) {
+//    spinState(modelState.getSpinState()) {
   double alpha=mass/(2*tau*pow(2,nlevel));
   for (int idim=0; idim<NDIM; ++idim) {
     double l=(*simInfo.getSuperCell())[idim];
@@ -47,37 +53,25 @@ WalkingChooser::WalkingChooser(const int nsize, const Species &species,
   for (int i=0; i<nsize; ++i) (*permutation)[i]=(i+1)%nsize;
 }
 
-WalkingChooser::~WalkingChooser() {
+SpinStatePermutationChooser::~SpinStatePermutationChooser() {
   for (PGArray::iterator i=pg.begin();  i!=pg.end(); ++i) delete *i;
 }
 
-void WalkingChooser::chooseParticles() {}
+void SpinStatePermutationChooser::chooseParticles() {}
 
 
-bool WalkingChooser::choosePermutation() {
+bool SpinStatePermutationChooser::choosePermutation() {
   double tranProb=0, revTranProb=0;
   for (int ipart=0; ipart<nsize; ++ipart) {
     if (ipart== 0) {
        // Select first particle at random.
        index(ipart)=(int)(npart*RandomNumGenerator::getRand());
        if (index(ipart)==npart) index(ipart)=npart-1;
-       //std :: cout <<"\n"<<"Begin : "<<index(0)<<"---->";
     } else { 
       // Select subsequent particle from t(k1,k2)/h(k1)
       double h=cump(index(ipart-1),npart-1);  
       double x=h*RandomNumGenerator::getRand();
       index(ipart)=iSearch(index(ipart-1),x);
-
-      /*test JS and this method
-	double xx=x;
-	for (int jpart=0; jpart<npart-1; ++jpart) {
-	xx-=t(index(ipart-1),jpart);
-	if (xx<0) {
-	if (index(ipart)==jpart) std :: cout <<"FOUND Agreement"<<index(ipart)<<" is equal"<<jpart<<std:: endl; 
-	if (index(ipart)!=jpart) std :: cout <<"DIS DIS Agreement"<<index(ipart)<<" is NOT equal"<<jpart<<std:: endl; 
-	break;}
-	}
-      */
 
       // Reject if repeated (not a nsize permutiaton cycle).
       for (int jpart=0; jpart<ipart; ++jpart) {
@@ -86,7 +80,6 @@ bool WalkingChooser::choosePermutation() {
       // Accumulate inverse probabilities.
       revTranProb+=h/t(index(ipart-1),index(ipart-1));
       tranProb+=h/t(index(ipart-1),index(ipart));
-      //std :: cout <<index(ipart)<<"---->";
     }
   }
   // Accumulate the inverse probability to connect the cycle.
@@ -94,7 +87,6 @@ bool WalkingChooser::choosePermutation() {
   revTranProb+=h/t(index(nsize-1),index(nsize-1));
   tranProb+=h/t(index(nsize-1),index(0));
   double accept=revTranProb/tranProb;
-  //std :: cout <<index(nsize-1)<<"END"<<std :: endl<<std :: endl;
 
   prob=1;
   for (int i=0; i<nsize; ++i) prob*=t(index(i),index(i))
@@ -104,56 +96,7 @@ bool WalkingChooser::choosePermutation() {
   return RandomNumGenerator::getRand()<accept;
 }
 
-/*
-bool WalkingChooser::choosePermutation() {
-  double tranProb=0, revTranProb=0;
-  for (int ipart=0; ipart<nsize; ++ipart) {
-    if (ipart== 0) {
-       // Select first particle at random.
-       index(ipart)=(int)(npart*RandomNumGenerator::getRand());
-       if (index(ipart)==npart) index(ipart)=npart-1;
-    } else { 
-      // Select subsequent particle from t(k1,k2)/h(k1)
-      double h=0;
-      for (int jpart=0; jpart<npart; ++jpart) h+=t(index(ipart-1),jpart);
-      double x=h*RandomNumGenerator::getRand();
-      
-      index(ipart)=npart-1;
-      //int kpart; 
-      for (int jpart=0; jpart<npart-1; ++jpart) {
-      //int iorg=RandomNumGenerator::getRand()*(npart-1);
-      //for (int jpart=iorg; jpart<(iorg+npart-1); ++jpart) {
-      x-=t(index(ipart-1),jpart);
-      if (x<0) {index(ipart)=jpart; break;}
-      //kpart=jpart%(npart-1);//array[jpart];
-      //x-=t(index(ipart-1),kpart);
-      //if (x<0) {index(ipart)=kpart; break;}
-      }
-     
-      // Reject if repeated (not a nsize permutiaton cycle).
-      for (int jpart=0; jpart<ipart; ++jpart) {
-        if(index(ipart)==index(jpart)) return false;
-      }
-      // Accumulate inverse probabilities.
-      revTranProb+=h/t(index(ipart-1),index(ipart-1));
-      tranProb+=h/t(index(ipart-1),index(ipart));
-    }
-  }
-  // Accumulate the inverse probability to connect the cycle.
-  double h=0;
-  for (int jpart=0; jpart<npart; ++jpart) h+=t(index(nsize-1),jpart);
-  revTranProb+=h/t(index(nsize-1),index(nsize-1));
-  tranProb+=h/t(index(nsize-1),index(0));
-  double accept=revTranProb/tranProb;
-  prob=1;
-  for (int i=0; i<nsize; ++i) prob*=t(index(i),index(i))
-                                   /t(index(i),index((i+1)%nsize));
-  // Add ifirst to particle IDs to convert to absolute IDs. 
-  index += ifirst;
-  return RandomNumGenerator::getRand()<accept;
-}
-*/
-void WalkingChooser::init() {
+void SpinStatePermutationChooser::init() {
   // Setup the table of free particle propagotor values.
   const Beads<NDIM> &sectionBeads=multiLevelSampler->getSectionBeads();
   const SuperCell &cell=multiLevelSampler->getSuperCell();
@@ -171,7 +114,12 @@ void WalkingChooser::init() {
       }
     } 
   }
-
+  // Zero out the probability between different particles.
+  for (int ipart=0; ipart<npart; ++ipart) {
+    for (int jpart=0; jpart<npart; ++jpart) {
+      if (spinState(ipart) != spinState(jpart)) t(ipart,jpart) = 1e-200;
+    }
+  }
  
   for (int ipart=0; ipart<npart; ++ipart) {
     cump(ipart,0)=t(ipart,0);
@@ -184,7 +132,7 @@ void WalkingChooser::init() {
   }
 }
 
-int WalkingChooser::iSearch(int part, double x){
+int SpinStatePermutationChooser::iSearch(int part, double x){
     
   if (x<cump(part,0))   return 0;
   
@@ -205,6 +153,6 @@ int WalkingChooser::iSearch(int part, double x){
   return mid;
 }
 
-void WalkingChooser::setMLSampler(const MultiLevelSampler *mls) {
+void SpinStatePermutationChooser::setMLSampler(const MultiLevelSampler *mls) {
   multiLevelSampler=mls;
 }

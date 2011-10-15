@@ -131,6 +131,7 @@ am_pi_OBJECTS = pi-ActionChoice.$(OBJEXT) pi-ActionParser.$(OBJEXT) \
 	pi-Spin4DPhase.$(OBJEXT) pi-SpinChargeEstimator.$(OBJEXT) \
 	pi-SpinModelSampler.$(OBJEXT) pi-SpinModelState.$(OBJEXT) \
 	pi-SpinChoiceFixedNodeAction.$(OBJEXT) \
+	pi-SpinStatePermutationChooser.$(OBJEXT) \
 	pi-SpringAction.$(OBJEXT) pi-SpringTensorAction.$(OBJEXT) \
 	pi-StillWebAction.$(OBJEXT) pi-StructReader.$(OBJEXT) \
 	pi-SuperCell.$(OBJEXT) pi-ThermoEnergyEstimator.$(OBJEXT) \
@@ -355,7 +356,8 @@ pi_SOURCES = ActionChoice.cc ActionParser.cc \
 	SimulationInfo.cc SKOmegaEstimator.cc SmoothedGridPotential.cc \
 	Species.cc SpeciesParticleChooser.cc SphereAction.cc \
 	Spin4DPhase.cc SpinChargeEstimator.cc SpinModelSampler.cc \
-	SpinModelState.cc SpinChoiceFixedNodeAction.cc SpringAction.cc \
+	SpinModelState.cc SpinChoiceFixedNodeAction.cc \
+	SpinStatePermutationChooser.cc SpringAction.cc \
 	SpringTensorAction.cc StillWebAction.cc StructReader.cc \
 	SuperCell.cc ThermoEnergyEstimator.cc TimpQPC.cc \
 	TradEwaldSum.cc TwoPairChooser.cc TwoQDAction.cc \
@@ -411,14 +413,15 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	SmoothedGridPotential.h Species.h SpeciesParticleChooser.h \
 	SphereAction.h Spin4DPhase.h SpinChargeEstimator.h \
 	SpinModelSampler.h SpinModelState.h \
-	SpinChoiceFixedNodeAction.h SpringAction.h \
-	SpringTensorAction.h StillWebAction.h StructReader.h \
-	SuperCell.h ThermoEnergyEstimator.h TimpQPC.h TradEwaldSum.h \
-	TwoPairChooser.h TwoQDAction.h UniformMover.h VIndEstimator.h \
-	VirialEnergyEstimator.h WalkingChooser.h WellImageAction.h \
-	WindingEstimator.h WireEwald.h WireNodes.h WorkerShifter.h \
-	WritePaths.h WriteProbDensity.h XMLParser.h XMLUnitParser.h \
-	XMLWriter.h ZeroVarDensityEstimator.h gnugetopt.h
+	SpinChoiceFixedNodeAction.h SpinStatePermutationChooser.h \
+	SpringAction.h SpringTensorAction.h StillWebAction.h \
+	StructReader.h SuperCell.h ThermoEnergyEstimator.h TimpQPC.h \
+	TradEwaldSum.h TwoPairChooser.h TwoQDAction.h UniformMover.h \
+	VIndEstimator.h VirialEnergyEstimator.h WalkingChooser.h \
+	WellImageAction.h WindingEstimator.h WireEwald.h WireNodes.h \
+	WorkerShifter.h WritePaths.h WriteProbDensity.h XMLParser.h \
+	XMLUnitParser.h XMLWriter.h ZeroVarDensityEstimator.h \
+	gnugetopt.h
 all: all-am
 
 .SUFFIXES:
@@ -640,6 +643,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinChoiceFixedNodeAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinModelSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinModelState.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpinStatePermutationChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpringAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-SpringTensorAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pi-StillWebAction.Po@am__quote@
@@ -2562,6 +2566,20 @@ pi-SpinChoiceFixedNodeAction.obj: SpinChoiceFixedNodeAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinChoiceFixedNodeAction.cc' object='pi-SpinChoiceFixedNodeAction.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinChoiceFixedNodeAction.obj `if test -f 'SpinChoiceFixedNodeAction.cc'; then $(CYGPATH_W) 'SpinChoiceFixedNodeAction.cc'; else $(CYGPATH_W) '$(srcdir)/SpinChoiceFixedNodeAction.cc'; fi`
+
+pi-SpinStatePermutationChooser.o: SpinStatePermutationChooser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpinStatePermutationChooser.o -MD -MP -MF $(DEPDIR)/pi-SpinStatePermutationChooser.Tpo -c -o pi-SpinStatePermutationChooser.o `test -f 'SpinStatePermutationChooser.cc' || echo '$(srcdir)/'`SpinStatePermutationChooser.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SpinStatePermutationChooser.Tpo $(DEPDIR)/pi-SpinStatePermutationChooser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinStatePermutationChooser.cc' object='pi-SpinStatePermutationChooser.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinStatePermutationChooser.o `test -f 'SpinStatePermutationChooser.cc' || echo '$(srcdir)/'`SpinStatePermutationChooser.cc
+
+pi-SpinStatePermutationChooser.obj: SpinStatePermutationChooser.cc
+@am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpinStatePermutationChooser.obj -MD -MP -MF $(DEPDIR)/pi-SpinStatePermutationChooser.Tpo -c -o pi-SpinStatePermutationChooser.obj `if test -f 'SpinStatePermutationChooser.cc'; then $(CYGPATH_W) 'SpinStatePermutationChooser.cc'; else $(CYGPATH_W) '$(srcdir)/SpinStatePermutationChooser.cc'; fi`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/pi-SpinStatePermutationChooser.Tpo $(DEPDIR)/pi-SpinStatePermutationChooser.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinStatePermutationChooser.cc' object='pi-SpinStatePermutationChooser.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -c -o pi-SpinStatePermutationChooser.obj `if test -f 'SpinStatePermutationChooser.cc'; then $(CYGPATH_W) 'SpinStatePermutationChooser.cc'; else $(CYGPATH_W) '$(srcdir)/SpinStatePermutationChooser.cc'; fi`
 
 pi-SpringAction.o: SpringAction.cc
 @am__fastdepCXX_TRUE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(pi_CXXFLAGS) $(CXXFLAGS) -MT pi-SpringAction.o -MD -MP -MF $(DEPDIR)/pi-SpringAction.Tpo -c -o pi-SpringAction.o `test -f 'SpringAction.cc' || echo '$(srcdir)/'`SpringAction.cc

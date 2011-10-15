@@ -22,6 +22,7 @@ class Paths;
 class AccRejEstimator;
 class MPIManager;
 class SpinModelState;
+class Permutation;
 
 #include "Algorithm.h"
 #include <vector>
@@ -47,6 +48,10 @@ public:
   /// (You are responsible for deleting this new object.) 
   virtual AccRejEstimator* getAccRejEstimator(const std::string& name);
 protected:
+  /// Method to atempt a Monte Carlo move, return true if accepted.
+  virtual bool tryMove();
+  /// Method to get the Permutation.
+  Permutation getGlobalPermutation();
   /// A reference to the paths.
   Paths& paths;
   /// The action to be evaluated during the move.
@@ -59,7 +64,10 @@ protected:
   AccRejEstimator* accRejEst;
   /// A pointer to the MPI manager, zero if MPI is not used.
   const MPIManager* mpi;
-  /// Method to atempt a Monte Carlo move, return true if accepted.
-  virtual bool tryMove();
+#ifdef ENABLE_MPI
+  const int npart;
+  const int nworker;
+  blitz::Array<int,2> iworkerPerm;
+#endif
 };
 #endif
