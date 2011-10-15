@@ -297,7 +297,9 @@ std::cout << "doubleAction!=0" << std::endl;
 		    getAccRejEstimator(accRejName));
 
   } else if (name=="SampleModel") {
-    algorithm = new ModelSampler(*paths, action, actionChoice, mpi);
+    int target = getIntAttribute(ctxt->node,"target");
+    if (target==0) target=-1;
+    algorithm = new ModelSampler(*paths, action, actionChoice, target, mpi);
     estimators->add(((ModelSampler*)algorithm)->
 		    getAccRejEstimator("ModelSampler"));
   } else if (name=="SampleSpinModel") {

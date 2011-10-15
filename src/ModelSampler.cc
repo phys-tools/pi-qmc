@@ -33,11 +33,12 @@
 #include <string>
 
 ModelSampler::ModelSampler(Paths& paths, Action* action, 
-  ActionChoiceBase* actionChoice, const MPIManager* mpi)
+  ActionChoiceBase* actionChoice, int target, const MPIManager* mpi)
   : paths(paths), action(action), actionChoice(actionChoice),
     modelState(dynamic_cast<EnumeratedModelState&>
                  (actionChoice->getModelState())),
-    nmodel(modelState.getModelCount()), accRejEst(0),  mpi(mpi) {
+    nmodel(modelState.getModelCount()), accRejEst(0),  target(target),
+    mpi(mpi) {
 }
 
 ModelSampler::~ModelSampler() {
@@ -64,14 +65,19 @@ bool ModelSampler::tryMove() {
   // Probably want to revisit this later.
   int jmodel = imodel+2*((int)floor(RandomNumGenerator::getRand()
       +(nmodel-1.-imodel)/(nmodel-1.)))-1;
-  if (jmodel<0 or jmodel>=nmodel) return false;
-
 #ifdef ENABLE_MPI
   int nworker = (mpi) ? mpi->getNWorker():1;
   if (mpi && nworker>1) {
     mpi->getWorkerComm().Bcast(&jmodel,1,MPI::INT,0);
   }
 #endif 
+
+  if (jmodel<0 or jmodel>=nmodel) return false;
+
+  // If we are targeting a model, reject moves that take us away from there.
+  if (target >= 0 && std::abs(jmodel-target) > std::abs(imodel-target)) {
+    return false;
+  }
 
   double tranProb = (jmodel>imodel)
                     ? (nmodel-1.-imodel)/jmodel :imodel/(nmodel-1.-jmodel);

@@ -38,7 +38,8 @@ public:
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<Vec,1> VArray;
   /// Constructor.
-  ModelSampler(Paths&, Action*, ActionChoiceBase*, const MPIManager* mpi);
+  ModelSampler(Paths&, Action*, ActionChoiceBase*, int target,
+    const MPIManager* mpi);
   /// Destructor.
   virtual ~ModelSampler();
   /// Run method, performs nrepeat samplings with probability ifreq.
@@ -61,5 +62,6 @@ protected:
   const MPIManager* mpi;
   /// Method to atempt a Monte Carlo move, return true if accepted.
   virtual bool tryMove();
+  const int target;
 };
 #endif
