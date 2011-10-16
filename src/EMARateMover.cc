@@ -128,7 +128,7 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
       Vec sigma1, sigma2;
       if (islice-nStride < nSlice/2) {
         if (islice+nStride > nSlice/2) {
-          sigma1 = sqrt((lambda(i1)+lambda(i2))*tau*nStride); 
+          sigma1 = sqrt(0.5*(lambda(i1)+lambda(i2))*tau*nStride); 
           sigma2 = sigma1;
         } else {
           sigma1 = sqrt(lambda(i1)*tau*nStride); 
