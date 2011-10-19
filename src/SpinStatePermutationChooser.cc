@@ -112,13 +112,9 @@ void SpinStatePermutationChooser::init() {
       for (int idim=0; idim<NDIM; ++idim) {
         t(ipart,jpart)*=(*pg(idim))(fabs(delta[idim]));
       }
-    } 
-  }
-  // Zero out the probability between different particles.
-  for (int ipart=0; ipart<npart; ++ipart) {
-    for (int jpart=0; jpart<npart; ++jpart) {
+      // Zero out the probability between different particles.
       if (spinState(ipart) != spinState(jpart)) t(ipart,jpart) = 1e-200;
-    }
+    } 
   }
  
   for (int ipart=0; ipart<npart; ++ipart) {

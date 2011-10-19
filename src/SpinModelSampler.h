@@ -50,8 +50,6 @@ public:
 protected:
   /// Method to atempt a Monte Carlo move, return true if accepted.
   virtual bool tryMove();
-  /// Method to get the Permutation.
-  Permutation getGlobalPermutation();
   /// A reference to the paths.
   Paths& paths;
   /// The action to be evaluated during the move.
