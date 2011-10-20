@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinyvec.h>
+#include "WalkingChooser.h"
 class MultiLevelSampler;
 class SimulationInfo;
 class PeriodicGaussian;
@@ -28,33 +29,15 @@ class Paths;
 class ModelState;
 class SpinModelState;
 
-class SpinStatePermutationChooser : public PermutationChooser,
-                       public SpeciesParticleChooser {
+class SpinStatePermutationChooser : public WalkingChooser {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,1> Array;
-  typedef blitz::Array<double,2> Mat;
-  typedef blitz::TinyVector<double,NDIM> Vec;
-  typedef blitz::Array<PeriodicGaussian*,1> PGArray;
   SpinStatePermutationChooser(const int nsize, const Species&, 
                  const int nlevel, const SimulationInfo&, ModelState& modelState);
   virtual ~SpinStatePermutationChooser();
-  virtual void setMLSampler(const MultiLevelSampler*);
-  virtual bool choosePermutation();
-  virtual void chooseParticles();
-  virtual void init(); 
-  int iSearch(int part, double x);
-  virtual double getLnTranProb() const {return log(prob);}
+  virtual void init();
 private:
-  int nsize;
-  Mat t;
-  Mat cump;
-  const MultiLevelSampler *multiLevelSampler;
-  const double mass;
-  const double tau;
-  double prob;
-  PGArray pg;
   const IArray& spinState;
 };
 #endif

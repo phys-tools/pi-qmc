@@ -43,14 +43,15 @@ public:
   virtual void init(); 
   int iSearch(int part, double x);
   virtual double getLnTranProb() const {return log(prob);}
-private:
-  int nsize;
+protected:
   Mat t;
   Mat cump;
   const MultiLevelSampler *multiLevelSampler;
+  PGArray pg;
+private:
+  int nsize;
   const double mass;
   const double tau;
   double prob;
-  PGArray pg;
 };
 #endif
