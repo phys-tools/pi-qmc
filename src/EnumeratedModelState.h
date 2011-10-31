@@ -31,7 +31,7 @@ public:
   void setModelState(int i) {modelState = i;}
   virtual int getModelCount() const {return modelCount;}
   virtual int getModelState() const {return modelState;}
-  virtual void broadcastToMPIWorkers(MPIManager *mpi);
+  virtual void broadcastToMPIWorkers(const MPIManager *mpi);
 private:
   const int modelCount;
   int modelState;

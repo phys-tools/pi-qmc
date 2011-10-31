@@ -50,7 +50,7 @@ bool EnumeratedModelState::read(const std::string &line) {
   return didRead;
 }
 
-void EnumeratedModelState::broadcastToMPIWorkers(MPIManager *mpi) {
+void EnumeratedModelState::broadcastToMPIWorkers(const MPIManager *mpi) {
 #ifdef ENABLE_MPI
   if (mpi) {
     mpi->getWorkerComm().Bcast(&modelState,1,MPI::INT,0);

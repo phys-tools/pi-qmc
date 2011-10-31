@@ -102,6 +102,7 @@ bool ModelSampler::tryMove() {
   if (reject) return false;
 
   modelState.setModelState(jmodel);
+  modelState.broadcastToMPIWorkers(mpi);
 
   if (workerID==0) accRejEst->moveAccepted(0);
   return true;
