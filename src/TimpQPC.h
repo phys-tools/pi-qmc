@@ -22,6 +22,7 @@ class SuperCell;
 #include <cstdlib>
 #include <blitz/array.h>
 #include "Action.h"
+#include "Species.h"
 class MPIManager;
 
 /** Class for calculating the action for a model of a quantum point contact.
@@ -44,7 +45,8 @@ public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
   /// Constructor by providing the timestep tau.
-  TimpQPC(const SuperCell &cell, const double tau, const double width=189.,
+  TimpQPC(const SuperCell &cell, const Species &species, 
+            const double tau, const double width=189.,
             const double length=587., const double vG=-0.03675,
             const double z=189., MPIManager *mpi=0);
   /// Virtual destructor.
@@ -52,8 +54,8 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
- virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
+ virtual double getActionDifference(const Paths&, const VArray &displacement,
+    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
@@ -74,6 +76,10 @@ private:
   const double vG;
   /// The distance from the 2DEG to the gates.
   const double z;
+  /// The first particle in this interaction.
+  const int ifirst;
+  /// The number of particles with this interaction.
+  const int npart;
   const double lx,ly;
   /// Pi.
   static const double PI;

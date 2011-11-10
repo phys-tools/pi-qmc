@@ -21,6 +21,7 @@
 #include "ActionChoice.h"
 #include "LinkSummable.h"
 class SpinModelState;
+class MPIManager;
 
 /**
 @version $Revision: 393 $
@@ -29,10 +30,10 @@ class SpinChoiceFixedNodeAction : public FixedNodeAction,
                                   public ActionChoiceBase,
                                   public LinkSummable {
 public:
-
+    typedef blitz::Array<int,1> IArray;
     SpinChoiceFixedNodeAction(const SimulationInfo&, const Species&, NodeModel*,
         bool withNodalAction, bool useDistDerivative, int maxlevel,
-        bool useManyBodyDistance);
+        bool useManyBodyDistance,const MPIManager* mpi);
 
     virtual ~SpinChoiceFixedNodeAction();
 
@@ -49,5 +50,6 @@ public:
 private:
     SpinModelState *spinModelState;
     double totalAction;
+    const MPIManager* mpi;
 };
 #endif

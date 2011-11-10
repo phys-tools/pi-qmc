@@ -20,7 +20,6 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "stats/MPIManager.h"
 #include "SpinModelSampler.h"
 #include "stats/AccRejEstimator.h"
 #include "stats/MPIManager.h"
@@ -40,8 +39,7 @@ SpinModelSampler::SpinModelSampler(Paths& paths, Action* action,
                  (actionChoice->getModelState())),
     nmodel(modelState.getModelCount()), accRejEst(0),  mpi(mpi) 
 #ifdef ENABLE_MPI
-    ,npart(paths.getNPart()), nworker((mpi)?mpi->getNWorker():1),
-    iworkerPerm((mpi)?mpi->getNWorker():1,paths.getNPart())
+    ,nworker((mpi)?mpi->getNWorker():1)
 #endif
 {
 }
@@ -91,6 +89,12 @@ bool SpinModelSampler::tryMove() {
   if (reject) return false;
 
   modelState.flipSpin(ipart);
+#ifdef ENABLE_MPI
+  if (mpi) {
+    mpi->getWorkerComm().Bcast(modelState.getModelState().data(),
+                               modelState.getModelCount(),MPI::INT,0);
+  }
+#endif
 
   if (workerID==0) accRejEst->moveAccepted(0);
   return true;

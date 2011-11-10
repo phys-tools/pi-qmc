@@ -25,16 +25,18 @@
 #include <fstream>
 #include "stats/MPIManager.h"
 
-TimpQPC::TimpQPC(const SuperCell& cell, const double tau, 
+TimpQPC::TimpQPC(const SuperCell& cell, const Species &species, const double tau, 
               const double width, const double length, const double vG,
               const double z, MPIManager *mpi)
   : tau(tau), width(width), length(length), vG(vG), z(z),
+    ifirst(species.ifirst), npart(species.count),
     lx(cell[0]), ly(cell[1]) {
 #ifdef ENABLE_MPI
   if (mpi && mpi->isMain())
 #endif
   {
-    std::cout << "Timp QPC with w=" << width << ", l=" << length
+    std::cout << "Timp QPC on "<<species.name
+              <<" with w=" << width << ", l=" << length
               << ", vG=" << vG << ", z=" << z << std::endl;
     std::ofstream file("timp.dat");
     for (int j=-50; j<50; ++j) {
@@ -82,6 +84,23 @@ void TimpQPC::getBeadAction(const Paths& paths, int ipart, int islice,
   Vec r=paths(ipart,islice);
   utau = v(r[0],r[1]);
   u = utau*tau;
+}
+
+double TimpQPC::getActionDifference(const Paths &paths, 
+       const VArray &displacement, int nmoving, const IArray &movingIndex,
+       int iFirstSlice, int nslice) {
+  double deltaAction = 0;
+  for (int i=0; i<nmoving; ++i) {
+    int ipart = movingIndex(i);
+    if (ipart<ifirst || ipart>=ifirst+npart) break;
+    for (int islice=iFirstSlice; islice<nslice; ++islice) {
+      Vec r = paths(ipart,islice);
+      deltaAction -= tau*v(r[0],r[1]);
+      r += displacement(i);
+      deltaAction += tau*v(r[0],r[1]);
+    }
+  }
+  return deltaAction;
 }
 
 

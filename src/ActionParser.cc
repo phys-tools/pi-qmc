@@ -18,7 +18,6 @@
 #include <config.h>
 #endif
 
-extern int irank;
 #include "EnumeratedModelState.h"
 
 #include "Beads.h"
@@ -340,7 +339,9 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       double l=getLengthAttribute(actNode,"l"); if (l==0) l=587.;
       double vG=getEnergyAttribute(actNode,"vG"); if (vG==0) vG=-0.03675;
       double z=getLengthAttribute(actNode,"z"); if (z==0) z=189.;
-      composite->addAction(new TimpQPC(*simInfo.getSuperCell(),
+      std::string specName=getStringAttribute(actNode,"species");
+      const Species& species(simInfo.getSpecies(specName));
+      composite->addAction(new TimpQPC(*simInfo.getSuperCell(),species,
                                         simInfo.getTau(),w,l,vG,z,mpi));
     } else if (name=="JelliumSlab") {
       double qtot=getDoubleAttribute(actNode,"qtot");
@@ -378,30 +379,24 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       continue;
     } else if (name == "RingGateAction") {
       if (NDIM != 2) {
-        if (irank == 0) {
           std::cout<<"The RingGateAction only works for 2D."<<std::endl;
           exit(-1);
-        }
       }
       double GVolt = getEnergyAttribute(actNode,"Vg");
       double s = getDoubleAttribute(actNode,"s");
       double theta0 = getDoubleAttribute(actNode,"theta0");
       if (theta0 == 0) {
-        if (irank == 0) {
           std::cout<<"The ring gate action is shut down because theta0 = 0."<<std::endl;
-        }
       }
       std::string specName=getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
-      if (irank == 0) std::cout << "The ring gate action is set." << std::endl;
+      std::cout << "The ring gate action is set." << std::endl;
       composite->addAction(new RingGateAction(simInfo,GVolt,s,theta0,species));
       continue;
     } else if (name == "GateAction") {
       if (NDIM != 2) {
-        if (irank == 0) { 
           std::cout<<"The GateAction only works for 2D."<<std::endl;
           exit(-1);
-        }
       }
       double GVolt = getEnergyAttribute(actNode, "Vg");
       double sx = getDoubleAttribute(actNode, "sx");
@@ -412,7 +407,7 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       double yoffset = getLengthAttribute(actNode, "yoffset");
       std::string specName = getStringAttribute(actNode, "species");
       const Species& species(simInfo.getSpecies(specName));
-      if (irank == 0) std::cout<<"The gate action is on."<<std::endl;
+      std::cout<<"The gate action is on."<<std::endl;
       composite->addAction(new GateAction(simInfo, GVolt, sx, sy, xwidth, 
                         ywidth, xoffset, yoffset, species));
       continue;
@@ -622,7 +617,7 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       NodeModel *nodeModel = parseNodeModel(ctxt,actNode,species);
       SpinChoiceFixedNodeAction *action 
         = new SpinChoiceFixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
-                            useDistDerivative,maxlevel,useManyBodyDistance);
+                            useDistDerivative,maxlevel,useManyBodyDistance,mpi);
       actionChoice = action;
       doubleComposite->addAction(action);
       continue;

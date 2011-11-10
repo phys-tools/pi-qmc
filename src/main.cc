@@ -21,8 +21,6 @@
 #include <mpi.h>
 #endif
 
-int irank = 0;   // store node rank for MPI environment
-
 #include "MainParser.h"
 #include "Help.h"
 #include <demo/Demo.h>

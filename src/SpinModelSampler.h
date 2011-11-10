@@ -63,9 +63,7 @@ protected:
   /// A pointer to the MPI manager, zero if MPI is not used.
   const MPIManager* mpi;
 #ifdef ENABLE_MPI
-  const int npart;
   const int nworker;
-  blitz::Array<int,2> iworkerPerm;
 #endif
 };
 #endif

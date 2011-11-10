@@ -17,6 +17,10 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
+#include "stats/MPIManager.h"
 #include "SpinChoiceFixedNodeAction.h"
 #include "SpinModelState.h"
 #include "Paths.h"
@@ -26,9 +30,10 @@
 SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
   const SimulationInfo &simInfo,
   const Species &species, NodeModel *nodeModel, bool withNodalAction,
-  bool useDistDerivative, int maxlevel, bool useManyBodyDistance) 
+  bool useDistDerivative, int maxlevel, bool useManyBodyDistance,
+  const MPIManager* mpi) 
   : FixedNodeAction(simInfo,species,nodeModel,withNodalAction,
-      useDistDerivative,maxlevel,useManyBodyDistance) {
+      useDistDerivative,maxlevel,useManyBodyDistance), mpi(mpi) {
   std::cout << "npart for spin flip is " << nSpeciesPart << std::endl;
   spinModelState = new SpinModelState(nSpeciesPart);
   modelState = spinModelState;
@@ -48,11 +53,22 @@ double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
     int ipart) {
   paths.sumOverLinks(*this);
   double oldAction = totalAction;
-
   spinModelState->flipSpin(ipart);
+#ifdef ENABLE_MPI
+    if (mpi) {
+      mpi->getWorkerComm().Bcast(spinModelState->getModelState().data(),
+                                 spinModelState->getModelCount(),MPI::INT,0);
+    }
+#endif
   paths.sumOverLinks(*this);
   double newAction = totalAction;
   spinModelState->flipSpin(ipart);
+#ifdef ENABLE_MPI
+  if (mpi) {
+    mpi->getWorkerComm().Bcast(spinModelState->getModelState().data(),
+                               spinModelState->getModelCount(),MPI::INT,0);
+  }       
+#endif
 
 //  std::cout << "newAction, oldAction " << newAction << ", " << oldAction << std::endl; 
 
