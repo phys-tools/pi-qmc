@@ -17,8 +17,12 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
 #include "SpinModelState.h"
 #include <cstdlib>
+#include "stats/MPIManager.h"
 
 SpinModelState::SpinModelState(int npart)
   : npart(npart), spinState(npart) {
@@ -51,4 +55,12 @@ bool SpinModelState::read(const std::string &line) {
 int SpinModelState::getModelState() const {
   int sztot =  blitz::sum(spinState);
   return sztot;
+}
+
+void SpinModelState::broadcastToMPIWorkers(const MPIManager *mpi) {
+#ifdef ENABLE_MPI
+  if (mpi)
+    mpi->getWorkerComm().Bcast(spinState.data(),
+                               npart+1,MPI::INT,0);
+#endif
 }

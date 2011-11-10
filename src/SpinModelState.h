@@ -37,6 +37,7 @@ public:
   virtual int getModelState() const;
   void flipSpin(int i) {spinState(i) = 1-spinState(i);}
   virtual bool isSpinModelState() {return true;}
+  virtual void broadcastToMPIWorkers(const MPIManager *mpi);
 private:
   const int npart;
   IArray spinState;
