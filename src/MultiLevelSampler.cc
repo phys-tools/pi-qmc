@@ -180,3 +180,7 @@ MultiLevelSampler::getAccRejEstimator(const std::string& name) {
            << " " << particleChooser.getName();
   return accRejEst=new AccRejEstimator(longName.str(),nlevel+1);
 }
+
+int MultiLevelSampler::getFirstSliceIndex() const {
+    return sectionChooser.getFirstSliceIndex();
+}

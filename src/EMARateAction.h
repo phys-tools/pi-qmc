@@ -17,6 +17,7 @@
 #ifndef __EMARateAction_h_
 #define __EMARateAction_h_
 class MultiLevelSampler;
+class MultiLevelSamplerInterface;
 class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
@@ -61,6 +62,9 @@ public:
   /// contribution).
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
+
+    double testableGetActionDifference(const MultiLevelSamplerInterface&,
+                                       const int level);
 private:
   /// The inverse of the timestep.
   const double invTau;
@@ -80,5 +84,7 @@ private:
   Vec mass2;
   /// The total number of slices in the path.
   const int nPathSlice;
+
+
 };
 #endif

@@ -1,5 +1,5 @@
 // $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr. and Saad A. Khairallah
+/*  Copyright (C) 2004-2006,2011 John B. Shumway, Jr. and Saad A. Khairallah
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 #ifndef __MultiLevelSampler_h_
 #define __MultiLevelSampler_h_
 template <int TDIM> class Beads;
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 class SuperCell;
 class Action;
 class Mover;
@@ -28,6 +31,7 @@ class Permutation;
 class AccRejEstimator;
 class BeadFactory;
 #include "Algorithm.h"
+#include "MultiLevelSamplerInterface.h"
 #include <vector>
 #include <cstdlib>
 #include <blitz/array.h>
@@ -36,7 +40,8 @@ class BeadFactory;
 /** Class for multilevel sampling of beads. 
   * @version $Revision$
   * @author John Shumway */
-class MultiLevelSampler : public Algorithm {
+class MultiLevelSampler : public Algorithm,
+                          public MultiLevelSamplerInterface {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
@@ -54,7 +59,10 @@ public:
   /// Get reference to the moving beads.
   Beads<NDIM>& getMovingBeads() {return *movingBeads;}
   /// Get const reference to the moving beads.
-  const Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
+  virtual const Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
+
+    virtual int getFirstSliceIndex() const;
+
   const Beads<NDIM>& getRejectedBeads() const {return *rejectedBeads;}
   Beads<NDIM>& getRejectedBeads() {return *rejectedBeads;}
   double getFactor(){return factor;}
@@ -62,7 +70,7 @@ public:
   /// Get reference to the old beads.
   Beads<NDIM>& getSectionBeads() {return *sectionBeads;}
   /// Get const reference to the moving beads.
-  const Beads<NDIM>& getSectionBeads() const {return *sectionBeads;}
+  virtual const Beads<NDIM>& getSectionBeads() const {return *sectionBeads;}
   /// Get a reference to the moving bead index.
   IArray&  getMovingIndex() {return *movingIndex;}
   /// Get a const reference to the moving bead index.
@@ -72,7 +80,7 @@ public:
   /// Set the action function for a level, or default to level=ALL_LEVELS.
   void setAction(Action*, const int level=ALL_LEVELS);
   /// Get a const reference to the SuperCell. 
-  const SuperCell& getSuperCell() const {return cell;}
+  virtual const SuperCell& getSuperCell() const {return cell;}
   /// Get a constant reference to the paths.
   const Paths& getPaths() const {return paths;}
   /// Get a pointer to the accept/reject statistic estimator.

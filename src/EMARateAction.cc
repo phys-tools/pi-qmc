@@ -50,9 +50,13 @@ EMARateAction::EMARateAction(const SimulationInfo& simInfo,
 
 EMARateAction::~EMARateAction() {
 }
-
 double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {
+    testableGetActionDifference(sampler, level);
+}
+
+double EMARateAction::testableGetActionDifference(
+        const MultiLevelSamplerInterface& sampler, const int level) {
   // Only evaluate if we are aligned with slice 0 in the middle.
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
@@ -62,7 +66,8 @@ double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
   const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();
 
-  const int iFirstSlice = sampler.getSectionChooser().getFirstSliceIndex();
+  //const int iFirstSlice = sampler.getSectionChooser().getFirstSliceIndex();
+  const int iFirstSlice = sampler.getFirstSliceIndex();
   if (iFirstSlice + nSlice/2 != nPathSlice) return 0.;
   
   // For now, we'll assume that the only two radiating particles are being moved.
