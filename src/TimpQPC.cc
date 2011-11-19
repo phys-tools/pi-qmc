@@ -61,14 +61,16 @@ double TimpQPC::getActionDifference(const MultiLevelSampler& sampler,
   for (int islice=nStride; islice<nSlice; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
-      // Add action for moving beads.
-      Vec r=movingBeads(iMoving,islice); 
-      //cell.pbc(r);
-      deltaAction += tau*nStride*v(r[0],r[1]);
-      // Subtract action for old beads.
-      r=sectionBeads(i,islice);
-      //cell.pbc(r);
-      deltaAction -= tau*nStride*v(r[0],r[1]);
+      if (i>=ifirst && i<ifirst+npart) {
+        // Add action for moving beads.
+        Vec r=movingBeads(iMoving,islice); 
+        //cell.pbc(r);
+        deltaAction += tau*nStride*v(r[0],r[1]);
+        // Subtract action for old beads.
+        r=sectionBeads(i,islice);
+        //cell.pbc(r);
+        deltaAction -= tau*nStride*v(r[0],r[1]);
+      }
     }
   }
   return deltaAction;
@@ -81,9 +83,11 @@ double TimpQPC::getTotalAction(const Paths& paths, const int level) const {
 void TimpQPC::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
   u=utau=0; fm=0.; fp=0.;
-  Vec r=paths(ipart,islice);
-  utau = v(r[0],r[1]);
-  u = utau*tau;
+  if (ipart>=ifirst && ipart<ifirst+npart) {
+    Vec r=paths(ipart,islice);
+    utau = v(r[0],r[1]);
+    u = utau*tau;
+  }
 }
 
 double TimpQPC::getActionDifference(const Paths &paths, 
@@ -92,12 +96,13 @@ double TimpQPC::getActionDifference(const Paths &paths,
   double deltaAction = 0;
   for (int i=0; i<nmoving; ++i) {
     int ipart = movingIndex(i);
-    if (ipart<ifirst || ipart>=ifirst+npart) break;
-    for (int islice=iFirstSlice; islice<nslice; ++islice) {
-      Vec r = paths(ipart,islice);
-      deltaAction -= tau*v(r[0],r[1]);
-      r += displacement(i);
-      deltaAction += tau*v(r[0],r[1]);
+    if (ipart>=ifirst && ipart<ifirst+npart) {
+      for (int islice=iFirstSlice; islice<nslice; ++islice) {
+        Vec r = paths(ipart,islice);
+        deltaAction -= tau*v(r[0],r[1]);
+        r += displacement(i);
+        deltaAction += tau*v(r[0],r[1]);
+      }
     }
   }
   return deltaAction;
