@@ -27,7 +27,7 @@
 class SpinModelState : public ModelState {
 public:
   typedef blitz::Array<int,1> IArray;
-  SpinModelState(int npart);
+  SpinModelState(int npart, int initial);
   virtual ~SpinModelState() {};
   virtual void write(std::ostream &os) const;
   virtual bool read(const std::string &line);

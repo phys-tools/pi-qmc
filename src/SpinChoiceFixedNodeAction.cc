@@ -28,14 +28,14 @@
 #include <blitz/array.h>
 
 SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
-  const SimulationInfo &simInfo,
+  const SimulationInfo &simInfo, int initial,
   const Species &species, NodeModel *nodeModel, bool withNodalAction,
   bool useDistDerivative, int maxlevel, bool useManyBodyDistance,
   const MPIManager* mpi) 
   : FixedNodeAction(simInfo,species,nodeModel,withNodalAction,
       useDistDerivative,maxlevel,useManyBodyDistance), mpi(mpi) {
   std::cout << "npart for spin flip is " << nSpeciesPart << std::endl;
-  spinModelState = new SpinModelState(nSpeciesPart);
+  spinModelState = new SpinModelState(nSpeciesPart,initial);
   modelState = spinModelState;
   nodeModel->setSpinModelState(spinModelState);
 }
@@ -55,18 +55,20 @@ double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
   double oldAction = totalAction;
   spinModelState->flipSpin(ipart);
 #ifdef ENABLE_MPI
-    if (mpi) {
-      mpi->getWorkerComm().Bcast(spinModelState->getModelState().data(),
-                                 spinModelState->getModelCount(),MPI::INT,0);
-    }
+  if (mpi) {
+//      mpi->getWorkerComm().Bcast(spinModelState->getModelState().data(),
+//                                 spinModelState->getModelCount(),MPI::INT,0);
+    spinModelState->broadcastToMPIWorkers(mpi);
+  }
 #endif
   paths.sumOverLinks(*this);
   double newAction = totalAction;
   spinModelState->flipSpin(ipart);
 #ifdef ENABLE_MPI
   if (mpi) {
-    mpi->getWorkerComm().Bcast(spinModelState->getModelState().data(),
-                               spinModelState->getModelCount(),MPI::INT,0);
+//    mpi->getWorkerComm().Bcast(spinModelState->getModelState().data(),
+//                               spinModelState->getModelCount(),MPI::INT,0);
+    spinModelState->broadcastToMPIWorkers(mpi);
   }       
 #endif
 

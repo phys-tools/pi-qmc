@@ -91,8 +91,9 @@ bool SpinModelSampler::tryMove() {
   modelState.flipSpin(ipart);
 #ifdef ENABLE_MPI
   if (mpi) {
-    mpi->getWorkerComm().Bcast(modelState.getModelState().data(),
-                               modelState.getModelCount(),MPI::INT,0);
+//    mpi->getWorkerComm().Bcast(modelState.getModelState().data(),
+//                               modelState.getModelCount(),MPI::INT,0);
+    modelState.broadcastToMPIWorkers(mpi);
   }
 #endif
 

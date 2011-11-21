@@ -31,7 +31,8 @@ class SpinChoiceFixedNodeAction : public FixedNodeAction,
                                   public LinkSummable {
 public:
     typedef blitz::Array<int,1> IArray;
-    SpinChoiceFixedNodeAction(const SimulationInfo&, const Species&, NodeModel*,
+    SpinChoiceFixedNodeAction(const SimulationInfo&, int initial,
+	const Species&, NodeModel*,
         bool withNodalAction, bool useDistDerivative, int maxlevel,
         bool useManyBodyDistance,const MPIManager* mpi);
 

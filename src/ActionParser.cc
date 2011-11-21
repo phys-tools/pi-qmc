@@ -609,6 +609,9 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       composite->addAction(new EMARateAction(simInfo,species1,species2,C)); 
       continue;
     } else if (name=="SpinChoiceFixedNodeAction") {
+      std::string initstring = getStringAttribute(actNode,"initial");
+      int initial = 0;
+      if (initstring == "alternating") initial = 1; 
       std::string specName=getStringAttribute(ctxt->node,"species");
       const Species& species(simInfo.getSpecies(specName));
       bool noNodalAction=getBoolAttribute(actNode,"noNodalAction");
@@ -616,7 +619,8 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       bool useManyBodyDistance=getBoolAttribute(actNode,"useManyBodyDistance");
       NodeModel *nodeModel = parseNodeModel(ctxt,actNode,species);
       SpinChoiceFixedNodeAction *action 
-        = new SpinChoiceFixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
+        = new SpinChoiceFixedNodeAction(simInfo,initial,species,nodeModel,
+	                    !noNodalAction,
                             useDistDerivative,maxlevel,useManyBodyDistance,mpi);
       actionChoice = action;
       doubleComposite->addAction(action);

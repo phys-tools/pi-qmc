@@ -24,9 +24,12 @@
 #include <cstdlib>
 #include "stats/MPIManager.h"
 
-SpinModelState::SpinModelState(int npart)
+SpinModelState::SpinModelState(int npart, int initial)
   : npart(npart), spinState(npart) {
-  for (int i=0; i<npart; ++i) spinState(i) = (i<npart/2) ? 0 : 1;
+  if (initial == 1)
+    for (int i=0; i<npart; ++i) spinState(i) = (i%2 == 0) ? 0 : 1;
+  else
+    for (int i=0; i<npart; ++i) spinState(i) = (i<npart/2) ? 0 : 1;
 }
 
 void SpinModelState::write(std::ostream &os) const {
