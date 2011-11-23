@@ -19,7 +19,7 @@
 
 #include "FixedNodeAction.h"
 #include "ActionChoice.h"
-#include "LinkSummable.h"
+//#include "LinkSummable.h"
 class SpinModelState;
 class MPIManager;
 
@@ -27,8 +27,8 @@ class MPIManager;
 @version $Revision: 393 $
 @author John Shumway and Jianheng Liu*/
 class SpinChoiceFixedNodeAction : public FixedNodeAction,
-                                  public ActionChoiceBase,
-                                  public LinkSummable {
+                                  public ActionChoiceBase {
+//                                  public LinkSummable {
 public:
     typedef blitz::Array<int,1> IArray;
     SpinChoiceFixedNodeAction(const SimulationInfo&, int initial,
@@ -40,17 +40,15 @@ public:
 
     virtual double getActionDifference(const Paths &paths, int ipart);
 
-//    virtual double getTotalAction(const Paths& paths) const;
-
-    virtual void initCalc(const int nslice, const int firstSlice);
+//    virtual void initCalc(const int nslice, const int firstSlice);
     
-    virtual void handleLink(const LinkSummable::Vec &start, 
-        const LinkSummable::Vec &end, int ipart, 
-        int islice, const Paths &paths);
+//    virtual void handleLink(const LinkSummable::Vec &start, 
+//        const LinkSummable::Vec &end, int ipart, 
+//        int islice, const Paths &paths);
 
 private:
     SpinModelState *spinModelState;
-    double totalAction;
+//    double totalAction;
     const MPIManager* mpi;
 };
 #endif
