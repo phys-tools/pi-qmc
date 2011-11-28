@@ -47,116 +47,118 @@ SpinChoiceFixedNodeAction::~SpinChoiceFixedNodeAction() {
 
 double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
     int ipart) {
-  if (!FixedNodeAction::nodeModel->dependsOnOtherParticles() ) {
-    if (ipart==FixedNodeAction::npart-1) return 0;
-  }
-
-  int  nsliceOver2=(paths.getNSlice()/2);
-
-  blitz::Range allPart = blitz::Range::all();
-  FixedNodeAction::Array prevd1(FixedNodeAction::dist(0,0,allPart));
-  FixedNodeAction::Array prevd2(FixedNodeAction::dist(0,1,allPart));
-  FixedNodeAction::Array d1(FixedNodeAction::dist(1,0,allPart));
-  FixedNodeAction::Array d2(FixedNodeAction::dist(1,1,allPart));
-
-  double deltaAction=0;  
-  double oldDet = 0.;
- 
-  // First check for nodal crossing with new positions 
-  // and calculate new nodal action.
+  int totNSlice = paths.getNSlice();
+  double newAction = 0., oldAction = 0.;
+  int iFirstSlice = paths.getLowestOwnedSlice(false);
+  int nSlice = paths.getHighestOwnedSlice(false);
   spinModelState->flipSpin(ipart);
 #ifdef ENABLE_MPI
   if (mpi) {
     spinModelState->broadcastToMPIWorkers(mpi);
   }
 #endif
-  int iFirstSlice = paths.getLowestOwnedSlice(true);
-  int nSlice = paths.getHighestOwnedSlice(true);
-  for (int islice=iFirstSlice; islice<=nSlice; islice++) {
-    if (islice<nSlice) {
-      for (int i=0; i<FixedNodeAction::npart; ++i) { 
-	FixedNodeAction::r1(i)=paths(i,islice);
-        FixedNodeAction::r2(i)=paths(i,islice+nsliceOver2);
-      }  
-    } else { // be sure to grab last slice carefully!
-      for (int i=0; i<FixedNodeAction::npart; ++i) { 
-        FixedNodeAction::r1(i)=paths(i,islice-1,1);
-        FixedNodeAction::r2(i)=paths(i,islice+nsliceOver2-1,1);
-      }  
-    }
-    
-    NodeModel::DetWithFlag result = FixedNodeAction::nodeModel->evaluate(FixedNodeAction::r1,FixedNodeAction::r2,0,false);
-    if (result.err) return deltaAction = 2e100;
-
-    if (islice==iFirstSlice) oldDet = result.det;
-
-    if (result.det * oldDet < 0.0) return deltaAction=2e100;
-
-    FixedNodeAction::nodeModel->evaluateDistance(FixedNodeAction::r1,FixedNodeAction::r2,0,d1,d2);
-    
-    if (islice>iFirstSlice) {
-      if (FixedNodeAction::useManyBodyDistance) {
-        double d02=0., d12=0., d0p2=0., d1p2=0.;
-        for (int i=0; i<FixedNodeAction::npart; ++i) {
-          d02 += 1./(d1(i)*d1(i));
-          d0p2 += 1./(prevd1(i)*prevd1(i));
-          d12 += 1./(d2(i)*d2(i));
-          d1p2 += 1./(prevd2(i)*prevd2(i));
-        }
-        deltaAction-=log( (1-exp(-1./sqrt(d02*d0p2)))
-                         *(1-exp(-1./sqrt(d12*d1p2))));
-      } else {
-        for (int i=0; i<FixedNodeAction::npart; ++i) {
-          deltaAction -= log((1-exp(-d1(i)*prevd1(i)))
-                            *(1-exp(-d2(i)*prevd2(i))));
-        }
-      }
-    }
-    for (int i=0; i<FixedNodeAction::npart; ++i) {
-      prevd1(i) = d1(i); 
-      prevd2(i) = d2(i); 
-    }
-  }
-  // Then calculate old nodal action.
-  spinModelState->flipSpin(ipart);
-#ifdef ENABLE_MPI
-  if (mpi) {
-    spinModelState->broadcastToMPIWorkers(mpi);
-  }
-#endif
-  for (int islice=iFirstSlice; islice<=nSlice; islice++) {
-    for (int i=0; i<FixedNodeAction::npart; ++i) { 
+  for (int islice=iFirstSlice; islice<=nSlice; ++islice) {
+    int jslice = (islice+totNSlice/2)%totNSlice;
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r1(i)=paths(i,islice,-1);
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r2(i)=paths(i,jslice,-1);
+    NodeModel::DetWithFlag detm = 
+      FixedNodeAction::nodeModel->evaluate(FixedNodeAction::r1,
+	                                   FixedNodeAction::r2, 0, false);
+    FixedNodeAction::nodeModel->evaluateDistance(FixedNodeAction::r1,
+	                                         FixedNodeAction::r2,
+						 0, FixedNodeAction::dim1,
+						 FixedNodeAction::dim2);
+    for (int i=0; i<npart; ++i) 
       FixedNodeAction::r1(i)=paths(i,islice);
-      FixedNodeAction::r2(i)=paths(i,islice+nsliceOver2);
-    }
-    NodeModel::DetWithFlag result= FixedNodeAction::nodeModel->evaluate(FixedNodeAction::r1,FixedNodeAction::r2,0,false);
-    if (result.err) return deltaAction=2e100;
-    FixedNodeAction::nodeModel->evaluateDistance(FixedNodeAction::r1,FixedNodeAction::r2,0,d1,d2);
-    if (islice>iFirstSlice) {
-      if (FixedNodeAction::useManyBodyDistance) {
-        double d02=0., d12=0., d0p2=0., d1p2=0.;
-        for (int i=0; i<FixedNodeAction::npart; ++i) {
-          d02 += 1./(d1(i)*d1(i));
-          d0p2 += 1./(prevd1(i)*prevd1(i));
-          d12 += 1./(d2(i)*d2(i));
-          d1p2 += 1./(prevd2(i)*prevd2(i));
-        }
-        deltaAction+=log( (1-exp(-1./sqrt(d02*d0p2)))
-                         *(1-exp(-1./sqrt(d12*d1p2))));
-      } else {
-        for (int i=0; i<FixedNodeAction::npart; ++i) {
-          deltaAction += log((1-exp(-d1(i)*prevd1(i)))
-                            *(1-exp(-d2(i)*prevd2(i))));
-        }
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r2(i)=paths(i,jslice);
+    NodeModel::DetWithFlag det = 
+      FixedNodeAction::nodeModel->evaluate(FixedNodeAction::r1,
+                                           FixedNodeAction::r2, 0, false);
+    FixedNodeAction::nodeModel->evaluateDistance(FixedNodeAction::r1,
+	                                         FixedNodeAction::r2,0,
+						 FixedNodeAction::di1,
+						 FixedNodeAction::di2);
+    // check if nodes are crossed.
+    if (detm.err || detm.err || detm.det*det.det < 0) 
+    {newAction += 1e200;continue;}
+
+    // Calculate action.
+    if (FixedNodeAction::useManyBodyDistance) {
+      double d12=0, d1m2=0;
+      for (int i=0; i<npart; ++i) {
+	d12 += 1./(FixedNodeAction::di1(i)*FixedNodeAction::di1(i));
+	d1m2 += 1./(FixedNodeAction::dim1(i)*FixedNodeAction::dim1(i));
+      }
+      d12 = 1./sqrt(d12);
+      dim2 = 1./sqrt(d1m2);
+      double xim1 = d12*d1m2;
+      double exim1 = exp(-xim1);
+      newAction -= log((1-exim1));
+    } else {
+      for (int jpart=0; jpart<npart; ++jpart) {
+	double xim1 = FixedNodeAction::dim1(jpart)*FixedNodeAction::di1(jpart);
+	newAction += -log(1-exp(-xim1));
       }
     }
-    for (int i=0; i<FixedNodeAction::npart; ++i) {
-      prevd1(i) = d1(i); 
-      prevd2(i) = d2(i); 
+  }
+  // Then calculate the old action.
+  spinModelState->flipSpin(ipart);
+#ifdef ENABLE_MPI
+  if (mpi) {
+    spinModelState->broadcastToMPIWorkers(mpi);
+  }
+#endif
+  for (int islice=iFirstSlice; islice<=nSlice; ++islice) {
+    int jslice = (islice+totNSlice/2)%totNSlice;
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r1(i)=paths(i,islice,-1);
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r2(i)=paths(i,jslice,-1);
+    NodeModel::DetWithFlag detm = 
+      FixedNodeAction::nodeModel->evaluate(FixedNodeAction::r1,
+	                                   FixedNodeAction::r2, 0, false);
+    FixedNodeAction::nodeModel->evaluateDistance(FixedNodeAction::r1,
+	                                         FixedNodeAction::r2,
+						 0, FixedNodeAction::dim1,
+						 FixedNodeAction::dim2);
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r1(i)=paths(i,islice);
+    for (int i=0; i<npart; ++i) 
+      FixedNodeAction::r2(i)=paths(i,jslice);
+    NodeModel::DetWithFlag det = 
+      FixedNodeAction::nodeModel->evaluate(FixedNodeAction::r1,
+                                           FixedNodeAction::r2, 0, false);
+    FixedNodeAction::nodeModel->evaluateDistance(FixedNodeAction::r1,
+	                                         FixedNodeAction::r2,0,
+						 FixedNodeAction::di1,
+						 FixedNodeAction::di2);
+    // check if nodes are crossed.
+    if (detm.err || detm.err || detm.det*det.det < 0) 
+    {oldAction += 1e200;continue;}
+
+    // Calculate action.
+    if (FixedNodeAction::useManyBodyDistance) {
+      double d12=0, d1m2=0;
+      for (int i=0; i<npart; ++i) {
+	d12 += 1./(FixedNodeAction::di1(i)*FixedNodeAction::di1(i));
+	d1m2 += 1./(FixedNodeAction::dim1(i)*FixedNodeAction::dim1(i));
+      }
+      d12 = 1./sqrt(d12);
+      dim2 = 1./sqrt(d1m2);
+      double xim1 = d12*d1m2;
+      double exim1 = exp(-xim1);
+      oldAction -= log((1-exim1));
+    } else {
+      for (int jpart=0; jpart<npart; ++jpart) {
+	double xim1 = FixedNodeAction::dim1(jpart)*FixedNodeAction::di1(jpart);
+	oldAction += -log(1-exp(-xim1));
+      }
     }
   }
-  
-  return deltaAction;
+  return newAction - oldAction;
 }
 
 // void SpinChoiceFixedNodeAction::initCalc(const int nslice, 
