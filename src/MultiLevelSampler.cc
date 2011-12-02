@@ -20,6 +20,7 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
+#include <cstdlib>
 #include "MultiLevelSampler.h"
 #include "stats/AccRejEstimator.h"
 #include "Beads.h"

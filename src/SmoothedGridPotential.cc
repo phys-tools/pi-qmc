@@ -17,6 +17,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include <cstdlib>
 #include "SmoothedGridPotential.h"
 #include "Beads.h"
 
