@@ -413,15 +413,15 @@ noinst_HEADERS = Action.h ActionChoice.h ActionParser.h Algorithm.h \
 	SmoothedGridPotential.h Species.h SpeciesParticleChooser.h \
 	SphereAction.h Spin4DPhase.h SpinChargeEstimator.h \
 	SpinModelSampler.h SpinModelState.h \
-	SpinChoiceFixedNodeAction.h SpinStatePermutationChooser.h \
-	SpringAction.h SpringTensorAction.h StillWebAction.h \
-	StructReader.h SuperCell.h ThermoEnergyEstimator.h TimpQPC.h \
-	TradEwaldSum.h TwoPairChooser.h TwoQDAction.h UniformMover.h \
-	VIndEstimator.h VirialEnergyEstimator.h WalkingChooser.h \
-	WellImageAction.h WindingEstimator.h WireEwald.h WireNodes.h \
-	WorkerShifter.h WritePaths.h WriteProbDensity.h XMLParser.h \
-	XMLUnitParser.h XMLWriter.h ZeroVarDensityEstimator.h \
-	gnugetopt.h
+	SpinChoiceFixedNodeAction.h SpinChoicePCFEstimator.h \
+	SpinStatePermutationChooser.h SpringAction.h \
+	SpringTensorAction.h StillWebAction.h StructReader.h \
+	SuperCell.h ThermoEnergyEstimator.h TimpQPC.h TradEwaldSum.h \
+	TwoPairChooser.h TwoQDAction.h UniformMover.h VIndEstimator.h \
+	VirialEnergyEstimator.h WalkingChooser.h WellImageAction.h \
+	WindingEstimator.h WireEwald.h WireNodes.h WorkerShifter.h \
+	WritePaths.h WriteProbDensity.h XMLParser.h XMLUnitParser.h \
+	XMLWriter.h ZeroVarDensityEstimator.h gnugetopt.h
 all: all-am
 
 .SUFFIXES:

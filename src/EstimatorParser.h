@@ -20,6 +20,7 @@
 #include <vector>
 #include "XMLUnitParser.h"
 #include "PairCFEstimator.h"
+#include "SpinChoicePCFEstimator.h"
 class EstimatorManager;
 class Distance;
 class SimulationInfo;
@@ -35,7 +36,7 @@ public:
   /// Constructor.
   EstimatorParser(const SimulationInfo&, const double tau, 
       const Action* action, const DoubleAction* doubleAction,
-      const ActionChoiceBase *actionChoice, MPIManager *mpi=0);
+      ActionChoiceBase *actionChoice, MPIManager *mpi=0);
   /// Virtual destructor.
   ~EstimatorParser();
   /// Parse some xml.
@@ -54,7 +55,7 @@ private:
   /// The double action.
   const DoubleAction* doubleAction;
   /// A choice of action models.
-  const ActionChoiceBase* actionChoice;
+  ActionChoiceBase* actionChoice;
   /// The MPI manager.
   MPIManager *mpi;
   /// Parser for pair correlation estimator.
@@ -68,5 +69,11 @@ private:
   void parsePairDistance(xmlNodePtr estNode, const xmlXPathContextPtr& ctxt,
     std::vector<PairDistance*> &darray, std::vector<double>& min,
     std::vector<double> &max, std::vector<int>& nbin);
+  /// Parser for spin pairs.
+  template<int N> 
+    SpinChoicePCFEstimator<N>* parseSpinPair(
+      const std::string &name, const std::vector<double> &tmin, 
+      const std::vector<double> &tmax, const std::vector<int> &tnbin,
+      const std::vector<PairDistance*> &dist, const bool &samespin); 
 };
 #endif

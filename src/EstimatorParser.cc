@@ -58,6 +58,7 @@
 #include "stats/MPIManager.h"
 #include "SuperCell.h"
 #include "SpinChargeEstimator.h"
+#include "SpinChoicePCFEstimator.h"
 #include "SHOPhase.h"
 #include "VIndEstimator.h"
 #include "EIndEstimator.h"
@@ -69,7 +70,7 @@
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,
-    const ActionChoiceBase *actionChoice, MPIManager *mpi)
+    ActionChoiceBase *actionChoice, MPIManager *mpi)
   : XMLUnitParser(simInfo.getUnits()), manager(0),
     simInfo(simInfo), tau(tau), action(action), doubleAction(doubleAction),
     actionChoice(actionChoice), mpi(mpi) {
@@ -460,6 +461,23 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
              min[0], max[0], nbin[0], nfreq, nstride, dist[0], mpi));
       }
     }
+    if (name=="SpinChoicePCFEstimator") {
+      std::string name = getStringAttribute(estNode, "name");
+      std::string corr = getStringAttribute(estNode, "correlation");
+      bool samespin = false;
+      if (corr == "same") samespin = true;
+      std::vector<PairDistance*> dist;
+      std::vector<double> tmin, tmax;
+      std::vector<int> tnbin;
+      parsePairDistance(estNode, ctxt, dist, tmin, tmax, tnbin);
+      switch (tnbin.size()) {
+	case 1: manager->add(parseSpinPair<1>(name,tmin,tmax,tnbin,dist,samespin)); break;
+	case 2: manager->add(parseSpinPair<2>(name,tmin,tmax,tnbin,dist,samespin)); break;
+	case 3: manager->add(parseSpinPair<3>(name,tmin,tmax,tnbin,dist,samespin)); break;
+	case 4: manager->add(parseSpinPair<4>(name,tmin,tmax,tnbin,dist,samespin)); break;
+	case 5: manager->add(parseSpinPair<5>(name,tmin,tmax,tnbin,dist,samespin)); break;
+      }
+    }
     if (name=="PermutationEstimator") {
       std::string name=getStringAttribute(estNode,"name");
       std::string species1=getStringAttribute(estNode,"species1");
@@ -639,7 +657,8 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
     std::string name=getName(distNode);
     if (name=="Cartesian" || name=="Cartesian1" || name=="Cartesian2") {
       std::string dirName = getStringAttribute(distNode,"dir");
-      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1));
+      idir=0;
+      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
       if (name=="Cartesian") {
         darray.push_back(new PairCart(idir));
       } else if (name=="Cartesian1") {
@@ -690,4 +709,21 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
       nbin.push_back(getIntAttribute(distNode,"nbin"));
     }
   }
+}
+
+template<int N>
+SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
+    const std::string &name, const std::vector<double> &tmin, 
+    const std::vector<double> &tmax, const std::vector<int> &tnbin,
+    const std::vector<PairDistance*> &dist, const bool &samespin) {
+  typename SpinChoicePCFEstimator<N>::VecN min(0.), max(1.);
+  typename SpinChoicePCFEstimator<N>::IVecN nbin(1);
+  for (int i=0; i<N; ++i) {
+    min[i] = tmin[i];
+    max[i] = tmax[i];
+    nbin[i] = tnbin[i];
+  }
+  return new SpinChoicePCFEstimator<N>(simInfo, name, 
+	simInfo.getSpecies(0), actionChoice->getModelState(),
+	min, max, nbin, dist, samespin, mpi);
 }
