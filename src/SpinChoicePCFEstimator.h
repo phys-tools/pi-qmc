@@ -82,12 +82,13 @@ public:
   /// Add contribution from a link.
   virtual void handleLink(const Vec& start, const Vec& end,
          const int ipart, const int islice, const Paths &paths) {
+    if (spinState(ipart) != ispin) return;
     if (ipart>=ifirst && ipart<npart) {
       int jpart = ifirst;
       while (jpart < npart) {
-	if (samespin) 
+	if (samespin)
 	  while (spinState(jpart) != ispin && jpart < npart) ++jpart;
-	else
+	else 
 	  while (spinState(jpart) == ispin && jpart < npart) ++jpart;
 	if (ipart!=jpart) {
 	  Vec r1=end; Vec r2=paths(jpart,islice);
