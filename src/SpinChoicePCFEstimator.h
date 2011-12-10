@@ -90,6 +90,7 @@ public:
 	  while (spinState(jpart) != ispin && jpart < npart) ++jpart;
 	else 
 	  while (spinState(jpart) == ispin && jpart < npart) ++jpart;
+	if (jpart >= npart) return;
 	if (ipart!=jpart) {
 	  Vec r1=end; Vec r2=paths(jpart,islice);
 	  IVecN ibin=0;
