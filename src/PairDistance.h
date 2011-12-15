@@ -91,8 +91,8 @@ class PairDistance {public:
     }
   };
   /// Angle between particles (idim and jdim specify plane).
-  class PairAngle : public PairDistance { public:
-    PairAngle(int idim, int jdim) : idim(idim), jdim(jdim){};
+  class PairPlaneAngle : public PairDistance { public:
+    PairPlaneAngle(int idim, int jdim) : idim(idim), jdim(jdim){};
     int idim, jdim;
     static const double PI;
     virtual double operator()(const Vec &r1, const Vec &r2, 
@@ -101,6 +101,13 @@ class PairDistance {public:
       double angle2=atan2(r2(idim),r2(jdim));
       double angle = angle1-angle2;
       return (angle>PI)?angle-2*PI:(angle>-PI)?angle:angle+2*PI;
+    }
+  };
+  /// Angle between particles.
+  class PairAngle : public PairDistance { public:
+    virtual double operator()(const Vec &r1, const Vec &r2, 
+                              const SuperCell &cell)const {
+      return acos(dot(r1,r2));
     }
   };
   /// Angle of particle 1 (idim and jdim specify plane).

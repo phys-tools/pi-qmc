@@ -593,7 +593,9 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
         else if (dirName=="y") {idim=0; jdim=2;}
       }
       if (name=="Angle") {
-        dist[idist]=new PairAngle(idim,jdim);
+        dist[idist]=new PairAngle();
+      } else if (name=="PlaneAngle") {
+        dist[idist]=new PairPlaneAngle(idim,jdim);
       } else if (name=="Angle1") {
         dist[idist]=new PairAngle1(idim,jdim);
       } else if (name=="Angle2") {
@@ -694,7 +696,9 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
         else if (dirName=="y") {idim=0; jdim=2;}
       }
       if (name=="Angle") {
-        darray.push_back(new PairAngle(idim,jdim));
+        darray.push_back(new PairAngle());
+      } else if (name=="PlaneAngle") {
+        darray.push_back(new PairPlaneAngle(idim,jdim));
       } else if (name=="Angle1") {
         darray.push_back(new PairAngle1(idim,jdim));
       } else if (name=="Angle2") {
