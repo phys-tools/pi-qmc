@@ -94,6 +94,7 @@ double TimpQPC::getActionDifference(const Paths &paths,
        const VArray &displacement, int nmoving, const IArray &movingIndex,
        int iFirstSlice, int nslice) {
   double deltaAction = 0;
+  const SuperCell& cell = paths.getSuperCell();
   for (int i=0; i<nmoving; ++i) {
     int ipart = movingIndex(i);
     if (ipart>=ifirst && ipart<ifirst+npart) {
@@ -101,6 +102,7 @@ double TimpQPC::getActionDifference(const Paths &paths,
         Vec r = paths(ipart,islice);
         deltaAction -= tau*v(r[0],r[1]);
         r += displacement(i);
+	cell.pbc(r);
         deltaAction += tau*v(r[0],r[1]);
       }
     }

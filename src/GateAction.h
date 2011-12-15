@@ -29,7 +29,9 @@ class SimulationInfo;
 class GateAction : public Action{
 public: 
   /// Typedefs.
+  typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<Vec,1> VArray;
   /// Constructor
   GateAction(const SimulationInfo &simInfo, const double GVolt, const double sx,
              const double sy, const double xwidth, const double ywidth,
@@ -38,9 +40,10 @@ public:
   virtual ~GateAction() {};
   /// Calculate the difference in action.
   virtual double getActionDifference(const MultiLevelSampler&, const int level);
-  /// calculate the difference in action (NOT IMPLEMENTED YET).
-  virtual double getActionDifference(const DisplaceMoveSampler&,
-                                     const int nMoving) {return 0;};
+  /// calculate the difference in action.
+  virtual double getActionDifference(const Paths&, const VArray&, 
+                                     const int nMoving, const IArray&,
+				     int iFirstSlice, int nslice);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

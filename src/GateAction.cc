@@ -95,6 +95,40 @@ double GateAction::getActionDifference(const MultiLevelSampler& sampler, const i
   return deltaAction;
 }
 
+double GateAction::getActionDifference(const Paths& paths, 
+                   const VArray& displacement,
+                   const int nMoving, const IArray& movingIndex,
+		   int iFirstSlice, int nslice) {
+  double deltaAction = 0.;
+  const SuperCell& cell = paths.getSuperCell();
+  double xspread = xwidth / 2;
+  double yspread = ywidth / 2;
+  for (int i=0; i<nMoving; ++i) {
+    int ipart = movingIndex(i);
+    if (ipart<ifirst || ipart>ifirst+npart) break;
+    for (int islice = iFirstSlice; islice < nslice; ++islice) {
+      Vec r = paths(ipart, islice);
+      double x = r[0];
+      double y = r[1];
+      deltaAction -= tau * GVolt * (tanh(sx * (x - xoffset + xspread)) - 
+                                    tanh(sx * (x - xoffset - xspread))) *
+                                   (tanh(sy * (y - yoffset + yspread)) - 
+                                    tanh(sy * (y - yoffset - yspread))) 
+                                   / normalConst;
+      r += displacement(i);
+      cell.pbc(r);
+      x = r[0];
+      y = r[1];
+      deltaAction += tau * GVolt * (tanh(sx * (x - xoffset + xspread)) - 
+                                    tanh(sx * (x - xoffset - xspread))) *
+                                   (tanh(sy * (y - yoffset + yspread)) - 
+                                    tanh(sy * (y - yoffset - yspread)))
+                                   / normalConst;
+    }
+  }
+  return deltaAction;
+}
+
 double GateAction::getTotalAction(const Paths& paths, const int level) const {
   return 0;
 }
