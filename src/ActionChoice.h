@@ -53,7 +53,7 @@ public:
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
-    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
+    int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, int jmodel);
   /// Calculate the total action.

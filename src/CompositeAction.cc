@@ -38,12 +38,12 @@ double CompositeAction::getActionDifference(
 
 double CompositeAction::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
-    int iFirstSlice, int nslice) {
+    int iFirstSlice, int iLastSlice) {
   double diff=0;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
     if (*action)
       diff+=(*action)->getActionDifference(paths,displacement,nmoving,
-                                           movingIndex,iFirstSlice,nslice);
+                                           movingIndex,iFirstSlice,iLastSlice);
   }
   return diff;
 }

@@ -102,14 +102,14 @@ double EFieldAction::v(const double z) const {
 
 double EFieldAction::getActionDifference(const Paths &paths,
        const VArray &displacement, int nmoving, const IArray &movingIndex,
-       int iFirstSlice, int nslice) {
+       int iFirstSlice, int iLastSlice) {
 
   const SuperCell& cell=paths.getSuperCell();
   double deltaAction=0;
   for (int iMoving=0; iMoving<nmoving; ++iMoving) {
     int ipart = movingIndex(iMoving);
 
-    for (int islice=iFirstSlice; islice<nslice; ++islice) {
+    for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
       // Subtract action for old positions. (Evaluate v at midpoint)
       
       Vec r = paths(ipart,islice,-1)-center;

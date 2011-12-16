@@ -116,7 +116,7 @@ double SpringAction::getActionDifference(const MultiLevelSampler& sampler,
 
 double SpringAction::getActionDifference(const Paths &paths, 
    const VArray &displacement, int nmoving, const IArray &movingIndex, 
-   int iFirstSlice, int nslice) {
+   int iFirstSlice, int iLastSlice) {
  return 0; //No change in action for uniform displacements of particles.
 }
 

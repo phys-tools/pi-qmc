@@ -42,10 +42,10 @@ double ActionChoice::getActionDifference(
 
 double ActionChoice::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
-    int iFirstSlice, int nslice) {
+    int iFirstSlice, int iLastSlice) {
   int imodel = enumModelState->getModelState();
   double diff = actions[imodel]->getActionDifference(paths,displacement,
-      nmoving, movingIndex,iFirstSlice,nslice);
+      nmoving, movingIndex,iFirstSlice,iLastSlice);
   return diff;
 }
 

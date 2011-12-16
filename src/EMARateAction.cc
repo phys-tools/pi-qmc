@@ -167,7 +167,7 @@ double EMARateAction::testableGetActionDifference(
 
 double EMARateAction::getActionDifference(const Paths &paths, 
    const VArray &displacement, int nmoving, const IArray &movingIndex, 
-   int iFirstSlice, int nslice) {
+   int iFirstSlice, int iLastSlice) {
  return 0; //No change in action for uniform displacements of particles.
 }
 

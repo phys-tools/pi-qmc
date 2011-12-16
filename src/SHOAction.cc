@@ -122,7 +122,7 @@ void SHOAction::getBeadAction(const Paths& paths, int ipart, int islice,
 
 double SHOAction::getActionDifference(const Paths &paths, 
        const VArray &displacement, int nmoving, const IArray &movingIndex,
-       int iFirstSlice, int nslice) {
+       int iFirstSlice, int iLastSlice) {
   double deltaAction=0;
   double wt=omega*tau;
   double sinhwt=sinh(wt);
@@ -132,7 +132,7 @@ double SHOAction::getActionDifference(const Paths &paths,
   for (int i=0; i<nmoving; ++i) {
     int ipart = movingIndex(i);
     if (ipart<ifirst || ipart>=ifirst+npart) break;
-    for (int islice=iFirstSlice; islice<nslice; ++islice) {
+    for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
       Vec r1=paths(ipart,islice)-center;
       Vec r0=paths(ipart,islice,-1)-center;
       Vec r2=paths(ipart,islice,1)-center;

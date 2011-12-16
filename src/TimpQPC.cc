@@ -92,13 +92,13 @@ void TimpQPC::getBeadAction(const Paths& paths, int ipart, int islice,
 
 double TimpQPC::getActionDifference(const Paths &paths, 
        const VArray &displacement, int nmoving, const IArray &movingIndex,
-       int iFirstSlice, int nslice) {
+       int iFirstSlice, int iLastSlice) {
   double deltaAction = 0;
   const SuperCell& cell = paths.getSuperCell();
   for (int i=0; i<nmoving; ++i) {
     int ipart = movingIndex(i);
     if (ipart>=ifirst && ipart<ifirst+npart) {
-      for (int islice=iFirstSlice; islice<nslice; ++islice) {
+      for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
         Vec r = paths(ipart,islice);
         deltaAction -= tau*v(r[0],r[1]);
         r += displacement(i);

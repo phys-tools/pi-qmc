@@ -98,7 +98,7 @@ double GateAction::getActionDifference(const MultiLevelSampler& sampler, const i
 double GateAction::getActionDifference(const Paths& paths, 
                    const VArray& displacement,
                    const int nMoving, const IArray& movingIndex,
-		   int iFirstSlice, int nslice) {
+		   int iFirstSlice, int iLastSlice) {
   double deltaAction = 0.;
   const SuperCell& cell = paths.getSuperCell();
   double xspread = xwidth / 2;
@@ -106,7 +106,7 @@ double GateAction::getActionDifference(const Paths& paths,
   for (int i=0; i<nMoving; ++i) {
     int ipart = movingIndex(i);
     if (ipart<ifirst || ipart>ifirst+npart) break;
-    for (int islice = iFirstSlice; islice < nslice; ++islice) {
+    for (int islice = iFirstSlice; islice <= iLastSlice; ++islice) {
       Vec r = paths(ipart, islice);
       double x = r[0];
       double y = r[1];
