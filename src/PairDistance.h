@@ -107,7 +107,7 @@ class PairDistance {public:
   class PairAngle : public PairDistance { public:
     virtual double operator()(const Vec &r1, const Vec &r2, 
                               const SuperCell &cell)const {
-      return acos(dot(r1,r2));
+      return acos(dot(r1,r2)/sqrt(dot(r1,r1)*dot(r2,r2)+1e-100));
     }
   };
   /// Angle of particle 1 (idim and jdim specify plane).
