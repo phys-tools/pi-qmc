@@ -154,7 +154,7 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
       for (int iMoving=0; iMoving<nMoving; ++iMoving) {
         const int i=index(iMoving);
         double sigma = sqrt(lambda(i)*tau*nStride); 
-        double inv2Sigma2 = 0.5/(sigma*sigma);
+        //double inv2Sigma2 = 0.5/(sigma*sigma);
         // Calculate the new position.
         Vec midpoint=movingBeads.delta(iMoving,islice+nStride,-2*nStride);
         cell.pbc(midpoint)*=0.5;

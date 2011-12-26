@@ -49,15 +49,16 @@ public:
   typedef blitz::TinyVector<double,N> VecN;
   typedef blitz::TinyVector<int,N> IVecN;
   typedef std::vector<PairDistance*> DistN;
-  /// Constructor.
+
   SpinChoicePCFEstimator(const SimulationInfo& simInfo, const std::string& name,
                   const Species &species, ModelState& modelState,
                   const VecN &min, const VecN &max, const IVecN &nbin, 
 		  const DistN &dist, bool samespin, MPIManager *mpi) 
     : BlitzArrayBlkdEst<N>(name,"array/spin-pair-correlation",nbin,true), 
+      min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
+      cell(*simInfo.getSuperCell()), temp(nbin), ispin(0), samespin(samespin),
       spinState(dynamic_cast<SpinModelState&>(modelState).getSpinState()),
-      min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist), ispin(0),
-      cell(*simInfo.getSuperCell()), temp(nbin), samespin(samespin), mpi(mpi) {
+      mpi(mpi){
   
     ifirst = species.ifirst;
     npart = ifirst + species.count; 
@@ -71,7 +72,7 @@ public:
     else
       std::cout<<"SpinChoicePCFEstimator for up-down correlation."<<std::endl;
   }
-  /// Virtual destructor.
+
   virtual ~SpinChoicePCFEstimator() {
     for (int i=0; i<N; ++i) delete dist[i];
   }
@@ -135,7 +136,7 @@ private:
   VecN deltaInv;
   IVecN nbin;
   DistN dist;
-  SuperCell cell;
+  const SuperCell& cell;
   ArrayN temp;
   int ifirst, npart;
   /// Reference spin.

@@ -31,7 +31,7 @@ GridPotential::GridPotential(const SimulationInfo& simInfo,
                              const std::string& filename, bool usePiezo)
   : tau(simInfo.getTau()), 
     vindex(simInfo.getNPart(),(ArrayN*)0) {
-  int nn;
+  //int nn;
   // Read the bandoffsets from grid.h5.
   hid_t fileID = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
@@ -50,7 +50,7 @@ GridPotential::GridPotential(const SimulationInfo& simInfo,
   H5Sget_simple_extent_dims(dataSpaceID, dims, NULL);
   H5Sclose(dataSpaceID);
   for (int i=0; i<NDIM; ++i) nvec[i]=dims[i];
-  nn = product(nvec);
+  //nn = product(nvec);
   vhgrid.resize(nvec);
   H5Dread(dataSetID, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT,
           vhgrid.data()); 

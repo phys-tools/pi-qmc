@@ -58,10 +58,10 @@ protected:
   const int nmodel;
   /// A pointer to the accept-reject estimator.
   AccRejEstimator* accRejEst;
-  /// A pointer to the MPI manager, zero if MPI is not used.
-  const MPIManager* mpi;
   /// Method to atempt a Monte Carlo move, return true if accepted.
   virtual bool tryMove();
   const int target;
+  /// A pointer to the MPI manager, zero if MPI is not used.
+  const MPIManager* mpi;
 };
 #endif

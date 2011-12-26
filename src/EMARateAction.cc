@@ -52,7 +52,7 @@ EMARateAction::~EMARateAction() {
 }
 double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
                                          const int level) {
-    testableGetActionDifference(sampler, level);
+    return testableGetActionDifference(sampler, level);
 }
 
 double EMARateAction::testableGetActionDifference(
@@ -64,7 +64,6 @@ double EMARateAction::testableGetActionDifference(
   const int nStride=(int)pow(2,level);
   const int nSlice=sectionBeads.getNSlice();
   const IArray& index=sampler.getMovingIndex(); 
-  const int nMoving=index.size();
 
   //const int iFirstSlice = sampler.getSectionChooser().getFirstSliceIndex();
   const int iFirstSlice = sampler.getFirstSliceIndex();

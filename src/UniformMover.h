@@ -36,9 +36,8 @@ public:
   virtual ~UniformMover();
   virtual double makeMove(VArray&, const IArray&) const;
   // virtual double makeMove(DoubleDisplaceMoveSampler&) const;
-protected:
-  const MPIManager* mpi;
 private:
   const Vec dist;
+  const MPIManager* mpi;
 };
 #endif

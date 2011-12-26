@@ -245,7 +245,7 @@ void HyperbolicMover::setFTable(int maxlevel) {
         double y1=2*pi*(oldgfr*oldfr*oldfr+oldgfr*x1*x1)
                   *(x1-oldfr)+sumg-sumg0;
         double y2=2*pi*(oldgfr*oldfr*oldfr+gfr*x2*x2)
-                      *(x2-oldfr)+sumg-sumg0;
+                     *(x2-oldfr)+sumg-sumg0;
         double g1=oldgfr;
         double g2=gfr;
         double newfr=x2, newgfr=gfr;

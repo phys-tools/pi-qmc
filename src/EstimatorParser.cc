@@ -611,8 +611,8 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
 std::cout << name << min[idist] << " - " << max[idist] << "  " << nbin << std::endl;
     }
   }
-  return new PairCFEstimator<N>(simInfo,name,speciesList,nspecies,min,max,nbin,dist,mpi);
   delete [] speciesList;
+  return new PairCFEstimator<N>(simInfo,name,speciesList,nspecies,min,max,nbin,dist,mpi);
 }
 
 void EstimatorParser::parseDistance(xmlNodePtr estNode, 

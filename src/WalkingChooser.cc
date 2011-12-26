@@ -32,23 +32,22 @@
 #include <blitz/tinyvec-et.h>
 
 WalkingChooser::WalkingChooser(const int nsize, const Species &species,
-  const int nlevel, const SimulationInfo& simInfo) 
-  : PermutationChooser(nsize), SpeciesParticleChooser(species,nsize),
-    nsize(nsize), t(npart,npart), cump(npart,npart),mass(species.mass), 
-    tau(simInfo.getTau()),
-    pg(NDIM) {
-  double alpha=mass/(2*tau*pow(2,nlevel));
-  for (int idim=0; idim<NDIM; ++idim) {
-    double l=(*simInfo.getSuperCell())[idim];
-    int ngrid = (alpha*l*l>1) ? (int)(l*sqrt(alpha)*10) : 10;
-    pg(idim)=new PeriodicGaussian(alpha,l,ngrid);
-  }
-  // Initialize permutation to an n-cycle.
-  for (int i=0; i<nsize; ++i) (*permutation)[i]=(i+1)%nsize;
+        const int nlevel, const SimulationInfo& simInfo)
+    :   PermutationChooser(nsize), SpeciesParticleChooser(species,nsize),
+        t(npart,npart), cump(npart,npart),
+        pg(NDIM), nsize(nsize), mass(species.mass), tau(simInfo.getTau()) {
+    double alpha=mass/(2*tau*pow(2,nlevel));
+    for (int idim=0; idim<NDIM; ++idim) {
+        double l=(*simInfo.getSuperCell())[idim];
+        int ngrid = (alpha*l*l>1) ? (int)(l*sqrt(alpha)*10) : 10;
+        pg(idim)=new PeriodicGaussian(alpha,l,ngrid);
+    }
+    // Initialize permutation to an n-cycle.
+    for (int i=0; i<nsize; ++i) (*permutation)[i]=(i+1)%nsize;
 }
 
 WalkingChooser::~WalkingChooser() {
-  for (PGArray::iterator i=pg.begin();  i!=pg.end(); ++i) delete *i;
+    for (PGArray::iterator i=pg.begin();  i!=pg.end(); ++i) delete *i;
 }
 
 void WalkingChooser::chooseParticles() {}

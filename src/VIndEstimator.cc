@@ -88,8 +88,8 @@ void VIndEstimator::handleLink(const Vec& start, const Vec& end,
 }
 
 void VIndEstimator::endCalc(const int lnslice) {
-  blitz::Range allSlice = blitz::Range::all();
-  blitz::Range allBin = blitz::Range::all();
+  //blitz::Range allSlice = blitz::Range::all();
+  //blitz::Range allBin = blitz::Range::all();
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI

@@ -45,12 +45,11 @@ public:
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<double,1> Array;
   typedef blitz::Array<bool,1> BArray;
-  /// Construct by providing simulation info.
+
   EMARateAction(const SimulationInfo&, const Species&, const Species&,
     double C);
-  /// Virtual destructor.
   virtual ~EMARateAction();
-  /// Calculate the difference in action.
+
   virtual double getActionDifference(const MultiLevelSampler&,
                                      const int level);
   /// Calculate the difference in action.

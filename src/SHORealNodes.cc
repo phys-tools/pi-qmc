@@ -77,10 +77,10 @@ SHORealNodes::evaluate(const VArray &r1, const VArray &r2,
       Vec sum=Vec(r1(jpart+ifirst)+r2(ipart+ifirst));
       Vec diff=Vec(r1(jpart+ifirst)-r2(ipart+ifirst));
       mat(ipart,jpart)= exp(-a1*dot(sum,sum)-a2*dot(diff,diff));
-      std::complex<double> m= exp(-a1*dot(sum,sum)-a2*dot(diff,diff)
-        -Complex(0,1)*b1*(r1(ipart+ifirst)[0]*r2(jpart+ifirst)[1]
-                         -r1(ipart+ifirst)[1]*r2(jpart+ifirst)[0]));
-       }
+      //std::complex<double> m= exp(-a1*dot(sum,sum)-a2*dot(diff,diff)
+      //  -Complex(0,1)*b1*(r1(ipart+ifirst)[0]*r2(jpart+ifirst)[1]
+      //                   -r1(ipart+ifirst)[1]*r2(jpart+ifirst)[0]));
+      }
   }
   int info=0;
   ZGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
