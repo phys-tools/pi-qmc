@@ -1,4 +1,8 @@
-    set (sources
+add_subdirectory(demo)
+add_subdirectory(spin)
+add_subdirectory(stats)
+
+set (sources
     ActionChoice.cc
     ActionParser.cc
     AlternatingParticleChooser.cc

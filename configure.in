@@ -68,6 +68,6 @@ AC_C_CONST
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile src/Makefile lib/Makefile lib/stats/Makefile lib/spin/Makefile lib/demo/Makefile doc/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/stats/Makefile src/spin/Makefile src/demo/Makefile doc/Makefile])
 AC_OUTPUT
 

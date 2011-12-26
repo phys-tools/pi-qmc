@@ -1,3 +1,5 @@
+SUBDIRS = stats spin demo
+
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = ../lib/stats/libstats.la ../lib/spin/libspin.la ../lib/demo/libdemo.la
 pi_LDADD = -L../lib/stats -lstats -L../lib/spin -lspin -L../lib/demo -ldemo

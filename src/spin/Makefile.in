@@ -35,7 +35,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = lib/demo
+subdir = src/spin
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -51,13 +51,15 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libdemo_la_LIBADD =
-am_libdemo_la_OBJECTS = libdemo_la-Demo.lo libdemo_la-HAtomDemo.lo \
-	libdemo_la-HeAtomDemo.lo libdemo_la-SHODemo.lo \
-	libdemo_la-SpinDemo.lo libdemo_la-WireDemo.lo
-libdemo_la_OBJECTS = $(am_libdemo_la_OBJECTS)
-libdemo_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libdemo_la_CXXFLAGS) \
+libspin_la_LIBADD =
+am_libspin_la_OBJECTS = libspin_la-FreeSpinMover.lo \
+	libspin_la-MainSpinParser.lo libspin_la-LatticeSpinPhase.lo \
+	libspin_la-SpinSetter.lo libspin_la-SpinAction.lo \
+	libspin_la-SpinEstimator.lo libspin_la-SpinFixedPhaseAction.lo \
+	libspin_la-SpinMover.lo libspin_la-SpinPhase.lo
+libspin_la_OBJECTS = $(am_libspin_la_OBJECTS)
+libspin_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libspin_la_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
@@ -72,8 +74,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libdemo_la_SOURCES)
-DIST_SOURCES = $(libdemo_la_SOURCES)
+SOURCES = $(libspin_la_SOURCES)
+DIST_SOURCES = $(libspin_la_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -209,10 +211,10 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libdemo.la
-libdemo_la_CXXFLAGS = -I$(top_srcdir)
-libdemo_la_SOURCES = Demo.cc HAtomDemo.cc HeAtomDemo.cc SHODemo.cc SpinDemo.cc WireDemo.cc
-noinst_HEADERS = Demo.h HAtomDemo.h HeAtomDemo.h SHODemo.h SpinDemo.h WireDemo.h
+noinst_LTLIBRARIES = libspin.la
+libspin_la_CXXFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/lib -I$(top_srcdir)
+libspin_la_SOURCES = FreeSpinMover.cc MainSpinParser.cc LatticeSpinPhase.cc SpinSetter.cc SpinAction.cc SpinEstimator.cc SpinFixedPhaseAction.cc SpinMover.cc SpinPhase.cc
+noinst_HEADERS = FreeSpinMover.h MainSpinParser.h LatticeSpinPhase.h SpinSetter.h SpinAction.h SpinEstimator.h SpinFixedPhaseAction.h SpinMover.h SpinPhase.h SpinPhaseModel.h
 all: all-am
 
 .SUFFIXES:
@@ -226,9 +228,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu lib/demo/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/spin/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu lib/demo/Makefile
+	  $(AUTOMAKE) --gnu src/spin/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -256,8 +258,8 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libdemo.la: $(libdemo_la_OBJECTS) $(libdemo_la_DEPENDENCIES) 
-	$(libdemo_la_LINK)  $(libdemo_la_OBJECTS) $(libdemo_la_LIBADD) $(LIBS)
+libspin.la: $(libspin_la_OBJECTS) $(libspin_la_DEPENDENCIES) 
+	$(libspin_la_LINK)  $(libspin_la_OBJECTS) $(libspin_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -265,12 +267,15 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-Demo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-HAtomDemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-HeAtomDemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-SHODemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-SpinDemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-WireDemo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-FreeSpinMover.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-LatticeSpinPhase.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-MainSpinParser.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-SpinAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-SpinEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-SpinFixedPhaseAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-SpinMover.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-SpinPhase.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libspin_la-SpinSetter.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -293,47 +298,68 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-libdemo_la-Demo.lo: Demo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-Demo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-Demo.Tpo -c -o libdemo_la-Demo.lo `test -f 'Demo.cc' || echo '$(srcdir)/'`Demo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-Demo.Tpo $(DEPDIR)/libdemo_la-Demo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Demo.cc' object='libdemo_la-Demo.lo' libtool=yes @AMDEPBACKSLASH@
+libspin_la-FreeSpinMover.lo: FreeSpinMover.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-FreeSpinMover.lo -MD -MP -MF $(DEPDIR)/libspin_la-FreeSpinMover.Tpo -c -o libspin_la-FreeSpinMover.lo `test -f 'FreeSpinMover.cc' || echo '$(srcdir)/'`FreeSpinMover.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-FreeSpinMover.Tpo $(DEPDIR)/libspin_la-FreeSpinMover.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FreeSpinMover.cc' object='libspin_la-FreeSpinMover.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-Demo.lo `test -f 'Demo.cc' || echo '$(srcdir)/'`Demo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-FreeSpinMover.lo `test -f 'FreeSpinMover.cc' || echo '$(srcdir)/'`FreeSpinMover.cc
 
-libdemo_la-HAtomDemo.lo: HAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-HAtomDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-HAtomDemo.Tpo -c -o libdemo_la-HAtomDemo.lo `test -f 'HAtomDemo.cc' || echo '$(srcdir)/'`HAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-HAtomDemo.Tpo $(DEPDIR)/libdemo_la-HAtomDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HAtomDemo.cc' object='libdemo_la-HAtomDemo.lo' libtool=yes @AMDEPBACKSLASH@
+libspin_la-MainSpinParser.lo: MainSpinParser.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-MainSpinParser.lo -MD -MP -MF $(DEPDIR)/libspin_la-MainSpinParser.Tpo -c -o libspin_la-MainSpinParser.lo `test -f 'MainSpinParser.cc' || echo '$(srcdir)/'`MainSpinParser.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-MainSpinParser.Tpo $(DEPDIR)/libspin_la-MainSpinParser.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MainSpinParser.cc' object='libspin_la-MainSpinParser.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-HAtomDemo.lo `test -f 'HAtomDemo.cc' || echo '$(srcdir)/'`HAtomDemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-MainSpinParser.lo `test -f 'MainSpinParser.cc' || echo '$(srcdir)/'`MainSpinParser.cc
 
-libdemo_la-HeAtomDemo.lo: HeAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-HeAtomDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-HeAtomDemo.Tpo -c -o libdemo_la-HeAtomDemo.lo `test -f 'HeAtomDemo.cc' || echo '$(srcdir)/'`HeAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-HeAtomDemo.Tpo $(DEPDIR)/libdemo_la-HeAtomDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HeAtomDemo.cc' object='libdemo_la-HeAtomDemo.lo' libtool=yes @AMDEPBACKSLASH@
+libspin_la-LatticeSpinPhase.lo: LatticeSpinPhase.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-LatticeSpinPhase.lo -MD -MP -MF $(DEPDIR)/libspin_la-LatticeSpinPhase.Tpo -c -o libspin_la-LatticeSpinPhase.lo `test -f 'LatticeSpinPhase.cc' || echo '$(srcdir)/'`LatticeSpinPhase.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-LatticeSpinPhase.Tpo $(DEPDIR)/libspin_la-LatticeSpinPhase.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='LatticeSpinPhase.cc' object='libspin_la-LatticeSpinPhase.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-HeAtomDemo.lo `test -f 'HeAtomDemo.cc' || echo '$(srcdir)/'`HeAtomDemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-LatticeSpinPhase.lo `test -f 'LatticeSpinPhase.cc' || echo '$(srcdir)/'`LatticeSpinPhase.cc
 
-libdemo_la-SHODemo.lo: SHODemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-SHODemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-SHODemo.Tpo -c -o libdemo_la-SHODemo.lo `test -f 'SHODemo.cc' || echo '$(srcdir)/'`SHODemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-SHODemo.Tpo $(DEPDIR)/libdemo_la-SHODemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SHODemo.cc' object='libdemo_la-SHODemo.lo' libtool=yes @AMDEPBACKSLASH@
+libspin_la-SpinSetter.lo: SpinSetter.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-SpinSetter.lo -MD -MP -MF $(DEPDIR)/libspin_la-SpinSetter.Tpo -c -o libspin_la-SpinSetter.lo `test -f 'SpinSetter.cc' || echo '$(srcdir)/'`SpinSetter.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-SpinSetter.Tpo $(DEPDIR)/libspin_la-SpinSetter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinSetter.cc' object='libspin_la-SpinSetter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-SHODemo.lo `test -f 'SHODemo.cc' || echo '$(srcdir)/'`SHODemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-SpinSetter.lo `test -f 'SpinSetter.cc' || echo '$(srcdir)/'`SpinSetter.cc
 
-libdemo_la-SpinDemo.lo: SpinDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-SpinDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-SpinDemo.Tpo -c -o libdemo_la-SpinDemo.lo `test -f 'SpinDemo.cc' || echo '$(srcdir)/'`SpinDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-SpinDemo.Tpo $(DEPDIR)/libdemo_la-SpinDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinDemo.cc' object='libdemo_la-SpinDemo.lo' libtool=yes @AMDEPBACKSLASH@
+libspin_la-SpinAction.lo: SpinAction.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-SpinAction.lo -MD -MP -MF $(DEPDIR)/libspin_la-SpinAction.Tpo -c -o libspin_la-SpinAction.lo `test -f 'SpinAction.cc' || echo '$(srcdir)/'`SpinAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-SpinAction.Tpo $(DEPDIR)/libspin_la-SpinAction.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinAction.cc' object='libspin_la-SpinAction.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-SpinDemo.lo `test -f 'SpinDemo.cc' || echo '$(srcdir)/'`SpinDemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-SpinAction.lo `test -f 'SpinAction.cc' || echo '$(srcdir)/'`SpinAction.cc
 
-libdemo_la-WireDemo.lo: WireDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-WireDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-WireDemo.Tpo -c -o libdemo_la-WireDemo.lo `test -f 'WireDemo.cc' || echo '$(srcdir)/'`WireDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-WireDemo.Tpo $(DEPDIR)/libdemo_la-WireDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WireDemo.cc' object='libdemo_la-WireDemo.lo' libtool=yes @AMDEPBACKSLASH@
+libspin_la-SpinEstimator.lo: SpinEstimator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-SpinEstimator.lo -MD -MP -MF $(DEPDIR)/libspin_la-SpinEstimator.Tpo -c -o libspin_la-SpinEstimator.lo `test -f 'SpinEstimator.cc' || echo '$(srcdir)/'`SpinEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-SpinEstimator.Tpo $(DEPDIR)/libspin_la-SpinEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinEstimator.cc' object='libspin_la-SpinEstimator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-WireDemo.lo `test -f 'WireDemo.cc' || echo '$(srcdir)/'`WireDemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-SpinEstimator.lo `test -f 'SpinEstimator.cc' || echo '$(srcdir)/'`SpinEstimator.cc
+
+libspin_la-SpinFixedPhaseAction.lo: SpinFixedPhaseAction.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-SpinFixedPhaseAction.lo -MD -MP -MF $(DEPDIR)/libspin_la-SpinFixedPhaseAction.Tpo -c -o libspin_la-SpinFixedPhaseAction.lo `test -f 'SpinFixedPhaseAction.cc' || echo '$(srcdir)/'`SpinFixedPhaseAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-SpinFixedPhaseAction.Tpo $(DEPDIR)/libspin_la-SpinFixedPhaseAction.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinFixedPhaseAction.cc' object='libspin_la-SpinFixedPhaseAction.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-SpinFixedPhaseAction.lo `test -f 'SpinFixedPhaseAction.cc' || echo '$(srcdir)/'`SpinFixedPhaseAction.cc
+
+libspin_la-SpinMover.lo: SpinMover.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-SpinMover.lo -MD -MP -MF $(DEPDIR)/libspin_la-SpinMover.Tpo -c -o libspin_la-SpinMover.lo `test -f 'SpinMover.cc' || echo '$(srcdir)/'`SpinMover.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-SpinMover.Tpo $(DEPDIR)/libspin_la-SpinMover.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinMover.cc' object='libspin_la-SpinMover.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-SpinMover.lo `test -f 'SpinMover.cc' || echo '$(srcdir)/'`SpinMover.cc
+
+libspin_la-SpinPhase.lo: SpinPhase.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -MT libspin_la-SpinPhase.lo -MD -MP -MF $(DEPDIR)/libspin_la-SpinPhase.Tpo -c -o libspin_la-SpinPhase.lo `test -f 'SpinPhase.cc' || echo '$(srcdir)/'`SpinPhase.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libspin_la-SpinPhase.Tpo $(DEPDIR)/libspin_la-SpinPhase.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinPhase.cc' object='libspin_la-SpinPhase.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libspin_la_CXXFLAGS) $(CXXFLAGS) -c -o libspin_la-SpinPhase.lo `test -f 'SpinPhase.cc' || echo '$(srcdir)/'`SpinPhase.cc
 
 mostlyclean-libtool:
 	-rm -f *.lo
