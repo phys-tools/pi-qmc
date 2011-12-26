@@ -72,7 +72,6 @@
     ImagePairAction.cc
     JelliumSlab.cc
     JEstimator.cc
-    main.cc
     MainParser.cc
     Measure.cc
     MiddleSectionChooser.cc
@@ -169,11 +168,14 @@ target_link_libraries(pi ${BLAS_LIB})
 target_link_libraries(pi ${LAPACK_LIB})
 if (EXISTS ${LIBF2C_LIB})
   target_link_libraries(pi ${LIBF2C_LIB})
-endif()
+endif(EXISTS ${LIBF2C_LIB})
 target_link_libraries(pi ${FFTW3_LIB})
 target_link_libraries(pi ${HDF5_LIB})
 target_link_libraries(pi ${GSL_LIB})
 
+set_target_properties(pi
+    PROPERTIES
+    LINKER_LANGUAGE CXX)
 
 target_link_libraries(pi demo spin stats)
 

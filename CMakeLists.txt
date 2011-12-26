@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.6)
 project (PI_QMC)
 set (PI_QMC_VERSION_MAJOR 0)
 set (PI_QMC_VERSION_MINOR 1)
+enable_language(CXX)
 enable_language(Fortran)
 
 find_library(LAPACK_LIB
