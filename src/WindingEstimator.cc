@@ -38,9 +38,11 @@ WindingEstimator::WindingEstimator(const SimulationInfo& simInfo,
     charge(npart), isChargeCoupled(isChargeCoupled), mpi(mpi) {
   value = 0.;
   norm = 0;
-  charge = 1.;
+  charge = 1;
   if (isChargeCoupled) {
-    for (int i=0; i<npart; ++i) charge(i)=simInfo.getPartSpecies(i).charge;
+    for (int i=0; i<npart; ++i) {
+      charge(i)=int(simInfo.getPartSpecies(i).charge);
+    }
   }
 }
 

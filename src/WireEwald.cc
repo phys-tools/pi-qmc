@@ -61,7 +61,7 @@ WireEwald::WireEwald(const SuperCell& cell, const double d, const double rmax,
 #endif
   {
   double L = cell.a[0];
-  int M = ceil(rmax / L);
+  int M = int(ceil(rmax / L));
   v = 0.; x = 0.; y = 0.;
   // Evaluate Coulomb interaction on the grid.
   for (int i=0; i<gridSize[0]; ++i) {
@@ -177,8 +177,8 @@ void WireEwald::curveFit() {
       J(i,j) = pow(x(i),2*k) * pow(y(i),2*(j-k*(MM+1)));
 #endif
 #if NDIM==3
-      int k = floor(j/((MM+1.)*(LL+1.)));
-      int kk = floor(j/(LL+1.));
+      int k = int(floor(j/((MM+1.)*(LL+1.))));
+      int kk = int(floor(j/(LL+1.)));
       J(i,j) = pow(x(i),2*k) * pow(y(i),2*(kk-k*(MM+1))) 
                * pow(z(i),2*(j-kk*(LL+1)));
 #endif

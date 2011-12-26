@@ -168,7 +168,7 @@ private:
   const int nspecies;
   SuperCell cell;
   Array temp;
-  int zCharge;
+  double zCharge;
   const Action * action;
   const DoubleAction * doubleAction;
   MPIManager *mpi;

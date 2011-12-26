@@ -60,8 +60,8 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
   if (nStride+1 == nSlice) {
     earlierTransitions = 0.;
     //std::cout << "Choosing radiating vs. diagonal." << std::endl; 
-    double i = index(0);
-    double j = index(1);
+    int i = index(0);
+    int j = index(1);
     Vec re1 = movingBeads(0,0);
     Vec re2 = movingBeads(0,nSlice-1);
     Vec rh1 = movingBeads(1,0);

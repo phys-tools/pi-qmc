@@ -65,7 +65,7 @@ PairIntegrator::PairIntegrator(double tau, double mu, double dr,
    ngrid=16;
    dr = 2*intRange*sigma/ngrid;
   }
-  ngridN = pow(ngrid,NDIM);
+  ngridN = int(pow(ngrid,NDIM));
   // Allocate the grids.
   expVtau.resize(ngridN);
   expHalfVtau.resize(ngridN);

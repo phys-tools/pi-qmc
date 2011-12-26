@@ -60,7 +60,7 @@ bool SpinModelSampler::tryMove() {
 
   int ipart = nmodel;
   do {
-    ipart  = RandomNumGenerator::getRand() * (nmodel-1);
+    ipart  = int(RandomNumGenerator::getRand() * (nmodel-1));
 //std::cout << ipart << ", " << nmodel << std::endl;
   } while (! (ipart < nmodel-1));
 
