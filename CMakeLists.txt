@@ -143,5 +143,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PI_QMC_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PI_QMC_BINARY_DIR}/lib)
 
 
-add_subdirectory(lib)
 add_subdirectory(src)
