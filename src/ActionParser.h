@@ -24,7 +24,7 @@ class SimulationInfo;
 class MPIManager;
 class CompositeAction;
 class CompositeDoubleAction;
-#include "AugmentedNodes.h"
+#include "fixednode/AugmentedNodes.h"
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>

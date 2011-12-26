@@ -81,8 +81,8 @@
 #include "WalkingChooser.h"
 #include "PairChooser.h"
 #include "TwoPairChooser.h"
-#include "NodeTester.h"
-#include "FreeParticleNodes.h"
+#include "fixednode/NodeTester.h"
+#include "fixednode/FreeParticleNodes.h"
 
 
 PIMCParser::PIMCParser(const SimulationInfo &simInfo, Action *action,

@@ -1,4 +1,5 @@
 add_subdirectory(demo)
+add_subdirectory(fixednode)
 add_subdirectory(spin)
 add_subdirectory(stats)
 
@@ -7,9 +8,7 @@ set (sources
     ActionParser.cc
     AlternatingParticleChooser.cc
     AngularMomentumEstimator.cc
-    AnisotropicNodes.cc
     AperiodicGaussian.cc
-    AugmentedNodes.cc
     BeadFactory.cc
     BinProbDensity.cc
     BondLengthEstimator.cc
@@ -53,14 +52,10 @@ set (sources
     EwaldImagePairAction.cc
     EwaldSum.cc
     ExchangeMover.cc
-    ExcitonNodes.cc
-    FixedNodeAction.cc
     FixedPhaseAction.cc
     FreeEnergyEstimator.cc
     FreeMover.cc
     FreeMoverPBC.cc
-    FreeParticleNodes.cc
-    FreePartNodesNoUpdate.cc
     FreeTensorMover.cc
     FrequencyEstimator.cc
     GateAction.cc
@@ -68,8 +63,6 @@ set (sources
     GaussianDotAction.cc
     GrapheneAction.cc
     GridPotential.cc
-    GroundStateSNode.cc
-    GroundStateWFNodes.cc
     Hungarian.cc
     HyperbolicAction.cc
     HyperbolicMover.cc
@@ -82,8 +75,6 @@ set (sources
     ModelSampler.cc
     MultiLevelSampler.cc
     MultiSpeciesParticleChooser.cc
-    NodeModel.cc
-    NodeTester.cc
     NonZeroSectionChooser.cc
     OptEwaldSum.cc
     OpticalLatticeAction.cc
@@ -120,9 +111,7 @@ set (sources
     SerialPaths.cc
     SHOAction.cc
     SHODotAction.cc
-    SHONodes.cc
     SHOPhase.cc
-    SHORealNodes.cc
     SimInfoParser.cc
     SimInfoWriter.cc
     SimpleParticleChooser.cc
@@ -134,7 +123,6 @@ set (sources
     SphereAction.cc
     Spin4DPhase.cc
     SpinChargeEstimator.cc
-    SpinChoiceFixedNodeAction.cc
     SpinModelSampler.cc
     SpinModelState.cc
     SpinStatePermutationChooser.cc
@@ -155,7 +143,6 @@ set (sources
     WellImageAction.cc
     WindingEstimator.cc
     WireEwald.cc
-    WireNodes.cc
     WorkerShifter.cc
     WritePaths.cc
     WriteProbDensity.cc
@@ -181,7 +168,7 @@ set_target_properties(pi
     PROPERTIES
     LINKER_LANGUAGE CXX)
 
-target_link_libraries(pi demo spin stats)
+target_link_libraries(pi demo fixednode spin stats)
 
 #add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)
