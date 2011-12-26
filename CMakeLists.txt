@@ -126,6 +126,10 @@ else()
     message("Found FFTW3: " ${FFTW3_LIB})    
 endif(NOT EXISTS ${FFTW3_LIB})
 
+include(CheckIncludeFiles)
+CHECK_INCLUDE_FILES(getopt.h HAVE_GETOPT_H)
+
+
 
 #find_package(FFTW3 REQUIRED)
 

@@ -8,3 +8,5 @@
 #define F77_FUNC_(name,NAME) name ## _
 
 #define HAVE_BLAS 1
+
+#cmakedefine HAVE_GETOPT_H 1
