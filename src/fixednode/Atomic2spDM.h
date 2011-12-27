@@ -8,7 +8,7 @@
 /// node in the 2s orbital, and there is enough 2s contribution
 /// to avoid an angular node (provided @f$0<p_{\text{angle}}@f<1$).
 /// @f[\rho(r,r') = C^2 rr' e^{-Z(r+r')/2}
-///                  (1+\hat{\mathbf{r}}\cdot\hat{\mathbf{r}}'),@f]
+///             (1+p_{\text{angle}}\hat{\mathbf{r}}\cdot\hat{\mathbf{r}}'),@f]
 /// where @f$C=\sqrt{Z^5/32\pi}@f$.
 /// and @f$0<p_{\text{angle}}@f<1$ controls the strength
 /// angular dependence (@f$p_{\text{angle}}=0@f$ for s-only).
@@ -27,6 +27,8 @@ public:
   mutable VArray2 work3;
   /// Storage for unit vector r'_ik.
   mutable VArray2 work4;
+  mutable Array2 work5;
+  mutable Array2 work6;
   virtual void evaluateValue(Matrix&, double scale) const;
   virtual void evaluateValueAndGrad() const;
   virtual ValAndGrad operator()(int i, int j) const;

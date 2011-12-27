@@ -34,6 +34,8 @@ if(GTEST_FOUND)
         Atomic1sDMTest.cc
         ${SRC_DIR}/fixednode/AtomicOrbitalDM.cc
         ${SRC_DIR}/fixednode/Atomic1sDM.cc
+        Atomic2spDMTest.cc
+        ${SRC_DIR}/fixednode/Atomic2spDM.cc
     )
     target_link_libraries(fixedNodeTests ${GTEST_BOTH_LIBRARIES} -lpthread)
   
