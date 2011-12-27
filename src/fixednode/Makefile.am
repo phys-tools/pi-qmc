@@ -2,6 +2,9 @@ noinst_LTLIBRARIES = libfixednode.la
 libfixednode_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
 libfixednode_la_SOURCES = \
     AnisotropicNodes.cc \
+    AtomicOrbitalDM.cc \
+    Atomic1sDM.cc \
+    Atomic2spDM.cc \
     AugmentedNodes.cc \
     ExcitonNodes.cc \
     FixedNodeAction.cc \
@@ -17,6 +20,9 @@ libfixednode_la_SOURCES = \
     WireNodes.cc
 noinst_HEADERS = \
     AnisotropicNodes.h \
+    AtomicOrbitalDM.h \
+    Atomic1sDM.h \
+    Atomic2spDM.h \
     AugmentedNodes.h \
     ExcitonNodes.h \
     FixedNodeAction.h \

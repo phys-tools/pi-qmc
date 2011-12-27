@@ -53,6 +53,8 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libfixednode_la_LIBADD =
 am_libfixednode_la_OBJECTS = libfixednode_la-AnisotropicNodes.lo \
+	libfixednode_la-AtomicOrbitalDM.lo \
+	libfixednode_la-Atomic1sDM.lo libfixednode_la-Atomic2spDM.lo \
 	libfixednode_la-AugmentedNodes.lo \
 	libfixednode_la-ExcitonNodes.lo \
 	libfixednode_la-FixedNodeAction.lo \
@@ -225,6 +227,9 @@ noinst_LTLIBRARIES = libfixednode.la
 libfixednode_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
 libfixednode_la_SOURCES = \
     AnisotropicNodes.cc \
+    AtomicOrbitalDM.cc \
+    Atomic1sDM.cc \
+    Atomic2spDM.cc \
     AugmentedNodes.cc \
     ExcitonNodes.cc \
     FixedNodeAction.cc \
@@ -241,6 +246,9 @@ libfixednode_la_SOURCES = \
 
 noinst_HEADERS = \
     AnisotropicNodes.h \
+    AtomicOrbitalDM.h \
+    Atomic1sDM.h \
+    Atomic2spDM.h \
     AugmentedNodes.h \
     ExcitonNodes.h \
     FixedNodeAction.h \
@@ -308,6 +316,9 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-AnisotropicNodes.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-Atomic1sDM.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-Atomic2spDM.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-AtomicOrbitalDM.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-AugmentedNodes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-ExcitonNodes.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libfixednode_la-FixedNodeAction.Plo@am__quote@
@@ -349,6 +360,27 @@ libfixednode_la-AnisotropicNodes.lo: AnisotropicNodes.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AnisotropicNodes.cc' object='libfixednode_la-AnisotropicNodes.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -c -o libfixednode_la-AnisotropicNodes.lo `test -f 'AnisotropicNodes.cc' || echo '$(srcdir)/'`AnisotropicNodes.cc
+
+libfixednode_la-AtomicOrbitalDM.lo: AtomicOrbitalDM.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -MT libfixednode_la-AtomicOrbitalDM.lo -MD -MP -MF $(DEPDIR)/libfixednode_la-AtomicOrbitalDM.Tpo -c -o libfixednode_la-AtomicOrbitalDM.lo `test -f 'AtomicOrbitalDM.cc' || echo '$(srcdir)/'`AtomicOrbitalDM.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libfixednode_la-AtomicOrbitalDM.Tpo $(DEPDIR)/libfixednode_la-AtomicOrbitalDM.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AtomicOrbitalDM.cc' object='libfixednode_la-AtomicOrbitalDM.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -c -o libfixednode_la-AtomicOrbitalDM.lo `test -f 'AtomicOrbitalDM.cc' || echo '$(srcdir)/'`AtomicOrbitalDM.cc
+
+libfixednode_la-Atomic1sDM.lo: Atomic1sDM.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -MT libfixednode_la-Atomic1sDM.lo -MD -MP -MF $(DEPDIR)/libfixednode_la-Atomic1sDM.Tpo -c -o libfixednode_la-Atomic1sDM.lo `test -f 'Atomic1sDM.cc' || echo '$(srcdir)/'`Atomic1sDM.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libfixednode_la-Atomic1sDM.Tpo $(DEPDIR)/libfixednode_la-Atomic1sDM.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Atomic1sDM.cc' object='libfixednode_la-Atomic1sDM.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -c -o libfixednode_la-Atomic1sDM.lo `test -f 'Atomic1sDM.cc' || echo '$(srcdir)/'`Atomic1sDM.cc
+
+libfixednode_la-Atomic2spDM.lo: Atomic2spDM.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -MT libfixednode_la-Atomic2spDM.lo -MD -MP -MF $(DEPDIR)/libfixednode_la-Atomic2spDM.Tpo -c -o libfixednode_la-Atomic2spDM.lo `test -f 'Atomic2spDM.cc' || echo '$(srcdir)/'`Atomic2spDM.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libfixednode_la-Atomic2spDM.Tpo $(DEPDIR)/libfixednode_la-Atomic2spDM.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Atomic2spDM.cc' object='libfixednode_la-Atomic2spDM.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -c -o libfixednode_la-Atomic2spDM.lo `test -f 'Atomic2spDM.cc' || echo '$(srcdir)/'`Atomic2spDM.cc
 
 libfixednode_la-AugmentedNodes.lo: AugmentedNodes.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -MT libfixednode_la-AugmentedNodes.lo -MD -MP -MF $(DEPDIR)/libfixednode_la-AugmentedNodes.Tpo -c -o libfixednode_la-AugmentedNodes.lo `test -f 'AugmentedNodes.cc' || echo '$(srcdir)/'`AugmentedNodes.cc
