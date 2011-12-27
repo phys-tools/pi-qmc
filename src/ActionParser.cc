@@ -650,6 +650,7 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       EnumeratedModelState *modelState
         = dynamic_cast<EnumeratedModelState*>(&actionChoice->getModelState());
       modelState->setModelState(imodel);
+      modelState->broadcastToMPIWorkers(mpi);
 
       continue;
     } else if (name=="ActionGroup") {

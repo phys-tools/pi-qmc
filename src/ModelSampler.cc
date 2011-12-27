@@ -58,6 +58,7 @@ bool ModelSampler::tryMove() {
   int imodel = modelState.getModelState();
 
   modelState.setModelState(imodel);
+  modelState.broadcastToMPIWorkers(mpi);
 
   // We select the next model so that the end points always
   // try a valid model. This is efficient for two models, but

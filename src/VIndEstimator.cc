@@ -88,11 +88,11 @@ void VIndEstimator::handleLink(const Vec& start, const Vec& end,
 }
 
 void VIndEstimator::endCalc(const int lnslice) {
-  //blitz::Range allSlice = blitz::Range::all();
-  //blitz::Range allBin = blitz::Range::all();
   // First move all data to 1st worker. 
   int workerID=(mpi)?mpi->getWorkerID():0;
 #ifdef ENABLE_MPI
+  blitz::Range allSlice = blitz::Range::all();
+  blitz::Range allBin = blitz::Range::all();
   if (mpi) {
     mpi->getWorkerComm().Reduce(&temp(0,0),&buff(0,0),
                                 2*nslice/nstride*nbin,MPI::DOUBLE,MPI::SUM,0);
@@ -109,13 +109,11 @@ void VIndEstimator::endCalc(const int lnslice) {
     double betaInv=1./(tau*nslice);
     temp2*=tau;
     for (int ibin=0; ibin<nbin; ++ibin) {
-      //temp(ibin,allSlice)*=conj(temp2(allSlice));
       for (int ifreq=0; ifreq<nfreq && 2*ifreq<nslice/2; ++ifreq) {
         value(ibin,ifreq) += real(temp(ibin,ifreq)*temp(ibin,ifreq)
                                   *conj(temp2(ifreq*2)))*betaInv;
       }
     }
-    //value += imag(temp(allBin,blitz::Range(0,nfreq-1)))/(tau*nslice);
     norm+=1;
   }
 }
