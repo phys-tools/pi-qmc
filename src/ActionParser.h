@@ -65,7 +65,7 @@ private:
   /// Parse actions for EwaldAction.
   Action* parseEwaldActions(const xmlXPathContextPtr& ctxt);
   /// Parse atomic orbitals for AugmentedNdoes.
-  void parseOrbitalDM(std::vector<const AugmentedNodes::AtomicOrbitalDM*>&,
+  void parseOrbitalDM(std::vector<const AtomicOrbitalDM*>&,
     const Species&, const xmlXPathContextPtr& ctxt);
   NodeModel* parseNodeModel(const xmlXPathContextPtr& ctxt, xmlNodePtr &actNode,
     const Species &species);

@@ -27,6 +27,7 @@ class PeriodicGaussian;
 class SimulationInfo;
 class Species;
 class SuperCell;
+class AtomicOrbitalDM;
 
 /*! Augmented free particle nodes.
 We define the node model as a slater determinant of density matricies
@@ -106,89 +107,7 @@ public:
     IArray index1,mindex1;
     int nMoving;
   };
-  /// Classes for atomic orbital density matricies.
-  /// These are optimized to work for vectors of identical orbitals.
-  class AtomicOrbitalDM {
-  public:
-    AtomicOrbitalDM(int ifirst, int npart, int nfermion, double weight);
-    const double weight;
-    const int ifirst;
-    const int npart;
-    /// Vector displacement of particle i from orbital center j in section 1.
-    mutable VArray2 dist1;
-    /// Vector displacement of particle i from orbital center j in section 2.
-    mutable VArray2 dist2;
-    /// Get the array of vector distances for section 1.
-    VArray2& getD1Array() const {return dist1;}
-    /// Get the array of vector distances for section 2.
-    VArray2& getD2Array() const {return dist2;}
-    /// Structure for value and gradient.
-    struct ValAndGrad {
-      ValAndGrad() : val(0.), grad1(0.), grad2(0.) {}
-      double val; Vec grad1, grad2;
-      ValAndGrad operator+=(ValAndGrad& s) {
-        val += s.val; grad1 += s.grad1; grad2 += s.grad2; return *this;
-      }
-    };
-    /// Calculate matrix values using vector distance arrays.
-    /// On exit, mat(i,j) has matrix elements for particles ri and rj'.
-    virtual void evaluateValue(Matrix&, double scale) const {;}
-    /// Calculate matrix values using vector distance arrays.
-    /// On exit work and distance arrays are setup for ValAndGrad operator().
-    virtual void evaluateValueAndGrad() const {;}
-    /// Return value and gradients of matrix element between ri  and rj'.
-    /// Must call evaluateValueAndGrad() first to initialize work arrays.
-    virtual ValAndGrad operator()(int i, int j) const {
-      ValAndGrad temp; return temp;}
-  };
-  /// Normalized density matrix for 1s orbital.
-  /// @f[\rho(r,r') = C^2 e^{-Z(r+r')},@f] where @f$C=\sqrt{Z^3/\pi}@f$.
-  class Atomic1sDM : public AtomicOrbitalDM {
-  public:
-    Atomic1sDM(double Z, int ifirst, int npart, int nfermion, double weight);
-    const int nfermion;
-    /// Coefficient before the exponential, @f$ C = \sqrt{Z^3/\pi} @f$.
-    const double coef;
-    /// Storage for @f$ \psi_k(r_i) @f$.
-    mutable Array2 work1;
-    /// Storage for @f$ \psi^*_k(r_i) @f$.
-    mutable Array2 work2;
-    virtual void evaluateValue(Matrix&, double scale) const;
-    virtual void evaluateValueAndGrad() const;
-    virtual ValAndGrad operator()(int i, int j) const;
-    const double Z;
-  };
 
-  /// Unnormalized density matrix for 2s and 2p orbital.
-  /// To avoid negative regions, this does not include the radial
-  /// node in the 2s orbital, and there is enough 2s contribution
-  /// to avoid an angular node (provided @f$0<p_{\text{angle}}@f<1$).
-  /// @f[\rho(r,r') = C^2 rr' e^{-Z(r+r')/2}
-  ///                  (1+\hat{\mathbf{r}}\cdot\hat{\mathbf{r}}'),@f]
-  /// where @f$C=\sqrt{Z^5/32\pi}@f$.
-  /// and @f$0<p_{\text{angle}}@f<1$ controls the strength
-  /// angular dependence (@f$p_{\text{angle}}=0@f$ for s-only).
-  class Atomic2spDM : public AtomicOrbitalDM {
-  public:
-    Atomic2spDM(double Z, int ifirst, int npart, int nfermion, 
-                double pweight, double weight);
-    const int nfermion;
-    /// Coefficient before the exponential, @f$ C = \sqrt{Z^5/32\pi} @f$.
-    const double coef;
-    /// Storage for @f$ \psi_k(r_i) @f$.
-    mutable Array2 work1;
-    /// Storage for @f$ \psi^*_k(r_i) @f$.
-    mutable Array2 work2;
-    /// Storage for unit vector r_ik.
-    mutable VArray2 work3;
-    /// Storage for unit vector r'_ik.
-    mutable VArray2 work4;
-    virtual void evaluateValue(Matrix&, double scale) const;
-    virtual void evaluateValueAndGrad() const;
-    virtual ValAndGrad operator()(int i, int j) const;
-    const double pweight;
-    const double Z;
-  };
 
   /** Constructor. */
   AugmentedNodes(const SimulationInfo&, const Species&,
@@ -260,9 +179,16 @@ private:
   /// Scale factor to avoid overflow or underflow.
   double scale;
   /// Constant.
-  static const double PI;
   /// Density coefficient in front of free particle density matrix.
   const double density;
   const std::vector<const AtomicOrbitalDM*> orbitals;
+  static const double PI;
 };
+
+
+
+
+
+
+
 #endif

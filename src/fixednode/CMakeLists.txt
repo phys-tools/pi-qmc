@@ -1,5 +1,8 @@
 set (sources
     AnisotropicNodes.cc
+    AtomicOrbitalDM.cc
+    Atomic1sDM.cc
+    Atomic2spDM.cc
     AugmentedNodes.cc
     ExcitonNodes.cc
     FixedNodeAction.cc

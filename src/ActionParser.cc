@@ -26,6 +26,9 @@
 #include "Action.h"
 #include "fixednode/AnisotropicNodes.h"
 #include "fixednode/AugmentedNodes.h"
+#include "fixednode/AtomicOrbitalDM.h"
+#include "fixednode/Atomic1sDM.h"
+#include "fixednode/Atomic2spDM.h"
 #include "fixednode/ExcitonNodes.h"
 #include "fixednode/FixedNodeAction.h"
 #include "fixednode/FreeParticleNodes.h"
@@ -697,7 +700,7 @@ Action* ActionParser::parseEwaldActions(const xmlXPathContextPtr& ctxt) {
 }
 
 void ActionParser::parseOrbitalDM(
-    std::vector<const AugmentedNodes::AtomicOrbitalDM*>& orbitals,
+    std::vector<const AtomicOrbitalDM*>& orbitals,
     const Species& fSpecies, const xmlXPathContextPtr& ctxt) {
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
   int norb=obj->nodesetval->nodeNr;
@@ -714,11 +717,11 @@ void ActionParser::parseOrbitalDM(
               << " with Z=" << Z << " and weight " << weight << std::endl;
     if (name=="Atomic1s") {
       orbitals.push_back(
-        new AugmentedNodes::Atomic1sDM(Z,ifirst,npart,fSpecies.count,weight));
+        new Atomic1sDM(Z,ifirst,npart,fSpecies.count,weight));
     } else if (name=="Atomic2sp") {
       double pweight=getDoubleAttribute(orbNode,"pweight");
       orbitals.push_back(
-        new AugmentedNodes::Atomic2spDM(Z,ifirst,npart,fSpecies.count,
+        new Atomic2spDM(Z,ifirst,npart,fSpecies.count,
                                         pweight,weight));
     }
   }
@@ -768,7 +771,7 @@ NodeModel* ActionParser::parseNodeModel(const xmlXPathContextPtr& ctxt,
         const bool updates=getBoolAttribute(actNode,"useUpdates");
         const bool useHungarian=getBoolAttribute(actNode,"useHungarian");
         int maxMovers=3;
-        std::vector<const AugmentedNodes::AtomicOrbitalDM*> orbitals;
+        std::vector<const AtomicOrbitalDM*> orbitals;
         parseOrbitalDM(orbitals, species, ctxt);
         nodeModel=new AugmentedNodes(simInfo,species,
             t,maxlevel,updates,maxMovers,orbitals,useHungarian);
