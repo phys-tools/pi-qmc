@@ -611,7 +611,7 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
 std::cout << name << min[idist] << " - " << max[idist] << "  " << nbin << std::endl;
     }
   }
-  delete [] speciesList;
+  //delete [] speciesList;
   return new PairCFEstimator<N>(simInfo,name,speciesList,nspecies,min,max,nbin,dist,mpi);
 }
 
