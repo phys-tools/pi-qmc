@@ -31,6 +31,9 @@ if(GTEST_FOUND)
 
     add_executable(fixedNodeTests
         AugmentedNodesTest.cc
+        Atomic1sDMTest.cc
+        ${SRC_DIR}/fixednode/AtomicOrbitalDM.cc
+        ${SRC_DIR}/fixednode/Atomic1sDM.cc
     )
     target_link_libraries(fixedNodeTests ${GTEST_BOTH_LIBRARIES} -lpthread)
   

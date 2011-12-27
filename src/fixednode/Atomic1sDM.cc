@@ -7,7 +7,9 @@ Atomic1sDM::Atomic1sDM(
   : AtomicOrbitalDM(ifirst, npart, nfermion, weight),
     nfermion(nfermion), coef(sqrt(weight*Z*Z*Z/PI)),
     work1(nfermion,npart), work2(nfermion,npart), Z(Z) {
-  std::cout << "1s: Z="<<Z<<", "<<weight<<", "<<ifirst << std::endl;
+}
+
+Atomic1sDM::~Atomic1sDM() {
 }
 
 void

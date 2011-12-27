@@ -8,6 +8,7 @@
 class Atomic1sDM : public AtomicOrbitalDM {
 public:
     Atomic1sDM(double Z, int ifirst, int npart, int nfermion, double weight);
+    virtual ~Atomic1sDM();
     const int nfermion;
     /// Coefficient before the exponential, @f$ C = \sqrt{Z^3/\pi} @f$.
     const double coef;
