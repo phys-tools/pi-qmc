@@ -55,8 +55,8 @@ public:
       const IVec &nbin, const DistArray &dist, int ispin, 
       ModelState& modelState, MPIManager *mpi) 
     : DensityEstimator(simInfo, name, spec, min, max, nbin, dist, mpi),
-      spinState(dynamic_cast<SpinModelState&>(modelState).getSpinState()),
-      ispin(ispin) {
+      ispin(ispin),
+      spinState(dynamic_cast<SpinModelState&>(modelState).getSpinState()) {
   }
 
   /// Virtual destructor.
