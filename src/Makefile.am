@@ -286,6 +286,7 @@ noinst_HEADERS = \
     SpinChargeEstimator.h \
     SpinModelSampler.h \
     SpinModelState.h \
+    SpinChoiceDensityEstimator.h \
     SpinChoicePCFEstimator.h \
     SpinStatePermutationChooser.h \
     SpringAction.h \

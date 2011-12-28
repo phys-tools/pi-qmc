@@ -71,17 +71,18 @@ public:
   /// Evaluate for Paths configuration.
   virtual void evaluate(const Paths& paths);
 
-private:
+protected:
   const Vec min;
   const Vec deltaInv;
   const IVec nbin;
   const DistArray dist;
-  SuperCell cell;
+  int ifirst, npart;
   ArrayN temp;
+private:
+  SuperCell cell;
 #ifdef ENABLE_MPI
   ArrayN mpiBuffer;
 #endif
-  int ifirst, npart;
   MPIManager *mpi;
 };
 #endif

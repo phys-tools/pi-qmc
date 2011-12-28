@@ -32,6 +32,7 @@
 #include "ConductanceEstimator.h"
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
+#include "SpinChoiceDensityEstimator.h"
 #include "DensCountEstimator.h"
 #include "DiamagneticEstimator.h"
 #include "DynamicPCFEstimator.h"
@@ -310,7 +311,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
                            useSpeciesTensor,idim,useCharge,mpi,norder));
     }
     if (name=="DensityEstimator" || name=="DensCountEstimator"||
-        name=="DensDensEstimator" || name=="CountCountEstimator") {
+        name=="DensDensEstimator" || name=="CountCountEstimator"||
+	name=="SpinChoiceDensityEstimator") {
       //bool useCharge=getBoolAttribute(estNode,"useCharge");
       std::string species=getStringAttribute(estNode,"species");
       const Species *spec = 0;
@@ -358,6 +360,13 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (name=="DensityEstimator") {
         manager->add(new DensityEstimator(simInfo,estName,spec,
                                           min,max,nbin,dist, mpi));
+      } else if (name=="SpinChoiceDensityEstimator") {
+	std::string spin = getStringAttribute(estNode,"spin");
+	int ispin = 0; 
+	estName = "rhoeup";
+	if (spin=="down") {ispin = 1; estName = "rhoedn";}
+	manager->add(new SpinChoiceDensityEstimator(simInfo,estName,spec,min,
+	              max,nbin,dist,ispin,actionChoice->getModelState(),mpi));
       } else if (name=="DensDensEstimator") {
         DensDensEstimator::IVecN nbinN;
         int nfreq=getIntAttribute(estNode,"nfreq");
