@@ -39,11 +39,12 @@ DensityEstimator::DensityEstimator(const SimulationInfo& simInfo,
     const DistArray &dist, MPIManager *mpi) 
   : BlitzArrayBlkdEst<NDIM>(name,"array/density",nbin,false),
     min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
-    cell(*simInfo.getSuperCell()),temp(nbin),
+    ifirst(spec->ifirst), npart(spec->count), temp(nbin),
+    cell(*simInfo.getSuperCell()),
 #ifdef ENABLE_MPI
     mpiBuffer(nbin),
 #endif 
-    ifirst(spec->ifirst), npart(spec->count), mpi(mpi) {
+    mpi(mpi) {
   scale=new Vec((max-min)/nbin);
   origin=new Vec(min);
   value=0.;
