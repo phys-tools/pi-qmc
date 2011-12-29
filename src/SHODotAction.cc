@@ -27,11 +27,12 @@
 #include "Species.h"
 
 SHODotAction::SHODotAction(double tau, double t, double v0,
-                           double omega, const Species &species)
+                           double omega, double z, const Species &species)
   : tau(tau), t(t), v0(v0), k(species.mass*omega*omega),
-    ifirst(species.ifirst), npart(species.count) {
+    ifirst(species.ifirst), npart(species.count), z(z) {
 std::cout << "SHODotAction: " << species << std::endl;
-std::cout << "thick,v0,mw2: " << t << "," << v0 << "," << k << std::endl;
+std::cout << "thick,v0,mw2,z: " << t << "," << v0 << "," << k 
+   << ", " << z << std::endl;
 }
 
 double SHODotAction::getActionDifference(const MultiLevelSampler& sampler,
@@ -56,18 +57,18 @@ double SHODotAction::getActionDifference(const MultiLevelSampler& sampler,
       cell.pbc(delta);
 #if NDIM==3
       deltaAction+=ktstride*(delta[0]*delta[0]+delta[1]*delta[1]);
-      deltaAction+=(fabs(delta[2])>0.5*t)?v0*tau*nStride:0;
+      deltaAction+=(fabs(delta[2]-z)>0.5*t)?v0*tau*nStride:0;
 #else
-      deltaAction+=(fabs(delta[0])>0.5*t)?v0*tau*nStride:0;
+      deltaAction+=(fabs(delta[0]-z)>0.5*t)?v0*tau*nStride:0;
 #endif
       // Subtract action for old beads.
       delta=sectionBeads(i,islice);
       cell.pbc(delta);
 #if NDIM==3
       deltaAction-=ktstride*(delta[0]*delta[0]+delta[1]*delta[1]);
-      deltaAction-=(fabs(delta[2])>0.5*t)?v0*tau*nStride:0;
+      deltaAction-=(fabs(delta[2]-z)>0.5*t)?v0*tau*nStride:0;
 #else
-      deltaAction-=(fabs(delta[0])>0.5*t)?v0*tau*nStride:0;
+      deltaAction-=(fabs(delta[0]-z)>0.5*t)?v0*tau*nStride:0;
 #endif
     }
   }
@@ -85,9 +86,9 @@ void SHODotAction::getBeadAction(const Paths& paths, int ipart, int islice,
   Vec delta=paths(ipart,islice);
 #if NDIM==3
   utau=0.5*k*(delta[0]*delta[0]+delta[1]*delta[1]);
-  utau+=(fabs(delta[2])>0.5*t)?v0:0;
+  utau+=(fabs(delta[2]-z)>0.5*t)?v0:0;
 #else
-  utau=(fabs(delta[0])>0.5*t)?v0:0;
+  utau=(fabs(delta[0]-z)>0.5*t)?v0:0;
 #endif
   u=utau*tau;
 }

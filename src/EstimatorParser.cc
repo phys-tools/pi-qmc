@@ -344,6 +344,9 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       Vec min,max;
       if (dist.size()==0) {
         nbin = getIVecAttribute(estNode,"n");
+        for (int idim = 0; idim < NDIM; ++ idim) {
+            if (nbin(idim)==0) nbin(idim)=1;
+        }
         double a = getLengthAttribute(estNode,"a");
         min=-0.5*a*nbin;
         max=0.5*a*nbin;

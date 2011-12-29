@@ -370,12 +370,13 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       continue;
     } else if (name=="SHODotAction") {
       double t=getLengthAttribute(actNode,"thickness");
+      double z=getLengthAttribute(actNode,"z");
       double v0=getEnergyAttribute(actNode,"v0");
       double omega=getEnergyAttribute(actNode,"omega");
       std::string specName=getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
       composite->addAction(
-        new SHODotAction(simInfo.getTau(),t,v0,omega,species));
+        new SHODotAction(simInfo.getTau(),t,v0,omega,z,species));
       continue;
     } else if (name=="DotGeomAction") {
       composite->addAction(new DotGeomAction(simInfo.getTau()));

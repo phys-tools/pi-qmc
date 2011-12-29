@@ -32,7 +32,8 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor by providing the timestep tau, thickness t, potenial
   /// v0 and spring constant k.
-  SHODotAction(double tau, double t, double v0, double omega, const Species&);
+  SHODotAction(double tau, double t, double v0, double omega, 
+    double z, const Species&);
   /// Virtual destructor.
   virtual ~SHODotAction() {}
   /// Calculate the difference in action.
@@ -54,6 +55,7 @@ private:
   const double v0;
   /// The spring constant.
   const double k;
+  const double z;
   /// The first particle and particle count for this species.
   const int ifirst, npart;
 };
