@@ -147,8 +147,7 @@ pi_SOURCES = \
     XMLParser.cc \
     XMLUnitParser.cc \
     XMLWriter.cc \
-    main.cc \
-    assndx.f
+    main.cc
 noinst_HEADERS = \
     Action.h \
     ActionChoice.h \

@@ -17,7 +17,8 @@ libfixednode_la_SOURCES = \
     SHONodes.cc \
     SHORealNodes.cc \
     SpinChoiceFixedNodeAction.cc \
-    WireNodes.cc
+    WireNodes.cc \
+    assndx.f
 noinst_HEADERS = \
     AnisotropicNodes.h \
     AtomicOrbitalDM.h \

@@ -65,7 +65,7 @@ am_libfixednode_la_OBJECTS = libfixednode_la-AnisotropicNodes.lo \
 	libfixednode_la-NodeModel.lo libfixednode_la-NodeTester.lo \
 	libfixednode_la-SHONodes.lo libfixednode_la-SHORealNodes.lo \
 	libfixednode_la-SpinChoiceFixedNodeAction.lo \
-	libfixednode_la-WireNodes.lo
+	libfixednode_la-WireNodes.lo assndx.lo
 libfixednode_la_OBJECTS = $(am_libfixednode_la_OBJECTS)
 libfixednode_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
@@ -83,6 +83,13 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libfixednode_la_SOURCES)
 DIST_SOURCES = $(libfixednode_la_SOURCES)
@@ -242,7 +249,8 @@ libfixednode_la_SOURCES = \
     SHONodes.cc \
     SHORealNodes.cc \
     SpinChoiceFixedNodeAction.cc \
-    WireNodes.cc
+    WireNodes.cc \
+    assndx.f
 
 noinst_HEADERS = \
     AnisotropicNodes.h \
@@ -266,7 +274,7 @@ noinst_HEADERS = \
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cc .lo .o .obj
+.SUFFIXES: .cc .f .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -472,6 +480,15 @@ libfixednode_la-WireNodes.lo: WireNodes.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WireNodes.cc' object='libfixednode_la-WireNodes.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libfixednode_la_CXXFLAGS) $(CXXFLAGS) -c -o libfixednode_la-WireNodes.lo `test -f 'WireNodes.cc' || echo '$(srcdir)/'`WireNodes.cc
+
+.f.o:
+	$(F77COMPILE) -c -o $@ $<
+
+.f.obj:
+	$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.f.lo:
+	$(LTF77COMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo

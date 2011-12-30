@@ -147,7 +147,6 @@ set (sources
     XMLParser.cc
     XMLUnitParser.cc
     XMLWriter.cc
-    assndx.f
 )
 
 add_executable(pi ${sources} main.cc)

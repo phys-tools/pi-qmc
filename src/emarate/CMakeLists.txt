@@ -5,3 +5,5 @@ set (sources
 )
 
 add_library(emarate STATIC ${sources})
+
+add_subdirectory(test)

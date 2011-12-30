@@ -24,6 +24,10 @@ class Paths;
 #include <blitz/array.h>
 #include <typeinfo>
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 /// Virtual base class for calculating the action.
 /// Action objects can compute differences in action from
 /// a MultiLevelSampler, the total action, and the action and
