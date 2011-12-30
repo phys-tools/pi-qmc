@@ -36,7 +36,7 @@
 #include "DoubleDisplaceMoveSampler.h"
 #include "ModelSampler.h"
 #include "SpinModelSampler.h"
-#include "EMARateMover.h"
+#include "emarate/EMARateMover.h"
 #include "EnumeratedModelState.h"
 #include "spin/SpinMover.h"
 #include "spin/FreeSpinMover.h"

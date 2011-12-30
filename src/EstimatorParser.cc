@@ -38,7 +38,7 @@
 #include "DynamicPCFEstimator.h"
 #include "CountCountEstimator.h"
 #include "Distance.h"
-#include "EMARateEstimator.h"
+#include "emarate/EMARateEstimator.h"
 #include "FreeEnergyEstimator.h"
 #include "PairDistance.h"
 #include "CoulombEnergyEstimator.h"

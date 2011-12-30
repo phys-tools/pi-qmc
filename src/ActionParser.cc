@@ -85,7 +85,7 @@
 #include "PairIntegrator.h"
 //#include "GrapheneAction.h"
 #include "WellImageAction.h"
-#include "EMARateAction.h"
+#include "emarate/EMARateAction.h"
 #include "Species.h"
 #include <iostream>
 #include <cstdlib>

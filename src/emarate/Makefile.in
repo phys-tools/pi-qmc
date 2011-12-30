@@ -35,7 +35,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = src/demo
+subdir = src/emarate
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -51,13 +51,13 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libdemo_la_LIBADD =
-am_libdemo_la_OBJECTS = libdemo_la-Demo.lo libdemo_la-HAtomDemo.lo \
-	libdemo_la-HeAtomDemo.lo libdemo_la-SHODemo.lo \
-	libdemo_la-SpinDemo.lo libdemo_la-WireDemo.lo
-libdemo_la_OBJECTS = $(am_libdemo_la_OBJECTS)
-libdemo_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libdemo_la_CXXFLAGS) \
+libemarate_la_LIBADD =
+am_libemarate_la_OBJECTS = libemarate_la-EMARateAction.lo \
+	libemarate_la-EMARateEstimator.lo \
+	libemarate_la-EMARateMover.lo
+libemarate_la_OBJECTS = $(am_libemarate_la_OBJECTS)
+libemarate_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libemarate_la_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
@@ -72,8 +72,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libdemo_la_SOURCES)
-DIST_SOURCES = $(libdemo_la_SOURCES)
+SOURCES = $(libemarate_la_SOURCES)
+DIST_SOURCES = $(libemarate_la_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -211,23 +211,17 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-noinst_LTLIBRARIES = libdemo.la
-libdemo_la_CXXFLAGS = -I$(top_srcdir)
-libdemo_la_SOURCES = \
-    Demo.cc \
-    HAtomDemo.cc \
-    HeAtomDemo.cc \
-    SHODemo.cc \
-    SpinDemo.cc \
-    WireDemo.cc
+noinst_LTLIBRARIES = libemarate.la
+libemarate_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libemarate_la_SOURCES = \
+    EMARateAction.cc \
+    EMARateEstimator.cc \
+    EMARateMover.cc
 
 noinst_HEADERS = \
-    Demo.h \
-    HAtomDemo.h \
-    HeAtomDemo.h \
-    SHODemo.h \
-    SpinDemo.h \
-    WireDemo.h
+    EMARateAction.h \
+    EMARateEstimator.h \
+    EMARateMover.h
 
 all: all-am
 
@@ -242,9 +236,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/demo/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/emarate/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu src/demo/Makefile
+	  $(AUTOMAKE) --gnu src/emarate/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -272,8 +266,8 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libdemo.la: $(libdemo_la_OBJECTS) $(libdemo_la_DEPENDENCIES) 
-	$(libdemo_la_LINK)  $(libdemo_la_OBJECTS) $(libdemo_la_LIBADD) $(LIBS)
+libemarate.la: $(libemarate_la_OBJECTS) $(libemarate_la_DEPENDENCIES) 
+	$(libemarate_la_LINK)  $(libemarate_la_OBJECTS) $(libemarate_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -281,12 +275,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-Demo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-HAtomDemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-HeAtomDemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-SHODemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-SpinDemo.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libdemo_la-WireDemo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libemarate_la-EMARateAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libemarate_la-EMARateEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libemarate_la-EMARateMover.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -309,47 +300,26 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-libdemo_la-Demo.lo: Demo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-Demo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-Demo.Tpo -c -o libdemo_la-Demo.lo `test -f 'Demo.cc' || echo '$(srcdir)/'`Demo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-Demo.Tpo $(DEPDIR)/libdemo_la-Demo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Demo.cc' object='libdemo_la-Demo.lo' libtool=yes @AMDEPBACKSLASH@
+libemarate_la-EMARateAction.lo: EMARateAction.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libemarate_la_CXXFLAGS) $(CXXFLAGS) -MT libemarate_la-EMARateAction.lo -MD -MP -MF $(DEPDIR)/libemarate_la-EMARateAction.Tpo -c -o libemarate_la-EMARateAction.lo `test -f 'EMARateAction.cc' || echo '$(srcdir)/'`EMARateAction.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libemarate_la-EMARateAction.Tpo $(DEPDIR)/libemarate_la-EMARateAction.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EMARateAction.cc' object='libemarate_la-EMARateAction.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-Demo.lo `test -f 'Demo.cc' || echo '$(srcdir)/'`Demo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libemarate_la_CXXFLAGS) $(CXXFLAGS) -c -o libemarate_la-EMARateAction.lo `test -f 'EMARateAction.cc' || echo '$(srcdir)/'`EMARateAction.cc
 
-libdemo_la-HAtomDemo.lo: HAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-HAtomDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-HAtomDemo.Tpo -c -o libdemo_la-HAtomDemo.lo `test -f 'HAtomDemo.cc' || echo '$(srcdir)/'`HAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-HAtomDemo.Tpo $(DEPDIR)/libdemo_la-HAtomDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HAtomDemo.cc' object='libdemo_la-HAtomDemo.lo' libtool=yes @AMDEPBACKSLASH@
+libemarate_la-EMARateEstimator.lo: EMARateEstimator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libemarate_la_CXXFLAGS) $(CXXFLAGS) -MT libemarate_la-EMARateEstimator.lo -MD -MP -MF $(DEPDIR)/libemarate_la-EMARateEstimator.Tpo -c -o libemarate_la-EMARateEstimator.lo `test -f 'EMARateEstimator.cc' || echo '$(srcdir)/'`EMARateEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libemarate_la-EMARateEstimator.Tpo $(DEPDIR)/libemarate_la-EMARateEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EMARateEstimator.cc' object='libemarate_la-EMARateEstimator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-HAtomDemo.lo `test -f 'HAtomDemo.cc' || echo '$(srcdir)/'`HAtomDemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libemarate_la_CXXFLAGS) $(CXXFLAGS) -c -o libemarate_la-EMARateEstimator.lo `test -f 'EMARateEstimator.cc' || echo '$(srcdir)/'`EMARateEstimator.cc
 
-libdemo_la-HeAtomDemo.lo: HeAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-HeAtomDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-HeAtomDemo.Tpo -c -o libdemo_la-HeAtomDemo.lo `test -f 'HeAtomDemo.cc' || echo '$(srcdir)/'`HeAtomDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-HeAtomDemo.Tpo $(DEPDIR)/libdemo_la-HeAtomDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='HeAtomDemo.cc' object='libdemo_la-HeAtomDemo.lo' libtool=yes @AMDEPBACKSLASH@
+libemarate_la-EMARateMover.lo: EMARateMover.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libemarate_la_CXXFLAGS) $(CXXFLAGS) -MT libemarate_la-EMARateMover.lo -MD -MP -MF $(DEPDIR)/libemarate_la-EMARateMover.Tpo -c -o libemarate_la-EMARateMover.lo `test -f 'EMARateMover.cc' || echo '$(srcdir)/'`EMARateMover.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libemarate_la-EMARateMover.Tpo $(DEPDIR)/libemarate_la-EMARateMover.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EMARateMover.cc' object='libemarate_la-EMARateMover.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-HeAtomDemo.lo `test -f 'HeAtomDemo.cc' || echo '$(srcdir)/'`HeAtomDemo.cc
-
-libdemo_la-SHODemo.lo: SHODemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-SHODemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-SHODemo.Tpo -c -o libdemo_la-SHODemo.lo `test -f 'SHODemo.cc' || echo '$(srcdir)/'`SHODemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-SHODemo.Tpo $(DEPDIR)/libdemo_la-SHODemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SHODemo.cc' object='libdemo_la-SHODemo.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-SHODemo.lo `test -f 'SHODemo.cc' || echo '$(srcdir)/'`SHODemo.cc
-
-libdemo_la-SpinDemo.lo: SpinDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-SpinDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-SpinDemo.Tpo -c -o libdemo_la-SpinDemo.lo `test -f 'SpinDemo.cc' || echo '$(srcdir)/'`SpinDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-SpinDemo.Tpo $(DEPDIR)/libdemo_la-SpinDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SpinDemo.cc' object='libdemo_la-SpinDemo.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-SpinDemo.lo `test -f 'SpinDemo.cc' || echo '$(srcdir)/'`SpinDemo.cc
-
-libdemo_la-WireDemo.lo: WireDemo.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -MT libdemo_la-WireDemo.lo -MD -MP -MF $(DEPDIR)/libdemo_la-WireDemo.Tpo -c -o libdemo_la-WireDemo.lo `test -f 'WireDemo.cc' || echo '$(srcdir)/'`WireDemo.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libdemo_la-WireDemo.Tpo $(DEPDIR)/libdemo_la-WireDemo.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WireDemo.cc' object='libdemo_la-WireDemo.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libdemo_la_CXXFLAGS) $(CXXFLAGS) -c -o libdemo_la-WireDemo.lo `test -f 'WireDemo.cc' || echo '$(srcdir)/'`WireDemo.cc
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libemarate_la_CXXFLAGS) $(CXXFLAGS) -c -o libemarate_la-EMARateMover.lo `test -f 'EMARateMover.cc' || echo '$(srcdir)/'`EMARateMover.cc
 
 mostlyclean-libtool:
 	-rm -f *.lo

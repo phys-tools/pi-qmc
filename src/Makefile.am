@@ -1,8 +1,9 @@
-SUBDIRS = demo fixednode spin stats
+SUBDIRS = demo emarate fixednode spin stats
 
 bin_PROGRAMS = pi
-pi_DEPENDENCIES = demo/libdemo.la fixednode/ spin/libspin.la stats/libstats.la
-pi_LDADD = -Ldemo -ldemo -Lfixednode -lfixednode -Lspin -lspin -Lstats -lstats
+pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la fixednode/libfixednode.la \
+		spin/libspin.la stats/libstats.la
+pi_LDADD = -Ldemo -ldemo -Lemarate -lemarate -Lfixednode -lfixednode -Lspin -lspin -Lstats -lstats
 pi_SOURCES = \
     ActionChoice.cc \
     ActionParser.cc \
@@ -42,9 +43,6 @@ pi_SOURCES = \
     DynamicPCFEstimator.cc \
     EFieldAction.cc \
     EIndEstimator.cc \
-    EMARateAction.cc \
-    EMARateEstimator.cc \
-    EMARateMover.cc \
     EnumeratedModelState.cc \
     EstimatorParser.cc \
     EwaldAction.cc \
@@ -196,9 +194,6 @@ noinst_HEADERS = \
     DynamicPCFEstimator.h \
     EFieldAction.h \
     EIndEstimator.h \
-    EMARateAction.h \
-    EMARateEstimator.h \
-    EMARateMover.h \
     EnumeratedModelState.h \
     EstimatorParser.h \
     EwaldAction.h \
