@@ -1,12 +1,12 @@
-SUBDIRS = demo emarate fixednode spin stats
+SUBDIRS = demo emarate fixednode parser spin stats
 
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la fixednode/libfixednode.la \
-		spin/libspin.la stats/libstats.la
-pi_LDADD = -Ldemo -ldemo -Lemarate -lemarate -Lfixednode -lfixednode -Lspin -lspin -Lstats -lstats
+		parser/libparser.la spin/libspin.la stats/libstats.la
+pi_LDADD = -Ldemo -ldemo -Lemarate -lemarate -Lfixednode -lfixednode \
+		-Lparser -lparser -Lspin -lspin -Lstats -lstats
 pi_SOURCES = \
     ActionChoice.cc \
-    ActionParser.cc \
     AlternatingParticleChooser.cc \
     AngularMomentumEstimator.cc \
     AperiodicGaussian.cc \
@@ -44,7 +44,6 @@ pi_SOURCES = \
     EFieldAction.cc \
     EIndEstimator.cc \
     EnumeratedModelState.cc \
-    EstimatorParser.cc \
     EwaldAction.cc \
     EwaldCoulombEstimator.cc \
     EwaldImagePairAction.cc \
@@ -67,7 +66,6 @@ pi_SOURCES = \
     ImagePairAction.cc \
     JEstimator.cc \
     JelliumSlab.cc \
-    MainParser.cc \
     Measure.cc \
     MiddleSectionChooser.cc \
     ModelSampler.cc \
@@ -76,7 +74,6 @@ pi_SOURCES = \
     NonZeroSectionChooser.cc \
     OptEwaldSum.cc \
     OpticalLatticeAction.cc \
-    PIMCParser.cc \
     PairAction.cc \
     PairChooser.cc \
     PairDistance.cc \
@@ -110,7 +107,6 @@ pi_SOURCES = \
     SectionChooser.cc \
     SeedRandom.cc \
     SerialPaths.cc \
-    SimInfoParser.cc \
     SimInfoWriter.cc \
     SimpleParticleChooser.cc \
     SimulationInfo.cc \
@@ -144,14 +140,11 @@ pi_SOURCES = \
     WorkerShifter.cc \
     WritePaths.cc \
     WriteProbDensity.cc \
-    XMLParser.cc \
-    XMLUnitParser.cc \
     XMLWriter.cc \
     main.cc
 noinst_HEADERS = \
     Action.h \
     ActionChoice.h \
-    ActionParser.h \
     Algorithm.h \
     AlternatingParticleChooser.h \
     AngularMomentumEstimator.h \
@@ -194,7 +187,6 @@ noinst_HEADERS = \
     EFieldAction.h \
     EIndEstimator.h \
     EnumeratedModelState.h \
-    EstimatorParser.h \
     EwaldAction.h \
     EwaldCoulombEstimator.h \
     EwaldImagePairAction.h \
@@ -219,7 +211,6 @@ noinst_HEADERS = \
     JelliumSlab.h \
     LinkSummable.h \
     Loop.h \
-    MainParser.h \
     Measure.h \
     MiddleSectionChooser.h \
     ModelSampler.h \
@@ -230,7 +221,6 @@ noinst_HEADERS = \
     NonZeroSectionChooser.h \
     OptEwaldSum.h \
     OpticalLatticeAction.h \
-    PIMCParser.h \
     PairAction.h \
     PairCFEstimator.h \
     PairChooser.h \
@@ -267,7 +257,6 @@ noinst_HEADERS = \
     SectionChooser.h \
     SeedRandom.h \
     SerialPaths.h \
-    SimInfoParser.h \
     SimInfoWriter.h \
     SimpleParticleChooser.h \
     SimulationInfo.h \
@@ -303,8 +292,6 @@ noinst_HEADERS = \
     WorkerShifter.h \
     WritePaths.h \
     WriteProbDensity.h \
-    XMLParser.h \
-    XMLUnitParser.h \
     XMLWriter.h \
     ZeroVarDensityEstimator.h \
     gnugetopt.h

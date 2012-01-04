@@ -21,19 +21,20 @@
 #include <mpi.h>
 #endif
 
-#include "MainParser.h"
 #include <iostream>
-#include "Action.h"
-#include "ActionParser.h"
-#include "Algorithm.h"
-#include "stats/MPIManager.h"
-#include "SimInfoParser.h"
-#include "SimulationInfo.h"
-#include "PIMCParser.h"
-#include "stats/EstimatorManager.h"
-#include "EstimatorParser.h"
-#include "spin/MainSpinParser.h"
 #include <ctime>
+
+#include "parser/MainParser.h"
+#include "parser/ActionParser.h"
+#include "parser/SimInfoParser.h"
+#include "parser/PIMCParser.h"
+#include "parser/EstimatorParser.h"
+#include "spin/MainSpinParser.h"
+#include "Action.h"
+#include "Algorithm.h"
+#include "SimulationInfo.h"
+#include "stats/EstimatorManager.h"
+#include "stats/MPIManager.h"
 class ActionChoiceBase;
 
 MainParser::MainParser(const std::string& filename) 

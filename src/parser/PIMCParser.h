@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PIMCParser_h_
 #define __PIMCParser_h_
-#include "XMLUnitParser.h"
+#include "parser/XMLUnitParser.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <vector>

@@ -5,7 +5,7 @@
 
 class MultiLevelSamplerFake : public MultiLevelSamplerInterface {
 public:
-    MultiLevelSamplerFake();
+    MultiLevelSamplerFake(int npart, int nmoving, int nslice);
     virtual ~MultiLevelSamplerFake();
     virtual const Beads<NDIM>& getSectionBeads() const;
     virtual const Beads<NDIM>& getMovingBeads() const;
@@ -14,9 +14,9 @@ public:
     virtual int getFirstSliceIndex() const;
     //virtual const SectionChooser& getSectionChooser() const;
 private:
-    static const int npart = 2;
-    static const int nmoving = 2;
-    static const int nslice = 65;
+    const int npart;
+    const int nmoving;
+    const int nslice;
     Beads<NDIM> *sectionBeads;
     Beads<NDIM> *movingBeads;
     IArray *movingIndex;

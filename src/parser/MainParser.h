@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __MainParser_h_
 #define __MainParser_h_
-#include "XMLParser.h"
+#include "parser/XMLParser.h"
 /** Main parser for PIMC code. 
   * @version $Revision$
   * @author John Shumway */

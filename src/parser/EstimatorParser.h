@@ -18,7 +18,7 @@
 #define __EstimatorParser_h_
 #include <string>
 #include <vector>
-#include "XMLUnitParser.h"
+#include "parser/XMLUnitParser.h"
 #include "PairCFEstimator.h"
 #include "SpinChoicePCFEstimator.h"
 class EstimatorManager;

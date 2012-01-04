@@ -7,8 +7,10 @@
 #include "SuperCell.h"
 #include "SectionChooser.h"
 
-MultiLevelSamplerFake::MultiLevelSamplerFake()
-:   sectionBeads(new Beads<NDIM>(npart, nslice)),
+
+MultiLevelSamplerFake::MultiLevelSamplerFake(int npart, int nmoving, int nslice)
+:   npart(npart), nmoving(nmoving), nslice(nslice),
+    sectionBeads(new Beads<NDIM>(npart, nslice)),
     movingBeads(new Beads<NDIM>(nmoving, nslice)),
     movingIndex(new IArray(nmoving)),
     superCell(new SuperCell(blitz::TinyVector<double, NDIM>(1.0,0))) {
@@ -40,7 +42,6 @@ const MultiLevelSamplerInterface::IArray & MultiLevelSamplerFake::getMovingIndex
 const SuperCell & MultiLevelSamplerFake::getSuperCell() const {
     return *superCell;
 }
-
 
 
 int MultiLevelSamplerFake::getFirstSliceIndex() const {

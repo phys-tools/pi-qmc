@@ -21222,7 +21222,7 @@ fi
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/demo/Makefile src/emarate/Makefile src/fixednode/Makefile src/spin/Makefile src/stats/Makefile doc/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/demo/Makefile src/emarate/Makefile src/fixednode/Makefile src/parser/Makefile src/spin/Makefile src/stats/Makefile doc/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -22434,6 +22434,7 @@ do
     "src/demo/Makefile") CONFIG_FILES="$CONFIG_FILES src/demo/Makefile" ;;
     "src/emarate/Makefile") CONFIG_FILES="$CONFIG_FILES src/emarate/Makefile" ;;
     "src/fixednode/Makefile") CONFIG_FILES="$CONFIG_FILES src/fixednode/Makefile" ;;
+    "src/parser/Makefile") CONFIG_FILES="$CONFIG_FILES src/parser/Makefile" ;;
     "src/spin/Makefile") CONFIG_FILES="$CONFIG_FILES src/spin/Makefile" ;;
     "src/stats/Makefile") CONFIG_FILES="$CONFIG_FILES src/stats/Makefile" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;

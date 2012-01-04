@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __ActionParser_h_
 #define __ActionParser_h_
-#include "XMLUnitParser.h"
+#include "parser/XMLUnitParser.h"
 class Action;
 class DoubleAction;
 class ActionChoiceBase;

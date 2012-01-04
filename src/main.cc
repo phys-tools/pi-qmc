@@ -21,9 +21,9 @@
 #include <mpi.h>
 #endif
 
-#include "MainParser.h"
+#include "parser/MainParser.h"
 #include "Help.h"
-#include <demo/Demo.h>
+#include "demo/Demo.h"
 #if HAVE_GETOPT_H
   #include <getopt.h>
 #else

@@ -1,12 +1,12 @@
 add_subdirectory(demo)
 add_subdirectory(emarate)
 add_subdirectory(fixednode)
+add_subdirectory(parser)
 add_subdirectory(spin)
 add_subdirectory(stats)
 
 set (sources
     ActionChoice.cc
-    ActionParser.cc
     AlternatingParticleChooser.cc
     AngularMomentumEstimator.cc
     AperiodicGaussian.cc
@@ -44,7 +44,6 @@ set (sources
     EFieldAction.cc
     EIndEstimator.cc
     EnumeratedModelState.cc
-    EstimatorParser.cc
     EwaldAction.cc
     EwaldCoulombEstimator.cc
     EwaldImagePairAction.cc
@@ -67,7 +66,6 @@ set (sources
     ImagePairAction.cc
     JelliumSlab.cc
     JEstimator.cc
-    MainParser.cc
     Measure.cc
     MiddleSectionChooser.cc
     ModelSampler.cc
@@ -89,7 +87,6 @@ set (sources
     Permutation.cc
     PermutationChooser.cc
     PermutationEstimator.cc
-    PIMCParser.cc
     PositionEstimator.cc
     PrimAnisSHOAction.cc
     PrimativePairAction.cc
@@ -110,7 +107,6 @@ set (sources
     SHOAction.cc
     SHODotAction.cc
     SHOPhase.cc
-    SimInfoParser.cc
     SimInfoWriter.cc
     SimpleParticleChooser.cc
     SimulationInfo.cc
@@ -144,8 +140,6 @@ set (sources
     WorkerShifter.cc
     WritePaths.cc
     WriteProbDensity.cc
-    XMLParser.cc
-    XMLUnitParser.cc
     XMLWriter.cc
 )
 
@@ -165,7 +159,7 @@ set_target_properties(pi
     PROPERTIES
     LINKER_LANGUAGE CXX)
 
-target_link_libraries(pi demo emarate fixednode spin stats)
+target_link_libraries(pi demo emarate fixednode parser spin stats)
 
 #add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)

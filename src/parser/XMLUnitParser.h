@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __XMLUnitParser_h_
 #define __XMLUnitParser_h_
-#include "XMLParser.h"
+#include "parser/XMLParser.h"
 #include <string>
 class Units;
 
