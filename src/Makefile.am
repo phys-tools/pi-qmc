@@ -1,10 +1,12 @@
 SUBDIRS = demo emarate fixednode parser spin stats
 
 bin_PROGRAMS = pi
-pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la fixednode/libfixednode.la \
-		parser/libparser.la spin/libspin.la stats/libstats.la
-pi_LDADD = -Ldemo -ldemo -Lemarate -lemarate -Lfixednode -lfixednode \
-		-Lparser -lparser -Lspin -lspin -Lstats -lstats
+pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
+    fixednode/libfixednode.la \
+    parser/libparser.la spin/libspin.la stats/libstats.la
+pi_LDADD = -Lparser -lparser -Ldemo -ldemo -Lspin -lspin -Lstats -lstats \
+  -Lemarate -lemarate -Lfixednode -lfixednode 
+
 pi_SOURCES = \
     ActionChoice.cc \
     AlternatingParticleChooser.cc \

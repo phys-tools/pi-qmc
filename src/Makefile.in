@@ -316,11 +316,12 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = demo emarate fixednode parser spin stats
-pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la fixednode/libfixednode.la \
-		parser/libparser.la spin/libspin.la stats/libstats.la
+pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
+    fixednode/libfixednode.la \
+    parser/libparser.la spin/libspin.la stats/libstats.la
 
-pi_LDADD = -Ldemo -ldemo -Lemarate -lemarate -Lfixednode -lfixednode \
-		-Lparser -lparser -Lspin -lspin -Lstats -lstats
+pi_LDADD = -Lparser -lparser -Ldemo -ldemo -Lspin -lspin -Lstats -lstats \
+  -Lemarate -lemarate -Lfixednode -lfixednode 
 
 pi_SOURCES = \
     ActionChoice.cc \
