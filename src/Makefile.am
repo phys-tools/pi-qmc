@@ -4,9 +4,9 @@ bin_PROGRAMS = pi
 pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
     fixednode/libfixednode.la \
     parser/libparser.la spin/libspin.la stats/libstats.la
-pi_LDADD = -Lparser -lparser -Ldemo -ldemo -Lspin -lspin -Lstats -lstats \
-  -Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode 
-
+pi_LDADD = -Lparser -lparser  \
+  -Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
+  -Ldemo -ldemo -Lspin -lspin -Lstats -lstats
 pi_SOURCES = \
     ActionChoice.cc \
     AngularMomentumEstimator.cc \
