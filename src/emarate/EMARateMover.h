@@ -19,9 +19,9 @@
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
-#include "Mover.h"
-#include "PermutationChooser.h"
-#include "ParticleChooser.h"
+#include "sampler/Mover.h"
+#include "sampler/PermutationChooser.h"
+#include "sampler/ParticleChooser.h"
 class SimulationInfo;
 class PeriodicGaussian;
 /** 

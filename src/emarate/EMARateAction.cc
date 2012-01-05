@@ -21,14 +21,14 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "MultiLevelSampler.h"
-#include "DisplaceMoveSampler.h"
+#include "sampler/MultiLevelSampler.h"
+#include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
 #include "SimulationInfo.h"
 #include "PeriodicGaussian.h"
-#include "SectionChooser.h"
+#include "sampler/SectionChooser.h"
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
   const Species& species1, const Species& species2, double C) 

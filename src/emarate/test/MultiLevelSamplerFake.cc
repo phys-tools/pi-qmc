@@ -2,10 +2,10 @@
 
 #include "Species.h"
 #include "SimulationInfo.h"
-#include "MultiLevelSamplerInterface.h"
+#include "sampler/MultiLevelSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
-#include "SectionChooser.h"
+#include "sampler/SectionChooser.h"
 
 
 MultiLevelSamplerFake::MultiLevelSamplerFake(int npart, int nmoving, int nslice)

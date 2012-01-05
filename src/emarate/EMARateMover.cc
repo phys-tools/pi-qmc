@@ -22,7 +22,7 @@
 #endif
 #include "EMARateMover.h"
 #include "Beads.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "RandomNumGenerator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>

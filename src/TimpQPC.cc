@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "TimpQPC.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"

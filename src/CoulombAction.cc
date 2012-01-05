@@ -18,8 +18,8 @@
 #include <config.h>
 #endif
 #include "CoulombAction.h"
-#include "MultiLevelSampler.h"
-#include "DisplaceMoveSampler.h"
+#include "sampler/MultiLevelSampler.h"
+#include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"

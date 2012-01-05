@@ -25,7 +25,7 @@
 #include "SuperCell.h"
 #include "Paths.h"
 #include "Beads.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)

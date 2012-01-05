@@ -19,7 +19,7 @@
 #endif
 #include "GridPotential.h"
 #include <blitz/tinyvec-et.h>
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "SimulationInfo.h"
 #include "Beads.h"
 #include "Paths.h"

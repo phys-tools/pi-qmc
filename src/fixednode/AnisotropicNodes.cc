@@ -18,9 +18,9 @@
 #include <config.h>
 #endif
 #include "AnisotropicNodes.h"
-#include "DoubleMLSampler.h"
+#include "sampler/DoubleMLSampler.h"
 #include "SimulationInfo.h"
-#include "DoubleSectionChooser.h"
+#include "sampler/DoubleSectionChooser.h"
 #include "Species.h"
 #include "Paths.h"
 #include "Beads.h"

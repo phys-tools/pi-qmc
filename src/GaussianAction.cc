@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "GaussianAction.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"

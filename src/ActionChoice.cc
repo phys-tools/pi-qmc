@@ -18,8 +18,8 @@
 #include <config.h>
 #endif
 #include "ActionChoice.h"
-#include "MultiLevelSampler.h"
-#include "SectionChooser.h"
+#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionChooser.h"
 #include "Paths.h"
 #include "EnumeratedModelState.h"
 

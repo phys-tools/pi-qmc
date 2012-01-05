@@ -26,7 +26,7 @@
 #include "Species.h"
 #include "SuperCell.h"
 #include "Beads.h"
-#include "DoubleMLSampler.h"
+#include "sampler/DoubleMLSampler.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,

@@ -44,8 +44,9 @@ def greeting():
 def check(tagName, outputName):
     print "Testing <%s> estimator tag" % tagName
     createXMLInputFile(tagName);
+    piexe = sys.argv[1]
     try:
-        command  = ["pi3D", "%s.xml" % tagName]
+        command  = [piexe, "%s.xml" % tagName]
         process = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         if exitsWithError(process):
             stderr = process.stderr.read()

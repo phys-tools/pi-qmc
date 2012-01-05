@@ -18,8 +18,8 @@
 #include <config.h>
 #endif
 #include "FreePartNodesNoUpdate.h"
-#include "DoubleMLSampler.h"
-#include "DoubleSectionChooser.h"
+#include "sampler/DoubleMLSampler.h"
+#include "sampler/DoubleSectionChooser.h"
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "Paths.h"

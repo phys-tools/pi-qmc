@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"

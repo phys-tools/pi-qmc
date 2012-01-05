@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "SHOAction.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"

@@ -1,15 +1,14 @@
-SUBDIRS = demo emarate fixednode parser spin stats
+SUBDIRS = demo emarate fixednode parser sampler spin stats
 
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
     fixednode/libfixednode.la \
     parser/libparser.la spin/libspin.la stats/libstats.la
 pi_LDADD = -Lparser -lparser -Ldemo -ldemo -Lspin -lspin -Lstats -lstats \
-  -Lemarate -lemarate -Lfixednode -lfixednode 
+  -Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode 
 
 pi_SOURCES = \
     ActionChoice.cc \
-    AlternatingParticleChooser.cc \
     AngularMomentumEstimator.cc \
     AperiodicGaussian.cc \
     BeadFactory.cc \
@@ -18,7 +17,6 @@ pi_SOURCES = \
     BoxEstimator.cc \
     CaoBerneAction.cc \
     Collect.cc \
-    CollectiveMover.cc \
     CompositeAction.cc \
     CompositeDoubleAction.cc \
     ConditionalDensityGrid.cc \
@@ -29,19 +27,14 @@ pi_SOURCES = \
     CoulombEnergyEstimator.cc \
     CountCountEstimator.cc \
     CubicLattice.cc \
-    DampedFreeTensorMover.cc \
     DensCountEstimator.cc \
     DensDensEstimator.cc \
     DensityEstimator.cc \
     DiamagneticEstimator.cc \
     DipoleMomentEstimator.cc \
-    DisplaceMoveSampler.cc \
     DotGeomAction.cc \
     DoubleActionChoice.cc \
-    DoubleDisplaceMoveSampler.cc \
-    DoubleMLSampler.cc \
     DoubleParallelPaths.cc \
-    DoubleSectionChooser.cc \
     DynamicPCFEstimator.cc \
     EFieldAction.cc \
     EIndEstimator.cc \
@@ -50,12 +43,8 @@ pi_SOURCES = \
     EwaldCoulombEstimator.cc \
     EwaldImagePairAction.cc \
     EwaldSum.cc \
-    ExchangeMover.cc \
     FixedPhaseAction.cc \
     FreeEnergyEstimator.cc \
-    FreeMover.cc \
-    FreeMoverPBC.cc \
-    FreeTensorMover.cc \
     FrequencyEstimator.cc \
     GateAction.cc \
     GaussianAction.cc \
@@ -64,30 +53,21 @@ pi_SOURCES = \
     GridPotential.cc \
     Hungarian.cc \
     HyperbolicAction.cc \
-    HyperbolicMover.cc \
     ImagePairAction.cc \
     JEstimator.cc \
     JelliumSlab.cc \
     Measure.cc \
-    MiddleSectionChooser.cc \
-    ModelSampler.cc \
-    MultiLevelSampler.cc \
-    MultiSpeciesParticleChooser.cc \
-    NonZeroSectionChooser.cc \
     OptEwaldSum.cc \
     OpticalLatticeAction.cc \
     PairAction.cc \
-    PairChooser.cc \
     PairDistance.cc \
     PairIntegrator.cc \
     PairPotential.cc \
     ParallelPaths.cc \
-    ParticleChooser.cc \
     PathReader.cc \
     Paths.cc \
     PeriodicGaussian.cc \
     Permutation.cc \
-    PermutationChooser.cc \
     PermutationEstimator.cc \
     PositionEstimator.cc \
     PrimAnisSHOAction.cc \
@@ -100,28 +80,22 @@ pi_SOURCES = \
     ProbDensityGrid.cc \
     QPCAction.cc \
     RandomNumGenerator.cc \
-    RandomPermutationChooser.cc \
     RingGateAction.cc \
     RingLattice.cc \
     SHOAction.cc \
     SHODotAction.cc \
     SHOPhase.cc \
-    SectionChooser.cc \
     SeedRandom.cc \
     SerialPaths.cc \
     SimInfoWriter.cc \
-    SimpleParticleChooser.cc \
     SimulationInfo.cc \
     SKOmegaEstimator.cc \
     SmoothedGridPotential.cc \
     Species.cc \
-    SpeciesParticleChooser.cc \
     SphereAction.cc \
     Spin4DPhase.cc \
     SpinChargeEstimator.cc \
-    SpinModelSampler.cc \
     SpinModelState.cc \
-    SpinStatePermutationChooser.cc \
     SpringAction.cc \
     SpringTensorAction.cc \
     StillWebAction.cc \
@@ -130,12 +104,9 @@ pi_SOURCES = \
     ThermoEnergyEstimator.cc \
     TimpQPC.cc \
     TradEwaldSum.cc \
-    TwoPairChooser.cc \
     TwoQDAction.cc \
-    UniformMover.cc \
     VIndEstimator.cc \
     VirialEnergyEstimator.cc \
-    WalkingChooser.cc \
     WellImageAction.cc \
     WindingEstimator.cc \
     WireEwald.cc \
@@ -148,7 +119,6 @@ noinst_HEADERS = \
     Action.h \
     ActionChoice.h \
     Algorithm.h \
-    AlternatingParticleChooser.h \
     AngularMomentumEstimator.h \
     AperiodicGaussian.h \
     BeadFactory.h \
@@ -158,7 +128,6 @@ noinst_HEADERS = \
     BoxEstimator.h \
     CaoBerneAction.h \
     Collect.h \
-    CollectiveMover.h \
     CompositeAction.h \
     CompositeAlgorithm.h \
     CompositeDoubleAction.h \
@@ -170,21 +139,16 @@ noinst_HEADERS = \
     CoulombEnergyEstimator.h \
     CountCountEstimator.h \
     CubicLattice.h \
-    DampedFreeTensorMover.h \
     DensCountEstimator.h \
     DensDensEstimator.h \
     DensityEstimator.h \
     DiamagneticEstimator.h \
     DipoleMomentEstimator.h \
-    DisplaceMoveSampler.h \
     Distance.h \
     DotGeomAction.h \
     DoubleAction.h \
     DoubleActionChoice.h \
-    DoubleDisplaceMoveSampler.h \
-    DoubleMLSampler.h \
     DoubleParallelPaths.h \
-    DoubleSectionChooser.h \
     DynamicPCFEstimator.h \
     EFieldAction.h \
     EIndEstimator.h \
@@ -193,12 +157,8 @@ noinst_HEADERS = \
     EwaldCoulombEstimator.h \
     EwaldImagePairAction.h \
     EwaldSum.h \
-    ExchangeMover.h \
     FixedPhaseAction.h \
     FreeEnergyEstimator.h \
-    FreeMover.h \
-    FreeMoverPBC.h \
-    FreeTensorMover.h \
     FrequencyEstimator.h \
     GateAction.h \
     GaussianAction.h \
@@ -207,35 +167,25 @@ noinst_HEADERS = \
     GridPotential.h \
     Help.h \
     HyperbolicAction.h \
-    HyperbolicMover.h \
     ImagePairAction.h \
     JEstimator.h \
     JelliumSlab.h \
     LinkSummable.h \
     Loop.h \
     Measure.h \
-    MiddleSectionChooser.h \
-    ModelSampler.h \
     ModelState.h \
-    Mover.h \
-    MultiLevelSampler.h \
-    MultiSpeciesParticleChooser.h \
-    NonZeroSectionChooser.h \
     OptEwaldSum.h \
     OpticalLatticeAction.h \
     PairAction.h \
     PairCFEstimator.h \
-    PairChooser.h \
     PairDistance.h \
     PairIntegrator.h \
     PairPotential.h \
     ParallelPaths.h \
-    ParticleChooser.h \
     PathReader.h \
     Paths.h \
     PeriodicGaussian.h \
     Permutation.h \
-    PermutationChooser.h \
     PermutationEstimator.h \
     PhaseModel.h \
     PositionEstimator.h \
@@ -250,30 +200,24 @@ noinst_HEADERS = \
     ProbDensityGrid.h \
     QPCAction.h \
     RandomNumGenerator.h \
-    RandomPermutationChooser.h \
     RingGateAction.h \
     RingLattice.h \
     SHOAction.h \
     SHODotAction.h \
     SHOPhase.h \
-    SectionChooser.h \
     SeedRandom.h \
     SerialPaths.h \
     SimInfoWriter.h \
-    SimpleParticleChooser.h \
     SimulationInfo.h \
     SKOmegaEstimator.h \
     SmoothedGridPotential.h \
     Species.h \
-    SpeciesParticleChooser.h \
     SphereAction.h \
     Spin4DPhase.h \
     SpinChargeEstimator.h \
-    SpinModelSampler.h \
     SpinModelState.h \
     SpinChoiceDensityEstimator.h \
     SpinChoicePCFEstimator.h \
-    SpinStatePermutationChooser.h \
     SpringAction.h \
     SpringTensorAction.h \
     StillWebAction.h \
@@ -282,12 +226,9 @@ noinst_HEADERS = \
     ThermoEnergyEstimator.h \
     TimpQPC.h \
     TradEwaldSum.h \
-    TwoPairChooser.h \
     TwoQDAction.h \
-    UniformMover.h \
     VIndEstimator.h \
     VirialEnergyEstimator.h \
-    WalkingChooser.h \
     WellImageAction.h \
     WindingEstimator.h \
     WireEwald.h \

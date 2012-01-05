@@ -2,12 +2,12 @@ add_subdirectory(demo)
 add_subdirectory(emarate)
 add_subdirectory(fixednode)
 add_subdirectory(parser)
+add_subdirectory(sampler)
 add_subdirectory(spin)
 add_subdirectory(stats)
 
 set (sources
     ActionChoice.cc
-    AlternatingParticleChooser.cc
     AngularMomentumEstimator.cc
     AperiodicGaussian.cc
     BeadFactory.cc
@@ -16,7 +16,6 @@ set (sources
     BoxEstimator.cc
     CaoBerneAction.cc
     Collect.cc
-    CollectiveMover.cc
     CompositeAction.cc
     CompositeDoubleAction.cc
     ConditionalDensityGrid.cc
@@ -27,19 +26,14 @@ set (sources
     CoulombEnergyEstimator.cc
     CountCountEstimator.cc
     CubicLattice.cc
-    DampedFreeTensorMover.cc
     DensCountEstimator.cc
     DensDensEstimator.cc
     DensityEstimator.cc
     DiamagneticEstimator.cc
     DipoleMomentEstimator.cc
-    DisplaceMoveSampler.cc
     DotGeomAction.cc
     DoubleActionChoice.cc
-    DoubleDisplaceMoveSampler.cc
-    DoubleMLSampler.cc
     DoubleParallelPaths.cc
-    DoubleSectionChooser.cc
     DynamicPCFEstimator.cc
     EFieldAction.cc
     EIndEstimator.cc
@@ -48,12 +42,8 @@ set (sources
     EwaldCoulombEstimator.cc
     EwaldImagePairAction.cc
     EwaldSum.cc
-    ExchangeMover.cc
     FixedPhaseAction.cc
     FreeEnergyEstimator.cc
-    FreeMover.cc
-    FreeMoverPBC.cc
-    FreeTensorMover.cc
     FrequencyEstimator.cc
     GateAction.cc
     GaussianAction.cc
@@ -62,30 +52,21 @@ set (sources
     GridPotential.cc
     Hungarian.cc
     HyperbolicAction.cc
-    HyperbolicMover.cc
     ImagePairAction.cc
     JelliumSlab.cc
     JEstimator.cc
     Measure.cc
-    MiddleSectionChooser.cc
-    ModelSampler.cc
-    MultiLevelSampler.cc
-    MultiSpeciesParticleChooser.cc
-    NonZeroSectionChooser.cc
     OptEwaldSum.cc
     OpticalLatticeAction.cc
     PairAction.cc
-    PairChooser.cc
     PairDistance.cc
     PairIntegrator.cc
     PairPotential.cc
     ParallelPaths.cc
-    ParticleChooser.cc
     PathReader.cc
     Paths.cc
     PeriodicGaussian.cc
     Permutation.cc
-    PermutationChooser.cc
     PermutationEstimator.cc
     PositionEstimator.cc
     PrimAnisSHOAction.cc
@@ -98,28 +79,22 @@ set (sources
     ProbDensityGrid.cc
     QPCAction.cc
     RandomNumGenerator.cc
-    RandomPermutationChooser.cc
     RingGateAction.cc
     RingLattice.cc
-    SectionChooser.cc
     SeedRandom.cc
     SerialPaths.cc
     SHOAction.cc
     SHODotAction.cc
     SHOPhase.cc
     SimInfoWriter.cc
-    SimpleParticleChooser.cc
     SimulationInfo.cc
     SKOmegaEstimator.cc
     SmoothedGridPotential.cc
     Species.cc
-    SpeciesParticleChooser.cc
     SphereAction.cc
     Spin4DPhase.cc
     SpinChargeEstimator.cc
-    SpinModelSampler.cc
     SpinModelState.cc
-    SpinStatePermutationChooser.cc
     SpringAction.cc
     SpringTensorAction.cc
     StillWebAction.cc
@@ -128,12 +103,9 @@ set (sources
     ThermoEnergyEstimator.cc
     TimpQPC.cc
     TradEwaldSum.cc
-    TwoPairChooser.cc
     TwoQDAction.cc
-    UniformMover.cc
     VIndEstimator.cc
     VirialEnergyEstimator.cc
-    WalkingChooser.cc
     WellImageAction.cc
     WindingEstimator.cc
     WireEwald.cc
@@ -159,7 +131,7 @@ set_target_properties(pi
     PROPERTIES
     LINKER_LANGUAGE CXX)
 
-target_link_libraries(pi demo emarate fixednode parser spin stats)
+target_link_libraries(pi demo emarate fixednode parser sampler spin stats)
 
 #add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)

@@ -17,7 +17,7 @@
 #ifndef __RandomPermutationChooser_h_
 #define __RandomPermutationChooser_h_
 
-#include "PermutationChooser.h"
+#include "sampler/PermutationChooser.h"
 /* Class for randomly selecting a permutation.
  * @bug Temporarily set to three particle even permutations.
  * @version $Revision$

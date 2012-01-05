@@ -24,7 +24,7 @@
 #include "SuperCell.h"
 #include "Paths.h"
 #include "Beads.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 
 TradEwaldSum::TradEwaldSum(const SuperCell& cell, const int npart,
 			   const double rcut, const double kcut, const double kappa)

@@ -19,9 +19,9 @@
 #endif
 #include "SpinFixedPhaseAction.h"
 #include "Beads.h"
-#include "DoubleSectionChooser.h"
-#include "DoubleMLSampler.h"
-#include "DisplaceMoveSampler.h"
+#include "sampler/DoubleSectionChooser.h"
+#include "sampler/DoubleMLSampler.h"
+#include "sampler/DisplaceMoveSampler.h"
 #include "SpinPhaseModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"

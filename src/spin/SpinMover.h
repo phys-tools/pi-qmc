@@ -19,8 +19,8 @@
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
-#include "../src/Mover.h"
-#include "../src/FreeMover.h"
+#include "sampler/Mover.h"
+#include "sampler/FreeMover.h"
 class SimulationInfo;
 /** Select a trial move for beads by free particle sampling.
   * @todo May want to make this a subclass of Action, with a flag

@@ -54,72 +54,53 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_pi_OBJECTS = ActionChoice.$(OBJEXT) \
-	AlternatingParticleChooser.$(OBJEXT) \
 	AngularMomentumEstimator.$(OBJEXT) AperiodicGaussian.$(OBJEXT) \
 	BeadFactory.$(OBJEXT) BinProbDensity.$(OBJEXT) \
 	BondLengthEstimator.$(OBJEXT) BoxEstimator.$(OBJEXT) \
 	CaoBerneAction.$(OBJEXT) Collect.$(OBJEXT) \
-	CollectiveMover.$(OBJEXT) CompositeAction.$(OBJEXT) \
-	CompositeDoubleAction.$(OBJEXT) \
+	CompositeAction.$(OBJEXT) CompositeDoubleAction.$(OBJEXT) \
 	ConditionalDensityGrid.$(OBJEXT) \
 	ConductanceEstimator.$(OBJEXT) ConductivityEstimator.$(OBJEXT) \
 	ConductivityEstimator2D.$(OBJEXT) CoulombAction.$(OBJEXT) \
 	CoulombEnergyEstimator.$(OBJEXT) CountCountEstimator.$(OBJEXT) \
-	CubicLattice.$(OBJEXT) DampedFreeTensorMover.$(OBJEXT) \
-	DensCountEstimator.$(OBJEXT) DensDensEstimator.$(OBJEXT) \
-	DensityEstimator.$(OBJEXT) DiamagneticEstimator.$(OBJEXT) \
-	DipoleMomentEstimator.$(OBJEXT) DisplaceMoveSampler.$(OBJEXT) \
+	CubicLattice.$(OBJEXT) DensCountEstimator.$(OBJEXT) \
+	DensDensEstimator.$(OBJEXT) DensityEstimator.$(OBJEXT) \
+	DiamagneticEstimator.$(OBJEXT) DipoleMomentEstimator.$(OBJEXT) \
 	DotGeomAction.$(OBJEXT) DoubleActionChoice.$(OBJEXT) \
-	DoubleDisplaceMoveSampler.$(OBJEXT) DoubleMLSampler.$(OBJEXT) \
-	DoubleParallelPaths.$(OBJEXT) DoubleSectionChooser.$(OBJEXT) \
-	DynamicPCFEstimator.$(OBJEXT) EFieldAction.$(OBJEXT) \
-	EIndEstimator.$(OBJEXT) EnumeratedModelState.$(OBJEXT) \
-	EwaldAction.$(OBJEXT) EwaldCoulombEstimator.$(OBJEXT) \
-	EwaldImagePairAction.$(OBJEXT) EwaldSum.$(OBJEXT) \
-	ExchangeMover.$(OBJEXT) FixedPhaseAction.$(OBJEXT) \
-	FreeEnergyEstimator.$(OBJEXT) FreeMover.$(OBJEXT) \
-	FreeMoverPBC.$(OBJEXT) FreeTensorMover.$(OBJEXT) \
-	FrequencyEstimator.$(OBJEXT) GateAction.$(OBJEXT) \
-	GaussianAction.$(OBJEXT) GaussianDotAction.$(OBJEXT) \
-	GrapheneAction.$(OBJEXT) GridPotential.$(OBJEXT) \
-	Hungarian.$(OBJEXT) HyperbolicAction.$(OBJEXT) \
-	HyperbolicMover.$(OBJEXT) ImagePairAction.$(OBJEXT) \
+	DoubleParallelPaths.$(OBJEXT) DynamicPCFEstimator.$(OBJEXT) \
+	EFieldAction.$(OBJEXT) EIndEstimator.$(OBJEXT) \
+	EnumeratedModelState.$(OBJEXT) EwaldAction.$(OBJEXT) \
+	EwaldCoulombEstimator.$(OBJEXT) EwaldImagePairAction.$(OBJEXT) \
+	EwaldSum.$(OBJEXT) FixedPhaseAction.$(OBJEXT) \
+	FreeEnergyEstimator.$(OBJEXT) FrequencyEstimator.$(OBJEXT) \
+	GateAction.$(OBJEXT) GaussianAction.$(OBJEXT) \
+	GaussianDotAction.$(OBJEXT) GrapheneAction.$(OBJEXT) \
+	GridPotential.$(OBJEXT) Hungarian.$(OBJEXT) \
+	HyperbolicAction.$(OBJEXT) ImagePairAction.$(OBJEXT) \
 	JEstimator.$(OBJEXT) JelliumSlab.$(OBJEXT) Measure.$(OBJEXT) \
-	MiddleSectionChooser.$(OBJEXT) ModelSampler.$(OBJEXT) \
-	MultiLevelSampler.$(OBJEXT) \
-	MultiSpeciesParticleChooser.$(OBJEXT) \
-	NonZeroSectionChooser.$(OBJEXT) OptEwaldSum.$(OBJEXT) \
-	OpticalLatticeAction.$(OBJEXT) PairAction.$(OBJEXT) \
-	PairChooser.$(OBJEXT) PairDistance.$(OBJEXT) \
+	OptEwaldSum.$(OBJEXT) OpticalLatticeAction.$(OBJEXT) \
+	PairAction.$(OBJEXT) PairDistance.$(OBJEXT) \
 	PairIntegrator.$(OBJEXT) PairPotential.$(OBJEXT) \
-	ParallelPaths.$(OBJEXT) ParticleChooser.$(OBJEXT) \
-	PathReader.$(OBJEXT) Paths.$(OBJEXT) \
+	ParallelPaths.$(OBJEXT) PathReader.$(OBJEXT) Paths.$(OBJEXT) \
 	PeriodicGaussian.$(OBJEXT) Permutation.$(OBJEXT) \
-	PermutationChooser.$(OBJEXT) PermutationEstimator.$(OBJEXT) \
-	PositionEstimator.$(OBJEXT) PrimAnisSHOAction.$(OBJEXT) \
-	PrimColloidalAction.$(OBJEXT) PrimCosineAction.$(OBJEXT) \
-	PrimSHOAction.$(OBJEXT) PrimShellAction.$(OBJEXT) \
-	PrimTorusAction.$(OBJEXT) PrimativePairAction.$(OBJEXT) \
-	ProbDensityGrid.$(OBJEXT) QPCAction.$(OBJEXT) \
-	RandomNumGenerator.$(OBJEXT) \
-	RandomPermutationChooser.$(OBJEXT) RingGateAction.$(OBJEXT) \
-	RingLattice.$(OBJEXT) SHOAction.$(OBJEXT) \
-	SHODotAction.$(OBJEXT) SHOPhase.$(OBJEXT) \
-	SectionChooser.$(OBJEXT) SeedRandom.$(OBJEXT) \
-	SerialPaths.$(OBJEXT) SimInfoWriter.$(OBJEXT) \
-	SimpleParticleChooser.$(OBJEXT) SimulationInfo.$(OBJEXT) \
+	PermutationEstimator.$(OBJEXT) PositionEstimator.$(OBJEXT) \
+	PrimAnisSHOAction.$(OBJEXT) PrimColloidalAction.$(OBJEXT) \
+	PrimCosineAction.$(OBJEXT) PrimSHOAction.$(OBJEXT) \
+	PrimShellAction.$(OBJEXT) PrimTorusAction.$(OBJEXT) \
+	PrimativePairAction.$(OBJEXT) ProbDensityGrid.$(OBJEXT) \
+	QPCAction.$(OBJEXT) RandomNumGenerator.$(OBJEXT) \
+	RingGateAction.$(OBJEXT) RingLattice.$(OBJEXT) \
+	SHOAction.$(OBJEXT) SHODotAction.$(OBJEXT) SHOPhase.$(OBJEXT) \
+	SeedRandom.$(OBJEXT) SerialPaths.$(OBJEXT) \
+	SimInfoWriter.$(OBJEXT) SimulationInfo.$(OBJEXT) \
 	SKOmegaEstimator.$(OBJEXT) SmoothedGridPotential.$(OBJEXT) \
-	Species.$(OBJEXT) SpeciesParticleChooser.$(OBJEXT) \
-	SphereAction.$(OBJEXT) Spin4DPhase.$(OBJEXT) \
-	SpinChargeEstimator.$(OBJEXT) SpinModelSampler.$(OBJEXT) \
-	SpinModelState.$(OBJEXT) SpinStatePermutationChooser.$(OBJEXT) \
+	Species.$(OBJEXT) SphereAction.$(OBJEXT) Spin4DPhase.$(OBJEXT) \
+	SpinChargeEstimator.$(OBJEXT) SpinModelState.$(OBJEXT) \
 	SpringAction.$(OBJEXT) SpringTensorAction.$(OBJEXT) \
 	StillWebAction.$(OBJEXT) StructReader.$(OBJEXT) \
 	SuperCell.$(OBJEXT) ThermoEnergyEstimator.$(OBJEXT) \
-	TimpQPC.$(OBJEXT) TradEwaldSum.$(OBJEXT) \
-	TwoPairChooser.$(OBJEXT) TwoQDAction.$(OBJEXT) \
-	UniformMover.$(OBJEXT) VIndEstimator.$(OBJEXT) \
-	VirialEnergyEstimator.$(OBJEXT) WalkingChooser.$(OBJEXT) \
+	TimpQPC.$(OBJEXT) TradEwaldSum.$(OBJEXT) TwoQDAction.$(OBJEXT) \
+	VIndEstimator.$(OBJEXT) VirialEnergyEstimator.$(OBJEXT) \
 	WellImageAction.$(OBJEXT) WindingEstimator.$(OBJEXT) \
 	WireEwald.$(OBJEXT) WorkerShifter.$(OBJEXT) \
 	WritePaths.$(OBJEXT) WriteProbDensity.$(OBJEXT) \
@@ -315,17 +296,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = demo emarate fixednode parser spin stats
+SUBDIRS = demo emarate fixednode parser sampler spin stats
 pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
     fixednode/libfixednode.la \
     parser/libparser.la spin/libspin.la stats/libstats.la
 
 pi_LDADD = -Lparser -lparser -Ldemo -ldemo -Lspin -lspin -Lstats -lstats \
-  -Lemarate -lemarate -Lfixednode -lfixednode 
+  -Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode 
 
 pi_SOURCES = \
     ActionChoice.cc \
-    AlternatingParticleChooser.cc \
     AngularMomentumEstimator.cc \
     AperiodicGaussian.cc \
     BeadFactory.cc \
@@ -334,7 +314,6 @@ pi_SOURCES = \
     BoxEstimator.cc \
     CaoBerneAction.cc \
     Collect.cc \
-    CollectiveMover.cc \
     CompositeAction.cc \
     CompositeDoubleAction.cc \
     ConditionalDensityGrid.cc \
@@ -345,19 +324,14 @@ pi_SOURCES = \
     CoulombEnergyEstimator.cc \
     CountCountEstimator.cc \
     CubicLattice.cc \
-    DampedFreeTensorMover.cc \
     DensCountEstimator.cc \
     DensDensEstimator.cc \
     DensityEstimator.cc \
     DiamagneticEstimator.cc \
     DipoleMomentEstimator.cc \
-    DisplaceMoveSampler.cc \
     DotGeomAction.cc \
     DoubleActionChoice.cc \
-    DoubleDisplaceMoveSampler.cc \
-    DoubleMLSampler.cc \
     DoubleParallelPaths.cc \
-    DoubleSectionChooser.cc \
     DynamicPCFEstimator.cc \
     EFieldAction.cc \
     EIndEstimator.cc \
@@ -366,12 +340,8 @@ pi_SOURCES = \
     EwaldCoulombEstimator.cc \
     EwaldImagePairAction.cc \
     EwaldSum.cc \
-    ExchangeMover.cc \
     FixedPhaseAction.cc \
     FreeEnergyEstimator.cc \
-    FreeMover.cc \
-    FreeMoverPBC.cc \
-    FreeTensorMover.cc \
     FrequencyEstimator.cc \
     GateAction.cc \
     GaussianAction.cc \
@@ -380,30 +350,21 @@ pi_SOURCES = \
     GridPotential.cc \
     Hungarian.cc \
     HyperbolicAction.cc \
-    HyperbolicMover.cc \
     ImagePairAction.cc \
     JEstimator.cc \
     JelliumSlab.cc \
     Measure.cc \
-    MiddleSectionChooser.cc \
-    ModelSampler.cc \
-    MultiLevelSampler.cc \
-    MultiSpeciesParticleChooser.cc \
-    NonZeroSectionChooser.cc \
     OptEwaldSum.cc \
     OpticalLatticeAction.cc \
     PairAction.cc \
-    PairChooser.cc \
     PairDistance.cc \
     PairIntegrator.cc \
     PairPotential.cc \
     ParallelPaths.cc \
-    ParticleChooser.cc \
     PathReader.cc \
     Paths.cc \
     PeriodicGaussian.cc \
     Permutation.cc \
-    PermutationChooser.cc \
     PermutationEstimator.cc \
     PositionEstimator.cc \
     PrimAnisSHOAction.cc \
@@ -416,28 +377,22 @@ pi_SOURCES = \
     ProbDensityGrid.cc \
     QPCAction.cc \
     RandomNumGenerator.cc \
-    RandomPermutationChooser.cc \
     RingGateAction.cc \
     RingLattice.cc \
     SHOAction.cc \
     SHODotAction.cc \
     SHOPhase.cc \
-    SectionChooser.cc \
     SeedRandom.cc \
     SerialPaths.cc \
     SimInfoWriter.cc \
-    SimpleParticleChooser.cc \
     SimulationInfo.cc \
     SKOmegaEstimator.cc \
     SmoothedGridPotential.cc \
     Species.cc \
-    SpeciesParticleChooser.cc \
     SphereAction.cc \
     Spin4DPhase.cc \
     SpinChargeEstimator.cc \
-    SpinModelSampler.cc \
     SpinModelState.cc \
-    SpinStatePermutationChooser.cc \
     SpringAction.cc \
     SpringTensorAction.cc \
     StillWebAction.cc \
@@ -446,12 +401,9 @@ pi_SOURCES = \
     ThermoEnergyEstimator.cc \
     TimpQPC.cc \
     TradEwaldSum.cc \
-    TwoPairChooser.cc \
     TwoQDAction.cc \
-    UniformMover.cc \
     VIndEstimator.cc \
     VirialEnergyEstimator.cc \
-    WalkingChooser.cc \
     WellImageAction.cc \
     WindingEstimator.cc \
     WireEwald.cc \
@@ -465,7 +417,6 @@ noinst_HEADERS = \
     Action.h \
     ActionChoice.h \
     Algorithm.h \
-    AlternatingParticleChooser.h \
     AngularMomentumEstimator.h \
     AperiodicGaussian.h \
     BeadFactory.h \
@@ -475,7 +426,6 @@ noinst_HEADERS = \
     BoxEstimator.h \
     CaoBerneAction.h \
     Collect.h \
-    CollectiveMover.h \
     CompositeAction.h \
     CompositeAlgorithm.h \
     CompositeDoubleAction.h \
@@ -487,21 +437,16 @@ noinst_HEADERS = \
     CoulombEnergyEstimator.h \
     CountCountEstimator.h \
     CubicLattice.h \
-    DampedFreeTensorMover.h \
     DensCountEstimator.h \
     DensDensEstimator.h \
     DensityEstimator.h \
     DiamagneticEstimator.h \
     DipoleMomentEstimator.h \
-    DisplaceMoveSampler.h \
     Distance.h \
     DotGeomAction.h \
     DoubleAction.h \
     DoubleActionChoice.h \
-    DoubleDisplaceMoveSampler.h \
-    DoubleMLSampler.h \
     DoubleParallelPaths.h \
-    DoubleSectionChooser.h \
     DynamicPCFEstimator.h \
     EFieldAction.h \
     EIndEstimator.h \
@@ -510,12 +455,8 @@ noinst_HEADERS = \
     EwaldCoulombEstimator.h \
     EwaldImagePairAction.h \
     EwaldSum.h \
-    ExchangeMover.h \
     FixedPhaseAction.h \
     FreeEnergyEstimator.h \
-    FreeMover.h \
-    FreeMoverPBC.h \
-    FreeTensorMover.h \
     FrequencyEstimator.h \
     GateAction.h \
     GaussianAction.h \
@@ -524,35 +465,25 @@ noinst_HEADERS = \
     GridPotential.h \
     Help.h \
     HyperbolicAction.h \
-    HyperbolicMover.h \
     ImagePairAction.h \
     JEstimator.h \
     JelliumSlab.h \
     LinkSummable.h \
     Loop.h \
     Measure.h \
-    MiddleSectionChooser.h \
-    ModelSampler.h \
     ModelState.h \
-    Mover.h \
-    MultiLevelSampler.h \
-    MultiSpeciesParticleChooser.h \
-    NonZeroSectionChooser.h \
     OptEwaldSum.h \
     OpticalLatticeAction.h \
     PairAction.h \
     PairCFEstimator.h \
-    PairChooser.h \
     PairDistance.h \
     PairIntegrator.h \
     PairPotential.h \
     ParallelPaths.h \
-    ParticleChooser.h \
     PathReader.h \
     Paths.h \
     PeriodicGaussian.h \
     Permutation.h \
-    PermutationChooser.h \
     PermutationEstimator.h \
     PhaseModel.h \
     PositionEstimator.h \
@@ -567,30 +498,24 @@ noinst_HEADERS = \
     ProbDensityGrid.h \
     QPCAction.h \
     RandomNumGenerator.h \
-    RandomPermutationChooser.h \
     RingGateAction.h \
     RingLattice.h \
     SHOAction.h \
     SHODotAction.h \
     SHOPhase.h \
-    SectionChooser.h \
     SeedRandom.h \
     SerialPaths.h \
     SimInfoWriter.h \
-    SimpleParticleChooser.h \
     SimulationInfo.h \
     SKOmegaEstimator.h \
     SmoothedGridPotential.h \
     Species.h \
-    SpeciesParticleChooser.h \
     SphereAction.h \
     Spin4DPhase.h \
     SpinChargeEstimator.h \
-    SpinModelSampler.h \
     SpinModelState.h \
     SpinChoiceDensityEstimator.h \
     SpinChoicePCFEstimator.h \
-    SpinStatePermutationChooser.h \
     SpringAction.h \
     SpringTensorAction.h \
     StillWebAction.h \
@@ -599,12 +524,9 @@ noinst_HEADERS = \
     ThermoEnergyEstimator.h \
     TimpQPC.h \
     TradEwaldSum.h \
-    TwoPairChooser.h \
     TwoQDAction.h \
-    UniformMover.h \
     VIndEstimator.h \
     VirialEnergyEstimator.h \
-    WalkingChooser.h \
     WellImageAction.h \
     WindingEstimator.h \
     WireEwald.h \
@@ -703,7 +625,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ActionChoice.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AlternatingParticleChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AngularMomentumEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AperiodicGaussian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BeadFactory.Po@am__quote@
@@ -712,7 +633,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BoxEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CaoBerneAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Collect.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CollectiveMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CompositeAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CompositeDoubleAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ConditionalDensityGrid.Po@am__quote@
@@ -723,19 +643,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoulombEnergyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CountCountEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CubicLattice.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DampedFreeTensorMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensCountEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensDensEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensityEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DiamagneticEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DipoleMomentEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DisplaceMoveSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DotGeomAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleActionChoice.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleDisplaceMoveSampler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleMLSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleParallelPaths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleSectionChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DynamicPCFEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EFieldAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EIndEstimator.Po@am__quote@
@@ -744,12 +659,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EwaldCoulombEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EwaldImagePairAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ExchangeMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FixedPhaseAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FreeEnergyEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FreeMover.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FreeMoverPBC.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FreeTensorMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FrequencyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GateAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GaussianAction.Po@am__quote@
@@ -758,30 +669,21 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GridPotential.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Hungarian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HyperbolicAction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HyperbolicMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ImagePairAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/JEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/JelliumSlab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Measure.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MiddleSectionChooser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ModelSampler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MultiLevelSampler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MultiSpeciesParticleChooser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/NonZeroSectionChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OptEwaldSum.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OpticalLatticeAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairAction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairDistance.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairIntegrator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairPotential.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParallelPaths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParticleChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PathReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Paths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PeriodicGaussian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Permutation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PermutationChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PermutationEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PositionEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PrimAnisSHOAction.Po@am__quote@
@@ -794,28 +696,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ProbDensityGrid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/QPCAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RandomNumGenerator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RandomPermutationChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RingGateAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RingLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SHOAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SHODotAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SHOPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SKOmegaEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SectionChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SeedRandom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SerialPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimInfoWriter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimpleParticleChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimulationInfo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SmoothedGridPotential.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Species.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpeciesParticleChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SphereAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Spin4DPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinChargeEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinModelSampler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinModelState.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinStatePermutationChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpringAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpringTensorAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StillWebAction.Po@am__quote@
@@ -824,12 +720,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ThermoEnergyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TimpQPC.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TradEwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TwoPairChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TwoQDAction.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/UniformMover.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VIndEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VirialEnergyEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WalkingChooser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WellImageAction.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WindingEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WireEwald.Po@am__quote@

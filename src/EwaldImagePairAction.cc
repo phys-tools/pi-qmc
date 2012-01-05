@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "EwaldImagePairAction.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -26,7 +26,7 @@
 #include <vector>
 #include <fstream>
 #include <blitz/tinyvec-et.h>
-#include "DisplaceMoveSampler.h"
+#include "sampler/DisplaceMoveSampler.h"
 
 EwaldImagePairAction::EwaldImagePairAction(const Species& s1, const Species& s2,
   const EmpiricalPairAction &action, const SimulationInfo& simInfo,
