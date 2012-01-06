@@ -31,6 +31,8 @@ if(GTEST_FOUND)
 
     add_executable(samplerTests
         MultiLevelSamplerTest.cc
+        CollectiveSectionMoverTest.cc
+        ${SRC_DIR}/sampler/CollectiveSectionMover.cc
     )
     
     target_link_libraries(samplerTests ${GTEST_BOTH_LIBRARIES} -lpthread)
