@@ -6,6 +6,7 @@
 
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
+#include "SuperCell.h"
 
 typedef blitz::TinyVector<double, NDIM> Vec;
 typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
@@ -23,13 +24,16 @@ protected:
     virtual void SetUp() {
         radius = 1.0;
         amplitude = Vec(0.4, 0.0, 0.0);
-        center = Vec(3.0, 4.0, 5.0);
+        center = Vec(4.9, 4.0, 4.5);
         sliceCount = 9;
+        cell = new SuperCell(Vec(10.0, 10.0, 10.0));
+        cell->computeRecipricalVectors();
         mover = new CollectiveSectionMover(radius, amplitude,
-                center, sliceCount);
+                center, sliceCount, cell);
     }
 
     virtual void TearDown() {
+        delete cell;
         delete mover;
     }
 
@@ -56,6 +60,7 @@ protected:
     Vec center;
     int sliceCount;
     CollectiveSectionMover *mover;
+    SuperCell *cell;
 
     static Mat matFromData(double *data) {
         Mat matrix;
@@ -74,7 +79,7 @@ TEST_F(CollectiveSectionMoverTest, testMoveAtCenter) {
     Vec oldr = center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.4, 0.0, 0.0) + center;
+    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
     ASSERT_VEC_EQ(expect, newr);
 }
 
@@ -83,15 +88,15 @@ TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenter) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.296, 0.5, 0.1) + center;
+    Vec expect = Vec(0.296-10.0, 0.5, 0.1) + center;
     ASSERT_VEC_EQ(expect, newr);
 }
 
 TEST_F(CollectiveSectionMoverTest, testDoesNotMoveOutsideOfRadius) {
-    Vec oldr = Vec(0.0, 1.5, 0.1) + center;
+    Vec oldr = Vec(0.0, -1.5, 0.1) + center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.0, 1.5, 0.1) + center;
+    Vec expect = Vec(0.0, -1.5, 0.1) + center;
     ASSERT_VEC_EQ(expect, newr);
 }
 
@@ -107,7 +112,7 @@ TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenterSlice) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 2;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.222, 0.5, 0.1) + center;
+    Vec expect = Vec(0.222-10.0, 0.5, 0.1) + center;
     ASSERT_VEC_EQ(expect, newr);
 }
 

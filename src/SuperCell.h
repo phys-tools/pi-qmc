@@ -30,7 +30,7 @@ public:
   /// Constructor 
   SuperCell(const Vec a);
   /// Virtual destructor.
-  virtual ~SuperCell() {}
+  virtual ~SuperCell();
   /// Compute the reciprical lattice vectors.
   void computeRecipricalVectors();
   /// Set to the smallest displacement with PBC.

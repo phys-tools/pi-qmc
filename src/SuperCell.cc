@@ -23,6 +23,8 @@
 
 SuperCell::SuperCell(const Vec a) : a(a) {}
 
+SuperCell::~SuperCell() {}
+
 void SuperCell::computeRecipricalVectors() {
   b=1./a;
   /// Set the rcut2 to be the square of half the shortest side.

@@ -6,6 +6,7 @@
 #endif
 #include <blitz/tinyvec.h>
 #include <blitz/tinymat.h>
+class SuperCell;
 
 
 class CollectiveSectionMover {
@@ -15,7 +16,7 @@ public:
     typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
 
     CollectiveSectionMover(double radius, Vec amplitude, Vec center,
-            int level);
+            int level, SuperCell*);
 
     Vec calcShift(const Vec&, int sliceIndex) const;
     Vec calcInverseShift(const Vec&, int sliceIndex) const;
@@ -37,6 +38,7 @@ private:
     Vec amplitude;
     Vec center;
     const int sliceCount;
+    SuperCell *cell;
 };
 
 
