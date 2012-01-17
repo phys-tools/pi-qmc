@@ -133,3 +133,12 @@ int CollectiveSectionMover::getSliceCount() const {
 void CollectiveSectionMover::setRadius(double radius) {
     this->radius = radius;
 }
+
+
+CollectiveSectionMover::Vec CollectiveSectionMover::getCenter() const {
+    return center;
+}
+
+void CollectiveSectionMover::setCenter(Vec center) {
+    this->center = center;
+}

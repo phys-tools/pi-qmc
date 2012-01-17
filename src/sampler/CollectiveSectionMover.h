@@ -27,6 +27,8 @@ public:
     void setAmplitude(Vec amplitude);
     void setRadius(double radius);
     int getSliceCount() const;
+    Vec getCenter() const;
+    void setCenter(Vec center);
 
 private:
     inline double envelope(const Vec&, int sliceIndex) const;

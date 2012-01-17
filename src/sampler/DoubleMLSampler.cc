@@ -76,7 +76,7 @@ void DoubleMLSampler::run() {
   if (samplingBoth) {
     activateSection(2); permutationChooser2.init(); activateSection(1);
   }
-  // Select particles to move and the permuation.
+  // Select particles to move and the permutation.
   for (int irepeat=0; irepeat<nrepeat; ++irepeat) {
     bool isNewPerm=permutationChooser.choosePermutation();
     permutation1=permutationChooser.getPermutation(); 

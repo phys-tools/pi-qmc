@@ -34,6 +34,7 @@ if(GTEST_FOUND)
         CollectiveSectionMoverTest.cc
         ${SRC_DIR}/sampler/CollectiveSectionMover.cc
         ${SRC_DIR}/SuperCell.cc
+        CollectiveSectionSamplerTest.cc
     )
     
     target_link_libraries(samplerTests ${GTEST_BOTH_LIBRARIES} -lpthread)
