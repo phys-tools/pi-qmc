@@ -42,7 +42,7 @@ public:
   virtual double getActionDifference(const DisplaceMoveSampler&,
 				    const int nMoving){ return 0;};
   virtual double getActionDifference(const Paths&, const VArray &displacement,
-    int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
+    int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.
