@@ -75,6 +75,40 @@ double SHODotAction::getActionDifference(const MultiLevelSampler& sampler,
   return deltaAction;
 }
 
+double SHODotAction::getActionDifference(const Paths &paths, const VArray &displacement, int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice) {
+  double deltaAction = 0;
+#if NDIM==3
+  double kt = 0.5*k*tau;
+#endif
+  const SuperCell& cell = paths.getSuperCell();
+  for (int i=0; i<nmoving; ++i) {
+    int ipart = movingIndex(i);
+    if (ipart<ifirst || ipart>=ifirst+npart) break;
+    for (int islice=iFirstSlice; islice<iLastSlice; ++islice) {
+      Vec delta=paths(ipart,islice);
+      cell.pbc(delta);
+
+#if NDIM==3
+      deltaAction-=kt*(delta[0]*delta[0]+delta[1]*delta[1]);
+      deltaAction-=(fabs(delta[2]-z)>0.5*t)?v0*tau:0;
+#else
+      deltaAction-=(fabs(delta[0]-z)>0.5*t)?v0*tau:0;
+#endif
+
+      delta += displacement(i);
+      cell.pbc(delta);
+
+#if NDIM==3
+      deltaAction+=kt*(delta[0]*delta[0]+delta[1]*delta[1]);
+      deltaAction+=(fabs(delta[2]-z)>0.5*t)?v0*tau:0;
+#else
+      deltaAction+=(fabs(delta[0]-z)>0.5*t)?v0*tau:0;
+#endif
+    }
+  }
+  return deltaAction;
+}
+
 double SHODotAction::getTotalAction(const Paths& paths, 
     const int level) const {
   return 0;
