@@ -4,7 +4,7 @@ bin_PROGRAMS = pi
 pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
     fixednode/libfixednode.la \
     parser/libparser.la spin/libspin.la stats/libstats.la
-pi_LDADD = -Lparser -lparser  \
+pi_LDADD = -Lparser -lparser \
   -Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
   -Ldemo -ldemo -Lspin -lspin -Lstats -lstats
 pi_SOURCES = \

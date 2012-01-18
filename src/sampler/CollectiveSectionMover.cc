@@ -20,7 +20,7 @@ double CollectiveSectionMover::timeEnvelope(int sliceIndex) const {
                * (2.0 * sliceIndex / (sliceCount - 1.0) - 1.0);
 }
 
-double CollectiveSectionMover::envelope(const Vec & rin,
+CollectiveSectionMover::Vec CollectiveSectionMover::envelope(const Vec & rin,
         int sliceIndex) const {
     if (isOutsideRadius(rin)) {
         return 0.0;
@@ -30,7 +30,7 @@ double CollectiveSectionMover::envelope(const Vec & rin,
         double deltaR2 = dot(delta, delta);
         double g = 1 - deltaR2 / (radius * radius);
         g *= timeEnvelope(sliceIndex);
-        return g;
+        return g * amplitude;
     }
 }
 
@@ -42,7 +42,7 @@ bool CollectiveSectionMover::isOutsideRadius(const Vec &rin) const {
 
 CollectiveSectionMover::Vec CollectiveSectionMover::calcShift(
         const Vec &rin, int sliceIndex) const {
-    Vec rout = rin + envelope(rin, sliceIndex) * amplitude;
+    Vec rout = rin + envelope(rin, sliceIndex);
     cell->pbc(rout);
     return rout;
 }
@@ -50,7 +50,7 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcShift(
 CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
         const Vec &rin, int sliceIndex) const {
     if (isOutsideRadius(rin)) return rin;
-    Vec rout = rin - envelope(rin, sliceIndex) * amplitude;
+    Vec rout = rin - envelope(rin, sliceIndex);
     Vec rback = calcShift(rout, sliceIndex);
     Vec deltaInBack = rin - rback;
     cell->pbc(deltaInBack);

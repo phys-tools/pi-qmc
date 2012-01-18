@@ -1,8 +1,8 @@
 add_subdirectory(demo)
-add_subdirectory(emarate)
-add_subdirectory(fixednode)
 add_subdirectory(parser)
 add_subdirectory(sampler)
+add_subdirectory(emarate)
+add_subdirectory(fixednode)
 add_subdirectory(spin)
 add_subdirectory(stats)
 
@@ -131,7 +131,7 @@ set_target_properties(pi
     PROPERTIES
     LINKER_LANGUAGE CXX)
 
-target_link_libraries(pi demo emarate fixednode parser sampler spin stats)
+target_link_libraries(pi demo parser sampler emarate fixednode spin stats)
 
 #add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)

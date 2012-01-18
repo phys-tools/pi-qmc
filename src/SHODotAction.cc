@@ -84,7 +84,7 @@ double SHODotAction::getActionDifference(const Paths &paths, const VArray &displ
   for (int i=0; i<nmoving; ++i) {
     int ipart = movingIndex(i);
     if (ipart<ifirst || ipart>=ifirst+npart) break;
-    for (int islice=iFirstSlice; islice<iLastSlice; ++islice) {
+    for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
       Vec delta=paths(ipart,islice);
       cell.pbc(delta);
 
