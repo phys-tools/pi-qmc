@@ -16,7 +16,8 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __GridPotential_h 
 #define __GridPotential_h
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;
+class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 #include "Action.h"
@@ -40,7 +41,7 @@ public:
   /// Virtual destructor.
   virtual ~GridPotential() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,

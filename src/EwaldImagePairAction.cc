@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "EwaldImagePairAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -47,7 +47,7 @@ EwaldImagePairAction::EwaldImagePairAction(const Species& s1, const Species& s2,
 } 
 
 
-double EwaldImagePairAction::getActionDifference(const MultiLevelSampler& sampler,
+double EwaldImagePairAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

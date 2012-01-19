@@ -21,7 +21,7 @@ protected:
         delete sampler;
     }
 
-    MultiLevelSamplerInterface *sampler;
+    SectionSamplerInterface *sampler;
     Species species1, species2;
     SimulationInfo simInfo;
     static const int npart=2;

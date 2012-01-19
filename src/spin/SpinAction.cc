@@ -21,7 +21,7 @@
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 
 SpinAction::SpinAction(const double tau, const double mass, 
@@ -37,7 +37,7 @@ SpinAction::~SpinAction() {
 }
 
 double SpinAction::getActionDifference(
-    const MultiLevelSampler& sampler, const int level) {
+    const SectionSamplerInterface& sampler, const int level) {
   double diff=0;
   const int nStride=(int)pow(2,level);
 #if NDIM==4

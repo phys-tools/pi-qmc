@@ -22,7 +22,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -41,7 +41,7 @@ pgm4@hw.ac.uk (will perhaps try to put it online too)
 Peter G McDonald 2009, Heriot Watt University, Scotland. 
 */
 
-double PrimCosineAction::getActionDifference(const MultiLevelSampler& sampler,
+double PrimCosineAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

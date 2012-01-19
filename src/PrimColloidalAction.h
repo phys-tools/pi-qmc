@@ -17,7 +17,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PrimColloidalAction_h_
 #define __PrimColloidalAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
@@ -35,7 +35,7 @@ const double V_cdte, const double V_cdse,const SimulationInfo &simInfo, const in
   /// Virtual destructor.
   virtual ~PrimColloidalAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calcuate the difference in action (NOT IMPLEMENTED YET).
   virtual double getActionDifference(const DisplaceMoveSampler&,

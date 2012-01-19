@@ -23,7 +23,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -47,7 +47,7 @@ const double V_lig, const double V_cdte, const double V_cdse, const SimulationIn
             << " V_lig= " << V_lig << "V_cdte= " << V_cdte << "V_cdse= " << V_cdse << std::endl;
 }
 
-double PrimColloidalAction::getActionDifference(const MultiLevelSampler& sampler,
+double PrimColloidalAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

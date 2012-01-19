@@ -20,7 +20,7 @@
 #include "SHODotAction.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -35,7 +35,7 @@ std::cout << "thick,v0,mw2,z: " << t << "," << v0 << "," << k
    << ", " << z << std::endl;
 }
 
-double SHODotAction::getActionDifference(const MultiLevelSampler& sampler,
+double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

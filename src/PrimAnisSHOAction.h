@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PrimAnisSHOAction_h_
 #define __PrimAnisSHOAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
@@ -39,7 +39,7 @@ public:
   /// Virtual destructor.
   virtual ~PrimAnisSHOAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calcuate the difference in action (NOT IMPLEMENTED YET).
   virtual double getActionDifference(const DisplaceMoveSampler&,

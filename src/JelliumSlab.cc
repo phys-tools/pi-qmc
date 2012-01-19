@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -56,7 +56,7 @@ JelliumSlab::JelliumSlab(const SimulationInfo& simInfo, const double qtot,
   }
 }
 
-double JelliumSlab::getActionDifference(const MultiLevelSampler& sampler,
+double JelliumSlab::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

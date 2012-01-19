@@ -2,7 +2,7 @@
 
 #include "Species.h"
 #include "SimulationInfo.h"
-#include "sampler/MultiLevelSamplerInterface.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "sampler/SectionChooser.h"
@@ -23,19 +23,23 @@ MultiLevelSamplerFake::~MultiLevelSamplerFake() {
     delete superCell;
 }
 
-const Beads<NDIM> & MultiLevelSamplerFake::getSectionBeads() const {
+Beads<NDIM> & MultiLevelSamplerFake::getSectionBeads() {
     return *sectionBeads;
 }
 
+Beads<NDIM> & MultiLevelSamplerFake::getMovingBeads() {
+    return *movingBeads;
+}
 
+const Beads<NDIM> & MultiLevelSamplerFake::getSectionBeads() const {
+    return *sectionBeads;
+}
 
 const Beads<NDIM> & MultiLevelSamplerFake::getMovingBeads() const {
     return *movingBeads;
 }
 
-
-
-const MultiLevelSamplerInterface::IArray & MultiLevelSamplerFake::getMovingIndex() const {
+const SectionSamplerInterface::IArray & MultiLevelSamplerFake::getMovingIndex() const {
     return *movingIndex;
 }
 

@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -33,7 +33,7 @@ TwoQDAction::TwoQDAction(const double tau, const double omega,
 	   << " and interdot distance="  << d << std::endl;
 }
 
-double TwoQDAction::getActionDifference(const MultiLevelSampler& sampler,
+double TwoQDAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

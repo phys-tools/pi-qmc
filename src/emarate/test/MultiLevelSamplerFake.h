@@ -1,14 +1,16 @@
 #ifndef MULTILEVELSAMPLERFAKE_H_
 #define MULTILEVELSAMPLERFAKE_H_
 
-#include "sampler/MultiLevelSamplerInterface.h"
+#include "sampler/SectionSamplerInterface.h"
 
-class MultiLevelSamplerFake : public MultiLevelSamplerInterface {
+class MultiLevelSamplerFake : public SectionSamplerInterface {
 public:
     MultiLevelSamplerFake(int npart, int nmoving, int nslice);
     virtual ~MultiLevelSamplerFake();
     virtual const Beads<NDIM>& getSectionBeads() const;
     virtual const Beads<NDIM>& getMovingBeads() const;
+    virtual Beads<NDIM>& getSectionBeads();
+    virtual Beads<NDIM>& getMovingBeads();
     virtual const IArray& getMovingIndex() const;
     virtual const SuperCell& getSuperCell() const;
     virtual int getFirstSliceIndex() const;

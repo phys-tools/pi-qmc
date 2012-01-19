@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -53,7 +53,7 @@ GateAction::GateAction(const SimulationInfo &simInfo, const double GVolt,
     ifirst(species.ifirst), npart(species.count) {
 }
 
-double GateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {
+double GateAction::getActionDifference(const SectionSamplerInterface& sampler, const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();

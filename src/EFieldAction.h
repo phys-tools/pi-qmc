@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __EFieldAction_h
 #define __EFieldAction_h
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 class SuperCell;
@@ -43,7 +43,7 @@ public:
   /// Virtual destructor.
   virtual ~EFieldAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,

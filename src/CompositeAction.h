@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __CompositeAction_h_
 #define __CompositeAction_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class DisplaceMoveSampler;
 class SectionChooser;
 class Paths;
@@ -37,7 +37,7 @@ public:
   /// Virtual destructor deletes all Action objects.
   virtual ~CompositeAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,

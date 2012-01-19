@@ -17,7 +17,7 @@
 #ifndef __EMARateAction_h_
 #define __EMARateAction_h_
 class MultiLevelSampler;
-class MultiLevelSamplerInterface;
+class SectionSamplerInterface;
 class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
@@ -50,7 +50,7 @@ public:
     double C);
   virtual ~EMARateAction();
 
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
@@ -62,7 +62,7 @@ public:
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
 
-    double testableGetActionDifference(const MultiLevelSamplerInterface&,
+    double testableGetActionDifference(const SectionSamplerInterface&,
                                        const int level);
 private:
   /// The inverse of the timestep.

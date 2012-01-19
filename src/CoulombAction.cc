@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "CoulombAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
@@ -106,7 +106,7 @@ CoulombAction::~CoulombAction() {
   delete ewaldSum;
 }
 
-double CoulombAction::getActionDifference(const MultiLevelSampler& sampler,
+double CoulombAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   double u=0;
   for (unsigned int i=0; i<pairActionArray.size(); ++i) {

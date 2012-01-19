@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Species.h"
 #include "SuperCell.h"
@@ -36,7 +36,7 @@ SphereAction::SphereAction(const double tau, const double radius,
       << " and center(s) " << ipart << std::endl;
 }
 
-double SphereAction::getActionDifference(const MultiLevelSampler& sampler,
+double SphereAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

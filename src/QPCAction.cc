@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "QPCAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -28,7 +28,7 @@ QPCAction::QPCAction(const double tau, const double length, const double v0,
   : tau(tau), length(length), v0(v0), omega(omega), mass(mass) {
 }
 
-double QPCAction::getActionDifference(const MultiLevelSampler& sampler,
+double QPCAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

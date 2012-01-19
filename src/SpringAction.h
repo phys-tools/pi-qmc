@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __SpringAction_h_
 #define __SpringAction_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
@@ -45,7 +45,7 @@ public:
   /// Virtual destructor.
   virtual ~SpringAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,

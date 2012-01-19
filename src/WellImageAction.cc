@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -37,7 +37,7 @@ WellImageAction::WellImageAction(const SimulationInfo& simInfo,
   q=1.0;
 }
 
-double WellImageAction::getActionDifference(const MultiLevelSampler& sampler,
+double WellImageAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   double deltaAction=0;
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();

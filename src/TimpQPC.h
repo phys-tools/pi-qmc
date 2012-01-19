@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __TimpQPC_h_
 #define __TimpQPC_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 template <int TDIM> class Beads;
 class SuperCell;
 #include <cstdlib>
@@ -52,7 +52,7 @@ public:
   /// Virtual destructor.
   virtual ~TimpQPC() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
  virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);

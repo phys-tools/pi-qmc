@@ -242,7 +242,7 @@ SmoothedGridPotential::~SmoothedGridPotential(){
 }
 
 double SmoothedGridPotential::getActionDifference(
-    const MultiLevelSampler& sampler, const int ilevel) {
+    const SectionSamplerInterface& sampler, const int ilevel) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();

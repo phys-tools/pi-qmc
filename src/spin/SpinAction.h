@@ -17,7 +17,7 @@
 #ifndef __SpinAction_h_
 #define __SpinAction_h_
 class Paths;
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class DisplaceMoveSampler;
 template <int TDIM> class Beads;
 #include "../src/Action.h"
@@ -50,7 +50,7 @@ public:
   /// Virtual destructor.
   virtual ~SpinAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   virtual double getActionDifference(const DisplaceMoveSampler&,
                                      const int nMoving);

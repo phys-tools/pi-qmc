@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "TimpQPC.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -49,7 +49,7 @@ TimpQPC::TimpQPC(const SuperCell& cell, const Species &species, const double tau
   }
 }
 
-double TimpQPC::getActionDifference(const MultiLevelSampler& sampler,
+double TimpQPC::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __SmoothedGridPotential_h
 #define __SmoothedGridPotential_h
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 #include "SimulationInfo.h"
 #include "Paths.h"
@@ -85,7 +85,7 @@ public:
   /// Destructor.
   ~SmoothedGridPotential();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int ilevel);
   virtual double getActionDifference(const DisplaceMoveSampler&,
 				    const int nMoving){ return 0;};

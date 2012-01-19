@@ -24,7 +24,7 @@
 #include "SuperCell.h"
 #include "Paths.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 
 #if NDIM==3
@@ -85,7 +85,7 @@ EwaldAction::~EwaldAction() {
 }
 
 double EwaldAction::getActionDifference(
-    const MultiLevelSampler& sampler, const int level) {
+    const SectionSamplerInterface& sampler, const int level) {
   double diff=0;
 return diff;
   for (ConstSRActIter action=actions.begin(); action<actions.end(); ++action) {

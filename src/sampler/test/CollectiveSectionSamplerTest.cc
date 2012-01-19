@@ -7,6 +7,7 @@
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
 #include "SuperCell.h"
+#include "sampler/DoubleCollectiveSectionSampler.h"
 
 typedef blitz::TinyVector<double, NDIM> Vec;
 typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
@@ -18,9 +19,11 @@ class CollectiveSectionSamplerTest: public ::testing::Test {
 protected:
 
     virtual void SetUp() {
+        sampler = 0;
     }
 
     virtual void TearDown() {
+        delete sampler;
     }
 
     void ASSERT_VEC_EQ(const Vec& v1, const Vec& v2) const {
@@ -41,9 +44,11 @@ protected:
         ASSERT_FLOAT_EQ(mat1(2,2), mat2(2,2));
     }
 
+    DoubleCollectiveSectionSampler* sampler;
 };
 
 TEST_F(CollectiveSectionSamplerTest, testCreate) {
+    sampler = new DoubleCollectiveSectionSampler(0,0,0,0,0);
 }
 
 }

@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -32,7 +32,7 @@ OpticalLatticeAction::OpticalLatticeAction(const Vec v0, const Vec length,
   : tau(simInfo.getTau()), v0(v0), piOverL(3.14159265354/length), max(max) {
 }
 
-double OpticalLatticeAction::getActionDifference(const MultiLevelSampler& sampler,
+double OpticalLatticeAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

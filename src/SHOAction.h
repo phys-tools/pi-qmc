@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __SHOAction_h_
 #define __SHOAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 class Species;
 template <int TDIM> class Beads;
 #include <cstdlib>
@@ -63,7 +63,7 @@ public:
   /// Virtual destructor.
   virtual ~SHOAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&, const int level);
+  virtual double getActionDifference(const SectionSamplerInterface&, const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);

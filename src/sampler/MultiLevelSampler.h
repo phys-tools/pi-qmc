@@ -31,7 +31,7 @@ class Permutation;
 class AccRejEstimator;
 class BeadFactory;
 #include "Algorithm.h"
-#include "MultiLevelSamplerInterface.h"
+#include "SectionSamplerInterface.h"
 #include <vector>
 #include <cstdlib>
 #include <blitz/array.h>
@@ -41,7 +41,7 @@ class BeadFactory;
   * @version $Revision$
   * @author John Shumway */
 class MultiLevelSampler : public Algorithm,
-                          public MultiLevelSamplerInterface {
+                          public SectionSamplerInterface {
 public:
   /// Typedefs.
   typedef blitz::Array<int,1> IArray;
@@ -57,18 +57,18 @@ public:
   /// Get the number of levels in the sampling.
   int getNLevel() const {return nlevel;}
   /// Get reference to the moving beads.
-  Beads<NDIM>& getMovingBeads() {return *movingBeads;}
+  virtual Beads<NDIM>& getMovingBeads() {return *movingBeads;}
   /// Get const reference to the moving beads.
   virtual const Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
 
-    virtual int getFirstSliceIndex() const;
+  virtual int getFirstSliceIndex() const;
 
   const Beads<NDIM>& getRejectedBeads() const {return *rejectedBeads;}
   Beads<NDIM>& getRejectedBeads() {return *rejectedBeads;}
   double getFactor(){return factor;}
 
   /// Get reference to the old beads.
-  Beads<NDIM>& getSectionBeads() {return *sectionBeads;}
+  virtual Beads<NDIM>& getSectionBeads() {return *sectionBeads;}
   /// Get const reference to the moving beads.
   virtual const Beads<NDIM>& getSectionBeads() const {return *sectionBeads;}
   /// Get a reference to the moving bead index.

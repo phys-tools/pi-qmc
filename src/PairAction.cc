@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "PairAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -232,7 +232,7 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
 }
 
 
-double PairAction::getActionDifference(const MultiLevelSampler& sampler,
+double PairAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

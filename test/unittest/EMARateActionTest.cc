@@ -10,7 +10,7 @@
 #include "SuperCell.h"
 #include "SectionChooser.h"
 
-class MultiLevelSamplerStub : public MultiLevelSamplerInterface {
+class MultiLevelSamplerStub : public SectionSamplerInterface {
 public:
     MultiLevelSamplerStub() 
         :   sectionBeads(new Beads<NDIM>(npart, nslice)),

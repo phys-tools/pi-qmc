@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "SHOAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -32,7 +32,7 @@ SHOAction::SHOAction(const double tau, const double omega, const double mass,
             << " centered at " << center << std::endl;
 }
 
-double SHOAction::getActionDifference(const MultiLevelSampler& sampler,
+double SHOAction::getActionDifference(const SectionSamplerInterface& sampler,
                                       const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

@@ -7,15 +7,12 @@ class BeadFactory;
 class Paths;
 class DoubleSectionChooser;
 
-class DoubleCollectiveSectionSampler : public DoubleMLSampler {
+class DoubleCollectiveSectionSampler {
 public:
-  /// Constructor.
-  DoubleCollectiveSectionSampler(const int nmoving, Paths&, DoubleSectionChooser&,
-		  Action*, DoubleAction*, const bool sampleBoth, const int nrepeat,
-		  const BeadFactory&);
-/// Destructor.
+  DoubleCollectiveSectionSampler(Paths*, DoubleSectionChooser*,
+		  Action*, DoubleAction*, const BeadFactory*);
   virtual ~DoubleCollectiveSectionSampler();
-  /// Run the sampler.
+
   virtual void run();
 private:
 };

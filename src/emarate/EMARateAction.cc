@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
@@ -50,13 +50,13 @@ EMARateAction::EMARateAction(const SimulationInfo& simInfo,
 
 EMARateAction::~EMARateAction() {
 }
-double EMARateAction::getActionDifference(const MultiLevelSampler& sampler,
+double EMARateAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
     return testableGetActionDifference(sampler, level);
 }
 
 double EMARateAction::testableGetActionDifference(
-        const MultiLevelSamplerInterface& sampler, const int level) {
+        const SectionSamplerInterface& sampler, const int level) {
   // Only evaluate if we are aligned with slice 0 in the middle.
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

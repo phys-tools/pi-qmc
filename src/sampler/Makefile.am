@@ -48,7 +48,6 @@ noinst_HEADERS = \
         ModelSampler.h \
         Mover.h \
         MultiLevelSampler.h \
-        MultiLevelSamplerInterface.h \
         MultiSpeciesParticleChooser.h \
         NonZeroSectionChooser.h \
         PairChooser.h \
@@ -56,6 +55,7 @@ noinst_HEADERS = \
         PermutationChooser.h \
         RandomPermutationChooser.h \
         SectionChooser.h \
+        SectionSamplerInterface.h \
         SimpleParticleChooser.h \
         SpeciesParticleChooser.h \
         SpinModelSampler.h \

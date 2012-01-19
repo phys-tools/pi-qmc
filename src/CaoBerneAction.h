@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __CaoBerneAction_h_
 #define __CaoBerneAction_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class Paths;
 class Species;
 class SimulationInfo;

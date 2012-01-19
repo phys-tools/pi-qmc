@@ -19,7 +19,7 @@
 #endif
 #include "EFieldAction.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
 #include "SuperCell.h"
@@ -53,7 +53,7 @@ EFieldAction::EFieldAction(const SimulationInfo& simInfo,
   }
 }
 
-double EFieldAction::getActionDifference(const MultiLevelSampler& sampler,
+double EFieldAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

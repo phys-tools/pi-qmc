@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "GaussianDotAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -31,7 +31,7 @@ GaussianDotAction::GaussianDotAction(const double v0, const double alpha,
             << ", v0= " << v0 << ", center=" << center << std::endl;
 }
 
-double GaussianDotAction::getActionDifference(const MultiLevelSampler& sampler,
+double GaussianDotAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

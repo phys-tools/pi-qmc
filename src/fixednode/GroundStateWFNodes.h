@@ -40,7 +40,7 @@ public:
   /// Virtual destructor.
   virtual ~GroundStateWFNodes() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&, int level);
+  virtual double getActionDifference(const SectionSamplerInterface&, int level);
   virtual double getActionDifference(const DisplaceMoveSampler&,
 				     const int nMoving) {std :: cout <<"WARNING IN GroundStateWFNodes: ATCION DIFF NOT IMPLEMETNED YET"; return 0;};
     /// Calculate the total action.

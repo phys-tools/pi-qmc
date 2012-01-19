@@ -19,7 +19,7 @@
 #endif
 #include "GridPotential.h"
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "SimulationInfo.h"
 #include "Beads.h"
 #include "Paths.h"
@@ -112,7 +112,7 @@ GridPotential::GridPotential(const SimulationInfo& simInfo,
   }
 }
 
-double GridPotential::getActionDifference(const MultiLevelSampler& sampler,
+double GridPotential::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

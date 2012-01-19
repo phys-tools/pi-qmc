@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __Action_h_
 #define __Action_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class DisplaceMoveSampler; 
 class SectionChooser;
 class Paths;
@@ -36,21 +36,18 @@ class Paths;
 /// @author John Shumway.
 class Action {
 public:
-  /// Typdefs and constants.
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::Array<int,1> IArray;
   typedef blitz::Array<Vec,1> VArray;
-  /// Virtual destructor.
+
   virtual ~Action() {}
-  /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&, int level)=0;
-  /// Calculate the difference in action.
+
+  virtual double getActionDifference(const SectionSamplerInterface&, int level)=0;
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice) {
     return 0;
   }
  
-  /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const=0;
   /// Calculate action and derivatives at a bead (defaults to no
   /// contribution).

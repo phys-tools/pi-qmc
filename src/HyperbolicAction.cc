@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -61,7 +61,7 @@ HyperbolicAction::HyperbolicAction(const SimulationInfo& simInfo,
 HyperbolicAction::~HyperbolicAction() {
 }
 
-double HyperbolicAction::getActionDifference(const MultiLevelSampler& sampler,
+double HyperbolicAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

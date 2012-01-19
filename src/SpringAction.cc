@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
@@ -69,7 +69,7 @@ SpringAction::~SpringAction() {
   for (PGArray::iterator i=pg.begin();  i!=pg.end(); ++i) delete *i;
 }
 
-double SpringAction::getActionDifference(const MultiLevelSampler& sampler,
+double SpringAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

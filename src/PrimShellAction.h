@@ -17,7 +17,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PrimShellAction_h_
 #define __PrimShellAction_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
@@ -39,7 +39,7 @@ public:
   /// Virtual destructor.
   virtual ~PrimShellAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calcuate the difference in action (NOT IMPLEMENTED YET).
   virtual double getActionDifference(const DisplaceMoveSampler&,

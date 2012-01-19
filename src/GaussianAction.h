@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __GaussianAction_h_
 #define __GaussianAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 #include "Action.h"
@@ -38,7 +38,7 @@ public:
   /// Virtual destructor.
   virtual ~GaussianAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
  virtual double getActionDifference(const DisplaceMoveSampler&,
 				    const int nMoving){ return 0;};

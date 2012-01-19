@@ -20,7 +20,7 @@
 #include "DotGeomAction.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -29,7 +29,7 @@ DotGeomAction::DotGeomAction(const double tau)
   : tau(tau) {
 }
 
-double DotGeomAction::getActionDifference(const MultiLevelSampler& sampler,
+double DotGeomAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   double deltaAction=0;
 #if NDIM==3

@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "SpringTensorAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -34,7 +34,7 @@ SpringTensorAction::SpringTensorAction(const SimulationInfo& simInfo)
 }
 
 double SpringTensorAction::getActionDifference(
-    const MultiLevelSampler& sampler, const int level) {
+    const SectionSamplerInterface& sampler, const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();

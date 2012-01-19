@@ -35,6 +35,7 @@ if(GTEST_FOUND)
         ${SRC_DIR}/sampler/CollectiveSectionMover.cc
         ${SRC_DIR}/SuperCell.cc
         CollectiveSectionSamplerTest.cc
+        ${SRC_DIR}/sampler/DoubleCollectiveSectionSampler.cc
     )
     
     target_link_libraries(samplerTests ${GTEST_BOTH_LIBRARIES} -lpthread)

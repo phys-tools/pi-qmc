@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "ImagePairAction.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "SuperCell.h"
@@ -45,7 +45,7 @@ ImagePairAction::ImagePairAction(const Species& s1, const Species& s2,
   std::cout << "Using images: " << nimage << std::endl;
 } 
 
-double ImagePairAction::getActionDifference(const MultiLevelSampler& sampler,
+double ImagePairAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __GrapheneAction_h_
 #define __GrapheneAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 template <int TDIM> class Beads;
 #include "Action.h"
 #include <cstdlib>
@@ -36,7 +36,7 @@ public:
   /// Virtual destructor.
   virtual ~GrapheneAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   virtual double getActionDifference(const DisplaceMoveSampler&,
 				    const int nMoving){ return 0;};

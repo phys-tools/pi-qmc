@@ -19,7 +19,7 @@
 #endif
 #include "GroundStateWFNodes.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Species.h"
 #include "SuperCell.h"
 
@@ -27,7 +27,7 @@ GroundStateWFNodes::GroundStateWFNodes(const Species& s, const Species& rs)
   : npart(s.count),ifirst(s.ifirst), iref(rs.ifirst) {
 }
 
-double GroundStateWFNodes::getActionDifference(const MultiLevelSampler& sampler,
+double GroundStateWFNodes::getActionDifference(const SectionSamplerInterface& sampler,
                                                int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

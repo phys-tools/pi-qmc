@@ -22,7 +22,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -51,7 +51,7 @@ RingGateAction::RingGateAction(const SimulationInfo &simInfo,
     ifirst(species.ifirst), npart(species.count) {
 }
 
-double RingGateAction::getActionDifference(const MultiLevelSampler& sampler, const int level) {
+double RingGateAction::getActionDifference(const SectionSamplerInterface& sampler, const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();

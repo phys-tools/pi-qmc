@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/MultiLevelSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "SuperCell.h"
 #include "Paths.h"
@@ -31,7 +31,7 @@ GrapheneAction::GrapheneAction(const SimulationInfo &simInfo)
   : tau(simInfo.getTau()) {
 }
 
-double GrapheneAction::getActionDifference(const MultiLevelSampler& sampler,
+double GrapheneAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();

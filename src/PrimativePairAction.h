@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __EmpriricalInteraction_h_
 #define __EmpriricalInteraction_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class Paths;
 class Species;
 class SimulationInfo;

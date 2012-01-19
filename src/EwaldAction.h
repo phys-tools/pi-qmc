@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __EwaldAction_h_
 #define __EwaldAction_h_
-class MultiLevelSampler;class DisplaceMoveSampler;
+class SectionSamplerInterface;class DisplaceMoveSampler;
 class SectionChooser;
 class Paths;
 class SuperCell;
@@ -77,7 +77,7 @@ public:
   /// Setup the long range and short range action.
   void setup();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
    virtual double getActionDifference(const DisplaceMoveSampler&,
 				    const int nMoving);

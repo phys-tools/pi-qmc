@@ -15,7 +15,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __GateAction_h_
 #define __GateAction_h_
-class MultiLevelSampler;
+class SectionSamplerInterface;
 class Species;
 template <int TDIM> class Beads;
 #include "Action.h"
@@ -39,7 +39,7 @@ public:
   /// Virtual destructor.
   virtual ~GateAction() {};
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&, const int level);
+  virtual double getActionDifference(const SectionSamplerInterface&, const int level);
   /// calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray&, 
                                      const int nMoving, const IArray&,
