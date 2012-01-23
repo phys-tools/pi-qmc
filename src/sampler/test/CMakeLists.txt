@@ -36,6 +36,11 @@ if(GTEST_FOUND)
         ${SRC_DIR}/SuperCell.cc
         CollectiveSectionSamplerTest.cc
         ${SRC_DIR}/sampler/DoubleCollectiveSectionSampler.cc
+        ${SRC_DIR}/BeadFactory.cc
+        ${SRC_DIR}/sampler/DoubleSectionChooser.cc
+        ${SRC_DIR}/RandomNumGenerator.cc
+        ${SRC_DIR}/sampler/SectionChooser.cc
+        ${SRC_DIR}/Permutation.cc
     )
     
     target_link_libraries(samplerTests ${GTEST_BOTH_LIBRARIES} -lpthread)
@@ -45,6 +50,8 @@ if(GTEST_FOUND)
     if (EXISTS ${LIBF2C_LIB})
         target_link_libraries(samplerTests ${LIBF2C_LIB})
     endif()
+    target_link_libraries(samplerTests ${GSL_LIB})
+    
 
     else()
     message(AUTHOR_WARNING "** GTEST not found, unit testing not enabled") 

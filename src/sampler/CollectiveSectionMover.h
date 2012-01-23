@@ -31,7 +31,7 @@ public:
     void setCenter(Vec center);
 
 private:
-    inline Vec envelope(const Vec&, int sliceIndex) const;
+    inline Vec calcDisplacement(const Vec&, int sliceIndex) const;
     inline double timeEnvelope(int sliceIndex) const;
     inline bool isOutsideRadius(const Vec &rin) const;
 

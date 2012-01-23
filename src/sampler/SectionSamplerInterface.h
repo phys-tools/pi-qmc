@@ -11,6 +11,7 @@ class SectionChooser;
 class SectionSamplerInterface {
 public:
     typedef blitz::Array<int,1> IArray;
+    virtual ~SectionSamplerInterface() {};
     virtual const Beads<NDIM>& getSectionBeads() const = 0;
     virtual const Beads<NDIM>& getMovingBeads() const = 0;
     virtual Beads<NDIM>& getSectionBeads() = 0;
