@@ -31,7 +31,7 @@ class BeadFactory;
 class SectionChooser : public CompositeAlgorithm {
 public:
   /// Constructor.
-  SectionChooser(const int nlevel, Paths &paths, Action& action,
+  SectionChooser(int nlevel, int npart, Paths &paths, Action& action,
                  const BeadFactory&);
   /// Virtual destructor.
   virtual ~SectionChooser();
@@ -46,12 +46,12 @@ public:
   /// Get the number of levels in the section.
   int getNLevel() const {return nlevel;}
   /// Get a reference to the paths.
-  const Paths& getPaths() const {return paths;}
+  const Paths& getPaths() const {return *paths;}
 protected:
   /// The paths.
-  Paths& paths;
+  Paths *paths;
   /// The action (SectionChooser initializes Action objects for the section).
-  Action &action;
+  Action *action;
   /// The section beads.
   mutable Beads<NDIM> *beads;
   /// The section permutation.

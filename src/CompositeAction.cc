@@ -80,10 +80,10 @@ void CompositeAction::acceptLastMove() {
   }
 }
 
-const Action* CompositeAction::getAction(const std::type_info &type) const {
+const Action* CompositeAction::getActionPointerByType(const std::type_info &type) const {
   const Action* actionPtr=0;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
-    actionPtr=(*action)->getAction(type);
+    actionPtr=(*action)->getActionPointerByType(type);
     if (actionPtr) return actionPtr;
   }
   return 0;

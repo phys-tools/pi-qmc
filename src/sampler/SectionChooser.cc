@@ -31,11 +31,11 @@
 #include <iostream>
 #include <gsl/gsl_qrng.h>
 
-SectionChooser::SectionChooser(const int nlevel, Paths &paths, Action &action,
-  const BeadFactory &beadFactory) 
-  : CompositeAlgorithm(0), paths(paths), action(action),
-    beads(beadFactory.getNewBeads(paths.getNPart(),(int)pow(2,nlevel)+1)),
-    permutation(new Permutation(paths.getNPart())),
+SectionChooser::SectionChooser(int nlevel, int npart, Paths &paths,
+        Action &action, const BeadFactory &beadFactory)
+  : CompositeAlgorithm(0), paths(&paths), action(&action),
+    beads(beadFactory.getNewBeads(npart,(int)pow(2,nlevel)+1)),
+    permutation(new Permutation(npart)),
     nlevel(nlevel), qrng(gsl_qrng_alloc(gsl_qrng_sobol,1)) {
 }
 
@@ -46,19 +46,19 @@ SectionChooser::~SectionChooser() {
 
 void SectionChooser::run() {
   double x=RandomNumGenerator::getRand()*(1-1e-8);
-  int ilo=paths.getLowestOwnedSlice(false)-1;
-  int ihi=paths.getHighestSampledSlice(beads->getNSlice()-1,false);
+  int ilo=paths->getLowestOwnedSlice(false)-1;
+  int ihi=paths->getHighestSampledSlice(beads->getNSlice()-1,false);
   iFirstSlice=ilo+(int)((ihi+1-ilo)*x);
   if (iFirstSlice>ihi) iFirstSlice=ihi;
   // Copy coordinates from allBeads to section Beads.
-  paths.getBeads(iFirstSlice,*beads);
+  paths->getBeads(iFirstSlice,*beads);
   permutation->reset();
   // Initialize the action.
-  action.initialize(*this);
+  action->initialize(*this);
   // Run the sampling algorithm.
   CompositeAlgorithm::run();
   // Copy moved coordinates from sectionBeads to allBeads.
-  paths.putBeads(iFirstSlice,*beads,*permutation);
+  paths->putBeads(iFirstSlice,*beads,*permutation);
   // Refresh the buffer slices.
-  paths.setBuffers();
+  paths->setBuffers();
 }

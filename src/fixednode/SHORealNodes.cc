@@ -68,7 +68,7 @@ SHORealNodes::~SHORealNodes() {
 
 NodeModel::DetWithFlag
 SHORealNodes::evaluate(const VArray &r1, const VArray &r2, 
-                          const int islice) { 
+                          const int islice, bool scaleMagnitude) {
   DetWithFlag result; result.err=false;
   // First evaluate the inverse slater matrix.
   Matrix& mat(*matrix[islice]);
@@ -113,8 +113,9 @@ void SHORealNodes::evaluateDistance(const VArray &r1, const VArray &r2,
       std::complex<double> m= exp(-a1*dot(sum,sum)-a2*dot(diff,diff)
         -Complex(0,1)*b1*(r1(jpart+ifirst)[0]*r2(ipart+ifirst)[1]
                          -r1(jpart+ifirst)[1]*r2(ipart+ifirst)[0]));
-      gradmat1(ipart,jpart)=m*(-2*a1*sum-2*a2*diff);
-      gradmat2(ipart,jpart)=m*(-2*a1*sum+2*a2*diff);
+      //Compiler bug (Jan 23, 2012)
+      //      gradmat1(ipart,jpart)=m*(-2*a1*sum-2*a2*diff);
+      //      gradmat2(ipart,jpart)=m*(-2*a1*sum+2*a2*diff);
     }
   }
 

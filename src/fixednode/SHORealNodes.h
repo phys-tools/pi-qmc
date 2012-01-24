@@ -56,13 +56,11 @@ class Species;
 * @author Daejin Shin */
 class SHORealNodes : public NodeModel {
 public:
+
   typedef std::complex<double> Complex;
-  typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<Complex,NDIM> CVec;
   typedef blitz::Array<Complex,2> Matrix;
-  typedef blitz::Array<CVec,2> VMatrix;
   typedef blitz::Array<int,1> IArray;
-  typedef blitz::Array<double,1> Array;
   typedef blitz::Array<Complex,1> CArray;
   typedef blitz::ColumnMajorArray<2> ColMajor;
   /// Constructor.
@@ -72,7 +70,7 @@ public:
   virtual ~SHORealNodes();
    /// Evaluate the density matrix function, returning the value.
   virtual DetWithFlag evaluate(const VArray &r1, const VArray &r2, 
-                               const int islice);
+                               const int islice, bool scaleMagnitude);
   /// Evaluate distance to the node in units of @f$ \sqrt{\tau/2m}@f$.
   virtual void evaluateDistance(const VArray &r1, const VArray &r2,
                                 const int islice, Array &d1, Array &d2);
@@ -82,7 +80,7 @@ public:
   //                 const int islice, VArray &force, const double distance);
   virtual void evaluateGradLogDist(const VArray &r1, const VArray &r2,
            const int islice, VMatrix &gradd1, VMatrix &gradd2,
-                             const Array &d1, const Array &d2)=0;
+                             const Array &d1, const Array &d2);
 
 
 private:

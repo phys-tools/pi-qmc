@@ -74,7 +74,7 @@ void DoubleActionChoice::acceptLastMove() {
   actions[imodel]->acceptLastMove();
 }
 
-double DoubleActionChoice::getActionDifference(const Paths &paths, int j) {
+double DoubleActionChoice::getActionChoiceDifference(const Paths &paths, int j) {
  jmodel = j;
  paths.sumOverLinks(*this);
  return actionDifference;

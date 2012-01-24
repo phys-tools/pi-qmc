@@ -39,7 +39,7 @@ public:
   virtual ~DoubleAction() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const DoubleMLSampler&,
-                                     int level) {return 0;}
+                                     const int level) {return 0;}
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice) {

@@ -206,9 +206,9 @@ PairAction::PairAction(const Species& s1, const Species& s2,
             const int ngpts, int exLevel) 
   : tau(simInfo.getTau()), ngpts(ngpts), rgridinv(1.0/rmin),
     logrratioinv((ngpts-1)/log(rmax/rmin)), 
-    ugrid(ngpts,2,(hasZ?(norder+1)*(norder+2)/2:norder+1)),
+    ugrid(ngpts,2,norder+1),
     species1(s1), species2(s2), ifirst1(s1.ifirst), ifirst2(s2.ifirst),
-    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(hasZ),
+    npart1(s1.count), npart2(s2.count), norder(norder), hasZ(false),
     exLevel(exLevel), mass(s1.mass) {
 std::cout << "constructing PairAction" << std::endl;
 std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;

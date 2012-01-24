@@ -174,13 +174,14 @@ Algorithm* PIMCParser::parseAlgorithm(const xmlXPathContextPtr& ctxt) {
     nlevel=getIntAttribute(ctxt->node,"nlevel");
     if (doubleAction==0) {
 std::cout << "doubleAction==0" << std::endl;
-      sectionChooser = new SectionChooser(nlevel,*paths,*action,beadFactory);
+      sectionChooser = new SectionChooser(nlevel,paths->getNPart(),*paths,
+              *action,beadFactory);
       parseBody(ctxt,sectionChooser);
       algorithm = sectionChooser;
     } else {
 std::cout << "doubleAction!=0" << std::endl;
       doubleSectionChooser=
-        new DoubleSectionChooser(nlevel,*paths,*action,
+        new DoubleSectionChooser(nlevel, paths->getNPart(), *paths, *action,
                                  *doubleAction,beadFactory);
       parseBody(ctxt,doubleSectionChooser);
       algorithm=doubleSectionChooser;

@@ -35,3 +35,13 @@ double PairPotential::getScatteringLength(double mu,
   }
   return (r-0.5*dr) - 0.5*dr*(psi+psim)/(psi-psim);
 }
+
+const double PairPotential::Aziz::A=1.9221529e5;
+const double PairPotential::Aziz::alpha=10.73520708;
+const double PairPotential::Aziz::beta=-1.89296514;
+const double PairPotential::Aziz::C6=1.34920045;
+const double PairPotential::Aziz::C8=0.41365922;
+const double PairPotential::Aziz::C10=0.17078164;
+const double PairPotential::Aziz::D=1.4135;
+const double PairPotential::Aziz::eps=10.94/3.1577465e5;
+const double PairPotential::Aziz::r0=0.2970/0.05291772086;

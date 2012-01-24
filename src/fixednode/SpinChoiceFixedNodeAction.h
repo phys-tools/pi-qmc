@@ -38,7 +38,7 @@ public:
 
     virtual ~SpinChoiceFixedNodeAction();
 
-    virtual double getActionDifference(const Paths &paths, int ipart);
+    virtual double getActionChoiceDifference(const Paths &paths, int ipart);
 
 //    virtual void initCalc(const int nslice, const int firstSlice);
     

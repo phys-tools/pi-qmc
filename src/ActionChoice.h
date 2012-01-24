@@ -29,7 +29,7 @@ class EnumeratedModelState;
 class ActionChoiceBase {
 public:
   ActionChoiceBase() : modelState(0) {}
-  virtual double getActionDifference(const Paths&, int jmodel)=0;
+  virtual double getActionChoiceDifference(const Paths&, int jmodel)=0;
   ModelState& getModelState() {return *modelState;}
   const ModelState& getModelState() const {return *modelState;}
 protected:
@@ -49,13 +49,13 @@ public:
   /// Virtual destructor deletes all Action objects.
   virtual ~ActionChoice();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const MultiLevelSampler&,
-                                     const int level);
+  virtual double getActionDifference(const SectionSamplerInterface&,
+                                     int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);
   /// Calculate the difference in action.
-  virtual double getActionDifference(const Paths&, int jmodel);
+  virtual double getActionChoiceDifference(const Paths&, int jmodel);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

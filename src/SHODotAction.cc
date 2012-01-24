@@ -28,8 +28,8 @@
 
 SHODotAction::SHODotAction(double tau, double t, double v0,
                            double omega, double z, const Species &species)
-  : tau(tau), t(t), v0(v0), k(species.mass*omega*omega),
-    ifirst(species.ifirst), npart(species.count), z(z) {
+  : tau(tau), t(t), v0(v0), k(species.mass*omega*omega), z(z),
+    ifirst(species.ifirst), npart(species.count) {
 std::cout << "SHODotAction: " << species << std::endl;
 std::cout << "thick,v0,mw2,z: " << t << "," << v0 << "," << k 
    << ", " << z << std::endl;

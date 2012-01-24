@@ -39,7 +39,7 @@ public:
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);
   /// Calculate the difference in action.
-  virtual double getActionDifference(const Paths&, int jmodel);
+  double getActionChoiceDifference(const Paths&, int jmodel);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

@@ -74,7 +74,7 @@ private:
   CArray2 best, err, worka;
   Array g,g0,s2,z,u;
   fftw_plan fwd, rev;
-  static const double PI=3.1415926535897931;
+  static const double PI;
   const PairPotential &pot;
   const double tol;
   const int nsegment;

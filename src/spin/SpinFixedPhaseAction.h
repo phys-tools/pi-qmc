@@ -98,9 +98,7 @@ public:
   /// Destructor.
   ~SpinFixedPhaseAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const DoubleMLSampler&,int level);
-  virtual double getActionDifference(const DoubleDisplaceMoveSampler&,
-                                     const int nMoving) {std :: cout << "not sure if this is correct in SpinFixedPhaseAction.h return 0"<<std ::endl;return 0;};
+  virtual double getActionDifference(const DoubleMLSampler&, const int level);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate action and derivatives at a bead.

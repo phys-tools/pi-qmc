@@ -69,7 +69,7 @@ bool SpinModelSampler::tryMove() {
   if (ipart != permutation[ipart]) return false;
 
   // Evaluate the change in action.
-  double deltaAction = actionChoice->getActionDifference(paths,ipart);
+  double deltaAction = actionChoice->getActionChoiceDifference(paths,ipart);
 
 #ifdef ENABLE_MPI
   double totalDeltaAction = 0;

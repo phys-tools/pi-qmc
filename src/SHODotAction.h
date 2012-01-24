@@ -38,7 +38,7 @@ public:
   virtual ~SHODotAction() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const SectionSamplerInterface&,
-                                     const int level);
+                                     int level);
   virtual double getActionDifference(const DisplaceMoveSampler&,
 				    const int nMoving){ return 0;};
   virtual double getActionDifference(const Paths&, const VArray &displacement,

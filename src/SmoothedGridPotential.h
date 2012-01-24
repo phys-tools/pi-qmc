@@ -87,8 +87,6 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int ilevel);
-  virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
  /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int ilevel) const;
   /// Calculate the and derivatives at a bead.

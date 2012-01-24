@@ -38,7 +38,7 @@ public:
   virtual ~CompositeAction();
   /// Calculate the difference in action.
   virtual double getActionDifference(const SectionSamplerInterface&,
-                                     const int level);
+                                     int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);
@@ -54,7 +54,7 @@ public:
   /// Accept last move.
   virtual void acceptLastMove();
   /// Returns pointer to an Action of type type, otherwise returns null pointer.
-  virtual const Action* getAction(const std::type_info &type) const;
+  virtual const Action* getActionPointerByType(const std::type_info &type) const;
   /// Returns the number of action objects.
   int getCount() {return actions.size();}
 protected:

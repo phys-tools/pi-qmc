@@ -30,7 +30,7 @@ class BeadFactory;
 class DoubleSectionChooser : public SectionChooser {
 public:
   /// Constructor.
-  DoubleSectionChooser(const int nlevel, Paths&, Action&, DoubleAction&,
+  DoubleSectionChooser(int nlevel, int npart, Paths&, Action&, DoubleAction&,
     const BeadFactory&);
   /// Virtual destructor.
   virtual ~DoubleSectionChooser();

@@ -375,3 +375,6 @@ void PairIntegrator::vpolyfit(const Array &x, const CArray3 &y, CArray2 &y0,
   }
   diff = d(0,all,all);
 }
+
+const double PairIntegrator::PI=3.1415926535897931;
+

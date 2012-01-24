@@ -45,7 +45,7 @@ Species::~Species() {delete anMass;}
 
 Species::Species(const std::string& name, const int count, const double mass,
   const double charge, const int twos, const bool isFermion) 
-  : name(name), count(count), ifirst(ifirst), mass(mass), charge(charge),
+  : name(name), count(count), ifirst(0), mass(mass), charge(charge),
     twos(twos), isFermion(isFermion) {
 }
 

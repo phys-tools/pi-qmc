@@ -17,7 +17,6 @@
 #ifndef __Action_h_
 #define __Action_h_
 class SectionSamplerInterface;
-class DisplaceMoveSampler; 
 class SectionChooser;
 class Paths;
 #include <cstdlib>
@@ -59,7 +58,7 @@ public:
   /// Accept last move.
   virtual void acceptLastMove() {};
   /// Returns pointer to Action of type t, otherwise returns null pointer.
-  virtual const Action* getAction(const std::type_info &type) const { 
+  virtual const Action* getActionPointerByType(const std::type_info &type) const { 
     return (typeid(*this)==type) ? this : 0;
   };
 };

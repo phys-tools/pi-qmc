@@ -84,7 +84,7 @@ bool ModelSampler::tryMove() {
                     ? (nmodel-1.-imodel)/jmodel :imodel/(nmodel-1.-jmodel);
 
   // Evaluate the change in action.
-  double deltaAction = actionChoice->getActionDifference(paths,jmodel);
+  double deltaAction = actionChoice->getActionChoiceDifference(paths,jmodel);
 #ifdef ENABLE_MPI
   double totalDeltaAction = 0;
   mpi->getWorkerComm().Reduce(&deltaAction,&totalDeltaAction,

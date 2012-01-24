@@ -49,24 +49,25 @@ public:
   virtual ~DoubleMLSampler();
   /// Run the sampler.
   virtual void run();
-  /// Get reference to the moving beads.
-  Beads<NDIM>& getMovingBeads(const int i) {
+
+  using MultiLevelSampler::getMovingBeads;
+  virtual Beads<NDIM>& getMovingBeads(const int i) {
     return i==1?*movingBeads1:*movingBeads2;}
-  /// Get const reference to the moving beads.
-  const Beads<NDIM>& getMovingBeads(const int i) const {
+  virtual const Beads<NDIM>& getMovingBeads(const int i) const {
     return i==1?*movingBeads1:*movingBeads2;}
-  /// Get reference to the old beads.
-  Beads<NDIM>& getSectionBeads(const int i) {
+
+  using MultiLevelSampler::getSectionBeads;
+  virtual Beads<NDIM>& getSectionBeads(const int i) {
     return i==1?*sectionBeads1:*sectionBeads2;}
-  /// Get const reference to the moving beads.
-  const Beads<NDIM>& getSectionBeads(const int i) const {
+  virtual const Beads<NDIM>& getSectionBeads(const int i) const {
     return i==1?*sectionBeads1:*sectionBeads2;}
-  /// Get a reference to the moving bead index.
-  IArray&  getMovingIndex(const int i) {
+
+  using MultiLevelSampler::getMovingIndex;
+  virtual IArray&  getMovingIndex(const int i) {
     return i==1?*movingIndex1:*movingIndex2;}
-  /// Get a const reference to the moving bead index.
-  const IArray&  getMovingIndex(const int i) const {
+  virtual const IArray&  getMovingIndex(const int i) const {
     return i==1?*movingIndex1:*movingIndex2;}
+
   /// Represent selecting all levels by -1.
   static const int ALL_LEVELS=-1;
   /// Are both sections being sampled?

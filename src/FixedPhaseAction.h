@@ -95,8 +95,9 @@ public:
   /// Destructor.
   ~FixedPhaseAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const DoubleMLSampler&,int level);
- virtual double getActionDifference(const DoubleDisplaceMoveSampler&,
+  using DoubleAction::getActionDifference;
+  virtual double getActionDifference(const DoubleMLSampler&, const int level);
+  virtual double getActionDifference(const DoubleDisplaceMoveSampler&,
 				    const int nMoving){ return 0;};
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;

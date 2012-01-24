@@ -34,7 +34,7 @@ ActionChoice::~ActionChoice() {
 }
 
 double ActionChoice::getActionDifference(
-    const MultiLevelSampler& sampler, const int level) {
+    const SectionSamplerInterface& sampler, int level) {
   int imodel = enumModelState->getModelState();
   double diff = actions[imodel]->getActionDifference(sampler,level);
   return diff;
@@ -73,7 +73,7 @@ void ActionChoice::acceptLastMove() {
   actions[imodel]->acceptLastMove();
 }
 
-double ActionChoice::getActionDifference(const Paths &paths, int j) {
+double ActionChoice::getActionChoiceDifference(const Paths &paths, int j) {
   jmodel = j;
   paths.sumOverLinks(*this);
   return actionDifference;

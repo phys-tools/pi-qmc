@@ -42,9 +42,7 @@ public:
   virtual ~DotGeomAction() {}
   /// Calculate the difference in action.
   virtual double getActionDifference(const SectionSamplerInterface&,
-                                     const int level);
- virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
+                                     int level);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate the action and derivatives at a bead.

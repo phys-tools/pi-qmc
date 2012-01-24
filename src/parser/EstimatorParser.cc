@@ -230,7 +230,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         new ConductivityEstimator(simInfo,nfreq,nbin,ndbin,nstride,mpi));
       if (getBoolAttribute(estNode,"calcInduced")) {
         std::cout << "Also calculating induced voltage" << std::endl;
-        const Action *coulAction=action->getAction(typeid(CoulombAction));
+        const Action *coulAction =
+                action->getActionPointerByType(typeid(CoulombAction));
         if (!coulAction) {
           std::cout << "ERROR, can't find CoulombAction" << std::endl;
         } else {
@@ -244,7 +245,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
       if (getBoolAttribute(estNode,"calcEInduced")) {
         std::cout << "Also calculating induced efield" << std::endl;
-        const Action *coulAction=action->getAction(typeid(CoulombAction));
+        const Action *coulAction =
+                action->getActionPointerByType(typeid(CoulombAction));
         if (!coulAction) {
           std::cout << "ERROR, can't find CoulombAction" << std::endl;
         } else {

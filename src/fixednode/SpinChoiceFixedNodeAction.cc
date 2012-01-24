@@ -45,7 +45,7 @@ SpinChoiceFixedNodeAction::~SpinChoiceFixedNodeAction() {
   delete spinModelState;
 }
 
-double SpinChoiceFixedNodeAction::getActionDifference(const Paths &paths,
+double SpinChoiceFixedNodeAction::getActionChoiceDifference(const Paths &paths,
     int ipart) {
   int totNSlice = paths.getNSlice();
   double newAction = 0., oldAction = 0.;

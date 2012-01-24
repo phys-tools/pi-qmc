@@ -56,9 +56,9 @@ public:
   virtual void run();
   /// Get the number of levels in the sampling.
   int getNLevel() const {return nlevel;}
-  /// Get reference to the moving beads.
+
+  using SectionSamplerInterface::getMovingBeads;
   virtual Beads<NDIM>& getMovingBeads() {return *movingBeads;}
-  /// Get const reference to the moving beads.
   virtual const Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
 
   virtual int getFirstSliceIndex() const;
@@ -67,15 +67,14 @@ public:
   Beads<NDIM>& getRejectedBeads() {return *rejectedBeads;}
   double getFactor(){return factor;}
 
-  /// Get reference to the old beads.
+  using SectionSamplerInterface::getSectionBeads;
   virtual Beads<NDIM>& getSectionBeads() {return *sectionBeads;}
-  /// Get const reference to the moving beads.
   virtual const Beads<NDIM>& getSectionBeads() const {return *sectionBeads;}
-  /// Get a reference to the moving bead index.
+
+  using SectionSamplerInterface::getMovingIndex;
   IArray&  getMovingIndex() {return *movingIndex;}
-  /// Get a const reference to the moving bead index.
   const IArray&  getMovingIndex() const {return *movingIndex;}
-  /// Represent selecting all levels by -1.
+
   static const int ALL_LEVELS=-1;
   /// Set the action function for a level, or default to level=ALL_LEVELS.
   void setAction(Action*, const int level=ALL_LEVELS);
