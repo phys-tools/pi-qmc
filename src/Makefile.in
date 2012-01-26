@@ -64,24 +64,25 @@ am_pi_OBJECTS = ActionChoice.$(OBJEXT) \
 	ConductivityEstimator2D.$(OBJEXT) CoulombAction.$(OBJEXT) \
 	CoulombEnergyEstimator.$(OBJEXT) CountCountEstimator.$(OBJEXT) \
 	CubicLattice.$(OBJEXT) DensCountEstimator.$(OBJEXT) \
-	DensDensEstimator.$(OBJEXT) DensityEstimator.$(OBJEXT) \
-	DiamagneticEstimator.$(OBJEXT) DipoleMomentEstimator.$(OBJEXT) \
-	DotGeomAction.$(OBJEXT) DoubleActionChoice.$(OBJEXT) \
-	DoubleParallelPaths.$(OBJEXT) DynamicPCFEstimator.$(OBJEXT) \
-	EFieldAction.$(OBJEXT) EIndEstimator.$(OBJEXT) \
-	EnumeratedModelState.$(OBJEXT) EwaldAction.$(OBJEXT) \
-	EwaldCoulombEstimator.$(OBJEXT) EwaldImagePairAction.$(OBJEXT) \
-	EwaldSum.$(OBJEXT) FixedPhaseAction.$(OBJEXT) \
-	FreeEnergyEstimator.$(OBJEXT) FrequencyEstimator.$(OBJEXT) \
-	GateAction.$(OBJEXT) GaussianAction.$(OBJEXT) \
-	GaussianDotAction.$(OBJEXT) GrapheneAction.$(OBJEXT) \
-	GridPotential.$(OBJEXT) Hungarian.$(OBJEXT) \
-	HyperbolicAction.$(OBJEXT) ImagePairAction.$(OBJEXT) \
-	JEstimator.$(OBJEXT) JelliumSlab.$(OBJEXT) Measure.$(OBJEXT) \
-	OptEwaldSum.$(OBJEXT) OpticalLatticeAction.$(OBJEXT) \
-	PairAction.$(OBJEXT) PairDistance.$(OBJEXT) \
-	PairIntegrator.$(OBJEXT) PairPotential.$(OBJEXT) \
-	ParallelPaths.$(OBJEXT) PathReader.$(OBJEXT) Paths.$(OBJEXT) \
+	DensDensEstimator.$(OBJEXT) DensityCurrentEstimator.$(OBJEXT) \
+	DensityEstimator.$(OBJEXT) DiamagneticEstimator.$(OBJEXT) \
+	DipoleMomentEstimator.$(OBJEXT) DotGeomAction.$(OBJEXT) \
+	DoubleActionChoice.$(OBJEXT) DoubleParallelPaths.$(OBJEXT) \
+	DynamicPCFEstimator.$(OBJEXT) EFieldAction.$(OBJEXT) \
+	EIndEstimator.$(OBJEXT) EnumeratedModelState.$(OBJEXT) \
+	EwaldAction.$(OBJEXT) EwaldCoulombEstimator.$(OBJEXT) \
+	EwaldImagePairAction.$(OBJEXT) EwaldSum.$(OBJEXT) \
+	FixedPhaseAction.$(OBJEXT) FreeEnergyEstimator.$(OBJEXT) \
+	FrequencyEstimator.$(OBJEXT) GateAction.$(OBJEXT) \
+	GaussianAction.$(OBJEXT) GaussianDotAction.$(OBJEXT) \
+	GrapheneAction.$(OBJEXT) GridPotential.$(OBJEXT) \
+	Hungarian.$(OBJEXT) HyperbolicAction.$(OBJEXT) \
+	ImagePairAction.$(OBJEXT) JEstimator.$(OBJEXT) \
+	JelliumSlab.$(OBJEXT) Measure.$(OBJEXT) OptEwaldSum.$(OBJEXT) \
+	OpticalLatticeAction.$(OBJEXT) PairAction.$(OBJEXT) \
+	PairDistance.$(OBJEXT) PairIntegrator.$(OBJEXT) \
+	PairPotential.$(OBJEXT) ParallelPaths.$(OBJEXT) \
+	PathReader.$(OBJEXT) Paths.$(OBJEXT) \
 	PeriodicGaussian.$(OBJEXT) Permutation.$(OBJEXT) \
 	PermutationEstimator.$(OBJEXT) PositionEstimator.$(OBJEXT) \
 	PrimAnisSHOAction.$(OBJEXT) PrimColloidalAction.$(OBJEXT) \
@@ -327,6 +328,7 @@ pi_SOURCES = \
     CubicLattice.cc \
     DensCountEstimator.cc \
     DensDensEstimator.cc \
+    DensityCurrentEstimator.cc \
     DensityEstimator.cc \
     DiamagneticEstimator.cc \
     DipoleMomentEstimator.cc \
@@ -440,6 +442,7 @@ noinst_HEADERS = \
     CubicLattice.h \
     DensCountEstimator.h \
     DensDensEstimator.h \
+    DensityCurrentEstimator.h \
     DensityEstimator.h \
     DiamagneticEstimator.h \
     DipoleMomentEstimator.h \
@@ -646,6 +649,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CubicLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensCountEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensDensEstimator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensityCurrentEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensityEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DiamagneticEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DipoleMomentEstimator.Po@am__quote@

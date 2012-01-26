@@ -32,6 +32,7 @@
 #include "ConductanceEstimator.h"
 #include "DensDensEstimator.h"
 #include "DensityEstimator.h"
+#include "DensityCurrentEstimator.h"
 #include "SpinChoiceDensityEstimator.h"
 #include "DensCountEstimator.h"
 #include "DiamagneticEstimator.h"
@@ -314,6 +315,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="DensityEstimator" || name=="DensCountEstimator"||
         name=="DensDensEstimator" || name=="CountCountEstimator"||
+	name=="DensityCurrentEstimator" ||
 	name=="SpinChoiceDensityEstimator") {
       //bool useCharge=getBoolAttribute(estNode,"useCharge");
       std::string species=getStringAttribute(estNode,"species");
@@ -333,6 +335,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
           estName = "rho";
         } else if (name=="DensDensEstimator") {
           estName = "nn";
+	} else if (name=="DensityCurrentEstimator") {
+	  estName = "nj";
         } else {
           estName = "count";
         }
@@ -385,6 +389,16 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         nbinN[2*NDIM]=nfreq;
         manager->add(new DensDensEstimator(simInfo,estName,spec1,spec2,
                                   min,max,nbin, nbinN,dist,nstride,mpi));
+      } else if (name=="DensityCurrentEstimator") {
+	DensityCurrentEstimator::IVecN nbinN;
+        int nfreq=getIntAttribute(estNode,"nfreq");
+        if (nfreq==0) nfreq=simInfo.getNSlice();
+        int nstride=getIntAttribute(estNode,"nstride");
+        if (nstride==0) nstride=1;
+        for (int i=0; i<NDIM; ++i) nbinN[i]=nbin[i];
+	nbinN[NDIM]=nfreq;
+	manager->add(new DensityCurrentEstimator(simInfo, estName, min, max,
+	                        nbin, nbinN, dist, nstride, mpi));
       } else {
         int maxCount=getIntAttribute(estNode,"maxCount");
         if (maxCount==0) maxCount=1;

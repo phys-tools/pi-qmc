@@ -29,6 +29,7 @@ pi_SOURCES = \
     CubicLattice.cc \
     DensCountEstimator.cc \
     DensDensEstimator.cc \
+    DensityCurrentEstimator.cc \
     DensityEstimator.cc \
     DiamagneticEstimator.cc \
     DipoleMomentEstimator.cc \
@@ -141,6 +142,7 @@ noinst_HEADERS = \
     CubicLattice.h \
     DensCountEstimator.h \
     DensDensEstimator.h \
+    DensityCurrentEstimator.h \
     DensityEstimator.h \
     DiamagneticEstimator.h \
     DipoleMomentEstimator.h \
