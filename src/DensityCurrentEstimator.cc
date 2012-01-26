@@ -38,7 +38,6 @@ DensityCurrentEstimator::DensityCurrentEstimator(const SimulationInfo& simInfo,
     const IVecN &nbinN, const DistArray &dist, int nstride, MPIManager *mpi) 
   : BlitzArrayBlkdEst<NDIM+1>(name,"dynamic-array/density-current",
                                nbinN,true),
-//    nslice(simInfo.getNSlice()), tempn(),
     nsliceEff(simInfo.getNSlice()/nstride), nfreq(nbinN[NDIM]), 
     nstride(nstride), min(min), deltaInv(nbin/(max-min)), nbin(nbin), 
     tempj(1,simInfo.getNSlice()/nstride), dist(dist), tau(simInfo.getTau()), 
@@ -60,8 +59,8 @@ DensityCurrentEstimator::DensityCurrentEstimator(const SimulationInfo& simInfo,
                             ptr,0,1,nsliceEff,
                             FFTW_FORWARD,FFTW_MEASURE);
   ptr = (fftw_complex*)tempj.data();
-  int tot = 1;
-  fwdj = fftw_plan_many_dft(1,&nsliceEff,tot,
+//  int tot = 1;
+  fwdj = fftw_plan_many_dft(1,&nsliceEff,1,
                             ptr,0,1,nsliceEff,
                             ptr,0,1,nsliceEff,
                             FFTW_FORWARD,FFTW_MEASURE);
@@ -97,7 +96,7 @@ void DensityCurrentEstimator::handleLink(const Vec& start, const Vec& end,
     if (i==NDIM-1) tempn(ibin) += 1.0;
   }
   // Calculate current at x = 0, assuming no link is longer than a[0]/2.
-  if (fabs(start[0]-end[0]) < ax && start[0]*end[0] < 0.) {
+  if (fabs(start[0]-end[0]) < ax && start[0]*end[0] < 0) {
     if (start[0] > end[0]) tempj(0,isliceBin) -= q(ipart);
     else tempj(0,isliceBin) += q(ipart);
   }
@@ -123,11 +122,11 @@ void DensityCurrentEstimator::endCalc(const int nslice) {
     // Calculate autocorrelation function using FFT for convolution.
     fftw_execute(fwdn);
     fftw_execute(fwdj);
-//    double scale= tau/nsliceEff;
+    double scale= 1./tau*nsliceEff;
     for (int i=0; i<ntot; ++i) 
       for (int ifreq=0; ifreq<nfreq; ++ifreq)
-	(*value_)(i,ifreq) += //scale *
-	  real((*tempn_)(i,ifreq)*conj(tempj(0,ifreq)));
+	(*value_)(i,ifreq) += scale 
+	  * real((*tempn_)(i,ifreq)*conj(tempj(0,ifreq)));
     norm+=1;
   }
 }

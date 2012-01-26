@@ -70,7 +70,6 @@ private:
   const Vec deltaInv;
   const IVec nbin;
   int npart, nstride, nfreq, nsliceEff;
-//  int nslice;
   const double tau, ntot, ax;
   const DistArray dist;
   CArrayN tempn;
