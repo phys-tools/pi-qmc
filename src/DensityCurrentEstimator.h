@@ -33,23 +33,23 @@ class MPIManager;
 /// @f[
 /// \chi_{nj}(x,\tau) = -\langle n(x,\tau) j_x(0,0) \rangle_beta
 /// @f]
-class DensityCurrentEstimator : public BlitzArrayBlkdEst<NDIM+1>, public LinkSummable {
+class DensityCurrentEstimator : public BlitzArrayBlkdEst<NDIM+2>, public LinkSummable {
 public:
   typedef blitz::Array<std::complex<double>,NDIM+1> CArrayN;
   typedef blitz::Array<std::complex<double>,2> CArray2;
   typedef blitz::Array<std::complex<double>,1> CArray1;
   typedef blitz::Array<double,1> Array;
-  typedef blitz::Array<float,2> FArray2;
+  typedef blitz::Array<float,3> FArray3;
   typedef blitz::TinyVector<double,NDIM> Vec;
   typedef blitz::TinyVector<int,NDIM> IVec;
-  typedef blitz::TinyVector<int,NDIM+1> IVecN;
+  typedef blitz::TinyVector<int,NDIM+2> IVecN;
   typedef std::vector<Distance*> DistArray;
 
   /// Constructor.
   DensityCurrentEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Vec &min, 
-    const Vec &max, const IVec &nbin, const IVecN &nbinN, const DistArray &dist,
-    const int nstride, MPIManager *mpi);
+    const Vec &max, const IVec &nbin, const IVecN &nbinN, const int &njbin,
+    const DistArray &dist, const int nstride, MPIManager *mpi);
   /// Virtual destructor.
   virtual ~DensityCurrentEstimator();
   /// Initialize the calculation.
@@ -69,13 +69,14 @@ private:
   const Vec min;
   const Vec deltaInv;
   const IVec nbin;
-  int npart, nstride, nfreq, nsliceEff;
-  const double tau, ntot, ax;
+  const int njbin;
+  const int npart, nstride, nfreq, nsliceEff;
+  const double tau, ntot, ax, dxinv;
   const DistArray dist;
   CArrayN tempn;
   CArray2 tempj;
   CArray2* tempn_;
-  FArray2* value_;
+  FArray3* value_;
   Array q;
   fftw_plan fwdn, fwdj;
   MPIManager *mpi;

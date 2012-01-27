@@ -35,23 +35,25 @@
 
 DensityCurrentEstimator::DensityCurrentEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Vec &min, const Vec &max, const IVec &nbin, 
-    const IVecN &nbinN, const DistArray &dist, int nstride, MPIManager *mpi) 
-  : BlitzArrayBlkdEst<NDIM+1>(name,"dynamic-array/density-current",
-                               nbinN,true),
-    nsliceEff(simInfo.getNSlice()/nstride), nfreq(nbinN[NDIM]), 
+    const IVecN &nbinN, const int &njbin,
+    const DistArray &dist, int nstride, MPIManager *mpi) 
+  : BlitzArrayBlkdEst<NDIM+2>(name,"dynamic-array/density-current",
+                               nbinN,false),
+    nsliceEff(simInfo.getNSlice()/nstride), nfreq(nbinN[NDIM+1]), 
     nstride(nstride), min(min), deltaInv(nbin/(max-min)), nbin(nbin), 
-    tempj(1,simInfo.getNSlice()/nstride), dist(dist), tau(simInfo.getTau()), 
-    ax(simInfo.getSuperCell()->a[0]/2.), ntot(product(nbin)),  
-    npart(simInfo.getNPart()), q(npart), mpi(mpi) {
-  DensityCurrentEstimator::IVecN tempDim;
+    tempj(njbin,simInfo.getNSlice()/nstride), tau(simInfo.getTau()),
+    ax(simInfo.getSuperCell()->a[0]/2.), ntot(product(nbin)), dist(dist),  
+    npart(simInfo.getNPart()), q(npart), njbin(njbin), dxinv(njbin/(ax*2)),
+    mpi(mpi) {
+  blitz::TinyVector<int,NDIM+1> tempDim;
   for (int i=0; i<NDIM; ++i) tempDim[i]=nbin[i];
   tempDim[NDIM]=nsliceEff;
   tempn.resize(tempDim);
   // Set up new views of the arrays for convenience.
   tempn_ = new DensityCurrentEstimator::CArray2(tempn.data(),
     blitz::shape(ntot,nsliceEff), blitz::neverDeleteData); 
-  value_ = new DensityCurrentEstimator::FArray2(value.data(),
-    blitz::shape(ntot,nfreq), blitz::neverDeleteData); 
+  value_ = new DensityCurrentEstimator::FArray3(value.data(),
+    blitz::shape(ntot,njbin,nfreq), blitz::neverDeleteData); 
   // Set up the FFT.
   fftw_complex *ptr = (fftw_complex*)tempn.data();
   fwdn = fftw_plan_many_dft(1,&nsliceEff,ntot,
@@ -59,8 +61,7 @@ DensityCurrentEstimator::DensityCurrentEstimator(const SimulationInfo& simInfo,
                             ptr,0,1,nsliceEff,
                             FFTW_FORWARD,FFTW_MEASURE);
   ptr = (fftw_complex*)tempj.data();
-//  int tot = 1;
-  fwdj = fftw_plan_many_dft(1,&nsliceEff,1,
+  fwdj = fftw_plan_many_dft(1,&nsliceEff,njbin,
                             ptr,0,1,nsliceEff,
                             ptr,0,1,nsliceEff,
                             FFTW_FORWARD,FFTW_MEASURE);
@@ -96,9 +97,20 @@ void DensityCurrentEstimator::handleLink(const Vec& start, const Vec& end,
     if (i==NDIM-1) tempn(ibin) += 1.0;
   }
   // Calculate current at x = 0, assuming no link is longer than a[0]/2.
-  if (fabs(start[0]-end[0]) < ax && start[0]*end[0] < 0) {
-    if (start[0] > end[0]) tempj(0,isliceBin) -= q(ipart);
-    else tempj(0,isliceBin) += q(ipart);
+  int ijbin=((int)(end[0]*dxinv+njbin))%njbin;
+  int jjbin=((int)(start[0]*dxinv+njbin))%njbin;
+  if (ijbin!=jjbin) {
+    int nstep = ((ijbin-jjbin+3*njbin/2)%njbin)-njbin/2;
+    int idir = (nstep>0)?1:-1;
+    if (idir>0)
+      for (int i=1;i<=nstep;++i)
+	tempj((jjbin+i)%njbin,isliceBin)+=idir*q(ipart);
+    else
+      for (int i=1;i<=-nstep;++i)
+	tempj((ijbin+i)%njbin,isliceBin)+=idir*q(ipart);
+//  if (fabs(start[0]-end[0]) < ax && start[0]*end[0] < 0) {
+//    if (start[0] > end[0]) tempj(0,isliceBin) -= q(ipart);
+//    else tempj(0,isliceBin) += q(ipart);
   }
 }
 
@@ -124,9 +136,10 @@ void DensityCurrentEstimator::endCalc(const int nslice) {
     fftw_execute(fwdj);
     double scale= 1./tau*nsliceEff;
     for (int i=0; i<ntot; ++i) 
-      for (int ifreq=0; ifreq<nfreq; ++ifreq)
-	(*value_)(i,ifreq) += scale 
-	  * real((*tempn_)(i,ifreq)*conj(tempj(0,ifreq)));
+      for (int j=0; j<njbin; ++j) 
+	for (int ifreq=0; ifreq<nfreq; ++ifreq) 
+	  (*value_)(i,j,ifreq) += scale 
+	    * real((*tempn_)(i,ifreq)*conj(tempj(j,ifreq)));
     norm+=1;
   }
 }

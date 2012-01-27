@@ -395,10 +395,13 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         if (nfreq==0) nfreq=simInfo.getNSlice();
         int nstride=getIntAttribute(estNode,"nstride");
         if (nstride==0) nstride=1;
+	int njbin=getIntAttribute(estNode,"njbin");
+	if (njbin==0) njbin=1;
+	nbinN[NDIM] = njbin;
         for (int i=0; i<NDIM; ++i) nbinN[i]=nbin[i];
-	nbinN[NDIM]=nfreq;
+	nbinN[NDIM+1]=nfreq;
 	manager->add(new DensityCurrentEstimator(simInfo, estName, min, max,
-	                        nbin, nbinN, dist, nstride, mpi));
+	                        nbin, nbinN, njbin, dist, nstride, mpi));
       } else {
         int maxCount=getIntAttribute(estNode,"maxCount");
         if (maxCount==0) maxCount=1;
