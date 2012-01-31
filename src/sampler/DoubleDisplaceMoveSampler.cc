@@ -70,12 +70,12 @@ bool DoubleDisplaceMoveSampler::tryMove() {
   double deltaAction = (action==0) ?  0 
     : action->getActionDifference(paths,displacement,nmoving,movingIndex,
 				  iFirstSlice,iLastSlice); 
-  //Now do the other double section
-  deltaAction += (action==0) ?  0 
+//  //Now do the other double section
+  deltaAction += (action==0) ?  0
     : action->getActionDifference(paths,displacement,nmoving,movingIndex,
 				  iFirstSlice+nsliceOver2,iLastSlice+nsliceOver2);
   //Now consider nodal action
-  deltaAction += (action==0) ?  0 
+  deltaAction += (doubleAction==0) ?  0
     : doubleAction->getActionDifference(paths,displacement,nmoving,movingIndex,
 					iFirstSlice,iLastSlice);
   

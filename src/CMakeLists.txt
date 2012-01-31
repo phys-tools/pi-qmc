@@ -28,6 +28,7 @@ set (sources
     CubicLattice.cc
     DensCountEstimator.cc
     DensDensEstimator.cc
+    DensityCurrentEstimator.cc
     DensityEstimator.cc
     DiamagneticEstimator.cc
     DipoleMomentEstimator.cc

@@ -39,8 +39,6 @@ public:
   /// Calculate the difference in action.
   virtual double getActionDifference(const SectionSamplerInterface&,
                                      int level);
-  virtual double getActionDifference(const DisplaceMoveSampler&,
-				    const int nMoving){ return 0;};
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int iLastSlice);
   /// Calculate the total action.

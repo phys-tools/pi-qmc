@@ -53,22 +53,22 @@ double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
       if (index(iMoving)<ifirst || index(iMoving)>ifirst+npart) continue;
       const int i=index(iMoving);
       // Add action for moving beads.
-      Vec delta=movingBeads(iMoving,islice);
-      cell.pbc(delta);
+      Vec position = movingBeads(iMoving,islice);
+      cell.pbc(position);
 #if NDIM==3
-      deltaAction+=ktstride*(delta[0]*delta[0]+delta[1]*delta[1]);
-      deltaAction+=(fabs(delta[2]-z)>0.5*t)?v0*tau*nStride:0;
+      deltaAction+=ktstride*(position[0]*position[0]+position[1]*position[1]);
+      deltaAction+=(fabs(position[2]-z)>0.5*t)?v0*tau*nStride:0;
 #else
-      deltaAction+=(fabs(delta[0]-z)>0.5*t)?v0*tau*nStride:0;
+      deltaAction+=(fabs(position[0]-z)>0.5*t)?v0*tau*nStride:0;
 #endif
       // Subtract action for old beads.
-      delta=sectionBeads(i,islice);
-      cell.pbc(delta);
+      position=sectionBeads(i,islice);
+      cell.pbc(position);
 #if NDIM==3
-      deltaAction-=ktstride*(delta[0]*delta[0]+delta[1]*delta[1]);
-      deltaAction-=(fabs(delta[2]-z)>0.5*t)?v0*tau*nStride:0;
+      deltaAction-=ktstride*(position[0]*position[0]+position[1]*position[1]);
+      deltaAction-=(fabs(position[2]-z)>0.5*t)?v0*tau*nStride:0;
 #else
-      deltaAction-=(fabs(delta[0]-z)>0.5*t)?v0*tau*nStride:0;
+      deltaAction-=(fabs(position[0]-z)>0.5*t)?v0*tau*nStride:0;
 #endif
     }
   }
@@ -85,24 +85,24 @@ double SHODotAction::getActionDifference(const Paths &paths, const VArray &displ
     int ipart = movingIndex(i);
     if (ipart<ifirst || ipart>=ifirst+npart) break;
     for (int islice=iFirstSlice; islice<=iLastSlice; ++islice) {
-      Vec delta=paths(ipart,islice);
-      cell.pbc(delta);
+      Vec position = paths(ipart,islice);
+      cell.pbc(position);
 
 #if NDIM==3
-      deltaAction-=kt*(delta[0]*delta[0]+delta[1]*delta[1]);
-      deltaAction-=(fabs(delta[2]-z)>0.5*t)?v0*tau:0;
+      deltaAction-=kt*(position[0]*position[0]+position[1]*position[1]);
+      deltaAction-=(fabs(position[2]-z)>0.5*t)?v0*tau:0;
 #else
-      deltaAction-=(fabs(delta[0]-z)>0.5*t)?v0*tau:0;
+      deltaAction-=(fabs(position[0]-z)>0.5*t)?v0*tau:0;
 #endif
 
-      delta += displacement(i);
-      cell.pbc(delta);
+      position += displacement(i);
+      cell.pbc(position);
 
 #if NDIM==3
-      deltaAction+=kt*(delta[0]*delta[0]+delta[1]*delta[1]);
-      deltaAction+=(fabs(delta[2]-z)>0.5*t)?v0*tau:0;
+      deltaAction+=kt*(position[0]*position[0]+position[1]*position[1]);
+      deltaAction+=(fabs(position[2]-z)>0.5*t)?v0*tau:0;
 #else
-      deltaAction+=(fabs(delta[0]-z)>0.5*t)?v0*tau:0;
+      deltaAction+=(fabs(position[0]-z)>0.5*t)?v0*tau:0;
 #endif
     }
   }
@@ -117,12 +117,12 @@ double SHODotAction::getTotalAction(const Paths& paths,
 void SHODotAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
   if (ipart<ifirst || ipart>ifirst+npart) return;
-  Vec delta=paths(ipart,islice);
+  Vec position=paths(ipart,islice);
 #if NDIM==3
-  utau=0.5*k*(delta[0]*delta[0]+delta[1]*delta[1]);
-  utau+=(fabs(delta[2]-z)>0.5*t)?v0:0;
+  utau=0.5*k*(position[0]*position[0]+position[1]*position[1]);
+  utau+=(fabs(position[2]-z)>0.5*t)?v0:0;
 #else
-  utau=(fabs(delta[0]-z)>0.5*t)?v0:0;
+  utau=(fabs(position[0]-z)>0.5*t)?v0:0;
 #endif
   u=utau*tau;
 }
