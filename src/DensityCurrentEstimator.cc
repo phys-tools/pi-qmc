@@ -78,8 +78,8 @@ DensityCurrentEstimator::~DensityCurrentEstimator() {
 
 void DensityCurrentEstimator::initCalc(const int nslice,
     const int firstSlice) {
-  tempn=0.;
-  tempj=0.;
+  tempn=0.0;
+  tempj=0.0;
 }
 
 
@@ -97,8 +97,8 @@ void DensityCurrentEstimator::handleLink(const Vec& start, const Vec& end,
     if (i==NDIM-1) tempn(ibin) += 1.0;
   }
   // Calculate current at x = 0, assuming no link is longer than a[0]/2.
-  int ijbin=((int)(end[0]*dxinv+njbin))%njbin;
-  int jjbin=((int)(start[0]*dxinv+njbin))%njbin;
+  int ijbin=((int)((end[0]+ax)*dxinv+njbin))%njbin;
+  int jjbin=((int)((start[0]+ax)*dxinv+njbin))%njbin;
   if (ijbin!=jjbin) {
     int nstep = ((ijbin-jjbin+3*njbin/2)%njbin)-njbin/2;
     int idir = (nstep>0)?1:-1;
@@ -139,7 +139,7 @@ void DensityCurrentEstimator::endCalc(const int nslice) {
       for (int j=0; j<njbin; ++j) 
 	for (int ifreq=0; ifreq<nfreq; ++ifreq) 
 	  (*value_)(i,j,ifreq) += scale 
-	    * real((*tempn_)(i,ifreq)*conj(tempj(j,ifreq)));
+	    * imag((*tempn_)(i,ifreq)*conj(tempj(j,ifreq)));
     norm+=1;
   }
 }
