@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "AnisotropicNodes.h"
-#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "SimulationInfo.h"
 #include "sampler/DoubleSectionChooser.h"
 #include "Species.h"
@@ -92,7 +92,7 @@ void AnisotropicNodes::initialize(const DoubleSectionChooser& chooser) {
 
 
 double AnisotropicNodes::getActionDifference(
-    const DoubleMLSampler& sampler, int level) {
+    const SectionSamplerInterface& sampler, int level) {
   // Get ready to move paths.
   double deltaAction=0;
   movingIndex=&sampler.getMovingIndex(1); 

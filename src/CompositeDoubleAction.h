@@ -33,7 +33,7 @@ public:
   /// Virtual destructor deletes all Action objects.
   virtual ~CompositeDoubleAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const DoubleMLSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,

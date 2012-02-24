@@ -16,7 +16,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __DoubleAction_h_
 #define __DoubleAction_h_
-class DoubleMLSampler;class DoubleDisplaceMoveSampler;
+class SectionSamplerInterface;class DoubleDisplaceMoveSampler;
 class DoubleSectionChooser;
 class Paths;
 #include <cstdlib>
@@ -38,7 +38,7 @@ public:
   /// Virtual destructor.
   virtual ~DoubleAction() {}
   /// Calculate the difference in action.
-  virtual double getActionDifference(const DoubleMLSampler&,
+  virtual double getActionDifference(const SectionSamplerInterface&,
                                      const int level) {return 0;}
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,

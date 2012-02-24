@@ -78,7 +78,7 @@ public:
   public:
     MatrixUpdate(int maxMovers, int maxlevel, int npart,
        std::vector<Matrix*>& matrix, const AugmentedNodes &fpnodes);
-    virtual double evaluateChange(const DoubleMLSampler&, int islice);
+    virtual double evaluateChange(const SectionSamplerInterface&, int islice);
     virtual void evaluateNewInverse(const int islice);
     virtual void evaluateNewDistance(const VArray &r1, const VArray &r2,
       const int islice, Array &d1, Array &d2);

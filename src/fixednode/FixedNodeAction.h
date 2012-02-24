@@ -89,7 +89,7 @@ public:
   /// Destructor.
   virtual ~FixedNodeAction();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const DoubleMLSampler&,int level);
+  virtual double getActionDifference(const SectionSamplerInterface&,int level);
   /// Calculate the difference in action.
   virtual double getActionDifference(const Paths&, const VArray &displacement,
     int nmoving, const IArray &movingIndex, int iFirstSlice, int nslice);

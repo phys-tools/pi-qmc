@@ -22,7 +22,8 @@
 #include <cstdlib>
 #include "Beads.h"
 #include "sampler/DoubleSectionChooser.h"
-#include "sampler/DoubleMLSampler.h"
+//#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "NodeModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
@@ -51,7 +52,7 @@ FixedNodeAction::~FixedNodeAction() {
   delete nodeModel;
 }
 
-double FixedNodeAction::getActionDifference(const DoubleMLSampler &sampler,
+double FixedNodeAction::getActionDifference(const SectionSamplerInterface &sampler,
     int level) {
   // Get ready to move paths.
   double deltaAction=0;

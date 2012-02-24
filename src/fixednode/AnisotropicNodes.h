@@ -51,7 +51,7 @@ public:
   /// Destructor.
   ~AnisotropicNodes();
   /// Calculate the difference in action.
-  virtual double getActionDifference(const DoubleMLSampler&,int level);
+  virtual double getActionDifference(const SectionSamplerInterface&,int level);
   /// Calculate the total action.
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate action and derivatives at a bead.

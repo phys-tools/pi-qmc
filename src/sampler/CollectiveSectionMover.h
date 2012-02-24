@@ -4,9 +4,13 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinymat.h>
+#include "SectionSamplerInterface.h"
+//#include "CollectiveSectionSampler.h"
 class SuperCell;
+class CollectiveSectionSampler;
 
 
 class CollectiveSectionMover {
@@ -15,12 +19,14 @@ public:
     typedef blitz::TinyVector<int, NDIM> IVec;
     typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
 
-    CollectiveSectionMover(double radius, Vec amplitude, Vec center,
-            int level, SuperCell*);
-
+    CollectiveSectionMover(double radius, Vec amplitude, int npart, Vec min,
+	                                           Vec max, SuperCell* cell);
+    ~CollectiveSectionMover();
+    double makeMove(CollectiveSectionSampler& sampler, int ilevel);
     Vec calcShift(const Vec&, int sliceIndex) const;
     Vec calcInverseShift(const Vec&, int sliceIndex) const;
     Mat calcJacobian(const Vec&, int sliceIndex) const;
+    double calcJacobianDet(const Mat&);
 
     Vec getAmplitude() const;
     double getRadius() const;
@@ -37,9 +43,13 @@ private:
 
 
     double radius;
-    Vec amplitude;
+    Vec amplitude, amp;
+    /// Center of the cylinder.
     Vec center;
-    const int sliceCount;
+    /// Boundary of for the center.
+    Vec min, max;
+    int sliceCount;
+    const int npart;
     SuperCell *cell;
 };
 

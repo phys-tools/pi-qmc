@@ -20,7 +20,7 @@
 #include "SpinFixedPhaseAction.h"
 #include "Beads.h"
 #include "sampler/DoubleSectionChooser.h"
-#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 #include "SpinPhaseModel.h"
 #include "Paths.h"
@@ -72,7 +72,7 @@ SpinFixedPhaseAction::~SpinFixedPhaseAction() {
   delete phaseModel;
 }
 
-double SpinFixedPhaseAction::getActionDifference(const DoubleMLSampler &sampler,
+double SpinFixedPhaseAction::getActionDifference(const SectionSamplerInterface &sampler,
     int level) {
   // Get ready to move paths.
   double deltaAction=0;

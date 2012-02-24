@@ -20,7 +20,7 @@
 #include "FixedPhaseAction.h"
 #include "Beads.h"
 #include "sampler/DoubleSectionChooser.h"
-#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "PhaseModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
@@ -62,7 +62,7 @@ FixedPhaseAction::~FixedPhaseAction() {
   delete phaseModel;
 }
 
-double FixedPhaseAction::getActionDifference(const DoubleMLSampler &sampler,
+double FixedPhaseAction::getActionDifference(const SectionSamplerInterface &sampler,
     int level) {
   // Get ready to move paths.
   double deltaAction=0;

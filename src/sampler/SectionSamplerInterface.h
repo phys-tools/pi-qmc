@@ -13,11 +13,17 @@ public:
     typedef blitz::Array<int,1> IArray;
     virtual ~SectionSamplerInterface() {};
     virtual const Beads<NDIM>& getSectionBeads() const = 0;
+    virtual const Beads<NDIM>& getSectionBeads(const int) const = 0;
     virtual const Beads<NDIM>& getMovingBeads() const = 0;
+    virtual const Beads<NDIM>& getMovingBeads(const int) const = 0;
     virtual Beads<NDIM>& getSectionBeads() = 0;
+    virtual Beads<NDIM>& getSectionBeads(int) = 0;
     virtual Beads<NDIM>& getMovingBeads() = 0;
+    virtual Beads<NDIM>& getMovingBeads(int) = 0;
     virtual const IArray& getMovingIndex() const = 0;
+    virtual const IArray& getMovingIndex(const int) const = 0;
     virtual int getFirstSliceIndex() const = 0;
     virtual const SuperCell& getSuperCell() const = 0;
+    virtual bool isSamplingBoth() const = 0;
 };
 #endif

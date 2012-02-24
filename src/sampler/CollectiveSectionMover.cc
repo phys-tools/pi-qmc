@@ -1,7 +1,18 @@
 #include "CollectiveSectionMover.h"
+#include <cstdlib>
 #include <blitz/tinyvec-et.h>
+#include "RandomNumGenerator.h"
 #include <iostream>
+#include <cmath>
 #include "SuperCell.h"
+#include "Beads.h"
+#include "SectionSamplerInterface.h"
+#include "CollectiveSectionSampler.h"
+
+/* 
+   Now we only do level 0 moves.
+   TO DO: Add multilevel moves.
+*/
 
 #define DGESV_F77 F77_FUNC(dgesv,DGESV)
 extern "C" void DGESV_F77(const int *n, const int *nrhs,
@@ -10,9 +21,41 @@ extern "C" void DGESV_F77(const int *n, const int *nrhs,
 
 
 CollectiveSectionMover::CollectiveSectionMover(double radius, Vec amplitude,
-        Vec center, int sliceCount, SuperCell* cell)
-    :   radius(radius), amplitude(amplitude), center(center),
-        sliceCount(sliceCount), cell(cell) {
+        int npart, Vec min, Vec max, SuperCell* cell)
+    :   radius(radius), amplitude(amplitude), amp(amplitude), 
+        min(min), max(max), sliceCount(0), npart(npart), cell(cell) {
+  for (int idim=0; idim<NDIM; ++idim) center[idim]=0.;
+}
+
+CollectiveSectionMover::~CollectiveSectionMover() {}
+
+double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler, 
+                                        int ilevel) {
+  const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
+  Beads<NDIM>& movingBeads = sampler.getMovingBeads();
+  const int sliceCount= sectionBeads.getNSlice();
+  double tranProb = 1.;
+  // Randomize the amplitude.
+  for (int idim=0; idim<NDIM; ++idim) {
+    amplitude[idim] = 2 * amp[idim] * (RandomNumGenerator::getRand() - 0.5);
+  }
+  bool forward = (RandomNumGenerator::getRand() > 0.5);
+  double jacobian = 0.;
+  for (int islice=0; islice<sliceCount; ++islice) {
+    for (int ipart=0; ipart<npart; ++ipart) {
+      jacobian = calcJacobianDet(calcJacobian(movingBeads(ipart,islice),islice));
+      if (forward) {
+        movingBeads(ipart,islice) = calcShift(movingBeads(ipart,islice),islice);
+	tranProb *= jacobian;
+      }
+      else {
+	movingBeads(ipart,islice) = 
+	                     calcInverseShift(movingBeads(ipart,islice),islice);
+	tranProb *= 1./jacobian;
+      }
+    }
+  }
+  return log(tranProb);
 }
 
 double CollectiveSectionMover::timeEnvelope(int sliceIndex) const {
@@ -111,6 +154,23 @@ CollectiveSectionMover::Mat CollectiveSectionMover::calcJacobian(
         }
     }
     return matrix;
+}
+
+double CollectiveSectionMover::calcJacobianDet(
+                  const CollectiveSectionMover::Mat& jacobian) {
+#if NDIM==1
+  double jacob = jacobian(0,0);
+#elif NDIM==2
+  double jacob = jacobian(0,0)*jacobian(1,1)-jacobian(0,1)*jacobian(1,0);
+#elif NDIM==3
+  double jacob = jacobian(0,0)
+    *(jacobian(1,1)*jacobian(2,2)-jacobian(1,2)*jacobian(2,1))
+    -jacobian(0,1)
+    *(jacobian(1,2)*jacobian(2,0)-jacobian(1,0)*jacobian(2,2))
+    +jacobian(0,2)
+    *(jacobian(1,0)*jacobian(2,1)-jacobian(1,1)*jacobian(2,0));
+#endif
+  return jacob;
 }
 
 CollectiveSectionMover::Vec CollectiveSectionMover::getAmplitude() const {

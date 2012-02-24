@@ -60,6 +60,8 @@ public:
   using SectionSamplerInterface::getMovingBeads;
   virtual Beads<NDIM>& getMovingBeads() {return *movingBeads;}
   virtual const Beads<NDIM>& getMovingBeads() const {return *movingBeads;}
+  virtual Beads<NDIM>& getMovingBeads(int i) {return *movingBeads;}
+  virtual const Beads<NDIM>& getMovingBeads(const int i) const {return *movingBeads;}
 
   virtual int getFirstSliceIndex() const;
 
@@ -70,10 +72,16 @@ public:
   using SectionSamplerInterface::getSectionBeads;
   virtual Beads<NDIM>& getSectionBeads() {return *sectionBeads;}
   virtual const Beads<NDIM>& getSectionBeads() const {return *sectionBeads;}
+  virtual Beads<NDIM>& getSectionBeads(int i) {return *sectionBeads;}
+  virtual const Beads<NDIM>& getSectionBeads(const int i) const {return *sectionBeads;}
 
   using SectionSamplerInterface::getMovingIndex;
   IArray&  getMovingIndex() {return *movingIndex;}
   const IArray&  getMovingIndex() const {return *movingIndex;}
+  IArray&  getMovingIndex(int i) {return *movingIndex;}
+  const IArray&  getMovingIndex(const int i) const {return *movingIndex;}
+
+  virtual bool isSamplingBoth() const {return false;}
 
   static const int ALL_LEVELS=-1;
   /// Set the action function for a level, or default to level=ALL_LEVELS.

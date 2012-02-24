@@ -32,6 +32,7 @@
 #include "sampler/UniformMover.h"
 #include "sampler/ExchangeMover.h"
 #include "sampler/CollectiveMover.h"
+#include "sampler/CollectiveSectionMover.h"
 #include "sampler/DisplaceMoveSampler.h"
 #include "sampler/DoubleDisplaceMoveSampler.h"
 #include "sampler/ModelSampler.h"
@@ -59,6 +60,8 @@
 #include "stats/MPIManager.h"
 #include "sampler/MultiLevelSampler.h"
 #include "sampler/DoubleMLSampler.h"
+#include "sampler/CollectiveSectionSampler.h"
+#include "sampler/DoubleCollectiveSectionSampler.h"
 #include "Action.h"
 #include "ActionChoice.h"
 #include "DoubleAction.h"
@@ -479,6 +482,33 @@ std::cout << "doubleAction!=0" << std::endl;
     std::string accRejName="MLSampler";
     estimators->add(((MultiLevelSampler*)algorithm)->
                       getAccRejEstimator(accRejName));
+  } else if (name=="SampleCollective") {
+    int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
+    if (nrepeat==0) nrepeat=1;
+    int npart=simInfo.getNPart();
+    double radius=getLengthAttribute(ctxt->node,"radius");
+    SuperCell *cell=simInfo.getSuperCell();
+    Vec amplitude, min, max;
+    for (int idim=0; idim<NDIM; ++idim) {
+      amplitude[idim]=getLengthAttribute(ctxt->node,
+	                                 std::string("d")+dimName[idim]);
+      min[idim]=-cell->a[idim]/2.;
+      max[idim]=cell->a[idim]/2.;
+    }
+    CollectiveSectionMover *mover=new CollectiveSectionMover(radius,amplitude,
+	                                                   npart,min,max,cell);
+    bool both=getBoolAttribute(ctxt->node,"both");
+    if (doubleAction==0) {
+      algorithm = new CollectiveSectionSampler(npart, *sectionChooser, action,
+	                                          nrepeat, beadFactory, mover);
+    } else {
+      algorithm = new DoubleCollectiveSectionSampler(npart, 
+	                     *doubleSectionChooser, action, doubleAction,
+			     nrepeat, beadFactory, mover, both);
+    }
+    std::string accRejName="CollectiveSampler";
+    estimators->add(((CollectiveSectionSampler*)algorithm)->
+	                     getAccRejEstimator(accRejName));
   } else if (name=="ProbDensityGrid") {
     double a=getLengthAttribute(ctxt->node,"a");
     IVec n;

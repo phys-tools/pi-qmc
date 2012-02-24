@@ -28,7 +28,7 @@ CompositeDoubleAction::~CompositeDoubleAction() {
 }
 
 double CompositeDoubleAction::getActionDifference(
-    const DoubleMLSampler& sampler, const int level) {
+    const SectionSamplerInterface& sampler, const int level) {
   double diff=0;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
     if (*action) diff+=(*action)->getActionDifference(sampler,level);

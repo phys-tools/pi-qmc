@@ -55,8 +55,11 @@ libsampler_la_LIBADD =
 am_libsampler_la_OBJECTS =  \
 	libsampler_la-AlternatingParticleChooser.lo \
 	libsampler_la-CollectiveMover.lo \
+	libsampler_la-CollectiveSectionMover.lo \
+	libsampler_la-CollectiveSectionSampler.lo \
 	libsampler_la-DampedFreeTensorMover.lo \
 	libsampler_la-DisplaceMoveSampler.lo \
+	libsampler_la-DoubleCollectiveSectionSampler.lo \
 	libsampler_la-DoubleDisplaceMoveSampler.lo \
 	libsampler_la-DoubleMLSampler.lo \
 	libsampler_la-DoubleSectionChooser.lo \
@@ -239,8 +242,11 @@ libsampler_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
 libsampler_la_SOURCES = \
         AlternatingParticleChooser.cc \
         CollectiveMover.cc \
+	CollectiveSectionMover.cc \
+	CollectiveSectionSampler.cc \
         DampedFreeTensorMover.cc \
         DisplaceMoveSampler.cc \
+	DoubleCollectiveSectionSampler.cc \
         DoubleDisplaceMoveSampler.cc \
         DoubleMLSampler.cc \
         DoubleSectionChooser.cc \
@@ -270,8 +276,11 @@ libsampler_la_SOURCES = \
 noinst_HEADERS = \
         AlternatingParticleChooser.h \
         CollectiveMover.h \
+	CollectiveSectionMover.h \
+	CollectiveSectionSampler.h \
         DampedFreeTensorMover.h \
         DisplaceMoveSampler.h \
+	DoubleCollectiveSectionSampler.h \
         DoubleDisplaceMoveSampler.h \
         DoubleMLSampler.h \
         DoubleSectionChooser.h \
@@ -354,8 +363,11 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-AlternatingParticleChooser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-CollectiveMover.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-CollectiveSectionMover.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-CollectiveSectionSampler.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-DampedFreeTensorMover.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-DisplaceMoveSampler.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-DoubleCollectiveSectionSampler.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-DoubleDisplaceMoveSampler.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-DoubleMLSampler.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libsampler_la-DoubleSectionChooser.Plo@am__quote@
@@ -417,6 +429,20 @@ libsampler_la-CollectiveMover.lo: CollectiveMover.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -c -o libsampler_la-CollectiveMover.lo `test -f 'CollectiveMover.cc' || echo '$(srcdir)/'`CollectiveMover.cc
 
+libsampler_la-CollectiveSectionMover.lo: CollectiveSectionMover.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -MT libsampler_la-CollectiveSectionMover.lo -MD -MP -MF $(DEPDIR)/libsampler_la-CollectiveSectionMover.Tpo -c -o libsampler_la-CollectiveSectionMover.lo `test -f 'CollectiveSectionMover.cc' || echo '$(srcdir)/'`CollectiveSectionMover.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libsampler_la-CollectiveSectionMover.Tpo $(DEPDIR)/libsampler_la-CollectiveSectionMover.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CollectiveSectionMover.cc' object='libsampler_la-CollectiveSectionMover.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -c -o libsampler_la-CollectiveSectionMover.lo `test -f 'CollectiveSectionMover.cc' || echo '$(srcdir)/'`CollectiveSectionMover.cc
+
+libsampler_la-CollectiveSectionSampler.lo: CollectiveSectionSampler.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -MT libsampler_la-CollectiveSectionSampler.lo -MD -MP -MF $(DEPDIR)/libsampler_la-CollectiveSectionSampler.Tpo -c -o libsampler_la-CollectiveSectionSampler.lo `test -f 'CollectiveSectionSampler.cc' || echo '$(srcdir)/'`CollectiveSectionSampler.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libsampler_la-CollectiveSectionSampler.Tpo $(DEPDIR)/libsampler_la-CollectiveSectionSampler.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='CollectiveSectionSampler.cc' object='libsampler_la-CollectiveSectionSampler.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -c -o libsampler_la-CollectiveSectionSampler.lo `test -f 'CollectiveSectionSampler.cc' || echo '$(srcdir)/'`CollectiveSectionSampler.cc
+
 libsampler_la-DampedFreeTensorMover.lo: DampedFreeTensorMover.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -MT libsampler_la-DampedFreeTensorMover.lo -MD -MP -MF $(DEPDIR)/libsampler_la-DampedFreeTensorMover.Tpo -c -o libsampler_la-DampedFreeTensorMover.lo `test -f 'DampedFreeTensorMover.cc' || echo '$(srcdir)/'`DampedFreeTensorMover.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libsampler_la-DampedFreeTensorMover.Tpo $(DEPDIR)/libsampler_la-DampedFreeTensorMover.Plo
@@ -430,6 +456,13 @@ libsampler_la-DisplaceMoveSampler.lo: DisplaceMoveSampler.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DisplaceMoveSampler.cc' object='libsampler_la-DisplaceMoveSampler.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -c -o libsampler_la-DisplaceMoveSampler.lo `test -f 'DisplaceMoveSampler.cc' || echo '$(srcdir)/'`DisplaceMoveSampler.cc
+
+libsampler_la-DoubleCollectiveSectionSampler.lo: DoubleCollectiveSectionSampler.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -MT libsampler_la-DoubleCollectiveSectionSampler.lo -MD -MP -MF $(DEPDIR)/libsampler_la-DoubleCollectiveSectionSampler.Tpo -c -o libsampler_la-DoubleCollectiveSectionSampler.lo `test -f 'DoubleCollectiveSectionSampler.cc' || echo '$(srcdir)/'`DoubleCollectiveSectionSampler.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libsampler_la-DoubleCollectiveSectionSampler.Tpo $(DEPDIR)/libsampler_la-DoubleCollectiveSectionSampler.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='DoubleCollectiveSectionSampler.cc' object='libsampler_la-DoubleCollectiveSectionSampler.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -c -o libsampler_la-DoubleCollectiveSectionSampler.lo `test -f 'DoubleCollectiveSectionSampler.cc' || echo '$(srcdir)/'`DoubleCollectiveSectionSampler.cc
 
 libsampler_la-DoubleDisplaceMoveSampler.lo: DoubleDisplaceMoveSampler.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libsampler_la_CXXFLAGS) $(CXXFLAGS) -MT libsampler_la-DoubleDisplaceMoveSampler.lo -MD -MP -MF $(DEPDIR)/libsampler_la-DoubleDisplaceMoveSampler.Tpo -c -o libsampler_la-DoubleDisplaceMoveSampler.lo `test -f 'DoubleDisplaceMoveSampler.cc' || echo '$(srcdir)/'`DoubleDisplaceMoveSampler.cc

@@ -8,27 +8,45 @@ class Paths;
 class DoubleSectionChooser;
 class CollectiveSectionMover;
 #include "SectionSamplerInterface.h"
+#include "CollectiveSectionSampler.h"
 
-class DoubleCollectiveSectionSampler : public SectionSamplerInterface {
+class DoubleCollectiveSectionSampler : public CollectiveSectionSampler {
 public:
-  DoubleCollectiveSectionSampler(int maximumMovingCount,
-          Paths*, DoubleSectionChooser*,
-		  Action*, DoubleAction*, const BeadFactory*);
+  DoubleCollectiveSectionSampler(int, DoubleSectionChooser&,
+		  Action*, DoubleAction*, int nrepeat, const BeadFactory&,
+		  CollectiveSectionMover*, bool);
   virtual ~DoubleCollectiveSectionSampler();
 
   virtual void run();
 
-  virtual const Beads<NDIM>& getSectionBeads() const;
-  virtual const Beads<NDIM>& getMovingBeads() const;
-  virtual Beads<NDIM>& getSectionBeads();
-  virtual Beads<NDIM>& getMovingBeads();
-  virtual const IArray& getMovingIndex() const;
-  virtual int getFirstSliceIndex() const;
-  virtual const SuperCell& getSuperCell() const;
+  using CollectiveSectionSampler::getMovingBeads;
+  virtual Beads<NDIM>& getMovingBeads(const int i) {
+    return i==1?*movingBeads1:*movingBeads2;}
+  virtual const Beads<NDIM>& getMovingBeads(const int i) const {
+    return i==1?*movingBeads1:*movingBeads2;}
 
+  using CollectiveSectionSampler::getSectionBeads;
+  virtual Beads<NDIM>& getSectionBeads(const int i) {
+    return i==1?*sectionBeads1:*sectionBeads2;}
+  virtual const Beads<NDIM>& getSectionBeads(const int i) const {
+    return i==1?*sectionBeads1:*sectionBeads2;}
+
+  using CollectiveSectionSampler::getMovingIndex;
+  virtual IArray&  getMovingIndex(const int i) {
+    return i==1?*movingIndex1:*movingIndex2;}
+  virtual const IArray&  getMovingIndex(const int i) const {
+    return i==1?*movingIndex1:*movingIndex2;}
+  
+  virtual bool isSamplingBoth() const {return samplingBoth;}
+
+  virtual AccRejEstimator* getAccRejEstimator(const std::string& name);
 
 private:
-  const int maximumMovingCount;
-  CollectiveSectionMover* mover;
+  bool tryMove();
+  Beads<NDIM> *sectionBeads1, *sectionBeads2;
+  Beads<NDIM> *movingBeads1, *movingBeads2;
+  IArray *movingIndex1, *movingIndex2;
+  DoubleAction *doubleAction;
+  bool samplingBoth;
 };
 #endif

@@ -22,7 +22,7 @@
 #include <cstdlib>
 #include <blitz/array.h>
 #include <fstream>
-class DoubleMLSampler;
+class SectionSamplerInterface;
 class SpinModelState;
 
 /** Base class for node models used in the fixed node approximation. 
@@ -73,7 +73,7 @@ public:
    */
   class MatrixUpdate {
     public:
-    virtual double evaluateChange(const DoubleMLSampler&, int islice)=0;
+    virtual double evaluateChange(const SectionSamplerInterface&, int islice)=0;
     virtual void evaluateNewInverse(const int islice)=0;
     virtual void evaluateNewDistance(const VArray &r1, const VArray &r2,
             const int islice, Array &d1, Array &d2)=0;

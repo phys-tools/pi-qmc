@@ -74,11 +74,11 @@ private:
   const double tau, ntot, ax, dxinv;
   const DistArray dist;
   CArrayN tempn;
-  CArray2 tempj;
+  CArray2 tempj, tempj0;
   CArray2* tempn_;
   FArray3* value_;
   Array q;
-  fftw_plan fwdn, fwdj;
+  fftw_plan fwdn, fwdj, fwdj0;
   MPIManager *mpi;
 };
 

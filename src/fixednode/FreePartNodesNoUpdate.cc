@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "FreePartNodesNoUpdate.h"
-#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DoubleSectionChooser.h"
 #include "SimulationInfo.h"
 #include "Species.h"
@@ -111,7 +111,7 @@ double FreePartNodesNoUpdate::evaluateDistance(const int islice) const {
 }
 
 double FreePartNodesNoUpdate::getActionDifference(
-    const DoubleMLSampler& sampler, int level) {
+    const SectionSamplerInterface& sampler, int level) {
   // Get ready to move paths.
   double deltaAction=0;
   const Beads<NDIM>& sectionBeads1=sampler.getSectionBeads(1);

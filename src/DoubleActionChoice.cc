@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "DoubleActionChoice.h"
-#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include "sampler/DoubleSectionChooser.h"
 #include "EnumeratedModelState.h"
 #include "Paths.h"
@@ -34,7 +34,7 @@ DoubleActionChoice::~DoubleActionChoice() {
 }
 
 double DoubleActionChoice::getActionDifference(
-    const DoubleMLSampler& sampler, const int level) {
+    const SectionSamplerInterface& sampler, const int level) {
   int imodel = enumModelState->getModelState();
   double diff = actions[imodel]->getActionDifference(sampler,level);
   return diff;

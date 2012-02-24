@@ -1,8 +1,10 @@
 set (sources
     AlternatingParticleChooser.cc
     CollectiveMover.cc
+    CollectiveSectionSampler.cc
     DampedFreeTensorMover.cc
     DisplaceMoveSampler.cc
+    DoubleCollectiveSectionSampler.cc
     DoubleDisplaceMoveSampler.cc
     DoubleMLSampler.cc
     DoubleSectionChooser.cc

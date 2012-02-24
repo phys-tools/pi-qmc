@@ -28,7 +28,7 @@
 #include "Species.h"
 #include "SuperCell.h"
 #include "Beads.h"
-#include "sampler/DoubleMLSampler.h"
+#include "sampler/SectionSamplerInterface.h"
 #include <cstdlib>
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
@@ -470,7 +470,7 @@ AugmentedNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel,
 }
 
 double AugmentedNodes::MatrixUpdate::evaluateChange(
-    const DoubleMLSampler &sampler, int islice) {
+    const SectionSamplerInterface &sampler, int islice) {
   isNewMatrixUpdated=false;
   const Beads<NDIM>& sectionBeads2=sampler.getSectionBeads(2);
   const Beads<NDIM>& movingBeads1=sampler.getMovingBeads(1);
