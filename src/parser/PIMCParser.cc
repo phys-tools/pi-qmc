@@ -495,6 +495,7 @@ std::cout << "doubleAction!=0" << std::endl;
       min[idim]=-cell->a[idim]/2.;
       max[idim]=cell->a[idim]/2.;
     }
+    parseBoundary(ctxt,min,max);
     CollectiveSectionMover *mover=new CollectiveSectionMover(radius,amplitude,
 	                                                   npart,min,max,cell);
     bool both=getBoolAttribute(ctxt->node,"both");
@@ -643,4 +644,25 @@ int PIMCParser::getLoopCount(const xmlXPathContextPtr& ctxt) {
   }
   xmlXPathFreeObject(obj);
   return count;
+}
+
+void PIMCParser::parseBoundary(const xmlXPathContextPtr& ctxt, 
+			       Vec& min, Vec& max) {
+//  ctxt->node = estNode;
+  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
+  int N=obj->nodesetval->nodeNr;
+  int idir=0;
+  for (int idist=0; idist<N; ++idist) {
+    xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
+    std::string name=getName(distNode);
+    if (name=="Cartesian") {
+      std::string dirName = getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) {
+	if (dirName==dimName.substr(i,1)) {
+	  min[i] = getLengthAttribute(distNode,"min");
+	  max[i] = getLengthAttribute(distNode,"max");
+	}
+      }
+    }
+  }
 }

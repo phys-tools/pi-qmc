@@ -23,7 +23,7 @@ extern "C" void DGESV_F77(const int *n, const int *nrhs,
 CollectiveSectionMover::CollectiveSectionMover(double radius, Vec amplitude,
         int npart, Vec min, Vec max, SuperCell* cell)
     :   radius(radius), amplitude(amplitude), amp(amplitude), 
-        min(min), max(max), sliceCount(0), npart(npart), cell(cell) {
+        min(min), max(max), sliceCount(1), npart(npart), cell(cell) {
   for (int idim=0; idim<NDIM; ++idim) center[idim]=0.;
 }
 
@@ -33,12 +33,15 @@ double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler,
                                         int ilevel) {
   const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
   Beads<NDIM>& movingBeads = sampler.getMovingBeads();
-  const int sliceCount= sectionBeads.getNSlice();
+  sliceCount = sectionBeads.getNSlice();
   double tranProb = 1.;
-  // Randomize the amplitude.
+  // Randomize the amplitude and the center of the cylinder.
   for (int idim=0; idim<NDIM; ++idim) {
     amplitude[idim] = 2 * amp[idim] * (RandomNumGenerator::getRand() - 0.5);
+    center[idim] = min[idim] 
+                   + (max[idim]-min[idim]) * RandomNumGenerator::getRand();
   }
+  cell->pbc(center);
   bool forward = (RandomNumGenerator::getRand() > 0.5);
   double jacobian = 0.;
   for (int islice=0; islice<sliceCount; ++islice) {

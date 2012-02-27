@@ -10,6 +10,7 @@
 #include "BeadFactory.h"
 #include "stats/AccRejEstimator.h"
 #include "CollectiveSectionMover.h"
+#include "RandomNumGenerator.h"
 
 
 CollectiveSectionSampler::CollectiveSectionSampler(int npart,
@@ -31,11 +32,30 @@ CollectiveSectionSampler::~CollectiveSectionSampler() {
 }
 
 void CollectiveSectionSampler::run() {
-
+  for (int irepeat=0; irepeat<nrepeat; ++irepeat) {
+    const int nsectionSlice = movingBeads->getNSlice();
+    sectionBeads->copySlice(*movingIndex, 0,
+	           *movingBeads, identityIndex, 0);
+    sectionBeads->copySlice(*movingIndex, nsectionSlice-1,
+	           *movingBeads, identityIndex, nsectionSlice-1);
+    tryMove();
+  }
 }
 
 bool CollectiveSectionSampler::tryMove() {
-
+  if (accRejEst) accRejEst->tryingMove(0);
+  double lnTranProb = mover->makeMove(*this,0);
+  double deltaAction = (action==0)?0:action->getActionDifference(*this,0);
+  double acceptProb = exp(lnTranProb - deltaAction);
+  if (RandomNumGenerator::getRand()>acceptProb) return false;
+  if (accRejEst) accRejEst->moveAccepted(0);
+  action->acceptLastMove();
+  int nSectionSlice = sectionBeads->getNSlice();
+  for (int islice=0; islice<nSectionSlice; ++islice) {
+    movingBeads->copySlice(identityIndex,islice,
+			   *sectionBeads,*movingIndex,islice);
+  }
+  return true;
 }
 
 AccRejEstimator* 

@@ -67,6 +67,8 @@ private:
   Algorithm* parseAlgorithm(const xmlXPathContextPtr& ctxt);
   /// Parse the body of an algorithm.
   void parseBody(const xmlXPathContextPtr& ctxt, CompositeAlgorithm*);
+  /// Parse the boundary.
+  void parseBoundary(const xmlXPathContextPtr& ctxt, Vec& min, Vec& max);
   /// The Action.
   Action* action;
   /// The DoubleAction.
