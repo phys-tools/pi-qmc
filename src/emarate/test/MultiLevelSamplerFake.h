@@ -12,6 +12,12 @@ public:
     virtual Beads<NDIM>& getSectionBeads();
     virtual Beads<NDIM>& getMovingBeads();
     virtual const IArray& getMovingIndex() const;
+    virtual const Beads<NDIM>& getSectionBeads(int) const;
+    virtual const Beads<NDIM>& getMovingBeads(int) const;
+    virtual Beads<NDIM>& getSectionBeads(int);
+    virtual Beads<NDIM>& getMovingBeads(int);
+    virtual const IArray& getMovingIndex(int) const;
+    virtual bool isSamplingBoth() const {return false;}
     virtual const SuperCell& getSuperCell() const;
     virtual int getFirstSliceIndex() const;
     //virtual const SectionChooser& getSectionChooser() const;

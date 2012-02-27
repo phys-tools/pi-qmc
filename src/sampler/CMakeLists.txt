@@ -1,6 +1,7 @@
 set (sources
     AlternatingParticleChooser.cc
     CollectiveMover.cc
+    CollectiveSectionMover.cc
     CollectiveSectionSampler.cc
     DampedFreeTensorMover.cc
     DisplaceMoveSampler.cc
@@ -34,4 +35,4 @@ set (sources
 
 add_library(sampler STATIC ${sources})
 
-add_subdirectory(test)
+#add_subdirectory(test)

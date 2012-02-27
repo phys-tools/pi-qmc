@@ -89,6 +89,7 @@ double CollectiveMover::makeMove(VArray& displacement,
   for (int ipart=0;ipart<npart;++ipart) {
     Vec r = paths(movingIndex(ipart),iFirstSlice);
     if (forward) calcShift(r); else calcInverseShift(r);
+    calcJacobian(r);
     displacement(ipart) = value;
 #if NDIM==1
     double jacob = jacobian(0,0);
@@ -103,7 +104,9 @@ double CollectiveMover::makeMove(VArray& displacement,
                      *(jacobian(1,0)*jacobian(2,1)-jacobian(1,1)*jacobian(2,0));
 #endif
     tranProb *= (forward ? jacob : 1./jacob); 
+//    std::cout<<"forward = "<<forward<<", jacob = "<<jacob<<", tranProb = "<<tranProb<<std::endl;
   }
+//  std::cin.ignore();
   return log(tranProb); 
 }
 

@@ -93,6 +93,5 @@ TEST_F(CollectiveSectionSamplerTest, testCreate) {
 //    ASSERT_EQ(1 << levelCount + 1, sliceCount);
 //    ASSERT_EQ(maximumMovingCount, movingCount);
 //}
-
 }
 
