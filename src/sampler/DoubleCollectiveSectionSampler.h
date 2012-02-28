@@ -7,6 +7,7 @@ class BeadFactory;
 class Paths;
 class DoubleSectionChooser;
 class CollectiveSectionMover;
+class SuperCell;
 #include "SectionSamplerInterface.h"
 #include "CollectiveSectionSampler.h"
 
@@ -14,7 +15,7 @@ class DoubleCollectiveSectionSampler : public CollectiveSectionSampler {
 public:
   DoubleCollectiveSectionSampler(int, DoubleSectionChooser&,
 		  Action*, DoubleAction*, int nrepeat, const BeadFactory&,
-		  CollectiveSectionMover*, bool);
+		  CollectiveSectionMover*, bool, SuperCell*);
   virtual ~DoubleCollectiveSectionSampler();
 
   virtual void run();

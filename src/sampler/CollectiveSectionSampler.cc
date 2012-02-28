@@ -8,6 +8,7 @@
 #include "Action.h"
 #include "Beads.h"
 #include "BeadFactory.h"
+#include "SuperCell.h"
 #include "stats/AccRejEstimator.h"
 #include "CollectiveSectionMover.h"
 #include "RandomNumGenerator.h"
@@ -15,12 +16,13 @@
 
 CollectiveSectionSampler::CollectiveSectionSampler(int npart,
         SectionChooser &sectionChooser, Action *action, int nrepeat,
-        const BeadFactory &beadFactory, CollectiveSectionMover* mover)
+        const BeadFactory &beadFactory, CollectiveSectionMover* mover,
+	SuperCell *cell)
   : nlevel(sectionChooser.getNLevel()), npart(npart), 
     sectionBeads(&sectionChooser.getBeads()), 
     movingBeads(beadFactory.getNewBeads(npart,sectionBeads->getNSlice())),
     movingIndex(new IArray(npart)), identityIndex(npart),
-    sectionChooser(sectionChooser), cell(0),
+    sectionChooser(sectionChooser), cell(cell),
     action(action), nrepeat(nrepeat),
     maximumMovingCount(npart), mover(mover), accRejEst(0) {
   for (int i=0; i<npart; ++i) (*movingIndex)(i) = identityIndex(i) = i;

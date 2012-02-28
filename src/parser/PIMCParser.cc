@@ -501,11 +501,11 @@ std::cout << "doubleAction!=0" << std::endl;
     bool both=getBoolAttribute(ctxt->node,"both");
     if (doubleAction==0) {
       algorithm = new CollectiveSectionSampler(npart, *sectionChooser, action,
-	                                          nrepeat, beadFactory, mover);
+	                                    nrepeat, beadFactory, mover, cell);
     } else {
       algorithm = new DoubleCollectiveSectionSampler(npart, 
 	                     *doubleSectionChooser, action, doubleAction,
-			     nrepeat, beadFactory, mover, both);
+			     nrepeat, beadFactory, mover, both, cell);
     }
     std::string accRejName="CollectiveSampler";
     estimators->add(((CollectiveSectionSampler*)algorithm)->

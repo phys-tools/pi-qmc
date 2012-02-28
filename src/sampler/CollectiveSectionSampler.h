@@ -5,17 +5,18 @@ class Action;
 class BeadFactory;
 class AccRejEstimator;
 class Paths;
-class SectionChooser;
+//class SectionChooser;
 class SuperCell;
 #include "Algorithm.h"
 #include "CollectiveSectionMover.h"
 #include "SectionSamplerInterface.h"
+#include "SectionChooser.h"
 
 class CollectiveSectionSampler : public Algorithm,
                                  public SectionSamplerInterface {
 public:
-  CollectiveSectionSampler(int, SectionChooser&, 
-		  Action*, int, const BeadFactory&, CollectiveSectionMover*);
+  CollectiveSectionSampler(int, SectionChooser&, Action*, int, 
+                      const BeadFactory&, CollectiveSectionMover*, SuperCell*);
   virtual ~CollectiveSectionSampler();
 
   virtual void run();
@@ -36,14 +37,13 @@ public:
   virtual const IArray& getMovingIndex() const {return *movingIndex;}
   virtual const IArray& getMovingIndex(const int i) const {return *movingIndex;}
 
-  virtual int getFirstSliceIndex() const {return 0;}
+//  virtual int getFirstSliceIndex() const {return 0;}
   virtual const SuperCell& getSuperCell() const {return *cell;}
   virtual bool isSamplingBoth() const {return false;}
 
   virtual AccRejEstimator* getAccRejEstimator(const std::string& name);
 
-//  virtual int getFirstSliceIndex() const {return sectionChooser.getFirstSliceIndex();}
-//  virtual const SuperCell& getSuperCell() const;
+  virtual int getFirstSliceIndex() const {return sectionChooser.getFirstSliceIndex();}
 
 
 protected:

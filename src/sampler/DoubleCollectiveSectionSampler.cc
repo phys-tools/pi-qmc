@@ -12,6 +12,7 @@
 #include "stats/AccRejEstimator.h"
 #include "CollectiveSectionMover.h"
 #include "RandomNumGenerator.h"
+#include "SuperCell.h"
 
 /*
    TO DO: Add samplingBoth
@@ -20,9 +21,9 @@
 DoubleCollectiveSectionSampler::DoubleCollectiveSectionSampler(int npart,
         DoubleSectionChooser& sectionChooser, Action *action,
         DoubleAction *doubleAction, int nrepeat, const BeadFactory &beadFactory,
-	CollectiveSectionMover *mover, bool both)
+	CollectiveSectionMover *mover, bool both, SuperCell *cell)
     : CollectiveSectionSampler(npart, sectionChooser,
-	            action, nrepeat, beadFactory, mover),
+	            action, nrepeat, beadFactory, mover, cell),
       sectionBeads1(&sectionChooser.getBeads(1)),
       sectionBeads2(&sectionChooser.getBeads(2)),
       movingBeads1(movingBeads),
