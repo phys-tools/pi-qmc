@@ -8,10 +8,8 @@
 #include <blitz/tinyvec.h>
 #include <blitz/tinymat.h>
 #include "SectionSamplerInterface.h"
-//#include "CollectiveSectionSampler.h"
 class SuperCell;
 class CollectiveSectionSampler;
-
 
 class CollectiveSectionMover {
 public:
@@ -27,7 +25,7 @@ public:
     Vec calcInverseShift(const Vec&, int sliceIndex) const;
     Mat calcJacobian(const Vec&, int sliceIndex) const;
     double calcJacobianDet(const Mat&);
-
+/*
     Vec getAmplitude() const;
     double getRadius() const;
     void setAmplitude(Vec amplitude);
@@ -35,12 +33,11 @@ public:
     int getSliceCount() const;
     Vec getCenter() const;
     void setCenter(Vec center);
-
+*/
 private:
     inline Vec calcDisplacement(const Vec&, int sliceIndex) const;
     inline double timeEnvelope(int sliceIndex) const;
     inline bool isOutsideRadius(const Vec &rin) const;
-
 
     double radius;
     Vec amplitude, amp;

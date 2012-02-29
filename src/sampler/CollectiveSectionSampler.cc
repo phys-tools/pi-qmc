@@ -35,11 +35,11 @@ CollectiveSectionSampler::~CollectiveSectionSampler() {
 
 void CollectiveSectionSampler::run() {
   for (int irepeat=0; irepeat<nrepeat; ++irepeat) {
-    const int nsectionSlice = movingBeads->getNSlice();
-    sectionBeads->copySlice(*movingIndex, 0,
-	           *movingBeads, identityIndex, 0);
-    sectionBeads->copySlice(*movingIndex, nsectionSlice-1,
-	           *movingBeads, identityIndex, nsectionSlice-1);
+    const int nSectionSlice = movingBeads->getNSlice();
+    for (int islice=0; islice<nSectionSlice; ++islice) {
+      sectionBeads->copySlice(*movingIndex,islice,
+			     *movingBeads,identityIndex,islice);
+    }
     tryMove();
   }
 }

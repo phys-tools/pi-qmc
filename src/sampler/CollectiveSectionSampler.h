@@ -5,12 +5,15 @@ class Action;
 class BeadFactory;
 class AccRejEstimator;
 class Paths;
-//class SectionChooser;
 class SuperCell;
 #include "Algorithm.h"
 #include "CollectiveSectionMover.h"
 #include "SectionSamplerInterface.h"
 #include "SectionChooser.h"
+
+/* Sampling a segment of paths with a specified mover, aiming to improve
+   the efficiency for dynamic estimators.
+*/
 
 class CollectiveSectionSampler : public Algorithm,
                                  public SectionSamplerInterface {

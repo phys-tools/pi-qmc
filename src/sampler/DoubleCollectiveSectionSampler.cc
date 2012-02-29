@@ -14,9 +14,6 @@
 #include "RandomNumGenerator.h"
 #include "SuperCell.h"
 
-/*
-   TO DO: Add samplingBoth
-*/
 
 DoubleCollectiveSectionSampler::DoubleCollectiveSectionSampler(int npart,
         DoubleSectionChooser& sectionChooser, Action *action,
@@ -41,16 +38,16 @@ DoubleCollectiveSectionSampler::~DoubleCollectiveSectionSampler() {
 
 void DoubleCollectiveSectionSampler::run() {
   for (int irepeat=0; irepeat<nrepeat; ++irepeat) {
-    const int nsectionSlice = movingBeads->getNSlice();
-    sectionBeads1->copySlice(*movingIndex1, 0,
-	           *movingBeads1, identityIndex, 0);
-    sectionBeads1->copySlice(*movingIndex1, nsectionSlice-1,
-	           *movingBeads1, identityIndex, nsectionSlice-1);
+    const int nSectionSlice = movingBeads->getNSlice();
+    for (int islice=0; islice<nSectionSlice; ++islice) {
+      sectionBeads1->copySlice(*movingIndex1,islice,
+			     *movingBeads1,identityIndex,islice);
+    }
     if (samplingBoth) {
-      sectionBeads2->copySlice(*movingIndex2, 0,
-	             *movingBeads2, identityIndex, 0);
-      sectionBeads2->copySlice(*movingIndex2, nsectionSlice-1,
-	             *movingBeads2, identityIndex, nsectionSlice-1);
+      for (int islice=0; islice<nSectionSlice; ++islice) {
+	sectionBeads2->copySlice(*movingIndex2,islice,
+                                 *movingBeads2,identityIndex,islice);
+      }
     }
     tryMove();
   }
@@ -85,12 +82,6 @@ bool DoubleCollectiveSectionSampler::tryMove() {
                *sectionBeads2,*movingIndex2,islice);
     }
   }
-//  movingBeads1->copySlice(identityIndex,nSectionSlice,
-//                          *sectionBeads1,*movingIndex1,nSectionSlice);
-//  if (samplingBoth) {
-//    movingBeads2->copySlice(identityIndex,nSectionSlice,
-//	                    *sectionBeads2,*movingIndex2,nSectionSlice);
-//  }
   return true;
 }
 
@@ -98,7 +89,7 @@ AccRejEstimator*
 DoubleCollectiveSectionSampler::getAccRejEstimator(const std::string& name) {
   std::ostringstream longName;
   longName << name << ": moving " << npart;
-//  if (samplingBoth) longName << ", both";
+  if (samplingBoth) longName << ", both";
   return accRejEst=new AccRejEstimator(longName.str(),1);
 }
 

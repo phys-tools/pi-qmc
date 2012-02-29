@@ -175,7 +175,7 @@ double CollectiveSectionMover::calcJacobianDet(
 #endif
   return jacob;
 }
-
+/*
 CollectiveSectionMover::Vec CollectiveSectionMover::getAmplitude() const {
     return amplitude;
 }
@@ -205,3 +205,4 @@ CollectiveSectionMover::Vec CollectiveSectionMover::getCenter() const {
 void CollectiveSectionMover::setCenter(Vec center) {
     this->center = center;
 }
+*/
