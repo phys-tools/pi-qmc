@@ -1,9 +1,14 @@
 SUBDIRS = demo emarate fixednode parser sampler spin stats
 
 bin_PROGRAMS = pi
-pi_DEPENDENCIES = demo/libdemo.la emarate/libemarate.la \
+pi_DEPENDENCIES = \
+    sampler/libsampler.la \
+    emarate/libemarate.la \
     fixednode/libfixednode.la \
-    parser/libparser.la spin/libspin.la stats/libstats.la
+    demo/libdemo.la \
+    spin/libspin.la \
+    stats/libstats.la \
+    parser/libparser.la 
 pi_LDADD = -Lparser -lparser \
   -Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
   -Ldemo -ldemo -Lspin -lspin -Lstats -lstats
