@@ -37,7 +37,7 @@ double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler,
   double tranProb = 1.;
   // Randomize the amplitude and the center of the cylinder.
   for (int idim=0; idim<NDIM; ++idim) {
-    amplitude[idim] = 2 * amp[idim] * (RandomNumGenerator::getRand() - 0.5);
+    amplitude[idim] = 2. * amp[idim] * (RandomNumGenerator::getRand() - 0.5);
     center[idim] = min[idim] 
                    + (max[idim]-min[idim]) * RandomNumGenerator::getRand();
   }
@@ -96,6 +96,19 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcShift(
 CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
         const Vec &rin, int sliceIndex) const {
     if (isOutsideRadius(rin)) return rin;
+    Vec delta = rin - center;
+    cell->pbc(delta);
+    double radius2 = radius * radius;
+    double a2 = dot(amplitude,amplitude);
+    double a = sqrt(a2);
+    double r = sqrt(dot(delta,delta));
+    Vec rout = rin - amplitude * (1.0 - 1./4.0/a2*(2*radius2-4*a*(r-a)
+                                  -2*radius*sqrt(radius2-4*a*(r-a))))
+                     * timeEnvelope(sliceIndex);
+    cell->pbc(rout);
+
+/* --------------------------------------------------------------
+/// Calculate the inverse shift by Newton iteration.
     Vec rout = rin - calcDisplacement(rin, sliceIndex);
     Vec rback = calcShift(rout, sliceIndex);
     Vec deltaInBack = rin - rback;
@@ -106,7 +119,7 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
     double error2 = dot(deltaInBack, deltaInBack)
             / (dot(deltaInOut, deltaInOut) + dot(deltaOutBack, deltaOutBack));
     int niter = 0;
-    while (error2 > 1e-18) {
+    while (error2 > 1e-10) {
         // Solve linear equations for Newton's method.
         ++niter;
         if (niter>20) {
@@ -134,6 +147,10 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
                       / (dot(deltaInOut, deltaInOut)
                               + dot(deltaOutBack, deltaOutBack));
     }
+    cell->pbc(rout);
+    std::cout<<"rout(2) = "<<rout<<std::endl;
+    std::cin.ignore();
+*/
     return rout;
 }
 
