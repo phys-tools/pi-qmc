@@ -23,7 +23,7 @@
 #include "EwaldCoulombEstimator.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "Paths.h"
 #include "SuperCell.h"
 #include <blitz/tinyvec-et.h>

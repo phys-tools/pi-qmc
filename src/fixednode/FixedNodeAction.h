@@ -17,7 +17,7 @@
 #ifndef __FixedNodeAction_h_
 #define __FixedNodeAction_h_
 
-#include "DoubleAction.h"
+#include "action/DoubleAction.h"
 #include "NodeModel.h"
 #include <cstdlib>
 #include <blitz/array.h>

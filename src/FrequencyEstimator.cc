@@ -22,8 +22,8 @@
 #endif
 #include "FrequencyEstimator.h"
 #include "SimulationInfo.h"
-#include "Action.h"
-#include "DoubleAction.h"
+#include "action/Action.h"
+#include "action/DoubleAction.h"
 #include "SuperCell.h"
 #include "Species.h"
 #include "Paths.h"

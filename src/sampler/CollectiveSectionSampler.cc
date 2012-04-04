@@ -5,7 +5,7 @@
 #include "CollectiveSectionSampler.h"
 #include "Paths.h"
 #include "SectionChooser.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "Beads.h"
 #include "BeadFactory.h"
 #include "SuperCell.h"

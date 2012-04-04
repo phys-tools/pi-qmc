@@ -22,7 +22,7 @@ class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 class Species;
-#include "Action.h"
+#include "action/Action.h"
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>

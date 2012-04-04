@@ -21,7 +21,7 @@
 #include <mpi.h>
 #endif
 #include "NonZeroSectionChooser.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "Paths.h"
 #include "Beads.h"
 #include "Permutation.h"

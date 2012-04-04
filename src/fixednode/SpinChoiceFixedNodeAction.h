@@ -18,7 +18,7 @@
 #define __SpinChoiceFixedNodeAction_h_
 
 #include "FixedNodeAction.h"
-#include "ActionChoice.h"
+#include "action/ActionChoice.h"
 //#include "LinkSummable.h"
 class SpinModelState;
 class MPIManager;

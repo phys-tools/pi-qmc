@@ -30,7 +30,7 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "SuperCell.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "Paths.h"
 
 SKOmegaEstimator::SKOmegaEstimator(const SimulationInfo& simInfo,

@@ -31,8 +31,8 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "SuperCell.h"
-#include "DoubleAction.h" 
-#include "Action.h"
+#include "action/DoubleAction.h"
+#include "action/Action.h"
 #include "Paths.h"
 #include <blitz/tinyvec-et.h>
 #include <vector>

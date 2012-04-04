@@ -70,6 +70,7 @@ AC_C_CONST
 
 AC_CONFIG_FILES([Makefile \
     src/Makefile \
+    src/action/Makefile \
     src/demo/Makefile \
     src/emarate/Makefile \
     src/fixednode/Makefile \

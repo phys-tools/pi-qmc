@@ -17,7 +17,7 @@
 #ifndef __GroundStateWFNodes_h_
 #define __GroundStateWFNodes_h_
 
-#include "Action.h"
+#include "action/Action.h"
 class Wavefunction;
 #include <cstdlib>
 #include <blitz/array.h>

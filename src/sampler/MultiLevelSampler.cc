@@ -25,7 +25,7 @@
 #include "stats/AccRejEstimator.h"
 #include "Beads.h"
 #include "BeadFactory.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "Mover.h"
 #include "RandomNumGenerator.h"
 #include "Paths.h"

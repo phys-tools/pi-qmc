@@ -22,7 +22,7 @@
 #endif
 #include "EIndEstimator.h"
 #include "SimulationInfo.h"
-#include "CoulombAction.h"
+#include "action/CoulombAction.h"
 #include "SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>

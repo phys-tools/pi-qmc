@@ -23,7 +23,7 @@
 #include "stats/MPIManager.h"
 #include "DisplaceMoveSampler.h"
 #include "stats/AccRejEstimator.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "UniformMover.h"
 #include "RandomNumGenerator.h"
 #include "Paths.h"

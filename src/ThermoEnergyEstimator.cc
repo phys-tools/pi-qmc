@@ -22,8 +22,8 @@
 #endif
 #include "ThermoEnergyEstimator.h"
 #include "SimulationInfo.h"
-#include "Action.h"
-#include "DoubleAction.h"
+#include "action/Action.h"
+#include "action/DoubleAction.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "stats/MPIManager.h"

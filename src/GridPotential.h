@@ -20,7 +20,7 @@ class SectionSamplerInterface;
 class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
-#include "Action.h"
+#include "action/Action.h"
 #include <string>
 #include <vector>
 #include <cstdlib>

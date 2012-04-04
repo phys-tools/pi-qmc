@@ -30,7 +30,7 @@
 #include "parser/PIMCParser.h"
 #include "parser/EstimatorParser.h"
 #include "spin/MainSpinParser.h"
-#include "Action.h"
+#include "action/Action.h"
 #include "Algorithm.h"
 #include "SimulationInfo.h"
 #include "stats/EstimatorManager.h"

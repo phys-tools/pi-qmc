@@ -19,8 +19,8 @@
 #endif
 #include "RandomNumGenerator.h"
 #include "DoubleSectionChooser.h"
-#include "Action.h"
-#include "DoubleAction.h"
+#include "action/Action.h"
+#include "action/DoubleAction.h"
 #include "Paths.h"
 #include "Beads.h"
 #include "BeadFactory.h"

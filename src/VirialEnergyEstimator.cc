@@ -25,8 +25,8 @@
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "SimulationInfo.h"
-#include "Action.h"
-#include "DoubleAction.h"
+#include "action/Action.h"
+#include "action/DoubleAction.h"
 #include "SuperCell.h"
 #include "stats/MPIManager.h"
 

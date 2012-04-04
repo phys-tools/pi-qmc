@@ -17,7 +17,7 @@
 #ifndef __AnisotropicNodes_h_
 #define __AnisotropicNodes_h_
 
-#include "DoubleAction.h"
+#include "action/DoubleAction.h"
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
