@@ -14,10 +14,10 @@ pi_DEPENDENCIES = \
     stats/libstats.la \
     parser/libparser.la \
     util/libutil.la
-pi_LDADD = -Lparser -lparser -Laction -laction -Lutil -lutil \
-	-Lalgorithm -lalgorithm\
+pi_LDADD = -Lparser -lparser -Laction -laction -Lalgorithm -lalgorithm \
 	-Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
-	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator
+	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator \
+        -Lutil -lutil
 pi_SOURCES = \
 	BeadFactory.cc \
 	DoubleParallelPaths.cc \
