@@ -16,11 +16,14 @@ libaction_la_SOURCES = \
 	GaussianAction.cc \
 	GaussianDotAction.cc \
 	GrapheneAction.cc \
+	GridPotential.cc \
 	HyperbolicAction.cc \
 	ImagePairAction.cc \
 	JelliumSlab.cc \
 	OpticalLatticeAction.cc \
 	PairAction.cc \
+	PairIntegrator.cc \
+	PairPotential.cc \
 	PrimAnisSHOAction.cc \
 	PrimColloidalAction.cc \
 	PrimCosineAction.cc \
@@ -58,11 +61,14 @@ noinst_HEADERS = \
 	GaussianAction.h \
 	GaussianDotAction.h \
 	GrapheneAction.h \
+	GridPotential.h \
 	HyperbolicAction.h \
 	ImagePairAction.h \
 	JelliumSlab.h \
 	OpticalLatticeAction.h \
 	PairAction.h \
+	PairIntegrator.h \
+	PairPotential.h \
 	PrimAnisSHOAction.h \
 	PrimColloidalAction.h \
 	PrimCosineAction.h \

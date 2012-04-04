@@ -62,11 +62,13 @@ am_libaction_la_OBJECTS = libaction_la-ActionChoice.lo \
 	libaction_la-FixedPhaseAction.lo libaction_la-GateAction.lo \
 	libaction_la-GaussianAction.lo \
 	libaction_la-GaussianDotAction.lo \
-	libaction_la-GrapheneAction.lo \
+	libaction_la-GrapheneAction.lo libaction_la-GridPotential.lo \
 	libaction_la-HyperbolicAction.lo \
 	libaction_la-ImagePairAction.lo libaction_la-JelliumSlab.lo \
 	libaction_la-OpticalLatticeAction.lo \
-	libaction_la-PairAction.lo libaction_la-PrimAnisSHOAction.lo \
+	libaction_la-PairAction.lo libaction_la-PairIntegrator.lo \
+	libaction_la-PairPotential.lo \
+	libaction_la-PrimAnisSHOAction.lo \
 	libaction_la-PrimColloidalAction.lo \
 	libaction_la-PrimCosineAction.lo libaction_la-PrimSHOAction.lo \
 	libaction_la-PrimShellAction.lo \
@@ -253,11 +255,14 @@ libaction_la_SOURCES = \
 	GaussianAction.cc \
 	GaussianDotAction.cc \
 	GrapheneAction.cc \
+	GridPotential.cc \
 	HyperbolicAction.cc \
 	ImagePairAction.cc \
 	JelliumSlab.cc \
 	OpticalLatticeAction.cc \
 	PairAction.cc \
+	PairIntegrator.cc \
+	PairPotential.cc \
 	PrimAnisSHOAction.cc \
 	PrimColloidalAction.cc \
 	PrimCosineAction.cc \
@@ -296,11 +301,14 @@ noinst_HEADERS = \
 	GaussianAction.h \
 	GaussianDotAction.h \
 	GrapheneAction.h \
+	GridPotential.h \
 	HyperbolicAction.h \
 	ImagePairAction.h \
 	JelliumSlab.h \
 	OpticalLatticeAction.h \
 	PairAction.h \
+	PairIntegrator.h \
+	PairPotential.h \
 	PrimAnisSHOAction.h \
 	PrimColloidalAction.h \
 	PrimCosineAction.h \
@@ -388,11 +396,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-GaussianAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-GaussianDotAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-GrapheneAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-GridPotential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-HyperbolicAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-ImagePairAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-JelliumSlab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-OpticalLatticeAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PairAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PairIntegrator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PairPotential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PrimAnisSHOAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PrimColloidalAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PrimCosineAction.Plo@am__quote@
@@ -539,6 +550,13 @@ libaction_la-GrapheneAction.lo: GrapheneAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-GrapheneAction.lo `test -f 'GrapheneAction.cc' || echo '$(srcdir)/'`GrapheneAction.cc
 
+libaction_la-GridPotential.lo: GridPotential.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-GridPotential.lo -MD -MP -MF $(DEPDIR)/libaction_la-GridPotential.Tpo -c -o libaction_la-GridPotential.lo `test -f 'GridPotential.cc' || echo '$(srcdir)/'`GridPotential.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-GridPotential.Tpo $(DEPDIR)/libaction_la-GridPotential.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='GridPotential.cc' object='libaction_la-GridPotential.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-GridPotential.lo `test -f 'GridPotential.cc' || echo '$(srcdir)/'`GridPotential.cc
+
 libaction_la-HyperbolicAction.lo: HyperbolicAction.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-HyperbolicAction.lo -MD -MP -MF $(DEPDIR)/libaction_la-HyperbolicAction.Tpo -c -o libaction_la-HyperbolicAction.lo `test -f 'HyperbolicAction.cc' || echo '$(srcdir)/'`HyperbolicAction.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-HyperbolicAction.Tpo $(DEPDIR)/libaction_la-HyperbolicAction.Plo
@@ -573,6 +591,20 @@ libaction_la-PairAction.lo: PairAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairAction.cc' object='libaction_la-PairAction.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairAction.lo `test -f 'PairAction.cc' || echo '$(srcdir)/'`PairAction.cc
+
+libaction_la-PairIntegrator.lo: PairIntegrator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairIntegrator.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairIntegrator.Tpo -c -o libaction_la-PairIntegrator.lo `test -f 'PairIntegrator.cc' || echo '$(srcdir)/'`PairIntegrator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PairIntegrator.Tpo $(DEPDIR)/libaction_la-PairIntegrator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairIntegrator.cc' object='libaction_la-PairIntegrator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairIntegrator.lo `test -f 'PairIntegrator.cc' || echo '$(srcdir)/'`PairIntegrator.cc
+
+libaction_la-PairPotential.lo: PairPotential.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairPotential.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairPotential.Tpo -c -o libaction_la-PairPotential.lo `test -f 'PairPotential.cc' || echo '$(srcdir)/'`PairPotential.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PairPotential.Tpo $(DEPDIR)/libaction_la-PairPotential.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairPotential.cc' object='libaction_la-PairPotential.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairPotential.lo `test -f 'PairPotential.cc' || echo '$(srcdir)/'`PairPotential.cc
 
 libaction_la-PrimAnisSHOAction.lo: PrimAnisSHOAction.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PrimAnisSHOAction.lo -MD -MP -MF $(DEPDIR)/libaction_la-PrimAnisSHOAction.Tpo -c -o libaction_la-PrimAnisSHOAction.lo `test -f 'PrimAnisSHOAction.cc' || echo '$(srcdir)/'`PrimAnisSHOAction.cc

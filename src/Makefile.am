@@ -1,9 +1,10 @@
-SUBDIRS = action demo emarate fixednode parser sampler spin stats
+SUBDIRS = action demo emarate estimator fixednode parser sampler spin stats
 
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = \
     sampler/libsampler.la \
     emarate/libemarate.la \
+    estimator/libestimator.la \
     fixednode/libfixednode.la \
     action/libaction.la \
     demo/libdemo.la \
@@ -12,71 +13,40 @@ pi_DEPENDENCIES = \
     parser/libparser.la 
 pi_LDADD = -Lparser -lparser -Laction -laction \
 	-Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
-	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats
+	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator
 pi_SOURCES = \
-	AngularMomentumEstimator.cc \
 	AperiodicGaussian.cc \
 	BeadFactory.cc \
 	BinProbDensity.cc \
-	BondLengthEstimator.cc \
-	BoxEstimator.cc \
 	Collect.cc \
 	ConditionalDensityGrid.cc \
-	ConductanceEstimator.cc \
-	ConductivityEstimator.cc \
-	ConductivityEstimator2D.cc \
-	CoulombEnergyEstimator.cc \
-	CountCountEstimator.cc \
 	CubicLattice.cc \
-	DensCountEstimator.cc \
-	DensDensEstimator.cc \
-	DensityCurrentEstimator.cc \
-	DensityEstimator.cc \
-	DiamagneticEstimator.cc \
-	DipoleMomentEstimator.cc \
 	DoubleParallelPaths.cc \
-	DynamicPCFEstimator.cc \
-	EIndEstimator.cc \
 	EnumeratedModelState.cc \
-	EwaldCoulombEstimator.cc \
 	EwaldSum.cc \
-	FreeEnergyEstimator.cc \
-	FrequencyEstimator.cc \
-	GridPotential.cc \
 	Hungarian.cc \
-	JEstimator.cc \
 	Measure.cc \
 	OptEwaldSum.cc \
 	PairDistance.cc \
-	PairIntegrator.cc \
-	PairPotential.cc \
 	ParallelPaths.cc \
 	PathReader.cc \
 	Paths.cc \
 	PeriodicGaussian.cc \
 	Permutation.cc \
-	PermutationEstimator.cc \
-	PositionEstimator.cc \
 	ProbDensityGrid.cc \
 	RandomNumGenerator.cc \
 	RingLattice.cc \
 	SHOPhase.cc \
-	SKOmegaEstimator.cc \
 	SeedRandom.cc \
 	SerialPaths.cc \
 	SimInfoWriter.cc \
 	SimulationInfo.cc \
 	Species.cc \
 	Spin4DPhase.cc \
-	SpinChargeEstimator.cc \
 	SpinModelState.cc \
 	StructReader.cc \
 	SuperCell.cc \
-	ThermoEnergyEstimator.cc \
 	TradEwaldSum.cc \
-	VIndEstimator.cc \
-	VirialEnergyEstimator.cc \
-	WindingEstimator.cc \
 	WireEwald.cc \
 	WorkerShifter.cc \
 	WritePaths.cc \
@@ -85,84 +55,49 @@ pi_SOURCES = \
 	main.cc
 noinst_HEADERS = \
 	Algorithm.h \
-	AngularMomentumEstimator.h \
 	AperiodicGaussian.h \
 	BeadFactory.h \
 	Beads.h \
 	BinProbDensity.h \
-	BondLengthEstimator.h \
-	BoxEstimator.h \
 	Collect.h \
 	CompositeAlgorithm.h \
 	ConditionalDensityGrid.h \
-	ConductanceEstimator.h \
-	ConductivityEstimator.h \
-	ConductivityEstimator2D.h \
-	CoulombEnergyEstimator.h \
-	CountCountEstimator.h \
 	CubicLattice.h \
-	DensCountEstimator.h \
-	DensDensEstimator.h \
-	DensityCurrentEstimator.h \
-	DensityEstimator.h \
-	DiamagneticEstimator.h \
-	DipoleMomentEstimator.h \
 	Distance.h \
 	DoubleParallelPaths.h \
-	DynamicPCFEstimator.h \
-	EIndEstimator.h \
 	EnumeratedModelState.h \
-	EwaldCoulombEstimator.h \
 	EwaldSum.h \
-	FreeEnergyEstimator.h \
-	FrequencyEstimator.h \
-	GridPotential.h \
 	Help.h \
-	JEstimator.h \
 	LinkSummable.h \
 	Loop.h \
 	Measure.h \
 	ModelState.h \
 	OptEwaldSum.h \
-	PairCFEstimator.h \
 	PairDistance.h \
-	PairIntegrator.h \
-	PairPotential.h \
 	ParallelPaths.h \
 	PathReader.h \
 	Paths.h \
 	PeriodicGaussian.h \
 	Permutation.h \
-	PermutationEstimator.h \
 	PhaseModel.h \
-	PositionEstimator.h \
 	Positioner.h \
 	ProbDensityGrid.h \
 	RandomNumGenerator.h \
 	RingLattice.h \
 	SHOPhase.h \
-	SKOmegaEstimator.h \
 	SeedRandom.h \
 	SerialPaths.h \
 	SimInfoWriter.h \
 	SimulationInfo.h \
 	Species.h \
 	Spin4DPhase.h \
-	SpinChargeEstimator.h \
-	SpinChoiceDensityEstimator.h \
-	SpinChoicePCFEstimator.h \
 	SpinModelState.h \
 	StructReader.h \
 	SuperCell.h \
-	ThermoEnergyEstimator.h \
 	TradEwaldSum.h \
-	VIndEstimator.h \
-	VirialEnergyEstimator.h \
-	WindingEstimator.h \
 	WireEwald.h \
 	WorkerShifter.h \
 	WritePaths.h \
 	WriteProbDensity.h \
 	XMLWriter.h \
-	ZeroVarDensityEstimator.h \
 	gnugetopt.h

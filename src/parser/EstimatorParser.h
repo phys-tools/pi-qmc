@@ -19,8 +19,8 @@
 #include <string>
 #include <vector>
 #include "parser/XMLUnitParser.h"
-#include "PairCFEstimator.h"
-#include "SpinChoicePCFEstimator.h"
+#include "estimator/PairCFEstimator.h"
+#include "estimator/SpinChoicePCFEstimator.h"
 class EstimatorManager;
 class Distance;
 class SimulationInfo;

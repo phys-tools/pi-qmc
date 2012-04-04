@@ -14,11 +14,14 @@ set (sources
     GaussianAction.cc
     GaussianDotAction.cc
     GrapheneAction.cc
+    GridPotential.cc
     HyperbolicAction.cc
     ImagePairAction.cc
     JelliumSlab.cc
     OpticalLatticeAction.cc
     PairAction.cc
+    PairIntegrator.cc
+    PairPotential.cc
     PrimAnisSHOAction.cc
     PrimColloidalAction.cc
     PrimCosineAction.cc

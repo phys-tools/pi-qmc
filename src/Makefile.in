@@ -53,41 +53,23 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_pi_OBJECTS = AngularMomentumEstimator.$(OBJEXT) \
-	AperiodicGaussian.$(OBJEXT) BeadFactory.$(OBJEXT) \
-	BinProbDensity.$(OBJEXT) BondLengthEstimator.$(OBJEXT) \
-	BoxEstimator.$(OBJEXT) Collect.$(OBJEXT) \
-	ConditionalDensityGrid.$(OBJEXT) \
-	ConductanceEstimator.$(OBJEXT) ConductivityEstimator.$(OBJEXT) \
-	ConductivityEstimator2D.$(OBJEXT) \
-	CoulombEnergyEstimator.$(OBJEXT) CountCountEstimator.$(OBJEXT) \
-	CubicLattice.$(OBJEXT) DensCountEstimator.$(OBJEXT) \
-	DensDensEstimator.$(OBJEXT) DensityCurrentEstimator.$(OBJEXT) \
-	DensityEstimator.$(OBJEXT) DiamagneticEstimator.$(OBJEXT) \
-	DipoleMomentEstimator.$(OBJEXT) DoubleParallelPaths.$(OBJEXT) \
-	DynamicPCFEstimator.$(OBJEXT) EIndEstimator.$(OBJEXT) \
-	EnumeratedModelState.$(OBJEXT) EwaldCoulombEstimator.$(OBJEXT) \
-	EwaldSum.$(OBJEXT) FreeEnergyEstimator.$(OBJEXT) \
-	FrequencyEstimator.$(OBJEXT) GridPotential.$(OBJEXT) \
-	Hungarian.$(OBJEXT) JEstimator.$(OBJEXT) Measure.$(OBJEXT) \
+am_pi_OBJECTS = AperiodicGaussian.$(OBJEXT) BeadFactory.$(OBJEXT) \
+	BinProbDensity.$(OBJEXT) Collect.$(OBJEXT) \
+	ConditionalDensityGrid.$(OBJEXT) CubicLattice.$(OBJEXT) \
+	DoubleParallelPaths.$(OBJEXT) EnumeratedModelState.$(OBJEXT) \
+	EwaldSum.$(OBJEXT) Hungarian.$(OBJEXT) Measure.$(OBJEXT) \
 	OptEwaldSum.$(OBJEXT) PairDistance.$(OBJEXT) \
-	PairIntegrator.$(OBJEXT) PairPotential.$(OBJEXT) \
 	ParallelPaths.$(OBJEXT) PathReader.$(OBJEXT) Paths.$(OBJEXT) \
 	PeriodicGaussian.$(OBJEXT) Permutation.$(OBJEXT) \
-	PermutationEstimator.$(OBJEXT) PositionEstimator.$(OBJEXT) \
 	ProbDensityGrid.$(OBJEXT) RandomNumGenerator.$(OBJEXT) \
-	RingLattice.$(OBJEXT) SHOPhase.$(OBJEXT) \
-	SKOmegaEstimator.$(OBJEXT) SeedRandom.$(OBJEXT) \
+	RingLattice.$(OBJEXT) SHOPhase.$(OBJEXT) SeedRandom.$(OBJEXT) \
 	SerialPaths.$(OBJEXT) SimInfoWriter.$(OBJEXT) \
 	SimulationInfo.$(OBJEXT) Species.$(OBJEXT) \
-	Spin4DPhase.$(OBJEXT) SpinChargeEstimator.$(OBJEXT) \
-	SpinModelState.$(OBJEXT) StructReader.$(OBJEXT) \
-	SuperCell.$(OBJEXT) ThermoEnergyEstimator.$(OBJEXT) \
-	TradEwaldSum.$(OBJEXT) VIndEstimator.$(OBJEXT) \
-	VirialEnergyEstimator.$(OBJEXT) WindingEstimator.$(OBJEXT) \
-	WireEwald.$(OBJEXT) WorkerShifter.$(OBJEXT) \
-	WritePaths.$(OBJEXT) WriteProbDensity.$(OBJEXT) \
-	XMLWriter.$(OBJEXT) main.$(OBJEXT)
+	Spin4DPhase.$(OBJEXT) SpinModelState.$(OBJEXT) \
+	StructReader.$(OBJEXT) SuperCell.$(OBJEXT) \
+	TradEwaldSum.$(OBJEXT) WireEwald.$(OBJEXT) \
+	WorkerShifter.$(OBJEXT) WritePaths.$(OBJEXT) \
+	WriteProbDensity.$(OBJEXT) XMLWriter.$(OBJEXT) main.$(OBJEXT)
 pi_OBJECTS = $(am_pi_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
@@ -279,10 +261,11 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = action demo emarate fixednode parser sampler spin stats
+SUBDIRS = action demo emarate estimator fixednode parser sampler spin stats
 pi_DEPENDENCIES = \
     sampler/libsampler.la \
     emarate/libemarate.la \
+    estimator/libestimator.la \
     fixednode/libfixednode.la \
     action/libaction.la \
     demo/libdemo.la \
@@ -292,72 +275,41 @@ pi_DEPENDENCIES = \
 
 pi_LDADD = -Lparser -lparser -Laction -laction \
 	-Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
-	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats
+	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator
 
 pi_SOURCES = \
-	AngularMomentumEstimator.cc \
 	AperiodicGaussian.cc \
 	BeadFactory.cc \
 	BinProbDensity.cc \
-	BondLengthEstimator.cc \
-	BoxEstimator.cc \
 	Collect.cc \
 	ConditionalDensityGrid.cc \
-	ConductanceEstimator.cc \
-	ConductivityEstimator.cc \
-	ConductivityEstimator2D.cc \
-	CoulombEnergyEstimator.cc \
-	CountCountEstimator.cc \
 	CubicLattice.cc \
-	DensCountEstimator.cc \
-	DensDensEstimator.cc \
-	DensityCurrentEstimator.cc \
-	DensityEstimator.cc \
-	DiamagneticEstimator.cc \
-	DipoleMomentEstimator.cc \
 	DoubleParallelPaths.cc \
-	DynamicPCFEstimator.cc \
-	EIndEstimator.cc \
 	EnumeratedModelState.cc \
-	EwaldCoulombEstimator.cc \
 	EwaldSum.cc \
-	FreeEnergyEstimator.cc \
-	FrequencyEstimator.cc \
-	GridPotential.cc \
 	Hungarian.cc \
-	JEstimator.cc \
 	Measure.cc \
 	OptEwaldSum.cc \
 	PairDistance.cc \
-	PairIntegrator.cc \
-	PairPotential.cc \
 	ParallelPaths.cc \
 	PathReader.cc \
 	Paths.cc \
 	PeriodicGaussian.cc \
 	Permutation.cc \
-	PermutationEstimator.cc \
-	PositionEstimator.cc \
 	ProbDensityGrid.cc \
 	RandomNumGenerator.cc \
 	RingLattice.cc \
 	SHOPhase.cc \
-	SKOmegaEstimator.cc \
 	SeedRandom.cc \
 	SerialPaths.cc \
 	SimInfoWriter.cc \
 	SimulationInfo.cc \
 	Species.cc \
 	Spin4DPhase.cc \
-	SpinChargeEstimator.cc \
 	SpinModelState.cc \
 	StructReader.cc \
 	SuperCell.cc \
-	ThermoEnergyEstimator.cc \
 	TradEwaldSum.cc \
-	VIndEstimator.cc \
-	VirialEnergyEstimator.cc \
-	WindingEstimator.cc \
 	WireEwald.cc \
 	WorkerShifter.cc \
 	WritePaths.cc \
@@ -367,86 +319,51 @@ pi_SOURCES = \
 
 noinst_HEADERS = \
 	Algorithm.h \
-	AngularMomentumEstimator.h \
 	AperiodicGaussian.h \
 	BeadFactory.h \
 	Beads.h \
 	BinProbDensity.h \
-	BondLengthEstimator.h \
-	BoxEstimator.h \
 	Collect.h \
 	CompositeAlgorithm.h \
 	ConditionalDensityGrid.h \
-	ConductanceEstimator.h \
-	ConductivityEstimator.h \
-	ConductivityEstimator2D.h \
-	CoulombEnergyEstimator.h \
-	CountCountEstimator.h \
 	CubicLattice.h \
-	DensCountEstimator.h \
-	DensDensEstimator.h \
-	DensityCurrentEstimator.h \
-	DensityEstimator.h \
-	DiamagneticEstimator.h \
-	DipoleMomentEstimator.h \
 	Distance.h \
 	DoubleParallelPaths.h \
-	DynamicPCFEstimator.h \
-	EIndEstimator.h \
 	EnumeratedModelState.h \
-	EwaldCoulombEstimator.h \
 	EwaldSum.h \
-	FreeEnergyEstimator.h \
-	FrequencyEstimator.h \
-	GridPotential.h \
 	Help.h \
-	JEstimator.h \
 	LinkSummable.h \
 	Loop.h \
 	Measure.h \
 	ModelState.h \
 	OptEwaldSum.h \
-	PairCFEstimator.h \
 	PairDistance.h \
-	PairIntegrator.h \
-	PairPotential.h \
 	ParallelPaths.h \
 	PathReader.h \
 	Paths.h \
 	PeriodicGaussian.h \
 	Permutation.h \
-	PermutationEstimator.h \
 	PhaseModel.h \
-	PositionEstimator.h \
 	Positioner.h \
 	ProbDensityGrid.h \
 	RandomNumGenerator.h \
 	RingLattice.h \
 	SHOPhase.h \
-	SKOmegaEstimator.h \
 	SeedRandom.h \
 	SerialPaths.h \
 	SimInfoWriter.h \
 	SimulationInfo.h \
 	Species.h \
 	Spin4DPhase.h \
-	SpinChargeEstimator.h \
-	SpinChoiceDensityEstimator.h \
-	SpinChoicePCFEstimator.h \
 	SpinModelState.h \
 	StructReader.h \
 	SuperCell.h \
-	ThermoEnergyEstimator.h \
 	TradEwaldSum.h \
-	VIndEstimator.h \
-	VirialEnergyEstimator.h \
-	WindingEstimator.h \
 	WireEwald.h \
 	WorkerShifter.h \
 	WritePaths.h \
 	WriteProbDensity.h \
 	XMLWriter.h \
-	ZeroVarDensityEstimator.h \
 	gnugetopt.h
 
 all: all-recursive
@@ -536,69 +453,38 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AngularMomentumEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AperiodicGaussian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BeadFactory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BinProbDensity.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BondLengthEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BoxEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Collect.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ConditionalDensityGrid.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ConductanceEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ConductivityEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ConductivityEstimator2D.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoulombEnergyEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CountCountEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CubicLattice.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensCountEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensDensEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensityCurrentEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DensityEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DiamagneticEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DipoleMomentEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleParallelPaths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DynamicPCFEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EIndEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EnumeratedModelState.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EwaldCoulombEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FreeEnergyEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FrequencyEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GridPotential.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Hungarian.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/JEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Measure.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OptEwaldSum.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairDistance.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairIntegrator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairPotential.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParallelPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PathReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Paths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PeriodicGaussian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Permutation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PermutationEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PositionEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ProbDensityGrid.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RandomNumGenerator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RingLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SHOPhase.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SKOmegaEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SeedRandom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SerialPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimInfoWriter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimulationInfo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Species.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Spin4DPhase.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinChargeEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinModelState.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StructReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SuperCell.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ThermoEnergyEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TradEwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VIndEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VirialEnergyEstimator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WindingEstimator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WireEwald.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WorkerShifter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WritePaths.Po@am__quote@

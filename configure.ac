@@ -73,6 +73,7 @@ AC_CONFIG_FILES([Makefile \
     src/action/Makefile \
     src/demo/Makefile \
     src/emarate/Makefile \
+    src/estimator/Makefile \
     src/fixednode/Makefile \
 	src/parser/Makefile \
 	src/sampler/Makefile \
