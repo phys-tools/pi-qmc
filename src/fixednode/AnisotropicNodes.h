@@ -26,7 +26,7 @@ class Paths;
 class SuperCell;
 class Species;
 class DoubleSectionChooser;
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 
 /** Free particle nodes for new fermion algorithm.
   * @todo Calculate nodal action.

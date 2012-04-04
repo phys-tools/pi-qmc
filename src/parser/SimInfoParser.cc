@@ -20,7 +20,7 @@
 #include "SimInfoParser.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <vector>
 #include <blitz/tinyvec-et.h>
 #include "stats/Units.h"

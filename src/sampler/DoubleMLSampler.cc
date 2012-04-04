@@ -17,7 +17,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "DoubleMLSampler.h"
 #include "stats/AccRejEstimator.h"
 #include "Beads.h"
@@ -25,7 +25,7 @@
 #include "action/DoubleAction.h"
 #include "Mover.h"
 #include "Paths.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include "PermutationChooser.h"
 #include "ParticleChooser.h"
 #include "SimpleParticleChooser.h"

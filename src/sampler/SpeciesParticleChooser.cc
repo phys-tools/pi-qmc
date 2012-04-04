@@ -21,7 +21,7 @@
 #include <mpi.h>
 #endif
 #include "SpeciesParticleChooser.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "SimulationInfo.h"
 #include <iostream>
 

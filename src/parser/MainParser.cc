@@ -31,7 +31,7 @@
 #include "parser/EstimatorParser.h"
 #include "spin/MainSpinParser.h"
 #include "action/Action.h"
-#include "Algorithm.h"
+#include "algorithm/Algorithm.h"
 #include "SimulationInfo.h"
 #include "stats/EstimatorManager.h"
 #include "stats/MPIManager.h"

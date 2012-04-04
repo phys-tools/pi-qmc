@@ -17,9 +17,26 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "SeedRandom.h"
-#include "RandomNumGenerator.h"
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
+#include "WorkerShifter.h"
+#include "Paths.h"
+#include "util/RandomNumGenerator.h"
+#include "stats/MPIManager.h"
 
-SeedRandom::SeedRandom(const int iseed) : iseed(iseed) {}
+WorkerShifter::WorkerShifter(const int maxShift, Paths& paths, MPIManager* mpi)
+  : CompositeAlgorithm(1), maxShift(maxShift), paths(paths), mpi(mpi) {
+}
 
-void SeedRandom::run() {RandomNumGenerator::seed(iseed);}
+WorkerShifter::~WorkerShifter() {}
+
+void WorkerShifter::run() {
+  int ishift=(int)((maxShift-1)*RandomNumGenerator::getRand()*(1-1e-8))+1;
+  if (maxShift==0) ishift=0;
+#ifdef ENABLE_MPI
+  if (mpi) mpi->getWorkerComm().Bcast(&ishift,1,MPI::INT,0);
+#endif
+  paths.shift(ishift);
+  CompositeAlgorithm::run();
+}

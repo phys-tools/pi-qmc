@@ -17,7 +17,7 @@
 #ifndef __SpinSetter_h_
 #define __SpinSetter_h_
 
-#include "../src/Positioner.h"
+#include "algorithm/Positioner.h"
 #include <cstdlib>
 #include <blitz/array.h>
 class Paths;

@@ -25,9 +25,9 @@
 #include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 
 SpringAction::SpringAction(const SimulationInfo& simInfo, const int maxlevel,
   const double deltaPG) 

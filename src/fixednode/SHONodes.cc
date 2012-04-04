@@ -21,10 +21,10 @@
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
 #include "SHONodes.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SpinModelState.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)

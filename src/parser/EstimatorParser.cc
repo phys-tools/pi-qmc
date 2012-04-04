@@ -58,7 +58,7 @@
 #include "estimator/PermutationEstimator.h"
 #include "estimator/JEstimator.h"
 #include "stats/MPIManager.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "estimator/SpinChargeEstimator.h"
 #include "estimator/SpinChoicePCFEstimator.h"
 #include "SHOPhase.h"

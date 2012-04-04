@@ -17,13 +17,13 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "DampedFreeTensorMover.h"
 #include "Beads.h"
 #include "MultiLevelSampler.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
 #include <cmath>
 #include <iostream>

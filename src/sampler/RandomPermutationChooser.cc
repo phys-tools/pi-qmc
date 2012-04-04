@@ -18,8 +18,8 @@
 #include <config.h>
 #endif
 #include "RandomPermutationChooser.h"
-#include "RandomNumGenerator.h"
-#include "Permutation.h"
+#include "util/RandomNumGenerator.h"
+#include "util/Permutation.h"
 
 RandomPermutationChooser::RandomPermutationChooser(const int nsize)
   : PermutationChooser(nsize), nsize(nsize) {

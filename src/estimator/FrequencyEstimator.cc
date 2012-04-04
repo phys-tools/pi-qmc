@@ -24,7 +24,7 @@
 #include "SimulationInfo.h"
 #include "action/Action.h"
 #include "action/DoubleAction.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Species.h"
 #include "Paths.h"
 #include <blitz/tinyvec-et.h>

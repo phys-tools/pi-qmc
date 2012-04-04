@@ -37,7 +37,7 @@ if(GTEST_FOUND)
         ${SRC_DIR}/BeadFactory.cc
         ${SRC_DIR}/SimulationInfo.cc
         ${SRC_DIR}/Species.cc
-        ${SRC_DIR}/SuperCell.cc
+        ${SRC_DIR}/util/SuperCell.cc
     )
     target_link_libraries(emaRateTests ${GTEST_BOTH_LIBRARIES} -lpthread)
   

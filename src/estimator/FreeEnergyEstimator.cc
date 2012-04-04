@@ -23,7 +23,7 @@
 #include "FreeEnergyEstimator.h"
 #include "SimulationInfo.h"
 #include "Paths.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"

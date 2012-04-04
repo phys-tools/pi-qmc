@@ -23,10 +23,10 @@
 #include "AtomicOrbitalDM.h"
 #include "Atomic1sDM.h"
 #include "Atomic2spDM.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Beads.h"
 #include "sampler/SectionSamplerInterface.h"
 #include <cstdlib>

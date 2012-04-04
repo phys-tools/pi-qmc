@@ -21,8 +21,8 @@
 #include "Beads.h"
 #include "BeadFactory.h"
 #include "LinkSummable.h"
-#include "Permutation.h"
-#include "SuperCell.h"
+#include "util/Permutation.h"
+#include "util/SuperCell.h"
 #include <iostream>
 #include <fstream>
 #include <cstdlib>

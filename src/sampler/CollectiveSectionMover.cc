@@ -1,10 +1,10 @@
 #include "CollectiveSectionMover.h"
 #include <cstdlib>
 #include <blitz/tinyvec-et.h>
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include <iostream>
 #include <cmath>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Beads.h"
 #include "SectionSamplerInterface.h"
 #include "CollectiveSectionSampler.h"

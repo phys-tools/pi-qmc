@@ -20,9 +20,9 @@
 #include "sampler/DisplaceMoveSampler.h"
 #include "SimulationInfo.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Action.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include <hdf5.h>
 #include <cstdlib>
 #include <blitz/array.h>

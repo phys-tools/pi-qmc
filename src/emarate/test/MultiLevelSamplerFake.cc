@@ -4,7 +4,7 @@
 #include "SimulationInfo.h"
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "sampler/SectionChooser.h"
 
 

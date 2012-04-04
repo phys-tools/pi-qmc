@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "FixedNodeAction.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include "Beads.h"
 #include "sampler/DoubleSectionChooser.h"

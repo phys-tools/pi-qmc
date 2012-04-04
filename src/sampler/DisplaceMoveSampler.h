@@ -26,7 +26,7 @@ class Permutation;
 class AccRejEstimator;
 class MPIManager;
 
-#include "Algorithm.h"
+#include "algorithm/Algorithm.h"
 #include <vector>
 #include <cstdlib>
 #include <blitz/array.h>

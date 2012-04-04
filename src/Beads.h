@@ -24,7 +24,7 @@
 class Spin;
 class SuperCell;
 class BeadFactory;
-#include "Permutation.h"
+#include "util/Permutation.h"
 
 class BeadsBase {
 public:

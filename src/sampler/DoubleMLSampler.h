@@ -27,7 +27,7 @@ class DoubleSectionChooser;
 class ParticleChooser;
 class PermutationChooser;
 #include "MultiLevelSampler.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include <vector>
 #include <cstdlib>
 #include <blitz/array.h>

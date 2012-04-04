@@ -21,7 +21,7 @@
 #include <mpi.h>
 #endif
 #include "SimpleParticleChooser.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include <iostream>
 
 SimpleParticleChooser::SimpleParticleChooser(const int npart, 

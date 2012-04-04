@@ -21,10 +21,10 @@
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
 #include "LatticeSpinPhase.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 
 #define ZGETRF_F77 F77_FUNC(zgetrf,ZGETRF)
 extern "C" void ZGETRF_F77(const int*, const int*, std::complex<double>*,

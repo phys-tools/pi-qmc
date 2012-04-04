@@ -25,8 +25,8 @@
 #include "Paths.h"
 #include "Beads.h"
 #include "BeadFactory.h"
-#include "Permutation.h"
-#include "RandomNumGenerator.h"
+#include "util/Permutation.h"
+#include "util/RandomNumGenerator.h"
 #include <cmath>
 #include <iostream>
 #include <gsl/gsl_qrng.h>

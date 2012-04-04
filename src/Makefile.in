@@ -53,21 +53,12 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_pi_OBJECTS = AperiodicGaussian.$(OBJEXT) BeadFactory.$(OBJEXT) \
-	BinProbDensity.$(OBJEXT) Collect.$(OBJEXT) \
-	ConditionalDensityGrid.$(OBJEXT) CubicLattice.$(OBJEXT) \
-	DoubleParallelPaths.$(OBJEXT) EnumeratedModelState.$(OBJEXT) \
-	Measure.$(OBJEXT) ParallelPaths.$(OBJEXT) PathReader.$(OBJEXT) \
-	Paths.$(OBJEXT) PeriodicGaussian.$(OBJEXT) \
-	Permutation.$(OBJEXT) ProbDensityGrid.$(OBJEXT) \
-	RandomNumGenerator.$(OBJEXT) RingLattice.$(OBJEXT) \
-	SHOPhase.$(OBJEXT) SeedRandom.$(OBJEXT) SerialPaths.$(OBJEXT) \
+am_pi_OBJECTS = BeadFactory.$(OBJEXT) DoubleParallelPaths.$(OBJEXT) \
+	EnumeratedModelState.$(OBJEXT) ParallelPaths.$(OBJEXT) \
+	Paths.$(OBJEXT) SHOPhase.$(OBJEXT) SerialPaths.$(OBJEXT) \
 	SimInfoWriter.$(OBJEXT) SimulationInfo.$(OBJEXT) \
 	Species.$(OBJEXT) Spin4DPhase.$(OBJEXT) \
-	SpinModelState.$(OBJEXT) StructReader.$(OBJEXT) \
-	SuperCell.$(OBJEXT) WorkerShifter.$(OBJEXT) \
-	WritePaths.$(OBJEXT) WriteProbDensity.$(OBJEXT) \
-	XMLWriter.$(OBJEXT) main.$(OBJEXT)
+	SpinModelState.$(OBJEXT) XMLWriter.$(OBJEXT) main.$(OBJEXT)
 pi_OBJECTS = $(am_pi_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
@@ -260,10 +251,11 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = action demo emarate estimator fixednode parser \
-	sampler spin stats util
+	sampler spin stats util algorithm
 
 pi_DEPENDENCIES = \
     sampler/libsampler.la \
+    algorithm/libalgorithm.la \
     emarate/libemarate.la \
     estimator/libestimator.la \
     fixednode/libfixednode.la \
@@ -274,84 +266,45 @@ pi_DEPENDENCIES = \
     parser/libparser.la \
     util/libutil.la
 
-pi_LDADD = -Lparser -lparser -Laction -laction -Lutil -lutil\
+pi_LDADD = -Lparser -lparser -Laction -laction -Lutil -lutil \
+	-Lalgorithm -lalgorithm\
 	-Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
 	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator
 
 pi_SOURCES = \
-	AperiodicGaussian.cc \
 	BeadFactory.cc \
-	BinProbDensity.cc \
-	Collect.cc \
-	ConditionalDensityGrid.cc \
-	CubicLattice.cc \
 	DoubleParallelPaths.cc \
 	EnumeratedModelState.cc \
-	Measure.cc \
 	ParallelPaths.cc \
-	PathReader.cc \
 	Paths.cc \
-	PeriodicGaussian.cc \
-	Permutation.cc \
-	ProbDensityGrid.cc \
-	RandomNumGenerator.cc \
-	RingLattice.cc \
 	SHOPhase.cc \
-	SeedRandom.cc \
 	SerialPaths.cc \
 	SimInfoWriter.cc \
 	SimulationInfo.cc \
 	Species.cc \
 	Spin4DPhase.cc \
 	SpinModelState.cc \
-	StructReader.cc \
-	SuperCell.cc \
-	WorkerShifter.cc \
-	WritePaths.cc \
-	WriteProbDensity.cc \
 	XMLWriter.cc \
 	main.cc
 
 noinst_HEADERS = \
-	Algorithm.h \
-	AperiodicGaussian.h \
 	BeadFactory.h \
 	Beads.h \
-	BinProbDensity.h \
-	Collect.h \
-	CompositeAlgorithm.h \
-	ConditionalDensityGrid.h \
-	CubicLattice.h \
 	DoubleParallelPaths.h \
 	EnumeratedModelState.h \
 	Help.h \
 	LinkSummable.h \
-	Loop.h \
-	Measure.h \
 	ModelState.h \
 	ParallelPaths.h \
-	PathReader.h \
 	Paths.h \
-	PeriodicGaussian.h \
-	Permutation.h \
 	PhaseModel.h \
-	Positioner.h \
-	ProbDensityGrid.h \
-	RandomNumGenerator.h \
-	RingLattice.h \
 	SHOPhase.h \
-	SeedRandom.h \
 	SerialPaths.h \
 	SimInfoWriter.h \
 	SimulationInfo.h \
 	Species.h \
 	Spin4DPhase.h \
 	SpinModelState.h \
-	StructReader.h \
-	SuperCell.h \
-	WorkerShifter.h \
-	WritePaths.h \
-	WriteProbDensity.h \
 	XMLWriter.h
 
 all: all-recursive
@@ -441,36 +394,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AperiodicGaussian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BeadFactory.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BinProbDensity.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Collect.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ConditionalDensityGrid.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CubicLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleParallelPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EnumeratedModelState.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Measure.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParallelPaths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PathReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Paths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PeriodicGaussian.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Permutation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ProbDensityGrid.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RandomNumGenerator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/RingLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SHOPhase.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SeedRandom.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SerialPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimInfoWriter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SimulationInfo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Species.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Spin4DPhase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinModelState.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StructReader.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SuperCell.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WorkerShifter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WritePaths.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WriteProbDensity.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/XMLWriter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 

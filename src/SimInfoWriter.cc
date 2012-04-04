@@ -17,7 +17,7 @@
 
 #include "SimInfoWriter.h"
 #include "SimulationInfo.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <string>
 #include <iostream>
 #include <vector>

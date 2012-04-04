@@ -22,7 +22,7 @@
 #include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
 #include "PairAction.h"
 #include "ImagePairAction.h"

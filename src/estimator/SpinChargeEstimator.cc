@@ -23,7 +23,7 @@
 #include "SpinChargeEstimator.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "stats/MPIManager.h"

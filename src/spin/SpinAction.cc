@@ -20,7 +20,7 @@
 #include "SpinAction.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
 

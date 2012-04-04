@@ -24,7 +24,7 @@
 #include "Species.h"
 #include "Paths.h"
 #include "Beads.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <iostream>
 #include <blitz/tinyvec-et.h>
 

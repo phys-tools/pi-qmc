@@ -25,8 +25,8 @@
 #include "Beads.h"
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
-#include "RandomNumGenerator.h"
-#include "SuperCell.h"
+#include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
 #include <cmath>
 

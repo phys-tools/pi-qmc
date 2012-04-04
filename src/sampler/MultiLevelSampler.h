@@ -30,7 +30,7 @@ class PermutationChooser;
 class Permutation;
 class AccRejEstimator;
 class BeadFactory;
-#include "Algorithm.h"
+#include "algorithm/Algorithm.h"
 #include "SectionSamplerInterface.h"
 #include <vector>
 #include <cstdlib>

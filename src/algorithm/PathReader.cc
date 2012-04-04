@@ -28,7 +28,7 @@
 #include <sstream>
 #include "Beads.h"
 #include "BeadFactory.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"
 

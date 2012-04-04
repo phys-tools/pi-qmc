@@ -25,9 +25,9 @@
 #include "sampler/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include "sampler/SectionChooser.h"
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,

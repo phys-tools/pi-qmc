@@ -17,13 +17,13 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "stats/MPIManager.h"
 #include "CubicLattice.h"
 #include "Paths.h"
 #include "Species.h"
 #include <blitz/tinyvec-et.h>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 
 CubicLattice::CubicLattice(Paths& paths, double a, double scatter,
      const IVec nmax, const Vec r0, MPIManager *mpi)

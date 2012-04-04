@@ -1,4 +1,5 @@
 add_subdirectory(demo)
+add_subdirectory(algorithm)
 add_subdirectory(action)
 add_subdirectory(parser)
 add_subdirectory(sampler)
@@ -10,36 +11,18 @@ add_subdirectory(stats)
 add_subdirectory(util)
 
 set (sources
-    AperiodicGaussian.cc
     BeadFactory.cc
-    BinProbDensity.cc
-    Collect.cc
-    ConditionalDensityGrid.cc
-    CubicLattice.cc
     DoubleParallelPaths.cc
     EnumeratedModelState.cc
-    Measure.cc
     ParallelPaths.cc
-    PathReader.cc
     Paths.cc
-    PeriodicGaussian.cc
-    Permutation.cc
-    ProbDensityGrid.cc
-    RandomNumGenerator.cc
-    RingLattice.cc
     SHOPhase.cc
-    SeedRandom.cc
     SerialPaths.cc
     SimInfoWriter.cc
     SimulationInfo.cc
     Species.cc
     Spin4DPhase.cc
     SpinModelState.cc
-    StructReader.cc
-    SuperCell.cc
-    WorkerShifter.cc
-    WritePaths.cc
-    WriteProbDensity.cc
     XMLWriter.cc
 )
 
@@ -60,7 +43,7 @@ set_target_properties(pi
     LINKER_LANGUAGE CXX)
 
 target_link_libraries(pi demo parser sampler estimator emarate fixednode 
-    spin stats action util)
+    spin stats action util algorithm)
 
 #add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)

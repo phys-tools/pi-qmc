@@ -17,14 +17,14 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "stats/MPIManager.h"
 #include "SpinSetter.h"
 #include "Paths.h"
 #include "Species.h"
 #include <cstdlib>
 #include <blitz/tinyvec-et.h>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 
 SpinSetter::SpinSetter(Paths& paths,MPIManager *mpi)
    : paths(paths), npart(paths.getNPart()), mpi(mpi) {

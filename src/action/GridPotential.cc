@@ -23,7 +23,7 @@
 #include "SimulationInfo.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <hdf5.h>
 #include <fstream>
 

@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "PermutationChooser.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 
 PermutationChooser::PermutationChooser(int size) 
   : permutation(new Permutation(size)) {

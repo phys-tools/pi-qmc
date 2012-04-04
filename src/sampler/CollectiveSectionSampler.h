@@ -6,7 +6,7 @@ class BeadFactory;
 class AccRejEstimator;
 class Paths;
 class SuperCell;
-#include "Algorithm.h"
+#include "algorithm/Algorithm.h"
 #include "CollectiveSectionMover.h"
 #include "SectionSamplerInterface.h"
 #include "SectionChooser.h"

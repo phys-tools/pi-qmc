@@ -52,8 +52,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libutil_la_LIBADD =
-am_libutil_la_OBJECTS = libutil_la-EwaldSum.lo libutil_la-Hungarian.lo \
+am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
+	libutil_la-EwaldSum.lo libutil_la-Hungarian.lo \
 	libutil_la-OptEwaldSum.lo libutil_la-PairDistance.lo \
+	libutil_la-PeriodicGaussian.lo libutil_la-Permutation.lo \
+	libutil_la-RandomNumGenerator.lo libutil_la-SuperCell.lo \
 	libutil_la-TradEwaldSum.lo libutil_la-WireEwald.lo
 libutil_la_OBJECTS = $(am_libutil_la_OBJECTS)
 libutil_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -214,18 +217,28 @@ top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libutil.la
 libutil_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
 libutil_la_SOURCES = \
+	AperiodicGaussian.cc \
 	EwaldSum.cc \
 	Hungarian.cc \
 	OptEwaldSum.cc \
 	PairDistance.cc \
+	PeriodicGaussian.cc \
+	Permutation.cc \
+	RandomNumGenerator.cc \
+	SuperCell.cc \
 	TradEwaldSum.cc \
 	WireEwald.cc
 
 noinst_HEADERS = \
+	AperiodicGaussian.h \
 	Distance.h \
 	EwaldSum.h \
 	OptEwaldSum.h \
 	PairDistance.h \
+	PeriodicGaussian.h \
+	Permutation.h \
+	RandomNumGenerator.h \
+	SuperCell.h \
 	TradEwaldSum.h \
 	WireEwald.h \
 	gnugetopt.h
@@ -282,10 +295,15 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-AperiodicGaussian.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-EwaldSum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Hungarian.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-OptEwaldSum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PairDistance.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PeriodicGaussian.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Permutation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-RandomNumGenerator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-SuperCell.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-TradEwaldSum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-WireEwald.Plo@am__quote@
 
@@ -309,6 +327,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+libutil_la-AperiodicGaussian.lo: AperiodicGaussian.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-AperiodicGaussian.lo -MD -MP -MF $(DEPDIR)/libutil_la-AperiodicGaussian.Tpo -c -o libutil_la-AperiodicGaussian.lo `test -f 'AperiodicGaussian.cc' || echo '$(srcdir)/'`AperiodicGaussian.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-AperiodicGaussian.Tpo $(DEPDIR)/libutil_la-AperiodicGaussian.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AperiodicGaussian.cc' object='libutil_la-AperiodicGaussian.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-AperiodicGaussian.lo `test -f 'AperiodicGaussian.cc' || echo '$(srcdir)/'`AperiodicGaussian.cc
 
 libutil_la-EwaldSum.lo: EwaldSum.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-EwaldSum.lo -MD -MP -MF $(DEPDIR)/libutil_la-EwaldSum.Tpo -c -o libutil_la-EwaldSum.lo `test -f 'EwaldSum.cc' || echo '$(srcdir)/'`EwaldSum.cc
@@ -337,6 +362,34 @@ libutil_la-PairDistance.lo: PairDistance.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairDistance.cc' object='libutil_la-PairDistance.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-PairDistance.lo `test -f 'PairDistance.cc' || echo '$(srcdir)/'`PairDistance.cc
+
+libutil_la-PeriodicGaussian.lo: PeriodicGaussian.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-PeriodicGaussian.lo -MD -MP -MF $(DEPDIR)/libutil_la-PeriodicGaussian.Tpo -c -o libutil_la-PeriodicGaussian.lo `test -f 'PeriodicGaussian.cc' || echo '$(srcdir)/'`PeriodicGaussian.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-PeriodicGaussian.Tpo $(DEPDIR)/libutil_la-PeriodicGaussian.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PeriodicGaussian.cc' object='libutil_la-PeriodicGaussian.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-PeriodicGaussian.lo `test -f 'PeriodicGaussian.cc' || echo '$(srcdir)/'`PeriodicGaussian.cc
+
+libutil_la-Permutation.lo: Permutation.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-Permutation.lo -MD -MP -MF $(DEPDIR)/libutil_la-Permutation.Tpo -c -o libutil_la-Permutation.lo `test -f 'Permutation.cc' || echo '$(srcdir)/'`Permutation.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-Permutation.Tpo $(DEPDIR)/libutil_la-Permutation.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Permutation.cc' object='libutil_la-Permutation.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-Permutation.lo `test -f 'Permutation.cc' || echo '$(srcdir)/'`Permutation.cc
+
+libutil_la-RandomNumGenerator.lo: RandomNumGenerator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-RandomNumGenerator.lo -MD -MP -MF $(DEPDIR)/libutil_la-RandomNumGenerator.Tpo -c -o libutil_la-RandomNumGenerator.lo `test -f 'RandomNumGenerator.cc' || echo '$(srcdir)/'`RandomNumGenerator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-RandomNumGenerator.Tpo $(DEPDIR)/libutil_la-RandomNumGenerator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='RandomNumGenerator.cc' object='libutil_la-RandomNumGenerator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-RandomNumGenerator.lo `test -f 'RandomNumGenerator.cc' || echo '$(srcdir)/'`RandomNumGenerator.cc
+
+libutil_la-SuperCell.lo: SuperCell.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-SuperCell.lo -MD -MP -MF $(DEPDIR)/libutil_la-SuperCell.Tpo -c -o libutil_la-SuperCell.lo `test -f 'SuperCell.cc' || echo '$(srcdir)/'`SuperCell.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-SuperCell.Tpo $(DEPDIR)/libutil_la-SuperCell.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SuperCell.cc' object='libutil_la-SuperCell.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-SuperCell.lo `test -f 'SuperCell.cc' || echo '$(srcdir)/'`SuperCell.cc
 
 libutil_la-TradEwaldSum.lo: TradEwaldSum.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-TradEwaldSum.lo -MD -MP -MF $(DEPDIR)/libutil_la-TradEwaldSum.Tpo -c -o libutil_la-TradEwaldSum.lo `test -f 'TradEwaldSum.cc' || echo '$(srcdir)/'`TradEwaldSum.cc

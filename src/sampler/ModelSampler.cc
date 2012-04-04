@@ -26,7 +26,7 @@
 #include "stats/MPIManager.h"
 #include "action/Action.h"
 #include "action/ActionChoice.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "Paths.h"
 #include "EnumeratedModelState.h"
 #include <sstream>

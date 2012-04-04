@@ -23,12 +23,12 @@
 #include "EMARateMover.h"
 #include "Beads.h"
 #include "sampler/MultiLevelSampler.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include <cmath>
 
 EMARateMover::EMARateMover(const SimulationInfo& simInfo, const int maxlevel,

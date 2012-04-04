@@ -25,9 +25,9 @@
 #include "stats/MPIManager.h"
 #include "action/Action.h"
 #include "action/ActionChoice.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "Paths.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include "SpinModelState.h"
 #include <sstream>
 #include <string>

@@ -23,7 +23,7 @@
 #include "PermutationEstimator.h"
 #include "SimulationInfo.h"
 #include "Paths.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>

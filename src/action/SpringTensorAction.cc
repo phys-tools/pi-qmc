@@ -21,7 +21,7 @@
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
 #include "Species.h"
 

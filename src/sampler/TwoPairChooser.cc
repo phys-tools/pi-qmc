@@ -22,8 +22,8 @@
 #endif
 #include "TwoPairChooser.h"
 #include "Species.h"
-#include "RandomNumGenerator.h"
-#include "Permutation.h"
+#include "util/RandomNumGenerator.h"
+#include "util/Permutation.h"
 #include <iostream>
 
 TwoPairChooser::TwoPairChooser(const Species &s1, const Species &s2)

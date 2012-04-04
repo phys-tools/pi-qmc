@@ -20,10 +20,10 @@
 #include <cstdlib>
 #include <blitz/tinyvec-et.h>
 #include "FreeParticleNodes.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Beads.h"
 #include "sampler/SectionSamplerInterface.h"
 #include "SpinModelState.h"

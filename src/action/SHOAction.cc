@@ -20,7 +20,7 @@
 #include "SHOAction.h"
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Paths.h"
 #include "Species.h"
 

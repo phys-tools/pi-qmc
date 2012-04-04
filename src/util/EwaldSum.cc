@@ -21,7 +21,7 @@
 #include <cmath>
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Paths.h"
 #include "Beads.h"
 #include "sampler/MultiLevelSampler.h"

@@ -25,13 +25,13 @@
 #include "stats/AccRejEstimator.h"
 #include "action/Action.h"
 #include "UniformMover.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "Paths.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include "PermutationChooser.h"
 #include "ParticleChooser.h"
 #include "SimpleParticleChooser.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <sstream>
 #include <string>
 

@@ -8,10 +8,10 @@
 #include "action/Action.h"
 #include "Beads.h"
 #include "BeadFactory.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "stats/AccRejEstimator.h"
 #include "CollectiveSectionMover.h"
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 
 
 CollectiveSectionSampler::CollectiveSectionSampler(int npart,

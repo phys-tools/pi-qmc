@@ -22,7 +22,7 @@
 #include "sampler/SectionSamplerInterface.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 #include <fstream>

@@ -23,7 +23,7 @@
 #include "Paths.h"
 #include "stats/Units.h"
 #include <blitz/tinyvec-et.h>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 
 BondLengthEstimator::BondLengthEstimator(const SimulationInfo& simInfo,
   const Species& species1, const Species& species2, const std::string& unitName)

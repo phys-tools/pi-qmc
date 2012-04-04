@@ -21,10 +21,10 @@
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
 #include "ExcitonNodes.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Beads.h"
 #include "sampler/DoubleMLSampler.h"
 

@@ -24,9 +24,9 @@
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "SimulationInfo.h"
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 #include <gsl/gsl_sf_bessel.h>
 
 HyperbolicAction::HyperbolicAction(const SimulationInfo& simInfo, 

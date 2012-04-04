@@ -21,7 +21,7 @@
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 

@@ -17,14 +17,14 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "DoubleSectionChooser.h"
 #include "action/Action.h"
 #include "action/DoubleAction.h"
 #include "Paths.h"
 #include "Beads.h"
 #include "BeadFactory.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include <cmath>
 #include <iostream>
 #include <gsl/gsl_qrng.h>

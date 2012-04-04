@@ -22,7 +22,7 @@
 #endif
 #include "PairChooser.h"
 #include "WalkingChooser.h"
-#include "Permutation.h"
+#include "util/Permutation.h"
 #include <iostream>
 
 PairChooser::PairChooser(const int npart, 

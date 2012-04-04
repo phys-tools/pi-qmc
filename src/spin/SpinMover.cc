@@ -17,7 +17,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "RandomNumGenerator.h"
+#include "util/RandomNumGenerator.h"
 #include "SpinMover.h"
 #include "Beads.h"
 #include "sampler/MultiLevelSampler.h"

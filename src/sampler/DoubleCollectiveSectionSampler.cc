@@ -11,8 +11,8 @@
 #include "BeadFactory.h"
 #include "stats/AccRejEstimator.h"
 #include "CollectiveSectionMover.h"
-#include "RandomNumGenerator.h"
-#include "SuperCell.h"
+#include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
 
 
 DoubleCollectiveSectionSampler::DoubleCollectiveSectionSampler(int npart,

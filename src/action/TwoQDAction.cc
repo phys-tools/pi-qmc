@@ -23,7 +23,7 @@
 #include <blitz/tinyvec-et.h>
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Paths.h"
 
 TwoQDAction::TwoQDAction(const double tau, const double omega, 

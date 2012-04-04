@@ -26,7 +26,7 @@ class SimulationInfo;
 class Paths;
 class SuperCell;
 class Species;
-#include "PeriodicGaussian.h"
+#include "util/PeriodicGaussian.h"
 
 /** Free particle nodes for new fermion algorithm.
 This nodal restriction rejects any paths for which

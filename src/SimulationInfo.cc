@@ -19,7 +19,7 @@
 #endif
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "BeadFactory.h"
 
 SimulationInfo::SimulationInfo()

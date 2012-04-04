@@ -21,7 +21,7 @@
 #include "Beads.h"
 #include "sampler/SectionSamplerInterface.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 
 GroundStateWFNodes::GroundStateWFNodes(const Species& s, const Species& rs)
   : npart(s.count),ifirst(s.ifirst), iref(rs.ifirst) {

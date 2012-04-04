@@ -22,7 +22,7 @@
 #include <blitz/tinyvec.h>
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Paths.h"
 
 DotGeomAction::DotGeomAction(const double tau)

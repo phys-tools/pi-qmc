@@ -25,7 +25,7 @@
 #include "Species.h"
 #include "action/Action.h"
 #include "Paths.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"
 #include "util/TradEwaldSum.h"

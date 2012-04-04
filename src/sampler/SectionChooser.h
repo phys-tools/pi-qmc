@@ -17,7 +17,7 @@
 #ifndef __SectionChooser_h_
 #define __SectionChooser_h_
 
-#include "CompositeAlgorithm.h"
+#include "algorithm/CompositeAlgorithm.h"
 #include <gsl/gsl_qrng.h>
 template <int TDIM> class Beads;
 class Paths;

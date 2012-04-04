@@ -32,7 +32,7 @@
 #include <blitz/array.h>
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "action/Action.h"
 #include "Paths.h"
 #include "ModelState.h"

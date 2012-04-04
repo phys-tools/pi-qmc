@@ -17,7 +17,7 @@
 #ifndef __NodeTester_h_
 #define __NodeTester_h_
 
-#include "Algorithm.h"
+#include "algorithm/Algorithm.h"
 #include "LinkSummable.h"
 #include <string>
 template <int TDIM> class Beads;

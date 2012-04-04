@@ -24,7 +24,7 @@
 #include "sampler/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Species.h"
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "Paths.h"
 
 SphereAction::SphereAction(const double tau, const double radius,

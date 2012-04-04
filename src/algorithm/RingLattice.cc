@@ -22,7 +22,7 @@
 #include "Paths.h"
 #include "Species.h"
 #include <blitz/tinyvec-et.h>
-#include "SuperCell.h"
+#include "util/SuperCell.h"
 #include "math.h"
 
 RingLattice::RingLattice(Paths& paths, double radius, double angle0, 
