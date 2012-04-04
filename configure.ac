@@ -79,6 +79,7 @@ AC_CONFIG_FILES([Makefile \
 	src/sampler/Makefile \
     src/spin/Makefile \
     src/stats/Makefile \
+    src/util/Makefile \
     doc/Makefile])
 AC_OUTPUT
 

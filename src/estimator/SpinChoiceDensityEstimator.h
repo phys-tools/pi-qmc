@@ -37,7 +37,7 @@
 #include "Paths.h"
 #include "ModelState.h"
 #include "SpinModelState.h"
-#include "Distance.h"
+#include "util/Distance.h"
 #include <blitz/tinyvec-et.h>
 #include <vector>
 /** Calculates single particle densities for many different geometries with

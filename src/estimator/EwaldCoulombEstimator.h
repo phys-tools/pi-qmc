@@ -19,7 +19,7 @@
 #include "stats/ScalarEstimator.h"
 #include "LinkSummable.h"
 #include "Paths.h"
-#include "EwaldSum.h"
+#include "util/EwaldSum.h"
 #include <cstdlib>
 #include <blitz/array.h>
 class Paths;

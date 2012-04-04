@@ -33,7 +33,7 @@
 #include "SuperCell.h"
 #include "action/Action.h"
 #include "Paths.h"
-#include "PairDistance.h"
+#include "util/PairDistance.h"
 #include <blitz/tinyvec-et.h>
 #include <vector>
 /** Pair correlation class.

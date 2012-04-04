@@ -28,8 +28,8 @@
 #include "SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include "stats/MPIManager.h"
-#include "TradEwaldSum.h"
-#include "OptEwaldSum.h"
+#include "util/TradEwaldSum.h"
+#include "util/OptEwaldSum.h"
 
 // constructor trad ewald
 EwaldCoulombEstimator::EwaldCoulombEstimator(

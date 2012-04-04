@@ -57,19 +57,17 @@ am_pi_OBJECTS = AperiodicGaussian.$(OBJEXT) BeadFactory.$(OBJEXT) \
 	BinProbDensity.$(OBJEXT) Collect.$(OBJEXT) \
 	ConditionalDensityGrid.$(OBJEXT) CubicLattice.$(OBJEXT) \
 	DoubleParallelPaths.$(OBJEXT) EnumeratedModelState.$(OBJEXT) \
-	EwaldSum.$(OBJEXT) Hungarian.$(OBJEXT) Measure.$(OBJEXT) \
-	OptEwaldSum.$(OBJEXT) PairDistance.$(OBJEXT) \
-	ParallelPaths.$(OBJEXT) PathReader.$(OBJEXT) Paths.$(OBJEXT) \
-	PeriodicGaussian.$(OBJEXT) Permutation.$(OBJEXT) \
-	ProbDensityGrid.$(OBJEXT) RandomNumGenerator.$(OBJEXT) \
-	RingLattice.$(OBJEXT) SHOPhase.$(OBJEXT) SeedRandom.$(OBJEXT) \
-	SerialPaths.$(OBJEXT) SimInfoWriter.$(OBJEXT) \
-	SimulationInfo.$(OBJEXT) Species.$(OBJEXT) \
-	Spin4DPhase.$(OBJEXT) SpinModelState.$(OBJEXT) \
-	StructReader.$(OBJEXT) SuperCell.$(OBJEXT) \
-	TradEwaldSum.$(OBJEXT) WireEwald.$(OBJEXT) \
-	WorkerShifter.$(OBJEXT) WritePaths.$(OBJEXT) \
-	WriteProbDensity.$(OBJEXT) XMLWriter.$(OBJEXT) main.$(OBJEXT)
+	Measure.$(OBJEXT) ParallelPaths.$(OBJEXT) PathReader.$(OBJEXT) \
+	Paths.$(OBJEXT) PeriodicGaussian.$(OBJEXT) \
+	Permutation.$(OBJEXT) ProbDensityGrid.$(OBJEXT) \
+	RandomNumGenerator.$(OBJEXT) RingLattice.$(OBJEXT) \
+	SHOPhase.$(OBJEXT) SeedRandom.$(OBJEXT) SerialPaths.$(OBJEXT) \
+	SimInfoWriter.$(OBJEXT) SimulationInfo.$(OBJEXT) \
+	Species.$(OBJEXT) Spin4DPhase.$(OBJEXT) \
+	SpinModelState.$(OBJEXT) StructReader.$(OBJEXT) \
+	SuperCell.$(OBJEXT) WorkerShifter.$(OBJEXT) \
+	WritePaths.$(OBJEXT) WriteProbDensity.$(OBJEXT) \
+	XMLWriter.$(OBJEXT) main.$(OBJEXT)
 pi_OBJECTS = $(am_pi_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
@@ -261,7 +259,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = action demo emarate estimator fixednode parser sampler spin stats
+SUBDIRS = action demo emarate estimator fixednode parser \
+	sampler spin stats util
+
 pi_DEPENDENCIES = \
     sampler/libsampler.la \
     emarate/libemarate.la \
@@ -271,9 +271,10 @@ pi_DEPENDENCIES = \
     demo/libdemo.la \
     spin/libspin.la \
     stats/libstats.la \
-    parser/libparser.la 
+    parser/libparser.la \
+    util/libutil.la
 
-pi_LDADD = -Lparser -lparser -Laction -laction \
+pi_LDADD = -Lparser -lparser -Laction -laction -Lutil -lutil\
 	-Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
 	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator
 
@@ -286,11 +287,7 @@ pi_SOURCES = \
 	CubicLattice.cc \
 	DoubleParallelPaths.cc \
 	EnumeratedModelState.cc \
-	EwaldSum.cc \
-	Hungarian.cc \
 	Measure.cc \
-	OptEwaldSum.cc \
-	PairDistance.cc \
 	ParallelPaths.cc \
 	PathReader.cc \
 	Paths.cc \
@@ -309,8 +306,6 @@ pi_SOURCES = \
 	SpinModelState.cc \
 	StructReader.cc \
 	SuperCell.cc \
-	TradEwaldSum.cc \
-	WireEwald.cc \
 	WorkerShifter.cc \
 	WritePaths.cc \
 	WriteProbDensity.cc \
@@ -327,17 +322,13 @@ noinst_HEADERS = \
 	CompositeAlgorithm.h \
 	ConditionalDensityGrid.h \
 	CubicLattice.h \
-	Distance.h \
 	DoubleParallelPaths.h \
 	EnumeratedModelState.h \
-	EwaldSum.h \
 	Help.h \
 	LinkSummable.h \
 	Loop.h \
 	Measure.h \
 	ModelState.h \
-	OptEwaldSum.h \
-	PairDistance.h \
 	ParallelPaths.h \
 	PathReader.h \
 	Paths.h \
@@ -358,13 +349,10 @@ noinst_HEADERS = \
 	SpinModelState.h \
 	StructReader.h \
 	SuperCell.h \
-	TradEwaldSum.h \
-	WireEwald.h \
 	WorkerShifter.h \
 	WritePaths.h \
 	WriteProbDensity.h \
-	XMLWriter.h \
-	gnugetopt.h
+	XMLWriter.h
 
 all: all-recursive
 
@@ -461,11 +449,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CubicLattice.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DoubleParallelPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EnumeratedModelState.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Hungarian.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Measure.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OptEwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PairDistance.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ParallelPaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PathReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Paths.Po@am__quote@
@@ -484,8 +468,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SpinModelState.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StructReader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SuperCell.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TradEwaldSum.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WireEwald.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WorkerShifter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WritePaths.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/WriteProbDensity.Po@am__quote@

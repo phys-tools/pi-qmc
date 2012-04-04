@@ -31,7 +31,7 @@
 #include "SuperCell.h"
 #include "action/Action.h"
 #include "Paths.h"
-#include "Distance.h"
+#include "util/Distance.h"
 
 DensityCurrentEstimator::DensityCurrentEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Vec &min, const Vec &max, const IVec &nbin, 

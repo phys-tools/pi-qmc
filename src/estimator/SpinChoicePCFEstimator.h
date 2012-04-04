@@ -34,7 +34,7 @@
 #include "action/Action.h"
 #include "action/ActionChoice.h"
 #include "Paths.h"
-#include "PairDistance.h"
+#include "util/PairDistance.h"
 #include "ModelState.h"
 #include "SpinModelState.h"
 #include <blitz/tinyvec-et.h>

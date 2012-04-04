@@ -27,8 +27,8 @@
 #include "PairAction.h"
 #include "ImagePairAction.h"
 #include "EwaldImagePairAction.h"
-#include "TradEwaldSum.h"
-#include "OptEwaldSum.h"
+#include "util/TradEwaldSum.h"
+#include "util/OptEwaldSum.h"
 
 CoulombAction::CoulombAction(const double epsilon, 
   const SimulationInfo& simInfo, const int norder, double rmin, double rmax,

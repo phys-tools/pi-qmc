@@ -7,6 +7,7 @@ add_subdirectory(estimator)
 add_subdirectory(fixednode)
 add_subdirectory(spin)
 add_subdirectory(stats)
+add_subdirectory(util)
 
 set (sources
     AperiodicGaussian.cc
@@ -17,11 +18,7 @@ set (sources
     CubicLattice.cc
     DoubleParallelPaths.cc
     EnumeratedModelState.cc
-    EwaldSum.cc
-    Hungarian.cc
     Measure.cc
-    OptEwaldSum.cc
-    PairDistance.cc
     ParallelPaths.cc
     PathReader.cc
     Paths.cc
@@ -40,8 +37,6 @@ set (sources
     SpinModelState.cc
     StructReader.cc
     SuperCell.cc
-    TradEwaldSum.cc
-    WireEwald.cc
     WorkerShifter.cc
     WritePaths.cc
     WriteProbDensity.cc
@@ -65,7 +60,7 @@ set_target_properties(pi
     LINKER_LANGUAGE CXX)
 
 target_link_libraries(pi demo parser sampler estimator emarate fixednode 
-    spin stats action)
+    spin stats action util)
 
 #add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)

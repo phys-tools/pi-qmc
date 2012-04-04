@@ -1,4 +1,5 @@
-SUBDIRS = action demo emarate estimator fixednode parser sampler spin stats
+SUBDIRS = action demo emarate estimator fixednode parser \
+	sampler spin stats util
 
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = \
@@ -10,8 +11,9 @@ pi_DEPENDENCIES = \
     demo/libdemo.la \
     spin/libspin.la \
     stats/libstats.la \
-    parser/libparser.la 
-pi_LDADD = -Lparser -lparser -Laction -laction \
+    parser/libparser.la \
+    util/libutil.la
+pi_LDADD = -Lparser -lparser -Laction -laction -Lutil -lutil\
 	-Lsampler -lsampler -Lemarate -lemarate -Lfixednode -lfixednode \
 	-Ldemo -ldemo -Lspin -lspin -Lstats -lstats -Lestimator -lestimator
 pi_SOURCES = \
@@ -23,11 +25,7 @@ pi_SOURCES = \
 	CubicLattice.cc \
 	DoubleParallelPaths.cc \
 	EnumeratedModelState.cc \
-	EwaldSum.cc \
-	Hungarian.cc \
 	Measure.cc \
-	OptEwaldSum.cc \
-	PairDistance.cc \
 	ParallelPaths.cc \
 	PathReader.cc \
 	Paths.cc \
@@ -46,8 +44,6 @@ pi_SOURCES = \
 	SpinModelState.cc \
 	StructReader.cc \
 	SuperCell.cc \
-	TradEwaldSum.cc \
-	WireEwald.cc \
 	WorkerShifter.cc \
 	WritePaths.cc \
 	WriteProbDensity.cc \
@@ -63,17 +59,13 @@ noinst_HEADERS = \
 	CompositeAlgorithm.h \
 	ConditionalDensityGrid.h \
 	CubicLattice.h \
-	Distance.h \
 	DoubleParallelPaths.h \
 	EnumeratedModelState.h \
-	EwaldSum.h \
 	Help.h \
 	LinkSummable.h \
 	Loop.h \
 	Measure.h \
 	ModelState.h \
-	OptEwaldSum.h \
-	PairDistance.h \
 	ParallelPaths.h \
 	PathReader.h \
 	Paths.h \
@@ -94,10 +86,7 @@ noinst_HEADERS = \
 	SpinModelState.h \
 	StructReader.h \
 	SuperCell.h \
-	TradEwaldSum.h \
-	WireEwald.h \
 	WorkerShifter.h \
 	WritePaths.h \
 	WriteProbDensity.h \
-	XMLWriter.h \
-	gnugetopt.h
+	XMLWriter.h

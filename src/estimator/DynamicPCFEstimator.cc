@@ -31,7 +31,7 @@
 #include "SuperCell.h"
 #include "action/Action.h"
 #include "Paths.h"
-#include "PairDistance.h"
+#include "util/PairDistance.h"
 
 DynamicPCFEstimator::DynamicPCFEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species *spec1, const Species *spec2,

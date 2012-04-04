@@ -31,7 +31,7 @@
 #include "SuperCell.h"
 #include "action/Action.h"
 #include "Paths.h"
-#include "Distance.h"
+#include "util/Distance.h"
 
 CountCountEstimator::CountCountEstimator(const SimulationInfo& simInfo,
     const std::string& name, const Species *spec,
