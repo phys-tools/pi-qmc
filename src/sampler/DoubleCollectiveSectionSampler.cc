@@ -2,6 +2,7 @@
 #include <config.h>
 #endif
 
+#include <cstdlib>
 #include "DoubleCollectiveSectionSampler.h"
 #include "Paths.h"
 #include "DoubleSectionChooser.h"

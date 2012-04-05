@@ -34,7 +34,7 @@ SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction(
   bool useDistDerivative, int maxlevel, bool useManyBodyDistance,
   const MPIManager* mpi) 
   : FixedNodeAction(simInfo,species,nodeModel,withNodalAction,
-      useDistDerivative,maxlevel,useManyBodyDistance), mpi(mpi) {
+      useDistDerivative,maxlevel,useManyBodyDistance,1000,mpi), mpi(mpi) {
   std::cout << "npart for spin flip is " << nSpeciesPart << std::endl;
   spinModelState = new SpinModelState(nSpeciesPart,initial);
   modelState = spinModelState;

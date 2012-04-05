@@ -424,10 +424,16 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       bool noNodalAction=getBoolAttribute(actNode,"noNodalAction");
       bool useDistDerivative=getBoolAttribute(actNode,"useDistDerivative");
       bool useManyBodyDistance=getBoolAttribute(actNode,"useManyBodyDistance");
+      int nerrorMax=getIntAttribute(actNode,"maxCross");
+
+      //This is how we allow maxCross==0 b/c getIntAttribute defaults to 0
+      if(!xmlHasProp(actNode,"maxCross"))
+          nerrorMax=1000;
+      std::cout<<"Max Node Crossings: "<<nerrorMax<<std::endl;
       NodeModel *nodeModel = parseNodeModel(ctxt,actNode,species);
       doubleComposite->addAction(
           new FixedNodeAction(simInfo,species,nodeModel,!noNodalAction,
-                              useDistDerivative,maxlevel,useManyBodyDistance));
+                              useDistDerivative,maxlevel,useManyBodyDistance,nerrorMax,mpi));
       continue;
     }  else if (name=="FixedPhaseAction") {
       ctxt->node=actNode;

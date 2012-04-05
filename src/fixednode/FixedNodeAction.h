@@ -26,6 +26,7 @@
 class SimulationInfo;
 class Paths;
 class Species;
+class MPIManager;
 //class DisplaceMoveSampler;
 //class DoubleDisplaceMoveSampler;
 
@@ -85,7 +86,7 @@ public:
   /// Constructor.
   FixedNodeAction(const SimulationInfo&, const Species&, NodeModel*,
     bool withNodalAction, bool useDistDerivative, int maxlevel,
-    bool useManyBodyDistance);
+    bool useManyBodyDistance, int nerrorMax, const MPIManager* mpi);
   /// Destructor.
   virtual ~FixedNodeAction();
   /// Calculate the difference in action.
@@ -136,6 +137,8 @@ protected:
   /// Flag for calculating time derivative of the distance to the node.
   bool useDistDerivative;
   int nerror;
+  int nerrorMax;
   bool useManyBodyDistance;
+  const MPIManager* mpi;
 };
 #endif

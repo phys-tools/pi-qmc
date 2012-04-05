@@ -17,6 +17,7 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
+#include "stats/MPIManager.h"
 #include "FixedNodeAction.h"
 #include "util/SuperCell.h"
 #include <cstdlib>
@@ -30,7 +31,7 @@
 
 FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
   const Species &species, NodeModel *nodeModel, bool withNodalAction,
-  bool useDistDerivative, int maxlevel, bool useManyBodyDistance) 
+  bool useDistDerivative, int maxlevel, bool useManyBodyDistance, int nerrorMax, const MPIManager *mpi) 
   : tau(simInfo.getTau()), npart(simInfo.getNPart()),
     nSpeciesPart(species.count), ifirst(species.ifirst), 
     r1(npart), r2(npart),
@@ -44,7 +45,7 @@ FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
     nodeModel(nodeModel), matrixUpdateObj(nodeModel->getUpdateObj()),
     withNodalAction(withNodalAction),
     useDistDerivative(useDistDerivative),
-    nerror(0), useManyBodyDistance(useManyBodyDistance) {
+    nerror(0), useManyBodyDistance(useManyBodyDistance), nerrorMax(nerrorMax), mpi(mpi) {
   std::cout << "FixedNodeAction" << std::endl;
 }
 
@@ -356,9 +357,10 @@ void FixedNodeAction::initialize(const DoubleSectionChooser &chooser) {
     NodeModel::DetWithFlag result = nodeModel->evaluate(r1,r2,islice,true);
     dmValue(islice) = result.det;
     if (result.err || dmValue(islice)*dmValue(0)<=1e-200) {
-      std::cout << "ERROR - crossed node" << islice << std::endl;
+      int cloneID=(mpi)?mpi->getCloneID():0;
+      std::cout << "ERROR - crossed node " << islice << " clone " << cloneID << std::endl;
       nerror++;
-      if (nerror>1000) {
+      if (nerror>nerrorMax) {
         std::cout << "too many node crossings, exiting" << std::endl;
         std::exit(-1);
       }
