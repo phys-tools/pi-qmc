@@ -427,8 +427,10 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       int nerrorMax=getIntAttribute(actNode,"maxCross");
 
       //This is how we allow maxCross==0 b/c getIntAttribute defaults to 0
-      if(!xmlHasProp(actNode,"maxCross"))
+      xmlChar* spMaxCross = xmlCharStrdup("maxCross");
+      if (!xmlHasProp(actNode, spMaxCross)) 
           nerrorMax=1000;
+      if (spMaxCross) delete []spMaxCross;
       std::cout<<"Max Node Crossings: "<<nerrorMax<<std::endl;
       NodeModel *nodeModel = parseNodeModel(ctxt,actNode,species);
       doubleComposite->addAction(
