@@ -70,6 +70,10 @@ public:
   virtual bool hasOrigin() const {return origin!=0;}
   virtual const void* getScale() const {return scale;}
   virtual const void* getOrigin() const {return origin;}
+  virtual bool hasMin() const {return min!=0;}
+  virtual bool hasMax() const {return max!=0;}
+  virtual const void* getMin() const {return min;}
+  virtual const void* getMax() const {return max;}
 protected:
   static const int rank=N;
   const IVecN n;
@@ -79,6 +83,8 @@ protected:
   int iblock;
   VecN* scale;
   VecN* origin;
+  VecN* min;
+  VecN* max;
 };
 
 
@@ -89,7 +95,7 @@ BlitzArrayBlkdEst<N>::BlitzArrayBlkdEst(const std::string& name,
  : ArrayBlockedEstimator(name,typeString,hasError),
    n(n), value(n), accumvalue(n),
    accumvalue2(hasError?n:n*0), norm(0), accumnorm(0),
-   hasError(hasError), iblock(0), scale(0), origin(0) {
+   hasError(hasError), iblock(0), scale(0), origin(0), min(0), max(0) {
   value=0; accumvalue=0; accumvalue2=0;
 }
 

@@ -55,8 +55,11 @@ public:
                   const VecN &max, const IVecN &nbin, const DistN &dist,
                   MPIManager *mpi) 
     : BlitzArrayBlkdEst<N>(name,"array/pair-correlation",nbin,true), 
-    min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist), nspecies(nspecies),
+    min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist), nspecies(nspecies), 
       cell(*simInfo.getSuperCell()), temp(nbin), mpi(mpi) {
+
+		BlitzArrayBlkdEst<N>::max = new VecN(max);
+		BlitzArrayBlkdEst<N>::min = new VecN(min);
   
     ifirst = speciesList[0].ifirst;
     nipart = speciesList[0].count; 

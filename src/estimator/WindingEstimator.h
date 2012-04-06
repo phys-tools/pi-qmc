@@ -19,6 +19,8 @@
 #include "LinkSummable.h"
 #include "stats/BlitzArrayBlkdEst.h"
 #include <blitz/array.h>
+#include "Species.h"
+
 class Paths;
 class SuperCell;
 class SimulationInfo;
@@ -33,7 +35,7 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor.
   WindingEstimator(const SimulationInfo& simInfo, int nmax,
-    const std::string &name, bool isChargeCoupled, MPIManager *mpi);
+    const std::string &name, bool isChargeCoupled, const Species *species, MPIManager *mpi);
   /// Virtual destructor.
   virtual ~WindingEstimator();
   /// Clear value of the estimator.
@@ -51,6 +53,7 @@ private:
   ///
   int nmax;
   int npart;
+  int ifirst;
   Vec winding;
   SuperCell &cell;
   IArray charge;

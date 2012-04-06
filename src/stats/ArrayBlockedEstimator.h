@@ -53,6 +53,10 @@ public:
   virtual bool hasOrigin() const=0;
   virtual const void* getScale() const=0;
   virtual const void* getOrigin() const=0;
+  virtual bool hasMin() const=0;
+  virtual bool hasMax() const=0;
+  virtual const void* getMin() const=0;
+  virtual const void* getMax() const=0;
   protected:
   bool hasErrorFlag;
 };

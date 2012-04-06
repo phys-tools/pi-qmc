@@ -537,9 +537,21 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     if (name=="WindingEstimator") {
       int nmax=getIntAttribute(estNode,"nmax");
       bool isChargeCoupled = getBoolAttribute(estNode,"isChargeCoupled");
+      const Species *spec = 0;
       std::string name = getStringAttribute(estNode,"name");
+      std::string species = getStringAttribute(estNode,"species");
+
+      //For species-specific winding
+      species=getStringAttribute(estNode,"species");
+      if (species!="" && species!="all") {
+        std::cout <<"Picked species "<<species<<" for winding estimator"<<std::endl;
+        spec=&simInfo.getSpecies(species);
+        if (name=="") name = "winding_" + species;
+      }
+
+
       if (name=="") name = isChargeCoupled ? "charge_winding" : "winding";
-      manager->add(new WindingEstimator(simInfo,nmax,name,isChargeCoupled,mpi));
+      manager->add(new WindingEstimator(simInfo,nmax,name,isChargeCoupled,spec,mpi));
     }
     if (name=="SKOmegaEstimator") {
       IVec nbin = getIVecAttribute(estNode,"n");

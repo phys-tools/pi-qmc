@@ -254,6 +254,38 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
     H5Aclose(attrID);
   }
 
+  if (est.hasMin()) {
+    hsize_t dim=est.getNDim();
+    hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "min", H5T_NATIVE_DOUBLE,
+                              attrSpaceID, H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "min",
+                             H5T_NATIVE_DOUBLE, attrSpaceID, H5P_DEFAULT);
+#endif
+    H5Sclose(attrSpaceID);
+    H5Awrite(attrID, H5T_NATIVE_DOUBLE, est.getMin()); 
+    H5Aclose(attrID);
+  }
+
+  if (est.hasMax()) {
+    hsize_t dim=est.getNDim();
+    hid_t attrSpaceID = H5Screate_simple(1, &dim, NULL);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t attrID = H5Acreate2(dataSetID, "max", H5T_NATIVE_DOUBLE,
+                              attrSpaceID, H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "max",
+                             H5T_NATIVE_DOUBLE, attrSpaceID, H5P_DEFAULT);
+#endif
+    H5Sclose(attrSpaceID);
+    H5Awrite(attrID, H5T_NATIVE_DOUBLE, est.getMax()); 
+    H5Aclose(attrID);
+  }
+
+
+
 }
 
 void H5ReportBuilder::recordInputDocument(const std::string &docstring) {

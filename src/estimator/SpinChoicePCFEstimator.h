@@ -59,6 +59,9 @@ public:
       cell(*simInfo.getSuperCell()), temp(nbin), ispin(0), samespin(samespin),
       spinState(dynamic_cast<SpinModelState&>(modelState).getSpinState()),
       mpi(mpi){
+
+		BlitzArrayBlkdEst<N>::max = new VecN(max);
+		BlitzArrayBlkdEst<N>::min = new VecN(min);
   
     ifirst = species.ifirst;
     npart = ifirst + species.count; 
