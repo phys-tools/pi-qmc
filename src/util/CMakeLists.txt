@@ -13,3 +13,5 @@ set (sources
 )
 
 add_library(util STATIC ${sources})
+
+add_subdirectory(test)
