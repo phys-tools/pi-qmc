@@ -106,6 +106,9 @@ int main(int argc, char** argv) {
         } }
         break;
       case 'V':
+#ifdef CONFIG_FLAGS
+        std::cout<<"Compiled with options: "<<std::endl<<CONFIG_FLAGS<<std::endl<<std::endl;
+#endif
         exit(-1);
       case 'h':
         Help::printHelp();

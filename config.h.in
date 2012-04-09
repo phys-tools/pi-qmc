@@ -1,5 +1,8 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Flags passed to configure */
+#undef CONFIG_FLAGS
+
 /* Flag to enable mpi features. */
 #undef ENABLE_MPI
 

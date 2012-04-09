@@ -1,11 +1,17 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT([pi],[1.3.0],[john.shumway@asu.edu])
+
+#save flags passed to configure
+config_flags="$*"
+
 AC_CONFIG_AUX_DIR(config)
 AM_INIT_AUTOMAKE(pi, 1.3,0)
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AM_MAINTAINER_MODE 
+
+AC_DEFINE_UNQUOTED([CONFIG_FLAGS],["$config_flags"],[Flags passed to configure])
 
 # Checks for programs.
 AC_PROG_CXX
