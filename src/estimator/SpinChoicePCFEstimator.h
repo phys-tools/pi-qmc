@@ -57,7 +57,7 @@ public:
     : BlitzArrayBlkdEst<N>(name,"array/spin-pair-correlation",nbin,true), 
       min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
       cell(*simInfo.getSuperCell()), temp(nbin), ispin(0), samespin(samespin),
-      spinState(dynamic_cast<SpinModelState&>(modelState).getSpinState()),
+      spinState((dynamic_cast<SpinModelState*>(&modelState))->getSpinState()),
       mpi(mpi){
 
 		BlitzArrayBlkdEst<N>::max = new VecN(max);
