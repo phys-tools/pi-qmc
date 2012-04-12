@@ -30,7 +30,7 @@ public:
   XMLUnitParser(const Units*);
   /// Destructor. 
   virtual ~XMLUnitParser() {};
-protected:
+public:
   /// Information about the units and conversions.
   const Units* units;
   /// Parse a length with unit conversion.

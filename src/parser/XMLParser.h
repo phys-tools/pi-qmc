@@ -33,8 +33,8 @@ public:
   /// Destructor.
   virtual ~XMLParser() {};
   /// Parse some xml.
-  virtual void parse(const xmlXPathContextPtr& ctxt)=0;
-protected:
+  virtual void parse(const xmlXPathContextPtr& ctxt) {};
+public:
   /// Get the name of the node.
   static std::string getName(const xmlNodePtr& node);
   /// Get a double valued attribute.

@@ -31,8 +31,10 @@ class MPIManager;
 /// XML Parser for estimators.
 /// @version $Revision$
 /// @author John Shumway */
-class EstimatorParser : public XMLUnitParser {
+class EstimatorParser  {
 public:
+    typedef blitz::TinyVector<double,NDIM> Vec;
+    typedef blitz::TinyVector<int,NDIM> IVec;
   /// Constructor.
   EstimatorParser(const SimulationInfo&, const double tau, 
       const Action* action, const DoubleAction* doubleAction,
@@ -44,6 +46,7 @@ public:
   /// Return the Estimator object.
   EstimatorManager* getEstimatorManager() {return manager;}
 private:
+  XMLUnitParser parser;
   /// The estimator manager.
   EstimatorManager* manager;
   /// General simulation information.

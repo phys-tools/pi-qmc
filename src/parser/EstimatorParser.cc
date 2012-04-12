@@ -73,7 +73,7 @@
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,
     ActionChoiceBase *actionChoice, MPIManager *mpi)
-  : XMLUnitParser(simInfo.getUnits()), manager(0),
+  : parser(simInfo.getUnits()), manager(0),
     simInfo(simInfo), tau(tau), action(action), doubleAction(doubleAction),
     actionChoice(actionChoice), mpi(mpi) {
   manager=new EstimatorManager("pimc.h5", mpi, new SimInfoWriter(simInfo));
@@ -92,11 +92,11 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
   int nest=obj->nodesetval->nodeNr;
   for (int iest=0; iest<nest; ++iest) {
     xmlNodePtr estNode=obj->nodesetval->nodeTab[iest];
-    std::string name=getName(estNode);
+    std::string name = parser.getName(estNode);
     if (name=="ThermalEnergyEstimator") {
-      std::string unitName=getStringAttribute(estNode,"unit");
-      double shift=getEnergyAttribute(estNode,"shift");
-      double perN=getDoubleAttribute(estNode,"perN");
+      std::string unitName = parser.getStringAttribute(estNode,"unit");
+      double shift= parser.getEnergyAttribute(estNode,"shift");
+      double perN= parser.getDoubleAttribute(estNode,"perN");
       double scale = 1.;
       if (perN>0) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getEnergyScaleIn(unitName);
@@ -104,17 +104,17 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
                                              unitName,scale,shift));
     }
     if (name=="SpinEstimator") {
-      double gc=getDoubleAttribute(estNode,"gc");
+      double gc= parser.getDoubleAttribute(estNode,"gc");
       manager->add(new SpinEstimator(simInfo,0,gc));
       manager->add(new SpinEstimator(simInfo,1,gc));
       manager->add(new SpinEstimator(simInfo,2,gc));
     }
     if (name=="VirialEnergyEstimator") {
-      int nwindow=getIntAttribute(estNode,"nwindow");
+      int nwindow= parser.getIntAttribute(estNode,"nwindow");
       if (nwindow==0) nwindow=1;
-      std::string unitName=getStringAttribute(estNode,"unit");
-      double shift=getEnergyAttribute(estNode,"shift");
-      int perN=getIntAttribute(estNode,"perN");
+      std::string unitName= parser.getStringAttribute(estNode,"unit");
+      double shift= parser.getEnergyAttribute(estNode,"shift");
+      int perN= parser.getIntAttribute(estNode,"perN");
       double scale = 1.;
       if (perN>0) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getEnergyScaleIn(unitName);
@@ -123,19 +123,19 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
                                   unitName,scale,shift));
     }
     if (name=="CoulombEnergyEstimator") {
-      double epsilon=getDoubleAttribute(estNode,"epsilon");
+      double epsilon= parser.getDoubleAttribute(estNode,"epsilon");
       if (epsilon==0) epsilon=1;
-      std::string unitName=getStringAttribute(estNode,"unit");
-      double shift=getEnergyAttribute(estNode,"shift");
-      int perN=getIntAttribute(estNode,"perN");
+      std::string unitName= parser.getStringAttribute(estNode,"unit");
+      double shift= parser.getEnergyAttribute(estNode,"shift");
+      int perN= parser.getIntAttribute(estNode,"perN");
       double scale = 1.;
       if (perN>0) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getEnergyScaleIn(unitName);
-      bool useEwald=getBoolAttribute(estNode,"useEwald");
+      bool useEwald= parser.getBoolAttribute(estNode,"useEwald");
       if (useEwald) {
-        double rcut=getLengthAttribute(estNode,"rcut");
-        double kcut=getDoubleAttribute(estNode,"kcut");
-	std::string ewaldType=getStringAttribute(estNode,"ewaldType");
+        double rcut= parser.getLengthAttribute(estNode,"rcut");
+        double kcut= parser.getDoubleAttribute(estNode,"kcut");
+	std::string ewaldType= parser.getStringAttribute(estNode,"ewaldType");
 	if (ewaldType=="") ewaldType="optEwald";
 	if (ewaldType=="opt") ewaldType="optEwald";
 	if (ewaldType=="trad") ewaldType="tradEwald";
@@ -145,9 +145,9 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 						 epsilon,rcut,kcut,mpi,unitName,scale,shift));
 	} else 
 	  if ( ewaldType=="tradEwald"){
-	    int nimages=getIntAttribute(estNode, "ewaldImages");
+	    int nimages= parser.getIntAttribute(estNode, "ewaldImages");
 	    if (nimages ==0) nimages=1;
-	    double kappa=getDoubleAttribute(estNode,"kappa");
+	    double kappa= parser.getDoubleAttribute(estNode,"kappa");
 	    if (kappa==0) {
 	      double Lside=1000000000000000.0 ;
 	      for (int i=0; i<NDIM; i++) {
@@ -157,7 +157,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	      kappa = sqrt( pow(3.6*simInfo.getNPart(),(1.0/6.0))*sqrt(3.1415926535897931)/(Lside) );
 	    }
 	    std :: cout <<"Estimator Parser :: CoulombEnergyEstimator :: kappa :: "<< kappa<<std :: endl;
-	    bool testEwald=getBoolAttribute(estNode,"testEwald");
+	    bool testEwald= parser.getBoolAttribute(estNode,"testEwald");
 
 	    manager->add(new EwaldCoulombEstimator(simInfo,action,
 						   epsilon,rcut,kcut,mpi,unitName,scale,shift, kappa, nimages,testEwald));
@@ -168,68 +168,68 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
     }
     if (name=="AngularMomentumEstimator") {
-      double omega=getEnergyAttribute(estNode,"omega");
-      double b=getEnergyAttribute(estNode,"b");
+      double omega= parser.getEnergyAttribute(estNode,"omega");
+      double b= parser.getEnergyAttribute(estNode,"b");
       PhaseModel* phaseModel=new SHOPhase(simInfo,simInfo.getSpecies(0),omega,
                                           simInfo.getTemperature(),b,0);
       manager->add(new AngularMomentumEstimator(simInfo,phaseModel));
     }
     if (name=="DipoleMomentEstimator") {
-      std::string component=getStringAttribute(estNode,"component");
+      std::string component= parser.getStringAttribute(estNode,"component");
       int index=2; //default use z component
       if (component=="x") index=0;
       else if (component=="y") index=1;
       manager->add(new DipoleMomentEstimator(simInfo, index));
     }
     if (name=="BondLengthEstimator") {
-      std::string species1=getStringAttribute(estNode,"species1");
-      std::string species2=getStringAttribute(estNode,"species2");
-      std::string unitName=getStringAttribute(estNode,"unit");
+      std::string species1= parser.getStringAttribute(estNode,"species1");
+      std::string species2= parser.getStringAttribute(estNode,"species2");
+      std::string unitName= parser.getStringAttribute(estNode,"unit");
       manager->add(new BondLengthEstimator(simInfo,simInfo.getSpecies(species1)
 			      ,simInfo.getSpecies(species2),unitName));
     }
     if (name=="FrequencyEstimator") {
-      std::string species1=getStringAttribute(estNode,"species1");
-      std::string species2=getStringAttribute(estNode,"species2");
-      int nfreq=getIntAttribute(estNode,"nfreq");
+      std::string species1= parser.getStringAttribute(estNode,"species1");
+      std::string species2= parser.getStringAttribute(estNode,"species2");
+      int nfreq= parser.getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
-      int nstride=getIntAttribute(estNode,"nstride");
+      int nstride= parser.getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
       manager->add(new FrequencyEstimator(simInfo,simInfo.getSpecies(species1),
 	simInfo.getSpecies(species2), nfreq, nstride, mpi));
     }
     if (name=="BoxEstimator") {
-      std::string component=getStringAttribute(estNode,"component");
+      std::string component= parser.getStringAttribute(estNode,"component");
       int index=2; //default use z component
       if (component=="x") index=0;
       else if (component=="y") index=1;
-      double lower=getDoubleAttribute(estNode,"lower");
-      double upper=getDoubleAttribute(estNode,"upper");
-      std::string species=getStringAttribute(estNode,"species");
+      double lower= parser.getDoubleAttribute(estNode,"lower");
+      double upper= parser.getDoubleAttribute(estNode,"upper");
+      std::string species= parser.getStringAttribute(estNode,"species");
       manager->add(new BoxEstimator(simInfo, simInfo.getSpecies(species), 
                                     lower, upper, index));
     }
     if (name=="PositionEstimator") {
-      std::string component=getStringAttribute(estNode,"component");
+      std::string component= parser.getStringAttribute(estNode,"component");
       int index=2; //default use z component
       if (component=="x") index=0;
       else if (component=="y") index=1;
-      std::string species=getStringAttribute(estNode,"species");
+      std::string species= parser.getStringAttribute(estNode,"species");
       manager->add(new PositionEstimator(simInfo, 
                                          simInfo.getSpecies(species), index));
     }
     if (name=="ConductivityEstimator") {
-      int nbin=getIntAttribute(estNode,"nbin");
+      int nbin= parser.getIntAttribute(estNode,"nbin");
       if (nbin==0) nbin=1;
-      int ndbin=getIntAttribute(estNode,"ndbin");
+      int ndbin= parser.getIntAttribute(estNode,"ndbin");
       if (ndbin==0) ndbin=1;
-      int nfreq=getIntAttribute(estNode,"nfreq");
+      int nfreq= parser.getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
-      int nstride=getIntAttribute(estNode,"nstride");
+      int nstride= parser.getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
       manager->add(
         new ConductivityEstimator(simInfo,nfreq,nbin,ndbin,nstride,mpi));
-      if (getBoolAttribute(estNode,"calcInduced")) {
+      if ( parser.getBoolAttribute(estNode,"calcInduced")) {
         std::cout << "Also calculating induced voltage" << std::endl;
         const Action *coulAction =
                 action->getActionPointerByType(typeid(CoulombAction));
@@ -244,7 +244,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
               nfreq,nbin,nstride,mpi));
         }
       }
-      if (getBoolAttribute(estNode,"calcEInduced")) {
+      if ( parser.getBoolAttribute(estNode,"calcEInduced")) {
         std::cout << "Also calculating induced efield" << std::endl;
         const Action *coulAction =
                 action->getActionPointerByType(typeid(CoulombAction));
@@ -258,57 +258,57 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
     }
     if (name=="ConductivityEstimator2D") {
-      std::string dim1 = getStringAttribute(estNode, "dim1");
+      std::string dim1 =  parser.getStringAttribute(estNode, "dim1");
       if(dim1.length()==0) dim1="xy";
-      std::string dim2 = getStringAttribute(estNode, "dim2");
+      std::string dim2 =  parser.getStringAttribute(estNode, "dim2");
       if(dim2.length()==0) dim2="xy";
-      int nxbin=getIntAttribute(estNode,"nxbin");
+      int nxbin= parser.getIntAttribute(estNode,"nxbin");
       if (nxbin==0) nxbin=1;
-      int nybin=getIntAttribute(estNode,"nybin");
+      int nybin= parser.getIntAttribute(estNode,"nybin");
       if (nybin==0) nybin=1;
-      int nxdbin=getIntAttribute(estNode,"nxdbin");
+      int nxdbin= parser.getIntAttribute(estNode,"nxdbin");
       if (nxdbin==0) nxdbin=1;
-      int nydbin=getIntAttribute(estNode,"nydbin");
+      int nydbin= parser.getIntAttribute(estNode,"nydbin");
       if (nydbin==0) nydbin=1;
-      double xmin=getLengthAttribute(estNode,"xmin");
-      double xmax=getLengthAttribute(estNode,"xmax");
-      double ymin=getLengthAttribute(estNode,"ymin");
-      double ymax=getLengthAttribute(estNode,"ymax");
-      int nfreq=getIntAttribute(estNode,"nfreq");
+      double xmin= parser.getLengthAttribute(estNode,"xmin");
+      double xmax= parser.getLengthAttribute(estNode,"xmax");
+      double ymin= parser.getLengthAttribute(estNode,"ymin");
+      double ymax= parser.getLengthAttribute(estNode,"ymax");
+      int nfreq= parser.getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
-      int nstride=getIntAttribute(estNode,"nstride");
+      int nstride= parser.getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
       manager->add(new ConductivityEstimator2D(simInfo, xmin, xmax, ymin, ymax, nfreq,
                        dim1, dim2, nxbin, nybin, nxdbin, nydbin, nstride ,mpi));
     }
     if (name=="SpinChargeEstimator") {
-      int nbin=getIntAttribute(estNode,"nbin");
+      int nbin= parser.getIntAttribute(estNode,"nbin");
       if (nbin==0) nbin=1;
-      int ndbin=getIntAttribute(estNode,"ndbin");
+      int ndbin= parser.getIntAttribute(estNode,"ndbin");
       if (ndbin==0) ndbin=1;
-      int nfreq=getIntAttribute(estNode,"nfreq");
+      int nfreq= parser.getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
-      int nstride=getIntAttribute(estNode,"nstride");
+      int nstride= parser.getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
-      std::string speciesUp=getStringAttribute(estNode,"speciesUp");
-      std::string speciesDown=getStringAttribute(estNode,"speciesDown");
+      std::string speciesUp= parser.getStringAttribute(estNode,"speciesUp");
+      std::string speciesDown= parser.getStringAttribute(estNode,"speciesDown");
       const Species &sup(simInfo.getSpecies(speciesUp));
       const Species &sdn(simInfo.getSpecies(speciesDown));
       manager->add(new SpinChargeEstimator(
                          simInfo,sup,sdn,nfreq,nbin,ndbin,nstride,mpi));
     }
     if (name=="ConductanceEstimator") {
-      int nfreq=getIntAttribute(estNode,"nfreq");
+      int nfreq= parser.getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
-      std::string component=getStringAttribute(estNode,"component");
+      std::string component= parser.getStringAttribute(estNode,"component");
       int idim=-1; // Default use all components in tensor.
       if (component=="all") idim=-1;
       else if (component=="x") idim=0;
       else if (component=="y") idim=1;
       else if (component=="z") idim=2;
-      bool useCharge=getBoolAttribute(estNode,"useCharge");
-      bool useSpeciesTensor=getBoolAttribute(estNode,"useSpeciesTensor");
-      int norder=getIntAttribute(estNode,"norder");
+      bool useCharge= parser.getBoolAttribute(estNode,"useCharge");
+      bool useSpeciesTensor= parser.getBoolAttribute(estNode,"useSpeciesTensor");
+      int norder= parser.getIntAttribute(estNode,"norder");
       if (norder==0) norder=1;
       manager->add(new ConductanceEstimator(simInfo,nfreq,0,
                            useSpeciesTensor,idim,useCharge,mpi,norder));
@@ -317,19 +317,19 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         name=="DensDensEstimator" || name=="CountCountEstimator"||
 	name=="DensityCurrentEstimator" ||
 	name=="SpinChoiceDensityEstimator") {
-      //bool useCharge=getBoolAttribute(estNode,"useCharge");
-      std::string species=getStringAttribute(estNode,"species");
+      //bool useCharge= parser.getBoolAttribute(estNode,"useCharge");
+      std::string species= parser.getStringAttribute(estNode,"species");
       const Species *spec = 0;
       if (species!="" && species!="all") spec=&simInfo.getSpecies(species);
-      std::string species1=getStringAttribute(estNode,"species1");
+      std::string species1= parser.getStringAttribute(estNode,"species1");
       const Species *spec1 = 0;
       if (species1!="" && species1!="all") spec1=&simInfo.getSpecies(species1);
-      std::string species2=getStringAttribute(estNode,"species2");
+      std::string species2= parser.getStringAttribute(estNode,"species2");
       const Species *spec2 = 0;
       if (species2!="" && species2!="all") spec2=&simInfo.getSpecies(species2);
       if (spec1==0) spec1=spec;
       if (spec2==0) spec2=spec;
-      std::string estName=getStringAttribute(estNode,"name");
+      std::string estName= parser.getStringAttribute(estNode,"name");
       if (estName=="") {
         if (name=="DensityEstimator") {
           estName = "rho";
@@ -349,11 +349,11 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       IVec nbin;
       Vec min,max;
       if (dist.size()==0) {
-        nbin = getIVecAttribute(estNode,"n");
+        nbin =  parser.getIVecAttribute(estNode,"n");
         for (int idim = 0; idim < NDIM; ++ idim) {
             if (nbin(idim)==0) nbin(idim)=1;
         }
-        double a = getLengthAttribute(estNode,"a");
+        double a =  parser.getLengthAttribute(estNode,"a");
         min=-0.5*a*nbin;
         max=0.5*a*nbin;
         for (int i=0; i<NDIM; ++i) dist.push_back(new Cart(i));
@@ -370,7 +370,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
         manager->add(new DensityEstimator(simInfo,estName,spec,
                                           min,max,nbin,dist, mpi));
       } else if (name=="SpinChoiceDensityEstimator") {
-	std::string spin = getStringAttribute(estNode,"spin");
+	std::string spin =  parser.getStringAttribute(estNode,"spin");
 	int ispin = 0; 
 	estName = "rhoeup";
 	if (spin=="down") {ispin = 1; estName = "rhoedn";}
@@ -378,9 +378,9 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	              max,nbin,dist,ispin,actionChoice->getModelState(),mpi));
       } else if (name=="DensDensEstimator") {
         DensDensEstimator::IVecN nbinN;
-        int nfreq=getIntAttribute(estNode,"nfreq");
+        int nfreq= parser.getIntAttribute(estNode,"nfreq");
         if (nfreq==0) nfreq=simInfo.getNSlice();
-        int nstride=getIntAttribute(estNode,"nstride");
+        int nstride= parser.getIntAttribute(estNode,"nstride");
         if (nstride==0) nstride=1;
         for (int i=0; i<NDIM; ++i) {
           nbinN[i]=nbin[i];
@@ -391,11 +391,11 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
                                   min,max,nbin, nbinN,dist,nstride,mpi));
       } else if (name=="DensityCurrentEstimator") {
 	DensityCurrentEstimator::IVecN nbinN;
-        int nfreq=getIntAttribute(estNode,"nfreq");
+        int nfreq= parser.getIntAttribute(estNode,"nfreq");
         if (nfreq==0) nfreq=simInfo.getNSlice();
-        int nstride=getIntAttribute(estNode,"nstride");
+        int nstride= parser.getIntAttribute(estNode,"nstride");
         if (nstride==0) nstride=1;
-	int njbin=getIntAttribute(estNode,"njbin");
+	int njbin= parser.getIntAttribute(estNode,"njbin");
 	if (njbin==0) njbin=1;
 	nbinN[NDIM] = njbin;
         for (int i=0; i<NDIM; ++i) nbinN[i]=nbin[i];
@@ -403,7 +403,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	manager->add(new DensityCurrentEstimator(simInfo, estName, min, max,
 	                        nbin, nbinN, njbin, dist, nstride, mpi));
       } else {
-        int maxCount=getIntAttribute(estNode,"maxCount");
+        int maxCount= parser.getIntAttribute(estNode,"maxCount");
         if (maxCount==0) maxCount=1;
         if (name=="DensCountEstimator") {
           DensCountEstimator::IVecN nbinN;
@@ -418,9 +418,9 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
             nbinN[i+NDIM]=nbin[i];
           }
           nbinN[2*NDIM]=nbinN[2*NDIM+1]=maxCount+1;
-          int nfreq=getIntAttribute(estNode,"nfreq");
+          int nfreq= parser.getIntAttribute(estNode,"nfreq");
           if (nfreq==0) nfreq=simInfo.getNSlice();
-          int nstride=getIntAttribute(estNode,"nstride");
+          int nstride= parser.getIntAttribute(estNode,"nstride");
           if (nstride==0) nstride=1;
           nbinN[2*NDIM+2]=nfreq;
           manager->add(new CountCountEstimator(simInfo,estName,spec,
@@ -442,15 +442,15 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="ZeroVarDensityEstimator") {
       
-      std::string name=getStringAttribute(estNode,"name");
-      int nspecies = getIntAttribute(estNode,"nspecies");  
+      std::string name= parser.getStringAttribute(estNode,"name");
+      int nspecies =  parser.getIntAttribute(estNode,"nspecies");
 
       if (nspecies == 0) nspecies=2;
       Species *speciesList = new Species [nspecies];
       for (int ispec=0; ispec<nspecies; ispec++){
 	std::stringstream sispec;
 	sispec << "species"<<(ispec+1);
-	std::string speciesName=getStringAttribute(estNode,sispec.str());
+	std::string speciesName= parser.getStringAttribute(estNode,sispec.str());
 	std :: cout<<"Picked species "<< speciesName <<" for Zero Variance pairCF."<<std :: endl;
 	speciesList[ispec]=simInfo.getSpecies(speciesName);
       }
@@ -461,11 +461,11 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       int N=obj->nodesetval->nodeNr; 
       for (int idist=0; idist<N; ++idist) {
 	xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
-	std::string name=getName(distNode);
+	std::string name= parser.getName(distNode);
 	if (name=="Radial") {
-	  min=getDoubleAttribute(distNode,"min");
-	  max=getDoubleAttribute(distNode,"max");
-	  nbin=getIntAttribute(distNode,"nbin");
+	  min= parser.getDoubleAttribute(distNode,"min");
+	  max= parser.getDoubleAttribute(distNode,"max");
+	  nbin= parser.getIntAttribute(distNode,"nbin");
 	}
       }
    
@@ -474,14 +474,14 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
 
     if (name=="DynamicPCFEstimator") {
-      std::string name=getStringAttribute(estNode,"name");
-      std::string species1=getStringAttribute(estNode,"species1");
-      std::string species2=getStringAttribute(estNode,"species2");
+      std::string name= parser.getStringAttribute(estNode,"name");
+      std::string species1= parser.getStringAttribute(estNode,"species1");
+      std::string species2= parser.getStringAttribute(estNode,"species2");
       const Species &s1(simInfo.getSpecies(species1));
       const Species &s2(simInfo.getSpecies(species2));
-      int nfreq=getIntAttribute(estNode,"nfreq");
+      int nfreq= parser.getIntAttribute(estNode,"nfreq");
       if (nfreq==0) nfreq=simInfo.getNSlice();
-      int nstride=getIntAttribute(estNode,"nstride");
+      int nstride= parser.getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
       std::vector<PairDistance*> dist;
       std::vector<double> min,max;
@@ -493,8 +493,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
     }
     if (name=="SpinChoicePCFEstimator") {
-      std::string name = getStringAttribute(estNode, "name");
-      std::string corr = getStringAttribute(estNode, "correlation");
+      std::string name =  parser.getStringAttribute(estNode, "name");
+      std::string corr =  parser.getStringAttribute(estNode, "correlation");
       bool samespin = false;
       if (corr == "same") samespin = true;
       std::vector<PairDistance*> dist;
@@ -510,10 +510,10 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       }
     }
     if (name=="PermutationEstimator") {
-      std::string name=getStringAttribute(estNode,"name");
-      std::string species1=getStringAttribute(estNode,"species1");
+      std::string name= parser.getStringAttribute(estNode,"name");
+      std::string species1= parser.getStringAttribute(estNode,"species1");
       if (species1=="") 
-        species1=getStringAttribute(estNode,"species");
+        species1= parser.getStringAttribute(estNode,"species");
       const Species &s1(simInfo.getSpecies(species1));
       if (species1=="") 
         species1=s1.name;
@@ -521,28 +521,28 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       manager->add(new PermutationEstimator(simInfo, name, s1, mpi));
     }
     if (name=="JEstimator") {
-      int nBField=getIntAttribute(estNode,"nBField");
-      double bmax=getDoubleAttribute(estNode,"bmax");
+      int nBField= parser.getIntAttribute(estNode,"nBField");
+      double bmax= parser.getDoubleAttribute(estNode,"bmax");
       manager->add(new JEstimator(simInfo,nBField,bmax,mpi));
     }
     if (name=="DiamagneticEstimator") {
-      std::string unitName=getStringAttribute(estNode,"unit");
-      double perN=getDoubleAttribute(estNode,"perN");
-      double scale = getDoubleAttribute(estNode,"scale");
+      std::string unitName= parser.getStringAttribute(estNode,"unit");
+      double perN= parser.getDoubleAttribute(estNode,"perN");
+      double scale =  parser.getDoubleAttribute(estNode,"scale");
       if (perN > 0.) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getLengthScaleIn(unitName,3);
       manager->add(new DiamagneticEstimator(simInfo,simInfo.getTemperature(),
                                             unitName,scale));
     }
     if (name=="WindingEstimator") {
-      int nmax=getIntAttribute(estNode,"nmax");
-      bool isChargeCoupled = getBoolAttribute(estNode,"isChargeCoupled");
+      int nmax= parser.getIntAttribute(estNode,"nmax");
+      bool isChargeCoupled =  parser.getBoolAttribute(estNode,"isChargeCoupled");
       const Species *spec = 0;
-      std::string name = getStringAttribute(estNode,"name");
-      std::string species = getStringAttribute(estNode,"species");
+      std::string name =  parser.getStringAttribute(estNode,"name");
+      std::string species =  parser.getStringAttribute(estNode,"species");
 
       //For species-specific winding
-      species=getStringAttribute(estNode,"species");
+      species= parser.getStringAttribute(estNode,"species");
       if (species!="" && species!="all") {
         std::cout <<"Picked species "<<species<<" for winding estimator"<<std::endl;
         spec=&simInfo.getSpecies(species);
@@ -554,19 +554,19 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       manager->add(new WindingEstimator(simInfo,nmax,name,isChargeCoupled,spec,mpi));
     }
     if (name=="SKOmegaEstimator") {
-      IVec nbin = getIVecAttribute(estNode,"n");
+      IVec nbin =  parser.getIVecAttribute(estNode,"n");
       blitz::TinyVector<int,NDIM+3> nbinN;
       nbinN[0] = nbinN[1] = simInfo.getNSpecies();
       for (int i=0; i<NDIM; ++i) nbinN[i+2] = (nbin[i]==0)?1:nbin[i];
-      nbinN[NDIM+2] = getIntAttribute(estNode,"nfreq"); 
-      int nstride = getIntAttribute(estNode,"nstride"); 
+      nbinN[NDIM+2] =  parser.getIntAttribute(estNode,"nfreq");
+      int nstride =  parser.getIntAttribute(estNode,"nstride");
       if (nstride==0) nstride=1;
-      std::string name=getStringAttribute(estNode,"name");
+      std::string name= parser.getStringAttribute(estNode,"name");
       if (name=="") name="skomega";
       manager->add(new SKOmegaEstimator(simInfo,name,nbin,nbinN,nstride,mpi));
     }
     if (name=="EMARateEstimator") {
-      double C = getDoubleAttribute(estNode,"c");
+      double C =  parser.getDoubleAttribute(estNode,"c");
       manager->add(new EMARateEstimator(simInfo,C));
     }
   }
@@ -576,17 +576,17 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 template<int N>
 PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
     xmlXPathObjectPtr obj) {
-  std::string name=getStringAttribute(estNode,"name");
-  // std::string species1=getStringAttribute(estNode,"species1");
+  std::string name= parser.getStringAttribute(estNode,"name");
+  // std::string species1= parser.getStringAttribute(estNode,"species1");
   //const Species &s1(simInfo.getSpecies(species1));
 
-  int nspecies = getIntAttribute(estNode,"nspecies");
+  int nspecies =  parser.getIntAttribute(estNode,"nspecies");
   if (nspecies == 0) nspecies=2;
   Species *speciesList = new Species [nspecies];
   for (int ispec=0; ispec<nspecies; ispec++){
     std::stringstream sispec;
     sispec << "species"<<(ispec+1);
-    std::string speciesName=getStringAttribute(estNode,sispec.str());
+    std::string speciesName= parser.getStringAttribute(estNode,sispec.str());
     std :: cout<<"Picked species "<< speciesName <<" for pairCF."<<std :: endl;
     speciesList[ispec]=simInfo.getSpecies(speciesName);
     }
@@ -596,9 +596,9 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
   typename PairCFEstimator<N>::DistN dist(N,(PairDistance*)0);
   for (int idist=0; idist<N; ++idist) {
     xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
-    std::string name=getName(distNode);
+    std::string name= parser.getName(distNode);
     if (name=="Cartesian" || name=="Cartesian1" || name=="Cartesian2") {
-      std::string dirName = getStringAttribute(distNode,"dir");
+      std::string dirName =  parser.getStringAttribute(distNode,"dir");
       int idir=0; if (dirName=="y") idir=1; else if (dirName=="z") idir=2;
       if (name=="Cartesian") {
         dist[idist]=new PairCart(idir);
@@ -607,11 +607,11 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
       } else if (name=="Cartesian2") {
         dist[idist]=new PairCart2(idir);
       }
-      min[idist] = getLengthAttribute(distNode,"min");
-      max[idist] = getLengthAttribute(distNode,"max");
-      nbin[idist] = getIntAttribute(distNode,"nbin");
+      min[idist] =  parser.getLengthAttribute(distNode,"min");
+      max[idist] =  parser.getLengthAttribute(distNode,"max");
+      nbin[idist] =  parser.getIntAttribute(distNode,"nbin");
     } else if (name=="Radial"||name=="Radial1"||name=="Radial2") {
-      std::string dirName = getStringAttribute(distNode,"dir");
+      std::string dirName =  parser.getStringAttribute(distNode,"dir");
       int idir=-1;
       if (dirName=="x") idir=0;
       else if (dirName=="y") idir=1;
@@ -623,15 +623,15 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
       } else if (name=="Radial2") {
         dist[idist] = new PairRadial2(idir);
       }
-      min[idist] = getLengthAttribute(distNode,"min");
-      max[idist] = getLengthAttribute(distNode,"max");
-      nbin[idist] = getIntAttribute(distNode,"nbin");
+      min[idist] =  parser.getLengthAttribute(distNode,"min");
+      max[idist] =  parser.getLengthAttribute(distNode,"max");
+      nbin[idist] =  parser.getIntAttribute(distNode,"nbin");
     } else if (name=="Angle" || name=="Angle1" || name=="Angle2") {
       int idim=0, jdim=1;
       if (NDIM==1) {
         jdim=0;
       } else if (NDIM>2) {
-        std::string dirName = getStringAttribute(distNode,"dir");
+        std::string dirName =  parser.getStringAttribute(distNode,"dir");
         if (dirName=="x") {idim=1; jdim=2;}
         else if (dirName=="y") {idim=0; jdim=2;}
       }
@@ -644,13 +644,13 @@ PairCFEstimator<N>* EstimatorParser::parsePairCF(xmlNodePtr estNode,
       } else if (name=="Angle2") {
         dist[idist]=new PairAngle2(idim,jdim);
       }
-      double minv = getDoubleAttribute(distNode,"min");
-      double maxv = getDoubleAttribute(distNode,"max");
+      double minv =  parser.getDoubleAttribute(distNode,"min");
+      double maxv =  parser.getDoubleAttribute(distNode,"max");
       const double PI=3.14159265358793;
       if (fabs(minv-maxv)<1e-9) {minv=-PI; maxv=+PI;}
       min[idist]=minv;
       max[idist]=maxv;
-      nbin[idist]=getIntAttribute(distNode,"nbin");
+      nbin[idist]= parser.getIntAttribute(distNode,"nbin");
 std::cout << name << min[idist] << " - " << max[idist] << "  " << nbin << std::endl;
     }
   }
@@ -668,23 +668,23 @@ void EstimatorParser::parseDistance(xmlNodePtr estNode,
   int idir=0;
   for (int idist=0; idist<N; ++idist) {
     xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
-    std::string name=getName(distNode);
+    std::string name= parser.getName(distNode);
     if (name=="Cartesian") {
-      std::string dirName = getStringAttribute(distNode,"dir");
-      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
+      std::string dirName =  parser.getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName== parser.dimName.substr(i,1)) idir=i;
       darray.push_back(new Cart(idir));
-      min.push_back(getLengthAttribute(distNode,"min"));
-      max.push_back(getLengthAttribute(distNode,"max"));
-      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      min.push_back( parser.getLengthAttribute(distNode,"min"));
+      max.push_back( parser.getLengthAttribute(distNode,"max"));
+      nbin.push_back( parser.getIntAttribute(distNode,"nbin"));
       idir++;
     } else if (name=="Radial") {
       int idir=-1;
-      std::string dirName = getStringAttribute(distNode,"dir");
-      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
+      std::string dirName =  parser.getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName== parser.dimName.substr(i,1)) idir=i;
       darray.push_back(new Radial(idir));
-      min.push_back(getLengthAttribute(distNode,"min"));
-      max.push_back(getLengthAttribute(distNode,"max"));
-      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      min.push_back( parser.getLengthAttribute(distNode,"min"));
+      max.push_back( parser.getLengthAttribute(distNode,"max"));
+      nbin.push_back( parser.getIntAttribute(distNode,"nbin"));
     }
   }
 }
@@ -699,11 +699,11 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
   int idir=0;
   for (int idist=0; idist<N; ++idist) {
     xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
-    std::string name=getName(distNode);
+    std::string name= parser.getName(distNode);
     if (name=="Cartesian" || name=="Cartesian1" || name=="Cartesian2") {
-      std::string dirName = getStringAttribute(distNode,"dir");
+      std::string dirName =  parser.getStringAttribute(distNode,"dir");
       idir=0;
-      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
+      for (int i=0; i<NDIM; ++i) if (dirName== parser.dimName.substr(i,1)) idir=i;
       if (name=="Cartesian") {
         darray.push_back(new PairCart(idir));
       } else if (name=="Cartesian1") {
@@ -711,14 +711,14 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
       } else {
         darray.push_back(new PairCart2(idir));
       }
-      min.push_back(getLengthAttribute(distNode,"min"));
-      max.push_back(getLengthAttribute(distNode,"max"));
-      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      min.push_back( parser.getLengthAttribute(distNode,"min"));
+      max.push_back( parser.getLengthAttribute(distNode,"max"));
+      nbin.push_back( parser.getIntAttribute(distNode,"nbin"));
       idir++;
     } else if (name=="Radial"||name=="Radial1"||name=="Radial2") {
       int idir=-1;
-      std::string dirName = getStringAttribute(distNode,"dir");
-      for (int i=0; i<NDIM; ++i) if (dirName==dimName.substr(i,1)) idir=i;
+      std::string dirName =  parser.getStringAttribute(distNode,"dir");
+      for (int i=0; i<NDIM; ++i) if (dirName== parser.dimName.substr(i,1)) idir=i;
       if (name=="Radial") {
         darray.push_back(new PairRadial(idir));
       } else if (name=="Radial1") {
@@ -726,15 +726,15 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
       } else if (name=="Radial2") {
         darray.push_back(new PairRadial2(idir));
       }
-      min.push_back(getLengthAttribute(distNode,"min"));
-      max.push_back(getLengthAttribute(distNode,"max"));
-      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      min.push_back( parser.getLengthAttribute(distNode,"min"));
+      max.push_back( parser.getLengthAttribute(distNode,"max"));
+      nbin.push_back( parser.getIntAttribute(distNode,"nbin"));
     } else if (name=="Angle" || name=="Angle1" || name=="Angle2") {
       int idim=0, jdim=1;
       if (NDIM==1) {
         jdim=0;
       } else if (NDIM>2) {
-        std::string dirName = getStringAttribute(distNode,"dir");
+        std::string dirName =  parser.getStringAttribute(distNode,"dir");
         if (dirName=="x") {idim=1; jdim=2;}
         else if (dirName=="y") {idim=0; jdim=2;}
       }
@@ -747,13 +747,13 @@ void EstimatorParser::parsePairDistance(xmlNodePtr estNode,
       } else if (name=="Angle2") {
         darray.push_back(new PairAngle2(idim,jdim));
       }
-      double minv = getDoubleAttribute(distNode,"min");
-      double maxv = getDoubleAttribute(distNode,"max");
+      double minv =  parser.getDoubleAttribute(distNode,"min");
+      double maxv =  parser.getDoubleAttribute(distNode,"max");
       const double PI=3.14159265358793;
       if (fabs(minv-maxv)<1e-9) {minv=-PI; maxv=+PI;}
       min.push_back(minv);
       max.push_back(maxv);
-      nbin.push_back(getIntAttribute(distNode,"nbin"));
+      nbin.push_back( parser.getIntAttribute(distNode,"nbin"));
     }
   }
 }
