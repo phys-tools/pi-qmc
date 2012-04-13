@@ -16,7 +16,6 @@ set (sources
     SHORealNodes.cc
     SpinChoiceFixedNodeAction.cc
     WireNodes.cc
-    assndx.f
 )
 
 add_library(fixednode STATIC ${sources})

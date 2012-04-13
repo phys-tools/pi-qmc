@@ -11,11 +11,13 @@ libutil_la_SOURCES = \
 	RandomNumGenerator.cc \
 	SuperCell.cc \
 	TradEwaldSum.cc \
-	WireEwald.cc
+	WireEwald.cc \
+    assndx.f
 noinst_HEADERS = \
 	AperiodicGaussian.h \
 	Distance.h \
 	EwaldSum.h \
+	Hungarian.h \
 	OptEwaldSum.h \
 	PairDistance.h \
 	PeriodicGaussian.h \
