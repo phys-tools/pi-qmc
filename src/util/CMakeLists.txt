@@ -10,7 +10,6 @@ set (sources
     SuperCell.cc
     TradEwaldSum.cc
     WireEwald.cc
-    assndx.f
 )
 
 add_library(util STATIC ${sources})

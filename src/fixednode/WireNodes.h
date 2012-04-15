@@ -25,6 +25,7 @@ class PeriodicGaussian;
 class SimulationInfo;
 class Species;
 class SuperCell;
+class Hungarian;
 
 /** Free particle nodes.
 We define the node model as a slater determinant of density matricies
@@ -162,8 +163,8 @@ private:
   /// Storage for calculating dominant contribution to determinant.
   Matrix uarray;
   IArray2 kindex;
-  IArray kwork;
   int nerror;
   double scale;
+  Hungarian *hungarian;
 };
 #endif

@@ -11,8 +11,7 @@ libutil_la_SOURCES = \
 	RandomNumGenerator.cc \
 	SuperCell.cc \
 	TradEwaldSum.cc \
-	WireEwald.cc \
-    assndx.f
+	WireEwald.cc
 noinst_HEADERS = \
 	AperiodicGaussian.h \
 	Distance.h \

@@ -28,6 +28,7 @@ class SimulationInfo;
 class Species;
 class SuperCell;
 class AtomicOrbitalDM;
+class Hungarian;
 
 /*! Augmented free particle nodes.
 We define the node model as a slater determinant of density matricies
@@ -171,7 +172,6 @@ private:
   /// Storage for calculating dominant contribution to determinant.
   Matrix uarray;
   IArray2 kindex;
-  IArray kwork;
   /// Flag for number of bad returns from LAPACK calls.
   int nerror;
   /// Flag to use Hungarian method to remove largest contribution to det.
@@ -183,6 +183,7 @@ private:
   const double density;
   const std::vector<const AtomicOrbitalDM*> orbitals;
   static const double PI;
+  Hungarian *hungarian;
 };
 
 

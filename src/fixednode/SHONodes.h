@@ -21,6 +21,7 @@
 #include <vector>
 class SimulationInfo;
 class Species;
+class Hungarian;
 
 /** Fermionic nodes for a simple hamonic oscillator.
 
@@ -123,8 +124,8 @@ private:
   mutable MMatrix grad2Matrix;
   Matrix uarray;
   IArray2 kindex;
-  IArray kwork;
   int nerror;
   double scale;
+  Hungarian *hungarian;
 };
 #endif

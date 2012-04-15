@@ -27,6 +27,7 @@
 #include "Beads.h"
 #include "sampler/SectionSamplerInterface.h"
 #include "SpinModelState.h"
+#include "util/Hungarian.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
@@ -34,9 +35,6 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 #define DGETRI_F77 F77_FUNC(dgetri,DGETRI)
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
-#define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
-extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n, 
-  const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
 FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
   const Species &species, const double temperature, const int maxlevel,
@@ -54,9 +52,10 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), nerror(0),
     useHungarian(useHungarian), scale(1.0), useIterations(useIterations),
-    nodalFactor(nodalFactor){
+    nodalFactor(nodalFactor),
+    hungarian(useHungarian ? new Hungarian(npart) : 0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor()); 
     romatrix[i] = new Matrix(npart,npart,ColMajor());
@@ -86,6 +85,7 @@ FreeParticleNodes::~FreeParticleNodes() {
     delete pg[idim]; delete pgm[idim]; delete pgp[idim];
   }
   delete updateObj;
+  delete hungarian;
 }
 
 NodeModel::DetWithFlag
@@ -120,11 +120,10 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
     }
     // Find dominant contribution to determinant (distroys uarray).
     if (useHungarian) {
-      const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
-      double usum=0;
-      ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
-                 &usum,kwork.data(),&npart);
-      for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+        hungarian->solve(uarray.data());
+        for (int ipart=0; ipart<npart; ++ipart) {
+            kindex(islice,ipart) = (*hungarian)[ipart];
+        }
       // Note: mat(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
       // or lowest total action.
     }
@@ -552,12 +551,10 @@ void FreeParticleNodes:: getDetInvMat( Matrix &invMat, double &det, IArray2 &loc
         uarray(ipart,jpart)=-log(fabs(invMat(ipart,jpart))+1e-100);
       }
     }
-    IArray kwork(npart*6);
-    const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
-    double usum=0;
-    ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&localKindex(islice,0),
-	       &usum,kwork.data(),&npart);
-    for (int ipart=0; ipart<npart; ++ipart) localKindex(islice,ipart)-=1;
+    hungarian->solve(uarray.data());
+    for (int ipart=0; ipart<npart; ++ipart) {
+        localKindex(islice,ipart) = (*hungarian)[ipart];
+    }
   }
   
   // calculate determinant and inverse of slater matrix.

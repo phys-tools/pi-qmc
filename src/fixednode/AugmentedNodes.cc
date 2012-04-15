@@ -29,6 +29,7 @@
 #include "util/SuperCell.h"
 #include "Beads.h"
 #include "sampler/SectionSamplerInterface.h"
+#include "util/Hungarian.h"
 #include <cstdlib>
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
@@ -37,9 +38,6 @@ extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
 #define DGETRI_F77 F77_FUNC(dgetri,DGETRI)
 extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
-#define ASSNDX_F77 F77_FUNC(assndx,ASSNDX)
-extern "C" void ASSNDX_F77(const int *mode, double *a, const int *n, 
-  const int *m, const int *ida, int *k, double *sum, int *iw, const int *idw);
 
 AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
   const Species &species, double temperature,
@@ -57,9 +55,10 @@ AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     cache(npart,npart), cacheV(npart,npart),
     uarray(npart,npart,ColMajor()), 
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), kwork(npart*6), nerror(0),
+    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), nerror(0),
     useHungarian(useHungarian), scale(1.0),
-    density(pow(mass*temperature/PI,0.5*NDIM)), orbitals(orbitals) {
+    density(pow(mass*temperature/PI,0.5*NDIM)), orbitals(orbitals),
+    hungarian(useHungarian ? new Hungarian(npart) : 0) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());
   }
@@ -89,6 +88,7 @@ AugmentedNodes::~AugmentedNodes() {
     delete pg[idim]; delete pgm[idim]; delete pgp[idim];
   }
   delete updateObj;
+  delete hungarian;
 }
 
 NodeModel::DetWithFlag 
@@ -134,13 +134,12 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
         uarray(ipart,jpart)=-log(fabs(mat(ipart,jpart))+1e-100);
       }
     }
-    // Find dominant contribution to determinant (distroys uarray).
+    // Find dominant contribution to determinant (destroys uarray).
     if (useHungarian) {
-      const int MODE=1; //"Case 1", sum uarray(i,j=k(i)) minimized.
-      double usum=0;
-      ASSNDX_F77(&MODE,uarray.data(),&npart,&npart,&npart,&kindex(islice,0),
-               &usum,kwork.data(),&npart);
-      for (int ipart=0; ipart<npart; ++ipart) kindex(islice,ipart)-=1;
+        hungarian->solve(uarray.data());
+        for (int ipart=0; ipart<npart; ++ipart) {
+            kindex(islice,ipart) = (*hungarian)[ipart];
+        }
       // Note: u(ipart,jpart=kindex(islice,ipart)) makes maximum contribution
       // or lowest total action.
     }
