@@ -30,7 +30,7 @@
 EFieldAction::EFieldAction(const SimulationInfo& simInfo,
     double strength, double center, double width, int idir)
   : tau(simInfo.getTau()), q(simInfo.getNPart()), strength(strength), 
-    center(0.), halfwidth(0.5*width), idir(idir),
+    center(center), halfwidth(0.5*width), idir(idir),
     cell(*simInfo.getSuperCell()),
     slopeIn(-strength), slopeOut(strength*width/(cell.a[idir]-width)),
     intercept(0.5*cell.a[idir]*slopeOut) {
