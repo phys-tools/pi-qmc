@@ -28,16 +28,14 @@ if(GTEST_FOUND)
 
     set(SRC_DIR ${PI_QMC_SOURCE_DIR}/src)
     include_directories(${SRC_DIR})
-    
-    set(utilTestsSource
+
+    add_executable(utilTests
         PermutationTest.cc
         ../Permutation.cc
-        HungarianTest.cc
-        ../Hungarian.cc
+     
     )
-
-    add_executable(utilTests ${utilTestsSource})
-    target_link_libraries(utilTests ${GTEST_BOTH_LIBRARIES} -lpthread)  
+    target_link_libraries(utilTests ${GTEST_BOTH_LIBRARIES} -lpthread)
+  
     target_link_libraries(utilTests ${BLAS_LIB})
     target_link_libraries(utilTests ${LAPACK_LIB})
     if (EXISTS ${LIBF2C_LIB})
