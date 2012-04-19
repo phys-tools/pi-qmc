@@ -651,7 +651,6 @@ void PIMCParser::parseBoundary(const xmlXPathContextPtr& ctxt,
 //  ctxt->node = estNode;
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"*",ctxt);
   int N=obj->nodesetval->nodeNr;
-  int idir=0;
   for (int idist=0; idist<N; ++idist) {
     xmlNodePtr distNode=obj->nodesetval->nodeTab[idist];
     std::string name=getName(distNode);

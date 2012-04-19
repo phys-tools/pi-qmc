@@ -66,20 +66,22 @@ public:
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
   ///
+  const int nsliceEff, nfreq, nstride;
   const Vec min;
   const Vec deltaInv;
   const IVec nbin;
-  const int njbin;
-  const int npart, nstride, nfreq, nsliceEff;
-  const double tau, ntot, ax, dxinv;
-  const DistArray dist;
-  CArrayN tempn;
   CArray2 tempj, tempj0;
+  const double tau, ax, ntot;
+  const DistArray dist;
+  const int npart;
+  Array q;
+  const int njbin;
+  const double dxinv;
+  MPIManager *mpi;
+  CArrayN tempn;
   CArray2* tempn_;
   FArray3* value_;
-  Array q;
   fftw_plan fwdn, fwdj, fwdj0;
-  MPIManager *mpi;
 };
 
 #endif
