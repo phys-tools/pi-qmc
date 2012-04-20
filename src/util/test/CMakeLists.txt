@@ -32,7 +32,14 @@ if(GTEST_FOUND)
     add_executable(utilTests
         PermutationTest.cc
         ../Permutation.cc
-     
+        HungarianTest.cc
+        ../Hungarian.cc
+        AperiodicGaussianTest.cc
+        ../AperiodicGaussian.cc
+        periodicGaussianTest.cc
+        ../periodicGaussian.cc
+       
+       
     )
     target_link_libraries(utilTests ${GTEST_BOTH_LIBRARIES} -lpthread)
   
