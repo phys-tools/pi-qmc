@@ -252,7 +252,7 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
             for (int ii=0; ii<NDIM; ++ii) {
               for (int i=0; i<NDIM; ++i) {
                 for (int j=0; j<NDIM; ++j) {
-                  grad2(i,j) *= pg(fabs(delta[i]));
+                  grad2(i,j) *= pg(fabs(delta[ii]));
                 }
               }
             }
