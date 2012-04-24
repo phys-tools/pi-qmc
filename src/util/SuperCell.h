@@ -17,6 +17,10 @@
 #ifndef __SuperCell_h_
 #define __SuperCell_h_
 
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <iostream>

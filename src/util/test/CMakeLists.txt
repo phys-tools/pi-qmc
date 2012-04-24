@@ -36,8 +36,10 @@ if(GTEST_FOUND)
         ../Hungarian.cc
         AperiodicGaussianTest.cc
         ../AperiodicGaussian.cc
-        periodicGaussianTest.cc
-        ../periodicGaussian.cc
+        PeriodicGaussianTest.cc
+        ../PeriodicGaussian.cc
+        SuperCellTest.cc
+        ../SuperCell.cc
        
        
     )
