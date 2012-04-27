@@ -57,9 +57,7 @@ TEST_F(PermutationTest, testReversePermutation) {
     ASSERT_EQ(3, permutation[2]);
     ASSERT_EQ(1, permutation[1]);
     ASSERT_EQ(0, permutation[0]);
-    std::cout<<permutation<<apermutation;
     permutation.setToInverse(apermutation);
-    std::cout<<permutation;
     ASSERT_EQ(2, permutation[3]);
     ASSERT_EQ(3, permutation[4]);
     ASSERT_EQ(4, permutation[2]);

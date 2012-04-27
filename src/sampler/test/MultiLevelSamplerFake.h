@@ -21,7 +21,6 @@ public:
     virtual const SuperCell& getSuperCell() const;
     virtual int getFirstSliceIndex() const;
     //virtual const SectionChooser& getSectionChooser() const;
-private:
     const int npart;
     const int nmoving;
     const int nslice;

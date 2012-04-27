@@ -36,6 +36,7 @@ if(GTEST_FOUND)
         ${SRC_DIR}/SimulationInfo.cc
         ${SRC_DIR}/util/SuperCell.cc
         ${SRC_DIR}/BeadFactory.cc
+        ${SRC_DIR}/sampler/test/MultiLevelSamplerFake.cc
     )
     target_link_libraries(actionTests ${GTEST_BOTH_LIBRARIES} -lpthread)
   

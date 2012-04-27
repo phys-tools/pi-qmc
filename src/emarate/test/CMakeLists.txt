@@ -31,7 +31,7 @@ if(GTEST_FOUND)
 
     add_executable(emaRateTests
         EMARateActionTest.cc
-        MultiLevelSamplerFake.cc
+        ${SRC_DIR}/sampler/test/MultiLevelSamplerFake.cc
         ${SRC_DIR}/emarate/EMARateAction.cc
         ${SRC_DIR}/Beads.h
         ${SRC_DIR}/BeadFactory.cc

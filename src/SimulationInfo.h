@@ -54,6 +54,7 @@ public:
   double getTemperature() const {return temperature;}
   /// Get the time step.
   double getTau() const {return tau;}
+  void setTau(double value) {tau = value;}
   /// Get the number of slices.
   int getNSlice() const {return nslice;}
   /// Get information about units.

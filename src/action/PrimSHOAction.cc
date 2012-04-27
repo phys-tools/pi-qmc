@@ -48,7 +48,6 @@ double PrimSHOAction::getActionDifference(const SectionSamplerInterface& sampler
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       const int i=index(iMoving);
-if (i<ifirst || i>=ifirst+npart) continue;
       // Add action for moving beads.
       Vec delta=movingBeads(iMoving,islice);
       cell.pbc(delta);

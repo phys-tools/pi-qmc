@@ -2,7 +2,7 @@
 
 #include "emarate/EMARateAction.h"
 
-#include "MultiLevelSamplerFake.h"
+#include "sampler/test/MultiLevelSamplerFake.h"
 #include "Species.h"
 #include "SimulationInfo.h"
 #include "Beads.h"
