@@ -25,14 +25,21 @@
 #include "util/SuperCell.h"
 #include "Paths.h"
 #include "Species.h"
+#include "SimulationInfo.h"
+#include "util/RandomNumGenerator.h"
 
-SHODotAction::SHODotAction(double tau, double t, double v0,
-                           double omega, double z, const Species &species)
-  : tau(tau), t(t), v0(v0), k(species.mass*omega*omega), z(z),
-    ifirst(species.ifirst), npart(species.count) {
-std::cout << "SHODotAction: " << species << std::endl;
-std::cout << "thick,v0,mw2,z: " << t << "," << v0 << "," << k 
-   << ", " << z << std::endl;
+SHODotAction::SHODotAction(const SimulationInfo &simInfo, double t, double v0, 
+double omega, double z, const Species &species, 
+  const bool semiclassical, const int numds)
+  : tau(simInfo.getTau()), t(t), v0(v0), k(species.mass*omega*omega), z(z),
+    ifirst(species.ifirst), npart(species.count), semiclassical(semiclassical), numds(numds), cell(*simInfo.getSuperCell()), nslice(simInfo.getNSlice()), 
+    nds1(1.0/numds) {
+  std::cout << "SHODotAction: " << species << std::endl;
+  std::cout << "thick,v0,mw2,z: " << t << "," << v0 << "," << k 
+  << ", " << z << std::endl;
+  if(semiclassical) {
+    std::cout <<"Using Semiclassical improvement for SHODotAction with numds "<<numds<<std::endl;
+  }
 }
 
 double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
@@ -49,6 +56,12 @@ double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
   double ktstride = 0.5*k*tau*nStride;
 #endif
   for (int islice=nStride; islice<nSlice-nStride; islice+=nStride) {
+    int islicePrime = islice-nStride;
+    if( islicePrime<0 )
+      islicePrime+=nslice;
+    else if( islicePrime>=nslice )
+      islicePrime-=nslice;
+
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
       if (index(iMoving)<ifirst || index(iMoving)>=ifirst+npart) continue;
       const int i=index(iMoving);
@@ -57,7 +70,10 @@ double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
       cell.pbc(position);
 #if NDIM==3
       deltaAction+=ktstride*(position[0]*position[0]+position[1]*position[1]);
-      deltaAction+=(fabs(position[2]-z)>0.5*t)?v0*tau*nStride:0;
+      if(semiclassical)
+        deltaAction+=tau*getSemiClassicalAction(movingBeads(iMoving,islicePrime)[2],position[2], nStride);
+      else
+        deltaAction+=(fabs(position[2]-z)>0.5*t)?v0*tau*nStride:0;
 #else
       deltaAction+=(fabs(position[0]-z)>0.5*t)?v0*tau*nStride:0;
 #endif
@@ -66,7 +82,10 @@ double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
       cell.pbc(position);
 #if NDIM==3
       deltaAction-=ktstride*(position[0]*position[0]+position[1]*position[1]);
-      deltaAction-=(fabs(position[2]-z)>0.5*t)?v0*tau*nStride:0;
+      if(semiclassical)
+        deltaAction-=tau*getSemiClassicalAction(movingBeads(iMoving,islicePrime)[2], position[2], nStride);
+      else
+        deltaAction-=(fabs(position[2]-z)>0.5*t)?v0*tau*nStride:0;
 #else
       deltaAction-=(fabs(position[0]-z)>0.5*t)?v0*tau*nStride:0;
 #endif
@@ -116,13 +135,41 @@ double SHODotAction::getTotalAction(const Paths& paths,
 
 void SHODotAction::getBeadAction(const Paths& paths, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec &fm, Vec &fp) const {
+  double z1,z2;
   if (ipart<ifirst || ipart>=ifirst+npart) return;
   Vec position=paths(ipart,islice);
+  if(semiclassical) {
+    z1 = position[2];
+    z2 = paths(ipart,islice,-1)[2];
+  }
 #if NDIM==3
   utau=0.5*k*(position[0]*position[0]+position[1]*position[1]);
-  utau+=(fabs(position[2]-z)>0.5*t)?v0:0;
+  if(semiclassical)
+    utau+=getSemiClassicalAction(z1, z2, 1);
+  else
+    utau+=(fabs(position[2]-z)>0.5*t)?v0:0;
 #else
   utau=(fabs(position[0]-z)>0.5*t)?v0:0;
 #endif
   u=utau*tau;
+}
+
+//Semiclassical improvement to the action based on (4.13) of Ceperley RMP
+//we leave out a factor of tau to be multiplied later
+//FIXME: Probably breaks workers
+double SHODotAction::getSemiClassicalAction(double zinitial, double zfinal,
+  int nStride) const {
+
+  double deltaAction=0.0; 
+  double deltaz, zcurrent;
+#if NDIM==3
+  deltaz = cell.pbc(zfinal-zinitial,2);
+  deltaz*=nds1;
+  for (int ids=0;ids<=numds;ids++) {
+    zcurrent=cell.pbc(zinitial+(ids*deltaz),2);
+    deltaAction+=(fabs(zcurrent-z)>0.5*t)?1:0;
+  }
+  deltaAction*=(v0*nStride*nds1);
+#endif
+  return deltaAction;
 }

@@ -40,6 +40,8 @@ public:
   /// Set to the smallest displacement with PBC.
   /// @todo May want to improve algorithm here.
   Vec& pbc(Vec&) const;
+  /// smallest displacement along an axis with PBC
+  double pbc(double dist, int idim) const;
   /// Write info to an ostream.
   virtual std::ostream& write(std::ostream&) const;
   /// Supercell dimensions.

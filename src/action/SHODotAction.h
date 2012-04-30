@@ -18,6 +18,8 @@
 #define __SHODotAction_h_
 class SectionSamplerInterface;class DisplaceMoveSampler;
 class Species;
+class SimulationInfo;
+class SuperCell;
 template <int TDIM> class Beads;
 #include <cstdlib>
 #include <blitz/array.h>
@@ -32,8 +34,8 @@ public:
   typedef blitz::Array<int,1> IArray;
   /// Constructor by providing the timestep tau, thickness t, potenial
   /// v0 and spring constant k.
-  SHODotAction(double tau, double t, double v0, double omega, 
-    double z, const Species&);
+  SHODotAction(const SimulationInfo &simInfo, double t, double v0, double omega,
+  double z, const Species&, const bool semiclassical, const int numds);
   /// Virtual destructor.
   virtual ~SHODotAction() {}
   /// Calculate the difference in action.
@@ -47,6 +49,8 @@ public:
   virtual void getBeadAction(const Paths&, int ipart, int islice,
     double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
 private:
+  /// The SuperCell.
+  SuperCell& cell;
   /// The timestep.
   const double tau;
   /// The thickness.
@@ -58,5 +62,14 @@ private:
   const double z;
   /// The first particle and particle count for this species.
   const int ifirst, npart;
+  /// Use Semiclassical approximation for the action
+  const bool semiclassical;
+  /// Number of discretized points for semiclassical action
+  const int numds;
+  const double nds1;
+  /// Number of time slices
+  const int nslice;
+  /// Helper function to calculate semiclassical action 
+  double getSemiClassicalAction(double zinitial, double zfinal, int nStride) const;
 };
 #endif

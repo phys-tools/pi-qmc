@@ -47,6 +47,16 @@ SuperCell::Vec& SuperCell::pbc(Vec& v) const {
   return v;
 }
 
+double SuperCell::pbc(double dist, int idim) const {
+  if ((dist*dist)>rcut2) {
+    double i = trunc (b[idim]*dist+1000.5)-1000; 
+    if (i!=0) dist-=a[idim]*i;
+  }
+  return dist;
+}
+
+
+
 std::ostream& SuperCell::write(std::ostream& os) const {
   os << "SuperCell:" << std::endl;
   for (int i=0; i<NDIM; ++i) {

@@ -374,8 +374,16 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       double omega=getEnergyAttribute(actNode,"omega");
       std::string specName=getStringAttribute(actNode,"species");
       const Species& species(simInfo.getSpecies(specName));
+      const bool semiclass=getBoolAttribute(actNode,"useSemiClassical");
+      int numds=0;
+      if(semiclass) {
+        numds=getIntAttribute(actNode,"numds");
+        //Default to 10 segements for ds in semiclassical action
+        if(numds==0)
+          numds=10;
+      }
       composite->addAction(
-        new SHODotAction(simInfo.getTau(),t,v0,omega,z,species));
+        new SHODotAction(simInfo,t,v0,omega,z,species,semiclass,numds));
       continue;
     } else if (name=="DotGeomAction") {
       composite->addAction(new DotGeomAction(simInfo.getTau()));
