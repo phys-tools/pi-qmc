@@ -48,7 +48,7 @@ SuperCell::Vec& SuperCell::pbc(Vec& v) const {
 }
 
 double SuperCell::pbc(double dist, int idim) const {
-  if ((dist*dist)>rcut2) {
+  if (dist>(0.5*a[idim])) {
     double i = trunc (b[idim]*dist+1000.5)-1000; 
     if (i!=0) dist-=a[idim]*i;
   }
