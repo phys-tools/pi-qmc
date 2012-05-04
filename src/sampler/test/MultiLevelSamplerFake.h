@@ -24,6 +24,7 @@ public:
     const int npart;
     const int nmoving;
     const int nslice;
+    int firstSliceIndex;
     Beads<NDIM> *sectionBeads;
     Beads<NDIM> *movingBeads;
     IArray *movingIndex;

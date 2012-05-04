@@ -24,6 +24,7 @@ template <int TDIM> class Beads;
 #include <cstdlib>
 #include <blitz/array.h>
 #include "Action.h"
+#include "util/SuperCell.h"
 
 /** Class for calculating the action for a simple harmonic oscillator.
   * @version $Revision$

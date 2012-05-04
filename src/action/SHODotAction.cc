@@ -143,6 +143,8 @@ void SHODotAction::getBeadAction(const Paths& paths, int ipart, int islice,
     z2 = paths(ipart,islice,-1)[2];
   }
 #if NDIM==3
+  position[2] -= z;
+  cell.pbc(position);
   utau=0.5*k*(position[0]*position[0]+position[1]*position[1]);
   if(semiclassical)
     utau+=getSemiClassicalAction(z1, z2, 1);

@@ -10,10 +10,14 @@
 
 MultiLevelSamplerFake::MultiLevelSamplerFake(int npart, int nmoving, int nslice)
 :   npart(npart), nmoving(nmoving), nslice(nslice),
+    firstSliceIndex(0),
     sectionBeads(new Beads<NDIM>(npart, nslice)),
     movingBeads(new Beads<NDIM>(nmoving, nslice)),
-    movingIndex(new IArray(nmoving)),
-    superCell(new SuperCell(blitz::TinyVector<double, NDIM>(1.0,0))) {
+    movingIndex(new IArray(nmoving)) {
+
+    blitz::TinyVector<double, NDIM> length = 10.0;
+    superCell = new SuperCell(length);
+
     for (int ipart = 0; ipart < nmoving; ++ ipart) {
         (*movingIndex)(ipart) = ipart;
     }
@@ -73,5 +77,5 @@ const SuperCell & MultiLevelSamplerFake::getSuperCell() const {
 
 
 int MultiLevelSamplerFake::getFirstSliceIndex() const {
-    return 0;
+    return firstSliceIndex;
 }

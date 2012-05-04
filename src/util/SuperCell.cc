@@ -21,7 +21,9 @@
 #include <iostream>
 #include <blitz/tinyvec-et.h>
 
-SuperCell::SuperCell(const Vec a) : a(a) {}
+SuperCell::SuperCell(const Vec a) : a(a) {
+    computeRecipricalVectors();
+}
 
 SuperCell::~SuperCell() {}
 
@@ -63,8 +65,13 @@ std::ostream& SuperCell::write(std::ostream& os) const {
     os << "    (" ;
     for (int j=0; j<i; ++j) os << "0,";
     os << a[i]; 
-    for (int j=i; j<NDIM; ++j) os << ",0";
+    for (int j=i+1; j<NDIM; ++j) os << ",0";
     os << ")" << std::endl;
   }
   return os;
 }
+
+std::ostream& operator<<(std::ostream &os, const SuperCell &cell) {
+    cell.write(os);
+}
+

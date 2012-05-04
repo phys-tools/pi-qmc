@@ -63,7 +63,6 @@ public:
   BeadFactory& getBeadFactory() const {return beadFactory;}
   /// The energy scale for spinors.
   double spinOmega;
-private:
   /// The supercell.
   SuperCell* superCell;
   /// Unit information.
