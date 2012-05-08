@@ -16,11 +16,14 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __LinkSummable_h_
 #define __LinkSummable_h_
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 #include "stats/Estimator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 class Paths;
-/// Interface class for ojects that can be summed over links.
+/// Interface class for objects that can be summed over links.
 /// @version $Revision$
 /// @author John Shumway
 class LinkSummable {

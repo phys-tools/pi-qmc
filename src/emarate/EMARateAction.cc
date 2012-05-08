@@ -18,13 +18,13 @@
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
         const Species& species1, const Species& species2, double C)
-:   invTau(1./simInfo.getTau()),
-    species1(species1),
-    species2(species2),
-    index1(species1.ifirst),
-    index2(species2.ifirst),
-    C(C),
-    nPathSlice(simInfo.getNSlice()) {
+: invTau(1./simInfo.getTau()),
+  species1(species1),
+  species2(species2),
+  index1(species1.ifirst),
+  index2(species2.ifirst),
+  C(C),
+  nPathSlice(simInfo.getNSlice()) {
 
     if (species1.anMass) {
         mass1 = *species1.anMass;

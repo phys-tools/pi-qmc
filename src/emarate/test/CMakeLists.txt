@@ -31,13 +31,22 @@ if(GTEST_FOUND)
 
     add_executable(emaRateTests
         EMARateActionTest.cc
+        EMARateMoverTest.cc
+        EMARateEstimatorTest.cc
         ${SRC_DIR}/sampler/test/MultiLevelSamplerFake.cc
         ${SRC_DIR}/emarate/EMARateAction.cc
+        ${SRC_DIR}/emarate/EMARateEstimator.cc
+        ${SRC_DIR}/emarate/EMARateMover.cc
         ${SRC_DIR}/Beads.h
         ${SRC_DIR}/BeadFactory.cc
         ${SRC_DIR}/SimulationInfo.cc
         ${SRC_DIR}/Species.cc
         ${SRC_DIR}/util/SuperCell.cc
+        ${SRC_DIR}/util/Permutation.cc
+        ${SRC_DIR}/util/RandomNumGenerator.cc
+        ${SRC_DIR}/stats/ScalarEstimator.cc
+        ${SRC_DIR}/sampler/PermutationChooser.cc
+        ${SRC_DIR}/sampler/ParticleChooser.cc
     )
     target_link_libraries(emaRateTests ${GTEST_BOTH_LIBRARIES} -lpthread)
   
