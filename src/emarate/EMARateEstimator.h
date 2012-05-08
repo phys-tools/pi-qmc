@@ -29,8 +29,14 @@ private:
     const double massh;
     const double C;
     const SuperCell& cell;
+    const int lastSlice;
     double actionDifference;
     double sum, norm;
+    void evaluateElectronBeforeRecombination(
+            const Vec& start, const Vec& end, const Paths & paths);
+    void evaluateHoleAfterRecombination(
+            const Vec& start, const Vec& end, const Paths & paths);
+
 };
 
 #endif

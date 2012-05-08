@@ -41,6 +41,8 @@ if(GTEST_FOUND)
         ${SRC_DIR}/BeadFactory.cc
         ${SRC_DIR}/SimulationInfo.cc
         ${SRC_DIR}/Species.cc
+        ${SRC_DIR}/Paths.cc
+        ${SRC_DIR}/SerialPaths.cc
         ${SRC_DIR}/util/SuperCell.cc
         ${SRC_DIR}/util/Permutation.cc
         ${SRC_DIR}/util/RandomNumGenerator.cc
