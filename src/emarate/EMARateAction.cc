@@ -5,7 +5,6 @@
 #include "EMARateAction.h"
 
 #include <cstdlib>
-#include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include "sampler/SectionSamplerInterface.h"
 #include "sampler/DisplaceMoveSampler.h"
@@ -42,8 +41,24 @@ EMARateAction::EMARateAction(const SimulationInfo& simInfo,
 EMARateAction::~EMARateAction() {
 }
 
+EMARateAction::Vec EMARateAction::getMovingPosition(int ipart, int islice,
+        int nMoving,
+        const IArray& index,
+        const Beads<NDIM>& sectionBeads,
+        const Beads<NDIM>& movingBeads) {
+    Vec re = sectionBeads(ipart, islice);
+    for(int imoving = 0;imoving < nMoving;++imoving){
+        int thisPart = index(imoving);
+        if(thisPart == ipart){
+            re = movingBeads(imoving, islice);
+        }
+    }
+
+    return re;
+}
+
 double EMARateAction::getActionDifference(
-        const SectionSamplerInterface& sampler, const int level) {
+    const SectionSamplerInterface& sampler, const int level) {
 
     const Beads<NDIM>& sectionBeads(sampler.getSectionBeads());
     const Beads<NDIM>& movingBeads(sampler.getMovingBeads());
@@ -51,13 +66,10 @@ double EMARateAction::getActionDifference(
     const SuperCell& cell = sampler.getSuperCell();
     const int nStride = 1 << level;
     const int nSlice = sectionBeads.getNSlice();
-    const IArray & index = sampler.getMovingIndex();
+    const IArray &index = sampler.getMovingIndex();
+    const int nMoving = index.size();
     // Only evaluate if we are aligned with slice 0 in the middle.
     if (!isCenteredOnSliceZero(sampler, nSlice)) return 0.;
-
-    // For now, we'll assume that the only two radiating particles are being moved.
-    int iMoving1 = index(0);
-    int iMoving2 = index(1);
 
     double oldDiagAction = 0.;
     double oldRadAction = 0.;
@@ -67,20 +79,21 @@ double EMARateAction::getActionDifference(
     const Vec inv2Sigma21 = 0.5*mass1*invTau/nStride;
     const Vec inv2Sigma22 = 0.5*mass2*invTau/nStride;
 
-    Vec rePrev = movingBeads(0,0);
-    Vec rhPrev = movingBeads(1,0);
+    Vec rePrev = getMovingPosition(0, 0, nMoving, index, sectionBeads,  movingBeads);
+    Vec rhPrev = getMovingPosition(1, 0, nMoving, index, sectionBeads,  movingBeads);
     Vec reRadPrev = rePrev;
     Vec rhRadPrev = rhPrev;
-    Vec rePrevOld = sectionBeads(iMoving1,0);
-    Vec rhPrevOld = sectionBeads(iMoving2,0);
+    Vec rePrevOld = sectionBeads(0,0);
+    Vec rhPrevOld = sectionBeads(1,0);
     Vec reRadPrevOld = rePrevOld;
     Vec rhRadPrevOld = rhPrevOld;
 
     for (int islice = nStride; islice < nSlice; islice += nStride) {
 
         // Calculate action for moving beads.
-        Vec re = movingBeads(0,islice);
-        Vec rh = movingBeads(1,islice);
+        Vec re = getMovingPosition(0, islice, nMoving, index, sectionBeads,  movingBeads);
+        Vec rh = getMovingPosition(1, islice, nMoving, index, sectionBeads,  movingBeads);
+
 
         Vec reRad = re;
         Vec rhRad = (islice==nSlice/2) ? re : rh;
@@ -109,8 +122,8 @@ double EMARateAction::getActionDifference(
         }
 
         // Calculate action for old beads.
-        Vec reOld = sectionBeads(iMoving1,islice);
-        Vec rhOld = sectionBeads(iMoving2,islice);
+        Vec reOld = sectionBeads(0,islice);
+        Vec rhOld = sectionBeads(1,islice);
 
         Vec reRadOld = reOld;
         Vec rhRadOld = (islice==nSlice/2)?reOld:rhOld;

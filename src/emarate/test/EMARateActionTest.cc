@@ -12,13 +12,11 @@
 
 namespace {
 
-class EMARateActionTest: public ::testing::Test {
+class EMARateActionTest: public testing::Test {
 protected:
 
     virtual void SetUp() {
-        sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
         simInfo.nslice = 128;
-        sampler->firstSliceIndex = simInfo.nslice - nslice/2;
         coefficient = 10.0;
     }
 
@@ -30,22 +28,30 @@ protected:
     Species species1, species2;
     SimulationInfo simInfo;
     static const int npart=2;
-    static const int nmoving=2;
+    int nmoving;
     static const int nlevel=6;
     static const int nslice=8;
     double coefficient;
 
-    void setIdenticalPaths() {
+    void createFakeSampler(int movingCount) {
+        nmoving = movingCount;
+        sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
+        sampler->firstSliceIndex = simInfo.nslice - nslice / 2;
+    }
+
+
+
+    void setIdenticalPaths()
+    {
         Beads<NDIM>::Vec electronPosition(0.0);
         Beads<NDIM>::Vec holePosition(1.0);
         Beads<NDIM> &sectionBeads(sampler->getSectionBeads());
         Beads<NDIM> &movingBeads(sampler->getMovingBeads());
-        for (int i = 0; i < nslice; ++i) {
-            sectionBeads(0,i) = holePosition;
-            sectionBeads(1,i) = electronPosition;
-            movingBeads(0,i) = holePosition;
-            movingBeads(1,i) = electronPosition;
+        for(int islice = 0;islice < nslice;++islice){
+            sectionBeads(0, islice) = holePosition;
+            sectionBeads(1, islice) = electronPosition;
         }
+        sampler->copySectionBeadsToMovingBeads();
     }
 
     void setRecombiningPaths() {
@@ -71,6 +77,7 @@ protected:
 };
 
 TEST_F(EMARateActionTest, testActionDifferenceForIdenticalPathsIsZero) {
+    createFakeSampler(2);
     EMARateAction action(simInfo, species1, species2, coefficient);
     setIdenticalPaths();
     double deltaAction = action.getActionDifference(*sampler, 0);
@@ -78,6 +85,7 @@ TEST_F(EMARateActionTest, testActionDifferenceForIdenticalPathsIsZero) {
 }
 
 TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
+    createFakeSampler(2);
     EMARateAction action(simInfo, species1, species2, coefficient);
     setRecombiningPaths();
     double deltaAction = action.getActionDifference(*sampler, 0);
@@ -87,6 +95,14 @@ TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
     ASSERT_FLOAT_EQ(expect, deltaAction);
 }
 
+TEST_F(EMARateActionTest, testSamplerWithOnlyElectron) {
+    createFakeSampler(1);
+    (*sampler->movingIndex)(0) = 1;
+    EMARateAction action(simInfo, species1, species2, coefficient);
+    setIdenticalPaths();
+    double deltaAction = action.getActionDifference(*sampler, 0);
+    ASSERT_FLOAT_EQ(0.0, deltaAction);
+}
 
 }
 

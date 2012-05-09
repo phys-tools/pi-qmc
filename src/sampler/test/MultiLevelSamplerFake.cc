@@ -46,7 +46,8 @@ const Beads<NDIM> & MultiLevelSamplerFake::getMovingBeads() const {
     return *movingBeads;
 }
 
-const SectionSamplerInterface::IArray & MultiLevelSamplerFake::getMovingIndex() const {
+const SectionSamplerInterface::IArray&
+MultiLevelSamplerFake::getMovingIndex() const {
     return *movingIndex;
 }
 
@@ -66,7 +67,8 @@ const Beads<NDIM> & MultiLevelSamplerFake::getMovingBeads(int i) const {
     return *movingBeads;
 }
 
-const SectionSamplerInterface::IArray & MultiLevelSamplerFake::getMovingIndex(int i) const {
+const SectionSamplerInterface::IArray&
+MultiLevelSamplerFake::getMovingIndex(int i) const {
     return *movingIndex;
 }
 
@@ -78,4 +80,13 @@ const SuperCell & MultiLevelSamplerFake::getSuperCell() const {
 
 int MultiLevelSamplerFake::getFirstSliceIndex() const {
     return firstSliceIndex;
+}
+
+void MultiLevelSamplerFake::copySectionBeadsToMovingBeads() {
+    for (int islice = 0;islice < nslice;++islice){
+        for (int imoving = 0;imoving < nmoving;++imoving){
+            int ipart = (*movingIndex)(imoving);
+            (*movingBeads)(imoving, islice) = (*sectionBeads)(ipart, islice);
+        }
+    }
 }

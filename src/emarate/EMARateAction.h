@@ -7,6 +7,7 @@ class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 class Species;
+#include "Beads.h"
 
 #include "action/Action.h"
 #include <cstdlib>
@@ -68,6 +69,10 @@ private:
     Vec mass2;
     /// The total number of slices in the path.
     const int nPathSlice;
+    EMARateAction::Vec getMovingPosition(int npart, int nslice, int nMoving,
+            const IArray &index,
+            const Beads<NDIM> &sectionBeads,
+            const Beads<NDIM> &movingBeads);
     bool isCenteredOnSliceZero(const SectionSamplerInterface & sampler, const int nSlice);
 };
 #endif

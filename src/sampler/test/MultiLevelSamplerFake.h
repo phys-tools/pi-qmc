@@ -20,6 +20,7 @@ public:
     virtual bool isSamplingBoth() const {return false;}
     virtual const SuperCell& getSuperCell() const;
     virtual int getFirstSliceIndex() const;
+    void copySectionBeadsToMovingBeads();
     //virtual const SectionChooser& getSectionChooser() const;
     const int npart;
     const int nmoving;
