@@ -33,6 +33,7 @@ if(GTEST_FOUND)
         EMARateActionTest.cc
         EMARateMoverTest.cc
         EMARateEstimatorTest.cc
+        EMARateTestBeadPositioner.cc
         ${SRC_DIR}/sampler/test/MultiLevelSamplerFake.cc
         ${SRC_DIR}/emarate/EMARateAction.cc
         ${SRC_DIR}/emarate/EMARateEstimator.cc

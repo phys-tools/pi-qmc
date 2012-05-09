@@ -17,11 +17,12 @@ protected:
         setupSimulationInfo();
         coefficient = 10.0;
         mover = new EMARateMover(simInfo.tau, 1.0, 1.0, maxlevel, coefficient);
+        sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
     }
 
     virtual void TearDown() {
         delete mover;
-//        delete sampler;
+        delete sampler;
     }
 
     void setupSimulationInfo() {
@@ -62,6 +63,10 @@ TEST_F(EMARateMoverTest, testParticleChooser) {
 TEST_F(EMARateMoverTest, testPermutationChooser) {
     mover->choosePermutation();
     ASSERT_TRUE(mover->getPermutation().isIdentity());
+}
+
+TEST_F(EMARateMoverTest, testRadiatingProbability) {
+
 }
 
 }

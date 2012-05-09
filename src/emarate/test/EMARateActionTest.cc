@@ -8,6 +8,7 @@
 #include "Species.h"
 #include "SimulationInfo.h"
 #include "Beads.h"
+#include "EMARateTestBeadPositioner.h"
 
 
 namespace {
@@ -22,9 +23,11 @@ protected:
 
     virtual void TearDown() {
         delete sampler;
+        delete positioner;
     }
 
     MultiLevelSamplerFake *sampler;
+    EMARateTestBeadPositioner *positioner;
     Species species1, species2;
     SimulationInfo simInfo;
     static const int npart=2;
@@ -36,49 +39,15 @@ protected:
         nmoving = movingCount;
         sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
         sampler->firstSliceIndex = simInfo.nslice - nslice / 2;
+        positioner = new EMARateTestBeadPositioner(*sampler);
     }
 
-
-
-    void setIdenticalPaths()
-    {
-        Beads<NDIM>::Vec electronPosition(0.0);
-        Beads<NDIM>::Vec holePosition(1.0);
-        Beads<NDIM> &sectionBeads(sampler->getSectionBeads());
-        Beads<NDIM> &movingBeads(sampler->getMovingBeads());
-        for(int islice = 0;islice < nslice;++islice){
-            sectionBeads(0, islice) = holePosition;
-            sectionBeads(1, islice) = electronPosition;
-        }
-        sampler->copySectionBeadsToMovingBeads();
-    }
-
-    void setRecombiningPaths() {
-        Beads<NDIM>::Vec beforePosition(0.0, 0.0, 0.0);
-        Beads<NDIM>::Vec afterPosition(1.0, 1.0, 1.0);
-        Beads<NDIM> &sectionBeads(sampler->getSectionBeads());
-        Beads<NDIM> &movingBeads(sampler->getMovingBeads());
-        for (int islice = 0; islice < nslice; ++islice) {
-            sectionBeads(0,islice) = beforePosition;
-            sectionBeads(1,islice) = afterPosition;
-            if (islice < nslice/2) {
-                movingBeads(0,islice) = beforePosition;
-                movingBeads(1,islice) = beforePosition;
-            } else if (islice == nslice/2) {
-                movingBeads(0, islice) = beforePosition;
-                movingBeads(1, islice) = afterPosition;
-            } else {
-                movingBeads(0,islice) = afterPosition;
-                movingBeads(1,islice) = afterPosition;
-            }
-        }
-    }
 };
 
 TEST_F(EMARateActionTest, testActionDifferenceForIdenticalPathsIsZero) {
     createFakeSampler(2);
     EMARateAction action(simInfo, species1, species2, coefficient);
-    setIdenticalPaths();
+    positioner->setIdenticalPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
     ASSERT_FLOAT_EQ(0.0, deltaAction);
 }
@@ -86,7 +55,7 @@ TEST_F(EMARateActionTest, testActionDifferenceForIdenticalPathsIsZero) {
 TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
     createFakeSampler(2);
     EMARateAction action(simInfo, species1, species2, coefficient);
-    setRecombiningPaths();
+    positioner->setRecombiningPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
     double oldAction = -log(1 + coefficient * exp(-3.0));
     double newAction = -log(1 + coefficient * exp(+3.0));
@@ -98,7 +67,7 @@ TEST_F(EMARateActionTest, testSamplerWithOnlyElectron) {
     createFakeSampler(1);
     (*sampler->movingIndex)(0) = 1;
     EMARateAction action(simInfo, species1, species2, coefficient);
-    setIdenticalPaths();
+    positioner->setIdenticalPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
     ASSERT_FLOAT_EQ(0.0, deltaAction);
 }
