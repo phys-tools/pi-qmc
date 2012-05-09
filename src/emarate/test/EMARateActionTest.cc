@@ -29,7 +29,6 @@ protected:
     SimulationInfo simInfo;
     static const int npart=2;
     int nmoving;
-    static const int nlevel=6;
     static const int nslice=8;
     double coefficient;
 

@@ -36,9 +36,11 @@ SimulationInfo::SimulationInfo(SuperCell* cell, int npart,
 }
 
 SimulationInfo::~SimulationInfo() {
-  for (unsigned int i=0; i<speciesList.size(); ++i) delete speciesList[i];
-  delete superCell;
-  delete &beadFactory;
+    for (unsigned int i=0; i<speciesList.size(); ++i) {
+        delete speciesList[i];
+    }
+    delete superCell;
+    delete &beadFactory;
 }
 
 const Species& SimulationInfo::getSpecies(const std::string& name) const {

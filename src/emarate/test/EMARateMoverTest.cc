@@ -2,61 +2,66 @@
 
 #include "emarate/EMARateAction.h"
 #include "SimulationInfo.h"
-#include "SerialPaths.h"
-#include "BeadFactory.h"
+#include "emarate/EMARateMover.h"
+#include "sampler/test/MultiLevelSamplerFake.h"
+#include "Species.h"
 
 namespace {
 
 class EMARateMoverTest: public testing::Test {
 protected:
 
+
     virtual void SetUp() {
         separation = 5.0;
-        simInfo.nslice = 128;
-        simInfo.npart = 2;
-        paths = new SerialPaths(simInfo.npart, simInfo.nslice, simInfo.tau,
-                *simInfo.superCell, beadFactory);
+        setupSimulationInfo();
         coefficient = 10.0;
+        mover = new EMARateMover(simInfo.tau, 1.0, 1.0, maxlevel, coefficient);
     }
 
     virtual void TearDown() {
-        delete paths;
+        delete mover;
+//        delete sampler;
     }
 
-    void setDirectPaths() {
-        Paths::Vec holePosition = Paths::Vec(0.0, 0.0, 0.0);
-        Paths::Vec electronPosition = Paths::Vec(separation, separation, separation);
-        for (int sliceIndex = 0; sliceIndex < simInfo.nslice; ++sliceIndex) {
-            (*paths)(0, sliceIndex) = holePosition;
-            (*paths)(1, sliceIndex) = electronPosition;
-        }
+    void setupSimulationInfo() {
+        species1 = new Species("h", 1, 1.0, 0.0, 0, 0);
+        species2 = new Species("e", 1, 1.0, 0.0, 0, 0);
+        simInfo.nslice = 128;
+        simInfo.npart = 2;
+        simInfo.speciesList.resize(simInfo.npart);
+        simInfo.speciesList[0] = species1;
+        simInfo.speciesList[1] = species2;
+        simInfo.speciesIndex.resize(simInfo.npart);
+        simInfo.speciesIndex[0] = species1;
+        simInfo.speciesIndex[1] = species2;
     }
 
-    void setExchangingPaths() {
-        Paths::Vec afterPosition = Paths::Vec(0.0, 0.0, 0.0);
-        Paths::Vec beforePosition = Paths::Vec(separation, separation, separation);
-        (*paths)(0,0) = beforePosition;
-        (*paths)(1,0) = afterPosition;
+    EMARateMover *mover;
+    MultiLevelSamplerFake *sampler;
 
-        double inverseSliceCount = 1.0 / paths->getNSlice();
-        for (int sliceIndex = 1; sliceIndex < simInfo.nslice; ++sliceIndex) {
-            double x = sliceIndex * inverseSliceCount;
-            Paths::Vec position = (1.0 - x) * afterPosition + x * beforePosition;
-            (*paths)(0, sliceIndex) = position;
-            (*paths)(1, sliceIndex) = position;
-        }
-    }
-
-    Species species1, species2;
+    Species *species1;
+    Species *species2;
     double coefficient;
+    static const int npart = 2;
+    int nmoving;
+    static const int maxlevel = 3;
+    static const int nslice = 1 << maxlevel;
     SimulationInfo simInfo;
-    SerialPaths *paths;
-    BeadFactory beadFactory;
     double separation;
 };
 
-TEST_F(EMARateMoverTest, testDirectPaths) {
-    setDirectPaths();
+TEST_F(EMARateMoverTest, testParticleChooser) {
+    mover->chooseParticles();
+    int holeIndex = (*mover)[0];
+    int electronIndex = (*mover)[1];
+    ASSERT_EQ(0, holeIndex);
+    ASSERT_EQ(1, electronIndex);
+}
+
+TEST_F(EMARateMoverTest, testPermutationChooser) {
+    mover->choosePermutation();
+    ASSERT_TRUE(mover->getPermutation().isIdentity());
 }
 
 }

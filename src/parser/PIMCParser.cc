@@ -357,7 +357,10 @@ std::cout << "doubleAction!=0" << std::endl;
       double c=getDoubleAttribute(ctxt->node,"c");
       std::string speciesName1=getStringAttribute(ctxt->node,"species1");
       std::string speciesName2=getStringAttribute(ctxt->node,"species2");
-      EMARateMover* emaRateMover = new EMARateMover(simInfo,nlevel,c);
+      double mass1 = simInfo.getSpecies(speciesName1).mass;
+      double mass2 = simInfo.getSpecies(speciesName2).mass;
+      EMARateMover* emaRateMover =
+              new EMARateMover(simInfo.tau, mass1, mass2, nlevel,c);
       mover = emaRateMover;
       particleChooser = emaRateMover;
       permutationChooser = emaRateMover;
