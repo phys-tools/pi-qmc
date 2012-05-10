@@ -38,7 +38,7 @@ double EMARateMover::calculateRadiatingProbability(
     cell.pbc(delta1);
     Vec delta2 = re2 - rh2;
     cell.pbc(delta2);
-    double inv2sigma21 = 1. / ( (lambda1 + lambda2) * tau * nStride);
+    double inv2sigma21 = 1. / ( (lambda1 + lambda2) * tau * nStride * 2);
     double t1 = dot(delta1, delta1) * inv2sigma21;
     double t2 = dot(delta2, delta2) * inv2sigma21;
     return exp(-(t1 + t2));
@@ -54,24 +54,24 @@ double EMARateMover::calculateDiagonalProbability(const Beads<NDIM> &movingBeads
     cell.pbc(deltae);
     Vec deltah = rh2 - rh1;
     cell.pbc(deltah);
-    double inv2sigma2e = 0.5 / (lambda1 * tau * nStride);
-    double inv2sigma2h = 0.5 / (lambda2 * tau * nStride);
+    double inv2sigma2e = 0.25 / (lambda1 * tau * nStride);
+    double inv2sigma2h = 0.25 / (lambda2 * tau * nStride);
     double te = dot(deltae, deltae) * inv2sigma2e;
     double th = dot(deltah, deltah) * inv2sigma2h;
     return exp(-(te + th));
 }
 
-void EMARateMover::chooseDiagonalOrRadiating(
+double EMARateMover::getRandomNumber() const {
+    return RandomNumGenerator::getRand();
+}
+
+bool EMARateMover::chooseDiagonalOrRadiating(
         const Beads<NDIM> & movingBeads, int nSlice,
         const SuperCell &cell, int nStride) {
-    earlierTransitions = 0.;
     double pRad = calculateRadiatingProbability(movingBeads, nSlice, cell, nStride);
     double pDiag = calculateDiagonalProbability(movingBeads, nSlice, cell, nStride);
-    if ( RandomNumGenerator::getRand() > pDiag / (pDiag + C * pRad) ) {
-        isSamplingRadiating=true;
-    } else {
-        isSamplingRadiating=false;
-    }
+    double randomNumber = getRandomNumber();
+    return randomNumber > pDiag / (pDiag + C * pRad);
 }
 
 double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
@@ -86,9 +86,10 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     double toldOverTnew=0;
     forwardProb = 0;
 
-    // Make radiating vs. direct choice at highest level.
     if (nStride+1 == nSlice) {
-        chooseDiagonalOrRadiating(movingBeads, nSlice, cell, nStride);
+        earlierTransitions = 0.;
+        isSamplingRadiating =
+                chooseDiagonalOrRadiating(movingBeads, nSlice, cell, nStride);
     } else {
 
         for (int islice=nStride; islice<nSlice-nStride; islice+=2*nStride) {
@@ -96,8 +97,6 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
             if (isSamplingRadiating) { // NEED TO CODE AND TEST THIS
                 int iMoving1 = 0;
                 int iMoving2 = 1;
-                int i1 = index(0);
-                int i2 = index(1);
                 Vec mass1 = 0.5/lambda1;
                 Vec mass2 = 0.5/lambda2;
                 //std::cout << islice-nStride << ", "

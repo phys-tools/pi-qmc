@@ -2,12 +2,10 @@
 
 #include "emarate/EMARateAction.h"
 #include <iostream>
-#include "util/SuperCell.h"
 
 #include "sampler/test/MultiLevelSamplerFake.h"
 #include "Species.h"
 #include "SimulationInfo.h"
-#include "Beads.h"
 #include "EMARateTestBeadPositioner.h"
 
 
@@ -49,7 +47,7 @@ TEST_F(EMARateActionTest, testActionDifferenceForIdenticalPathsIsZero) {
     EMARateAction action(simInfo, species1, species2, coefficient);
     positioner->setIdenticalPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0.0, deltaAction);
+    ASSERT_DOUBLE_EQ(0.0, deltaAction);
 }
 
 TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
@@ -60,7 +58,7 @@ TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
     double oldAction = -log(1 + coefficient * exp(-3.0));
     double newAction = -log(1 + coefficient * exp(+3.0));
     double expect = newAction - oldAction;
-    ASSERT_FLOAT_EQ(expect, deltaAction);
+    ASSERT_DOUBLE_EQ(expect, deltaAction);
 }
 
 TEST_F(EMARateActionTest, testSamplerWithOnlyElectron) {
@@ -69,7 +67,7 @@ TEST_F(EMARateActionTest, testSamplerWithOnlyElectron) {
     EMARateAction action(simInfo, species1, species2, coefficient);
     positioner->setIdenticalPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0.0, deltaAction);
+    ASSERT_DOUBLE_EQ(0.0, deltaAction);
 }
 
 }

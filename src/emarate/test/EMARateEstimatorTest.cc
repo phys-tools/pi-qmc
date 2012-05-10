@@ -76,7 +76,7 @@ TEST_F(EMARateEstimatorTest, testDirectPaths) {
     estimator->evaluate(*paths);
     double value = estimator->calcValue();
     double expect = 1.0;
-    ASSERT_FLOAT_EQ(expect, value);
+    ASSERT_DOUBLE_EQ(expect, value);
 }
 
 TEST_F(EMARateEstimatorTest, testExchangingPaths) {
@@ -85,7 +85,7 @@ TEST_F(EMARateEstimatorTest, testExchangingPaths) {
     estimator->evaluate(*paths);
     double value = estimator->calcValue();
     double expect = 0.0;
-    ASSERT_FLOAT_EQ(expect, value);
+    ASSERT_DOUBLE_EQ(expect, value);
 }
 
 TEST_F(EMARateEstimatorTest, testNearbyDirectPaths) {
@@ -97,7 +97,7 @@ TEST_F(EMARateEstimatorTest, testNearbyDirectPaths) {
     double delta2 = 3.0 * pow(separation, 2);
     double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
     double expect = 1.0 / (1.0 + exp(-actionDifference));
-    ASSERT_FLOAT_EQ(expect, value);
+    ASSERT_DOUBLE_EQ(expect, value);
 }
 
 TEST_F(EMARateEstimatorTest, testLargeCoefficentValue) {
@@ -110,7 +110,7 @@ TEST_F(EMARateEstimatorTest, testLargeCoefficentValue) {
     double delta2 = 3.0 * pow(separation, 2);
     double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
     double expect = 1.0 / (1.0 + coefficient * exp(-actionDifference));
-    ASSERT_FLOAT_EQ(expect, value);
+    ASSERT_DOUBLE_EQ(expect, value);
 }
 
 TEST_F(EMARateEstimatorTest, testSmallCoefficentValue) {
@@ -123,6 +123,6 @@ TEST_F(EMARateEstimatorTest, testSmallCoefficentValue) {
     double delta2 = 3.0 * pow(separation, 2);
     double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
     double expect = 1.0 / (1.0 + coefficient * exp(-actionDifference));
-    ASSERT_FLOAT_EQ(expect, value);
+    ASSERT_DOUBLE_EQ(expect, value);
 }
 }

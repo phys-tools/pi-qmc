@@ -9,7 +9,7 @@ EMARateTestBeadPositioner::EMARateTestBeadPositioner(
 
 void EMARateTestBeadPositioner::setIdenticalPaths(double separation) {
     Beads<NDIM>::Vec electronPosition(0.0);
-    Beads<NDIM>::Vec holePosition(1.0);
+    Beads<NDIM>::Vec holePosition(separation, separation, separation);
     Beads<NDIM> &sectionBeads(sampler.getSectionBeads());
     Beads<NDIM> &movingBeads(sampler.getMovingBeads());
     for(int islice = 0; islice < sampler.nslice; ++islice){
@@ -21,7 +21,7 @@ void EMARateTestBeadPositioner::setIdenticalPaths(double separation) {
 
 void EMARateTestBeadPositioner::setRecombiningPaths(double separation) {
     Beads<NDIM>::Vec beforePosition(0.0, 0.0, 0.0);
-    Beads<NDIM>::Vec afterPosition(1.0, 1.0, 1.0);
+    Beads<NDIM>::Vec afterPosition(separation, separation, separation);
     Beads<NDIM> &sectionBeads(sampler.getSectionBeads());
     Beads<NDIM> &movingBeads(sampler.getMovingBeads());
     for (int islice = 0; islice < sampler.nslice; ++islice) {

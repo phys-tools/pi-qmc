@@ -29,7 +29,7 @@ public:
     virtual double getForwardProb() {return forwardProb;}
     virtual void chooseParticles() {}
 
-    void chooseDiagonalOrRadiating(const Beads<NDIM> &movingBeads,
+    bool chooseDiagonalOrRadiating(const Beads<NDIM> &movingBeads,
             int nSlice, const SuperCell&, int nStride);
     double calculateDiagonalProbability(const Beads<NDIM>& movingBeads,
             int nSlice, const SuperCell&, int nStride);
@@ -43,5 +43,8 @@ private:
     bool isSamplingRadiating;
     double earlierTransitions;
     const double C;
+
+protected:
+    virtual double getRandomNumber() const;
 };
 #endif
