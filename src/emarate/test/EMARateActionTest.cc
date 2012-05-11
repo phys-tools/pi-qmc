@@ -55,8 +55,8 @@ TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
     EMARateAction action(simInfo, species1, species2, coefficient);
     positioner->setRecombiningPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
-    double oldAction = -log(1 + coefficient * exp(-3.0));
-    double newAction = -log(1 + coefficient * exp(+3.0));
+    double oldAction = -log(1 + coefficient) + NDIM/(nslice -1);
+    double newAction = -log(1 + coefficient * exp(+NDIM));
     double expect = newAction - oldAction;
     ASSERT_DOUBLE_EQ(expect, deltaAction);
 }

@@ -7,19 +7,22 @@
 #include "sampler/test/MultiLevelSamplerFake.h"
 #include "EMARateTestBeadPositioner.h"
 #include "Species.h"
+#include <iostream>
 
 namespace {
 
 class EMARateMoverTest: public testing::Test {
 protected:
-
+    typedef DeterministicEMARateMover::Vec Vec;
 
     virtual void SetUp() {
+        deltaTau = 0.4;
         nmoving = 2;
         separation = 1.0;
         setupSimulationInfo();
         coefficient = 10.0;
-        mover = new DeterministicEMARateMover(simInfo.tau, 1.0, 1.0, maxlevel, coefficient);
+        mover = new DeterministicEMARateMover(deltaTau, 1.0, 1.0,
+                maxlevel, coefficient);
         sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
         positioner = new EMARateTestBeadPositioner(*sampler);
     }
@@ -33,7 +36,7 @@ protected:
     void setupSimulationInfo() {
         species1 = new Species("h", 1, 1.0, 0.0, 0, 0);
         species2 = new Species("e", 1, 1.0, 0.0, 0, 0);
-        simInfo.tau = 0.1;
+        simInfo.tau = deltaTau;
         simInfo.nslice = 128;
         simInfo.npart = 2;
         simInfo.speciesList.resize(simInfo.npart);
@@ -51,27 +54,36 @@ protected:
     Species *species1;
     Species *species2;
     double coefficient;
+    double deltaTau;
     static const int npart = 2;
     int nmoving;
-    static const int maxlevel = 5;
-    static const int nslice = 1 << maxlevel;
+    static const int maxlevel = 3;
+    static const int nslice = (1 << maxlevel) + 1;
     SimulationInfo simInfo;
     double separation;
+    static const double PI;
 
     double calculateRadiatingProbability(double delta2) {
         double reducedMass = 0.5;
-        double tau = simInfo.tau * nslice / 2;
+        double tau = deltaTau * nslice / 2;
         double sigma2 = tau / reducedMass;
         return exp(-0.5 * delta2 / sigma2);
     }
 
     double calculateDiagonalProbability(double delta2) {
         double mass = 1.0;
-        double tau = simInfo.tau * nslice;
+        double tau = deltaTau * nslice;
         double sigma2 = tau / mass;
         return exp(-0.5 * delta2 / sigma2);
     }
+
+    bool vectorsAreClose(Vec v1, Vec v2, double threshold) {
+        double delta2 = dot(v1-v2, v1-v2);
+        return delta2 < threshold * threshold;
+    }
 };
+
+const double EMARateMoverTest::PI = 3.141592653589793;
 
 TEST_F(EMARateMoverTest, testParticleChooser) {
     mover->chooseParticles();
@@ -183,4 +195,76 @@ TEST_F(EMARateMoverTest, testRadiatingDecisionForIdenticalPaths) {
             nslice, sampler->getSuperCell(), nslice);
     ASSERT_TRUE(isRadiating);
 }
+
+TEST_F(EMARateMoverTest, testSampleRadiatingAtHighestLevel) {
+    positioner->setIdenticalPaths(separation);
+    mover->nextGaussianRandomNumber = Vec(0.3, 0.3, 0.3);
+    mover->nextGaussianRandomNumber = Vec(0.0, 0.0, 0.0);
+
+    Beads<NDIM> &movingBeads = sampler->getMovingBeads();
+    mover->sampleRadiating(nslice/2, nslice, movingBeads);
+    Vec radiatingPointBefore = movingBeads(0, nslice/2);
+    Vec radiatingPointAfter = movingBeads(1, nslice/2);
+    Vec holePosition = movingBeads(0,0);
+    Vec electronPosition = movingBeads(1,0);
+    double sigma2 = (nslice/2) * deltaTau / (1.0 + 1.0);
+    Vec expect = 0.5 * (holePosition + electronPosition)
+            + mover->nextGaussianRandomNumber * sqrt(sigma2);
+    ASSERT_TRUE(vectorsAreClose(expect, radiatingPointBefore, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expect, radiatingPointAfter, 1e-12));
+}
+
+TEST_F(EMARateMoverTest, testSampleRadiatingAtLowestLevel) {
+    positioner->setIdenticalPaths(separation);
+    mover->nextGaussianRandomNumber = Vec(0.0, 0.0, 0.0);
+    Beads<NDIM> &movingBeads = sampler->getMovingBeads();
+    int nstride = nslice/2;
+    while (nstride > 0) {
+        mover->sampleRadiating(nstride, nslice, movingBeads);
+        nstride >>= 1;
+    }
+    Vec radiatingPointBefore = movingBeads(0, nslice/2);
+    Vec radiatingPointAfter = movingBeads(1, nslice/2);
+    Vec holePosition = movingBeads(0,0);
+    Vec electronPosition = movingBeads(1,0);
+    Vec expect = 0.5 * (holePosition + electronPosition);
+//    std::cout << "expect =" << expect << std::endl;
+//    std::cout << "before = " << radiatingPointBefore << std::endl;
+//    std::cout << "after = " << radiatingPointAfter << std::endl;
+//    std::cout << "hole =" << holePosition << std::endl;
+//    std::cout << "electron =" << electronPosition << std::endl;
+//
+    std::cout << movingBeads << std::endl;
+
+    ASSERT_TRUE(vectorsAreClose(expect, radiatingPointBefore, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expect, radiatingPointAfter, 1e-12));
+}
+
+TEST_F(EMARateMoverTest, testTransitionProbabilityForIdenticalPaths) {
+    positioner->setIdenticalPaths(separation);
+    Beads<NDIM> &sectionBeads = sampler->getSectionBeads();
+    Beads<NDIM> &movingBeads = sampler->getMovingBeads();
+    double probability = mover->calculateTransitionProbability(nslice/2,
+            movingBeads, sectionBeads, nslice, sampler->getSuperCell());
+
+//    double directProbability = 1.0;
+//    double
+//
+//    double tau = (nslice / 2) * deltaTau;
+//    Vec holePosition = movingBeads(0,0);
+//    Vec electronPosition = movingBeads(1,0);
+//    Vec target = 0.5 * (electronPosition + holePosition);
+//    Vec deltaBefore = movingBeads(0, nslice/2) - target;
+//    double sigma2 = tau / (1.0 + 1.0);
+//    Vec deltaAfter = movingBeads(1, nslice/2) - target;
+//    double radiatingProbability =
+//            exp(-0.5 * dot(deltaBefore, deltaBefore) / sigma2) *
+//            exp(-0.5 * dot(deltaAfter, deltaAfter) / sigma2);
+//
+//    double expect = (directProbability + coefficient * radiatingProbability)
+//            / (1.0 + coefficient);
+    double expect = 0.0;
+    ASSERT_DOUBLE_EQ(expect, probability);
+}
+
 }

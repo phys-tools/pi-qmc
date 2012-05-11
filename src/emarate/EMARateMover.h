@@ -35,6 +35,15 @@ public:
             int nSlice, const SuperCell&, int nStride);
     double calculateRadiatingProbability(const Beads<NDIM> &movingBeads,
             int nSlice, const SuperCell&, int nStride);
+    void moveBeads(int nStride, int nSlice, Beads<NDIM> &movingBeads,
+            const SuperCell &cell);
+    void sampleRadiating(int nStride, int nSlice, Beads<NDIM> & movingBeads);
+    void sampleDiagonal(int nStride, int nSlice,
+            Beads<NDIM> &movingBeads, const SuperCell &cell);
+    double calculateTransitionProbability(int nStride,
+            const Beads<NDIM>& movingBeads, const Beads<NDIM> &sectionBeads,
+            int nSlice, const SuperCell &cell) const;
+
 private:
     double tau;
     double lambda1;
@@ -46,5 +55,6 @@ private:
 
 protected:
     virtual double getRandomNumber() const;
+    virtual void makeGaussianRandomNumbers(blitz::Array<Vec,1> &gaussRand);
 };
 #endif

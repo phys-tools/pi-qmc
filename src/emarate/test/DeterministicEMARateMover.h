@@ -15,6 +15,11 @@ public:
         return nextRandomNumber;
     }
 
+    virtual void makeGaussianRandomNumbers(blitz::Array<Vec,1> &gaussRand) {
+        gaussRand = nextGaussianRandomNumber;
+    }
+
     double nextRandomNumber;
+    Vec nextGaussianRandomNumber;
 };
 #endif

@@ -25,8 +25,11 @@ void EMARateTestBeadPositioner::setRecombiningPaths(double separation) {
     Beads<NDIM> &sectionBeads(sampler.getSectionBeads());
     Beads<NDIM> &movingBeads(sampler.getMovingBeads());
     for (int islice = 0; islice < sampler.nslice; ++islice) {
-        sectionBeads(0,islice) = beforePosition;
-        sectionBeads(1,islice) = afterPosition;
+        double x = double(islice) / (sampler.nslice - 1);
+        Beads<NDIM>::Vec interpolation =
+                (1.0 - x) * beforePosition + x * afterPosition;
+        sectionBeads(0,islice) = interpolation;
+        sectionBeads(1,islice) = interpolation;
         if (islice < sampler.nslice/2) {
             movingBeads(0,islice) = beforePosition;
             movingBeads(1,islice) = beforePosition;
