@@ -65,14 +65,14 @@ protected:
 
     double calculateRadiatingProbability(double delta2) {
         double reducedMass = 0.5;
-        double tau = deltaTau * nslice / 2;
+        double tau = deltaTau * (nslice - 1) / 2;
         double sigma2 = tau / reducedMass;
         return exp(-0.5 * delta2 / sigma2);
     }
 
     double calculateDiagonalProbability(double delta2) {
         double mass = 1.0;
-        double tau = deltaTau * nslice;
+        double tau = deltaTau * (nslice - 1);
         double sigma2 = tau / mass;
         return exp(-0.5 * delta2 / sigma2);
     }
@@ -102,7 +102,7 @@ TEST_F(EMARateMoverTest, testRadiatingProbabilityForIdenticalPaths) {
     positioner->setIdenticalPaths(separation);
     double probability =
             mover->calculateRadiatingProbability(sampler->getMovingBeads(),
-                    nslice, sampler->getSuperCell(), nslice);
+                    nslice, sampler->getSuperCell());
     double delta2 = 3 * separation * separation;
     double expect = pow(calculateRadiatingProbability(delta2), 2);
     ASSERT_DOUBLE_EQ(expect, probability);
@@ -112,7 +112,7 @@ TEST_F(EMARateMoverTest, testRadiatingProbabilityForRecombiningPaths) {
     positioner->setRecombiningPaths(separation);
     double probability =
             mover->calculateRadiatingProbability(sampler->getMovingBeads(),
-                    nslice, sampler->getSuperCell(), nslice);
+                    nslice, sampler->getSuperCell());
     double expect = 1.0;
     ASSERT_DOUBLE_EQ(expect, probability);
 }
@@ -121,7 +121,7 @@ TEST_F(EMARateMoverTest, testDiagonalProbabilityForIdenticalPaths) {
     positioner->setIdenticalPaths(separation);
     double probability =
             mover->calculateDiagonalProbability(sampler->getMovingBeads(),
-                    nslice, sampler->getSuperCell(), nslice);
+                    nslice, sampler->getSuperCell());
     double expect = 1.0;
     ASSERT_DOUBLE_EQ(expect, probability);
 }
@@ -130,7 +130,7 @@ TEST_F(EMARateMoverTest, testDiagonalProbabilityForRecombiningPaths) {
     positioner->setRecombiningPaths(separation);
     double probability =
             mover->calculateDiagonalProbability(sampler->getMovingBeads(),
-                    nslice, sampler->getSuperCell(), nslice);
+                    nslice, sampler->getSuperCell());
     double delta2 = 3 * separation * separation;
     double expect = pow(calculateDiagonalProbability(delta2), 2);
     ASSERT_DOUBLE_EQ(expect, probability);
@@ -147,7 +147,7 @@ TEST_F(EMARateMoverTest, testDiagonalDecisionForRecombiningPaths) {
     mover->nextRandomNumber = threshhold - 1e-6;
     bool isRadiating = mover->chooseDiagonalOrRadiating(
             sampler->getMovingBeads(),
-            nslice, sampler->getSuperCell(), nslice);
+            nslice, sampler->getSuperCell());
     ASSERT_FALSE(isRadiating);
 }
 
@@ -161,8 +161,7 @@ TEST_F(EMARateMoverTest, testRadiatinglDecisionForRecombiningPaths) {
             / (diagonalProbability + coefficient * radiatingProbability);
     mover->nextRandomNumber = threshhold + 1e-6;
     bool isRadiating = mover->chooseDiagonalOrRadiating(
-            sampler->getMovingBeads(),
-            nslice, sampler->getSuperCell(), nslice);
+            sampler->getMovingBeads(), nslice, sampler->getSuperCell());
     ASSERT_TRUE(isRadiating);
 }
 
@@ -176,8 +175,7 @@ TEST_F(EMARateMoverTest, testDiagonalDecisionForIdenticalPaths) {
             / (diagonalProbability + coefficient * radiatingProbability);
     mover->nextRandomNumber = threshhold - 1e-6;
     bool isRadiating = mover->chooseDiagonalOrRadiating(
-            sampler->getMovingBeads(),
-            nslice, sampler->getSuperCell(), nslice);
+            sampler->getMovingBeads(), nslice, sampler->getSuperCell());
     ASSERT_FALSE(isRadiating);
 }
 
@@ -191,8 +189,7 @@ TEST_F(EMARateMoverTest, testRadiatingDecisionForIdenticalPaths) {
             / (diagonalProbability + coefficient * radiatingProbability);
     mover->nextRandomNumber = threshhold + 1e-6;
     bool isRadiating = mover->chooseDiagonalOrRadiating(
-            sampler->getMovingBeads(),
-            nslice, sampler->getSuperCell(), nslice);
+            sampler->getMovingBeads(), nslice, sampler->getSuperCell());
     ASSERT_TRUE(isRadiating);
 }
 
@@ -223,21 +220,32 @@ TEST_F(EMARateMoverTest, testSampleRadiatingAtLowestLevel) {
         mover->sampleRadiating(nstride, nslice, movingBeads);
         nstride >>= 1;
     }
-    Vec radiatingPointBefore = movingBeads(0, nslice/2);
-    Vec radiatingPointAfter = movingBeads(1, nslice/2);
+    Vec firstPointAfterHole = movingBeads(0, 1);
+    Vec firstPointBeforeHole = movingBeads(0, nslice - 2);
+    Vec firstPointAfterElectron = movingBeads(1, 1);
+    Vec firstPointBeforeElectron = movingBeads(1, nslice - 2);
+    Vec thirdPointAfterHole = movingBeads(0, 3);
+    Vec thirdPointBeforeHole = movingBeads(0, nslice - 4);
+    Vec thirdPointAfterElectron = movingBeads(1, 3);
+    Vec thirdPointBeforeElectron = movingBeads(1, nslice - 4);
+
     Vec holePosition = movingBeads(0,0);
     Vec electronPosition = movingBeads(1,0);
-    Vec expect = 0.5 * (holePosition + electronPosition);
-//    std::cout << "expect =" << expect << std::endl;
-//    std::cout << "before = " << radiatingPointBefore << std::endl;
-//    std::cout << "after = " << radiatingPointAfter << std::endl;
-//    std::cout << "hole =" << holePosition << std::endl;
-//    std::cout << "electron =" << electronPosition << std::endl;
-//
-    std::cout << movingBeads << std::endl;
+    double x = 1 / (nslice - 1.0);
+    Vec expectFirstHole = (1.0 - x) * holePosition + x * electronPosition;
+    Vec expectFirstElectron = x * holePosition + (1.0 - x) * electronPosition;
+    x = 3 / (nslice - 1.0);
+    Vec expectThirdHole = (1.0 - x) * holePosition + x * electronPosition;
+    Vec expectThirdElectron = x * holePosition + (1.0 - x) * electronPosition;
 
-    ASSERT_TRUE(vectorsAreClose(expect, radiatingPointBefore, 1e-12));
-    ASSERT_TRUE(vectorsAreClose(expect, radiatingPointAfter, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectFirstHole, firstPointAfterHole, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectFirstHole, firstPointBeforeHole, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectFirstElectron, firstPointAfterElectron, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectFirstElectron, firstPointBeforeElectron, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectThirdHole, thirdPointAfterHole, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectThirdHole, thirdPointBeforeHole, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectThirdElectron, thirdPointAfterElectron, 1e-12));
+    ASSERT_TRUE(vectorsAreClose(expectThirdElectron, thirdPointBeforeElectron, 1e-12));
 }
 
 TEST_F(EMARateMoverTest, testTransitionProbabilityForIdenticalPaths) {
@@ -246,25 +254,21 @@ TEST_F(EMARateMoverTest, testTransitionProbabilityForIdenticalPaths) {
     Beads<NDIM> &movingBeads = sampler->getMovingBeads();
     double probability = mover->calculateTransitionProbability(nslice/2,
             movingBeads, sectionBeads, nslice, sampler->getSuperCell());
-
-//    double directProbability = 1.0;
-//    double
-//
-//    double tau = (nslice / 2) * deltaTau;
-//    Vec holePosition = movingBeads(0,0);
-//    Vec electronPosition = movingBeads(1,0);
-//    Vec target = 0.5 * (electronPosition + holePosition);
-//    Vec deltaBefore = movingBeads(0, nslice/2) - target;
-//    double sigma2 = tau / (1.0 + 1.0);
-//    Vec deltaAfter = movingBeads(1, nslice/2) - target;
-//    double radiatingProbability =
-//            exp(-0.5 * dot(deltaBefore, deltaBefore) / sigma2) *
-//            exp(-0.5 * dot(deltaAfter, deltaAfter) / sigma2);
-//
-//    double expect = (directProbability + coefficient * radiatingProbability)
-//            / (1.0 + coefficient);
     double expect = 0.0;
     ASSERT_DOUBLE_EQ(expect, probability);
 }
 
+//TEST_F(EMARateMoverTest, testTransitionProbabilityForRecombiningPaths) {
+//    positioner->setRecombiningPaths(separation);
+//    Beads<NDIM> &sectionBeads = sampler->getSectionBeads();
+//    Beads<NDIM> &movingBeads = sampler->getMovingBeads();
+//    double probability = mover->calculateTransitionProbability(nslice/2,
+//            movingBeads, sectionBeads, nslice, sampler->getSuperCell());
+//    double reverseProbability = mover->calculateDiagonalProbability(movingBeads,
+//            nslice, sampler->getSuperCell());
+//    double forwardProbability = mover->calculateRadiatingProbability(
+//            movingBeads, nslice, sampler->getSuperCell());
+//    double expect = log(forwardProbability / reverseProbability);
+//    ASSERT_DOUBLE_EQ(expect, probability);
+//}
 }

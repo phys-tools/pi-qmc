@@ -30,11 +30,11 @@ public:
     virtual void chooseParticles() {}
 
     bool chooseDiagonalOrRadiating(const Beads<NDIM> &movingBeads,
-            int nSlice, const SuperCell&, int nStride);
+            int nSlice, const SuperCell&);
     double calculateDiagonalProbability(const Beads<NDIM>& movingBeads,
-            int nSlice, const SuperCell&, int nStride);
+            int nSlice, const SuperCell&);
     double calculateRadiatingProbability(const Beads<NDIM> &movingBeads,
-            int nSlice, const SuperCell&, int nStride);
+            int nSlice, const SuperCell&);
     void moveBeads(int nStride, int nSlice, Beads<NDIM> &movingBeads,
             const SuperCell &cell);
     void sampleRadiating(int nStride, int nSlice, Beads<NDIM> & movingBeads);

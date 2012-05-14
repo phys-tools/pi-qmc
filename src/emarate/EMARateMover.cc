@@ -29,13 +29,13 @@ EMARateMover::~EMARateMover() {
 }
 
 double EMARateMover::calculateTransitionProbability(int nStride,
-        const Beads<NDIM> &movingBeads, const Beads<NDIM> &sectionBeads, int nSlice,
-        const SuperCell& cell) const {
+        const Beads<NDIM> &movingBeads, const Beads<NDIM> &sectionBeads,
+        int nSlice, const SuperCell& cell) const {
     // Calculate 1/transition probability for move
-    double oldDiagAction = 0.;
-    double oldRadAction = 0.;
-    double newDiagAction = 0.;
-    double newRadAction = 0.;
+    double oldDiagAction = 0.0;
+    double oldRadAction = 0.0;
+    double newDiagAction = 0.0;
+    double newRadAction = 0.0;
     Vec mass1 = 0.5 / lambda1;
     Vec mass2 = 0.5 / lambda2;
     const Vec inv2Sigma21 = 0.5 * mass1 / (tau * nStride);
@@ -57,63 +57,63 @@ double EMARateMover::calculateTransitionProbability(int nStride,
         Vec reRad = re;
         Vec rhRad = (islice == nSlice/2) ? re : rh;
 
-        Vec delta=re-rePrev; cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-            newDiagAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+        Vec delta = re - rePrev; cell.pbc(delta);
+        for (int idim = 0; idim < NDIM; ++idim) {
+            newDiagAction += delta[idim] * delta[idim] * inv2Sigma21[idim];
         }
-        delta=rh-rhPrev; cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-            newDiagAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+        delta = rh - rhPrev; cell.pbc(delta);
+        for (int idim = 0; idim < NDIM; ++idim) {
+            newDiagAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
-        delta=reRad-reRadPrev; cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-            newRadAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+        delta = reRad - reRadPrev; cell.pbc(delta);
+        for (int idim = 0; idim < NDIM; ++idim) {
+            newRadAction += delta[idim] * delta[idim] * inv2Sigma21[idim];
         }
-        delta=rhRad-rhRadPrev; cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-            newRadAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+        delta = rhRad - rhRadPrev; cell.pbc(delta);
+        for (int idim = 0; idim < NDIM; ++idim) {
+            newRadAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
         // Calculate action for old beads.
         Vec reOld = sectionBeads(0,islice);
         Vec rhOld = sectionBeads(1,islice);
 
-        Vec reRadOld = re;
-        Vec rhRadOld = (islice==nSlice/2)?re:rh;
+        Vec reRadOld = reOld;
+        Vec rhRadOld = (islice == nSlice / 2) ? reOld : rhOld;
 
-        delta=reOld-rePrevOld; cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-            oldDiagAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+        delta = reOld - rePrevOld; cell.pbc(delta);
+        for (int idim = 0; idim < NDIM; ++idim) {
+            oldDiagAction += delta[idim] * delta[idim] * inv2Sigma21[idim];
         }
         delta=rhOld-rhPrevOld; cell.pbc(delta);
-        for (int idim=0;idim<NDIM;++idim) {
-            oldDiagAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+        for (int idim = 0; idim < NDIM; ++idim) {
+            oldDiagAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
         delta=reRadOld-reRadPrevOld; cell.pbc(delta);
         for (int idim=0;idim<NDIM;++idim) {
-            oldRadAction+=delta[idim]*delta[idim]*inv2Sigma21[idim];
+            oldRadAction += delta[idim] * delta[idim] * inv2Sigma21[idim];
         }
-        delta=rhRadOld-rhRadPrevOld; cell.pbc(delta);
+        delta = rhRadOld - rhRadPrevOld; cell.pbc(delta);
         for (int idim=0;idim<NDIM;++idim) {
-            oldRadAction+=delta[idim]*delta[idim]*inv2Sigma22[idim];
+            oldRadAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
 
         // Set the previous positions.
         rePrev = re;
         rhPrev = rh;
-        reRadPrev = (islice==nSlice/2)?rhPrev:rePrev;
+        reRadPrev = (islice == nSlice / 2) ? rhPrev : rePrev;
         rhRadPrev = rhPrev;
         rePrevOld = reOld;
         rhPrevOld = rhOld;
-        reRadPrevOld = (islice==nSlice/2)?rhPrevOld:rePrevOld;
+        reRadPrevOld = (islice == nSlice / 2) ? rhPrevOld : rePrevOld;
         rhRadPrevOld = rhPrevOld;
     }
     double oldAction = oldDiagAction - log(1 + C * exp(-oldRadAction + oldDiagAction));
     double newAction = newDiagAction - log(1 + C * exp(-newRadAction + newDiagAction));
-    if(C > 0.){
-        if(log(C) - oldRadAction + newDiagAction > 40){
+    if (C > 0.0) {
+        if (log(C) - oldRadAction + newDiagAction > 40) {
             oldAction = -log(C) + oldRadAction;
         }
-        if(log(C) - newRadAction + newDiagAction > 40){
+        if (log(C) - newRadAction + newDiagAction > 40) {
             newAction = -log(C) + newRadAction;
         }
     }
@@ -133,7 +133,7 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
     if (nStride+1 == nSlice) {
         earlierTransitions = 0.;
         isSamplingRadiating =
-                chooseDiagonalOrRadiating(movingBeads, nSlice, cell, nStride);
+                chooseDiagonalOrRadiating(movingBeads, nSlice, cell);
     } else {
         moveBeads(nStride, nSlice, movingBeads, cell);
 
@@ -148,8 +148,7 @@ double EMARateMover::makeMove(MultiLevelSampler& sampler, const int level) {
 
 
 double EMARateMover::calculateRadiatingProbability(
-        const Beads<NDIM> & movingBeads,
-        int nSlice, const SuperCell &cell, int nStride) {
+        const Beads<NDIM> & movingBeads, int nSlice, const SuperCell &cell) {
     Vec re1 = movingBeads(0, 0);
     Vec re2 = movingBeads(0, nSlice - 1);
     Vec rh1 = movingBeads(1, 0);
@@ -158,6 +157,7 @@ double EMARateMover::calculateRadiatingProbability(
     cell.pbc(delta1);
     Vec delta2 = re2 - rh2;
     cell.pbc(delta2);
+    int nStride = nSlice - 1;
     double inv2sigma21 = 1. / ( (lambda1 + lambda2) * tau * nStride * 2);
     double t1 = dot(delta1, delta1) * inv2sigma21;
     double t2 = dot(delta2, delta2) * inv2sigma21;
@@ -165,7 +165,7 @@ double EMARateMover::calculateRadiatingProbability(
 }
 
 double EMARateMover::calculateDiagonalProbability(const Beads<NDIM> &movingBeads,
-        int nSlice, const SuperCell &cell, int nStride) {
+        int nSlice, const SuperCell &cell) {
     Vec re1 = movingBeads(0, 0);
     Vec re2 = movingBeads(0, nSlice - 1);
     Vec rh1 = movingBeads(1, 0);
@@ -174,6 +174,7 @@ double EMARateMover::calculateDiagonalProbability(const Beads<NDIM> &movingBeads
     cell.pbc(deltae);
     Vec deltah = rh2 - rh1;
     cell.pbc(deltah);
+    int nStride = nSlice - 1;
     double inv2sigma2e = 0.25 / (lambda1 * tau * nStride);
     double inv2sigma2h = 0.25 / (lambda2 * tau * nStride);
     double te = dot(deltae, deltae) * inv2sigma2e;
@@ -183,9 +184,9 @@ double EMARateMover::calculateDiagonalProbability(const Beads<NDIM> &movingBeads
 
 bool EMARateMover::chooseDiagonalOrRadiating(
         const Beads<NDIM> & movingBeads, int nSlice,
-        const SuperCell &cell, int nStride) {
-    double pRad = calculateRadiatingProbability(movingBeads, nSlice, cell, nStride);
-    double pDiag = calculateDiagonalProbability(movingBeads, nSlice, cell, nStride);
+        const SuperCell &cell) {
+    double pRad = calculateRadiatingProbability(movingBeads, nSlice, cell);
+    double pDiag = calculateDiagonalProbability(movingBeads, nSlice, cell);
     double randomNumber = getRandomNumber();
     return randomNumber > pDiag / (pDiag + C * pRad);
 }
@@ -207,12 +208,11 @@ void EMARateMover::sampleRadiating(int nStride, int nSlice,
         Beads<NDIM> &movingBeads) {
     for (int iSlice = nStride; iSlice < nSlice; iSlice += 2 * nStride) {
         blitz::Array<Vec,1> gaussRand(2);
-        makeGaussianRandomNumbers(gaussRand);
         Vec mass1 = 0.5 / lambda1;
         Vec mass2 = 0.5 / lambda2;
         Vec prev1 = (iSlice - nStride <= nSlice / 2)
                     ? movingBeads(0, iSlice - nStride)
-                            : movingBeads(0, nSlice  - 1 - (iSlice - nStride));
+                            : movingBeads(1, nSlice  - 1 - (iSlice - nStride));
         Vec prev2 = (iSlice - nStride < nSlice / 2)
                     ? movingBeads(0, nSlice - 1 - (iSlice - nStride))
                             : movingBeads(1, iSlice - nStride);
@@ -232,32 +232,30 @@ void EMARateMover::sampleRadiating(int nStride, int nSlice,
             midpoint1 = 0.5 * (prev1 + next1);
             midpoint2 = 0.5 * (prev2 + next2);
         }
-        Vec sigma1, sigma2;
+        Vec sigma;
         if (iSlice - nStride < nSlice / 2) {
             if (iSlice + nStride > nSlice / 2) {
-                sigma1 = sqrt(0.5 * (lambda1 + lambda2) * tau * nStride);
-                sigma2 = sigma1;
+                sigma = sqrt(0.5 * (lambda1 + lambda2) * tau * nStride);
             } else {
-                sigma1 = sqrt(lambda1 * tau * nStride);
-                sigma2 = sqrt(lambda1 * tau * nStride);
+                sigma = sqrt(lambda1 * tau * nStride);
             }
         }
         else{
-            sigma1 = sqrt(lambda2 * tau * nStride);
-            sigma2 = sqrt(lambda2 * tau * nStride);
+            sigma = sqrt(lambda2 * tau * nStride);
         }
-        Vec delta1 = gaussRand(0) * sigma1;
-        Vec delta2 = gaussRand(1) * sigma2;
-        if(iSlice < nSlice / 2){
+        makeGaussianRandomNumbers(gaussRand);
+        Vec delta1 = gaussRand(0) * sigma;
+        Vec delta2 = gaussRand(1) * sigma;
+        if (iSlice < nSlice / 2){
             movingBeads(0, iSlice) = midpoint1 + delta1;
-            movingBeads(1, nSlice - 1 - iSlice) = midpoint2 + delta2;
-        }else{
-            if(iSlice == nSlice / 2){
+            movingBeads(0, nSlice - 1 - iSlice) = midpoint2 + delta2;
+        } else {
+            if (iSlice == nSlice / 2){
                 movingBeads(0, iSlice) = midpoint1 + delta1;
                 movingBeads(1, iSlice) = midpoint2 + delta2;
-            }else{
+            } else {
+                movingBeads(1, iSlice) = midpoint2 + delta2;
                 movingBeads(1, nSlice - 1 - iSlice) = midpoint1 + delta1;
-                movingBeads(0, iSlice) = midpoint2 + delta2;
             }
         }
     }
@@ -266,21 +264,20 @@ void EMARateMover::sampleRadiating(int nStride, int nSlice,
 void EMARateMover::sampleDiagonal(int nStride, int nSlice,
         Beads<NDIM> &movingBeads, const SuperCell & cell) {
     for (int iSlice = nStride; iSlice < nSlice; iSlice += 2 * nStride) {
-    blitz::Array<Vec,1> gaussRand(2);
-    makeGaussianRandomNumbers(gaussRand);
-    for(int iMoving = 0;iMoving < 2;++iMoving){
-        double lambda = (iMoving == 0) ? lambda1 : lambda2;
-        double sigma = sqrt(lambda * tau * nStride);
-        //double inv2Sigma2 = 0.5/(sigma*sigma);
-        // Calculate the new position.
-        Vec midpoint = movingBeads.delta(iMoving, iSlice + nStride, -2 * nStride);
-        cell.pbc(midpoint) *= 0.5;
-        midpoint += movingBeads(iMoving, iSlice - nStride);
-        Vec delta = gaussRand(iMoving);
-        delta *= sigma;
-        movingBeads(iMoving, iSlice) = midpoint + delta;
-        cell.pbc(movingBeads(iMoving, iSlice));
-    }
+        blitz::Array<Vec,1> gaussRand(2);
+        makeGaussianRandomNumbers(gaussRand);
+        for(int iMoving = 0;iMoving < 2;++iMoving){
+            double lambda = (iMoving == 0) ? lambda1 : lambda2;
+            double sigma = sqrt(lambda * tau * nStride);
+            // Calculate the new position.
+            Vec midpoint = movingBeads.delta(iMoving, iSlice + nStride, -2 * nStride);
+            cell.pbc(midpoint) *= 0.5;
+            midpoint += movingBeads(iMoving, iSlice - nStride);
+            Vec delta = gaussRand(iMoving);
+            delta *= sigma;
+            movingBeads(iMoving, iSlice) = midpoint + delta;
+            cell.pbc(movingBeads(iMoving, iSlice));
+        }
     }
 }
 
