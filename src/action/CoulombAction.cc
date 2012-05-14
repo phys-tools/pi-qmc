@@ -80,17 +80,17 @@ CoulombAction::CoulombAction(const double epsilon,
           pairActionArray.push_back(
             // Hack to handle ion-ion interaction properly.
             new ImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-                  nimage, rmin, rmax, ngpts,(i==j)?exLevel:-1));
+                  nimage, rmin, rmax, ngpts,(i==j)?exLevel-1:-1));
         } else {
 	  if (nImages > 1 && ewaldType=="tradEwald"){
 	    pairActionArray.push_back(
               new EwaldImagePairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-                    rmin, rmax, ngpts, nImages, (i==j)?exLevel:-1));
+                    rmin, rmax, ngpts, nImages, (i==j)?exLevel-1:-1));
 	  } else {
 	    pairActionArray.push_back(
               // Hack to handle ion-ion interaction properly.
             new PairAction(s1,s2, *this, simInfo, (mu>500)?0:norder,
-                           rmin, rmax, ngpts, false, (i==j)?exLevel:-1));
+                           rmin, rmax, ngpts, false, (i==j)?exLevel-1:-1));
 	  }
         }
         if (dumpFiles) (*(pairActionArray.end()-1))->write("",0);
