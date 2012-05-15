@@ -84,11 +84,11 @@ double EMARateMover::calculateTransitionProbability(int nStride,
         for (int idim = 0; idim < NDIM; ++idim) {
             oldDiagAction += delta[idim] * delta[idim] * inv2Sigma21[idim];
         }
-        delta=rhOld-rhPrevOld; cell.pbc(delta);
+        delta = rhOld - rhPrevOld; cell.pbc(delta);
         for (int idim = 0; idim < NDIM; ++idim) {
             oldDiagAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
-        delta=reRadOld-reRadPrevOld; cell.pbc(delta);
+        delta = reRadOld - reRadPrevOld; cell.pbc(delta);
         for (int idim=0;idim<NDIM;++idim) {
             oldRadAction += delta[idim] * delta[idim] * inv2Sigma21[idim];
         }

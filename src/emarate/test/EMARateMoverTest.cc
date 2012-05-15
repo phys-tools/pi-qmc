@@ -20,7 +20,7 @@ protected:
         nmoving = 2;
         separation = 1.0;
         setupSimulationInfo();
-        coefficient = 10.0;
+        coefficient = 1.0;
         mover = new DeterministicEMARateMover(deltaTau, 1.0, 1.0,
                 maxlevel, coefficient);
         sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
@@ -258,17 +258,19 @@ TEST_F(EMARateMoverTest, testTransitionProbabilityForIdenticalPaths) {
     ASSERT_DOUBLE_EQ(expect, probability);
 }
 
-//TEST_F(EMARateMoverTest, testTransitionProbabilityForRecombiningPaths) {
-//    positioner->setRecombiningPaths(separation);
-//    Beads<NDIM> &sectionBeads = sampler->getSectionBeads();
-//    Beads<NDIM> &movingBeads = sampler->getMovingBeads();
-//    double probability = mover->calculateTransitionProbability(nslice/2,
-//            movingBeads, sectionBeads, nslice, sampler->getSuperCell());
-//    double reverseProbability = mover->calculateDiagonalProbability(movingBeads,
-//            nslice, sampler->getSuperCell());
-//    double forwardProbability = mover->calculateRadiatingProbability(
-//            movingBeads, nslice, sampler->getSuperCell());
-//    double expect = log(forwardProbability / reverseProbability);
-//    ASSERT_DOUBLE_EQ(expect, probability);
-//}
+TEST_F(EMARateMoverTest, testTransitionProbabilityForRecombiningPaths) {
+    positioner->setRecombiningPaths(separation);
+    Beads<NDIM> &sectionBeads = sampler->getSectionBeads();
+    Beads<NDIM> &movingBeads = sampler->getMovingBeads();
+    double probability = mover->calculateTransitionProbability(1,
+            movingBeads, sectionBeads, nslice, sampler->getSuperCell());
+
+    double delta2 = NDIM * separation * separation;
+    double reverseProbability = (1.0 + coefficient)
+            * pow(calculateDiagonalProbability(delta2), 2.0);
+    double forwardDiagonal = pow(calculateDiagonalProbability(delta2), 2.0 * (nslice-1));
+    double forwardProbability = forwardDiagonal + coefficient;
+    double expect = -log(forwardProbability / reverseProbability);
+    ASSERT_DOUBLE_EQ(expect, probability);
+}
 }
