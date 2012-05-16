@@ -107,14 +107,16 @@ double EMARateMover::calculateTransitionProbability(int nStride,
         reRadPrevOld = (islice == nSlice / 2) ? rhPrevOld : rePrevOld;
         rhRadPrevOld = rhPrevOld;
     }
-    double oldAction = oldDiagAction - log(1 + C * exp(-oldRadAction + oldDiagAction));
-    double newAction = newDiagAction - log(1 + C * exp(-newRadAction + newDiagAction));
+    double oldAction =
+            oldDiagAction - log(1 + C * exp(-oldRadAction + oldDiagAction));
+    double newAction =
+            newDiagAction - log(1 + C * exp(-newRadAction + newDiagAction));
     if (C > 0.0) {
-        if (log(C) - oldRadAction + newDiagAction > 40) {
-            oldAction = -log(C) + oldRadAction;
+        if (log(C) - oldRadAction + oldDiagAction > 140) {
+            oldAction = oldRadAction - log(C);
         }
-        if (log(C) - newRadAction + newDiagAction > 40) {
-            newAction = -log(C) + newRadAction;
+        if (log(C) - newRadAction + newDiagAction > 140) {
+            newAction =  newRadAction - log(C);
         }
     }
 
@@ -164,8 +166,8 @@ double EMARateMover::calculateRadiatingProbability(
     return exp(-(t1 + t2));
 }
 
-double EMARateMover::calculateDiagonalProbability(const Beads<NDIM> &movingBeads,
-        int nSlice, const SuperCell &cell) {
+double EMARateMover::calculateDiagonalProbability(
+        const Beads<NDIM> &movingBeads, int nSlice, const SuperCell &cell) {
     Vec re1 = movingBeads(0, 0);
     Vec re2 = movingBeads(0, nSlice - 1);
     Vec rh1 = movingBeads(1, 0);
