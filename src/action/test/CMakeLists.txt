@@ -31,7 +31,21 @@ if(GTEST_FOUND)
 
     add_executable(actionTests
         PrimSHOActionTest.cc
-        ../PrimSHOAction.cc
+       ../PrimSHOAction.cc
+        GaussianActionTest.cc
+        ../GaussianAction.cc
+        SHOActionTest.cc
+        ../SHOAction.cc
+        GrapheneActionTest.cc
+        ../GrapheneAction.cc
+        DotGeomActionTest.cc
+        ../DotGeomAction.cc
+        GateActionTest.cc
+        ../GateAction.cc
+        PrimAnisSHOActionTest.cc
+        ../PrimAnisSHOAction.cc
+        GaussianDotActionTest.cc
+        ../GaussianDotAction.cc
         ${SRC_DIR}/Species.cc
         ${SRC_DIR}/SimulationInfo.cc
         ${SRC_DIR}/util/SuperCell.cc
