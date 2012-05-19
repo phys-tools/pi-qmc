@@ -1,6 +1,7 @@
 #ifndef __PeriodicGaussian_h_
 #define __PeriodicGaussian_h_
 #include <cstdlib>
+#include <cmath>
 
 /** Function object for a periodic Gaussian.
  * Call evalauate first, the use the getter methods for the function
@@ -34,13 +35,23 @@
  **/
 class PeriodicGaussian {
 public:
-    PeriodicGaussian(double alpha, double length, int gridCount);
-    void evaluate(double x) const;
-    double operator()(double x) const;
-    double grad(double x) const;
-    double d2(double x) const;
+    PeriodicGaussian(double alpha, double length);
     static int numberOfTerms(double alpha, double length);
+    double evaluate(double x) const;
+    double getValue() const {
+        return value;
+    }
+    double getGradient() const {
+        return gradient;
+    }
+    double getSecondDerivative( ) const {
+        return secondDerivative;
+    }
+
 private:
+    mutable double value;
+    mutable double gradient;
+    mutable double secondDerivative;
     const double alpha;
     const double length;
     const double nome;
@@ -48,8 +59,5 @@ private:
     const double k;
     const int nmax;
     static const double PI;
-    mutable double value;
-    mutable double gradValue;
-    mutable double d2Value;
 };
 #endif

@@ -35,4 +35,4 @@ set (sources
 
 add_library(sampler STATIC ${sources})
 
-#add_subdirectory(test)
+add_subdirectory(test)

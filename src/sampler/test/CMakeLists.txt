@@ -32,15 +32,17 @@ if(GTEST_FOUND)
     add_executable(samplerTests
         MultiLevelSamplerTest.cc
         CollectiveSectionMoverTest.cc
-        ${SRC_DIR}/sampler/CollectiveSectionMover.cc
-        ${SRC_DIR}/SuperCell.cc
         CollectiveSectionSamplerTest.cc
+        ${SRC_DIR}/sampler/SectionChooser.cc
+        ${SRC_DIR}/sampler/DoubleSectionChooser.cc
+        ${SRC_DIR}/sampler/CollectiveSectionMover.cc
+        ${SRC_DIR}/sampler/CollectiveSectionSampler.cc
         ${SRC_DIR}/sampler/DoubleCollectiveSectionSampler.cc
         ${SRC_DIR}/BeadFactory.cc
-        ${SRC_DIR}/sampler/DoubleSectionChooser.cc
-        ${SRC_DIR}/RandomNumGenerator.cc
-        ${SRC_DIR}/sampler/SectionChooser.cc
-        ${SRC_DIR}/Permutation.cc
+        ${SRC_DIR}/util/SuperCell.cc
+        ${SRC_DIR}/util/RandomNumGenerator.cc
+        ${SRC_DIR}/util/Permutation.cc
+        ${SRC_DIR}/stats/AccRejEstimator.cc
     )
     
     target_link_libraries(samplerTests ${GTEST_BOTH_LIBRARIES} -lpthread)

@@ -40,47 +40,44 @@ extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
 
 AugmentedNodes::AugmentedNodes(const SimulationInfo &simInfo,
-  const Species &species, double temperature,
-  int maxlevel, bool useUpdates, int maxMovers,
-  const std::vector<const AtomicOrbitalDM*>& orbitals, bool useHungarian)
-  : NodeModel("_"+species.name),
+        const Species &species, double temperature,
+        int maxlevel, bool useUpdates, int maxMovers,
+        const std::vector<const AtomicOrbitalDM*>& orbitals, bool useHungarian)
+:   NodeModel("_"+species.name),
     tau(simInfo.getTau()),mass(species.mass),
-    npart(species.count), ifirst(species.ifirst), 
+    npart(species.count), ifirst(species.ifirst),
     matrix((int)(pow(2,maxlevel)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()),
     pg(NDIM), pgp(NDIM), pgm(NDIM),
     notMySpecies(false),
-    gradArray1(npart), gradArray2(npart), 
+    gradArray1(npart), gradArray2(npart),
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     cache(npart,npart), cacheV(npart,npart),
-    uarray(npart,npart,ColMajor()), 
+    uarray(npart,npart,ColMajor()),
     kindex((int)(pow(2,maxlevel)+0.1)+1,npart), nerror(0),
     useHungarian(useHungarian), scale(1.0),
     density(pow(mass*temperature/PI,0.5*NDIM)), orbitals(orbitals),
     hungarian(useHungarian ? new Hungarian(npart) : 0) {
-  for (unsigned int i=0; i<matrix.size(); ++i)  {
-    matrix[i] = new Matrix(npart,npart,ColMajor());
-  }
-  std::cout << "AugmentedNodes with temperature = "
+    for (unsigned int i=0; i<matrix.size(); ++i)  {
+        matrix[i] = new Matrix(npart,npart,ColMajor());
+    }
+    std::cout << "AugmentedNodes with temperature = "
             << temperature << std::endl;
-  std::cout << "thermal density = " << this->density << std::endl;
-  double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
-  double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
-  if (temperature!=simInfo.getTemperature()) {
-    tempp=tempm=temperature;
-  }
-  for (int idim=0; idim<NDIM; ++idim) {
-    pg[idim]=new PeriodicGaussian(mass*temperature,cell.a[idim],
-                            (int)(100*cell.a[idim]*sqrt(mass*temperature)));
-    pgm[idim]=new PeriodicGaussian(mass*tempm,cell.a[idim],
-                             (int)(100*cell.a[idim]*sqrt(mass*tempm)));
-    pgp[idim]=new PeriodicGaussian(mass*tempp,cell.a[idim],
-                             (int)(100*cell.a[idim]*sqrt(mass*tempp)));
-  }
-  if (useUpdates) {
-    updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
-  }
+    std::cout << "thermal density = " << this->density << std::endl;
+    double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
+    double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
+    if (temperature!=simInfo.getTemperature()) {
+        tempp=tempm=temperature;
+    }
+    for (int idim=0; idim<NDIM; ++idim) {
+        pg[idim]=new PeriodicGaussian(mass*temperature,cell.a[idim]);
+        pgm[idim]=new PeriodicGaussian(mass*tempm,cell.a[idim]);
+        pgp[idim]=new PeriodicGaussian(mass*tempp,cell.a[idim]);
+    }
+    if (useUpdates) {
+        updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
+    }
 }
 
 AugmentedNodes::~AugmentedNodes() {
@@ -103,7 +100,9 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
         Vec delta(r1(jpart+ifirst)-r2(ipart+ifirst));
         cell.pbc(delta);
         double ear2=scale*density;
-        for (int i=0; i<NDIM; ++i) ear2 *= (*pg[i])(fabs(delta[i]));
+        for (int i=0; i<NDIM; ++i) {
+            ear2 *= pg[i]->evaluate(delta[i]);
+        }
         mat(ipart,jpart) = ear2;
       }
     }
@@ -256,9 +255,9 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad; double val=density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-        val *= (*pg[i])(fabs(delta[i]));
-        if (delta[i]<0) grad[i]=-grad[i];
+          double value = pg[i]->evaluate(delta[i]);
+          grad[i] = pg[i]->getGradient() / (value + 1e-300);
+          val *= value;
       }
       grad *= val;
       grad += orbital.grad1;
@@ -278,9 +277,9 @@ void AugmentedNodes::evaluateDistance(const VArray& r1, const VArray& r2,
       cell.pbc(delta);
       Vec grad; double val=density;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*pg[i]).grad(fabs(delta[i]))/((*pg[i])(fabs(delta[i]))+1e-300);
-        val *= (*pg[i])(fabs(delta[i]));
-        if (delta[i]<0) grad[i]=-grad[i];
+          double value = pg[i]->evaluate(delta[i]);
+          grad[i] = pg[i]->getGradient() / (value + 1e-300);
+          val *= value;
       }
       grad *= val;
       grad += cacheV(jpart,ipart);
@@ -314,14 +313,14 @@ void AugmentedNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
           for (int i=0; i<NDIM; ++i) {
             for (int j=0; j<NDIM; ++j) {
               if (i==j) {
-                d2iik(i,j)=(*pg[i]).d2(fabs(delta[i]))
-                          /(*pg[i])(fabs(delta[i]));
+                  double value = pg[i]->evaluate(delta[i]);
+                  d2iik(i,j) = pg[i]->getSecondDerivative()
+                          / (value + 1e-300);
               } else {
-                d2iik(i,j)=(*pg[i]).grad(fabs(delta[i]))
-                          /(*pg[i])(fabs(delta[i])) 
-                          *(*pg[j]).grad(fabs(delta[j]))
-                          /(*pg[j])(fabs(delta[j]));
-                if (delta[i]*delta[j]<0) d2iik(i,j)=-d2iik(i,j);
+                  double value = pg[i]->evaluate(delta[i]);
+                  d2iik(i,j) = pg[i]->getGradient() / (value + 1e-300);
+                  value = pg[i]->evaluate(delta[j]);
+                  d2iik(i,j) *= pg[i]->getGradient() / (value + 1e-300);
               }
             }
           }
@@ -343,22 +342,26 @@ void AugmentedNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
           // First derivative acts on particle ipart.
           Vec delta=r1(ipart+ifirst)-r2(kpart+ifirst);
           cell.pbc(delta);
-          Vec grad;
+          Vec grad, value;
           for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-            if (delta[i]<0) grad[i]=-grad[i];
+              value[i] = pg[i]->evaluate(delta[i]);
+              grad[i] = pg[i]->getGradient()/(value[i] + 1e-300);
           }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+          for (int i=0; i<NDIM; ++i) {
+              grad *= value[i];
+          }
           g00 += mat(ipart,kpart)*grad;
           g10 += mat(jpart,kpart)*grad;
           // Next derivative acts on particle jpart.
           delta=r1(jpart+ifirst)-r2(kpart+ifirst);
           cell.pbc(delta);
           for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-            if (delta[i]<0) grad[i]=-grad[i];
+              value[i] = pg[i]->evaluate(delta[i]);
+              grad[i] = pg[i]->getGradient() / (value[i] + 1e-300);
           }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+          for (int i=0; i<NDIM; ++i) {
+              grad *= value[i];
+          }
           g01 += mat(ipart,kpart)*grad;
           g11 += mat(jpart,kpart)*grad;
         }
@@ -381,14 +384,13 @@ void AugmentedNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
           for (int i=0; i<NDIM; ++i) {
             for (int j=0; j<NDIM; ++j) {
               if (i==j) {
-                d2ii(i,j)=(*pg[i]).d2(fabs(delta[i]))
-                         /(*pg[i])(fabs(delta[i]));
+                  double value = pg[i]->evaluate(delta[i]);
+                  d2ii(i,j) = pg[i]->getSecondDerivative() / (value + 1e-300);
               } else {
-                d2ii(i,j)=(*pg[i]).grad(fabs(delta[i]))
-                         /(*pg[i])(fabs(delta[i])) 
-                         *(*pg[j]).grad(fabs(delta[j]))
-                         /(*pg[j])(fabs(delta[j]));
-                if (delta[i]*delta[j]>=0) d2ii(i,j)=-d2ii(i,j);
+                  double value = pg[i]->evaluate(delta[i]);
+                  d2ii(i,j) = pg[i]->getGradient() / (value + 1e-300);
+                  value = pg[j]->evaluate(delta[j]);
+                  d2ii(i,j) *= pg[i]->getGradient() / (value + 1e-300);
               }
             }
           }
@@ -409,24 +411,28 @@ void AugmentedNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
             // First derivative acts on particle ipart.
             Vec delta=r1(ipart+ifirst)-r2(kpart+ifirst);
             cell.pbc(delta);
-            Vec grad;
+            Vec grad, value;
             for (int i=0; i<NDIM; ++i) {
-              grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-              if (delta[i]<0) grad[i]=-grad[i];
+                value[i] = pg[i]->evaluate(delta[i]);
+                grad[i] = pg[i]->getGradient() / (value[i] + 1e-300);
             }
-            for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+            for (int i=0; i<NDIM; ++i) {
+                grad *= value;
+            }
             g00 += mat(ipart,kpart)*grad;
             g10 += mat(lpart,kpart)*grad;
           }
           // Next derivative acts on particle jpart.
           Vec delta=r2(jpart+ifirst)-r1(lpart+ifirst);
           cell.pbc(delta);
-          Vec grad(0.0);
+          Vec grad, value;
           for (int i=0; i<NDIM; ++i) {
-            grad[i]=(*pg[i]).grad(fabs(delta[i]))/(*pg[i])(fabs(delta[i]));
-            if (delta[i]<0) grad[i]=-grad[i];
+              value[i] = pg[i]->evaluate(delta[i]);
+              grad[i] = pg[i]->getGradient() / (value[i] + 1e-300);
           }
-          for (int i=0; i<NDIM; ++i) grad*=(*pg[i])(fabs(delta[i]));
+          for (int i=0; i<NDIM; ++i) {
+              grad *= value[i];
+          }
           g01 = mat(ipart,jpart)*grad;
           g11 = mat(lpart,jpart)*grad;
           for (int i=0; i<NDIM; ++i) {
@@ -491,7 +497,9 @@ double AugmentedNodes::MatrixUpdate::evaluateChange(
                -sectionBeads2(ipart+fpNodes.ifirst,islice));
       fpNodes.cell.pbc(delta);
       double ear2=1;
-      for (int i=0; i<NDIM; ++i) ear2*=(*fpNodes.pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          ear2 *= fpNodes.pg[i]->evaluate(delta[i]);
+      }
       (*phi[islice])(ipart,jmoving)=ear2;
     }
     for (int imoving=0; imoving<nMoving; ++imoving) {
@@ -559,13 +567,15 @@ void AugmentedNodes::MatrixUpdate::evaluateNewDistance(
     for (int ipart=0; ipart<npart; ++ipart) {
       Vec delta=r1(jpart+fpNodes.ifirst)-r2(ipart+fpNodes.ifirst);
       fpNodes.cell.pbc(delta);
-      Vec grad;
+      Vec grad, value;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/(*fpNodes.pg[i])(fabs(delta[i]));
-        if (delta[i]<0) grad[i]=-grad[i];
+          value[i] = fpNodes.pg[i]->evaluate(delta[i]);
+          grad[i] = fpNodes.pg[i]->getGradient() / (value[i] + 1e-300);
       }
       if (ipart==fpNodes.kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          grad *= value[i];
+      }
       logGrad+=mat(jpart,ipart)*grad;
     }
     fpNodes.gradArray1(jpart)=logGrad-fgrad;
@@ -577,13 +587,15 @@ void AugmentedNodes::MatrixUpdate::evaluateNewDistance(
     for(int jpart=0; jpart<npart; ++jpart) {
       Vec delta=r2(ipart+fpNodes.ifirst)-r1(jpart+fpNodes.ifirst);
       fpNodes.cell.pbc(delta);
-      Vec grad;
+      Vec grad, value;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=(*fpNodes.pg[i]).grad(fabs(delta[i]))/(*fpNodes.pg[i])(fabs(delta[i]));
-        if (delta[i]<0) grad[i]=-grad[i];
+          value[i] = fpNodes.pg[i]->evaluate(delta[i]);
+          grad[i] = fpNodes.pg[i]->getGradient() / (value[i] + 1e-300);
       }
       if (ipart==fpNodes.kindex(islice,jpart)) fgrad=grad;
-      for (int i=0; i<NDIM; ++i) grad*=(*fpNodes.pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          grad *= value[i];
+      }
       logGrad+=mat(jpart,ipart)*grad;
     }
     fpNodes.gradArray2(ipart)=logGrad-fgrad;

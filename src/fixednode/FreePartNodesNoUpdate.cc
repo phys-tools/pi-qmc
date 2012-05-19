@@ -45,7 +45,7 @@ FreePartNodesNoUpdate::FreePartNodesNoUpdate(const SimulationInfo& simInfo,
     dist((int)(pow(2,maxlevel)+0.1)+1),
     newDist((int)(pow(2,maxlevel+1)+0.1)+1),
     ipiv(npart),lwork(npart*npart),work(lwork),
-    cell(*simInfo.getSuperCell()), pg(mass*temperature,cell.a[0],500),
+    cell(*simInfo.getSuperCell()), pg(mass*temperature,cell.a[0]),
     notMySpecies(false), force(npart), gradArray(npart), 
     gradMatrix(npart,npart), grad2Matrix(npart,npart) {
   for (unsigned int i=0; i<matrix.size(); ++i) { 
@@ -82,12 +82,14 @@ double FreePartNodesNoUpdate::evaluateDistance(const int islice) const {
     for (int ipart=0; ipart<npart; ++ipart) {
       Vec delta=r1(jpart)-r2(ipart);
       cell.pbc(delta);
-      Vec grad;
+      Vec grad, value;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=pg.grad(fabs(delta[i]))/pg(fabs(delta[i]));
-        if (delta[i]<0) grad[i]=-grad[i];
+          value[i] = pg.evaluate(delta[i]);
+          grad[i] = pg.getGradient() / (value[i] + 1e-300);
       }
-      for (int i=0; i<NDIM; ++i) grad*=pg(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          grad *= value[i];
+      }
       logGrad+=mat(jpart,ipart)*grad;
     }
     d2inv+=dot(logGrad,logGrad);
@@ -97,12 +99,14 @@ double FreePartNodesNoUpdate::evaluateDistance(const int islice) const {
     for(int jpart=0; jpart<npart; ++jpart) {
       Vec delta=r1(jpart)-r2(ipart);
       cell.pbc(delta);
-      Vec grad;
+      Vec grad, value;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=pg.grad(fabs(delta[i]))/pg(fabs(delta[i]));
-        if (delta[i]<0) grad[i]=-grad[i];
+          value[i] = pg.evaluate(delta[i]);
+          grad[i] = pg.getGradient() / (value[i] + 1e-300);
       }
-      for (int i=0; i<NDIM; ++i) grad*=pg(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          grad *= value[i];
+      }
       logGrad+=mat(jpart,ipart)*grad;
     }
     d2inv+=dot(logGrad,logGrad);
@@ -170,7 +174,9 @@ double FreePartNodesNoUpdate::evaluate(const VArray& r1, const VArray& r2,
       Vec delta(r1(jpart)-r2(ipart));
       cell.pbc(delta);
       double ear2=1;
-      for (int i=0; i<NDIM; ++i) ear2*=pg(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          ear2 *= pg.evaluate(delta[i]);
+      }
       mat(ipart,jpart)=ear2;
     }
   }
@@ -227,12 +233,14 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
         // First calculate first derivative (loggrad) terms.
         Vec delta=r1(jpart)-r2(ipart);
         cell.pbc(delta);
-        Vec grad;
+        Vec grad, value;
         for (int i=0; i<NDIM; ++i) {
-          grad[i]=pg.grad(fabs(delta[i]))/pg(fabs(delta[i]));
-          if (delta[i]<0) grad[i]=-grad[i];
+            value[i] = pg.evaluate(delta[i]);
+            grad[i] = pg.getGradient() / (value[i] + 1e-300);
         }
-        for (int i=0; i<NDIM; ++i) grad*=pg(fabs(delta[i]));
+        for (int i=0; i<NDIM; ++i) {
+            grad *= value[i];
+        }
         gradArray(jpart)+=mat(jpart,ipart)*grad;
         // Calculate more complicated second derivative terms.
         for (int kpart=0; kpart<npart; ++kpart) {
@@ -241,18 +249,21 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
             for (int i=0; i<NDIM; ++i) {
               for (int j=0; j<NDIM; ++j) {
                 if (i==j) {
-                  grad2(i,i)=pg.d2(fabs(delta[i]))/pg(fabs(delta[i]));
+                    double value = pg.evaluate(delta[i]);
+                    grad2(i,i) = pg.getSecondDerivative()
+                            / (value + 1e-300);
                 } else {
-                  grad2(i,j)=pg.grad(fabs(delta[i]))/pg(fabs(delta[i])) 
-                            *pg.grad(fabs(delta[j]))/pg(fabs(delta[j]));
-                  if (delta[i]*delta[j]<0) grad2(i,j)=-grad2(i,j);
+                    double value = pg.evaluate(delta[i]);
+                    grad2(i,j) = pg.getGradient() / (value + 1e-300);
+                    value = pg.evaluate(delta[j]);
+                    grad2(i,j) *= pg.getGradient() / (value + 1e-300);
                 }
               }
             }
             for (int ii=0; ii<NDIM; ++ii) {
               for (int i=0; i<NDIM; ++i) {
                 for (int j=0; j<NDIM; ++j) {
-                  grad2(i,j) *= pg(fabs(delta[ii]));
+                  grad2(i,j) *= pg.evaluate(delta[ii]);
                 }
               }
             }
@@ -296,12 +307,14 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
       for (int kpart=0; kpart<npart; ++kpart) {
         Vec delta=r2(jpart)-r1(kpart);
         cell.pbc(delta);
-        Vec grad;
+        Vec grad, value;
         for (int i=0; i<NDIM; ++i) {
-          grad[i]=pg.grad(fabs(delta[i]))/pg(fabs(delta[i]));
-          if (delta[i]<0) grad[i]=-grad[i];
+            value[i] = pg.evaluate(delta[i]);
+            grad[i] = pg.getGradient() / (value[i] + 1e-300);
         }
-        for (int i=0; i<NDIM; ++i) grad*=pg(fabs(delta[i]));
+        for (int i=0; i<NDIM; ++i) {
+            grad *= value[i];
+        }
         for (int ipart=0; ipart<npart; ++ipart) {
           gradArray(ipart)+=mat(kpart,ipart)*grad;
         }
@@ -332,18 +345,20 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
             for (int i=0; i<NDIM; ++i) {
               for (int j=0; j<NDIM; ++j) {
                 if (i==j) {
-                  grad2=-pg.d2(fabs(delta[i]))/pg(fabs(delta[i]));
+                    double value = pg.evaluate(delta[i]);
+                    grad2(i,j) = -pg.getSecondDerivative() / (value + 1e-300);
                 } else {
-                  grad2=-pg.grad(fabs(delta[i]))/pg(fabs(delta[i]))
-                        *pg.grad(fabs(delta[j]))/pg(fabs(delta[j]));
-                  if (delta[i]*delta[j]<0) grad2(i,j)=-grad2(i,j);
+                    double value = pg.evaluate(delta[i]);
+                    grad2(i,j) = -pg.getGradient() / (value + 1e-300);
+                    value = pg.evaluate(delta[j]);
+                    grad2(i,j) *= pg.getGradient() / (value + 1e-300);
                 }
               }
             }
             for (int ii=0; ii<NDIM; ++ii) {
               for (int i=0; i<NDIM; ++i) {
                 for (int j=0; j<NDIM; ++j) {
-                  grad2(i,j) *= pg(fabs(delta[ii]));
+                  grad2(i,j) *= pg.evaluate(delta[ii]);
                 }
               }
             }
@@ -353,12 +368,14 @@ void FreePartNodesNoUpdate::getBeadAction(const Paths& paths, int iPart,
               }
             }
           } else {
-            Vec grad;
+            Vec grad, value;
             for (int i=0; i<NDIM; ++i) {
-              grad[i]=pg.grad(fabs(delta[i]))/pg(fabs(delta[i]));
-              if (delta[i]<0) grad[i]=-grad[i];
+                value[i] = pg.evaluate(delta[i]);
+                grad[i] = pg.getGradient() / (value[i] + 1e-300);
             }
-            for (int i=0; i<NDIM; ++i) grad*=pg(fabs(delta[i]));
+            for (int i=0; i<NDIM; ++i) {
+                grad *= value[i];
+            }
             temp+=grad*dot(mat2(ipart,kpart),gradArray(jpart));
           }
           force(ipart)-=di*di*temp;

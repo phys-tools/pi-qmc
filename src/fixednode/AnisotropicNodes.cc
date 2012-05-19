@@ -55,7 +55,7 @@ AnisotropicNodes::AnisotropicNodes(const SimulationInfo& simInfo,
     cell(*simInfo.getSuperCell()), 
     notMySpecies(true) {
   for (int idim=0; idim<NDIM; ++idim) {
-    pg[idim]=new PeriodicGaussian(mass[idim]*temperature,cell.a[idim],1000);
+    pg[idim] = new PeriodicGaussian(mass[idim]*temperature,cell.a[idim]);
   }
   for (unsigned int i=0; i<matrix.size(); ++i) { 
     matrix[i]=new Matrix(npart,npart,ColMajor());
@@ -175,8 +175,8 @@ double AnisotropicNodes::evaluateGrad(const int islice) {
       cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=pg[i]->grad(fabs(delta[i]))*sqrtmass[i];
-        if (delta[i]<0) grad[i]=-grad[i];
+          pg[i]->evaluate(delta[i]);
+          grad[i] = pg[i]->getGradient() * sqrtmass[i];
       }
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -195,8 +195,8 @@ void AnisotropicNodes::evaluateDistances(const int islice) {
       cell.pbc(delta);
       Vec grad;
       for (int i=0; i<NDIM; ++i) {
-        grad[i]=pg[i]->grad(fabs(delta[i]))*sqrtmass[i];
-        if (delta[i]<0) grad[i]=-grad[i];
+          pg[i]->evaluate(delta[i]);
+          grad[i] = pg[i]->getGradient() * sqrtmass[i];
       }
       logGrad+=mat(jpart,ipart)*grad;
     }
@@ -212,7 +212,9 @@ double AnisotropicNodes::evaluate(const VArray& r1, const VArray& r2,
       Vec delta=r1(jpart)-r2(ipart);
       cell.pbc(delta);
       double ear2=1;
-      for (int i=0; i<NDIM; ++i) ear2*=(*pg[i])(fabs(delta[i]));
+      for (int i=0; i<NDIM; ++i) {
+          ear2 *= pg[i]->evaluate(delta[i]);
+      }
       mat(ipart,jpart)=ear2;
     }
   }
@@ -241,7 +243,10 @@ double AnisotropicNodes::evaluateUpdate(const VArray& r1, const VArray& r2,
     for (int jpart=0; jpart<npart; ++jpart) {
       Vec delta=r1(kpart)-r2(jpart);
       cell.pbc(delta);
-      double ear2=1; for (int i=0;i<NDIM;++i) ear2*=(*pg[i])(fabs(delta[i]));
+      double ear2=1;
+      for (int i=0;i<NDIM;++i) {
+          ear2 *= pg[i]->evaluate(delta[i]);
+      }
       col(jpart,kmoving)=ear2;
       for (int imoving=0; imoving<nmoving; ++imoving) {
         int ipart=index(imoving)-ifirst;

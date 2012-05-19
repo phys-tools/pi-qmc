@@ -58,7 +58,8 @@ void SpinStatePermutationChooser::init() {
       cell.pbc(delta);
       WalkingChooser::t(ipart,jpart)=1;
       for (int idim=0; idim<NDIM; ++idim) {
-        WalkingChooser::t(ipart,jpart)*=(*(WalkingChooser::pg(idim)))(fabs(delta[idim]));
+          WalkingChooser::t(ipart,jpart) *=
+                  (WalkingChooser::pg(idim))->evaluate(delta[idim]);
       }
       // Zero out the probability between different particles.
       if (spinState(ipart) != spinState(jpart)) WalkingChooser::t(ipart,jpart) = 1e-200;

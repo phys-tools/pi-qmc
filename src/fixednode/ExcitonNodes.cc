@@ -37,10 +37,10 @@ extern "C" void DGETRI_F77(const int*, double*, const int*, const int*,
                            double*, const int*, int*);
 
 ExcitonNodes::ExcitonNodes(const SimulationInfo &simInfo,
-  const Species &species1, const Species &species2,
-  const double temperature, const int maxlevel,
-  const double radius, const bool useUpdates, const int maxMovers)
-  : NodeModel("_"+species1.name+species2.name),
+        const Species &species1, const Species &species2,
+        const double temperature, const int maxlevel,
+        const double radius, const bool useUpdates, const int maxMovers)
+:   NodeModel("_"+species1.name+species2.name),
     alpha(1./radius),
     tau(simInfo.getTau()),mass(species1.mass),npart(species1.count),
     ifirst(species1.ifirst), jfirst(species2.ifirst),
@@ -56,21 +56,18 @@ ExcitonNodes::ExcitonNodes(const SimulationInfo &simInfo,
     hungarian(new Hungarian(npart)) {
     //gradArray(npart), mat2(npart,npart),
     //gradMatrix(npart,npart), grad2Matrix(npart,npart) {
-  for (unsigned int i=0; i<matrix.size(); ++i)  {
-    matrix[i] = new Matrix(npart,npart,ColMajor());
-  }
-  std::cout << "ExcitonNodes with radius = "
+    for (unsigned int i=0; i<matrix.size(); ++i)  {
+        matrix[i] = new Matrix(npart,npart,ColMajor());
+    }
+    std::cout << "ExcitonNodes with radius = "
             << radius << std::endl;
-  double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
-  double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
-  for (int idim=0; idim<NDIM; ++idim) {
-    pg[idim]=new PeriodicGaussian(mass*temperature,cell.a[idim],
-                            (int)(100*cell.a[idim]*sqrt(mass*temperature)));
-    pgm[idim]=new PeriodicGaussian(mass*tempm,cell.a[idim],
-                             (int)(100*cell.a[idim]*sqrt(mass*tempm)));
-    pgp[idim]=new PeriodicGaussian(mass*tempp,cell.a[idim],
-                             (int)(100*cell.a[idim]*sqrt(mass*tempp)));
-  }
+    double tempp=temperature/(1.0+EPSILON); //Larger beta (plus).
+    double tempm=temperature/(1.0-EPSILON); //Smaller beta (minus).
+    for (int idim=0; idim<NDIM; ++idim) {
+        pg[idim] = new PeriodicGaussian(mass*temperature,cell.a[idim]);
+        pgm[idim] = new PeriodicGaussian(mass*tempm,cell.a[idim]);
+        pgp[idim] = new PeriodicGaussian(mass*tempp,cell.a[idim]);
+    }
 }
 
 ExcitonNodes::~ExcitonNodes() {

@@ -33,14 +33,17 @@
 
 WalkingChooser::WalkingChooser(const int nsize, const Species &species,
         const int nlevel, const SimulationInfo& simInfo)
-    :   PermutationChooser(nsize), SpeciesParticleChooser(species,nsize),
-        t(npart,npart), cump(npart,npart),
-        pg(NDIM), nsize(nsize), mass(species.mass), tau(simInfo.getTau()) {
+:   PermutationChooser(nsize), SpeciesParticleChooser(species,nsize),
+    t(npart,npart),
+    cump(npart,npart),
+    pg(NDIM),
+    nsize(nsize),
+    mass(species.mass),
+    tau(simInfo.getTau()) {
     double alpha=mass/(2*tau*pow(2,nlevel));
     for (int idim=0; idim<NDIM; ++idim) {
-        double l=(*simInfo.getSuperCell())[idim];
-        int ngrid = (alpha*l*l>1) ? (int)(l*sqrt(alpha)*10) : 10;
-        pg(idim)=new PeriodicGaussian(alpha,l,ngrid);
+        double length = (*simInfo.getSuperCell())[idim];
+        pg(idim) = new PeriodicGaussian(alpha, length);
     }
     // Initialize permutation to an n-cycle.
     for (int i=0; i<nsize; ++i) (*permutation)[i]=(i+1)%nsize;
@@ -160,15 +163,15 @@ void WalkingChooser::init() {
 
 
   for (int ipart=0; ipart<npart; ++ipart) {
-    for (int jpart=0; jpart<npart; ++jpart) {
-      Vec delta=sectionBeads(ipart+ifirst,0);
-      delta-=sectionBeads(jpart+ifirst,nslice-1);
-      cell.pbc(delta);
-      t(ipart,jpart)=1;
-      for (int idim=0; idim<NDIM; ++idim) {
-        t(ipart,jpart)*=(*pg(idim))(fabs(delta[idim]));
+      for (int jpart=0; jpart<npart; ++jpart) {
+          Vec delta=sectionBeads(ipart+ifirst,0);
+          delta-=sectionBeads(jpart+ifirst,nslice-1);
+          cell.pbc(delta);
+          t(ipart,jpart)=1;
+          for (int idim=0; idim<NDIM; ++idim) {
+              t(ipart,jpart) *= pg(idim)->evaluate(delta[idim]);
+          }
       }
-    } 
   }
 
  

@@ -134,26 +134,34 @@ SmoothedGridPotential::SmoothedGridPotential(const SimulationInfo& simInfo, cons
     }
     double TWObPI=b*TWOPI;
     //initialize periodic guassians and normalize
-    for(int i=0; i<3; i++){
-      pgh(i)=new PeriodicGaussian(h_alpha(i),TWObPI,n(i));
-      pge(i)=new PeriodicGaussian(e_alpha(i),TWObPI,n(i));
-      h_norm(i)=1./(*pgh(i))(0.);
-      e_norm(i)=1./(*pge(i))(0.);
+    for (int i=0; i<3; i++) {
+      pgh(i) = new PeriodicGaussian(h_alpha(i),TWObPI);
+      pge(i) = new PeriodicGaussian(e_alpha(i),TWObPI);
+      pgh(i)->evaluate(0.0);
+      h_norm(i) = 1.0 / pgh(i)->getValue();
+      pge(i)->evaluate(0.0);
+      e_norm(i) = 1.0 / pge(i)->getValue();
     }
     double xhfactor=0., yhfactor=0., xefactor=0., yefactor=0.;
     double ki, kj, kk;
     for(int i=0; i<n(0); i++){
       ki=((i<=n(0)/2)?i*TWObPI/n(0):(n(0)-i)*TWObPI/n(0));
-      xhfactor=(*pgh(0))(ki);
-      xefactor=(*pge(0))(ki);
+      pgh(0)->evaluate(ki);
+      pge(0)->evaluate(ki);
+      xhfactor = pgh(0)->getValue();
+      xefactor = pge(0)->getValue();
       for(int j=0; j<n(1); j++){
         kj=((j<=n(1)/2)?j*TWObPI/n(1):(n(1)-j)*TWObPI/n(1));
-        yhfactor=(*pgh(1))(kj);
-        yefactor=(*pge(1))(kj);
+        pgh(1)->evaluate(kj);
+        pge(1)->evaluate(kj);
+        xhfactor = pgh(1)->getValue();
+        xefactor = pge(1)->getValue();
         for(int k=0; k<n(2); k++){
           kk=((k<=n(2)/2)?k*TWObPI/n(2):(n(2)-k)*TWObPI/n(2));
-          vhsmooth(i,j,k)=kvhgrid(i,j,k)*blitz::product(h_norm)*xhfactor*yhfactor*(*pgh(2))(kk);
-          vesmooth(i,j,k)=kvegrid(i,j,k)*blitz::product(e_norm)*xefactor*yefactor*(*pge(2))(kk);
+          pgh(2)->evaluate(kk);
+          pge(2)->evaluate(kk);
+          vhsmooth(i,j,k)=kvhgrid(i,j,k)*blitz::product(h_norm)*xhfactor*yhfactor*pgh(2)->getValue();
+          vesmooth(i,j,k)=kvegrid(i,j,k)*blitz::product(e_norm)*xefactor*yefactor*pge(2)->getValue();
         }
       }
     }

@@ -499,6 +499,7 @@ std::cout << "doubleAction!=0" << std::endl;
       max[idim]=cell->a[idim]/2.;
     }
     parseBoundary(ctxt,min,max);
+    std::cout << "amplitude = " << amplitude << std::endl;
     CollectiveSectionMover *mover=new CollectiveSectionMover(radius,amplitude,
 	                                                   npart,min,max,cell);
     bool both=getBoolAttribute(ctxt->node,"both");

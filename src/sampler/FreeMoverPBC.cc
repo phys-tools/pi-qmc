@@ -55,13 +55,12 @@ FreeMoverPBC::FreeMoverPBC(const SimulationInfo& simInfo, const int maxlevel,
     for (int ispec=0; ispec<nspec; ++ispec) {
       double alpha=simInfo.getSpecies(ispec).mass/(tau*pow(2,ilevel));
       for (int idim=0; idim<NDIM; ++idim) {
-        double l = length(idim);
-        if (l*l*alpha<60) {
-          int ngridpts = (int)(100*l*sqrt(alpha)); 
-          pg(ilevel,ispec,idim) = new PeriodicGaussian(alpha,l,ngridpts);
-        } else {
-          pg(ilevel,ispec,idim)=0;
-        }
+          if (PeriodicGaussian::numberOfTerms(alpha, length[idim]) < 16) {
+              pg(ilevel,ispec,idim) =
+                      new PeriodicGaussian(alpha,length[idim]);
+          } else {
+              pg(ilevel,ispec,idim)=0;
+          }
       }
     }
   }
@@ -97,13 +96,15 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
       Vec midpoint2 = midpoint + 0.5*cell.a; 
       cell.pbc(midpoint2);
       for (int idim=0; idim<NDIM; ++idim) {
-        double weight1=1., weight2=1.;
+        double weight1 = 1.0, weight2 = 1.0;
         if (pg(level,ispec,idim)) {
-          weight1 = (*pg(level,ispec,idim))(fabs(midpoint[idim]));
-          weight2 = (*pg(level,ispec,idim))(fabs(midpoint2[idim]));
+            pg(level, ispec, idim)->evaluate(midpoint[idim]);
+            weight1 = pg(level, ispec, idim)->getValue();
+            pg(level, ispec, idim)->evaluate(midpoint2[idim]);
+            weight2 = pg(level, ispec, idim)->getValue();
         } else {
-          weight1 = exp(-inv2Sigma2*midpoint[idim]*midpoint[idim]);
-          weight2 = exp(-inv2Sigma2*midpoint2[idim]*midpoint2[idim]);
+            weight1 = exp(-inv2Sigma2*midpoint[idim]*midpoint[idim]);
+            weight2 = exp(-inv2Sigma2*midpoint2[idim]*midpoint2[idim]);
         }
         if (RandomNumGenerator::getRand() > weight1/(weight1+weight2)) {
           midpoint[idim] = midpoint2[idim];
@@ -132,23 +133,25 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
 
       double temp = 1.;
       for (int idim=0;idim<NDIM;++idim) {
-        if (pg(level+1,ispec,idim)) {
-          temp *= (*pg(level+1,ispec,idim))(fabs(deltapold[idim]));
-          temp *= (*pg(level+1,ispec,idim))(fabs(deltanold[idim]));
-          temp /= (*pg(level+1,ispec,idim))(fabs(deltapnew[idim]));
-          temp /= (*pg(level+1,ispec,idim))(fabs(deltannew[idim]));
+        PeriodicGaussian* gaussian = pg(level+1, ispec, idim);
+        if (gaussian) {
+            temp *= gaussian->evaluate(deltapold[idim]);
+            temp *= gaussian->evaluate(deltanold[idim]);
+            temp /= gaussian->evaluate(deltapnew[idim]);
+            temp /= gaussian->evaluate(deltannew[idim]);
         } else {
           toldOverTnew -= deltapold[idim]*deltapold[idim]*inv2Sigma2*0.5;
           toldOverTnew -= deltanold[idim]*deltanold[idim]*inv2Sigma2*0.5;
           toldOverTnew += deltapnew[idim]*deltapnew[idim]*inv2Sigma2*0.5;
           toldOverTnew += deltannew[idim]*deltannew[idim]*inv2Sigma2*0.5;
         }
-        if (pg(level+2,ispec,idim)) {
-          temp /= (*pg(level+2,ispec,idim))(fabs(deltaold[idim]));
-          temp *= (*pg(level+2,ispec,idim))(fabs(deltanew[idim]));
+        gaussian = pg(level+2, ispec, idim);
+        if (gaussian) {
+            temp /= gaussian->evaluate(deltaold[idim]);
+            temp *= gaussian->evaluate(deltanew[idim]);
         } else {
-          toldOverTnew += deltaold[idim]*deltaold[idim]*inv2Sigma2*0.25;
-          toldOverTnew -= deltanew[idim]*deltanew[idim]*inv2Sigma2*0.25;
+            toldOverTnew += deltaold[idim]*deltaold[idim]*inv2Sigma2*0.25;
+            toldOverTnew -= deltanew[idim]*deltanew[idim]*inv2Sigma2*0.25;
         }
       }
       toldOverTnew += log(temp);
@@ -188,7 +191,7 @@ double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
+            temp *= pg(level,ispec,idim)->evaluate(delta[idim]);
         } else {
 	  double tmp = delta[idim]*delta[idim]*inv2Sigma2;
 	  forwardProb -= tmp;
@@ -209,7 +212,7 @@ double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler, const int level
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
+          temp *= pg(level,ispec,idim)->evaluate(fabs(delta[idim]));
         } else {
 	  toldOverTnew -=  delta[idim]*delta[idim]*inv2Sigma2;
         }

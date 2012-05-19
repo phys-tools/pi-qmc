@@ -48,17 +48,16 @@ SpringAction::SpringAction(const SimulationInfo& simInfo, const int maxlevel,
     for (int ispec=0; ispec<nspec; ++ispec) {
       double alpha=simInfo.getSpecies(ispec).mass/(2*tau*pow(2,ilevel));
       for (int idim=0; idim<NDIM; ++idim) {
-        double l=(*simInfo.getSuperCell())[idim];
-        if (l*l*alpha<60) {
-          int ngridpts = (int)(100*l*sqrt(alpha));
-          pg(ilevel,ispec,idim) = new PeriodicGaussian(alpha,l,ngridpts);
+        double  length = (*simInfo.getSuperCell())[idim];
+        if (PeriodicGaussian::numberOfTerms(alpha, length) < 16) {
+          pg(ilevel,ispec,idim) = new PeriodicGaussian(alpha,length);
           if (ilevel==0) {
             std::cout << "WARNING: Periodic Gaussian will give incorrect"
               << " energy.\n         Decrease tau or fix SpringAction."
               << std::endl;
           }
         } else {
-          pg(ilevel,ispec,idim)=0;
+          pg(ilevel,ispec,idim) = 0;
         }
       }
     }
@@ -91,7 +90,7 @@ double SpringAction::getActionDifference(const SectionSamplerInterface& sampler,
       double temp = 1.0;
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
+          temp *= pg(level,ispec,idim)->evaluate(delta[idim]);
         } else {
           deltaAction+=delta[idim]*delta[idim]*inv2Sigma2;
         }
@@ -102,7 +101,7 @@ double SpringAction::getActionDifference(const SectionSamplerInterface& sampler,
       cell.pbc(delta);
       for (int idim=0;idim<NDIM;++idim) {
         if (pg(level,ispec,idim)) {
-          temp *= (*pg(level,ispec,idim))(fabs(delta[idim]));
+          temp *= pg(level,ispec,idim)->evaluate(delta[idim]);
         } else {
           deltaAction-=delta[idim]*delta[idim]*inv2Sigma2;
         }
