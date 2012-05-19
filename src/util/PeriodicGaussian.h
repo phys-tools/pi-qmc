@@ -1,63 +1,55 @@
-// $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __PeriodicGaussian_h_
 #define __PeriodicGaussian_h_
 #include <cstdlib>
-#include <blitz/array.h>
 
-/** Function object for a periodic gaussian.
-  * @version $Revision$
-  * @author John Shumway */
+/** Function object for a periodic Gaussian.
+ * Call evalauate first, the use the getter methods for the function
+ * value and derivatives.
+ *
+ * We start from the k-space representation of a Gaussian,
+ * @f[ \exp(-\alpha x^2) =
+ * \frac{1}{\sqrt{4\pi\alpha}} \int_{-\infty}^\infty
+ * \exp\left(-\frac{k^2}{4 \alpha}\right) \exp(ikx)\, dk. @f]
+ * To make this periodic function f(x) on the interval
+ * @f$ -L/2 < f < L/2 @f$, we restrict k to integer values,
+ * @f$ k_n = 2\pi n/L @f$, where n runs over all integers.
+ * Now the integral is a series,
+ * @f[ f(x) = \sqrt{\frac{\pi^2}{\alpha L^2}} \left[
+ * 1 + \Re e\, 2\sum_{n=1}^\infty
+ * \exp\left(-\frac{\pi^2n^2}{\alpha L^2}\right)
+ * \exp\left( \frac{2\pi i n x}{L^2} \right) \right ]. @f]
+ * The quantity in the square brackets in a theta function
+ * with real value `nome'
+ * @f$ q = \exp\left(-\frac{\pi^2n^2}{\alpha L^2}\right) @f$
+ * and complex argument
+ * @f$ w = \exp\left( \frac{2\pi i n x}{L^2} \right) @f$,
+ * @f[ f(x) = \sqrt{\frac{\pi^2}{\alpha L^2}} \left[
+ * 1 + \Re e\, 2\sum_{n=1}^\infty q^{n^2} w^n \right] @f]
+ * The series converges quickly in n, and we choose
+ * @f$ n_{max} \ge 2\sqrt{\alpha L^2} @f$, so that
+ * @f$ q^{n_{max}^2} < \exp(-4\pi^2) < 10^{-17}@f$.
+ * Since we are working in k-space, the first and second derivatives
+ * are easily found by multiplying each term by @f$ ik @f$ and
+ * @f$ -k^2 @f$, respectively.
+ **/
 class PeriodicGaussian {
 public:
-  typedef blitz::TinyVector<double,4> Vec4;
-  typedef blitz::Array<Vec4,1> V4Array;
-  /// Constructor.
-  PeriodicGaussian(const double a, const double d, const int n);
-  /// Get the Gaussian value.
-  inline double operator()(const double x) const {
-    const int i=(int)(x*dxInv); 
-    const double r=x-i*dx;
-    const Vec4 &f=grid(i);
-    return f[0]+r*(f[1]+r*(f[2]+r*f[3]));
-  }
-  /// Get the gradient value.
-  double grad(const double x) const {
-    const int i=(int)(x*dxInv);
-    const double r=x-i*dx;
-    const Vec4 &f=grid(i);
-    return f[1]+r*(2.0*f[2]+r*3.0*f[3]);
-  }
-  /// Get the second derivative value.
-  double d2(const double x) const {
-    const int i=(int)(x*dxInv); 
-    const double r=x-i*dx;
-    const Vec4 &f=grid(i);
-    return 2.0*f[2]+r*6.0*f[3];
-  }
- 
+    PeriodicGaussian(double alpha, double length, int gridCount);
+    void evaluate(double x) const;
+    double operator()(double x) const;
+    double grad(double x) const;
+    double d2(double x) const;
+    static int numberOfTerms(double alpha, double length);
 private:
-  /// The coefficient.
-  const double a;
-  /// The period.
-  const double d;
-  /// The grid.
-  V4Array grid;
-  /// The grid spacing.
-  double dx, dxInv;
+    const double alpha;
+    const double length;
+    const double nome;
+    const double prefactor;
+    const double k;
+    const int nmax;
+    static const double PI;
+    mutable double value;
+    mutable double gradValue;
+    mutable double d2Value;
 };
 #endif

@@ -356,15 +356,23 @@ WARN_LOGFILE           =
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-# The INPUT tag can be used to specify the files and/or directories that contain 
+# The INPUT tag can be used to specify the fles and/or directories that contain 
 # documented source files. You may enter file names like "myfile.cpp" or 
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
 INPUT                  = top_srcdir/src \
-                         top_srcdir/lib/stats \
-                         top_srcdir/lib/demo \
-                         top_srcdir/lib/spin
+                         top_srcdir/src/action \
+                         top_srcdir/src/algorithm \
+                         top_srcdir/src/demo \
+                         top_srcdir/src/emarate \
+                         top_srcdir/src/estimator \
+                         top_srcdir/src/fixednode \
+                         top_srcdir/src/parser \
+                         top_srcdir/src/sampler \
+                         top_srcdir/src/spin \
+                         top_srcdir/src/stats \
+                         top_srcdir/src/util
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 

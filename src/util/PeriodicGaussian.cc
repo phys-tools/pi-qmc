@@ -1,55 +1,56 @@
-// $Id$
-/*  Copyright (C) 2004-2006 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 #include "PeriodicGaussian.h"
-#include <iostream>
+#include <complex>
 
-PeriodicGaussian::PeriodicGaussian(const double a, const double d, const int n)
-  : a(a), d(d), grid(n+1), dx(d/(2*n)), dxInv(1.0/dx) {
-  grid=0.0;
-  // First set grid to function value and first derivative.
-  //const int nImage=0;
-  const int nImage=(int)(10.0/(sqrt(a)*d));
-  for (int iImage=-nImage; iImage<=nImage; ++ iImage) {
-    for (int i=0; i<=n; ++i) {
-      double x=i*dx;
-      double expax2 = exp(-a*pow((x-iImage*d),2));
-      grid(i)[0]+= expax2;
-      grid(i)[1]+= -2*a*(x-iImage*d)*expax2;
-    }
-  }
-  // Then compute cubic polynomial coefficients by matching function
-  // values and first derivatives.
-  grid(0)[1]=0; grid(n)[1]=0;
-  for (int i=0; i<n; ++i) {
-    Vec4 &f0(grid(i)), &f1(grid(i+1));
-    f0[3]=((f1[1]+f0[1])*dx-2*(f1[0]-f0[0]))*dxInv*dxInv*dxInv;
-    f0[2]=(f1[0]-f0[0]-dx*(f0[1]+f0[3]*dx*dx))*dxInv*dxInv;
-  }
+PeriodicGaussian::PeriodicGaussian(double alpha, double length,
+        int gridCount)
+:   alpha(alpha),
+    length(length),
+    nome(exp(-PI*PI/(alpha*length*length))),
+    nmax(numberOfTerms(alpha, length)),
+    prefactor(sqrt(PI/(alpha*length*length))),
+    k(2 * PI / length) {
+}
+
+int PeriodicGaussian::numberOfTerms(double alpha, double length) {
+    return 1 + int(2.0 * sqrt(alpha*length*length));
+}
+
+double PeriodicGaussian::operator()(double x) const {
+    evaluate(x);
+    return value;
+}
+
+double PeriodicGaussian::grad(double x) const {
+    evaluate(x);
+    return gradValue;
 }
 
 
-/*int main(int argc, char** argv) {
-  std::cout << "#Periodic gausian test" << std::endl;
-  PeriodicGaussian pg(0.01,10,3);
-  for (int i=0; i<=100; ++i) {
-    double x=i*0.05; std::cout << x << " " << pg(x) << std::endl;
-  }
-  return 0;
-}*/
+double PeriodicGaussian::d2(double x) const {
+    evaluate(x);
+    return d2Value;
+}
+
+void PeriodicGaussian::evaluate(double x) const {
+    std::complex<double> w = exp(std::complex<double>(0, k * x));
+    std::complex<double> sum0 = 0;
+    std::complex<double> sum1 = 0;
+    std::complex<double> sum2 = 0;
+    std::complex<double> ik = std::complex<double>(0, k);
+    double k2 = -k * k;
+    for(int n = 1; n < nmax; ++n){
+        std::complex<double> term = pow(nome, n*n) * pow(w, n);
+        sum0 += term;
+        sum1 += term * ik * double(n);
+        sum2 += term * k2 * double(n * n) ;
+    }
+    value = prefactor * (1 + 2 * real(sum0));
+    gradValue = prefactor * 2 * real(sum1);
+    d2Value = prefactor * 2 * real(sum2);
+}
+
+const double PeriodicGaussian::PI = 3.141592653589793;
+
