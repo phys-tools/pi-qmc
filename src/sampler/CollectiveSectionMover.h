@@ -25,15 +25,16 @@ public:
     Vec calcInverseShift(const Vec&, int sliceIndex) const;
     Mat calcJacobian(const Vec&, int sliceIndex) const;
     double calcJacobianDet(const Mat&);
-/*
+
     Vec getAmplitude() const;
     double getRadius() const;
     void setAmplitude(Vec amplitude);
     void setRadius(double radius);
     int getSliceCount() const;
+    void setSliceCount(int);
     Vec getCenter() const;
     void setCenter(Vec center);
-*/
+
 private:
     inline Vec calcDisplacement(const Vec&, int sliceIndex) const;
     inline double timeEnvelope(int sliceIndex) const;

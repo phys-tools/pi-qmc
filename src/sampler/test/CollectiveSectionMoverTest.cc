@@ -28,13 +28,13 @@ protected:
         sliceCount = 9;
         cell = new SuperCell(Vec(10.0, 10.0, 10.0));
         cell->computeRecipricalVectors();
-//        mover = new CollectiveSectionMover(radius, amplitude,
-//                center, sliceCount, cell);
         int npart = 0;
         min = Vec(-5.0, -5.0, -5.0);
         max = Vec(5.0, 5.0, 5.0);
         mover = new CollectiveSectionMover(radius, amplitude,
                 npart, min, max, cell);
+	mover->setSliceCount(sliceCount);
+	mover->setCenter(center);
     }
 
     virtual void TearDown() {
@@ -78,106 +78,107 @@ protected:
     }
 };
 
-//TEST_F(CollectiveSectionMoverTest, testValueOfNslice) {
-//    ASSERT_EQ(9, mover->getSliceCount());
-//}
+TEST_F(CollectiveSectionMoverTest, testValueOfNslice) {
+    ASSERT_EQ(9, mover->getSliceCount());
+}
 
-//TEST_F(CollectiveSectionMoverTest, testMoveAtCenter) {
-//    Vec oldr = center;
-//    int sliceIndex = 4;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
-//    ASSERT_VEC_EQ(expect, newr);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testMoveAtCenterWithNoAmplitude) {
-//    amplitude = 0.0;
+TEST_F(CollectiveSectionMoverTest, testMoveAtCenter) {
+    Vec oldr = center;
+    int sliceIndex = 4;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
+    ASSERT_VEC_EQ(expect, newr);
+}
+/*
+TEST_F(CollectiveSectionMoverTest, testMoveAtCenterWithNoAmplitude) {
+    amplitude = 0.0;
 //    delete mover;
 //    mover = new CollectiveSectionMover(radius, amplitude,
 //            center, sliceCount, cell);
-//    Vec oldr = center;
-//    int sliceIndex = 4;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
-//    ASSERT_VEC_EQ(expect, newr);
-//}
-//
-//
-//TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenter) {
-//    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
-//    int sliceIndex = 4;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec expect = Vec(0.296-10.0, 0.5, 0.1) + center;
-//    ASSERT_VEC_EQ(expect, newr);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testDoesNotMoveOutsideOfRadius) {
-//    Vec oldr = Vec(0.0, -1.5, 0.1) + center;
-//    int sliceIndex = 4;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec expect = Vec(0.0, -1.5, 0.1) + center;
-//    ASSERT_VEC_EQ(expect, newr);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testDoesNotMoveAtFirstSlice) {
-//    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
-//    int sliceIndex = 0;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec expect = Vec(0.0, 0.5, 0.1) + center;
-//    ASSERT_VEC_EQ(expect, newr);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenterSlice) {
-//    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
-//    int sliceIndex = 2;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec expect = Vec(0.222-10.0, 0.5, 0.1) + center;
-//    ASSERT_VEC_EQ(expect, newr);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testJacobianMatrixAtCenter) {
-//    Vec oldr = center;
-//    int sliceIndex = 4;
-//    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-//    double data[9] = {1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
-//    Mat expect = matFromData(data);
-//    ASSERT_MAT_EQ(expect, jacobian);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testJacobianAwayFromCenter) {
-//    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
-//    int sliceIndex = 4;
-//    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-//    double data[9] = {1.0, -0.4, -0.08,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
-//    Mat expect = matFromData(data);
-//    ASSERT_MAT_EQ(expect, jacobian);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testJacobianAwayFromCenterSlice) {
-//    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
-//    int sliceIndex = 2;
-//    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-//    double data[9] = {1.0, -0.3, -0.06,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
-//    Mat expect = matFromData(data);
-//    ASSERT_MAT_EQ(expect, jacobian);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testJacobianOutsideOfRadius) {
-//    Vec oldr = Vec(0.0, 1.5, 0.1) + center;
-//    int sliceIndex = 2;
-//    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-//    double data[9] = {1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
-//    Mat expect = matFromData(data);
-//    ASSERT_MAT_EQ(expect, jacobian);
-//}
-//
-//TEST_F(CollectiveSectionMoverTest, testReverseMove) {
-//    Vec oldr = Vec(0.1, 0.3, -0.2) + center;
-//    int sliceIndex = 3;
-//    Vec newr = mover->calcShift(oldr, sliceIndex);
-//    Vec backr = mover->calcInverseShift(newr, sliceIndex);
-//    ASSERT_VEC_EQ(backr, oldr);
-//}
+    mover->setAmplitude(amplitude);
+    Vec oldr = center;
+    int sliceIndex = 4;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
+    ASSERT_VEC_EQ(expect, newr);
+}
+*/
+
+TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenter) {
+    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
+    int sliceIndex = 4;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec expect = Vec(0.296-10.0, 0.5, 0.1) + center;
+    ASSERT_VEC_EQ(expect, newr);
+}
+
+TEST_F(CollectiveSectionMoverTest, testDoesNotMoveOutsideOfRadius) {
+    Vec oldr = Vec(0.0, -1.5, 0.1) + center;
+    int sliceIndex = 4;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec expect = Vec(0.0, -1.5, 0.1) + center;
+    ASSERT_VEC_EQ(expect, newr);
+}
+
+TEST_F(CollectiveSectionMoverTest, testDoesNotMoveAtFirstSlice) {
+    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
+    int sliceIndex = 0;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec expect = Vec(0.0, 0.5, 0.1) + center;
+    ASSERT_VEC_EQ(expect, newr);
+}
+
+TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenterSlice) {
+    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
+    int sliceIndex = 2;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec expect = Vec(0.222-10.0, 0.5, 0.1) + center;
+    ASSERT_VEC_EQ(expect, newr);
+}
+
+TEST_F(CollectiveSectionMoverTest, testJacobianMatrixAtCenter) {
+    Vec oldr = center;
+    int sliceIndex = 4;
+    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
+    double data[9] = {1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    Mat expect = matFromData(data);
+    ASSERT_MAT_EQ(expect, jacobian);
+}
+
+TEST_F(CollectiveSectionMoverTest, testJacobianAwayFromCenter) {
+    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
+    int sliceIndex = 4;
+    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
+    double data[9] = {1.0, -0.4, -0.08,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    Mat expect = matFromData(data);
+    ASSERT_MAT_EQ(expect, jacobian);
+}
+
+TEST_F(CollectiveSectionMoverTest, testJacobianAwayFromCenterSlice) {
+    Vec oldr = Vec(0.0, 0.5, 0.1) + center;
+    int sliceIndex = 2;
+    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
+    double data[9] = {1.0, -0.3, -0.06,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    Mat expect = matFromData(data);
+    ASSERT_MAT_EQ(expect, jacobian);
+}
+
+TEST_F(CollectiveSectionMoverTest, testJacobianOutsideOfRadius) {
+    Vec oldr = Vec(0.0, 1.5, 0.1) + center;
+    int sliceIndex = 2;
+    Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
+    double data[9] = {1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    Mat expect = matFromData(data);
+    ASSERT_MAT_EQ(expect, jacobian);
+}
+
+TEST_F(CollectiveSectionMoverTest, testReverseMove) {
+    Vec oldr = Vec(0.1, 0.3, -0.2) + center;
+    int sliceIndex = 3;
+    Vec newr = mover->calcShift(oldr, sliceIndex);
+    Vec backr = mover->calcInverseShift(newr, sliceIndex);
+    ASSERT_VEC_EQ(backr, oldr);
+}
 
 }
 

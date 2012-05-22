@@ -96,6 +96,7 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcShift(
 CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
         const Vec &rin, int sliceIndex) const {
     if (isOutsideRadius(rin)) return rin;
+/*
     Vec delta = rin - center;
     cell->pbc(delta);
     double radius2 = radius * radius;
@@ -106,8 +107,9 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
                                   -2*radius*sqrt(radius2-4*a*(r-a))))
                      * timeEnvelope(sliceIndex);
     cell->pbc(rout);
+*/
 
-/* --------------------------------------------------------------
+/* -------------------------------------------------------------- */
 /// Calculate the inverse shift by Newton iteration.
     Vec rout = rin - calcDisplacement(rin, sliceIndex);
     Vec rback = calcShift(rout, sliceIndex);
@@ -119,7 +121,7 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
     double error2 = dot(deltaInBack, deltaInBack)
             / (dot(deltaInOut, deltaInOut) + dot(deltaOutBack, deltaOutBack));
     int niter = 0;
-    while (error2 > 1e-10) {
+    while (error2 > 1e-20) {
         // Solve linear equations for Newton's method.
         ++niter;
         if (niter>20) {
@@ -148,9 +150,9 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
                               + dot(deltaOutBack, deltaOutBack));
     }
     cell->pbc(rout);
-    std::cout<<"rout(2) = "<<rout<<std::endl;
-    std::cin.ignore();
-*/
+//    std::cout<<"rout(2) = "<<rout<<std::endl;
+//    std::cin.ignore();
+//*/
     return rout;
 }
 
@@ -192,7 +194,7 @@ double CollectiveSectionMover::calcJacobianDet(
 #endif
   return jacob;
 }
-/*
+
 CollectiveSectionMover::Vec CollectiveSectionMover::getAmplitude() const {
     return amplitude;
 }
@@ -209,6 +211,9 @@ int CollectiveSectionMover::getSliceCount() const {
     return sliceCount;
 }
 
+void CollectiveSectionMover::setSliceCount(int count) {
+  this->sliceCount = count;
+}
 
 void CollectiveSectionMover::setRadius(double radius) {
     this->radius = radius;
@@ -222,4 +227,4 @@ CollectiveSectionMover::Vec CollectiveSectionMover::getCenter() const {
 void CollectiveSectionMover::setCenter(Vec center) {
     this->center = center;
 }
-*/
+
