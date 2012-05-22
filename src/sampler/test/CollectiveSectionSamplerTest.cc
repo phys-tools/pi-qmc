@@ -8,8 +8,10 @@
 #include <blitz/tinymat.h>
 #include "util/SuperCell.h"
 #include "sampler/DoubleCollectiveSectionSampler.h"
+#include "sampler/CollectiveSectionMover.h"
 #include "BeadFactory.h"
 #include "sampler/DoubleSectionChooser.h"
+#include "util/SuperCell.h"
 
 typedef blitz::TinyVector<double, NDIM> Vec;
 typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
@@ -30,6 +32,9 @@ protected:
         doubleAction = 0;
         beadFactory = 0;
         sectionChooser = 0;
+	mover=0;
+	cell=0;
+	nrepeat=1;
     }
 
     virtual void TearDown() {
@@ -64,26 +69,34 @@ protected:
     BeadFactory *beadFactory;
     DoubleSectionChooser *sectionChooser;
     int particleCount;
+    CollectiveSectionMover *mover;
+    SuperCell *cell;
+    int nrepeat;
 
 
     void createSampler() {
         Paths *paths = 0;
         Action *action = 0;
         DoubleAction *doubleAction = 0;
+	int repreat = 1;
+	bool both = false;
         const BeadFactory *beadFactory = new BeadFactory();
+	CollectiveSectionMover *mover = 0;
+	SuperCell *cell=0;
         DoubleSectionChooser *sectionChooser =
                 new DoubleSectionChooser(levelCount,particleCount,*paths,
                         *action,*doubleAction,*beadFactory);
-//        sampler = new DoubleCollectiveSectionSampler(particleCount,
-//                paths, sectionChooser,
-//                action, doubleAction, beadFactory);
+        sampler = new DoubleCollectiveSectionSampler(particleCount,
+                *sectionChooser,
+                action, doubleAction, nrepeat, *beadFactory,
+                mover, both, cell);
         delete beadFactory;
     }
 };
 
-//TEST_F(CollectiveSectionSamplerTest, testCreate) {
-//    createSampler();
-//}
+TEST_F(CollectiveSectionSamplerTest, testCreate) {
+    createSampler();
+}
 
 //TEST_F(CollectiveSectionSamplerTest, testSizeOfMovingBeads) {
 //    createSampler();
