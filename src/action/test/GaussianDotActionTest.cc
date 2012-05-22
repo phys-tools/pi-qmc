@@ -60,14 +60,15 @@ TEST_F(GaussianDotActionTest, getActionDifferenceForIdenticalPathsIsZero) {
 }
 
 TEST_F(GaussianDotActionTest, getActionDifferenceForOneMovedBead) {
-    alpha = 1.0;
+    alpha = 0.1;
     GaussianDotAction action(v0, alpha, center, simInfo);
     setIdenticalPaths();
     Beads<NDIM> *movingBeads = sampler->movingBeads;
     Beads<NDIM>::Vec position(1.0, 2.0, 3.0);
     (*movingBeads)(0, 32) = position;
     double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0, deltaAction);
+    double expect = (exp(-1.4)-1)*0.1;
+    ASSERT_FLOAT_EQ(expect, deltaAction);
 }
 
 }
