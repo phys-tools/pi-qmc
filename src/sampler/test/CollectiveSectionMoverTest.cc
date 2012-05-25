@@ -89,20 +89,17 @@ TEST_F(CollectiveSectionMoverTest, testMoveAtCenter) {
     Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
     ASSERT_VEC_EQ(expect, newr);
 }
-/*
+
 TEST_F(CollectiveSectionMoverTest, testMoveAtCenterWithNoAmplitude) {
     amplitude = 0.0;
-//    delete mover;
-//    mover = new CollectiveSectionMover(radius, amplitude,
-//            center, sliceCount, cell);
     mover->setAmplitude(amplitude);
     Vec oldr = center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
+    Vec expect = center;
     ASSERT_VEC_EQ(expect, newr);
 }
-*/
+
 
 TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenter) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
