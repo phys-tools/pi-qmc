@@ -48,6 +48,10 @@ if(GTEST_FOUND)
         ../GaussianDotAction.cc
         PrimCosineActionTest.cc
         ../PrimCosineAction.cc
+        PrimColloidalActionTest.cc
+        EFieldActionTest.cc
+        ../EFieldAction.cc
+        ../PrimColloidalAction.cc
         ${SRC_DIR}/Species.cc
         ${SRC_DIR}/SimulationInfo.cc
         ${SRC_DIR}/util/SuperCell.cc
