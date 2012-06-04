@@ -128,10 +128,6 @@ endif(NOT EXISTS ${FFTW3_LIB})
 include(CheckIncludeFiles)
 CHECK_INCLUDE_FILES(getopt.h HAVE_GETOPT_H)
 
-
-
-#find_package(FFTW3 REQUIRED)
-
 configure_file (
   "${PI_QMC_SOURCE_DIR}/config_cmake.h.in"
   "${PI_QMC_BINARY_DIR}/config.h"
@@ -145,5 +141,14 @@ set(EXECUTABLE_OUTPUT_PATH ${PI_QMC_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PI_QMC_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PI_QMC_BINARY_DIR}/lib)
 
+
+add_custom_target(unittest)
+set (GTEST_SOURCE_DIR ${PI_QMC_SOURCE_DIR}/lib/gtest-1.6.0)
+add_subdirectory(${GTEST_SOURCE_DIR})
+
+file(COPY ${PI_QMC_SOURCE_DIR}/test/runalltest.sh 
+    DESTINATION ${PI_QMC_BINARY_DIR}/test
+    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
+        GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 add_subdirectory(src)
