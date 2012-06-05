@@ -26,7 +26,8 @@ protected:
         amplitude = Vec(0.4, 0.0, 0.0);
         center = Vec(4.9, 4.0, 4.5);
         sliceCount = 9;
-        cell = new SuperCell(Vec(10.0, 10.0, 10.0));
+        length = 10.0;
+        cell = new SuperCell(Vec(length, length, length));
         cell->computeRecipricalVectors();
         int npart = 0;
         min = Vec(-5.0, -5.0, -5.0);
@@ -42,22 +43,24 @@ protected:
         delete mover;
     }
 
-    void ASSERT_VEC_EQ(const Vec& v1, const Vec& v2) const {
-        ASSERT_FLOAT_EQ(v1(0), v2(0));
-        ASSERT_FLOAT_EQ(v1(1), v2(1));
-        ASSERT_FLOAT_EQ(v1(2), v2(2));
+    void ASSERT_VEC_EQ(const Vec& v1, const Vec& v2,
+            double epsilon = 1e-14) const {
+        ASSERT_NEAR(v1(0), v2(0), epsilon);
+        ASSERT_NEAR(v1(1), v2(1), epsilon);
+        ASSERT_NEAR(v1(2), v2(2), epsilon);
     }
 
-    void ASSERT_MAT_EQ(const Mat& mat1, const Mat& mat2) const {
-        ASSERT_FLOAT_EQ(mat1(0,0), mat2(0,0));
-        ASSERT_FLOAT_EQ(mat1(0,1), mat2(0,1));
-        ASSERT_FLOAT_EQ(mat1(0,2), mat2(0,2));
-        ASSERT_FLOAT_EQ(mat1(1,0), mat2(1,0));
-        ASSERT_FLOAT_EQ(mat1(1,1), mat2(1,1));
-        ASSERT_FLOAT_EQ(mat1(1,2), mat2(1,2));
-        ASSERT_FLOAT_EQ(mat1(2,0), mat2(2,0));
-        ASSERT_FLOAT_EQ(mat1(2,1), mat2(2,1));
-        ASSERT_FLOAT_EQ(mat1(2,2), mat2(2,2));
+    void ASSERT_MAT_EQ(const Mat& mat1, const Mat& mat2,
+            double epsilon = 1e-14) const {
+        ASSERT_NEAR(mat1(0,0), mat2(0,0), epsilon);
+        ASSERT_NEAR(mat1(0,1), mat2(0,1), epsilon);
+        ASSERT_NEAR(mat1(0,2), mat2(0,2), epsilon);
+        ASSERT_NEAR(mat1(1,0), mat2(1,0), epsilon);
+        ASSERT_NEAR(mat1(1,1), mat2(1,1), epsilon);
+        ASSERT_NEAR(mat1(1,2), mat2(1,2), epsilon);
+        ASSERT_NEAR(mat1(2,0), mat2(2,0), epsilon);
+        ASSERT_NEAR(mat1(2,1), mat2(2,1), epsilon);
+        ASSERT_NEAR(mat1(2,2), mat2(2,2), epsilon);
     }
 
     double radius;
@@ -67,6 +70,7 @@ protected:
     Vec max;
     int sliceCount;
     CollectiveSectionMover *mover;
+    double length;
     SuperCell *cell;
 
     static Mat matFromData(double *data) {
@@ -86,7 +90,7 @@ TEST_F(CollectiveSectionMoverTest, testMoveAtCenter) {
     Vec oldr = center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.4-10.0, 0.0, 0.0) + center;
+    Vec expect = (amplitude - Vec(length, 0, 0)) + center;
     ASSERT_VEC_EQ(expect, newr);
 }
 
@@ -96,15 +100,14 @@ TEST_F(CollectiveSectionMoverTest, testMoveAtCenterWithNoAmplitude) {
     Vec oldr = center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = center;
-    ASSERT_VEC_EQ(expect, newr);
+    ASSERT_VEC_EQ(center, newr);
 }
 
 TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenter) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.296-10.0, 0.5, 0.1) + center;
+    Vec expect = 0.74 * amplitude - Vec(length, 0, 0) + oldr;
     ASSERT_VEC_EQ(expect, newr);
 }
 
@@ -112,23 +115,21 @@ TEST_F(CollectiveSectionMoverTest, testDoesNotMoveOutsideOfRadius) {
     Vec oldr = Vec(0.0, -1.5, 0.1) + center;
     int sliceIndex = 4;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.0, -1.5, 0.1) + center;
-    ASSERT_VEC_EQ(expect, newr);
+    ASSERT_VEC_EQ(oldr, newr);
 }
 
 TEST_F(CollectiveSectionMoverTest, testDoesNotMoveAtFirstSlice) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 0;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.0, 0.5, 0.1) + center;
-    ASSERT_VEC_EQ(expect, newr);
+    ASSERT_VEC_EQ(oldr, newr);
 }
 
 TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenterSlice) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 2;
     Vec newr = mover->calcShift(oldr, sliceIndex);
-    Vec expect = Vec(0.222-10.0, 0.5, 0.1) + center;
+    Vec expect = 0.555 * amplitude - Vec(length, 0, 0) + oldr;
     ASSERT_VEC_EQ(expect, newr);
 }
 
@@ -173,7 +174,7 @@ TEST_F(CollectiveSectionMoverTest, testReverseMove) {
     int sliceIndex = 3;
     Vec newr = mover->calcShift(oldr, sliceIndex);
     Vec backr = mover->calcInverseShift(newr, sliceIndex);
-    ASSERT_VEC_EQ(backr, oldr);
+    ASSERT_VEC_EQ(backr, oldr, 1e-9);
 }
 
 }
