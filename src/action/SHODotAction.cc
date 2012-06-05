@@ -63,8 +63,8 @@ double SHODotAction::getActionDifference(const SectionSamplerInterface& sampler,
       islicePrime-=nslice;
 
     for (int iMoving=0; iMoving<nMoving; ++iMoving) {
-      if (index(iMoving)<ifirst || index(iMoving)>=ifirst+npart) continue;
       const int i=index(iMoving);
+      if (i<ifirst || i>=ifirst+npart) continue;
       // Add action for moving beads.
       Vec position = movingBeads(iMoving,islice);
       cell.pbc(position);
@@ -143,8 +143,8 @@ void SHODotAction::getBeadAction(const Paths& paths, int ipart, int islice,
     z2 = paths(ipart,islice,-1)[2];
   }
 #if NDIM==3
-  position[2] -= z;
-  cell.pbc(position);
+//  position[2] -= z;
+//  cell.pbc(position);
   utau=0.5*k*(position[0]*position[0]+position[1]*position[1]);
   if(semiclassical)
     utau+=getSemiClassicalAction(z1, z2, 1);

@@ -100,7 +100,6 @@ TEST_F(CollectiveSectionMoverTest, testMoveAtCenterWithNoAmplitude) {
     ASSERT_VEC_EQ(expect, newr);
 }
 
-
 TEST_F(CollectiveSectionMoverTest, testMoveAwayFromCenter) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 4;
@@ -178,4 +177,5 @@ TEST_F(CollectiveSectionMoverTest, testReverseMove) {
 }
 
 }
+
 
