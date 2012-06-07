@@ -9,65 +9,64 @@
 #include "SectionSamplerInterface.h"
 #include "CollectiveSectionSampler.h"
 
-/* 
-   Now we only do level 0 moves.
-   TO DO: Add multilevel moves.
-*/
-
 #define DGESV_F77 F77_FUNC(dgesv,DGESV)
 extern "C" void DGESV_F77(const int *n, const int *nrhs,
-                          const double *a, const int *lda, int *ipiv,
-                          double *b, const int *ldb, int *info);
+        const double *a, const int *lda, int *ipiv,
+        double *b, const int *ldb, int *info);
 
 
 CollectiveSectionMover::CollectiveSectionMover(double radius, Vec amplitude,
         int npart, Vec min, Vec max, SuperCell* cell)
-    :   radius(radius), amplitude(amplitude), amp(amplitude), 
-        min(min), max(max), sliceCount(1), npart(npart), cell(cell) {
-  for (int idim=0; idim<NDIM; ++idim) center[idim]=0.;
+:   radius(radius), amplitude(amplitude), amp(amplitude),
+    min(min), max(max), sliceCount(1), npart(npart), cell(cell) {
+    for (int idim=0; idim<NDIM; ++idim) center[idim]=0.;
 }
 
 CollectiveSectionMover::~CollectiveSectionMover() {}
 
 double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler, 
-                                        int ilevel) {
-  const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
-  Beads<NDIM>& movingBeads = sampler.getMovingBeads();
-  sliceCount = sectionBeads.getNSlice();
-  double tranProb = 1.;
-  // Randomize the amplitude and the center of the cylinder.
-  for (int idim=0; idim<NDIM; ++idim) {
-    amplitude[idim] = 2. * amp[idim] * (RandomNumGenerator::getRand() - 0.5);
-    center[idim] = min[idim] 
-                   + (max[idim]-min[idim]) * RandomNumGenerator::getRand();
-  }
-  cell->pbc(center);
-  bool forward = (RandomNumGenerator::getRand() > 0.5);
-  double jacobian = 0.;
-  for (int islice=0; islice<sliceCount; ++islice) {
-    for (int ipart=0; ipart<npart; ++ipart) {
-      jacobian = calcJacobianDet(calcJacobian(movingBeads(ipart,islice),islice));
-      if (forward) {
-        movingBeads(ipart,islice) = calcShift(movingBeads(ipart,islice),islice);
-	tranProb *= jacobian;
-      }
-      else {
-	movingBeads(ipart,islice) = 
-	                     calcInverseShift(movingBeads(ipart,islice),islice);
-	tranProb *= 1./jacobian;
-      }
+        int ilevel) {
+    const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
+    Beads<NDIM>& movingBeads = sampler.getMovingBeads();
+    sliceCount = sectionBeads.getNSlice();
+    double tranProb = 1.;
+    // Randomize the amplitude and the center of the cylinder.
+    for (int idim=0; idim<NDIM; ++idim) {
+        amplitude[idim] = 2. * amp[idim]
+                                   * (RandomNumGenerator::getRand() - 0.5);
+        center[idim] = min[idim]
+                           + (max[idim]-min[idim])
+                           * RandomNumGenerator::getRand();
     }
-  }
-  return log(tranProb);
+    cell->pbc(center);
+    bool forward = (RandomNumGenerator::getRand() > 0.5);
+    double jacobian = 0.;
+    for (int islice=0; islice<sliceCount; ++islice) {
+        for (int ipart=0; ipart<npart; ++ipart) {
+            jacobian
+            = calcJacobianDet(calcJacobian(movingBeads(ipart,islice),islice));
+            if (forward) {
+                movingBeads(ipart,islice)
+                        = calcShift(movingBeads(ipart,islice),islice);
+                tranProb *= jacobian;
+            }
+            else {
+                movingBeads(ipart,islice) =
+                        calcInverseShift(movingBeads(ipart,islice),islice);
+                tranProb *= 1./jacobian;
+            }
+        }
+    }
+    return log(tranProb);
 }
 
 double CollectiveSectionMover::timeEnvelope(int sliceIndex) const {
     return 1.0 - (2.0 * sliceIndex / (sliceCount - 1.0) - 1.0)
-               * (2.0 * sliceIndex / (sliceCount - 1.0) - 1.0);
+            * (2.0 * sliceIndex / (sliceCount - 1.0) - 1.0);
 }
 
-CollectiveSectionMover::Vec CollectiveSectionMover::calcDisplacement(const Vec & rin,
-        int sliceIndex) const {
+CollectiveSectionMover::Vec CollectiveSectionMover::calcDisplacement(
+        const Vec & rin, int sliceIndex) const {
     if (isOutsideRadius(rin)) {
         return 0.0;
     } else {
@@ -96,21 +95,7 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcShift(
 CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
         const Vec &rin, int sliceIndex) const {
     if (isOutsideRadius(rin)) return rin;
-/*
-    Vec delta = rin - center;
-    cell->pbc(delta);
-    double radius2 = radius * radius;
-    double a2 = dot(amplitude,amplitude);
-    double a = sqrt(a2);
-    double r = sqrt(dot(delta,delta));
-    Vec rout = rin - amplitude * (1.0 - 1./4.0/a2*(2*radius2-4*a*(r-a)
-                                  -2*radius*sqrt(radius2-4*a*(r-a))))
-                     * timeEnvelope(sliceIndex);
-    cell->pbc(rout);
-*/
-
-/* -------------------------------------------------------------- */
-/// Calculate the inverse shift by Newton iteration.
+    /// Calculate the inverse shift by Newton iteration.
     Vec rout = rin - calcDisplacement(rin, sliceIndex);
     Vec rback = calcShift(rout, sliceIndex);
     Vec deltaInBack = rin - rback;
@@ -119,12 +104,13 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
     cell->pbc(deltaInOut);
     Vec deltaOutBack = rout - rback;
     double error2 = dot(deltaInBack, deltaInBack)
-            / (dot(deltaInOut, deltaInOut) + dot(deltaOutBack, deltaOutBack));
+                    / (dot(deltaInOut, deltaInOut)
+                            + dot(deltaOutBack, deltaOutBack));
     int niter = 0;
-    while (error2 > 1e-20) {
+    while (error2 > 1e-25) {
         // Solve linear equations for Newton's method.
         ++niter;
-        if (niter>20) {
+        if (niter>25) {
             std::cout << "WARNING: Too many Newton iterations "
                     << "in CollectiveSectionMover!" << std::endl;
             break;
@@ -146,13 +132,10 @@ CollectiveSectionMover::Vec CollectiveSectionMover::calcInverseShift(
         cell->pbc(deltaInOut);
         Vec deltaOutBack = rout - rback;
         error2 = dot(deltaInBack, deltaInBack)
-                      / (dot(deltaInOut, deltaInOut)
-                              + dot(deltaOutBack, deltaOutBack));
+                              / (dot(deltaInOut, deltaInOut)
+                                      + dot(deltaOutBack, deltaOutBack));
     }
     cell->pbc(rout);
-//    std::cout<<"rout(2) = "<<rout<<std::endl;
-//    std::cin.ignore();
-//*/
     return rout;
 }
 
@@ -172,27 +155,27 @@ CollectiveSectionMover::Mat CollectiveSectionMover::calcJacobian(
         for (int j=0; j<NDIM; ++j) {
             matrix(i,j) = (i==j) ? 1.0 : 0.0;
             matrix(i,j) -= 2 * amplitude(i) * delta(j)
-                    * invRadius2  * scale;
+                            * invRadius2  * scale;
         }
     }
     return matrix;
 }
 
 double CollectiveSectionMover::calcJacobianDet(
-                  const CollectiveSectionMover::Mat& jacobian) {
+        const CollectiveSectionMover::Mat& jacobian) {
 #if NDIM==1
-  double jacob = jacobian(0,0);
+    double jacob = jacobian(0,0);
 #elif NDIM==2
-  double jacob = jacobian(0,0)*jacobian(1,1)-jacobian(0,1)*jacobian(1,0);
+    double jacob = jacobian(0,0)*jacobian(1,1)-jacobian(0,1)*jacobian(1,0);
 #elif NDIM==3
-  double jacob = jacobian(0,0)
-    *(jacobian(1,1)*jacobian(2,2)-jacobian(1,2)*jacobian(2,1))
-    -jacobian(0,1)
-    *(jacobian(1,2)*jacobian(2,0)-jacobian(1,0)*jacobian(2,2))
-    +jacobian(0,2)
-    *(jacobian(1,0)*jacobian(2,1)-jacobian(1,1)*jacobian(2,0));
+    double jacob = jacobian(0,0)
+            *(jacobian(1,1)*jacobian(2,2)-jacobian(1,2)*jacobian(2,1))
+            -jacobian(0,1)
+            *(jacobian(1,2)*jacobian(2,0)-jacobian(1,0)*jacobian(2,2))
+            +jacobian(0,2)
+            *(jacobian(1,0)*jacobian(2,1)-jacobian(1,1)*jacobian(2,0));
 #endif
-  return jacob;
+    return jacob;
 }
 
 CollectiveSectionMover::Vec CollectiveSectionMover::getAmplitude() const {
@@ -212,7 +195,7 @@ int CollectiveSectionMover::getSliceCount() const {
 }
 
 void CollectiveSectionMover::setSliceCount(int count) {
-  this->sliceCount = count;
+    this->sliceCount = count;
 }
 
 void CollectiveSectionMover::setRadius(double radius) {

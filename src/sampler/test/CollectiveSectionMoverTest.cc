@@ -170,11 +170,11 @@ TEST_F(CollectiveSectionMoverTest, testJacobianOutsideOfRadius) {
 }
 
 TEST_F(CollectiveSectionMoverTest, testReverseMove) {
-    Vec oldr = Vec(0.1, 0.3, -0.2) + center;
+    Vec oldr = Vec(0.05, 0.3, -0.2) + center;
     int sliceIndex = 3;
     Vec newr = mover->calcShift(oldr, sliceIndex);
     Vec backr = mover->calcInverseShift(newr, sliceIndex);
-    ASSERT_VEC_EQ(backr, oldr, 1e-9);
+    ASSERT_VEC_EQ(backr, oldr, 1e-12);
 }
 
 }
