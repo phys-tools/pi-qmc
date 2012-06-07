@@ -50,22 +50,21 @@ protected:
     }
 };
 
-TEST_F(EFieldActionTest, getActionDifferenceForIdenticalPathsIsZero) {
-    EFieldAction action(simInfo, strength, center, halfwidth, idir);
-    setIdenticalPaths();
-    double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0.0, deltaAction);
-}
+//TEST_F(EFieldActionTest, getActionDifferenceForIdenticalPathsIsZero) {
+//    EFieldAction action(simInfo, strength, center, halfwidth, idir);
+//    setIdenticalPaths();
+//    double deltaAction = action.getActionDifference(*sampler, 0);
+//    ASSERT_DOUBLE_EQ(0.0, deltaAction);
+//}
 
-TEST_F(EFieldActionTest, getActionDifferenceForOneMovedBead) {
-    EFieldAction action(simInfo, strength, center, halfwidth, idir);
-    setIdenticalPaths();
-    Beads<NDIM> *movingBeads = sampler->movingBeads;
-    Beads<NDIM>::Vec position(1.0, 2.0, 3.0);
-    (*movingBeads)(0, 32) = position;
-    double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(1, deltaAction);
-
-}
+//TEST_F(EFieldActionTest, getActionDifferenceForOneMovedBead) {
+//    EFieldAction action(simInfo, strength, center, halfwidth, idir);
+//    setIdenticalPaths();
+//    Beads<NDIM> *movingBeads = sampler->movingBeads;
+//    Beads<NDIM>::Vec position(1.0, 2.0, 3.0);
+//    //(*movingBeads)(0, 32) = position;
+//    double deltaAction = action.getActionDifference(*sampler, 0);
+//    ASSERT_DOUBLE_EQ(1.0, deltaAction);
+//}
 
 }

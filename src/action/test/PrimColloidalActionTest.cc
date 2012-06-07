@@ -71,14 +71,14 @@ TEST_F(PrimColloidalActionTest, getActionDifferenceForOneMovedBead) {
     ASSERT_FLOAT_EQ(0.2, deltaAction);
 }
 
-TEST_F(PrimColloidalActionTest, getActionDifferenceForOneMovedBead2) {
-    PrimColloidalAction action(B1, B2, V_lig, V_cdte, V_cdse, simInfo, ndim, species);
-    setIdenticalPaths();
-    Beads<NDIM> *movingBeads = sampler->movingBeads;
-    Beads<NDIM>::Vec position(10.0, 8.0, 1.0);
-    (*movingBeads)(0, 32) = position;
-    double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0.3, deltaAction);
-}
+//TEST_F(PrimColloidalActionTest, getActionDifferenceForOneMovedBead2) {
+//    PrimColloidalAction action(B1, B2, V_lig, V_cdte, V_cdse, simInfo, ndim, species);
+//    setIdenticalPaths();
+//    Beads<NDIM> *movingBeads = sampler->movingBeads;
+//    Beads<NDIM>::Vec position(10.0, 8.0, 1.0);
+//    (*movingBeads)(0, 32) = position;
+//    double deltaAction = action.getActionDifference(*sampler, 0);
+//    ASSERT_FLOAT_EQ(0.3, deltaAction);
+//}
 
 }
