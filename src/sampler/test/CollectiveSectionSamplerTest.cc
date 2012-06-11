@@ -24,7 +24,7 @@ protected:
 
     virtual void SetUp() {
         levelCount = 3;
-        particleCount = 5;
+        particleCount = 1;
 
         sampler = 0;
         paths = 0;
@@ -32,9 +32,9 @@ protected:
         doubleAction = 0;
         beadFactory = 0;
         sectionChooser = 0;
-	mover=0;
-	cell=0;
-	nrepeat=1;
+        mover=0;
+        cell=0;
+        nrepeat=1;
     }
 
     virtual void TearDown() {
@@ -78,17 +78,16 @@ protected:
         Paths *paths = 0;
         Action *action = 0;
         DoubleAction *doubleAction = 0;
-	int repreat = 1;
-	bool both = false;
+        int repreat = 1;
+        bool both = false;
         const BeadFactory *beadFactory = new BeadFactory();
-	CollectiveSectionMover *mover = 0;
-	SuperCell *cell=0;
+        CollectiveSectionMover *mover = 0;
+        SuperCell *cell=0;
         DoubleSectionChooser *sectionChooser =
-                new DoubleSectionChooser(levelCount,particleCount,*paths,
+                new DoubleSectionChooser(levelCount, particleCount, *paths,
                         *action,*doubleAction,*beadFactory);
         sampler = new DoubleCollectiveSectionSampler(particleCount,
-                *sectionChooser,
-                action, doubleAction, nrepeat, *beadFactory,
+                *sectionChooser, action, doubleAction, nrepeat, *beadFactory,
                 mover, both, cell);
         delete beadFactory;
     }
@@ -98,14 +97,14 @@ TEST_F(CollectiveSectionSamplerTest, testCreate) {
     createSampler();
 }
 
-//TEST_F(CollectiveSectionSamplerTest, testSizeOfMovingBeads) {
-//    createSampler();
-//    Beads<NDIM> *beads = &sampler->getMovingBeads();
-//    int sliceCount = beads->getNSlice();
-//    int movingCount = beads->getNPart();
-//    ASSERT_EQ(1 << levelCount + 1, sliceCount);
-//    ASSERT_EQ(maximumMovingCount, movingCount);
-//}
+TEST_F(CollectiveSectionSamplerTest, testSizeOfMovingBeads) {
+    createSampler();
+    Beads<NDIM> *beads = &sampler->getMovingBeads();
+    int sliceCount = beads->getNSlice();
+    int movingCount = beads->getNPart();
+    ASSERT_EQ((1 << levelCount) + 1, sliceCount);
+    ASSERT_EQ(1, movingCount);
+}
 
 }
 

@@ -37,7 +37,8 @@ CMakeCache.txt
 /bin/**/*
 bin
 CMakeFiles
-/test/**/*
+/testbin/**/*
+testbin
 /config.h
 /.project
 /.cproject

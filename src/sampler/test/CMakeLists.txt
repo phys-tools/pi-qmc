@@ -1,4 +1,4 @@
-set(EXECUTABLE_OUTPUT_PATH ${PI_QMC_BINARY_DIR}/test)
+set(EXECUTABLE_OUTPUT_PATH ${PI_QMC_BINARY_DIR}/testbin)
 set(SRC_DIR ${PI_QMC_SOURCE_DIR}/src)
 include_directories(${SRC_DIR} ${GTEST_SOURCE_DIR}/include)
 

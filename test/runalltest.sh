@@ -3,17 +3,14 @@
 cd $(dirname $0)
 
 START=$(date +%s)
-for testfile in *
+for testfile in ../testbin/*
 do
-    if [ ! $testfile = "runalltest.sh" ]
-    then
-        echo "Running..."
-        echo $testfile
-        ./$testfile
-        if [ ! $? = 0 ]; then
-            echo "Test failure in " $testfile
-            exit -1
-        fi
+    echo "Running..."
+    echo $testfile
+    ./$testfile
+    if [ ! $? = 0 ]; then
+        echo "Test failure in " $testfile
+        exit -1
     fi
 done
 
