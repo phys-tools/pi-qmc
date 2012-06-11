@@ -1,3 +1,29 @@
+# Obtaining the source code
+
+*   Version controll through gitHUB:
+
+        git clone git@github.com:phys-tools/pi-qmc.git
+        
+*   Download ZIP File: https://github.com/phys-tools/pi-qmc/zipball/master
+*   Download TAR Ball: https://github.com/phys-tools/pi-qmc/tarball/master
+
+
+# Building with cmake (recommended)
+
+Running "cmake ." in the source directory configures the program.
+After the program is configured you can always edit settings in CMakeCache.txt.
+
+You can set the intel compilers with:
+
+    env CC=icc CXX=icpc cmake .
+
+To generate an eclipse project with gcc-4.7 tools from mac ports:
+
+    env CC=gcc-mp-4.7 CXX=g++-mp-4.7 cmake -G"Eclipse CDT4 - Unix Makefiles" .
+    
+
+# Building with legacy autotools (supported, but not  recommended)
+
 Important configure flags:
 
 *   Compile the code for 1, 2, 3 or 4 dimensional
@@ -22,6 +48,4 @@ Important configure flags:
         --with-blas=<lib>
         --with-lapack=<lib>
 
-If you are using cmake, you can set the intel compilers with:
 
-    env CC=icc CXX=icpc cmake .
