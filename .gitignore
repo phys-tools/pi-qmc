@@ -35,6 +35,8 @@ CMakeFiles/**/*
 CMakeCache.txt
 /config.h
 /bin/**/*
+bin
+CMakeFiles
 /test/**/*
 /config.h
 /.project
