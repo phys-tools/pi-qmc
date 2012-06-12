@@ -32,10 +32,11 @@ protected:
         int npart = 0;
         min = Vec(-5.0, -5.0, -5.0);
         max = Vec(5.0, 5.0, 5.0);
-        mover = new CollectiveSectionMover(radius, amplitude,
-                npart, min, max, cell);
-	mover->setSliceCount(sliceCount);
-	mover->setCenter(center);
+        mover = new CollectiveSectionMover(cell);
+        mover->setRadius(radius);
+        mover->setAmplitude(amplitude);
+        mover->setSliceCount(sliceCount);
+        mover->setCenter(center);
     }
 
     virtual void TearDown() {

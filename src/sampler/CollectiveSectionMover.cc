@@ -15,33 +15,26 @@ extern "C" void DGESV_F77(const int *n, const int *nrhs,
         double *b, const int *ldb, int *info);
 
 
-CollectiveSectionMover::CollectiveSectionMover(double radius, Vec amplitude,
-        int npart, Vec min, Vec max, SuperCell* cell)
-:   radius(radius), amplitude(amplitude), amp(amplitude),
-    min(min), max(max), sliceCount(1), npart(npart), cell(cell) {
-    for (int idim=0; idim<NDIM; ++idim) center[idim]=0.;
+CollectiveSectionMover::CollectiveSectionMover(SuperCell* cell)
+:   cell(cell) {
+    center = 0.0;
+    radius = 1.0;
+    sliceCount = 3;
+    amplitude = 0.0;
 }
 
 CollectiveSectionMover::~CollectiveSectionMover() {}
 
-double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler, 
-        int ilevel) {
+double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler) {
     const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
     Beads<NDIM>& movingBeads = sampler.getMovingBeads();
+    int npart = movingBeads.getNPart();
     sliceCount = sectionBeads.getNSlice();
     double tranProb = 1.;
-    // Randomize the amplitude and the center of the cylinder.
-    for (int idim=0; idim<NDIM; ++idim) {
-        amplitude[idim] = 2. * amp[idim]
-                                   * (RandomNumGenerator::getRand() - 0.5);
-        center[idim] = min[idim]
-                           + (max[idim]-min[idim])
-                           * RandomNumGenerator::getRand();
-    }
     cell->pbc(center);
     bool forward = (RandomNumGenerator::getRand() > 0.5);
     double jacobian = 0.;
-    for (int islice=0; islice<sliceCount; ++islice) {
+    for (int islice = 1; islice < sliceCount - 1; ++islice) {
         for (int ipart=0; ipart<npart; ++ipart) {
             jacobian
             = calcJacobianDet(calcJacobian(movingBeads(ipart,islice),islice));
@@ -53,7 +46,7 @@ double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler,
             else {
                 movingBeads(ipart,islice) =
                         calcInverseShift(movingBeads(ipart,islice),islice);
-                tranProb *= 1./jacobian;
+                tranProb /= jacobian;
             }
         }
     }

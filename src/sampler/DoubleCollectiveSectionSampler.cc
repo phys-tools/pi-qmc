@@ -56,13 +56,13 @@ void DoubleCollectiveSectionSampler::run() {
 
 bool DoubleCollectiveSectionSampler::tryMove() {
   if (accRejEst) accRejEst->tryingMove(0);
-  double lnTranProb = mover->makeMove(*this,0);
+  double lnTranProb = mover->makeMove(*this);
   double deltaAction = (action==0)?0:action->getActionDifference(*this,0);
   if (samplingBoth) {
     sectionBeads = sectionBeads2;
     movingBeads = movingBeads2;
     movingIndex = movingIndex2;
-    lnTranProb += mover->makeMove(*this,0);
+    lnTranProb += mover->makeMove(*this);
     deltaAction += (action==0)?0:action->getActionDifference(*this,0);
     sectionBeads = sectionBeads1;
     movingBeads = movingBeads1;

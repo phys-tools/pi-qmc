@@ -46,7 +46,7 @@ void CollectiveSectionSampler::run() {
 
 bool CollectiveSectionSampler::tryMove() {
   if (accRejEst) accRejEst->tryingMove(0);
-  double lnTranProb = mover->makeMove(*this,0);
+  double lnTranProb = mover->makeMove(*this);
   double deltaAction = (action==0)?0:action->getActionDifference(*this,0);
   double acceptProb = exp(lnTranProb - deltaAction);
   if (RandomNumGenerator::getRand()>acceptProb) return false;

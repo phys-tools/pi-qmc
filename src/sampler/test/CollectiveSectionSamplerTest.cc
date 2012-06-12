@@ -19,7 +19,7 @@ typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
 
 namespace {
 
-class CollectiveSectionSamplerTest: public ::testing::Test {
+class DoubleCollectiveSectionSamplerTest: public ::testing::Test {
 protected:
 
     virtual void SetUp() {
@@ -81,7 +81,7 @@ protected:
         int repreat = 1;
         bool both = false;
         const BeadFactory *beadFactory = new BeadFactory();
-        CollectiveSectionMover *mover = 0;
+        CollectiveSectionMover *mover = 0; //new CollectiveSectionMover();
         SuperCell *cell=0;
         DoubleSectionChooser *sectionChooser =
                 new DoubleSectionChooser(levelCount, particleCount, *paths,
@@ -93,17 +93,22 @@ protected:
     }
 };
 
-TEST_F(CollectiveSectionSamplerTest, testCreate) {
+TEST_F(DoubleCollectiveSectionSamplerTest, testCreate) {
     createSampler();
 }
 
-TEST_F(CollectiveSectionSamplerTest, testSizeOfMovingBeads) {
+TEST_F(DoubleCollectiveSectionSamplerTest, testSizeOfMovingBeads) {
     createSampler();
     Beads<NDIM> *beads = &sampler->getMovingBeads();
     int sliceCount = beads->getNSlice();
     int movingCount = beads->getNPart();
     ASSERT_EQ((1 << levelCount) + 1, sliceCount);
     ASSERT_EQ(1, movingCount);
+}
+
+TEST_F(DoubleCollectiveSectionSamplerTest, testRun) {
+    createSampler();
+//    sampler->run();
 }
 
 }

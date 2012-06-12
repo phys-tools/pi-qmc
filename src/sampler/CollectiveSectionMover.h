@@ -17,23 +17,25 @@ public:
     typedef blitz::TinyVector<int, NDIM> IVec;
     typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
 
-    CollectiveSectionMover(double radius, Vec amplitude, int npart, Vec min,
-	                                           Vec max, SuperCell* cell);
+    CollectiveSectionMover(SuperCell* cell);
     ~CollectiveSectionMover();
-    double makeMove(CollectiveSectionSampler& sampler, int ilevel);
+    double makeMove(CollectiveSectionSampler&);
     Vec calcShift(const Vec&, int sliceIndex) const;
     Vec calcInverseShift(const Vec&, int sliceIndex) const;
     Mat calcJacobian(const Vec&, int sliceIndex) const;
     double calcJacobianDet(const Mat&);
 
-    Vec getAmplitude() const;
-    double getRadius() const;
     void setAmplitude(Vec amplitude);
+    Vec getAmplitude() const;
+
     void setRadius(double radius);
-    int getSliceCount() const;
-    void setSliceCount(int);
-    Vec getCenter() const;
     void setCenter(Vec center);
+
+    double getRadius() const;
+    void setSliceCount(int);
+
+    int getSliceCount() const;
+    Vec getCenter() const;
 
 private:
     inline Vec calcDisplacement(const Vec&, int sliceIndex) const;
@@ -41,13 +43,9 @@ private:
     inline bool isOutsideRadius(const Vec &rin) const;
 
     double radius;
-    Vec amplitude, amp;
-    /// Center of the cylinder.
+    Vec amplitude;
     Vec center;
-    /// Boundary of for the center.
-    Vec min, max;
     int sliceCount;
-    const int npart;
     SuperCell *cell;
 };
 
