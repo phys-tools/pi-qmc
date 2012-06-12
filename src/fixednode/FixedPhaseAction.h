@@ -17,7 +17,7 @@
 #ifndef __FixedPhaseAction_h_
 #define __FixedPhaseAction_h_
 
-#include "DoubleAction.h"
+#include "action/DoubleAction.h"
 #include <cstdlib>
 #include <blitz/array.h>
 #include <blitz/tinymat.h>

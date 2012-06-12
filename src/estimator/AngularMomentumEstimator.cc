@@ -20,7 +20,7 @@
 #include "AngularMomentumEstimator.h"
 #include "SimulationInfo.h"
 #include "Species.h"
-#include "PhaseModel.h"
+#include "fixednode/PhaseModel.h"
 #include "Paths.h"
 
 AngularMomentumEstimator::AngularMomentumEstimator(

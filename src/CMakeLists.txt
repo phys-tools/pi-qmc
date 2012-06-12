@@ -16,12 +16,10 @@ set (sources
     EnumeratedModelState.cc
     ParallelPaths.cc
     Paths.cc
-    SHOPhase.cc
     SerialPaths.cc
     SimInfoWriter.cc
     SimulationInfo.cc
     Species.cc
-    Spin4DPhase.cc
     SpinModelState.cc
     XMLWriter.cc
 )

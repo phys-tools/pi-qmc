@@ -9,7 +9,6 @@ set (sources
     EFieldAction.cc
     EwaldAction.cc
     EwaldImagePairAction.cc
-    FixedPhaseAction.cc
     GateAction.cc
     GaussianAction.cc
     GaussianDotAction.cc

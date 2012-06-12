@@ -6,6 +6,7 @@ set (sources
     AugmentedNodes.cc
     ExcitonNodes.cc
     FixedNodeAction.cc
+    FixedPhaseAction.cc
     FreeParticleNodes.cc
     FreePartNodesNoUpdate.cc
     GroundStateSNode.cc
@@ -13,7 +14,9 @@ set (sources
     NodeModel.cc
     NodeTester.cc
     SHONodes.cc
+    SHOPhase.cc
     SHORealNodes.cc
+    Spin4DPhase.cc
     SpinChoiceFixedNodeAction.cc
     WireNodes.cc
 )

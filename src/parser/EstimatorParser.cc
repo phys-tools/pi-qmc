@@ -61,7 +61,7 @@
 #include "util/SuperCell.h"
 #include "estimator/SpinChargeEstimator.h"
 #include "estimator/SpinChoicePCFEstimator.h"
-#include "SHOPhase.h"
+#include "fixednode/SHOPhase.h"
 #include "estimator/VIndEstimator.h"
 #include "estimator/EIndEstimator.h"
 #include "SimInfoWriter.h"
