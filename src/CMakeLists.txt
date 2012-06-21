@@ -43,5 +43,4 @@ set_target_properties(pi
 target_link_libraries(pi demo parser sampler estimator emarate fixednode 
     spin stats action algorithm util)
 
-#add_subdirectory(test)
 INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)
