@@ -152,3 +152,4 @@ file(COPY ${PI_QMC_SOURCE_DIR}/test/runalltest.sh
         GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 add_subdirectory(src)
+add_subdirectory(unittest)
