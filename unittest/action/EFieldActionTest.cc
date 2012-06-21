@@ -2,7 +2,7 @@
 
 #include "action/EFieldAction.h"
 
-#include "sampler/test/MultiLevelSamplerFake.h"
+#include "sampler/MultiLevelSamplerFake.h"
 #include "Species.h"
 #include "SimulationInfo.h"
 #include "Beads.h"

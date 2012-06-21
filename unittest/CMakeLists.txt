@@ -1,0 +1,12 @@
+
+#add_subdirectory(demo)
+#add_subdirectory(algorithm)
+add_subdirectory(action)
+add_subdirectory(parser)
+add_subdirectory(sampler)
+add_subdirectory(emarate)
+#add_subdirectory(estimator)
+add_subdirectory(fixednode)
+#add_subdirectory(spin)
+#add_subdirectory(stats)
+add_subdirectory(util)

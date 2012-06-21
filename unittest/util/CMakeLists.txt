@@ -1,18 +1,19 @@
 set(EXECUTABLE_OUTPUT_PATH ${PI_QMC_BINARY_DIR}/testbin)
 set(SRC_DIR ${PI_QMC_SOURCE_DIR}/src)
-include_directories(${SRC_DIR} ${GTEST_SOURCE_DIR}/include)
+set(TEST_DIR ${PI_QMC_SOURCE_DIR}/unittest)
+include_directories(${SRC_DIR} ${TEST_DIR} ${GTEST_SOURCE_DIR}/include)
 
 add_executable(utilTests EXCLUDE_FROM_ALL
     PermutationTest.cc
-    ../Permutation.cc
+    ${SRC_DIR}/util/Permutation.cc
     HungarianTest.cc
-    ../Hungarian.cc
+    ${SRC_DIR}/util/Hungarian.cc
     AperiodicGaussianTest.cc
-    ../AperiodicGaussian.cc
+    ${SRC_DIR}/util/AperiodicGaussian.cc
     PeriodicGaussianTest.cc
-    ../PeriodicGaussian.cc
+    ${SRC_DIR}/util/PeriodicGaussian.cc
     SuperCellTest.cc
-    ../SuperCell.cc
+    ${SRC_DIR}/util/SuperCell.cc
 )
 
 target_link_libraries(utilTests gtest gtest_main -lpthread)  

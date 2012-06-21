@@ -43,5 +43,3 @@ set (sources
 )
 
 add_library(action STATIC ${sources})
-
-add_subdirectory(test)

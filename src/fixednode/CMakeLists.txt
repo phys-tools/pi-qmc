@@ -22,5 +22,3 @@ set (sources
 )
 
 add_library(fixednode STATIC ${sources})
-
-add_subdirectory(test)

@@ -1,5 +1,5 @@
 #include "EMARateTestBeadPositioner.h"
-#include "sampler/test/MultiLevelSamplerFake.h"
+#include "sampler/MultiLevelSamplerFake.h"
 #include "Beads.h"
 
 EMARateTestBeadPositioner::EMARateTestBeadPositioner(

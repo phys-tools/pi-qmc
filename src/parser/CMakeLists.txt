@@ -9,5 +9,3 @@ set (sources
 )
 
 add_library(parser STATIC ${sources})
-
-add_subdirectory(test)

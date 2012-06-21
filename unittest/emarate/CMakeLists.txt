@@ -1,13 +1,14 @@
 set(EXECUTABLE_OUTPUT_PATH ${PI_QMC_BINARY_DIR}/testbin)
 set(SRC_DIR ${PI_QMC_SOURCE_DIR}/src)
-include_directories(${SRC_DIR} ${GTEST_SOURCE_DIR}/include)
+set(TEST_DIR ${PI_QMC_SOURCE_DIR}/unittest)
+include_directories(${SRC_DIR} ${TEST_DIR} ${GTEST_SOURCE_DIR}/include)
 
 add_executable(emaRateTests EXCLUDE_FROM_ALL
     EMARateActionTest.cc
     EMARateMoverTest.cc
     EMARateEstimatorTest.cc
     EMARateTestBeadPositioner.cc
-    ${SRC_DIR}/sampler/test/MultiLevelSamplerFake.cc
+    ${TEST_DIR}/sampler/MultiLevelSamplerFake.cc
     ${SRC_DIR}/emarate/EMARateAction.cc
     ${SRC_DIR}/emarate/EMARateEstimator.cc
     ${SRC_DIR}/emarate/EMARateMover.cc
