@@ -1,6 +1,4 @@
-set (sources
-    EstimatorParserTest.cc
+set (dir parser)
+set_property(TARGET unittest APPEND PROPERTY sources
+    ${dir}/EstimatorParserTest.cc
 )
-
-add_library(parser_tests STATIC EXCLUDE_FROM_ALL ${sources})
-

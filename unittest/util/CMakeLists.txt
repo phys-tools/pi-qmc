@@ -1,9 +1,8 @@
-set (sources
-    AperiodicGaussianTest.cc
-    HungarianTest.cc
-    PeriodicGaussianTest.cc
-    PermutationTest.cc
-    SuperCellTest.cc
+set (dir util)
+set_property(TARGET unittest APPEND PROPERTY sources
+    ${dir}/AperiodicGaussianTest.cc
+    ${dir}/HungarianTest.cc
+    ${dir}/PeriodicGaussianTest.cc
+    ${dir}/PermutationTest.cc
+    ${dir}/SuperCellTest.cc
 )
-
-add_library(util_tests STATIC EXCLUDE_FROM_ALL ${sources})

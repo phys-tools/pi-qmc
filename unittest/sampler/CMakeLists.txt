@@ -1,7 +1,7 @@
-set (sources
-    MultiLevelSamplerTest.cc
-    CollectiveSectionMoverTest.cc
-    CollectiveSectionSamplerTest.cc
+set (dir sampler)
+set_property(TARGET unittest APPEND PROPERTY sources
+    ${dir}/MultiLevelSamplerTest.cc
+    ${dir}/CollectiveSectionMoverTest.cc
+    ${dir}/CollectiveSectionSamplerTest.cc
+    ${dir}/MultiLevelSamplerFake.cc
 )
-
-add_library(sampler_tests STATIC EXCLUDE_FROM_ALL ${sources})
