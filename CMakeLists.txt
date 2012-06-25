@@ -143,7 +143,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PI_QMC_BINARY_DIR}/lib)
 
 
 add_custom_target(unittest)
-set (GTEST_SOURCE_DIR ${PI_QMC_SOURCE_DIR}/lib/gtest-1.6.0)
+set (GTEST_SOURCE_DIR ${PI_QMC_SOURCE_DIR}/contrib/gtest-1.6.0)
 add_subdirectory(${GTEST_SOURCE_DIR})
 
 add_subdirectory(src)
