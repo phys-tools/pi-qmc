@@ -146,10 +146,5 @@ add_custom_target(unittest)
 set (GTEST_SOURCE_DIR ${PI_QMC_SOURCE_DIR}/lib/gtest-1.6.0)
 add_subdirectory(${GTEST_SOURCE_DIR})
 
-file(COPY ${PI_QMC_SOURCE_DIR}/test/runalltest.sh 
-    DESTINATION ${PI_QMC_BINARY_DIR}/test
-    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
-        GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
 add_subdirectory(src)
 add_subdirectory(unittest)
