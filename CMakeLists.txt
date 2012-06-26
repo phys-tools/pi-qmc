@@ -147,4 +147,4 @@ set (GTEST_SOURCE_DIR ${PI_QMC_SOURCE_DIR}/contrib/gtest-1.6.0)
 add_subdirectory(${GTEST_SOURCE_DIR})
 
 add_subdirectory(src)
-add_subdirectory(unittest)
+add_subdirectory(unit-tests)
