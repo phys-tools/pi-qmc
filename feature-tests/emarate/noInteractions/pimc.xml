@@ -5,8 +5,8 @@
   <Species name="h" count="1" mass="0.5 m_e" charge="+1"/>
   <Temperature value="0.1 Ry" nslice="1024"/>
   <Action>
-    <SHOAction omega="4.0 Ry" species="e"/>
-    <SHOAction omega="1.0 Ry" species="h"/>
+    <PrimSHOAction omega="4.0 Ry" species="e"/>
+    <PrimSHOAction omega="1.0 Ry" species="h"/>
     <SpringAction/>
     <EMARateAction species1="e" species2="h" c="1.0"/>
   </Action>
