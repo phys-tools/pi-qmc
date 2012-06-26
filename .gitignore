@@ -60,3 +60,10 @@ testbin
 Icon?
 ehthumbs.db
 Thumbs.db
+.*.swp
+
+# pi-qmc files #
+################
+*.h5
+*.dat
+*.out
