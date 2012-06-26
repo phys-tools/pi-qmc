@@ -27,7 +27,7 @@ set (sources
     PrimSHOAction.cc
     PrimShellAction.cc
     PrimTorusAction.cc
-    PrimativePairAction.cc
+    PrimitivePairAction.cc
     QPCAction.cc
     RingGateAction.cc
     SHOAction.cc

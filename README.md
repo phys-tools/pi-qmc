@@ -1,6 +1,6 @@
 # Obtaining the source code
 
-*   Version controll through gitHUB:
+*   Version control through gitHUB:
 
         git clone git@github.com:phys-tools/pi-qmc.git
         

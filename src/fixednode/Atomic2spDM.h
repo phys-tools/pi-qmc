@@ -16,6 +16,7 @@ class Atomic2spDM : public AtomicOrbitalDM {
 public:
   Atomic2spDM(double Z, int ifirst, int npart, int nfermion,
               double pweight, double weight);
+  virtual ~Atomic2spDM() {}
   const int nfermion;
   /// Coefficient before the exponential, @f$ C = \sqrt{Z^5/32\pi} @f$.
   const double coef;

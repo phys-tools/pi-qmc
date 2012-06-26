@@ -59,7 +59,7 @@
 #include "spin/LatticeSpinPhase.h"
 #include "spin/SpinPhase.h"
 #include "action/PairAction.h"
-#include "action/PrimativePairAction.h"
+#include "action/PrimitivePairAction.h"
 #include "action/PairPotential.h"
 #include "action/GridPotential.h"
 #include "action/HyperbolicAction.h"
@@ -576,7 +576,7 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
         if (dumpFiles) action -> write("", hasZ);
         composite->addAction(action);
       } else {
-        PrimativePairAction empAction(*pot,simInfo.getTau());
+        PrimitivePairAction empAction(*pot,simInfo.getTau());
         std::cout << "Scattering length = " 
                   << empAction.getScatteringLength(species1,species2,
                      rmax,rmax/(100*ngpts)) << std::endl;

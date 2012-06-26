@@ -26,6 +26,7 @@ public:
     typedef blitz::ColumnMajorArray<2> ColMajor;
 
   AtomicOrbitalDM(int ifirst, int npart, int nfermion, double weight);
+  virtual ~AtomicOrbitalDM() {}
   const double weight;
   const int ifirst;
   const int npart;
