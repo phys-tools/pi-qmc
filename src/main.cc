@@ -93,6 +93,7 @@ int main(int argc, char** argv) {
             std::cout<<"Compiled with options: "<<std::endl<<CONFIG_FLAGS<<std::endl<<std::endl;
 #endif
             exit(-1);
+            break;
         case 'h':
             Help::printHelp();
             break;
