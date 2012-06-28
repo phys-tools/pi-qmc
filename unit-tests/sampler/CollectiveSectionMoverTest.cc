@@ -9,11 +9,10 @@
 #include "util/SuperCell.h"
 
 typedef blitz::TinyVector<double, NDIM> Vec;
-typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
-
+typedef blitz::TinyMatrix<double, NDIM, NDIM> Mat;
 
 bool vecEquals(const Vec& r1, const Vec& r2) {
-    return dot(r1-r2,r1-r2) < 1e-10;
+    return dot(r1 - r2, r1 - r2) < 1e-10;
 }
 
 namespace {
@@ -76,7 +75,7 @@ protected:
 
     static Mat matFromData(double *data) {
         Mat matrix;
-        for (int i=0; i<9; ++i) {
+        for (int i = 0; i < 9; ++i) {
             matrix.data()[i] = data[i];
         }
         return matrix;
@@ -138,7 +137,7 @@ TEST_F(CollectiveSectionMoverTest, testJacobianMatrixAtCenter) {
     Vec oldr = center;
     int sliceIndex = 4;
     Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-    double data[9] = {1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    double data[9] = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Mat expect = matFromData(data);
     ASSERT_MAT_EQ(expect, jacobian);
 }
@@ -147,7 +146,7 @@ TEST_F(CollectiveSectionMoverTest, testJacobianAwayFromCenter) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 4;
     Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-    double data[9] = {1.0, -0.4, -0.08,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    double data[9] = { 1.0, -0.4, -0.08, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Mat expect = matFromData(data);
     ASSERT_MAT_EQ(expect, jacobian);
 }
@@ -156,7 +155,7 @@ TEST_F(CollectiveSectionMoverTest, testJacobianAwayFromCenterSlice) {
     Vec oldr = Vec(0.0, 0.5, 0.1) + center;
     int sliceIndex = 2;
     Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-    double data[9] = {1.0, -0.3, -0.06,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    double data[9] = { 1.0, -0.3, -0.06, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Mat expect = matFromData(data);
     ASSERT_MAT_EQ(expect, jacobian);
 }
@@ -165,7 +164,7 @@ TEST_F(CollectiveSectionMoverTest, testJacobianOutsideOfRadius) {
     Vec oldr = Vec(0.0, 1.5, 0.1) + center;
     int sliceIndex = 2;
     Mat jacobian = mover->calcJacobian(oldr, sliceIndex);
-    double data[9] = {1.0, 0.0, 0.0,  0.0, 1.0, 0.0,  0.0, 0.0, 1.0};
+    double data[9] = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Mat expect = matFromData(data);
     ASSERT_MAT_EQ(expect, jacobian);
 }
@@ -179,5 +178,4 @@ TEST_F(CollectiveSectionMoverTest, testReverseMove) {
 }
 
 }
-
 
