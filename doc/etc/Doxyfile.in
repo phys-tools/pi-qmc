@@ -361,18 +361,18 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = top_srcdir/src \
-                         top_srcdir/src/action \
-                         top_srcdir/src/algorithm \
-                         top_srcdir/src/demo \
-                         top_srcdir/src/emarate \
-                         top_srcdir/src/estimator \
-                         top_srcdir/src/fixednode \
-                         top_srcdir/src/parser \
-                         top_srcdir/src/sampler \
-                         top_srcdir/src/spin \
-                         top_srcdir/src/stats \
-                         top_srcdir/src/util
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/src \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/action \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/algorithm \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/demo \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/emarate \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/estimator \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/fixednode \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/parser \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/sampler \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/spin \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/stats \
+                         @CMAKE_CURRENT_SOURCE_DIR@/src/util
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -382,7 +382,8 @@ INPUT                  = top_srcdir/src \
 # *.h++ *.idl *.odl *.cs *.php *.php3 *.inc
 
 FILE_PATTERNS          = *.h \
-                         *.cc
+                         *.cc \
+                         *.md
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 
