@@ -63,5 +63,31 @@ screened Coulomb interactions.
 <td align="right">not started</td>
 </tr>
 
+<tr>
+<td> Coulomb interactions </td>
+<td>
+Include long ronge coulomb with Ewald sums in 3D (test with Madelung sums).
+</td>
+<td align="right">unit testing</td>
+</tr><tr><td></td>
+<td>
+Include long range coulomb with Ewald sums in 2D.</td>
+<td align="right">started</td>
+</tr><tr><td></td>
+<td>
+Include long range coulomb in quasi-1D wires sums in 2D.</td>
+</td>
+<td align="right">not started</td>
+</tr><tr><td></td>
+<td>
+Chemical accuracy for 3D pair coulomb interaction.
+</td>
+<td align="right">done</td>
+</tr><tr><td></td>
+<td>
+Chemical accuracy for 2D pair coulomb interaction.
+</td>
+<td align="right">testing</td>
+</tr>
 
 </table>
