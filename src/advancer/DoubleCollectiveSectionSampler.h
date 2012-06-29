@@ -21,26 +21,26 @@ public:
     virtual void run();
 
     using CollectiveSectionSampler::getMovingBeads;
-    virtual Beads<NDIM>& getMovingBeads(const int i) {
+    virtual Beads<NDIM>& getMovingBeads(int i) {
         return i == 1 ? *movingBeads1 : *movingBeads2;
     }
-    virtual const Beads<NDIM>& getMovingBeads(const int i) const {
+    virtual const Beads<NDIM>& getMovingBeads(int i) const {
         return i == 1 ? *movingBeads1 : *movingBeads2;
     }
 
     using CollectiveSectionSampler::getSectionBeads;
-    virtual Beads<NDIM>& getSectionBeads(const int i) {
+    virtual Beads<NDIM>& getSectionBeads(int i) {
         return i == 1 ? *sectionBeads1 : *sectionBeads2;
     }
-    virtual const Beads<NDIM>& getSectionBeads(const int i) const {
+    virtual const Beads<NDIM>& getSectionBeads(int i) const {
         return i == 1 ? *sectionBeads1 : *sectionBeads2;
     }
 
     using CollectiveSectionSampler::getMovingIndex;
-    virtual IArray& getMovingIndex(const int i) {
+    virtual IArray& getMovingIndex(int i) {
         return i == 1 ? *movingIndex1 : *movingIndex2;
     }
-    virtual const IArray& getMovingIndex(const int i) const {
+    virtual const IArray& getMovingIndex(int i) const {
         return i == 1 ? *movingIndex1 : *movingIndex2;
     }
 

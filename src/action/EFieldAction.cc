@@ -19,7 +19,7 @@
 #endif
 #include "EFieldAction.h"
 #include "Beads.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "Paths.h"
 #include "SimulationInfo.h"
 #include "util/SuperCell.h"

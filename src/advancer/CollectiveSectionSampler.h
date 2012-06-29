@@ -31,7 +31,7 @@ public:
     virtual Beads<NDIM>& getSectionBeads(int i) {
         return *sectionBeads;
     }
-    virtual const Beads<NDIM>& getSectionBeads(const int i) const {
+    virtual const Beads<NDIM>& getSectionBeads(int i) const {
         return *sectionBeads;
     }
 
@@ -45,7 +45,7 @@ public:
     virtual Beads<NDIM>& getMovingBeads(int i) {
         return *movingBeads;
     }
-    virtual const Beads<NDIM>& getMovingBeads(const int i) const {
+    virtual const Beads<NDIM>& getMovingBeads(int i) const {
         return *movingBeads;
     }
 
@@ -53,7 +53,7 @@ public:
     virtual const IArray& getMovingIndex() const {
         return *movingIndex;
     }
-    virtual const IArray& getMovingIndex(const int i) const {
+    virtual const IArray& getMovingIndex(int i) const {
         return *movingIndex;
     }
 

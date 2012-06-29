@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "sampler/CollectiveSectionMover.h"
+#include "advancer/CollectiveSectionMover.h"
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

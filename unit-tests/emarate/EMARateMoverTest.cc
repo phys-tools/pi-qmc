@@ -4,7 +4,7 @@
 #include "SimulationInfo.h"
 #include "emarate/EMARateMover.h"
 #include "DeterministicEMARateMover.h"
-#include "sampler/MultiLevelSamplerFake.h"
+#include "advancer/MultiLevelSamplerFake.h"
 #include "EMARateTestBeadPositioner.h"
 #include "Species.h"
 #include <iostream>

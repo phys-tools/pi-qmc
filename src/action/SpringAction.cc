@@ -21,8 +21,8 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "sampler/SectionSamplerInterface.h"
-#include "sampler/DisplaceMoveSampler.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "advancer/DisplaceMoveSampler.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "util/SuperCell.h"

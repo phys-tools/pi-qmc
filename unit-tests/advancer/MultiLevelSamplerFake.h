@@ -1,7 +1,7 @@
 #ifndef MULTILEVELSAMPLERFAKE_H_
 #define MULTILEVELSAMPLERFAKE_H_
 
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 
 class MultiLevelSamplerFake : public SectionSamplerInterface {
 public:

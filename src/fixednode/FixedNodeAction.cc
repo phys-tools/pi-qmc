@@ -22,9 +22,9 @@
 #include "util/SuperCell.h"
 #include <cstdlib>
 #include "Beads.h"
-#include "sampler/DoubleSectionChooser.h"
+#include "advancer/DoubleSectionChooser.h"
 //#include "sampler/DoubleMLSampler.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "NodeModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"

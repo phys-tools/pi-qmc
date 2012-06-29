@@ -21,8 +21,8 @@
 #include "Beads.h"
 #include "Paths.h"
 #include "util/SuperCell.h"
-#include "sampler/SectionSamplerInterface.h"
-#include "sampler/DisplaceMoveSampler.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "advancer/DisplaceMoveSampler.h"
 
 SpinAction::SpinAction(const double tau, const double mass, 
                        const double bx, const double by, const double bz,

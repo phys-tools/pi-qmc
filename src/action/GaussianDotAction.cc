@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "GaussianDotAction.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "util/SuperCell.h"

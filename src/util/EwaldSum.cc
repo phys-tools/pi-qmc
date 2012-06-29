@@ -24,7 +24,6 @@
 #include "util/SuperCell.h"
 #include "Paths.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
 #include <blitz/tinyvec-et.h>
 #ifdef _OPENMP
 #include <omp.h>

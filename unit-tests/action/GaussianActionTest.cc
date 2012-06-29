@@ -2,7 +2,7 @@
 
 #include "action/GaussianAction.h"
 
-#include "sampler/MultiLevelSamplerFake.h"
+#include "advancer/MultiLevelSamplerFake.h"
 #include "Species.h"
 #include "SimulationInfo.h"
 #include "Beads.h"

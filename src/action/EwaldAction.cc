@@ -24,8 +24,8 @@
 #include "util/SuperCell.h"
 #include "Paths.h"
 #include "Beads.h"
-#include "sampler/SectionSamplerInterface.h"
-#include "sampler/DisplaceMoveSampler.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "advancer/DisplaceMoveSampler.h"
 
 #if NDIM==3
 EwaldAction::EwaldAction(const SimulationInfo& simInfo, 

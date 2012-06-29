@@ -18,8 +18,8 @@
 #include <config.h>
 #endif
 #include "FreePartNodesNoUpdate.h"
-#include "sampler/SectionSamplerInterface.h"
-#include "sampler/DoubleSectionChooser.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "advancer/DoubleSectionChooser.h"
 #include "SimulationInfo.h"
 #include "Species.h"
 #include "Paths.h"

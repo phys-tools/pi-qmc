@@ -26,7 +26,7 @@
 #include "Species.h"
 #include "util/SuperCell.h"
 #include "Beads.h"
-#include "sampler/DoubleMLSampler.h"
+#include "advancer/DoubleMLSampler.h"
 #include "util/Hungarian.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)

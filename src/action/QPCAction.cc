@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "QPCAction.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "util/SuperCell.h"
 #include "Paths.h"

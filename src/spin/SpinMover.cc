@@ -20,7 +20,7 @@
 #include "util/RandomNumGenerator.h"
 #include "SpinMover.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
+#include "advancer/MultiLevelSampler.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "SimulationInfo.h"

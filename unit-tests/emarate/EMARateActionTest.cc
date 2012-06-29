@@ -3,7 +3,7 @@
 #include "emarate/EMARateAction.h"
 #include <iostream>
 
-#include "sampler/MultiLevelSamplerFake.h"
+#include "advancer/MultiLevelSamplerFake.h"
 #include "Species.h"
 #include "SimulationInfo.h"
 #include "EMARateTestBeadPositioner.h"

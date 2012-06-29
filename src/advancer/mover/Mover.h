@@ -1,5 +1,6 @@
 #ifndef __Mover_h_
 #define __Mover_h_
+
 class MultiLevelSampler;
 /// Virtual base class for routines to select trial moves for beads.
 

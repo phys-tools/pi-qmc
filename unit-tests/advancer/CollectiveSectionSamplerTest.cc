@@ -7,10 +7,10 @@
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
 #include "util/SuperCell.h"
-#include "sampler/DoubleCollectiveSectionSampler.h"
-#include "sampler/CollectiveSectionMover.h"
+#include "advancer/DoubleCollectiveSectionSampler.h"
+#include "advancer/CollectiveSectionMover.h"
 #include "BeadFactory.h"
-#include "sampler/DoubleSectionChooser.h"
+#include "advancer/DoubleSectionChooser.h"
 #include "util/SuperCell.h"
 
 typedef blitz::TinyVector<double, NDIM> Vec;

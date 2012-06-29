@@ -19,7 +19,7 @@
 #endif
 #include "GroundStateWFNodes.h"
 #include "Beads.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "Species.h"
 #include "util/SuperCell.h"
 

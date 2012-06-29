@@ -18,7 +18,7 @@
 #include <config.h>
 #endif
 #include "PairAction.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "Beads.h"
 #include "Paths.h"
 #include "util/SuperCell.h"
@@ -27,7 +27,7 @@
 #include <vector>
 #include <fstream>
 #include <blitz/tinyvec-et.h>
-#include "sampler/DisplaceMoveSampler.h"
+#include "advancer/DisplaceMoveSampler.h"
 PairAction::PairAction(const Species& s1, const Species& s2,
             const std::string& filename, const SimulationInfo& simInfo, 
             const int norder, const bool hasZ, int exLevel) 

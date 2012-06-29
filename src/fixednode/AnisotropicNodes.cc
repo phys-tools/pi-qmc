@@ -18,9 +18,9 @@
 #include <config.h>
 #endif
 #include "AnisotropicNodes.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "SimulationInfo.h"
-#include "sampler/DoubleSectionChooser.h"
+#include "advancer/DoubleSectionChooser.h"
 #include "Species.h"
 #include "Paths.h"
 #include "Beads.h"

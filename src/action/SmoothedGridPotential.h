@@ -16,8 +16,8 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __SmoothedGridPotential_h
 #define __SmoothedGridPotential_h
-#include "sampler/SectionSamplerInterface.h"
-#include "sampler/DisplaceMoveSampler.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "advancer/DisplaceMoveSampler.h"
 #include "SimulationInfo.h"
 #include "Paths.h"
 #include "util/SuperCell.h"

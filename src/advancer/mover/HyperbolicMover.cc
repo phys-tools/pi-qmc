@@ -6,7 +6,7 @@
 #endif
 #include "HyperbolicMover.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
+#include "advancer/MultiLevelSampler.h"
 #include "util/RandomNumGenerator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>

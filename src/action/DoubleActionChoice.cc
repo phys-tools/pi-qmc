@@ -18,8 +18,7 @@
 #include <config.h>
 #endif
 #include "DoubleActionChoice.h"
-#include "sampler/SectionSamplerInterface.h"
-#include "sampler/DoubleSectionChooser.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "EnumeratedModelState.h"
 #include "Paths.h"
 

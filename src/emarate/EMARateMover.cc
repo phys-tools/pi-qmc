@@ -4,9 +4,9 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
+#include "advancer/MultiLevelSampler.h"
 #include "EMARateMover.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
 #include "util/RandomNumGenerator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
@@ -14,6 +14,7 @@
 #include "SimulationInfo.h"
 #include "util/PeriodicGaussian.h"
 #include <cmath>
+#include <blitz/tinyvec-et.h>
 
 EMARateMover::EMARateMover(double tau, double mass1, double mass2,
         int maxlevel, double C)

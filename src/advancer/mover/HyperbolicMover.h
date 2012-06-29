@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
-#include "sampler/mover/Mover.h"
+#include "advancer/mover/Mover.h"
 class SimulationInfo;
 class PeriodicGaussian;
 /** Select a trial move for beads by free particle sampling.

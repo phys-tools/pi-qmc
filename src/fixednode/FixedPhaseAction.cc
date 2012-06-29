@@ -19,8 +19,8 @@
 #endif
 #include "FixedPhaseAction.h"
 #include "Beads.h"
-#include "sampler/DoubleSectionChooser.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/DoubleSectionChooser.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "PhaseModel.h"
 #include "Paths.h"
 #include "SimulationInfo.h"

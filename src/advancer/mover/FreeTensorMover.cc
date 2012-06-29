@@ -6,7 +6,7 @@
 #endif
 #include "FreeTensorMover.h"
 #include "Beads.h"
-#include "sampler/MultiLevelSampler.h"
+#include "advancer/MultiLevelSampler.h"
 #include "util/RandomNumGenerator.h"
 #include <blitz/tinyvec.h>
 #include "util/SuperCell.h"

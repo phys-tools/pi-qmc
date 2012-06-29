@@ -28,7 +28,7 @@
 #include "Species.h"
 #include "util/SuperCell.h"
 #include "Beads.h"
-#include "sampler/SectionSamplerInterface.h"
+#include "advancer/SectionSamplerInterface.h"
 #include "util/Hungarian.h"
 #include <cstdlib>
 
