@@ -24,6 +24,7 @@ add_executable(unittest_pi EXCLUDE_FROM_ALL
     ${SRC_DIR}/SerialPaths.cc
     ${SRC_DIR}/SimulationInfo.cc
     ${SRC_DIR}/Species.cc
+    ${SRC_DIR}/emarate/EMARateMover.cc
 )
 
 target_link_libraries(unittest_pi 
