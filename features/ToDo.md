@@ -14,7 +14,7 @@
 <td>
 Given an external potential, calculate exciton recombination rate.
 </td>
-<td align="right">done</td>
+<td align="right"><font color="green">done</font></td>
 </tr><tr><td></td>
 <td>
 Include effect of Coulomb interactions on recombination.
@@ -39,12 +39,12 @@ Include effect mass anisotropy on biexciton recombination.
 <td>
 Sample free particles in one dimension with multilevel sampling.
 </td>
-<td align="right">done</td>
+<td align="right"><font color="green">done</font></td>
 </tr><tr><td></td>
 <td>
 Sample free particles in one dimension with collective sampling.
 </td>
-<td align="right">done</td>
+<td align="right"><font color="green">done</font></td>
 </tr><tr><td></td>
 <td>
 Sample free particles in one dimension with collective section sampling.
