@@ -1,19 +1,3 @@
-// $Id: SpinModelSampler.cc 404 2011-09-19 21:45:15Z john.shumwayjr $
-/*  Copyright (C) 2010 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -32,14 +16,13 @@
 #include <sstream>
 #include <string>
 
-SpinModelSampler::SpinModelSampler(Paths& paths, Action* action, 
-  ActionChoiceBase* actionChoice, const MPIManager* mpi)
-  : paths(paths), action(action), actionChoice(actionChoice),
-    modelState(dynamic_cast<SpinModelState&>
-                 (actionChoice->getModelState())),
-    nmodel(modelState.getModelCount()), accRejEst(0),  mpi(mpi) 
+SpinModelSampler::SpinModelSampler(Paths& paths, Action* action,
+        ActionChoiceBase* actionChoice, const MPIManager* mpi) :
+        paths(paths), action(action), actionChoice(actionChoice), modelState(
+                dynamic_cast<SpinModelState&>(actionChoice->getModelState())), nmodel(
+                modelState.getModelCount()), accRejEst(0), mpi(mpi)
 #ifdef ENABLE_MPI
-    ,nworker((mpi)?mpi->getNWorker():1)
+        ,nworker((mpi)?mpi->getNWorker():1)
 #endif
 {
 }
@@ -48,60 +31,63 @@ SpinModelSampler::~SpinModelSampler() {
 }
 
 void SpinModelSampler::run() {
-  tryMove();
+    tryMove();
 
 }
-
 
 bool SpinModelSampler::tryMove() {
-  int workerID = (mpi) ? mpi->getWorkerID() : 0;
+    int workerID = (mpi) ? mpi->getWorkerID() : 0;
 
-  if (workerID==0) accRejEst->tryingMove(0);
+    if (workerID == 0)
+        accRejEst->tryingMove(0);
 
-  int ipart = nmodel;
-  do {
-    ipart  = int(RandomNumGenerator::getRand() * (nmodel-1));
+    int ipart = nmodel;
+    do {
+        ipart = int(RandomNumGenerator::getRand() * (nmodel - 1));
 //std::cout << ipart << ", " << nmodel << std::endl;
-  } while (! (ipart < nmodel-1));
+    } while (!(ipart < nmodel - 1));
 
-  // Check if ipart is part of a permutation, reject if yes.
-  Permutation permutation = paths.getGlobalPermutation();
-  if (ipart != permutation[ipart]) return false;
+    // Check if ipart is part of a permutation, reject if yes.
+    Permutation permutation = paths.getGlobalPermutation();
+    if (ipart != permutation[ipart])
+        return false;
 
-  // Evaluate the change in action.
-  double deltaAction = actionChoice->getActionChoiceDifference(paths,ipart);
+    // Evaluate the change in action.
+    double deltaAction = actionChoice->getActionChoiceDifference(paths, ipart);
 
 #ifdef ENABLE_MPI
-  double totalDeltaAction = 0;
-  mpi->getWorkerComm().Reduce(&deltaAction,&totalDeltaAction,
-                              1,MPI::DOUBLE,MPI::SUM,0);
-  deltaAction = totalDeltaAction;
+    double totalDeltaAction = 0;
+    mpi->getWorkerComm().Reduce(&deltaAction,&totalDeltaAction,
+            1,MPI::DOUBLE,MPI::SUM,0);
+    deltaAction = totalDeltaAction;
 #endif 
 
-  double acceptProb=exp(-deltaAction);
+    double acceptProb = exp(-deltaAction);
 
-  bool reject = RandomNumGenerator::getRand()>acceptProb;
+    bool reject = RandomNumGenerator::getRand() > acceptProb;
 #ifdef ENABLE_MPI
     if (nworker > 1) {
-      mpi->getWorkerComm().Bcast(&reject, sizeof(bool), MPI::CHAR, 0); 
+        mpi->getWorkerComm().Bcast(&reject, sizeof(bool), MPI::CHAR, 0);
     }
 #endif 
-  if (reject) return false;
+    if (reject)
+        return false;
 
-  modelState.flipSpin(ipart);
+    modelState.flipSpin(ipart);
 #ifdef ENABLE_MPI
-  if (mpi) {
+    if (mpi) {
 //    mpi->getWorkerComm().Bcast(modelState.getModelState().data(),
 //                               modelState.getModelCount(),MPI::INT,0);
-    modelState.broadcastToMPIWorkers(mpi);
-  }
+        modelState.broadcastToMPIWorkers(mpi);
+    }
 #endif
 
-  if (workerID==0) accRejEst->moveAccepted(0);
-  return true;
+    if (workerID == 0)
+        accRejEst->moveAccepted(0);
+    return true;
 }
 
-AccRejEstimator* 
+AccRejEstimator*
 SpinModelSampler::getAccRejEstimator(const std::string& name) {
-  return accRejEst=new AccRejEstimator(name.c_str(),1);
+    return accRejEst = new AccRejEstimator(name.c_str(), 1);
 }

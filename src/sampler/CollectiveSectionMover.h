@@ -15,7 +15,7 @@ class CollectiveSectionMover {
 public:
     typedef blitz::TinyVector<double, NDIM> Vec;
     typedef blitz::TinyVector<int, NDIM> IVec;
-    typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
+    typedef blitz::TinyMatrix<double, NDIM, NDIM> Mat;
 
     CollectiveSectionMover(SuperCell* cell);
     ~CollectiveSectionMover();
@@ -48,6 +48,5 @@ private:
     int sliceCount;
     SuperCell *cell;
 };
-
 
 #endif

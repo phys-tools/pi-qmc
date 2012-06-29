@@ -13,7 +13,7 @@ add_subdirectory(util)
 get_property(sources TARGET unittest PROPERTY sources)
 
 set(SRC_DIR ${PI_QMC_SOURCE_DIR}/src)
-set(TEST_DIR ${PI_QMC_SOURCE_DIR}/unittest)
+set(TEST_DIR ${PI_QMC_SOURCE_DIR}/unit-tests)
 
 include_directories(${SRC_DIR} ${TEST_DIR} ${GTEST_SOURCE_DIR}/include)
 add_executable(unittest_pi EXCLUDE_FROM_ALL 
