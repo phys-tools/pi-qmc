@@ -7,7 +7,7 @@
 #include "Beads.h"
 #include "action/Action.h"
 #include "action/DoubleAction.h"
-#include "Mover.h"
+#include "mover/Mover.h"
 #include "Paths.h"
 #include "util/Permutation.h"
 #include "PermutationChooser.h"

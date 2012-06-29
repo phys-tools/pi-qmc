@@ -6,7 +6,7 @@
 #endif
 #include "FreeMoverPBC.h"
 #include "Beads.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include "util/RandomNumGenerator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>

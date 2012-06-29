@@ -2,9 +2,9 @@
 #include <config.h>
 #endif
 #include "util/RandomNumGenerator.h"
-#include "DampedFreeTensorMover.h"
+#include "sampler/mover/DampedFreeTensorMover.h"
 #include "Beads.h"
-#include "MultiLevelSampler.h"
+#include "sampler/MultiLevelSampler.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include "util/SuperCell.h"

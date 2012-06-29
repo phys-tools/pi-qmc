@@ -10,7 +10,7 @@
 #include "Beads.h"
 #include "BeadFactory.h"
 #include "action/Action.h"
-#include "Mover.h"
+#include "mover/Mover.h"
 #include "util/RandomNumGenerator.h"
 #include "Paths.h"
 #include "util/Permutation.h"

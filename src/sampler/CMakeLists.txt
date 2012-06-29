@@ -3,17 +3,12 @@ set (sources
     CollectiveMover.cc
     CollectiveSectionMover.cc
     CollectiveSectionSampler.cc
-    DampedFreeTensorMover.cc
     DisplaceMoveSampler.cc
     DoubleCollectiveSectionSampler.cc
     DoubleDisplaceMoveSampler.cc
     DoubleMLSampler.cc
     DoubleSectionChooser.cc
     ExchangeMover.cc
-    FreeMover.cc
-    FreeMoverPBC.cc
-    FreeTensorMover.cc
-    HyperbolicMover.cc
     ModelSampler.cc
     MiddleSectionChooser.cc
     MultiLevelSampler.cc
@@ -32,5 +27,7 @@ set (sources
     UniformMover.cc
     WalkingChooser.cc
 )
+
+add_subdirectory(mover)
 
 add_library(sampler STATIC ${sources})

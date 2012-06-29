@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <blitz/array.h>
 #include <vector>
-#include "sampler/Mover.h"
+#include "sampler/mover/Mover.h"
 #include "sampler/PermutationChooser.h"
 #include "sampler/ParticleChooser.h"
 #include "Beads.h"
