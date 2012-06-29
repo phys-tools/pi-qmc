@@ -1,6 +1,7 @@
 get_filename_component(dir ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-set_property(TARGET unittest APPEND PROPERTY sources
-    ${test_sources}
+
+set(sources
+    ${sources}
     ${dir}/CoulombActionTest.cc
     ${dir}/PrimSHOActionTest.cc
     ${dir}/GaussianActionTest.cc
@@ -13,4 +14,5 @@ set_property(TARGET unittest APPEND PROPERTY sources
     ${dir}/PrimCosineActionTest.cc
     ${dir}/EFieldActionTest.cc
     ${dir}/PrimColloidalActionTest.cc
+    PARENT_SCOPE
 )
