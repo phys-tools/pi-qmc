@@ -14,5 +14,6 @@ set(sources
     ${dir}/PrimCosineActionTest.cc
     ${dir}/EFieldActionTest.cc
     ${dir}/PrimColloidalActionTest.cc
+    ${dir}/coulomb/CoulombLinkActionTest.cc
     PARENT_SCOPE
 )

@@ -40,6 +40,7 @@ set (sources
     TimpQPC.cc
     TwoQDAction.cc
     WellImageAction.cc
+    coulomb/CoulombLinkAction.cpp
 )
 
 add_library(action STATIC ${sources})
