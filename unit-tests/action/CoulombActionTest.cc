@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "action/CoulombAction.h"
+#include "action/coulomb/Coulomb1DLinkAction.h"
 
 namespace {
 
@@ -17,15 +17,15 @@ protected:
 
 TEST_F(CoulombActionTest, testValuesAtOrigin) {
     ASSERT_DOUBLE_EQ(0.0,
-            CoulombAction::calculate1DValueAtOrigin(0.0));
+            Coulomb1DLinkAction::calculate1DValueAtOrigin(0.0));
     ASSERT_DOUBLE_EQ(0.017717130566979017,
-            CoulombAction::calculate1DValueAtOrigin(0.01));
+            Coulomb1DLinkAction::calculate1DValueAtOrigin(0.01));
     ASSERT_DOUBLE_EQ(0.17650980432591801,
-            CoulombAction::calculate1DValueAtOrigin(0.1));
+            Coulomb1DLinkAction::calculate1DValueAtOrigin(0.1));
     ASSERT_DOUBLE_EQ(-0.017731958122632733,
-            CoulombAction::calculate1DValueAtOrigin(-0.01));
+            Coulomb1DLinkAction::calculate1DValueAtOrigin(-0.01));
     ASSERT_DOUBLE_EQ(-0.17799263565884202,
-            CoulombAction::calculate1DValueAtOrigin(-0.1));
+            Coulomb1DLinkAction::calculate1DValueAtOrigin(-0.1));
 
 }
 

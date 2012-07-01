@@ -2,6 +2,7 @@
 #include <config.h>
 #endif
 #include "CoulombAction.h"
+#include "action/coulomb/Coulomb1DLinkAction.h"
 #include "advancer/SectionSamplerInterface.h"
 #include "advancer/DisplaceMoveSampler.h"
 #include "Beads.h"
@@ -198,17 +199,6 @@ double CoulombAction::getEField(const Paths& paths, int ipart,
   return fp[0]/tau;
 }
 
-double CoulombAction::calculate1DValueAtOrigin(double stau) {
-    double u0 =
-            stau * (1.772453851
-                    + stau * (-0.074137740
-                            + stau * (0.005834805
-                                    + stau * (-0.000382686
-                                            + stau * (0.000008738
-                                                    + stau * 0.000002138)))));
-    return u0;
-}
-
 double CoulombAction::calculateU0For1D(double & stau, double u1_0, double u0, double & reff, double & taueff) const
 {
     // u0 for 1D
@@ -230,7 +220,7 @@ double CoulombAction::u(double r, int order) const {
     double reff = 2.0*mu*q1q2*r;
     double stau = q1q2*sqrt(2.0*mu*tau);
     //First compute the 1D actions.
-    double u0 = calculate1DValueAtOrigin(stau);
+    double u0 = Coulomb1DLinkAction::calculate1DValueAtOrigin(stau);
     double u1_0 = 0., u1_1 = 0., u1_2 = 0., u1_3 = 0., u1_4 = 0.;
     u1_0 = calculateU0For1D(stau, u1_0, u0, reff, taueff);
     {

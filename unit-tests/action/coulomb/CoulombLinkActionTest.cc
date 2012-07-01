@@ -28,7 +28,8 @@ TEST_F(CoulombLinkActionTest, testValuesAtOrigin) {
 	CoulombLinkAction::Vec delta1 = 0.0;
 	CoulombLinkAction::Vec delta2 = 0.0;
 	double value = action->getValue(delta1, delta2);
-	ASSERT_NEAR(-6.61375337e-02, value, 1e-8);
+	double expect = -0.066158726800149281;
+	ASSERT_NEAR(expect, value, 1e-8);
 }
 
 }

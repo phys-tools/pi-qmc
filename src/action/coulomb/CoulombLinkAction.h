@@ -14,6 +14,7 @@ public:
 	double getValue(Vec delta1, Vec delta2) const;
 
 private:
+	double stau;
 };
 
 #endif

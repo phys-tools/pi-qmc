@@ -46,7 +46,6 @@ public:
     /// EmpiricalPairAction method.
     virtual double utau(double r, int order) const;
     double calculateU0For1D(double & stau, double u1_0, double u0, double & reff, double & taueff) const;
-    static double calculate1DValueAtOrigin(double stau);
 private:
     /// The dielectric constant.
     const double epsilon;
