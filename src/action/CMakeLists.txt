@@ -42,6 +42,7 @@ set (sources
     WellImageAction.cc
     coulomb/CoulombLinkAction.cpp
     coulomb/Coulomb1DLinkAction.cpp
+    coulomb/Coulomb3DLinkAction.cpp
 )
 
 add_library(action STATIC ${sources})

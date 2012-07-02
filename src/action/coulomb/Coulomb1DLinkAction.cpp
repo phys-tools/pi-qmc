@@ -42,7 +42,7 @@ double Coulomb1DLinkAction::calculateU0(double uOrigin, double reff,
 	return u0;
 }
 
-double Coulomb1DLinkAction::calculateU1(double stau, double reff) const {
+double Coulomb1DLinkAction::calculateU1(double reff) const {
 	double a = 0.07776906 * stauToMinus1;
 	double b = -0.04695226 * stauToMinus2;
 	double c = 0.01291994 * stauToMinus3;
@@ -56,15 +56,15 @@ double Coulomb1DLinkAction::calculateU1(double stau, double reff) const {
 	return u1;
 }
 
-double Coulomb1DLinkAction::calculateU2(double stau, double reff) const {
-	double a = 9.52130652e-04 * pow(stau, -3);
-	double b = -6.39946071e-04 * pow(stau, -4);
-	double c = 1.14359558e-04 * pow(stau, -5);
-	double d = -7.59575215e-01 * pow(stau, -3);
-	double e = 5.53798980e-01 * pow(stau, -4);
-	double f = -7.15626226e-02 * pow(stau, -5);
-	double g = -3.49081618e-02 * pow(stau, -6);
-	double h = 8.40084881e-03 * pow(stau, -7);
+double Coulomb1DLinkAction::calculateU2(double reff) const {
+	double a = 9.52130652e-04 * stauToMinus3;
+	double b = -6.39946071e-04 * stauToMinus4;
+	double c = 1.14359558e-04 * stauToMinus5;
+	double d = -7.59575215e-01 * stauToMinus3;
+	double e = 5.53798980e-01 * stauToMinus4;
+	double f = -7.15626226e-02 * stauToMinus5;
+	double g = -3.49081618e-02 * stauToMinus5 * stauToMinus1;
+	double h = 8.40084881e-03 * stauToMinus5 * stauToMinus2;
 	double u1_2 =
 			pow(reff, 4) * (a + reff * (b + reff * c))
 			/ (1
@@ -81,17 +81,17 @@ double Coulomb1DLinkAction::calculateU2(double stau, double reff) const {
 	return u1_2;
 }
 
-double Coulomb1DLinkAction::calculateU3(double stau, double reff) const {
-	double a = -2.06984256e-1 * pow(stau, -5);
-	double b = -9.51423947e-3 * pow(stau, -6);
-	double c = 8.97532561e-2 * pow(stau, -7);
-	double d = 6.10876797e+4 * pow(stau, -3);
-	double e = -1.19016292e+5 * pow(stau, -4);
-	double f = 9.29836599e+4 * pow(stau, -5);
-	double g = -3.49919130e+4 * pow(stau, -6);
-	double h = 6.42490539e+3 * pow(stau, -7);
-	double i = -6.02729064e+2 * pow(stau, -8);
-	double j = 6.01285550e+1 * pow(stau, -9);
+double Coulomb1DLinkAction::calculateU3(double reff) const {
+	double a = -2.06984256e-1 * stauToMinus5;
+	double b = -9.51423947e-3 * stauToMinus5 * stauToMinus1;
+	double c = 8.97532561e-2 * stauToMinus5 * stauToMinus2;
+	double d = 6.10876797e+4 * stauToMinus3;
+	double e = -1.19016292e+5 * stauToMinus4;
+	double f = 9.29836599e+4 * stauToMinus5;
+	double g = -3.49919130e+4 * stauToMinus5 * stauToMinus1;
+	double h = 6.42490539e+3 * stauToMinus5 * stauToMinus2;
+	double i = -6.02729064e+2 * stauToMinus5 * stauToMinus3;
+	double j = 6.01285550e+1 * stauToMinus5 * stauToMinus4;
 	double u1_3 =
 			pow(reff, 6) * (a + reff * (b + reff * c))
 			/ (1
@@ -112,13 +112,13 @@ double Coulomb1DLinkAction::calculateU3(double stau, double reff) const {
 	return u1_3;
 }
 
-double Coulomb1DLinkAction::calculateU4(double stau, double reff) const {
-	double a = -2.84102296e-6 * pow(stau, -5);
-	double b = 6.26961672e-7 * pow(stau, -7);
-	double c = -2.20166473e-1 * pow(stau, -3);
-	double d = 1.07981903e-1 * pow(stau, -5);
-	double e = -1.94671111e-2 * pow(stau, -7);
-	double f = 1.56217930e-3 * pow(stau, -9);
+double Coulomb1DLinkAction::calculateU4(double reff) const {
+	double a = -2.84102296e-6 * stauToMinus5;
+	double b = 6.26961672e-7 * stauToMinus5 * stauToMinus2;
+	double c = -2.20166473e-1 * stauToMinus3;
+	double d = 1.07981903e-1 * stauToMinus5;
+	double e = -1.94671111e-2 * stauToMinus5 * stauToMinus2;
+	double f = 1.56217930e-3 * stauToMinus5 * stauToMinus4;
 	double u1_4 =
 			pow(reff, 6) * (a + b * reff * reff)
 			/ (1

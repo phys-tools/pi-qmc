@@ -45,6 +45,7 @@ public:
     virtual double u(double r, int order) const;
     /// EmpiricalPairAction method.
     virtual double utau(double r, int order) const;
+
 private:
     /// The dielectric constant.
     const double epsilon;

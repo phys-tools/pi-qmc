@@ -53,15 +53,15 @@ TEST_F(CoulombLinkActionTest, testValueAtOrigin) {
 	ASSERT_DOUBLE_EQ(expect, value);
 }
 
-TEST_F(CoulombLinkActionTest, DISABLED_testDiagonalValue) {
+TEST_F(CoulombLinkActionTest, testDiagonalValue) {
 	double dist = 5.0;
 	CoulombLinkAction::Vec delta1 = 0.0;
 	delta1(0) = dist;
 	CoulombLinkAction::Vec delta2 = 0.0;
 	delta2(0) = dist;
 	double value = action->getValue(delta1, delta2);
-	double expect = -0.00166121407;
-	ASSERT_NEAR(expect, value, 1e-10);
+	double expect = -0.0016612138747140238;
+	ASSERT_DOUBLE_EQ(expect, value);
 }
 
 }

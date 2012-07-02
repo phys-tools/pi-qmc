@@ -1,5 +1,6 @@
 #include "CoulombLinkAction.h"
 #include "Coulomb1DLinkAction.h"
+#include "Coulomb3DLinkAction.h"
 #include <cmath>
 #include <blitz/tinyvec-et.h>
 
@@ -19,10 +20,12 @@ double CoulombLinkAction::getValue(Vec delta1, Vec delta2) const {
 	double r = calculateAverageSeparation(delta1, delta2);
 	double s2 = calculateS2(delta1, delta2);
 	Coulomb1DLinkAction coulomb1D(stau);
+	Coulomb3DLinkAction coulomb3D(coulomb1D);
 	double u0AtOrigin = coulomb1D.calculateValueAtOrigin();
 	double taueff = 2.0 * mu * q1q2 * q1q2 * deltaTau / (epsilon * epsilon);
 	double reff = 2.0 * mu * q1q2 * r / epsilon;
-	return coulomb1D.calculateU0(u0AtOrigin, reff, taueff);
+//	return coulomb1D.calculateU0(u0AtOrigin, reff, taueff);
+	return coulomb3D.calculateU0(taueff, reff);
 }
 
 double CoulombLinkAction::calculateAverageSeparation(Vec delta1, Vec delta2) {

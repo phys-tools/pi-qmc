@@ -3,6 +3,7 @@
 #endif
 #include "CoulombAction.h"
 #include "action/coulomb/Coulomb1DLinkAction.h"
+#include "action/coulomb/Coulomb3DLinkAction.h"
 #include "advancer/SectionSamplerInterface.h"
 #include "advancer/DisplaceMoveSampler.h"
 #include "Beads.h"
@@ -199,6 +200,7 @@ double CoulombAction::getEField(const Paths& paths, int ipart,
   return fp[0]/tau;
 }
 
+
 double CoulombAction::u(double r, int order) const {
 	r = sqrt(r * r + displace2);
 	double taueff = 2.0 * mu * q1q2 * q1q2 * tau;
@@ -208,32 +210,29 @@ double CoulombAction::u(double r, int order) const {
 	Coulomb1DLinkAction coulomb1D(stau);
 	double u0 = coulomb1D.calculateValueAtOrigin();
     double u1_0 = coulomb1D.calculateU0(u0, reff, taueff);
-	double u1_1 = coulomb1D.calculateU1(stau, reff);
-	double u1_2 = coulomb1D.calculateU2(stau, reff);
-	double u1_3 = coulomb1D.calculateU3(stau, reff);
-	double u1_4 = coulomb1D.calculateU4(stau, reff);
+	double u1_1 = coulomb1D.calculateU1(reff);
+	double u1_2 = coulomb1D.calculateU2(reff);
+	double u1_3 = coulomb1D.calculateU3(reff);
+	double u1_4 = coulomb1D.calculateU4(reff);
 
 	// Then extract the 3D actions.
-    double a = 2. * taueff / (reff * reff);
-    double b = exp(-2. / a);
-    double c = 1. / (1 + 2 * a * (1 - b) * u1_1);
-
+	Coulomb3DLinkAction coulomb3D(coulomb1D);
 	double u = 0;
     switch (order) {
     case 0:
-        u = u1_0 + log(c);
-    	break;
+		u = coulomb3D.calculateU0(taueff, reff);
+        break;
     case 1:
-    	u = u1_1 + c * (b * u1_1 - 4 * a * (1 - b) * u1_2);
+		u = coulomb3D.calculateU1(taueff, reff);
     	break;
     case 2:
-    	u = u1_2 + 0.25 * c / a * (c * (b * u1_1 * (1 + 2 * a * u1_1) + 8 * a * b * u1_2 + 32 * a * a * a * (1 - b) * (1 - b) * u1_2 * u1_2) - 24 * a * a * (1 - b) * u1_3);
+		u = coulomb3D.calculateU2(taueff, reff);
     	break;
     case 3:
-    	u = u1_3 + c * c * c / (24. * a * a) * (128 * a * a * a * a * a * b * b * b * (4 * u1_2 * u1_2 * u1_2 - 9 * u1_1 * u1_2 * u1_3 + 6 * u1_1 * u1_1 * u1_4) + 64 * a * a * a * (a * u1_2 * (-8 * a * u1_2 * u1_2 + 9 * (1 + 2 * a * u1_1) * u1_3) - 3 * (1 + 2 * a * u1_1) * (1 + 2 * a * u1_1) * u1_4) + 2 * a * b * b * (2 * a * u1_1 * u1_1 * u1_1 + 96 * a * a * u1_2 * (u1_2 - 8 * a * a * u1_2 * u1_2 + 3 * a * u1_3) + 12 * a * u1_1 * (u1_2 - 6 * a * u1_3 + 144 * a * a * a * u1_2 * u1_3 - 32 * a * a * u1_4) + u1_1 * u1_1 * (1 - 1152 * a * a * a * a * u1_4)) + b * (4 * a * a * u1_1 * u1_1 * u1_1 + 12 * a * (u1_2 - 16 * a * a * u1_2 * u1_2 + 128 * a * a * a * a * u1_2 * u1_2 * u1_2 + 6 * a * u1_3 - 96 * a * a * a * u1_2 * u1_3 + 16 * a * a * u1_4) + 4 * u1_1 * u1_1 * (a + 576 * a * a * a * a * a * u1_4) + u1_1 * (1 + 24 * a * a * (u1_2 + 6 * a * u1_3 - 144 * a * a * a * u1_2 * u1_3 + 64 * a * a * u1_4))));
+		u = coulomb3D.calculateU3(taueff, reff);
     	break;
     case 4:
-    	u = u1_4; //Not exact
+    	u = coulomb3D.calculateU4(reff); //Not exact
     	break;
     }
 

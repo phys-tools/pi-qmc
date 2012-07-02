@@ -8,10 +8,10 @@ public:
 
     double calculateValueAtOrigin() const;
     double calculateU0(double u0, double reff, double taueff) const;
-	double calculateU1(double stau, double reff) const;
-	double calculateU2(double stau, double reff) const;
-	double calculateU3(double stau, double reff) const;
-	double calculateU4(double stau, double reff) const;
+	double calculateU1(double reff) const;
+	double calculateU2(double reff) const;
+	double calculateU3(double reff) const;
+	double calculateU4(double reff) const;
 private:
     const double stau;
 	const double stauToMinus1;
