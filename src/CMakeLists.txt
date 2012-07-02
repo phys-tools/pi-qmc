@@ -42,6 +42,3 @@ target_link_libraries(pi ${GSL_LIB})
 set_target_properties(pi
     PROPERTIES
     LINKER_LANGUAGE CXX)
-
-
-INCLUDE_DIRECTORIES(${PI_BINARY_DIR} ${PI_SOURCE_DIR}/src)

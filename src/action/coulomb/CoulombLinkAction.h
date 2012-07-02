@@ -9,7 +9,7 @@ public:
     typedef blitz::TinyVector<double,NDIM> Vec;
 
 	CoulombLinkAction(double q1q2, double epsilon, double mu,
-			double deltaTau);
+			double deltaTau, int norder);
 	virtual ~CoulombLinkAction();
 
 	double getValue(Vec delta1, Vec delta2) const;
@@ -23,6 +23,7 @@ private:
 	const double mu;
 	const double deltaTau;
 	const double stau;
+	const int norder;
 };
 
 #endif

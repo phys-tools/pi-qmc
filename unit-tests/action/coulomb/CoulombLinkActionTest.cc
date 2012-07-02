@@ -17,7 +17,7 @@ protected:
 		epsilon = 12.0;
 		deltaTau = 0.1;
 		mu = 1.0;
-		action = new CoulombLinkAction(q1q2, epsilon, mu, deltaTau);
+		action = new CoulombLinkAction(q1q2, epsilon, mu, deltaTau, 3);
 	}
 
 	virtual void TearDown() {

@@ -5,12 +5,13 @@
 #include <blitz/tinyvec-et.h>
 
 CoulombLinkAction::CoulombLinkAction(double q1q2, double epsilon, double mu,
-		double deltaTau) :
+		double deltaTau, int norder) :
 		q1q2(q1q2),
 		epsilon(epsilon),
 		mu(mu),
 		deltaTau(deltaTau),
-		stau(q1q2 / epsilon * sqrt(2.0 * mu * deltaTau)) {
+		stau(q1q2 / epsilon * sqrt(2.0 * mu * deltaTau)),
+		norder(norder) {
 }
 
 CoulombLinkAction::~CoulombLinkAction() {
@@ -18,14 +19,34 @@ CoulombLinkAction::~CoulombLinkAction() {
 
 double CoulombLinkAction::getValue(Vec delta1, Vec delta2) const {
 	double r = calculateAverageSeparation(delta1, delta2);
-	double s2 = calculateS2(delta1, delta2);
+	double s2 = calculateS2(delta1, delta2) / (r * r + 1e-200);
 	Coulomb1DLinkAction coulomb1D(stau);
 	Coulomb3DLinkAction coulomb3D(coulomb1D);
 	double u0AtOrigin = coulomb1D.calculateValueAtOrigin();
 	double taueff = 2.0 * mu * q1q2 * q1q2 * deltaTau / (epsilon * epsilon);
 	double reff = 2.0 * mu * q1q2 * r / epsilon;
-//	return coulomb1D.calculateU0(u0AtOrigin, reff, taueff);
-	return coulomb3D.calculateU0(taueff, reff);
+    double u = coulomb3D.calculateU0(taueff, reff);
+    switch (norder)  {
+    case 1:
+        u += coulomb3D.calculateU1(taueff, reff) * s2;
+        break;
+    case 2:
+        u += coulomb3D.calculateU1(taueff, reff) * s2;
+        u += coulomb3D.calculateU2(taueff, reff) * s2 * s2;
+        break;
+    case 3:
+        u += coulomb3D.calculateU1(taueff, reff) * s2;
+        u += coulomb3D.calculateU2(taueff, reff) * s2 * s2;
+        u += coulomb3D.calculateU3(taueff, reff) * s2 * s2 * s2;
+        break;
+    case 4:
+        u += coulomb3D.calculateU1(taueff, reff) * s2;
+        u += coulomb3D.calculateU2(taueff, reff) * s2 * s2;
+        u += coulomb3D.calculateU3(taueff, reff) * s2 * s2 * s2;
+        u += coulomb3D.calculateU4(reff) * s2 * s2 * s2 * s2;
+        break;
+    }
+    return u;
 }
 
 double CoulombLinkAction::calculateAverageSeparation(Vec delta1, Vec delta2) {
