@@ -2,7 +2,6 @@ get_filename_component(dir ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 
 set(sources
     ${sources}
-    ${dir}/CoulombActionTest.cc
     ${dir}/PrimSHOActionTest.cc
     ${dir}/GaussianActionTest.cc
     ${dir}/SHOActionTest.cc
@@ -14,6 +13,7 @@ set(sources
     ${dir}/PrimCosineActionTest.cc
     ${dir}/EFieldActionTest.cc
     ${dir}/PrimColloidalActionTest.cc
+    ${dir}/coulomb/Coulomb1DLinkActionTest.cc
     ${dir}/coulomb/CoulombLinkActionTest.cc
     PARENT_SCOPE
 )
