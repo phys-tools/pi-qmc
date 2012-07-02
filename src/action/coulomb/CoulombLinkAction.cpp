@@ -18,10 +18,11 @@ CoulombLinkAction::~CoulombLinkAction() {
 double CoulombLinkAction::getValue(Vec delta1, Vec delta2) const {
 	double r = calculateAverageSeparation(delta1, delta2);
 	double s2 = calculateS2(delta1, delta2);
-	double u0AtOrigin = Coulomb1DLinkAction::calculateValueAtOrigin(stau);
+	Coulomb1DLinkAction coulomb1D(stau);
+	double u0AtOrigin = coulomb1D.calculateValueAtOrigin();
 	double taueff = 2.0 * mu * q1q2 * q1q2 * deltaTau / (epsilon * epsilon);
 	double reff = 2.0 * mu * q1q2 * r / epsilon;
-	return Coulomb1DLinkAction::calculateU0(stau, u0AtOrigin, reff, taueff);
+	return coulomb1D.calculateU0(u0AtOrigin, reff, taueff);
 }
 
 double CoulombLinkAction::calculateAverageSeparation(Vec delta1, Vec delta2) {

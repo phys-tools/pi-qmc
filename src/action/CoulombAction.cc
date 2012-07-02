@@ -208,8 +208,9 @@ double CoulombAction::u(double r, int order) const {
 	double reff = 2.0 * mu * q1q2 * r;
 	double stau = q1q2 * sqrt(2.0 * mu * tau);
 	//First compute the 1D actions.
-	double u0 = Coulomb1DLinkAction::calculateValueAtOrigin(stau);
-    double u1_0 = Coulomb1DLinkAction::calculateU0(stau, u0, reff, taueff);
+	Coulomb1DLinkAction coulomb1D(stau);
+	double u0 = coulomb1D.calculateValueAtOrigin();
+    double u1_0 = coulomb1D.calculateU0(u0, reff, taueff);
 	double u1_1 = 0., u1_2 = 0., u1_3 = 0., u1_4 = 0.;
     {
         // u1 for 1D
