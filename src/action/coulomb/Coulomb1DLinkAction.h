@@ -6,7 +6,9 @@ public:
 	Coulomb1DLinkAction();
 	virtual ~Coulomb1DLinkAction();
 
-    static double calculate1DValueAtOrigin(double stau);
+    static double calculateValueAtOrigin(double stau);
+    static double calculateU0(
+    		double stau, double u0, double reff, double taueff);
 };
 
 #endif

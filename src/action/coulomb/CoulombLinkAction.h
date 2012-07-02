@@ -8,13 +8,21 @@ class CoulombLinkAction {
 public:
     typedef blitz::TinyVector<double,NDIM> Vec;
 
-	CoulombLinkAction(double q1q2, double epsilon, double deltaTau);
+	CoulombLinkAction(double q1q2, double epsilon, double mu,
+			double deltaTau);
 	virtual ~CoulombLinkAction();
 
 	double getValue(Vec delta1, Vec delta2) const;
 
+	static double calculateAverageSeparation(Vec delta1, Vec delta2);
+	static double calculateS2(Vec delta1, Vec delta2);
+
 private:
-	double stau;
+	const double q1q2;
+	const double epsilon;
+	const double mu;
+	const double deltaTau;
+	const double stau;
 };
 
 #endif

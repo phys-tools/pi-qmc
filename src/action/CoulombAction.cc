@@ -199,30 +199,18 @@ double CoulombAction::getEField(const Paths& paths, int ipart,
   return fp[0]/tau;
 }
 
-double CoulombAction::calculateU0For1D(double & stau, double u1_0, double u0, double & reff, double & taueff) const
-{
-    // u0 for 1D
-    double a = 0.25300593 * pow(stau, -1) + 0.01432126;
-    double b = 0.07936898 * pow(stau, -2) - 0.01634421 / stau;
-    double c = 0.07263383 * pow(stau, -3);
-    double d = 0.00940013 * pow(stau, -4);
-    double e = 0.03160181 * pow(stau, -5);
-    double f = 0.18976335 * pow(stau, -1);
-    double g = 0.00343053 * pow(stau, -2);
-    u1_0 = (u0 + reff * ((u0 * a - 1.) + reff * (f + reff * (g + reff * e * taueff)))) / (1. + reff * (a + reff * (b + reff * (c + reff * (d + reff * e)))));
-    return u1_0;
-}
+
 
 double CoulombAction::u(double r, int order) const {
-    r = sqrt(r*r+displace2);
-    double taueff = 2.0*mu*q1q2*q1q2*tau;
-    double u=0;
-    double reff = 2.0*mu*q1q2*r;
-    double stau = q1q2*sqrt(2.0*mu*tau);
-    //First compute the 1D actions.
-    double u0 = Coulomb1DLinkAction::calculate1DValueAtOrigin(stau);
-    double u1_0 = 0., u1_1 = 0., u1_2 = 0., u1_3 = 0., u1_4 = 0.;
-    u1_0 = calculateU0For1D(stau, u1_0, u0, reff, taueff);
+	double u = 0;
+	r = sqrt(r * r + displace2);
+	double taueff = 2.0 * mu * q1q2 * q1q2 * tau;
+	double reff = 2.0 * mu * q1q2 * r;
+	double stau = q1q2 * sqrt(2.0 * mu * tau);
+	//First compute the 1D actions.
+	double u0 = Coulomb1DLinkAction::calculateValueAtOrigin(stau);
+    double u1_0 = Coulomb1DLinkAction::calculateU0(stau, u0, reff, taueff);
+	double u1_1 = 0., u1_2 = 0., u1_3 = 0., u1_4 = 0.;
     {
         // u1 for 1D
         double a = 0.07776906 * pow(stau, -1);

@@ -20,7 +20,7 @@ protected:
 TEST_P(Coulomb1DLinkActionTest, testValueAtOrigin) {
 	double stau = GetParam().first;
 	double expect = GetParam().second;
-	double value = Coulomb1DLinkAction::calculate1DValueAtOrigin(stau);
+	double value = Coulomb1DLinkAction::calculateValueAtOrigin(stau);
 	ASSERT_DOUBLE_EQ(expect, value)
 			<< "(tau = " << stau << ")";
 }
