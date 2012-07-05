@@ -8,6 +8,7 @@ libfixednode_la_SOURCES = \
     AugmentedNodes.cc \
     ExcitonNodes.cc \
     FixedNodeAction.cc \
+    FixedPhaseAction.cc \
     FreeParticleNodes.cc \
     FreePartNodesNoUpdate.cc \
     GroundStateSNode.cc \
@@ -15,8 +16,10 @@ libfixednode_la_SOURCES = \
     NodeModel.cc \
     NodeTester.cc \
     SHONodes.cc \
+    SHOPhase.cc \
     SHORealNodes.cc \
     SpinChoiceFixedNodeAction.cc \
+    Spin4DPhase.cc \
     WireNodes.cc
 noinst_HEADERS = \
     AnisotropicNodes.h \
@@ -26,13 +29,17 @@ noinst_HEADERS = \
     AugmentedNodes.h \
     ExcitonNodes.h \
     FixedNodeAction.h \
+    FixedPhaseAction.h \
     FreeParticleNodes.h \
     FreePartNodesNoUpdate.h \
     GroundStateSNode.h \
     GroundStateWFNodes.h \
     NodeModel.h \
     NodeTester.h \
+    PhaseModel.h \
     SHONodes.h \
+    SHOPhase.h \
     SHORealNodes.h \
     SpinChoiceFixedNodeAction.h \
+    Spin4DPhase.h \
     WireNodes.h

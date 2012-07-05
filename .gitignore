@@ -9,6 +9,14 @@
 *.so
 *.a
 *.dylib
+*.la
+*.lo
+.deps
+config.status
+autom4te.cache
+libtool
+stamp-h1
+src/pi
 
 # Packages #
 ############

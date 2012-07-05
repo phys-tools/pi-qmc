@@ -77,13 +77,13 @@ AC_C_CONST
 AC_CONFIG_FILES([Makefile \
     src/Makefile \
     src/action/Makefile \
+	src/advancer/Makefile \
     src/algorithm/Makefile \
     src/demo/Makefile \
     src/emarate/Makefile \
     src/estimator/Makefile \
     src/fixednode/Makefile \
 	src/parser/Makefile \
-	src/sampler/Makefile \
     src/spin/Makefile \
     src/stats/Makefile \
     src/util/Makefile \

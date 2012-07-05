@@ -11,7 +11,6 @@ libaction_la_SOURCES = \
 	EFieldAction.cc \
 	EwaldAction.cc \
 	EwaldImagePairAction.cc \
-	FixedPhaseAction.cc \
 	GateAction.cc \
 	GaussianAction.cc \
 	GaussianDotAction.cc \
@@ -30,7 +29,7 @@ libaction_la_SOURCES = \
 	PrimSHOAction.cc \
 	PrimShellAction.cc \
 	PrimTorusAction.cc \
-	PrimativePairAction.cc \
+	PrimitivePairAction.cc \
 	QPCAction.cc \
 	RingGateAction.cc \
 	SHOAction.cc \
@@ -42,7 +41,10 @@ libaction_la_SOURCES = \
 	StillWebAction.cc \
 	TimpQPC.cc \
 	TwoQDAction.cc \
-	WellImageAction.cc
+	WellImageAction.cc \
+    coulomb/Coulomb1DLinkAction.cpp \
+    coulomb/Coulomb3DLinkAction.cpp \
+    coulomb/CoulombLinkAction.cpp 
 noinst_HEADERS = \
 	Action.h \
 	ActionChoice.h \
@@ -56,7 +58,6 @@ noinst_HEADERS = \
 	EFieldAction.h \
 	EwaldAction.h \
 	EwaldImagePairAction.h \
-	FixedPhaseAction.h \
 	GateAction.h \
 	GaussianAction.h \
 	GaussianDotAction.h \
@@ -75,7 +76,7 @@ noinst_HEADERS = \
 	PrimSHOAction.h \
 	PrimShellAction.h \
 	PrimTorusAction.h \
-	PrimativePairAction.h \
+	PrimitivePairAction.h \
 	QPCAction.h \
 	RingGateAction.h \
 	SHOAction.h \
@@ -87,4 +88,7 @@ noinst_HEADERS = \
 	StillWebAction.h \
 	TimpQPC.h \
 	TwoQDAction.h \
-	WellImageAction.h
+	WellImageAction.h \
+    coulomb/Coulomb1DLinkAction.h \
+    coulomb/Coulomb3DLinkAction.h \
+    coulomb/CoulombLinkAction.h
