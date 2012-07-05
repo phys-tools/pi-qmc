@@ -26,7 +26,7 @@ set (sources
 
 add_executable(pi ${sources} main.cc)
 
-target_link_libraries(pi demo parser sampler estimator emarate fixednode 
+target_link_libraries(pi demo parser advancer estimator emarate fixednode 
     spin stats action algorithm util)
 
 target_link_libraries(pi ${LIBXML2_LIBRARIES} )

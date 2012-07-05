@@ -27,7 +27,7 @@ add_executable(unittest_pi EXCLUDE_FROM_ALL
 )
 
 target_link_libraries(unittest_pi 
-    demo parser sampler estimator emarate fixednode 
+    demo parser advancer estimator emarate fixednode 
     spin stats action algorithm util)    
 
 target_link_libraries(unittest_pi gtest -lpthread)

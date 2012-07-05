@@ -30,4 +30,4 @@ set (sources
 
 add_subdirectory(mover)
 
-add_library(sampler STATIC ${sources})
+add_library(advancer STATIC ${sources})
