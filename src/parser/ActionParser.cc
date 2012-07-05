@@ -72,6 +72,7 @@
 #include "action/SHODotAction.h"
 #include "action/DotGeomAction.h"
 #include "action/PrimSHOAction.h"
+#include "action/PrimImageAction.h"
 #include "action/PrimCosineAction.h"
 #include "action/PrimShellAction.h"
 #include "action/PrimColloidalAction.h"
@@ -221,6 +222,24 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       if (ndim==0) ndim=NDIM;
       composite->addAction(new PrimSHOAction(a,b,simInfo,ndim,species));
       continue;
+    } else if (name == "PrimImageAction") {
+            double d = getLengthAttribute(actNode, "d");
+            double del = getLengthAttribute(actNode, "del");
+            double epsilon = getDoubleAttribute(actNode, "epsilon");
+            double epsilonrel = getDoubleAttribute(actNode, "epsilonrel");
+            double vbarr = getEnergyAttribute(actNode, "vbarr");
+            std::string specName = getStringAttribute(actNode, "species");
+            const Species& species(simInfo.getSpecies(specName));
+            /*std::cout <<"d,epsilon,epsilonrel,vbarr="<<d<<","
+              <<epsilon<<", "<<epsilonrel", "<<vbarr<<std::endl; */
+            int ndim = getIntAttribute(actNode, "ndim");
+            if (ndim == 0)
+                ndim = NDIM;
+            composite->addAction(
+                    new PrimImageAction(d, del, epsilon, epsilonrel, vbarr,
+                            simInfo, ndim, species));
+            continue;
+
     } else if (name=="PrimCosineAction") {
 	  double a=getDoubleAttribute(actNode,"a");
 	  double b=getDoubleAttribute(actNode,"b");

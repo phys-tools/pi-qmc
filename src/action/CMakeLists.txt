@@ -24,6 +24,7 @@ set (sources
     PrimAnisSHOAction.cc
     PrimColloidalAction.cc
     PrimCosineAction.cc
+    PrimImageAction.cc
     PrimSHOAction.cc
     PrimShellAction.cc
     PrimTorusAction.cc
