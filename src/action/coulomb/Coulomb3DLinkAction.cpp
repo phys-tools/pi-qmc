@@ -4,41 +4,42 @@
 #include <iostream>
 
 Coulomb3DLinkAction::Coulomb3DLinkAction(Coulomb1DLinkAction &coulomb1D) :
-        coulomb1D(coulomb1D) {
+        coulomb1D(coulomb1D), stau(coulomb1D.getSTau()) {
 }
 
 Coulomb3DLinkAction::~Coulomb3DLinkAction() {
 }
 
-double Coulomb3DLinkAction::calculateU0(double taueff, double reff) const {
+double Coulomb3DLinkAction::calculateU0(double reff) const {
     double u0 = coulomb1D.calculateValueAtOrigin();
-    double u1_0 = coulomb1D.calculateU0(u0, reff, taueff);
+    double u1_0 = coulomb1D.calculateU0(u0, reff);
     double u1_1 = coulomb1D.calculateU1(reff);
 
-    double a = 2. * taueff / (reff * reff + 1e-200);
-    double b = exp(-2. / a);
-    double c = 1. / (1 + 2 * a * (1 - b) * u1_1);
+    double a = 0.5 * reff * reff  / (stau * stau);
+    double b = exp(-2. * a);
+    double c = 1.0 / (1.0 + 2 * (1.0 - b) * u1_1 / (a + 1e-200));
     double u = u1_0 + log(c);
     return u;
 }
 
-double Coulomb3DLinkAction::calculateU1(double taueff, double reff) const {
+double Coulomb3DLinkAction::calculateU1(double reff) const {
     double u1_1 = coulomb1D.calculateU1(reff);
     double u1_2 = coulomb1D.calculateU2(reff);
 
-    double a = 2. * taueff / (reff * reff + 1e-200);
-    double b = exp(-2. / (a + 1e-200));
-    double c = 1. / (1 + 2 * a * (1 - b) * u1_1);
-    double u = u1_1 + c * (b * u1_1 - 4 * a * (1 - b) * u1_2);
+    double a = 0.5 * reff * reff  / (stau * stau);
+    double b = exp(-2. * a);
+    double c = 1.0 / (1.0 + 2 * (1.0 - b) * u1_1 / (a + 1e-200));
+
+    double u = u1_1 + c * (b * u1_1 - 4 * (1 - b) * u1_2 / (a + 1e-200));
     return u;
 }
 
-double Coulomb3DLinkAction::calculateU2(double taueff, double reff) const {
+double Coulomb3DLinkAction::calculateU2(double reff) const {
     double u1_1 = coulomb1D.calculateU1(reff);
     double u1_2 = coulomb1D.calculateU2(reff);
     double u1_3 = coulomb1D.calculateU3(reff);
 
-    double a = 2. * taueff / (reff * reff + 1e-50);
+    double a = 2. * stau * stau / (reff * reff + 1e-50);
     double b = exp(-2. / (a + 1e-200));
     double c = 1. / (1 + 2 * a * (1 - b) * u1_1);
     double u = u1_2
@@ -47,17 +48,16 @@ double Coulomb3DLinkAction::calculateU2(double taueff, double reff) const {
                     + 32 * a * a * a * (1 - b) * (1 - b) * u1_2
                     * u1_2)
                     - 24 * a * a * (1 - b) * u1_3);
-    std::cout << "a, b, c, u" << a << ", " << b << ", " << c << ", " << u << std::endl;
     return u;
 }
 
-double Coulomb3DLinkAction::calculateU3(double taueff, double reff) const {
+double Coulomb3DLinkAction::calculateU3(double reff) const {
     double u1_1 = coulomb1D.calculateU1(reff);
     double u1_2 = coulomb1D.calculateU2(reff);
     double u1_3 = coulomb1D.calculateU3(reff);
     double u1_4 = coulomb1D.calculateU4(reff);
 
-    double a = 2. * taueff / (reff * reff + 1e-50);
+    double a = 2. * stau * stau / (reff * reff + 1e-50);
     double b = exp(-2. / (a + 1e-200));
     double c = 1. / (1 + 2 * a * (1 - b) * u1_1);
     double u = u1_3 + c * c * c / (24. * a * a + 1e-200)

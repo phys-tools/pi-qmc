@@ -24,8 +24,7 @@ double Coulomb1DLinkAction::calculateValueAtOrigin() const {
 	return u0;
 }
 
-double Coulomb1DLinkAction::calculateU0(double uOrigin, double reff,
-		double taueff) const {
+double Coulomb1DLinkAction::calculateU0(double uOrigin, double reff) const {
 
 	double a = 0.25300593 * stauToMinus1 + 0.01432126;
 	double b = 0.07936898 * stauToMinus2 - 0.01634421 / stau;
@@ -35,10 +34,9 @@ double Coulomb1DLinkAction::calculateU0(double uOrigin, double reff,
 	double f = 0.18976335 * stauToMinus1;
 	double g = 0.00343053 * stauToMinus2;
 
-	double u0 = (uOrigin + reff * ((u0 * a - 1.)
-							+ reff * (f + reff * (g + reff * e * taueff))));
-	u0 /= (1.
-			+ reff * (a + reff * (b + reff * (c + reff * (d + reff * e)))));
+	double u0 = uOrigin + reff * ((uOrigin * a - 1.)
+	        + reff * (f + reff * (g + reff * e * stau * stau)));
+	u0 /= 1. + reff * (a + reff * (b + reff * (c + reff * (d + reff * e))));
 	return u0;
 }
 
@@ -133,5 +131,10 @@ double Coulomb1DLinkAction::calculateU4(double reff) const {
 											* f))));
 	return u1_4;
 }
+
+double Coulomb1DLinkAction::getSTau() const {
+    return stau;
+}
+
 
 

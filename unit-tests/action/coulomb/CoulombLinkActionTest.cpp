@@ -49,7 +49,7 @@ TEST_F(CoulombLinkActionTest, testValueAtOrigin) {
 	CoulombLinkAction::Vec delta1 = 0.0;
 	CoulombLinkAction::Vec delta2 = 0.0;
 	double value = action->getValue(delta1, delta2);
-	double expect = -0.066158726800149281;
+    double expect = -0.066158726800149281;
 	ASSERT_DOUBLE_EQ(expect, value);
 }
 
@@ -60,7 +60,7 @@ TEST_F(CoulombLinkActionTest, testDiagonalValue) {
 	CoulombLinkAction::Vec delta2 = 0.0;
 	delta2(0) = dist;
 	double value = action->getValue(delta1, delta2);
-	double expect = -0.0016612138747140238;
+    double expect = -0.0016612138747140238;
 	ASSERT_DOUBLE_EQ(expect, value);
 }
 

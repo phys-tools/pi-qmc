@@ -13,7 +13,8 @@ set(sources
     ${dir}/PrimCosineActionTest.cc
     ${dir}/EFieldActionTest.cc
     ${dir}/PrimColloidalActionTest.cc
-    ${dir}/coulomb/Coulomb1DLinkActionTest.cc
-    ${dir}/coulomb/CoulombLinkActionTest.cc
+    ${dir}/coulomb/Coulomb1DLinkActionTest.cpp
+    ${dir}/coulomb/Coulomb3DLinkActionTest.cpp
+    ${dir}/coulomb/CoulombLinkActionTest.cpp
     PARENT_SCOPE
 )

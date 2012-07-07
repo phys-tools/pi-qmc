@@ -203,13 +203,12 @@ double CoulombAction::getEField(const Paths& paths, int ipart,
 
 double CoulombAction::u(double r, int order) const {
 	r = sqrt(r * r + displace2);
-	double taueff = 2.0 * mu * q1q2 * q1q2 * tau;
 	double reff = 2.0 * mu * q1q2 * r;
 	double stau = q1q2 * sqrt(2.0 * mu * tau);
 	// First compute the 1D actions.
 	Coulomb1DLinkAction coulomb1D(stau);
 	double u0 = coulomb1D.calculateValueAtOrigin();
-    double u1_0 = coulomb1D.calculateU0(u0, reff, taueff);
+    double u1_0 = coulomb1D.calculateU0(u0, reff);
 	double u1_1 = coulomb1D.calculateU1(reff);
 	double u1_2 = coulomb1D.calculateU2(reff);
 	double u1_3 = coulomb1D.calculateU3(reff);
@@ -220,25 +219,25 @@ double CoulombAction::u(double r, int order) const {
 	double u = 0;
     switch (order) {
     case 0:
-		u = coulomb3D.calculateU0(taueff, reff);
+		u = coulomb3D.calculateU0(reff);
         break;
     case 1:
-		u = coulomb3D.calculateU1(taueff, reff);
+		u = coulomb3D.calculateU1(reff);
     	break;
     case 2:
-		u = coulomb3D.calculateU2(taueff, reff);
+		u = coulomb3D.calculateU2(reff);
     	break;
     case 3:
-		u = coulomb3D.calculateU3(taueff, reff);
+		u = coulomb3D.calculateU3(reff);
     	break;
     case 4:
     	u = coulomb3D.calculateU4(reff); //Not exact
     	break;
     }
 
-    if(order == 0 && ewaldSum){
-            u -= tau * q1q2 * ewaldSum->evalFR(r);
-    }
+//    if(order == 0 && ewaldSum){
+//            u -= tau * q1q2 * ewaldSum->evalFR(r);
+//    }
 
     return u;
 }
