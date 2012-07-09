@@ -28,11 +28,34 @@ protected:
 
 	double calculateUDot(CoulombLinkAction::Vec delta1,
 	        CoulombLinkAction::Vec delta2) const {
-	    double delta = 1e-6;
+	    double delta = 1e-10;
         double value = calculatePropagator(deltaTau + delta, delta1, delta2);
         value -= calculatePropagator(deltaTau - delta, delta1, delta2);
         return value / (2.0 * delta);
 	}
+
+	double calculateLaplacian(CoulombLinkAction::Vec delta1,
+            CoulombLinkAction::Vec delta2) const {
+	    double delta = 1e-4;
+	    double value = -2 * NDIM * calculatePropagator(delta1, delta2);
+	    for (int idim = 0; idim < NDIM; ++idim) {
+            delta1[idim] += delta;
+            value += calculatePropagator(delta1, delta2);
+            delta1[idim] -= 2.0 * delta;
+            value += calculatePropagator(delta1, delta2);
+            delta1[idim] += delta;
+	    }
+	    value /= delta * delta;
+	    return value;
+	}
+
+    double calculatePropagator(
+            CoulombLinkAction::Vec delta1,
+            CoulombLinkAction::Vec delta2) const {
+        double propagator = calculateFreePropagator(deltaTau, delta1, delta2);
+        propagator *= exp(-action->getValue(delta1, delta2));
+        return propagator;
+    }
 
 	double calculatePropagator(double someDeltaTau,
 	        CoulombLinkAction::Vec delta1,
@@ -101,8 +124,33 @@ TEST_F(CoulombLinkActionTest, testTauDerivatve) {
     CoulombLinkAction::Vec delta2 = 0.0;
     delta2(0) = dist;
     double value = calculateUDot(delta1, delta2);
-    double expect = -10.654095411954945;
-    ASSERT_DOUBLE_EQ(expect, value);
+    double expect = -10.654095383699769;
+    ASSERT_NEAR(expect, value, 1e-10);
+}
+
+TEST_F(CoulombLinkActionTest, testLaplacian) {
+    double dist = 5.0;
+    CoulombLinkAction::Vec delta1 = 0.0;
+    delta1(0) = dist;
+    CoulombLinkAction::Vec delta2 = 0.0;
+    delta2(0) = dist;
+    double value = calculateLaplacian(delta1, delta2);
+    double expect = -10.665909;
+    ASSERT_NEAR(expect, value, 1e-5);
+}
+
+TEST_F(CoulombLinkActionTest, testBlochEquation) {
+    double dist = 5.0;
+    CoulombLinkAction::Vec delta1 = 0.0;
+    delta1(0) = dist;
+    CoulombLinkAction::Vec delta2 = 0.0;
+    delta2(0) = dist;
+    double lhs = -calculateLaplacian(delta1, delta2);
+    double potential = q1q2 / (dist * epsilon);
+    lhs += potential * calculatePropagator(delta1, delta2);
+    double rhs = -calculateUDot(delta1, delta2);
+    ASSERT_NEAR(0.0, lhs - rhs, 5e-5)
+        << "Block equation: " << lhs << " =?= " << rhs;
 }
 
 }
