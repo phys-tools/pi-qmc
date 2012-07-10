@@ -13,6 +13,7 @@
 #include "util/SuperCell.h"
 #include "SimulationInfo.h"
 #include "util/PeriodicGaussian.h"
+#include "action/coulomb/CoulombLinkAction.h"
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
         const Species& species1, const Species& species2, double C)
@@ -22,7 +23,9 @@ EMARateAction::EMARateAction(const SimulationInfo& simInfo,
   index1(species1.ifirst),
   index2(species2.ifirst),
   C(C),
-  nPathSlice(simInfo.getNSlice()) {
+  nPathSlice(simInfo.getNSlice()),
+  hasCoulomb(false),
+  coulomb(0) {
 
     if (species1.anMass) {
         mass1 = *species1.anMass;
@@ -38,6 +41,15 @@ EMARateAction::EMARateAction(const SimulationInfo& simInfo,
 }
 
 EMARateAction::~EMARateAction() {
+    delete coulomb;
+}
+
+void EMARateAction::includeCoulombContribution(double epsilon, int norder) {
+    hasCoulomb = true;
+    double q1q2 = -1.0;
+    double mu = 1.0 / (1.0 / species1.mass + 1.0 / species2.mass);
+    double deltaTau = 1.0 / deltaTau;
+    coulomb = new CoulombLinkAction(q1q2, epsilon, mu, deltaTau, norder);
 }
 
 EMARateAction::Vec EMARateAction::getMovingPosition(
@@ -189,9 +201,9 @@ void EMARateAction::getBeadAction(const Paths& paths, int ipart, int islice,
         double &u, double &utau, double &ulambda, Vec &fm, Vec &fp) const {
     u = utau = ulambda = 0; fm = 0.; fp = 0.;
 }
+
 bool EMARateAction::isCenteredOnSliceZero(
         const SectionSamplerInterface & sampler, const int nSlice) {
     const int iFirstSlice = sampler.getFirstSliceIndex();
     return iFirstSlice + nSlice / 2 == nPathSlice;
 }
-

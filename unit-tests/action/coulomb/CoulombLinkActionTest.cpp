@@ -36,7 +36,7 @@ protected:
 
 	double calculateLaplacian(CoulombLinkAction::Vec delta1,
             CoulombLinkAction::Vec delta2) const {
-	    double delta = 1e-4;
+	    double delta = 1e-5;
 	    double value = -2 * NDIM * calculatePropagator(delta1, delta2);
 	    for (int idim = 0; idim < NDIM; ++idim) {
             delta1[idim] += delta;

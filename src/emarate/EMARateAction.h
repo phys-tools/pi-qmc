@@ -7,6 +7,7 @@ class DisplaceMoveSampler;
 class Paths;
 class SimulationInfo;
 class Species;
+class CoulombLinkAction;
 #include "Beads.h"
 
 #include "action/Action.h"
@@ -37,6 +38,8 @@ public:
     EMARateAction(const SimulationInfo&, const Species&, const Species&,
             double C);
     virtual ~EMARateAction();
+
+    void includeCoulombContribution(double epsilon, int norder);
 
     virtual double getActionDifference(const SectionSamplerInterface&,
             const int level);
@@ -69,6 +72,8 @@ private:
     Vec mass2;
     /// The total number of slices in the path.
     const int nPathSlice;
+    bool hasCoulomb;
+    CoulombLinkAction *coulomb;
     EMARateAction::Vec getMovingPosition(int npart, int nslice, int nMoving,
             const IArray &index,
             const Beads<NDIM> &sectionBeads,

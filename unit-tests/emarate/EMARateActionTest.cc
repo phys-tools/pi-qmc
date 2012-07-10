@@ -70,5 +70,19 @@ TEST_F(EMARateActionTest, testSamplerWithOnlyElectron) {
     ASSERT_DOUBLE_EQ(0.0, deltaAction);
 }
 
+TEST_F(EMARateActionTest, testActionDifferenceWithCoulombAction) {
+    createFakeSampler(2);
+    EMARateAction action(simInfo, species1, species2, coefficient);
+    double epsilon = 1.0;
+    int norder = 3;
+    action.includeCoulombContribution(epsilon, norder);
+    positioner->setRecombiningPaths(1.0);
+    double deltaAction = action.getActionDifference(*sampler, 0);
+    double oldAction = -log(1 + coefficient) + NDIM/(nslice - 1);
+    double newAction = -log(1 + coefficient * exp(+NDIM));
+    double expect = newAction - oldAction;
+    ASSERT_DOUBLE_EQ(expect, deltaAction);
+}
+
 }
 
