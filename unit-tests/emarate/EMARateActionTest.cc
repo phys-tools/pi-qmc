@@ -7,6 +7,7 @@
 #include "Species.h"
 #include "SimulationInfo.h"
 #include "EMARateTestBeadPositioner.h"
+#include "action/coulomb/CoulombLinkAction.h"
 
 
 namespace {
@@ -55,8 +56,9 @@ TEST_F(EMARateActionTest, testActionDifferenceForRecombiningPaths) {
     EMARateAction action(simInfo, species1, species2, coefficient);
     positioner->setRecombiningPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
-    double oldAction = -log(1 + coefficient) + NDIM/(nslice -1);
-    double newAction = -log(1 + coefficient * exp(+NDIM));
+    double oldAction = -log(1 + coefficient);
+    double kineticDifference = NDIM;
+    double newAction = -log(1 + coefficient * exp(kineticDifference));
     double expect = newAction - oldAction;
     ASSERT_DOUBLE_EQ(expect, deltaAction);
 }
@@ -78,9 +80,22 @@ TEST_F(EMARateActionTest, testActionDifferenceWithCoulombAction) {
     action.includeCoulombContribution(epsilon, norder);
     positioner->setRecombiningPaths(1.0);
     double deltaAction = action.getActionDifference(*sampler, 0);
-    double oldAction = -log(1 + coefficient) + NDIM/(nslice - 1);
-    double newAction = -log(1 + coefficient * exp(+NDIM));
+
+    double q1q2 = -1.0;
+    double mu = 0.5;
+    double deltaTau = 1.0;
+    CoulombLinkAction coulomb(q1q2, epsilon, mu, deltaTau, norder);
+    CoulombLinkAction::Vec zero = 0.0;
+    CoulombLinkAction::Vec delta = 1.0;
+    double oldAction = -log(1 + coefficient);
+    double kineticDifference = 0.0;
+    double coulombDifference = 2.0 * coulomb.getValue(zero, delta);
+    kineticDifference -= -NDIM;
+    coulombDifference -= 2.0 * coulomb.getValue(zero, zero);
+    double actionDifference = kineticDifference + coulombDifference;
+    double newAction = -log(1 + coefficient * exp(actionDifference));
     double expect = newAction - oldAction;
+
     ASSERT_DOUBLE_EQ(expect, deltaAction);
 }
 

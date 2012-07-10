@@ -80,10 +80,10 @@ double EMARateAction::getActionDifference(
     // Only evaluate if we are aligned with slice 0 in the middle.
     if (!isCenteredOnSliceZero(sampler, nSlice)) return 0.;
 
-    double oldDiagAction = 0.;
-    double oldRadAction = 0.;
-    double newDiagAction = 0.;
-    double newRadAction = 0.;
+    double oldDiagAction = 0.0;
+    double oldRadAction = 0.0;
+    double newDiagAction = 0.0;
+    double newRadAction = 0.0;
 
     const Vec inv2Sigma21 = 0.5 * mass1 * invTau / nStride;
     const Vec inv2Sigma22 = 0.5 * mass2 * invTau / nStride;
@@ -134,6 +134,22 @@ double EMARateAction::getActionDifference(
             newRadAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
 
+        if (hasCoulomb && islice == nSlice/2 && nStride == 1) {
+            Vec deltaPrev = reRadPrev - rhRadPrev;
+            Vec deltaRad = reRad - rhRad;
+            Vec deltaDiag = re - rh;
+            newDiagAction += coulomb->getValue(deltaDiag, deltaPrev);
+            newRadAction += coulomb->getValue(deltaRad, deltaPrev);
+        }
+
+        if (hasCoulomb && islice == nSlice/2 + nStride && nStride == 1) {
+            Vec deltaRad = reRadPrev - rhRadPrev;
+            Vec deltaDiag = rePrev - rhRad;
+            Vec delta = re - rh;
+            newDiagAction += coulomb->getValue(delta, deltaDiag);
+            newRadAction += coulomb->getValue(delta, deltaRad);
+        }
+
         // Calculate action for old beads.
         Vec reOld = sectionBeads(0,islice);
         Vec rhOld = sectionBeads(1,islice);
@@ -158,6 +174,22 @@ double EMARateAction::getActionDifference(
             oldRadAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
 
+        if (hasCoulomb && islice == nSlice/2 && nStride == 1) {
+            Vec deltaPrev = reRadPrevOld - rhRadPrevOld;
+            Vec deltaRad = reRadOld - rhRadOld;
+            Vec deltaDiag = reOld - rhOld;
+            oldDiagAction += coulomb->getValue(deltaDiag, deltaPrev);
+            oldRadAction += coulomb->getValue(deltaRad, deltaPrev);
+        }
+
+        if (hasCoulomb && islice == nSlice/2 + nStride && nStride == 1) {
+            Vec deltaRad = reRadPrevOld - rhRadPrevOld;
+            Vec deltaDiag = rePrevOld - rhPrevOld;
+            Vec delta = reOld - rhOld;
+            oldDiagAction += coulomb->getValue(delta, deltaDiag);
+            oldRadAction += coulomb->getValue(delta, deltaRad);
+        }
+
         // Set the previous positions.
         rePrev = re;
         rhPrev = rh;
@@ -173,7 +205,7 @@ double EMARateAction::getActionDifference(
     double oldAction = -log(1 + C * exp(-oldRadAction + oldDiagAction));
     double newAction = -log(1 + C * exp(-newRadAction + newDiagAction));
 
-    if (C > 0.) {
+    if (C > 0.0) {
         if (log(C) - oldRadAction + oldDiagAction > 140) {
             oldAction = oldRadAction - log(C) - oldDiagAction;
         }
