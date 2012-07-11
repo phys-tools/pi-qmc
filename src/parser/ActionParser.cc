@@ -644,7 +644,14 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       specName=getStringAttribute(actNode,"species2");
       const Species& species2(simInfo.getSpecies(specName));
       const double C=getDoubleAttribute(actNode,"c");
-      composite->addAction(new EMARateAction(simInfo,species1,species2,C)); 
+      EMARateAction* action
+          = new EMARateAction(simInfo, species1, species2, C);
+      if (getBoolAttribute(actNode, "useCoulomb")) {
+          const double epsilon = getDoubleAttribute(actNode, "epsilon");
+          const int norder = getIntAttribute(actNode, "norder");
+          action->includeCoulombContribution(epsilon, norder);
+      }
+      composite->addAction(action);
       continue;
     } else if (name=="SpinChoiceFixedNodeAction") {
       std::string initstring = getStringAttribute(actNode,"initial");
