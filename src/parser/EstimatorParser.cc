@@ -567,7 +567,13 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="EMARateEstimator") {
       double C =  parser.getDoubleAttribute(estNode,"c");
-      manager->add(new EMARateEstimator(simInfo,C));
+      EMARateEstimator* estimator = new EMARateEstimator(simInfo, C);
+      if (parser.getBoolAttribute(estNode, "useCoulomb")) {
+          double epsilon = parser.getDoubleAttribute(estNode, "epsilon");
+          int norder = parser.getIntAttribute(estNode, "norder");
+          estimator->includeCoulombContribution(epsilon, norder);
+      }
+      manager->add(estimator);
     }
   }
   xmlXPathFreeObject(obj);
