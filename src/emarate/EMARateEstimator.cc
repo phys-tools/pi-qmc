@@ -6,6 +6,7 @@
 #include "Species.h"
 #include "Paths.h"
 #include "util/SuperCell.h"
+#include "action/coulomb/CoulombLinkAction.h"
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 
@@ -18,7 +19,21 @@ EMARateEstimator::EMARateEstimator(const SimulationInfo& simInfo, double C)
   cell(*simInfo.getSuperCell()),
   lastSlice(simInfo.getNSlice()-1),
   sum(0),
-  norm(0) {
+  norm(0),
+  hasCoulomb(false),
+  coulomb(0) {
+}
+
+EMARateEstimator::~EMARateEstimator() {
+    delete coulomb;
+}
+
+void EMARateEstimator::includeCoulombContribution(double epsilon, int norder) {
+    hasCoulomb = true;
+    double q1q2 = -1.0;
+    double mu = 1.0 / (1.0 / masse + 1.0 / massh);
+    coulomb = new CoulombLinkAction(q1q2, epsilon, mu, dtau, norder);
+
 }
 
 void EMARateEstimator::initCalc(const int nslice, const int firstSlice) {
@@ -44,6 +59,15 @@ void EMARateEstimator::evaluateElectronBeforeRecombination(
     delta = end - start;
     cell.pbc(delta);
     actionDifference -= 0.5 * masse * dot(delta, delta) / dtau;
+
+    if (hasCoulomb) {
+        Vec zero = 0.0;
+        Vec deltaPrev = paths(0, 0, -1) - start;
+        actionDifference += coulomb->getValue(deltaPrev, zero);
+
+        delta = paths(0, 0) - end;
+        actionDifference -= coulomb->getValue(deltaPrev, delta);
+    }
 }
 
 void EMARateEstimator::evaluateHoleAfterRecombination(
@@ -55,6 +79,15 @@ void EMARateEstimator::evaluateHoleAfterRecombination(
     delta = end - start;
     cell.pbc(delta);
     actionDifference -= 0.5 * massh * dot(delta, delta) / dtau;
+
+    if (hasCoulomb) {
+        Vec zero = 0.0;
+        Vec deltaNext = paths(1, 1) - end;
+        actionDifference += coulomb->getValue(deltaNext, zero);
+
+        delta = paths(1, 1, -1) - start;
+        actionDifference -= coulomb->getValue(deltaNext, delta);
+    }
 }
 
 void EMARateEstimator::endCalc(const int nslice) {

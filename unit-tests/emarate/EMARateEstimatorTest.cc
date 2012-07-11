@@ -5,6 +5,7 @@
 #include "SimulationInfo.h"
 #include "BeadFactory.h"
 #include "util/SuperCell.h"
+#include "action/coulomb/CoulombLinkAction.h"
 
 
 namespace {
@@ -94,7 +95,7 @@ TEST_F(EMARateEstimatorTest, testNearbyDirectPaths) {
     setDirectPaths();
     estimator->evaluate(*paths);
     double value = estimator->calcValue();
-    double delta2 = 3.0 * pow(separation, 2);
+    double delta2 = NDIM * separation * separation;
     double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
     double expect = 1.0 / (1.0 + exp(-actionDifference));
     ASSERT_DOUBLE_EQ(expect, value);
@@ -107,7 +108,7 @@ TEST_F(EMARateEstimatorTest, testLargeCoefficentValue) {
     setDirectPaths();
     estimator->evaluate(*paths);
     double value = estimator->calcValue();
-    double delta2 = 3.0 * pow(separation, 2);
+    double delta2 = NDIM * separation * separation;
     double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
     double expect = 1.0 / (1.0 + coefficient * exp(-actionDifference));
     ASSERT_DOUBLE_EQ(expect, value);
@@ -120,9 +121,34 @@ TEST_F(EMARateEstimatorTest, testSmallCoefficentValue) {
     setDirectPaths();
     estimator->evaluate(*paths);
     double value = estimator->calcValue();
-    double delta2 = 3.0 * pow(separation, 2);
+    double delta2 = NDIM * separation * separation;
     double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
     double expect = 1.0 / (1.0 + coefficient * exp(-actionDifference));
     ASSERT_DOUBLE_EQ(expect, value);
 }
+
+TEST_F(EMARateEstimatorTest, testCoulombInteraction) {
+    createEstimator();
+    double epsilon = 1.0;
+    int norder = 1;
+    estimator->includeCoulombContribution(epsilon, norder);
+    separation = 0.1;
+    setDirectPaths();
+    estimator->evaluate(*paths);
+    double value = estimator->calcValue();
+
+    double q1q2 = -1.0;
+    double mu = 0.5;
+    CoulombLinkAction coulomb(q1q2, epsilon, mu, simInfo.tau, norder);
+    CoulombLinkAction::Vec zero = 0.0;
+    CoulombLinkAction::Vec delta = separation;
+
+    double delta2 = NDIM * separation * separation;
+    double actionDifference = 2 * 0.5 * delta2 / simInfo.tau;
+    actionDifference += 2.0 * coulomb.getValue(zero, delta);
+    actionDifference -= 2.0 * coulomb.getValue(delta, delta);
+    double expect = 1.0 / (1.0 + exp(-actionDifference));
+    ASSERT_DOUBLE_EQ(expect, value);
+}
+
 }
