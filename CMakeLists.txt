@@ -125,6 +125,8 @@ else()
     message("Found FFTW3: " ${FFTW3_LIB})    
 endif(NOT EXISTS ${FFTW3_LIB})
 
+set(BLITZ_INCLUDE_DIR ${PI_QMC_SOURCE_DIR}/contrib/blitz-0.9)
+
 include(CheckIncludeFiles)
 CHECK_INCLUDE_FILES(getopt.h HAVE_GETOPT_H)
 
@@ -132,7 +134,12 @@ configure_file (
   "${PI_QMC_SOURCE_DIR}/config_cmake.h.in"
   "${PI_QMC_BINARY_DIR}/config.h"
 )
-INCLUDE_DIRECTORIES(${PI_QMC_BINARY_DIR} ${PI_QMC_SOURCE_DIR}/lib ${PI_QMC_SOURCE_DIR}/src)
+
+INCLUDE_DIRECTORIES(
+    ${PI_QMC_BINARY_DIR}
+    ${PI_QMC_SOURCE_DIR}/lib
+    ${PI_QMC_SOURCE_DIR}/src
+    ${BLITZ_INCLUDE_DIR})
 
 add_definitions(-DHAVE_CONFIG_H)
 
