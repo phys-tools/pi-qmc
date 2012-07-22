@@ -1,19 +1,18 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-#include <cstdlib>
 #include "DoubleCollectiveSectionSampler.h"
-#include "Paths.h"
+#include "CollectiveSectionMover.h"
 #include "DoubleSectionChooser.h"
 #include "action/Action.h"
 #include "action/DoubleAction.h"
-#include "Beads.h"
-#include "BeadFactory.h"
+#include "base/Paths.h"
+#include "base/Beads.h"
+#include "base/BeadFactory.h"
 #include "stats/AccRejEstimator.h"
-#include "CollectiveSectionMover.h"
 #include "util/RandomNumGenerator.h"
 #include "util/SuperCell.h"
+#include <cstdlib>
 
 DoubleCollectiveSectionSampler::DoubleCollectiveSectionSampler(int npart,
         DoubleSectionChooser& sectionChooser, Action *action,

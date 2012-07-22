@@ -7,7 +7,7 @@ class Paths;
 class ModelState;
 class EnumeratedModelState;
 #include "CompositeAction.h"
-#include "LinkSummable.h"
+#include "base/LinkSummable.h"
 #include <vector>
 
 class ActionChoiceBase {

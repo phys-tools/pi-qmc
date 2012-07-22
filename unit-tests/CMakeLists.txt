@@ -1,6 +1,7 @@
 add_subdirectory(action)
 #add_subdirectory(algorithm)
 add_subdirectory(advancer)
+#add_subdirectory(base)
 #add_subdirectory(demo)
 add_subdirectory(emarate)
 #add_subdirectory(estimator)
@@ -18,17 +19,11 @@ include_directories(${SRC_DIR} ${TEST_DIR} ${GTEST_SOURCE_DIR}/include)
 add_executable(unittest_pi EXCLUDE_FROM_ALL 
     unittest_main.cc
     ${sources}
-    ${SRC_DIR}/BeadFactory.cc
-    ${SRC_DIR}/Paths.cc
-    ${SRC_DIR}/SerialPaths.cc
-    ${SRC_DIR}/SimulationInfo.cc
-    ${SRC_DIR}/Species.cc
-    ${SRC_DIR}/emarate/EMARateMover.cc
 )
 
 target_link_libraries(unittest_pi 
-    demo parser advancer estimator emarate fixednode 
-    spin stats action algorithm util)    
+    action advancer algorithm  base demo  estimator emarate fixednode 
+    parser spin stats util)    
 
 target_link_libraries(unittest_pi gtest -lpthread)
 target_link_libraries(unittest_pi ${BLAS_LIB})

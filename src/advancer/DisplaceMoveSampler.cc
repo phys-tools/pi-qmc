@@ -4,17 +4,17 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "stats/MPIManager.h"
 #include "DisplaceMoveSampler.h"
-#include "stats/AccRejEstimator.h"
-#include "action/Action.h"
-#include "UniformMover.h"
-#include "util/RandomNumGenerator.h"
-#include "Paths.h"
-#include "util/Permutation.h"
 #include "PermutationChooser.h"
 #include "ParticleChooser.h"
 #include "SimpleParticleChooser.h"
+#include "UniformMover.h"
+#include "action/Action.h"
+#include "base/Paths.h"
+#include "stats/MPIManager.h"
+#include "stats/AccRejEstimator.h"
+#include "util/Permutation.h"
+#include "util/RandomNumGenerator.h"
 #include "util/SuperCell.h"
 #include <sstream>
 #include <string>

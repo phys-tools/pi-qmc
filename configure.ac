@@ -79,6 +79,7 @@ AC_CONFIG_FILES([Makefile \
     src/action/Makefile \
 	src/advancer/Makefile \
     src/algorithm/Makefile \
+    src/base/Makefile \
     src/demo/Makefile \
     src/emarate/Makefile \
     src/estimator/Makefile \

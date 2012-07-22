@@ -1,19 +1,3 @@
-// $Id$
-/*  Copyright (C) 2004-2011 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -21,12 +5,6 @@
 #include <mpi.h>
 #endif
 #include "PIMCParser.h"
-#include "util/SuperCell.h"
-#include "SerialPaths.h"
-#include "ParallelPaths.h"
-#include "DoubleParallelPaths.h"
-#include "stats/AccRejEstimator.h"
-#include "SimulationInfo.h"
 #include "advancer/mover/FreeMover.h"
 #include "advancer/mover/FreeMoverPBC.h"
 #include "advancer/UniformMover.h"
@@ -37,10 +15,6 @@
 #include "advancer/DoubleDisplaceMoveSampler.h"
 #include "advancer/ModelSampler.h"
 #include "advancer/SpinModelSampler.h"
-#include "emarate/EMARateMover.h"
-#include "EnumeratedModelState.h"
-#include "spin/SpinMover.h"
-#include "spin/FreeSpinMover.h"
 #include "advancer/mover/DampedFreeTensorMover.h"
 #include "advancer/mover/FreeTensorMover.h"
 #include "algorithm/Algorithm.h"
@@ -57,7 +31,6 @@
 #include "spin/SpinSetter.h"
 #include "algorithm/SeedRandom.h"
 #include "algorithm/Measure.h"
-#include "stats/MPIManager.h"
 #include "advancer/MultiLevelSampler.h"
 #include "advancer/DoubleMLSampler.h"
 #include "advancer/CollectiveSectionSampler.h"
@@ -65,7 +38,6 @@
 #include "action/Action.h"
 #include "action/ActionChoice.h"
 #include "action/DoubleAction.h"
-#include "stats/EstimatorManager.h"
 #include "algorithm/ProbDensityGrid.h"
 #include "algorithm/ConditionalDensityGrid.h"
 #include "algorithm/BinProbDensity.h"
@@ -78,14 +50,26 @@
 #include "algorithm/WorkerShifter.h"
 #include "algorithm/WriteProbDensity.h"
 #include "algorithm/WritePaths.h"
-#include <iostream>
 #include "advancer/RandomPermutationChooser.h"
 #include "advancer/SpinStatePermutationChooser.h"
 #include "advancer/WalkingChooser.h"
 #include "advancer/PairChooser.h"
 #include "advancer/TwoPairChooser.h"
+#include "base/DoubleParallelPaths.h"
+#include "base/EnumeratedModelState.h"
+#include "base/ParallelPaths.h"
+#include "base/SerialPaths.h"
+#include "base/SimulationInfo.h"
+#include "emarate/EMARateMover.h"
 #include "fixednode/NodeTester.h"
 #include "fixednode/FreeParticleNodes.h"
+#include "spin/SpinMover.h"
+#include "spin/FreeSpinMover.h"
+#include "stats/AccRejEstimator.h"
+#include "stats/EstimatorManager.h"
+#include "stats/MPIManager.h"
+#include "util/SuperCell.h"
+#include <iostream>
 
 
 PIMCParser::PIMCParser(const SimulationInfo &simInfo, Action *action,

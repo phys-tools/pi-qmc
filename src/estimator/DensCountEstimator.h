@@ -22,20 +22,19 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
+#include "action/Action.h"
+#include "base/LinkSummable.h"
+#include "base/Paths.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
 #include "stats/ArrayBlockedEstimator.h"
 #include "stats/BlitzArrayBlkdEst.h"
 #include "stats/MPIManager.h"
-#include "LinkSummable.h"
-#include "Paths.h"
-#include <cstdlib>
-#include <blitz/array.h>
-#include "SimulationInfo.h"
-#include "Species.h"
 #include "util/SuperCell.h"
-#include "action/Action.h"
-#include "Paths.h"
-#include <blitz/tinyvec-et.h>
+#include <cstdlib>
 #include <vector>
+#include <blitz/array.h>
+#include <blitz/tinyvec-et.h>
 class Distance;
 /** Calculates single particle densities for many different geometries.
  *  Implements several options for studying fluctations.

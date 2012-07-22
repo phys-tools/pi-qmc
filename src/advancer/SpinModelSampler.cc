@@ -5,14 +5,14 @@
 #include <mpi.h>
 #endif
 #include "SpinModelSampler.h"
-#include "stats/AccRejEstimator.h"
-#include "stats/MPIManager.h"
 #include "action/Action.h"
 #include "action/ActionChoice.h"
+#include "base/Paths.h"
+#include "base/SpinModelState.h"
+#include "stats/AccRejEstimator.h"
+#include "stats/MPIManager.h"
 #include "util/RandomNumGenerator.h"
-#include "Paths.h"
 #include "util/Permutation.h"
-#include "SpinModelState.h"
 #include <sstream>
 #include <string>
 

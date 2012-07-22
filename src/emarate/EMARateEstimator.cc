@@ -2,11 +2,11 @@
 #include <config.h>
 #endif
 #include "EMARateEstimator.h"
-#include "SimulationInfo.h"
-#include "Species.h"
-#include "Paths.h"
-#include "util/SuperCell.h"
 #include "action/coulomb/CoulombLinkAction.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
+#include "base/Paths.h"
+#include "util/SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 

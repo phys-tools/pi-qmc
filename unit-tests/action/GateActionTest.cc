@@ -3,11 +3,10 @@
 #include "action/GateAction.h"
 
 #include "advancer/MultiLevelSamplerFake.h"
-#include "Species.h"
-#include "SimulationInfo.h"
-#include "Beads.h"
-#include <math.h>
-
+#include "base/Beads.h"
+#include "base/Species.h"
+#include "base/SimulationInfo.h"
+#include <cmath>
 
 namespace {
 

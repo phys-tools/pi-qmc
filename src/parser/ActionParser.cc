@@ -1,63 +1,17 @@
-// $Id$
-/*  Copyright (C) 2004-2011 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include "EnumeratedModelState.h"
-
-#include "Beads.h"
 #include "ActionParser.h"
-#include "action/ActionChoice.h"
 #include "action/Action.h"
-#include "fixednode/AnisotropicNodes.h"
-#include "fixednode/AugmentedNodes.h"
-#include "fixednode/AtomicOrbitalDM.h"
-#include "fixednode/Atomic1sDM.h"
-#include "fixednode/Atomic2spDM.h"
-#include "fixednode/ExcitonNodes.h"
-#include "fixednode/FixedNodeAction.h"
-#include "fixednode/FreeParticleNodes.h"
-#include "fixednode/FreePartNodesNoUpdate.h"
-#include "fixednode/GroundStateSNode.h"
-#include "fixednode/GroundStateWFNodes.h"
-#include "fixednode/SHONodes.h"
-#include "fixednode/WireNodes.h"
-#include "fixednode/SpinChoiceFixedNodeAction.h"
-#include "fixednode/FixedPhaseAction.h"
-#include "fixednode/SHOPhase.h"
-#include "fixednode/Spin4DPhase.h"
+#include "action/ActionChoice.h"
 #include "action/CaoBerneAction.h"
-#include "SimulationInfo.h"
 #include "action/SphereAction.h"
 #include "action/CompositeAction.h"
 #include "action/CompositeDoubleAction.h"
 #include "action/DoubleActionChoice.h"
-#include "spin/SpinAction.h"
-#include "action/SpringAction.h"
 #include "action/SpringTensorAction.h"
 #include "action/CoulombAction.h"
-#include "action/GateAction.h"
-#include "action/GaussianAction.h"
-#include "action/GaussianDotAction.h"
-#include "action/OpticalLatticeAction.h"
-#include "spin/SpinFixedPhaseAction.h"
-#include "spin/LatticeSpinPhase.h"
-#include "spin/SpinPhase.h"
 #include "action/PairAction.h"
 #include "action/PrimitivePairAction.h"
 #include "action/PairPotential.h"
@@ -82,11 +36,40 @@
 #include "action/EwaldAction.h"
 #include "action/StillWebAction.h"
 #include "action/RingGateAction.h"
-#include "stats/MPIManager.h"
 #include "action/PairIntegrator.h"
 #include "action/WellImageAction.h"
+#include "action/GateAction.h"
+#include "action/GaussianAction.h"
+#include "action/GaussianDotAction.h"
+#include "action/OpticalLatticeAction.h"
+#include "action/SpringAction.h"
+#include "base/Species.h"
+#include "base/Beads.h"
+#include "base/EnumeratedModelState.h"
+#include "base/SimulationInfo.h"
 #include "emarate/EMARateAction.h"
-#include "Species.h"
+#include "fixednode/AnisotropicNodes.h"
+#include "fixednode/AugmentedNodes.h"
+#include "fixednode/AtomicOrbitalDM.h"
+#include "fixednode/Atomic1sDM.h"
+#include "fixednode/Atomic2spDM.h"
+#include "fixednode/ExcitonNodes.h"
+#include "fixednode/FixedNodeAction.h"
+#include "fixednode/FreeParticleNodes.h"
+#include "fixednode/FreePartNodesNoUpdate.h"
+#include "fixednode/GroundStateSNode.h"
+#include "fixednode/GroundStateWFNodes.h"
+#include "fixednode/SHONodes.h"
+#include "fixednode/WireNodes.h"
+#include "fixednode/SpinChoiceFixedNodeAction.h"
+#include "fixednode/FixedPhaseAction.h"
+#include "fixednode/SHOPhase.h"
+#include "fixednode/Spin4DPhase.h"
+#include "spin/SpinAction.h"
+#include "spin/SpinFixedPhaseAction.h"
+#include "spin/LatticeSpinPhase.h"
+#include "spin/SpinPhase.h"
+#include "stats/MPIManager.h"
 #include <iostream>
 #include <cstdlib>
 #include <cstdlib>

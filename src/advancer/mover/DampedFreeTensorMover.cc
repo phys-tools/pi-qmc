@@ -1,14 +1,14 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "util/RandomNumGenerator.h"
 #include "advancer/mover/DampedFreeTensorMover.h"
-#include "Beads.h"
 #include "advancer/MultiLevelSampler.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
+#include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "util/SuperCell.h"
-#include "SimulationInfo.h"
 #include <cmath>
 #include <iostream>
 

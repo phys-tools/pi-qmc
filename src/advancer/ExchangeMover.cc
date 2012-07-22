@@ -4,13 +4,13 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "stats/MPIManager.h"
 #include "ExchangeMover.h"
-#include "Paths.h"
-#include "Beads.h"
+#include "base/Paths.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
+#include "stats/MPIManager.h"
 #include "util/RandomNumGenerator.h"
 #include "util/SuperCell.h"
-#include "SimulationInfo.h"
 #include <cmath>
 #include <sstream>
 #include <string>

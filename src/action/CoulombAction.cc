@@ -2,17 +2,17 @@
 #include <config.h>
 #endif
 #include "CoulombAction.h"
+#include "PairAction.h"
+#include "ImagePairAction.h"
+#include "EwaldImagePairAction.h"
 #include "action/coulomb/Coulomb1DLinkAction.h"
 #include "action/coulomb/Coulomb3DLinkAction.h"
 #include "advancer/SectionSamplerInterface.h"
 #include "advancer/DisplaceMoveSampler.h"
-#include "Beads.h"
-#include "Paths.h"
+#include "base/Beads.h"
+#include "base/Paths.h"
+#include "base/SimulationInfo.h"
 #include "util/SuperCell.h"
-#include "SimulationInfo.h"
-#include "PairAction.h"
-#include "ImagePairAction.h"
-#include "EwaldImagePairAction.h"
 #include "util/TradEwaldSum.h"
 #include "util/OptEwaldSum.h"
 

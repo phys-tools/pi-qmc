@@ -5,14 +5,14 @@
 #include <mpi.h>
 #endif
 #include "WalkingChooser.h"
-#include "util/RandomNumGenerator.h"
-#include "util/Permutation.h"
 #include "MultiLevelSampler.h"
-#include "Species.h"
-#include "util/SuperCell.h"
-#include "Beads.h"
-#include "SimulationInfo.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
 #include "util/PeriodicGaussian.h"
+#include "util/Permutation.h"
+#include "util/SuperCell.h"
+#include "util/RandomNumGenerator.h"
 #include <blitz/tinyvec-et.h>
 
 WalkingChooser::WalkingChooser(const int nsize, const Species &species,

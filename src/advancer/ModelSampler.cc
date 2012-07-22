@@ -4,15 +4,15 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "stats/MPIManager.h"
 #include "ModelSampler.h"
-#include "stats/AccRejEstimator.h"
-#include "stats/MPIManager.h"
 #include "action/Action.h"
 #include "action/ActionChoice.h"
+#include "base/EnumeratedModelState.h"
+#include "base/Paths.h"
+#include "stats/MPIManager.h"
+#include "stats/AccRejEstimator.h"
+#include "stats/MPIManager.h"
 #include "util/RandomNumGenerator.h"
-#include "Paths.h"
-#include "EnumeratedModelState.h"
 #include <sstream>
 #include <string>
 

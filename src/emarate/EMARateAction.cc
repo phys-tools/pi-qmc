@@ -3,17 +3,16 @@
 #endif
 
 #include "EMARateAction.h"
-
+#include "advancer/DisplaceMoveSampler.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "action/coulomb/CoulombLinkAction.h"
+#include "base/Beads.h"
+#include "base/Paths.h"
+#include "base/SimulationInfo.h"
+#include "util/SuperCell.h"
+#include "util/PeriodicGaussian.h"
 #include <cstdlib>
 #include <blitz/tinyvec-et.h>
-#include "advancer/SectionSamplerInterface.h"
-#include "advancer/DisplaceMoveSampler.h"
-#include "Beads.h"
-#include "Paths.h"
-#include "util/SuperCell.h"
-#include "SimulationInfo.h"
-#include "util/PeriodicGaussian.h"
-#include "action/coulomb/CoulombLinkAction.h"
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
         const Species& species1, const Species& species2, double C)

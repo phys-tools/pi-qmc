@@ -6,7 +6,7 @@
 #endif
 
 #include "parser/MainParser.h"
-#include "Help.h"
+#include "base/Help.h"
 #include "demo/Demo.h"
 #if HAVE_GETOPT_H
 #include <getopt.h>

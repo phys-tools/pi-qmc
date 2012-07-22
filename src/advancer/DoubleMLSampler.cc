@@ -1,21 +1,21 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include "util/RandomNumGenerator.h"
 #include "DoubleMLSampler.h"
-#include "stats/AccRejEstimator.h"
-#include "Beads.h"
-#include "action/Action.h"
-#include "action/DoubleAction.h"
-#include "mover/Mover.h"
-#include "Paths.h"
-#include "util/Permutation.h"
 #include "PermutationChooser.h"
 #include "ParticleChooser.h"
 #include "SimpleParticleChooser.h"
 #include "RandomPermutationChooser.h"
 #include "DoubleSectionChooser.h"
-#include "BeadFactory.h"
+#include "action/Action.h"
+#include "action/DoubleAction.h"
+#include "base/Beads.h"
+#include "base/BeadFactory.h"
+#include "base/Paths.h"
+#include "mover/Mover.h"
+#include "stats/AccRejEstimator.h"
+#include "util/Permutation.h"
+#include "util/RandomNumGenerator.h"
 
 DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
         DoubleSectionChooser &sectionChooser, ParticleChooser& particleChooser,

@@ -4,18 +4,16 @@
 #include "config.h"
 #endif
 
+#include "advancer/CollectiveSectionMover.h"
+#include "advancer/DoubleCollectiveSectionSampler.h"
+#include "advancer/DoubleSectionChooser.h"
+#include "base/BeadFactory.h"
+#include "util/SuperCell.h"
 #include <blitz/tinyvec-et.h>
 #include <blitz/tinymat.h>
-#include "util/SuperCell.h"
-#include "advancer/DoubleCollectiveSectionSampler.h"
-#include "advancer/CollectiveSectionMover.h"
-#include "BeadFactory.h"
-#include "advancer/DoubleSectionChooser.h"
-#include "util/SuperCell.h"
 
 typedef blitz::TinyVector<double, NDIM> Vec;
 typedef blitz::TinyMatrix<double,NDIM,NDIM> Mat;
-
 
 namespace {
 

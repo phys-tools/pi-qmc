@@ -4,15 +4,15 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "advancer/MultiLevelSampler.h"
 #include "EMARateMover.h"
-#include "Beads.h"
+#include "advancer/MultiLevelSampler.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
 #include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
+#include "util/PeriodicGaussian.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "util/SuperCell.h"
-#include "SimulationInfo.h"
-#include "util/PeriodicGaussian.h"
 #include <cmath>
 #include <blitz/tinyvec-et.h>
 

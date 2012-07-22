@@ -6,9 +6,9 @@
 #endif
 #include "MiddleSectionChooser.h"
 #include "action/Action.h"
-#include "Paths.h"
-#include "Beads.h"
-#include "BeadFactory.h"
+#include "base/Paths.h"
+#include "base/Beads.h"
+#include "base/BeadFactory.h"
 #include "util/Permutation.h"
 #include "util/RandomNumGenerator.h"
 #include <cmath>

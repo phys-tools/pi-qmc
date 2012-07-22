@@ -1,13 +1,13 @@
 #include "CollectiveSectionMover.h"
-#include <cstdlib>
-#include <blitz/tinyvec-et.h>
-#include "util/RandomNumGenerator.h"
-#include <iostream>
-#include <cmath>
-#include "util/SuperCell.h"
-#include "Beads.h"
 #include "SectionSamplerInterface.h"
 #include "CollectiveSectionSampler.h"
+#include "base/Beads.h"
+#include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
+#include <iostream>
+#include <cmath>
+#include <cstdlib>
+#include <blitz/tinyvec-et.h>
 
 #define DGESV_F77 F77_FUNC(dgesv,DGESV)
 extern "C" void DGESV_F77(const int *n, const int *nrhs, const double *a,

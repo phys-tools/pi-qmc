@@ -6,7 +6,7 @@
 #endif
 #include "AlternatingParticleChooser.h"
 #include "util/RandomNumGenerator.h"
-#include "SimulationInfo.h"
+#include "base/SimulationInfo.h"
 #include <iostream>
 
 AlternatingParticleChooser::AlternatingParticleChooser(const Species& species1,

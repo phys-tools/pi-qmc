@@ -4,11 +4,10 @@
 #include <iostream>
 
 #include "advancer/MultiLevelSamplerFake.h"
-#include "Species.h"
-#include "SimulationInfo.h"
+#include "base/Species.h"
+#include "base/SimulationInfo.h"
 #include "EMARateTestBeadPositioner.h"
 #include "action/coulomb/CoulombLinkAction.h"
-
 
 namespace {
 

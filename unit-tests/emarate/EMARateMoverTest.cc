@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
 #include "emarate/EMARateAction.h"
-#include "SimulationInfo.h"
 #include "emarate/EMARateMover.h"
 #include "DeterministicEMARateMover.h"
-#include "advancer/MultiLevelSamplerFake.h"
 #include "EMARateTestBeadPositioner.h"
-#include "Species.h"
+#include "advancer/MultiLevelSamplerFake.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
 #include <iostream>
 
 namespace {

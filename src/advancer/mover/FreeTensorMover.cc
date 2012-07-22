@@ -5,12 +5,12 @@
 #include <mpi.h>
 #endif
 #include "FreeTensorMover.h"
-#include "Beads.h"
 #include "advancer/MultiLevelSampler.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
 #include "util/RandomNumGenerator.h"
-#include <blitz/tinyvec.h>
 #include "util/SuperCell.h"
-#include "SimulationInfo.h"
+#include <blitz/tinyvec.h>
 #include <cmath>
 
 FreeTensorMover::FreeTensorMover(const SimulationInfo& simInfo) :

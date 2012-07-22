@@ -1,12 +1,12 @@
 #ifndef __EMARateMover_h_
 #define __EMARateMover_h_
-#include <cstdlib>
-#include <blitz/array.h>
-#include <vector>
 #include "advancer/mover/Mover.h"
 #include "advancer/PermutationChooser.h"
 #include "advancer/ParticleChooser.h"
-#include "Beads.h"
+#include "base/Beads.h"
+#include <cstdlib>
+#include <blitz/array.h>
+#include <vector>
 class SimulationInfo;
 class PeriodicGaussian;
 

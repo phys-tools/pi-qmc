@@ -3,14 +3,14 @@
 #endif
 
 #include "CollectiveSectionSampler.h"
-#include "Paths.h"
+#include "CollectiveSectionMover.h"
 #include "SectionChooser.h"
 #include "action/Action.h"
-#include "Beads.h"
-#include "BeadFactory.h"
-#include "util/SuperCell.h"
+#include "base/Paths.h"
+#include "base/Beads.h"
+#include "base/BeadFactory.h"
 #include "stats/AccRejEstimator.h"
-#include "CollectiveSectionMover.h"
+#include "util/SuperCell.h"
 #include "util/RandomNumGenerator.h"
 
 CollectiveSectionSampler::CollectiveSectionSampler(int npart,

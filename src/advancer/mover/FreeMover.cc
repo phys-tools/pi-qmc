@@ -5,14 +5,14 @@
 #include <mpi.h>
 #endif
 #include "FreeMover.h"
-#include "Beads.h"
 #include "advancer/MultiLevelSampler.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
+#include "util/PeriodicGaussian.h"
 #include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
-#include "util/SuperCell.h"
-#include "SimulationInfo.h"
-#include "util/PeriodicGaussian.h"
 #include <cmath>
 
 FreeMover::FreeMover(const double lam, const int npart, const double tau) :

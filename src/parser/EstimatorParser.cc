@@ -1,19 +1,3 @@
-// $Id$
-/*  Copyright (C) 2004-2009 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -21,12 +5,15 @@
 #include <mpi.h>
 #endif
 #include "EstimatorParser.h"
-#include "stats/EstimatorManager.h"
-#include "SimulationInfo.h"
 #include "action/Action.h"
 #include "action/ActionChoice.h"
-#include "estimator/AngularMomentumEstimator.h"
 #include "action/CoulombAction.h"
+#include "action/DoubleAction.h"
+#include "base/SimulationInfo.h"
+#include "base/SimInfoWriter.h"
+#include "base/ModelState.h"
+#include "emarate/EMARateEstimator.h"
+#include "estimator/AngularMomentumEstimator.h"
 #include "estimator/ConductivityEstimator.h"
 #include "estimator/ConductivityEstimator2D.h"
 #include "estimator/ConductanceEstimator.h"
@@ -38,37 +25,34 @@
 #include "estimator/DiamagneticEstimator.h"
 #include "estimator/DynamicPCFEstimator.h"
 #include "estimator/CountCountEstimator.h"
-#include "util/Distance.h"
-#include "emarate/EMARateEstimator.h"
 #include "estimator/FreeEnergyEstimator.h"
-#include "util/PairDistance.h"
 #include "estimator/CoulombEnergyEstimator.h"
 #include "estimator/EwaldCoulombEstimator.h"
-#include "action/DoubleAction.h"
 #include "estimator/ThermoEnergyEstimator.h"
 #include "estimator/VirialEnergyEstimator.h"
 #include "estimator/DipoleMomentEstimator.h"
 #include "estimator/BondLengthEstimator.h"
 #include "estimator/FrequencyEstimator.h"
-#include "spin/SpinEstimator.h"
 #include "estimator/PositionEstimator.h"
 #include "estimator/BoxEstimator.h"
 #include "estimator/PairCFEstimator.h"
 #include "estimator/ZeroVarDensityEstimator.h"
 #include "estimator/PermutationEstimator.h"
 #include "estimator/JEstimator.h"
-#include "stats/MPIManager.h"
-#include "util/SuperCell.h"
 #include "estimator/SpinChargeEstimator.h"
 #include "estimator/SpinChoicePCFEstimator.h"
-#include "fixednode/SHOPhase.h"
 #include "estimator/VIndEstimator.h"
 #include "estimator/EIndEstimator.h"
-#include "SimInfoWriter.h"
 #include "estimator/SKOmegaEstimator.h"
 #include "estimator/WindingEstimator.h"
+#include "fixednode/SHOPhase.h"
+#include "spin/SpinEstimator.h"
+#include "stats/MPIManager.h"
+#include "stats/EstimatorManager.h"
 #include "stats/Units.h"
-#include "ModelState.h"
+#include "util/Distance.h"
+#include "util/PairDistance.h"
+#include "util/SuperCell.h"
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,

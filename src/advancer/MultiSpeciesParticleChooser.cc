@@ -5,8 +5,8 @@
 #include <mpi.h>
 #endif
 #include "MultiSpeciesParticleChooser.h"
+#include "base/SimulationInfo.h"
 #include "util/RandomNumGenerator.h"
-#include "SimulationInfo.h"
 #include <iostream>
 
 MultiSpeciesParticleChooser::MultiSpeciesParticleChooser(

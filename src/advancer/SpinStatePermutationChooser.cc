@@ -5,17 +5,17 @@
 #include <mpi.h>
 #endif
 #include "SpinStatePermutationChooser.h"
-#include "util/RandomNumGenerator.h"
-#include "util/Permutation.h"
-#include "Paths.h"
 #include "MultiLevelSampler.h"
-#include "Species.h"
-#include "util/SuperCell.h"
-#include "Beads.h"
-#include "SimulationInfo.h"
+#include "base/Beads.h"
+#include "base/ModelState.h"
+#include "base/Paths.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
+#include "base/SpinModelState.h"
 #include "util/PeriodicGaussian.h"
-#include "ModelState.h"
-#include "SpinModelState.h"
+#include "util/Permutation.h"
+#include "util/RandomNumGenerator.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec-et.h>
 

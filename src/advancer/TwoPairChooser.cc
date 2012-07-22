@@ -5,7 +5,7 @@
 #include <mpi.h>
 #endif
 #include "TwoPairChooser.h"
-#include "Species.h"
+#include "base/Species.h"
 #include "util/RandomNumGenerator.h"
 #include "util/Permutation.h"
 #include <iostream>

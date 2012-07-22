@@ -1,12 +1,11 @@
 #include <gtest/gtest.h>
 
 #include "emarate/EMARateEstimator.h"
-#include "SerialPaths.h"
-#include "SimulationInfo.h"
-#include "BeadFactory.h"
-#include "util/SuperCell.h"
 #include "action/coulomb/CoulombLinkAction.h"
-
+#include "base/BeadFactory.h"
+#include "base/SerialPaths.h"
+#include "base/SimulationInfo.h"
+#include "util/SuperCell.h"
 
 namespace {
 

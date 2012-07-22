@@ -4,14 +4,14 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include "stats/MPIManager.h"
 #include "UniformMover.h"
-#include "Beads.h"
 #include "DisplaceMoveSampler.h"
 #include "DoubleDisplaceMoveSampler.h"
+#include "base/Beads.h"
+#include "base/SimulationInfo.h"
+#include "stats/MPIManager.h"
 #include "util/RandomNumGenerator.h"
 #include "util/SuperCell.h"
-#include "SimulationInfo.h"
 #include <cmath>
 
 #include <sstream>

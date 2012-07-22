@@ -1,6 +1,7 @@
 add_subdirectory(action)
 add_subdirectory(advancer)
 add_subdirectory(algorithm)
+add_subdirectory(base)
 add_subdirectory(demo)
 add_subdirectory(emarate)
 add_subdirectory(estimator)
@@ -10,24 +11,10 @@ add_subdirectory(spin)
 add_subdirectory(stats)
 add_subdirectory(util)
 
-set (sources
-    BeadFactory.cc
-    DoubleParallelPaths.cc
-    EnumeratedModelState.cc
-    ParallelPaths.cc
-    Paths.cc
-    SerialPaths.cc
-    SimInfoWriter.cc
-    SimulationInfo.cc
-    Species.cc
-    SpinModelState.cc
-    XMLWriter.cc
-)
+add_executable(pi main.cc)
 
-add_executable(pi ${sources} main.cc)
-
-target_link_libraries(pi demo parser advancer estimator emarate fixednode 
-    spin stats action algorithm util)
+target_link_libraries(pi base demo parser advancer estimator emarate 
+    fixednode spin stats action algorithm util)
 
 target_link_libraries(pi ${LIBXML2_LIBRARIES} )
 target_link_libraries(pi ${BLAS_LIB})

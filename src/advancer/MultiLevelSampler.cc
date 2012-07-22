@@ -4,21 +4,21 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
-#include <cstdlib>
 #include "MultiLevelSampler.h"
-#include "stats/AccRejEstimator.h"
-#include "Beads.h"
-#include "BeadFactory.h"
-#include "action/Action.h"
-#include "mover/Mover.h"
-#include "util/RandomNumGenerator.h"
-#include "Paths.h"
-#include "util/Permutation.h"
 #include "PermutationChooser.h"
 #include "ParticleChooser.h"
-#include "SimpleParticleChooser.h"
 #include "RandomPermutationChooser.h"
+#include "SimpleParticleChooser.h"
 #include "SectionChooser.h"
+#include "action/Action.h"
+#include "base/Beads.h"
+#include "base/BeadFactory.h"
+#include "base/Paths.h"
+#include "mover/Mover.h"
+#include "util/RandomNumGenerator.h"
+#include "util/Permutation.h"
+#include "stats/AccRejEstimator.h"
+#include <cstdlib>
 #include <sstream>
 #include <string>
 

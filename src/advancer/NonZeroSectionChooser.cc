@@ -6,8 +6,8 @@
 #endif
 #include "NonZeroSectionChooser.h"
 #include "action/Action.h"
-#include "Paths.h"
-#include "Beads.h"
+#include "base/Beads.h"
+#include "base/Paths.h"
 #include "util/Permutation.h"
 #include "util/RandomNumGenerator.h"
 #include <cmath>

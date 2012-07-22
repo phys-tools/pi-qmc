@@ -18,15 +18,15 @@
 #include <config.h>
 #endif
 #include "GateAction.h"
+#include "advancer/SectionSamplerInterface.h"
+#include "base/Beads.h"
+#include "base/Paths.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
-#include "advancer/SectionSamplerInterface.h"
-#include "Beads.h"
-#include "util/SuperCell.h"
-#include "Paths.h"
-#include "SimulationInfo.h"
-#include "Species.h"
 #include <stdio.h>
 #include <math.h>
 

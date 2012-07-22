@@ -1,6 +1,12 @@
 #ifndef __EMARateAction_h_
 #define __EMARateAction_h_
 
+#include "action/Action.h"
+#include "base/Beads.h"
+#include <cstdlib>
+#include <blitz/array.h>
+#include <vector>
+
 class MultiLevelSampler;
 class SectionSamplerInterface;
 class DisplaceMoveSampler;
@@ -8,12 +14,6 @@ class Paths;
 class SimulationInfo;
 class Species;
 class CoulombLinkAction;
-#include "Beads.h"
-
-#include "action/Action.h"
-#include <cstdlib>
-#include <blitz/array.h>
-#include <vector>
 
 /** Class to modify the action to allow for electron-hole recombination.
  * To sample recombination rates, we work with a larger ensemble that

@@ -1,8 +1,8 @@
 #ifndef __EMARateEstimator_h_
 #define __EMARateEstimator_h_
+#include "base/LinkSummable.h"
+#include "base/Paths.h"
 #include "stats/ScalarEstimator.h"
-#include "LinkSummable.h"
-#include "Paths.h"
 #include <cstdlib>
 #include <blitz/array.h>
 #include <iostream>

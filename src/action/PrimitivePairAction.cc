@@ -3,7 +3,7 @@
 #endif
 #include "PrimitivePairAction.h"
 #include "PairPotential.h"
-#include "Species.h"
+#include "base/Species.h"
 
 double PrimitivePairAction::u(double r, int iorder) const {
     return (iorder == 0) ? v(r) * tau : 0.;

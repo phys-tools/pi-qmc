@@ -21,10 +21,10 @@
 #include <mpi.h>
 #endif
 #include "NodeTester.h"
-#include "Paths.h"
 #include "NodeModel.h"
-#include "Beads.h"
-#include "BeadFactory.h"
+#include "base/Beads.h"
+#include "base/BeadFactory.h"
+#include "base/Paths.h"
 #include "stats/MPIManager.h"
 #include <iostream>
 #include <sstream>

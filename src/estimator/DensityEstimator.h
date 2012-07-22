@@ -1,19 +1,3 @@
-// $Id$
-/*  Copyright (C) 2009 John B. Shumway, Jr.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #ifndef __DensityEstimator_h_
 #define __DensityEstimator_h_
 #ifdef HAVE_CONFIG_H
@@ -22,18 +6,16 @@
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif
+#include "base/LinkSummable.h"
+#include "base/Paths.h"
+#include "base/SimulationInfo.h"
+#include "base/Species.h"
 #include "stats/ArrayBlockedEstimator.h"
 #include "stats/BlitzArrayBlkdEst.h"
 #include "stats/MPIManager.h"
-#include "LinkSummable.h"
-#include "Paths.h"
+#include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/array.h>
-#include "SimulationInfo.h"
-#include "Species.h"
-#include "util/SuperCell.h"
-#include "action/Action.h"
-#include "Paths.h"
 #include <blitz/tinyvec-et.h>
 #include <vector>
 class Distance;
