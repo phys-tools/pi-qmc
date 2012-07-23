@@ -13,8 +13,8 @@ add_subdirectory(util)
 
 add_executable(pi main.cc)
 
-target_link_libraries(pi base demo parser advancer estimator emarate 
-    fixednode spin stats action algorithm util)
+target_link_libraries(pi parser demo advancer estimator emarate 
+    fixednode spin stats action algorithm base util)
 
 target_link_libraries(pi ${LIBXML2_LIBRARIES} )
 target_link_libraries(pi ${BLAS_LIB})

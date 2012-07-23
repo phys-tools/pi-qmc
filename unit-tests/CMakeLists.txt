@@ -22,8 +22,8 @@ add_executable(unittest_pi EXCLUDE_FROM_ALL
 )
 
 target_link_libraries(unittest_pi 
-    action advancer algorithm  base demo  estimator emarate fixednode 
-    parser spin stats util)    
+    parser emarate action advancer algorithm demo estimator fixednode 
+    spin stats base util)
 
 target_link_libraries(unittest_pi gtest -lpthread)
 target_link_libraries(unittest_pi ${BLAS_LIB})
