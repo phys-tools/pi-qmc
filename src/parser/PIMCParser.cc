@@ -310,195 +310,227 @@ std::cout << "doubleAction!=0" << std::endl;
     int iseed = getIntAttribute(ctxt->node,"iseed");
     algorithm=new SeedRandom(iseed);
   } else if (name=="Sample") {
-    // delayed rejection stuff
-    bool delayedRejection=getBoolAttribute(ctxt->node,"delayedRejection");  
-    double defaultFactor=getDoubleAttribute(ctxt->node,"defaultSigmaFactor");
-    if (defaultFactor==0) defaultFactor=1;
-    double newFactor=getDoubleAttribute(ctxt->node,"newSigmaFactor");
-    if (delayedRejection!=0 && newFactor==0) newFactor=0.75;
-    Mover* mover(0);
-    ParticleChooser* particleChooser=0;
-    ParticleChooser* particleChooser2=0;
-    PermutationChooser* permutationChooser=0;
-    PermutationChooser* permutationChooser2=0;
-    int nmoving=0;
-    bool noPerm=true;
-    std::string moverName=getStringAttribute(ctxt->node,"mover");
-    if (moverName=="Free" || moverName=="")
-      mover = new FreeMover(simInfo,nlevel,10.0);
-    if (moverName=="FreePBC" || moverName=="")
-      mover = new FreeMoverPBC(simInfo,nlevel,10.0);
-    else if (moverName=="Spin") mover = new SpinMover(simInfo,nlevel,10.0);
-    else if (moverName=="FreeSpin") 
-      mover = new FreeSpinMover(simInfo,nlevel,10.0);
-    else if (moverName=="FreeTensor") mover = new FreeTensorMover(simInfo);
-    else if (moverName=="DampedFreeTensor") {
-      int saturationLevel=getIntAttribute(ctxt->node,"saturationLevel");
-      mover = new DampedFreeTensorMover(simInfo,saturationLevel);
-    } else if (moverName=="Hyperbolic") {
-      mover = new HyperbolicMover(simInfo,nlevel);
-    } else if (moverName=="EMARate") {
-      double c=getDoubleAttribute(ctxt->node,"c");
-      std::string speciesName1=getStringAttribute(ctxt->node,"species1");
-      std::string speciesName2=getStringAttribute(ctxt->node,"species2");
-      double mass1 = simInfo.getSpecies(speciesName1).mass;
-      double mass2 = simInfo.getSpecies(speciesName2).mass;
-      EMARateMover* emaRateMover =
-              new EMARateMover(simInfo.tau, mass1, mass2, nlevel,c);
-      mover = emaRateMover;
-      particleChooser = emaRateMover;
-      permutationChooser = emaRateMover;
-      nmoving = 2;
-    }   
-    if (!particleChooser) {
-    std::string chooserName=getStringAttribute(ctxt->node,"chooser");
-    nmoving=getIntAttribute(ctxt->node,"npart");
-    std::string speciesName=getStringAttribute(ctxt->node,"species");
-    bool noPerm=getBoolAttribute(ctxt->node,"noPermutation");
-    if (speciesName=="" || speciesName=="all") {
-      particleChooser=new SimpleParticleChooser(simInfo.getNPart(),nmoving);
-      if (doubleAction) {
-        particleChooser2=new SimpleParticleChooser(simInfo.getNPart(),nmoving);
-      }
-    } else if (noPerm) {
-      particleChooser=new SpeciesParticleChooser(
-                            simInfo.getSpecies(speciesName),nmoving);
-      if (doubleAction) {
-        particleChooser2=new SpeciesParticleChooser(
-                               simInfo.getSpecies(speciesName),nmoving);
-      }
-    } else if (chooserName=="twoPair") {
-      std::string species2Name=getStringAttribute(ctxt->node,"species2");
-      if (species2Name=="") species2Name=speciesName;
-      TwoPairChooser* chooser
-        = new TwoPairChooser(simInfo.getSpecies(speciesName),
-                             simInfo.getSpecies(species2Name));
-      particleChooser = chooser;
-      permutationChooser = chooser;
-      if (doubleAction) {
-        TwoPairChooser* chooser
-          = new TwoPairChooser(simInfo.getSpecies(speciesName),
-                               simInfo.getSpecies(species2Name));
-        particleChooser2 = chooser;
-        permutationChooser2 = chooser;
-      }
-    } else if (chooserName=="pair") {
-      std::string species2Name=getStringAttribute(ctxt->node,"species2");
-      PairChooser* chooser
-        = new PairChooser(nmoving,simInfo.getSpecies(speciesName),
-                          simInfo.getSpecies(species2Name),nlevel,simInfo);
-      particleChooser = chooser;
-      permutationChooser = chooser;
-      if (doubleAction) {
-        PairChooser* chooser
-          = new PairChooser(nmoving,simInfo.getSpecies(speciesName),
-                            simInfo.getSpecies(species2Name),nlevel,simInfo);
-        particleChooser2 = chooser;
-        permutationChooser2 = chooser;
-      }
-      nmoving*=2;
-    } else {
-      if (actionChoice && (paths->getModelState()->isSpinModelState())) {
-	  SpinStatePermutationChooser* chooser 
-	    = new SpinStatePermutationChooser(nmoving,
-		simInfo.getSpecies(speciesName),nlevel,simInfo,
-		actionChoice->getModelState());
-          particleChooser = chooser;
-          permutationChooser = chooser;
-      } else {
-        WalkingChooser* chooser
-          = new WalkingChooser(nmoving,simInfo.getSpecies(speciesName),
-                               nlevel,simInfo);
-        particleChooser = chooser;
-        permutationChooser = chooser;
-      }
-      if (doubleAction) {
-        if (actionChoice && (paths->getModelState()->isSpinModelState())) {
-	  SpinStatePermutationChooser* chooser 
-	    = new SpinStatePermutationChooser(nmoving,
-		simInfo.getSpecies(speciesName),nlevel,simInfo,
-		actionChoice->getModelState());
-          particleChooser2 = chooser;
-          permutationChooser2 = chooser;
-	} else {
-          WalkingChooser* chooser
-            = new WalkingChooser(nmoving,simInfo.getSpecies(speciesName),
-                                 nlevel,simInfo);
-          particleChooser2 = chooser;
-          permutationChooser2 = chooser;
-	}
-      }
-    }
-    }
-    if (doubleAction==0) {
-      if (!permutationChooser) {
-        if (noPerm) {
-          permutationChooser = new PermutationChooser(nmoving);
-        } else {
-          permutationChooser = new RandomPermutationChooser(nmoving);
+        // delayed rejection stuff
+        bool delayedRejection = getBoolAttribute(ctxt->node,
+                "delayedRejection");
+        double defaultFactor = getDoubleAttribute(ctxt->node,
+                "defaultSigmaFactor");
+        if (defaultFactor == 0)
+            defaultFactor = 1;
+        double newFactor = getDoubleAttribute(ctxt->node, "newSigmaFactor");
+        if (delayedRejection != 0 && newFactor == 0)
+            newFactor = 0.75;
+        Mover* mover(0);
+        ParticleChooser* particleChooser = 0;
+        ParticleChooser* particleChooser2 = 0;
+        PermutationChooser* permutationChooser = 0;
+        PermutationChooser* permutationChooser2 = 0;
+        bool shouldDeletePermutationChooser = true;
+        int nmoving = 0;
+        bool noPerm = true;
+        std::string moverName = getStringAttribute(ctxt->node, "mover");
+        if (moverName == "Free")
+            mover = new FreeMover(simInfo, nlevel, 10.0);
+        else if (moverName == "FreePBC" || moverName == "")
+            mover = new FreeMoverPBC(simInfo, nlevel, 10.0);
+        else if (moverName == "Spin")
+            mover = new SpinMover(simInfo, nlevel, 10.0);
+        else if (moverName == "FreeSpin")
+            mover = new FreeSpinMover(simInfo, nlevel, 10.0);
+        else if (moverName == "FreeTensor")
+            mover = new FreeTensorMover(simInfo);
+        else if (moverName == "DampedFreeTensor") {
+            int saturationLevel = getIntAttribute(ctxt->node,
+                    "saturationLevel");
+            mover = new DampedFreeTensorMover(simInfo, saturationLevel);
+        } else if (moverName == "Hyperbolic") {
+            mover = new HyperbolicMover(simInfo, nlevel);
+        } else if (moverName == "EMARate") {
+            double c = getDoubleAttribute(ctxt->node, "c");
+            std::string speciesName1 = getStringAttribute(ctxt->node,
+                    "species1");
+            std::string speciesName2 = getStringAttribute(ctxt->node,
+                    "species2");
+            double mass1 = simInfo.getSpecies(speciesName1).mass;
+            double mass2 = simInfo.getSpecies(speciesName2).mass;
+            EMARateMover* emaRateMover = new EMARateMover(simInfo.tau, mass1,
+                    mass2, nlevel, c);
+            mover = emaRateMover;
+            particleChooser = emaRateMover;
+            permutationChooser = emaRateMover;
+            shouldDeletePermutationChooser = false;
+            nmoving = 2;
         }
-      } 
-      int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
-      if (nrepeat==0) nrepeat=1;
-      algorithm=new MultiLevelSampler(nmoving, *paths, *sectionChooser, 
-                     *particleChooser, *permutationChooser,
-                     *mover, action, nrepeat, beadFactory, delayedRejection,
-				      defaultFactor,newFactor);
-      permutationChooser->setMLSampler((MultiLevelSampler*)algorithm);
-    } else {
-      bool both=getBoolAttribute(ctxt->node,"both");
-      int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
-      if (nrepeat==0) nrepeat=1;
-      if (!permutationChooser) {
-        if (noPerm) {
-          permutationChooser = new PermutationChooser(nmoving);
-          permutationChooser2 = permutationChooser;
-        } else {
-          permutationChooser = new RandomPermutationChooser(nmoving);
-          permutationChooser2 = permutationChooser;
+        if (!particleChooser) {
+            std::string chooserName = getStringAttribute(ctxt->node, "chooser");
+            nmoving = getIntAttribute(ctxt->node, "npart");
+            std::string speciesName = getStringAttribute(ctxt->node, "species");
+            noPerm = getBoolAttribute(ctxt->node, "noPermutation");
+            if (speciesName == "" || speciesName == "all") {
+                particleChooser = new SimpleParticleChooser(simInfo.getNPart(),
+                        nmoving);
+                if (doubleAction) {
+                    particleChooser2 = new SimpleParticleChooser(
+                            simInfo.getNPart(), nmoving);
+                }
+            } else if (noPerm) {
+                particleChooser = new SpeciesParticleChooser(
+                        simInfo.getSpecies(speciesName), nmoving);
+                if (doubleAction) {
+                    particleChooser2 = new SpeciesParticleChooser(
+                            simInfo.getSpecies(speciesName), nmoving);
+                }
+            } else if (chooserName == "twoPair") {
+                std::string species2Name = getStringAttribute(ctxt->node,
+                        "species2");
+                if (species2Name == "")
+                    species2Name = speciesName;
+                TwoPairChooser* chooser = new TwoPairChooser(
+                        simInfo.getSpecies(speciesName),
+                        simInfo.getSpecies(species2Name));
+                particleChooser = chooser;
+                permutationChooser = chooser;
+                shouldDeletePermutationChooser = false;
+                if (doubleAction) {
+                    TwoPairChooser* chooser = new TwoPairChooser(
+                            simInfo.getSpecies(speciesName),
+                            simInfo.getSpecies(species2Name));
+                    particleChooser2 = chooser;
+                    permutationChooser2 = chooser;
+                }
+            } else if (chooserName == "pair") {
+                std::string species2Name = getStringAttribute(ctxt->node,
+                        "species2");
+                PairChooser* chooser = new PairChooser(nmoving,
+                        simInfo.getSpecies(speciesName),
+                        simInfo.getSpecies(species2Name), nlevel, simInfo);
+                particleChooser = chooser;
+                permutationChooser = chooser;
+                shouldDeletePermutationChooser = false;
+                if (doubleAction) {
+                    PairChooser* chooser = new PairChooser(nmoving,
+                            simInfo.getSpecies(speciesName),
+                            simInfo.getSpecies(species2Name), nlevel, simInfo);
+                    particleChooser2 = chooser;
+                    permutationChooser2 = chooser;
+                }
+                nmoving *= 2;
+            } else {
+                if (actionChoice
+                        && (paths->getModelState()->isSpinModelState())) {
+                    SpinStatePermutationChooser* chooser =
+                            new SpinStatePermutationChooser(nmoving,
+                                    simInfo.getSpecies(speciesName), nlevel,
+                                    simInfo, actionChoice->getModelState());
+                    particleChooser = chooser;
+                    permutationChooser = chooser;
+                    shouldDeletePermutationChooser = false;
+                } else {
+                    WalkingChooser* chooser = new WalkingChooser(nmoving,
+                            simInfo.getSpecies(speciesName), nlevel, simInfo);
+                    particleChooser = chooser;
+                    permutationChooser = chooser;
+                    shouldDeletePermutationChooser = false;
+                }
+                if (doubleAction) {
+                    if (actionChoice
+                            && (paths->getModelState()->isSpinModelState())) {
+                        SpinStatePermutationChooser* chooser =
+                                new SpinStatePermutationChooser(nmoving,
+                                        simInfo.getSpecies(speciesName), nlevel,
+                                        simInfo, actionChoice->getModelState());
+                        particleChooser2 = chooser;
+                        permutationChooser2 = chooser;
+                    } else {
+                        WalkingChooser* chooser = new WalkingChooser(nmoving,
+                                simInfo.getSpecies(speciesName), nlevel,
+                                simInfo);
+                        std::cout << chooser << std::endl;
+                        particleChooser2 = chooser;
+                        permutationChooser2 = chooser;
+                    }
+                    std::cout << particleChooser << particleChooser2
+                            << permutationChooser << permutationChooser2 << std::endl;
+                }
+            }
         }
-      }
-      algorithm = new DoubleMLSampler(nmoving, *paths, *doubleSectionChooser, 
-				      *particleChooser, *permutationChooser,
-				      *particleChooser2, *permutationChooser2, *mover, action,
-				      doubleAction, both, nrepeat, beadFactory, delayedRejection,
-				      defaultFactor,newFactor);
-      permutationChooser->setMLSampler((MultiLevelSampler*)algorithm);
-      permutationChooser2->setMLSampler((MultiLevelSampler*)algorithm);
-    }
-    std::string accRejName="MLSampler";
-    estimators->add(((MultiLevelSampler*)algorithm)->
-                      getAccRejEstimator(accRejName));
-  } else if (name=="SampleCollective") {
-    int nrepeat=getIntAttribute(ctxt->node,"nrepeat");
-    if (nrepeat==0) nrepeat=1;
-    int npart=simInfo.getNPart();
-    double radius=getLengthAttribute(ctxt->node,"radius");
-    SuperCell *cell=simInfo.getSuperCell();
-    Vec amplitude, min, max;
-    for (int idim=0; idim<NDIM; ++idim) {
-      amplitude[idim]=getLengthAttribute(ctxt->node,
-	                                 std::string("d")+dimName[idim]);
-      min[idim]=-cell->a[idim]/2.;
-      max[idim]=cell->a[idim]/2.;
-    }
-    parseBoundary(ctxt,min,max);
-    std::cout << "amplitude = " << amplitude << std::endl;
-    CollectiveSectionMover *mover = new CollectiveSectionMover(cell);
-    mover->setRadius(radius);
-    mover->setAmplitude(amplitude);
-    bool both=getBoolAttribute(ctxt->node,"both");
-    if (doubleAction==0) {
-      algorithm = new CollectiveSectionSampler(npart, *sectionChooser, action,
-	                                    nrepeat, beadFactory, mover, cell);
-    } else {
-      algorithm = new DoubleCollectiveSectionSampler(npart, 
-	                     *doubleSectionChooser, action, doubleAction,
-			     nrepeat, beadFactory, mover, both, cell);
-    }
-    std::string accRejName="CollectiveSampler";
-    estimators->add(((CollectiveSectionSampler*)algorithm)->
-	                     getAccRejEstimator(accRejName));
+        if (doubleAction == 0) {
+            if (!permutationChooser) {
+                if (noPerm) {
+                    permutationChooser = new PermutationChooser(nmoving);
+                } else {
+                    permutationChooser = new RandomPermutationChooser(nmoving);
+                }
+            }
+            int nrepeat = getIntAttribute(ctxt->node, "nrepeat");
+            if (nrepeat == 0)
+                nrepeat = 1;
+            algorithm = new MultiLevelSampler(nmoving, *paths, *sectionChooser,
+                    particleChooser, permutationChooser, *mover, action,
+                    nrepeat, beadFactory, delayedRejection, defaultFactor,
+                    newFactor, shouldDeletePermutationChooser);
+            permutationChooser->setMLSampler((MultiLevelSampler*) algorithm);
+        } else {
+            bool both = getBoolAttribute(ctxt->node, "both");
+            int nrepeat = getIntAttribute(ctxt->node, "nrepeat");
+            if (nrepeat == 0)
+                nrepeat = 1;
+            if (!permutationChooser) {
+                if (noPerm) {
+                    permutationChooser = new PermutationChooser(nmoving);
+                    permutationChooser2 = permutationChooser;
+                } else {
+                    permutationChooser = new RandomPermutationChooser(nmoving);
+                    permutationChooser2 = permutationChooser;
+                }
+            }
+            std::cout << particleChooser << particleChooser2
+                    << permutationChooser << permutationChooser2 << std::endl;
+
+            algorithm = new DoubleMLSampler(nmoving, *paths,
+                    *doubleSectionChooser, particleChooser, permutationChooser,
+                    particleChooser2, permutationChooser2, *mover, action,
+                    doubleAction, both, nrepeat, beadFactory, delayedRejection,
+                    defaultFactor, newFactor, shouldDeletePermutationChooser);
+            permutationChooser->setMLSampler((MultiLevelSampler*) algorithm);
+            permutationChooser2->setMLSampler((MultiLevelSampler*) algorithm);
+        }
+        std::string accRejName = "MLSampler";
+        estimators->add(
+                ((MultiLevelSampler*) algorithm)->getAccRejEstimator(
+                        accRejName));
+    } else if (name == "SampleCollective") {
+        int nrepeat = getIntAttribute(ctxt->node, "nrepeat");
+        if (nrepeat == 0)
+            nrepeat = 1;
+        int npart = simInfo.getNPart();
+        double radius = getLengthAttribute(ctxt->node, "radius");
+        SuperCell *cell = simInfo.getSuperCell();
+        Vec amplitude, min, max;
+        for (int idim = 0; idim < NDIM; ++idim) {
+            amplitude[idim] = getLengthAttribute(ctxt->node,
+                    std::string("d") + dimName[idim]);
+            min[idim] = -cell->a[idim] / 2.;
+            max[idim] = cell->a[idim] / 2.;
+        }
+        parseBoundary(ctxt, min, max);
+        std::cout << "amplitude = " << amplitude << std::endl;
+        CollectiveSectionMover *mover = new CollectiveSectionMover(cell);
+        mover->setRadius(radius);
+        mover->setAmplitude(amplitude);
+        bool both = getBoolAttribute(ctxt->node, "both");
+        if (doubleAction == 0) {
+            algorithm = new CollectiveSectionSampler(npart, *sectionChooser,
+                    action, nrepeat, beadFactory, mover, cell);
+        } else {
+            algorithm = new DoubleCollectiveSectionSampler(npart,
+                    *doubleSectionChooser, action, doubleAction, nrepeat,
+                    beadFactory, mover, both, cell);
+        }
+        std::string accRejName = "CollectiveSampler";
+        estimators->add(
+                ((CollectiveSectionSampler*) algorithm)->getAccRejEstimator(
+                        accRejName));
   } else if (name=="ProbDensityGrid") {
     double a=getLengthAttribute(ctxt->node,"a");
     IVec n;

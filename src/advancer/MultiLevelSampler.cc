@@ -23,25 +23,35 @@
 #include <string>
 
 MultiLevelSampler::MultiLevelSampler(int nmoving, Paths& paths,
-        SectionChooser &sectionChooser, ParticleChooser& particleChooser,
-        PermutationChooser& permutationChooser, Mover& mover, Action* action,
+        SectionChooser &sectionChooser, ParticleChooser* particleChooser,
+        PermutationChooser* permutationChooser, Mover& mover, Action* action,
         const int nrepeat, const BeadFactory& beadFactory,
         const bool delayedRejection, const double defaultFactor,
-        double newFactor) :
-        nlevel(sectionChooser.getNLevel()), nmoving(nmoving), sectionBeads(
-                &sectionChooser.getBeads()), sectionPermutation(
-                &sectionChooser.getPermutation()), movingBeads(
-                beadFactory.getNewBeads(nmoving, sectionBeads->getNSlice())), mover(
-                mover), cell(paths.getSuperCell()), action(action), movingIndex(
-                new IArray(nmoving)), identityIndex(nmoving), pMovingIndex(
-                nmoving), particleChooser(particleChooser), permutationChooser(
-                permutationChooser), sectionChooser(sectionChooser), paths(
-                paths), accRejEst(0), nrepeat(nrepeat), delayedRejection(
-                delayedRejection), rejectedBeads(
-                (delayedRejection) ?
-                        beadFactory.getNewBeads(nmoving,
-                                sectionBeads->getNSlice()) :
-                        0), newFactor(newFactor), defaultFactor(defaultFactor) {
+        double newFactor, bool shouldDeletePermutationChooser) :
+    nlevel(sectionChooser.getNLevel()),
+    nmoving(nmoving),
+    sectionBeads(&sectionChooser.getBeads()),
+    sectionPermutation(&sectionChooser.getPermutation()),
+    movingBeads(beadFactory.getNewBeads(nmoving, sectionBeads->getNSlice())),
+    mover(mover),
+    cell(paths.getSuperCell()),
+    action(action),
+    movingIndex(new IArray(nmoving)),
+    identityIndex(nmoving),
+    pMovingIndex(nmoving),
+    particleChooser(particleChooser),
+    permutationChooser(permutationChooser),
+    sectionChooser(sectionChooser),
+    paths(paths),
+    accRejEst(0),
+    nrepeat(nrepeat),
+    delayedRejection(delayedRejection),
+    rejectedBeads((delayedRejection) ?
+            beadFactory.getNewBeads(nmoving, sectionBeads->getNSlice()) :
+            0),
+    newFactor(newFactor),
+    defaultFactor(defaultFactor),
+    shouldDeletePermutationChooser(shouldDeletePermutationChooser) {
     for (int i = 0; i < nmoving; ++i)
         (*movingIndex)(i) = identityIndex(i) = i;
     factor = 1;
@@ -51,21 +61,23 @@ MultiLevelSampler::~MultiLevelSampler() {
     delete movingBeads;
     delete rejectedBeads;
     delete movingIndex;
-    delete &particleChooser;
-    delete &permutationChooser;
+    if (shouldDeletePermutationChooser) {
+        delete permutationChooser;
+    }
+    delete particleChooser;
 }
 
 void MultiLevelSampler::run() {
     // Select particles to move and the permuation.
-    permutationChooser.init();
+    permutationChooser->init();
     for (int irepeat = 0; irepeat < nrepeat; ++irepeat) {
-        bool isNewPerm = permutationChooser.choosePermutation();
+        bool isNewPerm = permutationChooser->choosePermutation();
         if (isNewPerm) {
-            Permutation permutation(permutationChooser.getPermutation());
-            particleChooser.chooseParticles();
-            double lnTranProb = permutationChooser.getLnTranProb();
+            Permutation permutation(permutationChooser->getPermutation());
+            particleChooser->chooseParticles();
+            double lnTranProb = permutationChooser->getLnTranProb();
             for (int i = 0; i < nmoving; ++i)
-                (*movingIndex)(i) = particleChooser[i];
+                (*movingIndex)(i) = (*particleChooser)[i];
             // Copy old coordinate endpoint to the moving coordinate endpoints.
             const int nsectionSlice = movingBeads->getNSlice();
             for (int imoving = 0; imoving < nmoving; ++imoving) {
@@ -82,7 +94,7 @@ void MultiLevelSampler::run() {
 //                        nsectionSlice-1);
 //      }
             if (tryMove(lnTranProb) && irepeat < nrepeat - 1)
-                permutationChooser.init();
+                permutationChooser->init();
         }
     }
 }
@@ -155,13 +167,13 @@ bool MultiLevelSampler::tryMove(double initialLnTranProb) {
 
     }
     // Append the current permutation to section permutation.
-    const Permutation& perm(permutationChooser.getPermutation());
+    const Permutation& perm(permutationChooser->getPermutation());
     Permutation temp(perm);
     for (int i = 0; i < nmoving; ++i) {
-        temp[i] = (*sectionPermutation)[particleChooser[i]];
+        temp[i] = (*sectionPermutation)[(*particleChooser)[i]];
     }
     for (int i = 0; i < nmoving; ++i) {
-        (*sectionPermutation)[particleChooser[i]] = temp[perm[i]];
+        (*sectionPermutation)[(*particleChooser)[i]] = temp[perm[i]];
     }
     return true;
 }
@@ -174,7 +186,7 @@ AccRejEstimator*
 MultiLevelSampler::getAccRejEstimator(const std::string& name) {
     std::ostringstream longName;
     longName << name << ": level " << nlevel << ", moving " << nmoving << " "
-            << particleChooser.getName();
+            << particleChooser->getName();
     return accRejEst = new AccRejEstimator(longName.str(), nlevel + 1);
 }
 

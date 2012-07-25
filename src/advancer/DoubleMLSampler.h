@@ -21,11 +21,11 @@ class PermutationChooser;
 class DoubleMLSampler: public MultiLevelSampler {
 public:
     DoubleMLSampler(const int nmoving, Paths&, DoubleSectionChooser&,
-            ParticleChooser&, PermutationChooser&, ParticleChooser&,
-            PermutationChooser&, Mover&, Action*, DoubleAction*,
+            ParticleChooser*, PermutationChooser*, ParticleChooser*,
+            PermutationChooser*, Mover&, Action*, DoubleAction*,
             const bool sampleBoth, const int nrepeat, const BeadFactory&,
             const bool delayedRejection, const double defaultFactor,
-            double newFactor);
+            double newFactor, bool);
     virtual ~DoubleMLSampler();
 
     virtual void run();
@@ -89,9 +89,9 @@ private:
     /// The permutations.
     Permutation permutation1, permutation2;
     /// The algorithm for selecting the particles to move.
-    ParticleChooser& particleChooser2;
+    ParticleChooser* particleChooser2;
     /// The algorithm for selecting the permutation.
-    PermutationChooser& permutationChooser2;
+    PermutationChooser* permutationChooser2;
     /// Number of times to repeat.
     const int nrepeat;
 };

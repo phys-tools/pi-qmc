@@ -16,17 +16,18 @@
 DoubleSectionChooser::DoubleSectionChooser(int nlevel, int npart, Paths &paths,
         Action &action, DoubleAction& doubleAction,
         const BeadFactory &beadFactory) :
-        SectionChooser(nlevel, npart, paths, action, beadFactory), doubleAction(
-                doubleAction), beads1(SectionChooser::beads), beads2(
-                beadFactory.getNewBeads(npart, (int) pow(2, nlevel) + 1)), permutation1(
-                SectionChooser::permutation), permutation2(
-                new Permutation(npart)) {
+        SectionChooser(nlevel, npart, paths, action, beadFactory),
+        doubleAction(doubleAction),
+        beads1(SectionChooser::beads),
+        beads2(beadFactory.getNewBeads(npart, (int) pow(2, nlevel) + 1)),
+        permutation1(SectionChooser::permutation),
+        permutation2(new Permutation(npart)) {
 }
 
 DoubleSectionChooser::~DoubleSectionChooser() {
     activateSection(1);
-    delete &beads2;
-    delete &permutation2;
+    delete beads2;
+    delete permutation2;
 }
 
 void DoubleSectionChooser::run() {

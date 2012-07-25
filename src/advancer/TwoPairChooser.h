@@ -5,8 +5,6 @@
 #include "PermutationChooser.h"
 class Species;
 
-/// Class for choosing  particles at random.
-
 class TwoPairChooser: public ParticleChooser, public PermutationChooser {
 public:
     TwoPairChooser(const Species&, const Species&);

@@ -23,32 +23,35 @@ class BeadFactory;
 
 /// Class for multilevel sampling of beads.
 class MultiLevelSampler: public Algorithm, public SectionSamplerInterface {
+
 public:
     typedef blitz::Array<int, 1> IArray;
-
     MultiLevelSampler(const int nmoving, Paths&, SectionChooser&,
-            ParticleChooser&, PermutationChooser&, Mover&, Action*,
+            ParticleChooser*, PermutationChooser*, Mover&, Action*,
             const int nrepeat, const BeadFactory&, const bool delayedRejection,
-            const double defaultFactor, double newFactor);
-
+            const double defaultFactor, double newFactor, bool);
     virtual ~MultiLevelSampler();
-
     virtual void run();
+
     int getNLevel() const {
         return nlevel;
     }
 
     using SectionSamplerInterface::getMovingBeads;
+
     virtual Beads<NDIM>& getMovingBeads() {
         return *movingBeads;
     }
-    virtual const Beads<NDIM>& getMovingBeads() const {
+
+    const virtual Beads<NDIM>& getMovingBeads() const {
         return *movingBeads;
     }
+
     virtual Beads<NDIM>& getMovingBeads(int i) {
         return *movingBeads;
     }
-    virtual const Beads<NDIM>& getMovingBeads(const int i) const {
+
+    const virtual Beads<NDIM>& getMovingBeads(const int i) const {
         return *movingBeads;
     }
 
@@ -57,37 +60,47 @@ public:
     const Beads<NDIM>& getRejectedBeads() const {
         return *rejectedBeads;
     }
+
     Beads<NDIM>& getRejectedBeads() {
         return *rejectedBeads;
     }
+
     double getFactor() {
         return factor;
     }
 
     using SectionSamplerInterface::getSectionBeads;
+
     virtual Beads<NDIM>& getSectionBeads() {
         return *sectionBeads;
     }
-    virtual const Beads<NDIM>& getSectionBeads() const {
+
+    const virtual Beads<NDIM>& getSectionBeads() const {
         return *sectionBeads;
     }
+
     virtual Beads<NDIM>& getSectionBeads(int i) {
         return *sectionBeads;
     }
-    virtual const Beads<NDIM>& getSectionBeads(const int i) const {
+
+    const virtual Beads<NDIM>& getSectionBeads(const int i) const {
         return *sectionBeads;
     }
 
     using SectionSamplerInterface::getMovingIndex;
+
     IArray& getMovingIndex() {
         return *movingIndex;
     }
+
     const IArray& getMovingIndex() const {
         return *movingIndex;
     }
+
     IArray& getMovingIndex(int i) {
         return *movingIndex;
     }
+
     const IArray& getMovingIndex(const int i) const {
         return *movingIndex;
     }
@@ -99,8 +112,9 @@ public:
     static const int ALL_LEVELS = -1;
     /// Set the action function for a level, or default to level=ALL_LEVELS.
     void setAction(Action*, const int level = ALL_LEVELS);
+
     /// Get a const reference to the SuperCell.
-    virtual const SuperCell& getSuperCell() const {
+    const virtual SuperCell& getSuperCell() const {
         return cell;
     }
     /// Get a constant reference to the paths.
@@ -138,9 +152,9 @@ protected:
     /// More indicies for moving particles.
     IArray identityIndex, pMovingIndex;
     /// The algorithm for selecting the particles to move.
-    ParticleChooser& particleChooser;
+    ParticleChooser* particleChooser;
     /// The algorithm for selecting the permutation.
-    PermutationChooser& permutationChooser;
+    PermutationChooser* permutationChooser;
     /// Reference to the algorithm that selected the section.
     SectionChooser& sectionChooser;
     /// Reference to the paths (only needed for fixed node reference point).
@@ -155,5 +169,6 @@ protected:
     double newFactor;
     const double defaultFactor;
     double factor;
+    int shouldDeletePermutationChooser;
 };
 #endif

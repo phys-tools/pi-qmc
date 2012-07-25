@@ -18,67 +18,77 @@
 #include "util/RandomNumGenerator.h"
 
 DoubleMLSampler::DoubleMLSampler(int nmoving, Paths& paths,
-        DoubleSectionChooser &sectionChooser, ParticleChooser& particleChooser,
-        PermutationChooser& permutationChooser,
-        ParticleChooser& particleChooser2,
-        PermutationChooser& permutationChooser2, Mover& mover, Action* action,
+        DoubleSectionChooser &sectionChooser,
+        ParticleChooser* particleChooser,
+        PermutationChooser* permutationChooser,
+        ParticleChooser* particleChooser2,
+        PermutationChooser* permutationChooser2, Mover& mover, Action* action,
         DoubleAction* doubleAction, const bool both, const int nrepeat,
         const BeadFactory &beadFactory, const bool delayedRejection,
-        const double defaultFactor, double newFactor) :
-        MultiLevelSampler(nmoving, paths, sectionChooser, particleChooser,
-                permutationChooser, mover, action, nrepeat, beadFactory,
-                delayedRejection, defaultFactor, newFactor), sectionBeads1(
-                &sectionChooser.getBeads(1)), sectionBeads2(
-                &sectionChooser.getBeads(2)), sectionPermutation1(
-                &sectionChooser.getPermutation(1)), sectionPermutation2(
-                &sectionChooser.getPermutation(2)), movingBeads1(movingBeads), movingBeads2(
-                beadFactory.getNewBeads(nmoving, sectionBeads->getNSlice())), rejectedBeads1(
-                rejectedBeads), rejectedBeads2(
-                delayedRejection ?
-                        beadFactory.getNewBeads(nmoving,
-                                sectionBeads->getNSlice()) :
-                        0), doubleAction(doubleAction), movingIndex1(
-                movingIndex), movingIndex2(new IArray(nmoving)), pMovingIndex2(
-                nmoving), doubleSectionChooser(sectionChooser), samplingBoth(
-                both), permutation1(nmoving), permutation2(nmoving), particleChooser2(
-                particleChooser2), permutationChooser2(permutationChooser2), nrepeat(
-                nrepeat) {
-    for (int i = 0; i < nmoving; ++i)
+        const double defaultFactor, double newFactor,
+        bool shouldDeletePermutationChooser) :
+    MultiLevelSampler(nmoving, paths, sectionChooser, particleChooser,
+            permutationChooser, mover, action, nrepeat, beadFactory,
+            delayedRejection, defaultFactor, newFactor,
+            shouldDeletePermutationChooser),
+    sectionBeads1(&sectionChooser.getBeads(1)),
+    sectionBeads2(&sectionChooser.getBeads(2)),
+    sectionPermutation1(&sectionChooser.getPermutation(1)),
+    sectionPermutation2(&sectionChooser.getPermutation(2)),
+    movingBeads1(movingBeads),
+    movingBeads2(beadFactory.getNewBeads(nmoving, sectionBeads->getNSlice())),
+    rejectedBeads1(rejectedBeads),
+    rejectedBeads2(delayedRejection ?
+                    beadFactory.getNewBeads(nmoving, sectionBeads->getNSlice()) :
+                    0),
+    doubleAction(doubleAction),
+    movingIndex1(movingIndex),
+    movingIndex2(new IArray(nmoving)),
+    pMovingIndex2(nmoving),
+    doubleSectionChooser(sectionChooser),
+    samplingBoth(both), permutation1(nmoving),
+    permutation2(nmoving),
+    particleChooser2(particleChooser2),
+    permutationChooser2(permutationChooser2),
+    nrepeat(nrepeat) {
+    for (int i = 0; i < nmoving; ++i) {
         (*movingIndex2)(i) = identityIndex(i) = i;
-
+    }
 }
 
 DoubleMLSampler::~DoubleMLSampler() {
     delete movingBeads2;
     delete rejectedBeads2;
     delete movingIndex2;
-    delete &permutationChooser2;
-    delete &particleChooser2;
+    delete particleChooser2;
+    if (shouldDeletePermutationChooser) {
+        delete permutationChooser2;
+    }
 }
 
 void DoubleMLSampler::run() {
     activateSection(1);
-    permutationChooser.init();
+    permutationChooser->init();
     if (samplingBoth) {
         activateSection(2);
-        permutationChooser2.init();
+        permutationChooser2->init();
         activateSection(1);
     }
     // Select particles to move and the permutation.
     for (int irepeat = 0; irepeat < nrepeat; ++irepeat) {
-        bool isNewPerm = permutationChooser.choosePermutation();
-        permutation1 = permutationChooser.getPermutation();
-        particleChooser.chooseParticles();
-        double lnTranProb = permutationChooser.getLnTranProb();
+        bool isNewPerm = permutationChooser->choosePermutation();
+        permutation1 = permutationChooser->getPermutation();
+        particleChooser->chooseParticles();
+        double lnTranProb = permutationChooser->getLnTranProb();
         for (int i = 0; i < nmoving; ++i)
-            (*movingIndex1)(i) = particleChooser[i];
+            (*movingIndex1)(i) = (*particleChooser)[i];
         if (samplingBoth) {
-            isNewPerm &= permutationChooser2.choosePermutation();
-            permutation2 = permutationChooser2.getPermutation();
-            lnTranProb += permutationChooser2.getLnTranProb();
-            particleChooser2.chooseParticles();
+            isNewPerm &= permutationChooser2->choosePermutation();
+            permutation2 = permutationChooser2->getPermutation();
+            lnTranProb += permutationChooser2->getLnTranProb();
+            particleChooser2->chooseParticles();
             for (int i = 0; i < nmoving; ++i)
-                (*movingIndex2)(i) = particleChooser2[i];
+                (*movingIndex2)(i) = (*particleChooser2)[i];
         }
 
         if (isNewPerm) {
@@ -102,10 +112,10 @@ void DoubleMLSampler::run() {
             }
             if (tryMove(lnTranProb) && irepeat < nrepeat - 1) {
 
-                permutationChooser.init();
+                permutationChooser->init();
                 if (samplingBoth) {
                     activateSection(2);
-                    permutationChooser2.init();
+                    permutationChooser2->init();
                     activateSection(1);
                 }
             }
@@ -259,7 +269,7 @@ AccRejEstimator*
 DoubleMLSampler::getAccRejEstimator(const std::string& name) {
     std::ostringstream longName;
     longName << name << ": level " << nlevel << ", moving " << nmoving << " "
-            << particleChooser.getName();
+            << particleChooser->getName();
     if (samplingBoth)
         longName << ", both";
     return accRejEst = new AccRejEstimator(longName.str(), nlevel + 1);
