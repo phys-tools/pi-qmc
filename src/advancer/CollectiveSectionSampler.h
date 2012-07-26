@@ -20,46 +20,61 @@ public:
     virtual ~CollectiveSectionSampler();
 
     virtual void run();
+    bool tryMove();
+    void initializeMovingBeads();
+    void reportAtempt() const;
+    void reportAcceptance() const;
+    void updateSectionBeads();
 
     using SectionSamplerInterface::getSectionBeads;
     virtual Beads<NDIM>& getSectionBeads() {
         return *sectionBeads;
     }
-    virtual const Beads<NDIM>& getSectionBeads() const {
+
+    const virtual Beads<NDIM>& getSectionBeads() const {
         return *sectionBeads;
     }
+
     virtual Beads<NDIM>& getSectionBeads(int i) {
         return *sectionBeads;
     }
-    virtual const Beads<NDIM>& getSectionBeads(int i) const {
+
+    const virtual Beads<NDIM>& getSectionBeads(int i) const {
         return *sectionBeads;
     }
 
     using SectionSamplerInterface::getMovingBeads;
+
     virtual Beads<NDIM>& getMovingBeads() {
         return *movingBeads;
     }
-    virtual const Beads<NDIM>& getMovingBeads() const {
+
+    const virtual Beads<NDIM>& getMovingBeads() const {
         return *movingBeads;
     }
+
     virtual Beads<NDIM>& getMovingBeads(int i) {
         return *movingBeads;
     }
-    virtual const Beads<NDIM>& getMovingBeads(int i) const {
+
+    const virtual Beads<NDIM>& getMovingBeads(int i) const {
         return *movingBeads;
     }
 
     using SectionSamplerInterface::getMovingIndex;
-    virtual const IArray& getMovingIndex() const {
-        return *movingIndex;
-    }
-    virtual const IArray& getMovingIndex(int i) const {
+
+    const virtual IArray& getMovingIndex() const {
         return *movingIndex;
     }
 
-    virtual const SuperCell& getSuperCell() const {
+    const virtual IArray& getMovingIndex(int i) const {
+        return *movingIndex;
+    }
+
+    const virtual SuperCell& getSuperCell() const {
         return *cell;
     }
+
     virtual bool isSamplingBoth() const {
         return false;
     }
@@ -70,8 +85,8 @@ public:
         return sectionChooser.getFirstSliceIndex();
     }
 
+
 protected:
-    bool tryMove();
     const int nlevel;
     const int npart;
     Beads<NDIM> *sectionBeads;
@@ -86,5 +101,6 @@ protected:
     const int maximumMovingCount;
     CollectiveSectionMover* mover;
     AccRejEstimator* accRejEst;
+
 };
 #endif
