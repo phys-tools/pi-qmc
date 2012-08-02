@@ -50,12 +50,12 @@ public:
   virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
 private:
   ///
-  const int nsliceEff, nfreq, nstride;
+  const int nsliceEff, nfreq, nstride, ntot;
   const Vec min;
   const Vec deltaInv;
   const IVec nbin;
   CArray2 tempj, tempj0;
-  const double tau, ax, ntot;
+  const double tau, ax;
   const DistArray dist;
   const int npart;
   Array q;
