@@ -69,17 +69,17 @@ bool CollectiveSectionSampler::tryMove() {
     return accepted;
 }
 
-void CollectiveSectionSampler::reportAtempt() const {
-    if (accRejEst) {
-        accRejEst->tryingMove(0);
-    }
-}
-
 void CollectiveSectionSampler::updateSectionBeads() {
     int nSectionSlice = sectionBeads->getNSlice();
     for (int islice = 0; islice < nSectionSlice; ++islice) {
         movingBeads->copySlice(identityIndex, islice, *sectionBeads,
                 *movingIndex, islice);
+    }
+}
+
+void CollectiveSectionSampler::reportAtempt() const {
+    if (accRejEst) {
+        accRejEst->tryingMove(0);
     }
 }
 
