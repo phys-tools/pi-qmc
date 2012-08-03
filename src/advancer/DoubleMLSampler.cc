@@ -61,9 +61,6 @@ DoubleMLSampler::~DoubleMLSampler() {
     delete rejectedBeads2;
     delete movingIndex2;
     delete particleChooser2;
-    if (shouldDeletePermutationChooser) {
-        delete permutationChooser2;
-    }
 }
 
 void DoubleMLSampler::run() {

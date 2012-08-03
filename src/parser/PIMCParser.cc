@@ -445,12 +445,9 @@ std::cout << "doubleAction!=0" << std::endl;
                         WalkingChooser* chooser = new WalkingChooser(nmoving,
                                 simInfo.getSpecies(speciesName), nlevel,
                                 simInfo);
-                        std::cout << chooser << std::endl;
                         particleChooser2 = chooser;
                         permutationChooser2 = chooser;
                     }
-                    std::cout << particleChooser << particleChooser2
-                            << permutationChooser << permutationChooser2 << std::endl;
                 }
             }
         }
@@ -484,9 +481,6 @@ std::cout << "doubleAction!=0" << std::endl;
                     permutationChooser2 = permutationChooser;
                 }
             }
-            std::cout << particleChooser << particleChooser2
-                    << permutationChooser << permutationChooser2 << std::endl;
-
             algorithm = new DoubleMLSampler(nmoving, *paths,
                     *doubleSectionChooser, particleChooser, permutationChooser,
                     particleChooser2, permutationChooser2, *mover, action,
