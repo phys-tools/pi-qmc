@@ -27,7 +27,7 @@ double DampedFreeTensorMover::makeMove(MultiLevelSampler& sampler,
     const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
     Beads<NDIM>& movingBeads = sampler.getMovingBeads();
     const SuperCell& cell = sampler.getSuperCell();
-    const int nStride = (int) pow(2, level);
+    const int nStride = 1 << level;
     //std::cout << "sl:" << saturationLevel << "," << level << std::endl;
     const double lambdaScale =
             (saturationLevel >= level) ?

@@ -23,7 +23,7 @@ SpinAction::~SpinAction() {
 double SpinAction::getActionDifference(
     const SectionSamplerInterface& sampler, const int level) {
   double diff=0;
-  const int nStride=(int)pow(2,level);
+  const int nStride = 1 << level;
 #if NDIM==4
   const Beads<4>& sectionBeads=sampler.getSectionBeads();
   const Beads<4>& movingBeads=sampler.getMovingBeads();

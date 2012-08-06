@@ -18,23 +18,24 @@ SpinFixedPhaseAction::SpinFixedPhaseAction(const SimulationInfo &simInfo,
     nSpeciesPart(species.count), ifirst(species.ifirst), 
     mass(species.mass),
     r1(npart), r2(npart), s1(npart), s2(npart),
-    phi((int)(pow(2,maxlevel)+0.1)+1), newPhi((int)(pow(2,maxlevel)+0.1)+1),
-    gradPhi1((int)(pow(2,maxlevel)+0.1)+1), 
-    gradPhi2((int)(pow(2,maxlevel)+0.1)+1), 
-    newGradPhi1((int)(pow(2,maxlevel)+0.1)+1),
-    newGradPhi2((int)(pow(2,maxlevel)+0.1)+1),
-    sgradPhi1((int)(pow(2,maxlevel)+0.1)+1), 
-    sgradPhi2((int)(pow(2,maxlevel)+0.1)+1), 
-    newSGradPhi1((int)(pow(2,maxlevel)+0.1)+1),
-    newSGradPhi2((int)(pow(2,maxlevel)+0.1)+1),
-    vecPot1((int)(pow(2,maxlevel)+0.1)+1), 
-    vecPot2((int)(pow(2,maxlevel)+0.1)+1), 
-    newVecPot1((int)(pow(2,maxlevel)+0.1)+1),
-    newVecPot2((int)(pow(2,maxlevel)+0.1)+1),
-    dmValue((int)(pow(2,maxlevel)+0.1)+1),
-    newDMValue((int)(pow(2,maxlevel)+0.1)+1),
-    dist((int)(pow(2,maxlevel)+0.1)+1),
-    newDist((int)(pow(2,maxlevel+1)+0.1)+1),
+    phi((1 << maxlevel) + 1),
+    newPhi((1 << maxlevel) + 1),
+    gradPhi1((1 << maxlevel) + 1),
+    gradPhi2((1 << maxlevel) + 1),
+    newGradPhi1((1 << maxlevel) + 1),
+    newGradPhi2((1 << maxlevel) + 1),
+    sgradPhi1((1 << maxlevel) + 1),
+    sgradPhi2((1 << maxlevel) + 1),
+    newSGradPhi1((1 << maxlevel) + 1),
+    newSGradPhi2((1 << maxlevel) + 1),
+    vecPot1((1 << maxlevel) + 1),
+    vecPot2((1 << maxlevel) + 1),
+    newVecPot1((1 << maxlevel) + 1),
+    newVecPot2((1 << maxlevel) + 1),
+    dmValue((1 << maxlevel) + 1),
+    newDMValue((1 << maxlevel) + 1),
+    dist((1 << maxlevel) + 1),
+    newDist((1 << (maxlevel+1)) + 1),
     force(npart), phaseModel(phaseModel) {
   for (unsigned int i=0; i<gradPhi1.size(); ++i) {
     gradPhi1[i].resize(npart);
@@ -80,7 +81,7 @@ double SpinFixedPhaseAction::getActionDifference(const SectionSamplerInterface &
   else notMySpecies=false;
   int nSlice=sectionBeads1.getNSlice();
   const int nMoving=index1.size();
-  const int nStride=(int)pow(2,level);
+  const int nStride = 1 << level;
   // Calculate the fixed-phase action.
   for (int islice=nStride; islice<nSlice; islice+=nStride) { 
     // Calculate fixed-phase action for attemped move.

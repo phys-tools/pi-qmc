@@ -33,7 +33,7 @@ double SpinMover::makeMove(MultiLevelSampler& sampler, const int level) {
     dynamic_cast<Beads<4>&>(*sampler.getSectionBeads().getAuxBeads(1));
   Beads<4>& movingBeads =
     dynamic_cast<Beads<4>&>(*sampler.getMovingBeads().getAuxBeads(1));
-  const int nStride=(int)pow(2,level);
+  const int nStride = 1 << level;
   const int nSlice=sectionBeads.getNSlice();
   const blitz::Array<int,1>& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();

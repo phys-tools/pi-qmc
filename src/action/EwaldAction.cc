@@ -9,6 +9,7 @@
 #include "base/Paths.h"
 #include "base/SimulationInfo.h"
 #include "base/Species.h"
+#include "util/erf.h"
 #include "util/SuperCell.h"
 
 #if NDIM==3
@@ -195,8 +196,8 @@ void EwaldAction::setup() {
     //         *exp((n-1)/action.logrratioinv)/action.rgridinv; 
     for (int i=0; i<n; ++i) {
       double r=exp(i/action.logrratioinv)/action.rgridinv;
-      action.ugrid(i,0)-=coef*tau*erf(kappa*r)/r;
-      action.ugrid(i,action.norder+1)-=coef*erf(kappa*r)/r;
+      action.ugrid(i,0) -= coef*tau*erf(kappa*r)/r;
+      action.ugrid(i,action.norder+1) -= coef*erf(kappa*r)/r;
     }
   }
 }

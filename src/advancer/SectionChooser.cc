@@ -18,9 +18,9 @@
 SectionChooser::SectionChooser(int nlevel, int npart, Paths &paths,
         Action &action, const BeadFactory &beadFactory) :
         CompositeAlgorithm(0), paths(&paths), action(&action), beads(
-                beadFactory.getNewBeads(npart, (int) pow(2, nlevel) + 1)), permutation(
-                new Permutation(npart)), nlevel(nlevel), qrng(
-                gsl_qrng_alloc(gsl_qrng_sobol, 1)) {
+                beadFactory.getNewBeads(npart, (1 << nlevel) + 1)),
+                permutation(new Permutation(npart)), nlevel(nlevel),
+                qrng(gsl_qrng_alloc(gsl_qrng_sobol, 1)) {
 }
 
 SectionChooser::~SectionChooser() {

@@ -40,7 +40,7 @@ FreeMoverPBC::FreeMoverPBC(const SimulationInfo& simInfo, const int maxlevel,
     for (int ilevel = 0; ilevel <= maxlevel + 1; ++ilevel) {
         for (int ispec = 0; ispec < nspec; ++ispec) {
             double alpha = simInfo.getSpecies(ispec).mass
-                    / (tau * pow(2, ilevel));
+                    / (tau * (1  << ilevel));
             for (int idim = 0; idim < NDIM; ++idim) {
                 if (PeriodicGaussian::numberOfTerms(alpha, length[idim]) < 16) {
                     pg(ilevel, ispec, idim) = new PeriodicGaussian(alpha,
@@ -62,7 +62,7 @@ double FreeMoverPBC::makeMove(MultiLevelSampler& sampler, const int level) {
     const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
     Beads<NDIM>& movingBeads = sampler.getMovingBeads();
     const SuperCell& cell = sampler.getSuperCell();
-    const int nStride = (int) pow(2, level);
+    const int nStride = 1 << level;
     const int nSlice = sectionBeads.getNSlice();
     double factor = sampler.getFactor();
     const blitz::Array<int, 1>& index = sampler.getMovingIndex();
@@ -169,7 +169,7 @@ double FreeMoverPBC::makeDelayedMove(MultiLevelSampler& sampler,
     const Beads<NDIM>& rejectedBeads = sampler.getRejectedBeads();
     Beads<NDIM>& movingBeads = sampler.getMovingBeads();
     const SuperCell& cell = sampler.getSuperCell();
-    const int nStride = (int) pow(2, level);
+    const int nStride = 1 << level;
     const int nSlice = movingBeads.getNSlice();
     double factor = sampler.getFactor();
     const blitz::Array<int, 1>& index = sampler.getMovingIndex();

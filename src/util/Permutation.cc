@@ -37,20 +37,24 @@ void Permutation::reset() {
 }
 
 Permutation& Permutation::prepend(const Permutation& p) {
-  int temp[permutation.size()];
+  int *temp;
+  temp = new int[permutation.size()];
   for (int i=0; i<permutation.size(); ++i) {
     temp[i]=permutation(p.permutation(i));
   }
   for (int i=0; i<permutation.size(); ++i) permutation(i)=temp[i];
+  delete temp;
   return *this;
 }
 
 Permutation& Permutation::append(const Permutation& p) {
-  int temp[permutation.size()];
+  int *temp;
+  temp = new int[permutation.size()];
   for (int i=0; i<permutation.size(); ++i) {
     temp[i]=p.permutation(permutation(i));
   }
   for (int i=0; i<permutation.size(); ++i) permutation(i)=temp[i];
+  delete temp;
   return *this;
 }
 

@@ -19,7 +19,7 @@ DoubleSectionChooser::DoubleSectionChooser(int nlevel, int npart, Paths &paths,
         SectionChooser(nlevel, npart, paths, action, beadFactory),
         doubleAction(doubleAction),
         beads1(SectionChooser::beads),
-        beads2(beadFactory.getNewBeads(npart, (int) pow(2, nlevel) + 1)),
+        beads2(beadFactory.getNewBeads(npart, (1 << nlevel) + 1)),
         permutation1(SectionChooser::permutation),
         permutation2(new Permutation(npart)) {
 }

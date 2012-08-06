@@ -63,8 +63,9 @@ void WindingEstimator::endCalc(int nslice) {
     winding = buffer;
   }
   #endif
-  IVec iwind = rint(winding*cell.b)+nmax;
+  IVec iwind;
   for (int idim=0; idim<NDIM; ++idim) {
+    iwind = int(winding[idim] * cell.b[idim] + 0.5) + nmax;
     if (iwind[idim]<0 || iwind[idim]>2*nmax+1) break;
     if (idim==NDIM-1) ++value(iwind);
   }

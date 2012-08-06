@@ -7,6 +7,7 @@
 #include "base/Paths.h"
 #include "base/SimulationInfo.h"
 #include "base/Species.h"
+#include "util/erf.h"
 #include "util/SuperCell.h"
 
 TradEwaldSum::TradEwaldSum(const SuperCell& cell, const int npart,

@@ -25,7 +25,7 @@ double FreeTensorMover::makeMove(MultiLevelSampler& sampler, const int level) {
     const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
     Beads<NDIM>& movingBeads = sampler.getMovingBeads();
     const SuperCell& cell = sampler.getSuperCell();
-    const int nStride = (int) pow(2, level);
+    const int nStride = 1 << level;
     const int nSlice = sectionBeads.getNSlice();
     const blitz::Array<int, 1>& index = sampler.getMovingIndex();
     const int nMoving = index.size();

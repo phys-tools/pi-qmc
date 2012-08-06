@@ -18,10 +18,10 @@ FixedNodeAction::FixedNodeAction(const SimulationInfo &simInfo,
   : tau(simInfo.getTau()), npart(simInfo.getNPart()),
     nSpeciesPart(species.count), ifirst(species.ifirst), 
     r1(npart), r2(npart),
-    dmValue((int)(pow(2,maxlevel)+0.1)+1),
-    newDMValue((int)(pow(2,maxlevel)+0.1)+1),
-    dist((int)(pow(2,maxlevel)+0.1)+1,2,npart),
-    newDist((int)(pow(2,maxlevel)+0.1)+1,2,npart), force(npart), 
+    dmValue((1 << maxlevel) + 1),
+    newDMValue((1 << maxlevel)  + 1),
+    dist((1 << maxlevel) + 1, 2, npart),
+    newDist((1 < maxlevel) + 1, 2, npart), force(npart),
     gradd1(npart,npart), gradd2(npart,npart),
     dim1(npart), dip1(npart), di1(npart), dim2(npart), dip2(npart), di2(npart),
     dotdim1(npart),  dotdi1(npart), dotdim2(npart), dotdi2(npart),
@@ -55,7 +55,7 @@ double FixedNodeAction::getActionDifference(const SectionSamplerInterface &sampl
   }
   notMySpecies=false;
   const int nSlice=sectionBeads1.getNSlice();
-  const int nStride=(int)pow(2,level+1);
+  const int nStride = 1 << (level+1);
   // First check for node crossing.
   for (int islice=nStride/2; islice<nSlice; islice+=nStride) {
     if (matrixUpdateObj) {

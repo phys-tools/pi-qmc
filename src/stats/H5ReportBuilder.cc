@@ -167,7 +167,8 @@ void H5ReportBuilder::reportArrayBlockedStep(const ArrayBlockedEstimator& est) {
 }
 
 void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) {
-  hsize_t dims[est.getNDim()];
+  hsize_t *dims;
+  dims = new hsize_t[est.getNDim()];
   unsigned int maxDim=1, imaxDim=0, size=1;
   // Find maximum dimension for compression.
   for (int i=0; i<est.getNDim(); ++i) {
@@ -184,7 +185,8 @@ void H5ReportBuilder::startArrayBlockedReport(const ArrayBlockedEstimator& est) 
     if (dims[imaxDim] == 0) dims[imaxDim]=1;
     H5Pset_chunk(plist,est.getNDim(),dims);
     H5Pset_deflate(plist,1);
-  } 
+  }
+  delete dims;
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
   hid_t dataSetID = H5Dcreate2(writingGroupID, est.getName().c_str(),
                                H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT,

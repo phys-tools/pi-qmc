@@ -27,13 +27,13 @@ AnisotropicNodes::AnisotropicNodes(const SimulationInfo& simInfo,
     mass(*species.anMass),sqrtmass(sqrt(mass)),
     npart(species.count),ifirst(species.ifirst),
     r1(npart), r2(npart),
-    matrix((int)(pow(2,maxlevel+1)+0.1)+1),
-    newMatrix((int)(pow(2,maxlevel+1)+0.1)+1),
-    newColumn((int)(pow(2,maxlevel+1)+0.1)+1),
-    dist((int)(pow(2,maxlevel+1)+0.1)+1,npart),
-    newDist((int)(pow(2,maxlevel+1)+0.1)+1,npart),
-    det((int)(pow(2,maxlevel+1)+0.1)+1),
-    newDet((int)(pow(2,maxlevel+1)+0.1)+1),
+    matrix((1 << (maxlevel+1)) + 1),
+    newMatrix((1 << (maxlevel+1)) + 1),
+    newColumn((1 << (maxlevel+1)) + 1),
+    dist((1 << (maxlevel+1)) + 1,npart),
+    newDist((1 << (maxlevel + 1)) + 1,npart),
+    det((1 << (maxlevel+1)) + 1),
+    newDet((1 << (maxlevel+1)) + 1),
     ipiv(npart),lwork(npart*npart),
     work(lwork),
     cell(*simInfo.getSuperCell()), 
@@ -91,7 +91,7 @@ double AnisotropicNodes::getActionDifference(
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads(1);
   const int nSlice=sectionBeads.getNSlice();
   const int nMoving=index.size();
-  const int nStride=(int)pow(2,level+1);
+  const int nStride = 1 << (level + 1);
   // First check for node crossing.
   for (int islice=nStride/2; islice<nSlice; islice+=nStride) {
     for (int i=0; i<npart; ++i) r2(i)=otherBeads(i+ifirst,islice);

@@ -30,7 +30,8 @@ SpringAction::SpringAction(const SimulationInfo& simInfo, const int maxlevel,
   pg.resize(maxlevel+1,nspec,NDIM);
   for (int ilevel=0; ilevel<=maxlevel; ++ilevel) {
     for (int ispec=0; ispec<nspec; ++ispec) {
-      double alpha=simInfo.getSpecies(ispec).mass/(2*tau*pow(2,ilevel));
+      double alpha = simInfo.getSpecies(ispec).mass
+					/ (2 * tau * (1 << ilevel));
       for (int idim=0; idim<NDIM; ++idim) {
         double  length = (*simInfo.getSuperCell())[idim];
         if (PeriodicGaussian::numberOfTerms(alpha, length) < 16) {
@@ -57,7 +58,7 @@ double SpringAction::getActionDifference(const SectionSamplerInterface& sampler,
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();
-  const int nStride=(int)pow(2,level);
+  const int nStride = 1 << level;
   const int nSlice=sectionBeads.getNSlice();
   const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();

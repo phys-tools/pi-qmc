@@ -85,7 +85,7 @@ double HyperbolicMover::makeMove(MultiLevelSampler& sampler, const int level) {
     const Beads<NDIM>& sectionBeads = sampler.getSectionBeads();
     Beads<NDIM>& movingBeads = sampler.getMovingBeads();
     const SuperCell& cell = sampler.getSuperCell();
-    const int nStride = (int) pow(2, level);
+    const int nStride = (1 << level);
     const double teff = tau * nStride;
     const int nSlice = sectionBeads.getNSlice();
     const blitz::Array<int, 1>& index = sampler.getMovingIndex();
@@ -175,7 +175,7 @@ void HyperbolicMover::setFTable(int maxlevel) {
     for (int ilevel = 0; ilevel < maxlevel + 1; ++ilevel) {
         double sumg = 0, sumg0 = 0;
         double fr = 0;
-        double teff = tau * pow(2, ilevel);
+        double teff = tau * (1 << ilevel);
         /// Set normalization for g and g2.
         normG2(ilevel) = 1. / g(0, 2 * teff, ilevel + 1);
         sumg = 0;

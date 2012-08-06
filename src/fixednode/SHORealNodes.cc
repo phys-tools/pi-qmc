@@ -23,10 +23,10 @@ SHORealNodes::SHORealNodes(const SimulationInfo &simInfo,
   : tau(simInfo.getTau()),temperature(temperature),mass(species.mass),
     charge(species.charge), omega(omega), b(b), npart(species.count),
     ifirst(species.ifirst),
-    matrix((int)(pow(2,maxlevel)+0.1)+1),
+    matrix((1 << maxlevel) + 1),
     gradmat1(npart,npart), gradmat2(npart,npart),
     gradmattau(npart,npart),  ipiv(npart), lwork(npart*npart), work(lwork),
-    det((int)(pow(2,maxlevel)+0.1)+1),
+    det((1 << maxlevel) + 1),
     omegac(charge*b/(mass*c)), omega1(sqrt(omega*omega+0.25*omegac*omegac)),
     sinh1(sinh(0.5*omega1/temperature)), cosh1(cosh(0.5*omega1/temperature)),
     sinhc(sinh(0.5*omegac/temperature)), coshc(cosh(0.5*omegac/temperature)),
@@ -137,4 +137,4 @@ void SHORealNodes::evaluateGradLogDist(const VArray &r1, const VArray &r2,
 }
 
 const double SHORealNodes::c(137.0359895);
-const double SHORealNodes::pi(acos(-1));
+const double SHORealNodes::pi(acos(-1.0));

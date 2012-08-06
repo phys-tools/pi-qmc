@@ -20,7 +20,7 @@ WalkingChooser::WalkingChooser(const int nsize, const Species &species,
         PermutationChooser(nsize), SpeciesParticleChooser(species, nsize), t(
                 npart, npart), cump(npart, npart), pg(NDIM), nsize(nsize), mass(
                 species.mass), tau(simInfo.getTau()) {
-    double alpha = mass / (2 * tau * pow(2, nlevel));
+    double alpha = mass / (2 * tau * (1 << nlevel));
     for (int idim = 0; idim < NDIM; ++idim) {
         double length = (*simInfo.getSuperCell())[idim];
         pg(idim) = new PeriodicGaussian(alpha, length);

@@ -24,7 +24,8 @@ SHOPhase::SHOPhase(const SimulationInfo &simInfo,
   : PhaseModel(simInfo.getNPart()),
     tau(simInfo.getTau()),temperature(temperature), mass(species.mass),
     charge(species.charge), omega(omega), b(b), npart(species.count),
-    ifirst(species.ifirst),  matrix((int)(pow(2,maxlevel)+0.1)+1),
+    ifirst(species.ifirst),
+    matrix((1 << maxlevel) + 1),
     gradmat1(npart,npart), gradmat2(npart,npart),
     ipiv(npart), lwork(npart*npart), work(lwork),
     omegac(charge*b/(2.0*mass*c)), omega1(sqrt(omega*omega+omegac*omegac)),
@@ -46,7 +47,7 @@ SHOPhase::~SHOPhase() {
 }
 
 const double SHOPhase::c(1); //(137.0359895);
-const double SHOPhase::pi(acos(-1));
+const double SHOPhase::pi(acos(-1.0));
 
 void SHOPhase::evaluate(const VArray &r1, const VArray &r2, 
                           const int islice) { 

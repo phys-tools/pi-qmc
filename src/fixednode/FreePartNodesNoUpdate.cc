@@ -23,11 +23,13 @@ FreePartNodesNoUpdate::FreePartNodesNoUpdate(const SimulationInfo& simInfo,
   const Species& species, const double temperature, const int maxlevel)
   : tau(simInfo.getTau()),mass(species.mass),npart(species.count),
     ifirst(species.ifirst), 
-    r1(npart), r2(npart), matrix((int)(pow(2,maxlevel)+0.1)+1),
-    det((int)(pow(2,maxlevel)+0.1)+1),
-    newDet((int)(pow(2,maxlevel)+0.1)+1),
-    dist((int)(pow(2,maxlevel)+0.1)+1),
-    newDist((int)(pow(2,maxlevel+1)+0.1)+1),
+    r1(npart),
+    r2(npart),
+    matrix((1 << maxlevel) + 1),
+    det((1 << maxlevel) + 1),
+    newDet((1 << maxlevel) + 1),
+    dist((1 << maxlevel) + 1),
+    newDist((1 << (maxlevel+1)) + 1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()), pg(mass*temperature,cell.a[0]),
     notMySpecies(false), force(npart), gradArray(npart), 
@@ -112,7 +114,7 @@ double FreePartNodesNoUpdate::getActionDifference(
   else notMySpecies=false;
   int nSlice=sectionBeads1.getNSlice();
   const int nMoving=index1.size();
-  const int nStride=(int)pow(2,level+1);
+  const int nStride = 1 << (level + 1);
   // First check for node crossing.
   for (int islice=nStride/2; islice<nSlice; islice+=nStride) {
     for (int i=0; i<npart; ++i) r1(i)=sectionBeads1(i+ifirst,islice);

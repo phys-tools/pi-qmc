@@ -26,12 +26,12 @@ SHONodes::SHONodes(const SimulationInfo &simInfo,
     omega(omega), coshwt(cosh(omega*0.5/temperature)),
     sinhwt(sinh(omega*0.5/temperature)), c(mass*0.5*omega/sinhwt),
     npart(species.count),ifirst(species.ifirst), 
-    matrix((int)(pow(2,maxlevel)+0.1)+1),
+    matrix((1 << maxlevel) + 1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     notMySpecies(false), gradArray(npart), gradMatrix(npart,npart), 
     mat2(npart,npart), grad2Matrix(npart,npart), 
     uarray(npart,npart,ColMajor()),
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart),
+    kindex((1 << maxlevel) + 1, npart),
     nerror(0), scale(1.), hungarian(new Hungarian(npart)) {
   for (unsigned int i=0; i<matrix.size(); ++i)  {
     matrix[i] = new Matrix(npart,npart,ColMajor());

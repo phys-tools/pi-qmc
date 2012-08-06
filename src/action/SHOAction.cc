@@ -20,7 +20,7 @@ double SHOAction::getActionDifference(const SectionSamplerInterface& sampler,
                                       const int level) {
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
-  const int nStride=(int)pow(2,level);
+  const int nStride = 1 << level;
   const int nSlice=sectionBeads.getNSlice();
   const IArray& index=sampler.getMovingIndex(); 
   const int nMoving=index.size();

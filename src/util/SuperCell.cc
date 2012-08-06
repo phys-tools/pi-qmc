@@ -26,8 +26,8 @@ SuperCell::Vec& SuperCell::pbc(Vec& v) const {
   if (dot(v,v)>rcut2) {
     for (int idim=0; idim<NDIM; ++idim) {
       // int i = (int)(b[idim]*v[idim]+1000.5)-1000;
-      double i = trunc (b[idim]*v[idim]+1000.5)-1000; 
-      if (i!=0) v[idim]-=a[idim]*i;
+      double i = floor(b[idim]*v[idim]+1000.5)-1000;
+      v[idim]-=a[idim]*i;
     }
   }
   return v;
@@ -35,8 +35,8 @@ SuperCell::Vec& SuperCell::pbc(Vec& v) const {
 
 double SuperCell::pbc(double dist, int idim) const {
   if (dist>(0.5*a[idim])) {
-    double i = trunc (b[idim]*dist+1000.5)-1000; 
-    if (i!=0) dist-=a[idim]*i;
+    double i = floor (b[idim]*dist+1000.5)-1000;
+    dist -= a[idim]*i;
   }
   return dist;
 }

@@ -111,7 +111,7 @@ SmoothedGridPotential::SmoothedGridPotential(const SimulationInfo& simInfo, cons
     //smooth
     Vec h_alpha=0., e_alpha=0.;
     Vec h_norm=0., e_norm=0.;
-    double sigma=pow(2,ilevel)*tau/24.;
+    double sigma = (1 << ilevel) * tau / 24.0;
     for(int i=0; i<3; i++){
       h_alpha(i)=sigma/h_m(i);
       e_alpha(i)=sigma/e_m(i);
@@ -238,7 +238,7 @@ double SmoothedGridPotential::getActionDifference(
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();
-  const int nStride=(int)pow(2,ilevel);
+  const int nStride = 1 << ilevel;
   const int nSlice=sectionBeads.getNSlice();
   const IArray& index=sampler.getMovingIndex();
   const int nMoving=index.size();

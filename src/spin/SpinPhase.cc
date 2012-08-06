@@ -24,7 +24,8 @@ SpinPhase::SpinPhase(const SimulationInfo &simInfo,
     charge(species.charge), temperature(t), bx(bx), by(by), bz(bz), 
     gmubs(gmubs), tanhx(tanh(0.5*gmubs*bx/t)), tanhy(tanh(0.5*gmubs*by/t)),
     tanhz(tanh(0.5*gmubs*bz/t)), npart(species.count),
-    ifirst(species.ifirst),  matrix((int)(pow(2,maxlevel)+0.1)+1),
+    ifirst(species.ifirst),
+    matrix((1 << maxlevel) + 1),
     gradmat1(npart,npart), gradmat2(npart,npart), ipiv(npart),
     lwork(npart*npart), work(lwork), f(1) /* f(1.0/(16.0*pi*pi)) */  {
   std::cout << "SpinPhase with t=" << temperature << ", b=" << bx << " "
@@ -39,7 +40,7 @@ SpinPhase::~SpinPhase() {
   for (unsigned int i=0; i<matrix.size(); ++i) delete matrix[i];
 }
 
-const double SpinPhase::pi(acos(-1));
+const double SpinPhase::pi(acos(-1.0));
 
 void SpinPhase::evaluate(const VArray &r1Array, const VArray &r2Array, 
                          const SArray &s1Array, const SArray &s2Array, 

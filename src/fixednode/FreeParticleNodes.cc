@@ -28,15 +28,15 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
 :   NodeModel("_"+species.name), maxlevel(maxlevel),
     tau(simInfo.getTau()),mass(species.mass),npart(species.count),
     ifirst(species.ifirst), 
-    matrix((int)(pow(2,maxlevel)+0.1)+1), 
-    romatrix((int)(pow(2,maxlevel)+0.1)+1),
+    matrix((1 << maxlevel) + 1),
+    romatrix((1 << maxlevel) + 1),
     ipiv(npart),lwork(npart*npart),work(lwork),
     cell(*simInfo.getSuperCell()), pg(NDIM), pgp(NDIM), pgm(NDIM),
     notMySpecies(false),
     gradArray1(npart), gradArray2(npart), 
     temp1(simInfo.getNPart()), temp2(simInfo.getNPart()),
     uarray(npart,npart,ColMajor()), 
-    kindex((int)(pow(2,maxlevel)+0.1)+1,npart), nerror(0),
+    kindex((1 << maxlevel) + 1,npart), nerror(0),
     useHungarian(useHungarian), scale(1.0), useIterations(useIterations),
     nodalFactor(nodalFactor),
     hungarian(useHungarian ? new Hungarian(npart) : 0) {
@@ -255,7 +255,7 @@ void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const 
   if (section==2) mat.transposeSelf(1,0);
   matSav=*romatrix[islice];
   
-  IArray2 localKindex((int)(pow(2,maxlevel)+0.1)+1,npart);
+  IArray2 localKindex((1 << maxlevel) + 1, npart);
   localKindex=kindex;
   Vec normal;
 
@@ -877,9 +877,9 @@ const double FreeParticleNodes::EPSILON=1e-6;//6
 FreeParticleNodes::MatrixUpdate::MatrixUpdate(int maxMovers, int maxlevel, 
     int npart, std::vector<Matrix*> &matrix, const FreeParticleNodes &fpNodes)
   : fpNodes(fpNodes), maxMovers(maxMovers), npart(npart),
-    newMatrix((int)(pow(2,maxlevel)+0.1)+1),
-    phi((int)(pow(2,maxlevel)+0.1)+1),
-    bvec((int)(pow(2,maxlevel)+0.1)+1),
+    newMatrix((1 << maxlevel) + 1),
+    phi((1 << maxlevel) + 1),
+    bvec((1 << maxlevel) + 1),
     smallDet(maxMovers,maxMovers),
     matrix(matrix),
     ipiv(maxMovers),lwork(maxMovers*maxMovers),work(lwork),

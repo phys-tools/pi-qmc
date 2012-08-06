@@ -60,7 +60,7 @@ bool ModelSampler::tryMove() {
     }
 #endif 
 
-    if (jmodel < 0 or jmodel >= nmodel)
+    if (jmodel < 0 && jmodel >= nmodel)
         return false;
 
     // If we are targeting a model, reject moves that take us away from there.
