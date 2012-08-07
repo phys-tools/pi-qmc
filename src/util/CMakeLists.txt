@@ -10,6 +10,8 @@ set (sources
     SuperCell.cc
     TradEwaldSum.cc
     WireEwald.cc
+    erf.cpp
+    ipow.cpp
 )
 
 add_library(util STATIC ${sources})
