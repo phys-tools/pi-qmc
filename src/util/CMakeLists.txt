@@ -12,6 +12,10 @@ set (sources
     WireEwald.cc
     erf.cpp
     ipow.cpp
+    startup/CommandLineParser.cpp
+    startup/Greeting.cpp
+    startup/MPILifecycle.cpp
+    startup/UsageMessage.cpp
 )
 
 add_library(util STATIC ${sources})

@@ -13,7 +13,11 @@ libutil_la_SOURCES = \
 	TradEwaldSum.cc \
 	WireEwald.cc \
 	erf.cpp \
-	ipow.cpp
+	ipow.cpp \
+    startup/CommandLineParser.cpp \
+    startup/Greeting.cpp \
+    startup/MPILifecycle.cpp \
+    startup/UsageMessage.cpp
 noinst_HEADERS = \
 	AperiodicGaussian.h \
 	Distance.h \
@@ -29,4 +33,9 @@ noinst_HEADERS = \
 	WireEwald.h \
 	erf.h \
 	gnugetopt.h \
-	ipow.h
+	ipow.h \
+    startup/CommandLineParser.h \
+    startup/Greeting.h \
+    startup/MPILifecycle.h \
+    startup/UsageMessage.h
+    

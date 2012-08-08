@@ -75,7 +75,9 @@ am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
 	libutil_la-PeriodicGaussian.lo libutil_la-Permutation.lo \
 	libutil_la-RandomNumGenerator.lo libutil_la-SuperCell.lo \
 	libutil_la-TradEwaldSum.lo libutil_la-WireEwald.lo \
-	libutil_la-erf.lo libutil_la-ipow.lo
+	libutil_la-erf.lo libutil_la-ipow.lo \
+	libutil_la-CommandLineParser.lo libutil_la-Greeting.lo \
+	libutil_la-MPILifecycle.lo libutil_la-UsageMessage.lo
 libutil_la_OBJECTS = $(am_libutil_la_OBJECTS)
 libutil_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libutil_la_CXXFLAGS) \
@@ -252,7 +254,11 @@ libutil_la_SOURCES = \
 	TradEwaldSum.cc \
 	WireEwald.cc \
 	erf.cpp \
-	ipow.cpp
+	ipow.cpp \
+    startup/CommandLineParser.cpp \
+    startup/Greeting.cpp \
+    startup/MPILifecycle.cpp \
+    startup/UsageMessage.cpp
 
 noinst_HEADERS = \
 	AperiodicGaussian.h \
@@ -269,7 +275,11 @@ noinst_HEADERS = \
 	WireEwald.h \
 	erf.h \
 	gnugetopt.h \
-	ipow.h
+	ipow.h \
+    startup/CommandLineParser.h \
+    startup/Greeting.h \
+    startup/MPILifecycle.h \
+    startup/UsageMessage.h
 
 all: all-am
 
@@ -326,8 +336,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-AperiodicGaussian.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-CommandLineParser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-EwaldSum.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Greeting.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Hungarian.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-MPILifecycle.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-OptEwaldSum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PairDistance.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PeriodicGaussian.Plo@am__quote@
@@ -335,6 +348,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-RandomNumGenerator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-SuperCell.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-TradEwaldSum.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-UsageMessage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-WireEwald.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-erf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-ipow.Plo@am__quote@
@@ -450,6 +464,34 @@ libutil_la-ipow.lo: ipow.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ipow.cpp' object='libutil_la-ipow.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-ipow.lo `test -f 'ipow.cpp' || echo '$(srcdir)/'`ipow.cpp
+
+libutil_la-CommandLineParser.lo: startup/CommandLineParser.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-CommandLineParser.lo -MD -MP -MF $(DEPDIR)/libutil_la-CommandLineParser.Tpo -c -o libutil_la-CommandLineParser.lo `test -f 'startup/CommandLineParser.cpp' || echo '$(srcdir)/'`startup/CommandLineParser.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-CommandLineParser.Tpo $(DEPDIR)/libutil_la-CommandLineParser.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='startup/CommandLineParser.cpp' object='libutil_la-CommandLineParser.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-CommandLineParser.lo `test -f 'startup/CommandLineParser.cpp' || echo '$(srcdir)/'`startup/CommandLineParser.cpp
+
+libutil_la-Greeting.lo: startup/Greeting.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-Greeting.lo -MD -MP -MF $(DEPDIR)/libutil_la-Greeting.Tpo -c -o libutil_la-Greeting.lo `test -f 'startup/Greeting.cpp' || echo '$(srcdir)/'`startup/Greeting.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-Greeting.Tpo $(DEPDIR)/libutil_la-Greeting.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='startup/Greeting.cpp' object='libutil_la-Greeting.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-Greeting.lo `test -f 'startup/Greeting.cpp' || echo '$(srcdir)/'`startup/Greeting.cpp
+
+libutil_la-MPILifecycle.lo: startup/MPILifecycle.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-MPILifecycle.lo -MD -MP -MF $(DEPDIR)/libutil_la-MPILifecycle.Tpo -c -o libutil_la-MPILifecycle.lo `test -f 'startup/MPILifecycle.cpp' || echo '$(srcdir)/'`startup/MPILifecycle.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-MPILifecycle.Tpo $(DEPDIR)/libutil_la-MPILifecycle.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='startup/MPILifecycle.cpp' object='libutil_la-MPILifecycle.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-MPILifecycle.lo `test -f 'startup/MPILifecycle.cpp' || echo '$(srcdir)/'`startup/MPILifecycle.cpp
+
+libutil_la-UsageMessage.lo: startup/UsageMessage.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-UsageMessage.lo -MD -MP -MF $(DEPDIR)/libutil_la-UsageMessage.Tpo -c -o libutil_la-UsageMessage.lo `test -f 'startup/UsageMessage.cpp' || echo '$(srcdir)/'`startup/UsageMessage.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-UsageMessage.Tpo $(DEPDIR)/libutil_la-UsageMessage.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='startup/UsageMessage.cpp' object='libutil_la-UsageMessage.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-UsageMessage.lo `test -f 'startup/UsageMessage.cpp' || echo '$(srcdir)/'`startup/UsageMessage.cpp
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
