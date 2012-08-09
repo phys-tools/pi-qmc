@@ -31,7 +31,28 @@
               Introduction
           </h1>    
               <p>
+          <pre>
+          <small>
               This documentation describes the pimc.xml input file and the pitools python utilities for reading the pimc.h5 output file.
+              The pimc.xml files are xml files (start with <?xml version="1.0"?>) and have a root tag named < Simulation>. The root tag contains six elements. Order doesn't matter to the parser, but we always order them in our pimc.xml input files:
+                  
+                  <?xml version="1.0"?>
+                  <Simulation>
+                      <SuperCell ... />
+                      <Species ... />
+                      <Temperature .../>
+                      <Action>
+                          ...
+                      </Action>
+                      <Estimators>
+                          ...
+                      </Estimators>
+                      <PIMC ...>
+                          ...
+                      </PIMC>
+                  </Simulation>
+         </pre>
+          </small>
               </p>
           
       </section>
