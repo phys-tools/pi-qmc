@@ -221,7 +221,7 @@ footer {
   }
 }
 
-@media print, screen and (max-width: 720px) {
+@media print, screen and (max-width: 720px and max-height: 720px) {
   body {
     word-wrap:break-word;
   }
@@ -239,7 +239,7 @@ footer {
   }
 }
 
-@media print, screen and (max-width: 480px) {
+@media print, screen and (max-width: 480px and max-width: 480px) {
   body {
     padding:15px;
   }
