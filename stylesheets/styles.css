@@ -11,6 +11,9 @@ h1, h2, h3, h4, h5, h6 {
   color:#222;
   margin:0 0 20px;
 }
+h1 a {
+  color:#222;
+}
 
 p, ul, ol, table, pre, dl {
   margin:0 0 20px;
@@ -34,8 +37,8 @@ h3, h4, h5, h6 {
 
 a {
   color:#39c;
-  font-weight:400;
-  text-decoration:none;
+  font-weight:inherit;
+  text-decoration:inherit;
 }
 
 a small {
