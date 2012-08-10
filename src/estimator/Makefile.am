@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libestimator.la
-libestimator_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libestimator_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libestimator_la_SOURCES = \
 	AngularMomentumEstimator.cc \
 	BondLengthEstimator.cc \

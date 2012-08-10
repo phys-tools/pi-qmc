@@ -790,7 +790,6 @@ enable_xmltest
 with_gsl_prefix
 with_gsl_exec_prefix
 enable_gsltest
-with_blitz
 with_ndim
 '
       ac_precious_vars='build_alias
@@ -1458,7 +1457,6 @@ Optional Packages:
   --with-xml-exec-prefix=PFX Exec prefix where libxml is installed (optional)
   --with-gsl-prefix=PFX   Prefix where GSL is installed (optional)
   --with-gsl-exec-prefix=PFX Exec prefix where GSL is installed (optional)
-  --with-blitz[=DIR]      Set the path for Blitz++
   --with-ndim=NDIM    Set the number of physical dimensions (default is 3)
 
 Some influential environment variables:
@@ -20959,128 +20957,7 @@ rm -f core conftest.err conftest.$ac_objext \
 LIBS="$GSL_LIBS $LIBS"
 CPPFLAGS="$GSL_CFLAGS $CPPFLAGS"
 
-
-
-# Check whether --with-blitz was given.
-if test "${with_blitz+set}" = set; then :
-  withval=$with_blitz;
-else
-  withval='yes'
-fi
-
-
-if test "required" = required -a "$withval" = no ; then
-
-as_fn_error $? "
-$PACKAGE_STRING requires the Blitz++ template library
-available at http://oonumerics.org/blitz
-When installed give the directory of installation with the option
-  --with-blitz[=DIR]
-" "$LINENO" 5
-fi
-
-if test "$withval" != no ; then
-
-        saveCPPFLAGS=$CPPFLAGS
-        saveLDFLAGS=$LDFLAGS
-        saveLIBS=$LIBS
-
-        if test "$withval" != 'yes'; then
-                CPPFLAGS="-I$withval/include"
-                LDFLAGS="-L$withval/lib"
-        fi
-        LIBS="-lblitz $LIBS"
-
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether Blitz++ is installed" >&5
-$as_echo_n "checking whether Blitz++ is installed... " >&6; }
-if ${acx_cv_blitz+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-        ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-        if test "$cross_compiling" = yes; then :
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "cannot run test program while cross compiling
-See \`config.log' for more details" "$LINENO" 5; }
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <cstdlib>
-#include <blitz/array.h>
-
-#ifdef F77_DUMMY_MAIN
-
-#  ifdef __cplusplus
-     extern "C"
-#  endif
-   int F77_DUMMY_MAIN() { return 1; }
-
-#endif
-int
-main ()
-{
-
-blitz::Array<int,1> x(10);
-x = blitz::tensor::i;
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_run "$LINENO"; then :
-  acx_cv_blitz=yes
-else
-  acx_cv_blitz=no
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext
-fi
-
-        ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $acx_cv_blitz" >&5
-$as_echo "$acx_cv_blitz" >&6; }
-
-        CPPFLAGS=$saveCPPFLAGS
-        LDFLAGS=$saveLDFLAGS
-        LIBS=$saveLIBS
-
-
-        if test "$acx_cv_blitz" = yes ; then
-                if test "$withval" != yes ; then
-                        CPPFLAGS="-I$withval/include $CPPFLAGS"
-                        LDFLAGS="-L$withval/lib $LDFLAGS"
-                fi
-                LIBS="-lblitz $LIBS"
-        else
-                if test "required" = required ; then
-
-as_fn_error $? "
-$PACKAGE_STRING requires the Blitz++ template library
-available at http://oonumerics.org/blitz
-When installed give the directory of installation with the option
-  --with-blitz[=DIR]
-" "$LINENO" 5
-                fi
-        fi
-
-
-fi
-
-
+#ACX_BLITZ(required) #moved to Makefile.am files.
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for H5Fopen in -lhdf5" >&5
 $as_echo_n "checking for H5Fopen in -lhdf5... " >&6; }

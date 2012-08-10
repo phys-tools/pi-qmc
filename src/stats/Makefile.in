@@ -69,11 +69,17 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libstats_la_LIBADD =
-am_libstats_la_OBJECTS = AccRejEstimator.lo ArrayEstimator.lo \
-	ArrayBlockedEstimator.lo AsciiReportBuilder.lo \
-	EstimatorManager.lo H5ReportBuilder.lo MPIManager.lo \
-	ScalarEstimator.lo StdoutReportBuilder.lo Units.lo
+am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
+	libstats_la-ArrayEstimator.lo \
+	libstats_la-ArrayBlockedEstimator.lo \
+	libstats_la-AsciiReportBuilder.lo \
+	libstats_la-EstimatorManager.lo libstats_la-H5ReportBuilder.lo \
+	libstats_la-MPIManager.lo libstats_la-ScalarEstimator.lo \
+	libstats_la-StdoutReportBuilder.lo libstats_la-Units.lo
 libstats_la_OBJECTS = $(am_libstats_la_OBJECTS)
+libstats_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libstats_la_CXXFLAGS) \
+	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/config/depcomp
 am__depfiles_maybe = depfiles
@@ -232,6 +238,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libstats.la
+libstats_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/contrib/blitz-0.9
 libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \
@@ -305,7 +312,7 @@ clean-noinstLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 libstats.la: $(libstats_la_OBJECTS) $(libstats_la_DEPENDENCIES) $(EXTRA_libstats_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libstats_la_OBJECTS) $(libstats_la_LIBADD) $(LIBS)
+	$(libstats_la_LINK)  $(libstats_la_OBJECTS) $(libstats_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -313,16 +320,16 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AccRejEstimator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ArrayBlockedEstimator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ArrayEstimator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/AsciiReportBuilder.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/EstimatorManager.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/H5ReportBuilder.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MPIManager.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ScalarEstimator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/StdoutReportBuilder.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Units.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AccRejEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ArrayBlockedEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ArrayEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiReportBuilder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorManager.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ReportBuilder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-MPIManager.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ScalarEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-StdoutReportBuilder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-Units.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -344,6 +351,76 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+libstats_la-AccRejEstimator.lo: AccRejEstimator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AccRejEstimator.lo -MD -MP -MF $(DEPDIR)/libstats_la-AccRejEstimator.Tpo -c -o libstats_la-AccRejEstimator.lo `test -f 'AccRejEstimator.cc' || echo '$(srcdir)/'`AccRejEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AccRejEstimator.Tpo $(DEPDIR)/libstats_la-AccRejEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AccRejEstimator.cc' object='libstats_la-AccRejEstimator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AccRejEstimator.lo `test -f 'AccRejEstimator.cc' || echo '$(srcdir)/'`AccRejEstimator.cc
+
+libstats_la-ArrayEstimator.lo: ArrayEstimator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ArrayEstimator.lo -MD -MP -MF $(DEPDIR)/libstats_la-ArrayEstimator.Tpo -c -o libstats_la-ArrayEstimator.lo `test -f 'ArrayEstimator.cc' || echo '$(srcdir)/'`ArrayEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-ArrayEstimator.Tpo $(DEPDIR)/libstats_la-ArrayEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ArrayEstimator.cc' object='libstats_la-ArrayEstimator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ArrayEstimator.lo `test -f 'ArrayEstimator.cc' || echo '$(srcdir)/'`ArrayEstimator.cc
+
+libstats_la-ArrayBlockedEstimator.lo: ArrayBlockedEstimator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ArrayBlockedEstimator.lo -MD -MP -MF $(DEPDIR)/libstats_la-ArrayBlockedEstimator.Tpo -c -o libstats_la-ArrayBlockedEstimator.lo `test -f 'ArrayBlockedEstimator.cc' || echo '$(srcdir)/'`ArrayBlockedEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-ArrayBlockedEstimator.Tpo $(DEPDIR)/libstats_la-ArrayBlockedEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ArrayBlockedEstimator.cc' object='libstats_la-ArrayBlockedEstimator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ArrayBlockedEstimator.lo `test -f 'ArrayBlockedEstimator.cc' || echo '$(srcdir)/'`ArrayBlockedEstimator.cc
+
+libstats_la-AsciiReportBuilder.lo: AsciiReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo -c -o libstats_la-AsciiReportBuilder.lo `test -f 'AsciiReportBuilder.cc' || echo '$(srcdir)/'`AsciiReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo $(DEPDIR)/libstats_la-AsciiReportBuilder.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AsciiReportBuilder.cc' object='libstats_la-AsciiReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiReportBuilder.lo `test -f 'AsciiReportBuilder.cc' || echo '$(srcdir)/'`AsciiReportBuilder.cc
+
+libstats_la-EstimatorManager.lo: EstimatorManager.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-EstimatorManager.lo -MD -MP -MF $(DEPDIR)/libstats_la-EstimatorManager.Tpo -c -o libstats_la-EstimatorManager.lo `test -f 'EstimatorManager.cc' || echo '$(srcdir)/'`EstimatorManager.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-EstimatorManager.Tpo $(DEPDIR)/libstats_la-EstimatorManager.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EstimatorManager.cc' object='libstats_la-EstimatorManager.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-EstimatorManager.lo `test -f 'EstimatorManager.cc' || echo '$(srcdir)/'`EstimatorManager.cc
+
+libstats_la-H5ReportBuilder.lo: H5ReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo -c -o libstats_la-H5ReportBuilder.lo `test -f 'H5ReportBuilder.cc' || echo '$(srcdir)/'`H5ReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo $(DEPDIR)/libstats_la-H5ReportBuilder.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='H5ReportBuilder.cc' object='libstats_la-H5ReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ReportBuilder.lo `test -f 'H5ReportBuilder.cc' || echo '$(srcdir)/'`H5ReportBuilder.cc
+
+libstats_la-MPIManager.lo: MPIManager.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-MPIManager.lo -MD -MP -MF $(DEPDIR)/libstats_la-MPIManager.Tpo -c -o libstats_la-MPIManager.lo `test -f 'MPIManager.cc' || echo '$(srcdir)/'`MPIManager.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-MPIManager.Tpo $(DEPDIR)/libstats_la-MPIManager.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MPIManager.cc' object='libstats_la-MPIManager.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-MPIManager.lo `test -f 'MPIManager.cc' || echo '$(srcdir)/'`MPIManager.cc
+
+libstats_la-ScalarEstimator.lo: ScalarEstimator.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ScalarEstimator.lo -MD -MP -MF $(DEPDIR)/libstats_la-ScalarEstimator.Tpo -c -o libstats_la-ScalarEstimator.lo `test -f 'ScalarEstimator.cc' || echo '$(srcdir)/'`ScalarEstimator.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-ScalarEstimator.Tpo $(DEPDIR)/libstats_la-ScalarEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ScalarEstimator.cc' object='libstats_la-ScalarEstimator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ScalarEstimator.lo `test -f 'ScalarEstimator.cc' || echo '$(srcdir)/'`ScalarEstimator.cc
+
+libstats_la-StdoutReportBuilder.lo: StdoutReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutReportBuilder.Tpo -c -o libstats_la-StdoutReportBuilder.lo `test -f 'StdoutReportBuilder.cc' || echo '$(srcdir)/'`StdoutReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutReportBuilder.Tpo $(DEPDIR)/libstats_la-StdoutReportBuilder.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='StdoutReportBuilder.cc' object='libstats_la-StdoutReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutReportBuilder.lo `test -f 'StdoutReportBuilder.cc' || echo '$(srcdir)/'`StdoutReportBuilder.cc
+
+libstats_la-Units.lo: Units.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-Units.lo -MD -MP -MF $(DEPDIR)/libstats_la-Units.Tpo -c -o libstats_la-Units.lo `test -f 'Units.cc' || echo '$(srcdir)/'`Units.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-Units.Tpo $(DEPDIR)/libstats_la-Units.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Units.cc' object='libstats_la-Units.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-Units.lo `test -f 'Units.cc' || echo '$(srcdir)/'`Units.cc
 
 mostlyclean-libtool:
 	-rm -f *.lo

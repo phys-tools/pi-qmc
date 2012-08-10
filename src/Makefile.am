@@ -1,6 +1,9 @@
 SUBDIRS = action advancer base demo emarate estimator fixednode parser \
 	spin stats util algorithm
 
+pi_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
+
+
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = \
     action/libaction.la \

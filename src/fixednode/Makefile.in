@@ -248,7 +248,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libfixednode.la
-libfixednode_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libfixednode_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libfixednode_la_SOURCES = \
     AnisotropicNodes.cc \
     AtomicOrbitalDM.cc \
