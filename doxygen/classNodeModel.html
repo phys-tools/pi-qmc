@@ -98,11 +98,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a18bea6869295fd6c731fd46713972cfe"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structNodeModel_1_1DetWithFlag.html">DetWithFlag</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeModel.html#a18bea6869295fd6c731fd46713972cfe">evaluate</a> (const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r1, const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r2, const int islice, bool scaleMagnitude)=0</td></tr>
 <tr class="memdesc:a18bea6869295fd6c731fd46713972cfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the density matrix function, returning the value.  <a href="#a18bea6869295fd6c731fd46713972cfe"></a><br/></td></tr>
 <tr class="memitem:a1f854379fc33d02b89713b3103042e6c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeModel.html#a1f854379fc33d02b89713b3103042e6c">evaluateDistance</a> (const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r1, const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r2, const int islice, <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d1, <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d2)=0</td></tr>
-<tr class="memdesc:a1f854379fc33d02b89713b3103042e6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_96.png"/>.  <a href="#a1f854379fc33d02b89713b3103042e6c"></a><br/></td></tr>
+<tr class="memdesc:a1f854379fc33d02b89713b3103042e6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_101.png"/>.  <a href="#a1f854379fc33d02b89713b3103042e6c"></a><br/></td></tr>
 <tr class="memitem:a987bb4c0601da6b6df1af343f1aae227"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeModel.html#a987bb4c0601da6b6df1af343f1aae227">evaluateDotDistance</a> (const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r1, const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r2, const int islice, <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d1, <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d2)</td></tr>
-<tr class="memdesc:a987bb4c0601da6b6df1af343f1aae227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the time-derivative of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_96.png"/>.  <a href="#a987bb4c0601da6b6df1af343f1aae227"></a><br/></td></tr>
+<tr class="memdesc:a987bb4c0601da6b6df1af343f1aae227"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the time-derivative of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_101.png"/>.  <a href="#a987bb4c0601da6b6df1af343f1aae227"></a><br/></td></tr>
 <tr class="memitem:ac1df0577b068d5fb2a81d4281684ad22"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeModel.html#ac1df0577b068d5fb2a81d4281684ad22">evaluateGradLogDist</a> (const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r1, const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r2, const int islice, <a class="el" href="classNodeModel.html#a3b75e526ec9a78b8a5460906d19f6e28">VMatrix</a> &amp;gradd1, <a class="el" href="classNodeModel.html#a3b75e526ec9a78b8a5460906d19f6e28">VMatrix</a> &amp;gradd2, const <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d1, const <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d2)=0</td></tr>
-<tr class="memdesc:ac1df0577b068d5fb2a81d4281684ad22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate gradient of log of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_96.png"/>.  <a href="#ac1df0577b068d5fb2a81d4281684ad22"></a><br/></td></tr>
+<tr class="memdesc:ac1df0577b068d5fb2a81d4281684ad22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate gradient of log of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_101.png"/>.  <a href="#ac1df0577b068d5fb2a81d4281684ad22"></a><br/></td></tr>
 <tr class="memitem:a808550e65585a38c6ef013b557632aab"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeModel.html#a808550e65585a38c6ef013b557632aab">dependsOnOtherParticles</a> ()</td></tr>
 <tr class="memdesc:a808550e65585a38c6ef013b557632aab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if action depends on other particle coordinates.  <a href="#a808550e65585a38c6ef013b557632aab"></a><br/></td></tr>
 <tr class="memitem:af0c4428aff7ef0264c8809876a987440"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNodeModel.html#af0c4428aff7ef0264c8809876a987440">testGradLogDist</a> (const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r1, const <a class="el" href="classNodeModel.html#a8f1cfa1714190458fe6a759b1ae4caa5">VArray</a> &amp;r2, const int islice, <a class="el" href="classNodeModel.html#a3b75e526ec9a78b8a5460906d19f6e28">VMatrix</a> &amp;gradd1, <a class="el" href="classNodeModel.html#a3b75e526ec9a78b8a5460906d19f6e28">VMatrix</a> &amp;gradd2, const <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d1, const <a class="el" href="classNodeModel.html#a1d1f3874bc3833d59061061a7dc4fa0b">Array</a> &amp;d2, const int npart, const int ifirst)</td></tr>
@@ -118,7 +118,7 @@ Protected Attributes</h2></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Base class for node models used in the fixed node approximation. </p>
-<p>The <a class="el" href="classNodeModel.html" title="Base class for node models used in the fixed node approximation.">NodeModel</a> is a function <img class="formulaInl" alt="$\rho_0(R(t),R(t+\beta/2)$" src="form_123.png"/> that is used by <a class="el" href="classFixedNodeAction.html" title="Action for fixed node approximation.">FixedNodeAction</a>. </p>
+<p>The <a class="el" href="classNodeModel.html" title="Base class for node models used in the fixed node approximation.">NodeModel</a> is a function <img class="formulaInl" alt="$\rho_0(R(t),R(t+\beta/2)$" src="form_128.png"/> that is used by <a class="el" href="classFixedNodeAction.html" title="Action for fixed node approximation.">FixedNodeAction</a>. </p>
 <dl class="section author"><dt>Author:</dt><dd>John Shumway </dd></dl>
 
 <p>Definition at line <a class="el" href="NodeModel_8h_source.html#l00032">32</a> of file <a class="el" href="NodeModel_8h_source.html">NodeModel.h</a>.</p>
@@ -311,7 +311,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Implemented in <a class="el" href="classAugmentedNodes.html#ade4663d44497e5207734b0e72a533596">AugmentedNodes</a>, <a class="el" href="classFreeParticleNodes.html#a80beb88f5acd2bb2f611b7d0a3b54afc">FreeParticleNodes</a>, <a class="el" href="classWireNodes.html#a71d78d3ce073256dffc2576c0c4fbf05">WireNodes</a>, <a class="el" href="classSHONodes.html#a4e2f14c7c3dd24c4091e249d3b3d6ba5">SHONodes</a>, <a class="el" href="classExcitonNodes.html#a8c7edfaf14f2fd7752238b5d3cf078a6">ExcitonNodes</a>, <a class="el" href="classSHORealNodes.html#a01f42833919e4f19791383cb9fecee51">SHORealNodes</a>, and <a class="el" href="classGroundStateSNode.html#a8f8f4b127a9b78f744fe074106c58b0e">GroundStateSNode</a>.</p>
 
-<p>Referenced by <a class="el" href="SpinChoiceFixedNodeAction_8cc_source.html#l00032">SpinChoiceFixedNodeAction::getActionChoiceDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00039">FixedNodeAction::getActionDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00254">FixedNodeAction::getBeadAction()</a>, and <a class="el" href="FixedNodeAction_8cc_source.html#l00331">FixedNodeAction::initialize()</a>.</p>
+<p>Referenced by <a class="el" href="SpinChoiceFixedNodeAction_8cc_source.html#l00030">SpinChoiceFixedNodeAction::getActionChoiceDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00039">FixedNodeAction::getActionDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00254">FixedNodeAction::getBeadAction()</a>, and <a class="el" href="FixedNodeAction_8cc_source.html#l00331">FixedNodeAction::initialize()</a>.</p>
 
 </div>
 </div>
@@ -365,12 +365,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Evaluate distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_96.png"/>. </p>
+<p>Evaluate distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_101.png"/>. </p>
 <p>Assumes that evaluate has already been called on the slice. </p>
 
 <p>Implemented in <a class="el" href="classAugmentedNodes.html#a28b1bc48cdb1e6ac4cac908971a93284">AugmentedNodes</a>, <a class="el" href="classFreeParticleNodes.html#a0b8f426bb1fc8a4e85003e88cea62a45">FreeParticleNodes</a>, <a class="el" href="classWireNodes.html#a688cc147dcd9fe07fd5c6d510d6197fb">WireNodes</a>, <a class="el" href="classSHONodes.html#a515a0dc2c586bb6c0b1d70ec6cc30625">SHONodes</a>, <a class="el" href="classExcitonNodes.html#ae0d5378a0e7fd82b515732c27ebb1110">ExcitonNodes</a>, <a class="el" href="classSHORealNodes.html#ac7817a04096ddba6720b7a2f8b35ce0e">SHORealNodes</a>, and <a class="el" href="classGroundStateSNode.html#a3344db85efc6ef57a3c82e1f41687627">GroundStateSNode</a>.</p>
 
-<p>Referenced by <a class="el" href="SpinChoiceFixedNodeAction_8cc_source.html#l00032">SpinChoiceFixedNodeAction::getActionChoiceDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00039">FixedNodeAction::getActionDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00254">FixedNodeAction::getBeadAction()</a>, and <a class="el" href="FixedNodeAction_8cc_source.html#l00331">FixedNodeAction::initialize()</a>.</p>
+<p>Referenced by <a class="el" href="SpinChoiceFixedNodeAction_8cc_source.html#l00030">SpinChoiceFixedNodeAction::getActionChoiceDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00039">FixedNodeAction::getActionDifference()</a>, <a class="el" href="FixedNodeAction_8cc_source.html#l00254">FixedNodeAction::getBeadAction()</a>, and <a class="el" href="FixedNodeAction_8cc_source.html#l00331">FixedNodeAction::initialize()</a>.</p>
 
 </div>
 </div>
@@ -424,7 +424,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Evaluate the time-derivative of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_96.png"/>. </p>
+<p>Evaluate the time-derivative of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_101.png"/>. </p>
 <p>Assumes that evaluate has already been called on the slice. </p>
 
 <p>Reimplemented in <a class="el" href="classFreeParticleNodes.html#a6bf0545de00235ac8d333e1dac17ef18">FreeParticleNodes</a>, <a class="el" href="classAugmentedNodes.html#ae006270dad77e02ed641981d8f1dc2e3">AugmentedNodes</a>, <a class="el" href="classWireNodes.html#a1a1630094f5e9bc22a1c28901c5711c3">WireNodes</a>, and <a class="el" href="classExcitonNodes.html#aba61b434144f8c8168a191cb86e4fb4d">ExcitonNodes</a>.</p>
@@ -497,7 +497,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Evaluate gradient of log of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_96.png"/>. </p>
+<p>Evaluate gradient of log of the distance to the node in units of <img class="formulaInl" alt="$ \sqrt{\tau/2m}$" src="form_101.png"/>. </p>
 
 <p>Implemented in <a class="el" href="classFreeParticleNodes.html#a8dc407574cb0d35569f45f75915165bb">FreeParticleNodes</a>, <a class="el" href="classAugmentedNodes.html#ad5d3e77e83063f0ae510b7d885c05afa">AugmentedNodes</a>, <a class="el" href="classWireNodes.html#a9c417f74cbb80f86868f04e72c636a3a">WireNodes</a>, <a class="el" href="classSHONodes.html#a9384b7d67b1db4860a2857ef2e44ebd3">SHONodes</a>, <a class="el" href="classExcitonNodes.html#a721bc7111d430551d0d8a7457525a83c">ExcitonNodes</a>, <a class="el" href="classSHORealNodes.html#a276f1e99246af169fe13bb162549a3b9">SHORealNodes</a>, and <a class="el" href="classGroundStateSNode.html#a4a15fa5ba05e86ac3f744adcbef81425">GroundStateSNode</a>.</p>
 
@@ -585,7 +585,7 @@ Protected Attributes</h2></td></tr>
 
 <p>References <a class="el" href="NodeModel_8h_source.html#l00120">spinModelState</a>.</p>
 
-<p>Referenced by <a class="el" href="SpinChoiceFixedNodeAction_8cc_source.html#l00015">SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction()</a>.</p>
+<p>Referenced by <a class="el" href="SpinChoiceFixedNodeAction_8cc_source.html#l00013">SpinChoiceFixedNodeAction::SpinChoiceFixedNodeAction()</a>.</p>
 
 </div>
 </div>
@@ -718,7 +718,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:16:04 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:30 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

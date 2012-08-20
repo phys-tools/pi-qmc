@@ -83,22 +83,22 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Base class for matrix updates. </p>
 <p>The trial density matrix is </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \rho_{ij} = \rho_T(r_j, r_j). \]" src="form_124.png"/>
+<img class="formulaDsp" alt="\[ \rho_{ij} = \rho_T(r_j, r_j). \]" src="form_129.png"/>
 </p>
-<p> The inverse matrix satisfies <img class="formulaInl" alt="$1=\rho^{-1}\rho$" src="form_125.png"/>, so a change in the density matrix changes the determinant by a factor, </p>
+<p> The inverse matrix satisfies <img class="formulaInl" alt="$1=\rho^{-1}\rho$" src="form_130.png"/>, so a change in the density matrix changes the determinant by a factor, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \frac{|\rho'|}{|\rho|} = |\rho^{-1}\rho'|. \]" src="form_126.png"/>
+<img class="formulaDsp" alt="\[ \frac{|\rho'|}{|\rho|} = |\rho^{-1}\rho'|. \]" src="form_131.png"/>
 </p>
-<p> This matrix is the identity matrix, except for rows with moving particles. Using the notation <img class="formulaInl" alt="$j_i$" src="form_127.png"/> to indicate the index j of the ith moving particle, we construct the nmoving-by-nmoving matrix </p>
+<p> This matrix is the identity matrix, except for rows with moving particles. Using the notation <img class="formulaInl" alt="$j_i$" src="form_132.png"/> to indicate the index j of the ith moving particle, we construct the nmoving-by-nmoving matrix </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ a_{ij} = \sum_k \rho^{-1}_{i_i k}\rho'_{k j_j} \]" src="form_128.png"/>
+<img class="formulaDsp" alt="\[ a_{ij} = \sum_k \rho^{-1}_{i_i k}\rho'_{k j_j} \]" src="form_133.png"/>
 </p>
-<p> so <img class="formulaInl" alt="$|\rho'|/|\rho|=|a|$" src="form_129.png"/>. We calculate and store the vectors <img class="formulaInl" alt="$\phi_{ij}=\rho'_{i_ij}$" src="form_130.png"/> for each of the moving particles j.</p>
-<p>To calculate the distance to the node, we need to temporarily calculate a new updated matrix, The update formula for a changed row <img class="formulaInl" alt="$j_j$" src="form_131.png"/> is, </p>
+<p> so <img class="formulaInl" alt="$|\rho'|/|\rho|=|a|$" src="form_134.png"/>. We calculate and store the vectors <img class="formulaInl" alt="$\phi_{ij}=\rho'_{i_ij}$" src="form_135.png"/> for each of the moving particles j.</p>
+<p>To calculate the distance to the node, we need to temporarily calculate a new updated matrix, The update formula for a changed row <img class="formulaInl" alt="$j_j$" src="form_136.png"/> is, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ (\rho^{-1})'_{ik} = \begin{cases} \frac{\rho_{ik}^{-1}}{b_{j_j,j}};&amp; i=j_j\\ \rho_{ik}^{-1} - \frac{\rho_{jk}^{-1} b_{ij}}{b_{j_j,j}};&amp; i\ne j_j \end{cases} \]" src="form_132.png"/>
+<img class="formulaDsp" alt="\[ (\rho^{-1})'_{ik} = \begin{cases} \frac{\rho_{ik}^{-1}}{b_{j_j,j}};&amp; i=j_j\\ \rho_{ik}^{-1} - \frac{\rho_{jk}^{-1} b_{ij}}{b_{j_j,j}};&amp; i\ne j_j \end{cases} \]" src="form_137.png"/>
 </p>
-<p> where <img class="formulaInl" alt="$ b_{ij} = \sum_k \rho^{-1}_{ik} \phi_{kj}$" src="form_133.png"/>. </p>
+<p> where <img class="formulaInl" alt="$ b_{ij} = \sum_k \rho^{-1}_{ik} \phi_{kj}$" src="form_138.png"/>. </p>
 
 <p>Definition at line <a class="el" href="NodeModel_8h_source.html#l00074">74</a> of file <a class="el" href="NodeModel_8h_source.html">NodeModel.h</a>.</p>
 </div><hr/><h2>Member Function Documentation</h2>
@@ -258,7 +258,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:16:05 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:30 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

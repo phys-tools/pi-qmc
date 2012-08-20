@@ -93,17 +93,17 @@ Static Private Attributes</h2></td></tr>
 <p>Call evalauate first, the use the getter methods for the function value and derivatives.</p>
 <p>We start from the k-space representation of a Gaussian, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \exp(-\alpha x^2) = \frac{1}{\sqrt{4\pi\alpha}} \int_{-\infty}^\infty \exp\left(-\frac{k^2}{4 \alpha}\right) \exp(ikx)\, dk. \]" src="form_182.png"/>
+<img class="formulaDsp" alt="\[ \exp(-\alpha x^2) = \frac{1}{\sqrt{4\pi\alpha}} \int_{-\infty}^\infty \exp\left(-\frac{k^2}{4 \alpha}\right) \exp(ikx)\, dk. \]" src="form_188.png"/>
 </p>
-<p> To make this periodic function f(x) on the interval <img class="formulaInl" alt="$ -L/2 < f < L/2 $" src="form_183.png"/>, we restrict k to integer values, <img class="formulaInl" alt="$ k_n = 2\pi n/L $" src="form_184.png"/>, where n runs over all integers. Now the integral is a series, </p>
+<p> To make this periodic function f(x) on the interval <img class="formulaInl" alt="$ -L/2 < f < L/2 $" src="form_189.png"/>, we restrict k to integer values, <img class="formulaInl" alt="$ k_n = 2\pi n/L $" src="form_190.png"/>, where n runs over all integers. Now the integral is a series, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ f(x) = \sqrt{\frac{\pi^2}{\alpha L^2}} \left[ 1 + \Re e\, 2\sum_{n=1}^\infty \exp\left(-\frac{\pi^2n^2}{\alpha L^2}\right) \exp\left( \frac{2\pi i n x}{L^2} \right) \right ]. \]" src="form_185.png"/>
+<img class="formulaDsp" alt="\[ f(x) = \sqrt{\frac{\pi^2}{\alpha L^2}} \left[ 1 + \Re e\, 2\sum_{n=1}^\infty \exp\left(-\frac{\pi^2n^2}{\alpha L^2}\right) \exp\left( \frac{2\pi i n x}{L^2} \right) \right ]. \]" src="form_191.png"/>
 </p>
-<p> The quantity in the square brackets in a theta function with real value `nome' <img class="formulaInl" alt="$ q = \exp\left(-\frac{\pi^2n^2}{\alpha L^2}\right) $" src="form_186.png"/> and complex argument <img class="formulaInl" alt="$ w = \exp\left( \frac{2\pi i n x}{L^2} \right) $" src="form_187.png"/>, </p>
+<p> The quantity in the square brackets in a theta function with real value `nome' <img class="formulaInl" alt="$ q = \exp\left(-\frac{\pi^2n^2}{\alpha L^2}\right) $" src="form_192.png"/> and complex argument <img class="formulaInl" alt="$ w = \exp\left( \frac{2\pi i n x}{L^2} \right) $" src="form_193.png"/>, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ f(x) = \sqrt{\frac{\pi^2}{\alpha L^2}} \left[ 1 + \Re e\, 2\sum_{n=1}^\infty q^{n^2} w^n \right] \]" src="form_188.png"/>
+<img class="formulaDsp" alt="\[ f(x) = \sqrt{\frac{\pi^2}{\alpha L^2}} \left[ 1 + \Re e\, 2\sum_{n=1}^\infty q^{n^2} w^n \right] \]" src="form_194.png"/>
 </p>
-<p> The series converges quickly in n, and we choose <img class="formulaInl" alt="$ n_{max} \ge 2\sqrt{\alpha L^2} $" src="form_189.png"/>, so that <img class="formulaInl" alt="$ q^{n_{max}^2} < \exp(-4\pi^2) < 10^{-17}$" src="form_190.png"/>. Since we are working in k-space, the first and second derivatives are easily found by multiplying each term by <img class="formulaInl" alt="$ ik $" src="form_191.png"/> and <img class="formulaInl" alt="$ -k^2 $" src="form_192.png"/>, respectively. </p>
+<p> The series converges quickly in n, and we choose <img class="formulaInl" alt="$ n_{max} \ge 2\sqrt{\alpha L^2} $" src="form_195.png"/>, so that <img class="formulaInl" alt="$ q^{n_{max}^2} < \exp(-4\pi^2) < 10^{-17}$" src="form_196.png"/>. Since we are working in k-space, the first and second derivatives are easily found by multiplying each term by <img class="formulaInl" alt="$ ik $" src="form_197.png"/> and <img class="formulaInl" alt="$ -k^2 $" src="form_198.png"/>, respectively. </p>
 
 <p>Definition at line <a class="el" href="PeriodicGaussian_8h_source.html#l00036">36</a> of file <a class="el" href="PeriodicGaussian_8h_source.html">PeriodicGaussian.h</a>.</p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
@@ -523,7 +523,7 @@ Static Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:16:10 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:35 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

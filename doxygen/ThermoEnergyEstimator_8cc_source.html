@@ -50,70 +50,68 @@
 <div class="title">ThermoEnergyEstimator.cc</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="ThermoEnergyEstimator_8cc.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifdef HAVE_CONFIG_H</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;config.h&gt;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef ENABLE_MPI</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;mpi.h&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="ThermoEnergyEstimator_8h.html">ThermoEnergyEstimator.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Action_8h.html">action/Action.h</a>&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="DoubleAction_8h.html">action/DoubleAction.h</a>&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;base/SimulationInfo.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="MPIManager_8h.html">stats/MPIManager.h</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;blitz/tinyvec.h&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a752021f84737ede4a5f317a400330bbb">   15</a></span>&#160;<a class="code" href="classThermoEnergyEstimator.html#a752021f84737ede4a5f317a400330bbb" title="Constructor.">ThermoEnergyEstimator::ThermoEnergyEstimator</a>(</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keyword">const</span> SimulationInfo&amp; simInfo, <span class="keyword">const</span> <a class="code" href="classAction.html" title="Virtual base class for calculating the action.">Action</a>* action,</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keyword">const</span> <a class="code" href="classDoubleAction.html" title="Virtual base class for calculating the fermi action that depends on two slices Action objects can com...">DoubleAction</a>* doubleAction, <a class="code" href="classMPIManager.html">MPIManager</a> *mpi,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">const</span> std::string&amp; unitName, <span class="keywordtype">double</span> scale, <span class="keywordtype">double</span> shift)</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  : <a class="code" href="classScalarEstimator.html" title="Base class for scalar estimators.">ScalarEstimator</a>(<span class="stringliteral">&quot;thermo_energy&quot;</span>,<span class="stringliteral">&quot;scalar-energy/thermo-energy&quot;</span>,</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;                    unitName,scale,shift),</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    energy(0), etot(0), enorm(0), action(action), doubleAction(doubleAction),</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    mpi(mpi) {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;}</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a0e2a231c320adfbfc68a28761795c40e">   25</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThermoEnergyEstimator.html#a0e2a231c320adfbfc68a28761795c40e" title="Initialize the calculation.">ThermoEnergyEstimator::initCalc</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> nslice, <span class="keyword">const</span> <span class="keywordtype">int</span> firstSlice) {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>=0;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a8eaab691f7d6600c399ab4516d7882c4">   29</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThermoEnergyEstimator.html#a8eaab691f7d6600c399ab4516d7882c4" title="Add contribution from a link.">ThermoEnergyEstimator::handleLink</a>(<span class="keyword">const</span> <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a>&amp; start, <span class="keyword">const</span> <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a>&amp; end,</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">int</span> ipart, <span class="keyword">const</span> <span class="keywordtype">int</span> islice, <span class="keyword">const</span> Paths&amp; paths) {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classThermoEnergyEstimator.html#a71b9fc44c9d95557d89b7bd8891c1dcf" title="Action.">action</a>) {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">double</span> u(0),utau(0),ulambda(0);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> fm,fp;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a71b9fc44c9d95557d89b7bd8891c1dcf" title="Action.">action</a>-&gt;<a class="code" href="classAction.html#aff88157afb9ed080c1d61f8dd4c1de0c" title="Calculate action and derivatives at a bead (defaults to no contribution).">getBeadAction</a>(paths,ipart,islice,u,utau,ulambda,fm,fp);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>+=utau;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classThermoEnergyEstimator.html#a89b18f44519a1fd0b64446492231bd76" title="DoubleAction.">doubleAction</a>) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">double</span> u(0),utau(0),ulambda(0);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> fm,fp;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a89b18f44519a1fd0b64446492231bd76" title="DoubleAction.">doubleAction</a>-&gt;<a class="code" href="classDoubleAction.html#a57dfaa5fb8955c520e09f5ed6c5a733e" title="Calculate action and derivatives at a bead (defaults to no contribution).">getBeadAction</a>(paths,ipart,islice,u,utau,ulambda,fm,fp);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>+=utau;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  }</div>
+<a href="ThermoEnergyEstimator_8cc.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;config.h&quot;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#ifdef ENABLE_MPI</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;mpi.h&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="ThermoEnergyEstimator_8h.html">ThermoEnergyEstimator.h</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Action_8h.html">action/Action.h</a>&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="DoubleAction_8h.html">action/DoubleAction.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;base/SimulationInfo.h&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="MPIManager_8h.html">stats/MPIManager.h</a>&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;blitz/tinyvec.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a752021f84737ede4a5f317a400330bbb">   13</a></span>&#160;<a class="code" href="classThermoEnergyEstimator.html#a752021f84737ede4a5f317a400330bbb" title="Constructor.">ThermoEnergyEstimator::ThermoEnergyEstimator</a>(</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  <span class="keyword">const</span> SimulationInfo&amp; simInfo, <span class="keyword">const</span> <a class="code" href="classAction.html" title="Virtual base class for calculating the action.">Action</a>* action,</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keyword">const</span> <a class="code" href="classDoubleAction.html" title="Virtual base class for calculating the fermi action that depends on two slices Action objects can com...">DoubleAction</a>* doubleAction, <a class="code" href="classMPIManager.html">MPIManager</a> *mpi,</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keyword">const</span> std::string&amp; unitName, <span class="keywordtype">double</span> scale, <span class="keywordtype">double</span> shift)</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  : <a class="code" href="classScalarEstimator.html" title="Base class for scalar estimators.">ScalarEstimator</a>(<span class="stringliteral">&quot;thermo_energy&quot;</span>,<span class="stringliteral">&quot;scalar-energy/thermo-energy&quot;</span>,</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                    unitName,scale,shift),</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    energy(0), etot(0), enorm(0), action(action), doubleAction(doubleAction),</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    mpi(mpi) {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;}</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a0e2a231c320adfbfc68a28761795c40e">   23</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThermoEnergyEstimator.html#a0e2a231c320adfbfc68a28761795c40e" title="Initialize the calculation.">ThermoEnergyEstimator::initCalc</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> nslice, <span class="keyword">const</span> <span class="keywordtype">int</span> firstSlice) {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;  <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>=0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a8eaab691f7d6600c399ab4516d7882c4">   27</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThermoEnergyEstimator.html#a8eaab691f7d6600c399ab4516d7882c4" title="Add contribution from a link.">ThermoEnergyEstimator::handleLink</a>(<span class="keyword">const</span> <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a>&amp; start, <span class="keyword">const</span> <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a>&amp; end,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;          <span class="keyword">const</span> <span class="keywordtype">int</span> ipart, <span class="keyword">const</span> <span class="keywordtype">int</span> islice, <span class="keyword">const</span> Paths&amp; paths) {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classThermoEnergyEstimator.html#a71b9fc44c9d95557d89b7bd8891c1dcf" title="Action.">action</a>) {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">double</span> u(0),utau(0),ulambda(0);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> fm,fp;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a71b9fc44c9d95557d89b7bd8891c1dcf" title="Action.">action</a>-&gt;<a class="code" href="classAction.html#aff88157afb9ed080c1d61f8dd4c1de0c" title="Calculate action and derivatives at a bead (defaults to no contribution).">getBeadAction</a>(paths,ipart,islice,u,utau,ulambda,fm,fp);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>+=utau;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classThermoEnergyEstimator.html#a89b18f44519a1fd0b64446492231bd76" title="DoubleAction.">doubleAction</a>) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordtype">double</span> u(0),utau(0),ulambda(0);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> fm,fp;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a89b18f44519a1fd0b64446492231bd76" title="DoubleAction.">doubleAction</a>-&gt;<a class="code" href="classDoubleAction.html#a57dfaa5fb8955c520e09f5ed6c5a733e" title="Calculate action and derivatives at a bead (defaults to no contribution).">getBeadAction</a>(paths,ipart,islice,u,utau,ulambda,fm,fp);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>+=utau;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a4a2868a4cafb6e460b6ada3baf077ecf">   48</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThermoEnergyEstimator.html#a4a2868a4cafb6e460b6ada3baf077ecf" title="Finalize the calculation.">ThermoEnergyEstimator::endCalc</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> lnslice) {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordtype">int</span> nslice=lnslice;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">  #ifdef ENABLE_MPI</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor"></span>  <span class="keywordflow">if</span> (<a class="code" href="classThermoEnergyEstimator.html#aca5d2204d16ba32556482350072db9ce" title="The MPI Manager.">mpi</a>) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">double</span> buffer; <span class="keywordtype">int</span> ibuffer;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#aca5d2204d16ba32556482350072db9ce" title="The MPI Manager.">mpi</a>-&gt;getWorkerComm().Reduce(&amp;<a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>,&amp;buffer,1,MPI::DOUBLE,MPI::SUM,0);</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#aca5d2204d16ba32556482350072db9ce" title="The MPI Manager.">mpi</a>-&gt;getWorkerComm().Reduce(&amp;lnslice,&amp;ibuffer,1,MPI::INT,MPI::SUM,0);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>=buffer; nslice=ibuffer;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">  #endif</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor"></span>  <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>/=nslice;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <a class="code" href="classThermoEnergyEstimator.html#acd126af867cfdc57c5040b7991cff3be" title="The accumulated energy.">etot</a>+=<a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>; <a class="code" href="classThermoEnergyEstimator.html#a84ec618920cb12f6735682a1a3b2ee4d" title="The normalization of the accumualted energy.">enorm</a>+=1; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="classThermoEnergyEstimator.html#a4a2868a4cafb6e460b6ada3baf077ecf">   46</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classThermoEnergyEstimator.html#a4a2868a4cafb6e460b6ada3baf077ecf" title="Finalize the calculation.">ThermoEnergyEstimator::endCalc</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> lnslice) {</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keywordtype">int</span> nslice=lnslice;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">  #ifdef ENABLE_MPI</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span>  <span class="keywordflow">if</span> (<a class="code" href="classThermoEnergyEstimator.html#aca5d2204d16ba32556482350072db9ce" title="The MPI Manager.">mpi</a>) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">double</span> buffer; <span class="keywordtype">int</span> ibuffer;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#aca5d2204d16ba32556482350072db9ce" title="The MPI Manager.">mpi</a>-&gt;getWorkerComm().Reduce(&amp;<a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>,&amp;buffer,1,MPI::DOUBLE,MPI::SUM,0);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#aca5d2204d16ba32556482350072db9ce" title="The MPI Manager.">mpi</a>-&gt;getWorkerComm().Reduce(&amp;lnslice,&amp;ibuffer,1,MPI::INT,MPI::SUM,0);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>=buffer; nslice=ibuffer;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">  #endif</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor"></span>  <a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>/=nslice;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;  <a class="code" href="classThermoEnergyEstimator.html#acd126af867cfdc57c5040b7991cff3be" title="The accumulated energy.">etot</a>+=<a class="code" href="classThermoEnergyEstimator.html#a129e375e7178453753754442dfabfe03" title="ThermoEnergy energy.">energy</a>; <a class="code" href="classThermoEnergyEstimator.html#a84ec618920cb12f6735682a1a3b2ee4d" title="The normalization of the accumualted energy.">enorm</a>+=1; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:15:38 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:07 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

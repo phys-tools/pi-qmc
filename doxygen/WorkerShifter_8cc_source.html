@@ -50,36 +50,34 @@
 <div class="title">WorkerShifter.cc</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="WorkerShifter_8cc.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifdef HAVE_CONFIG_H</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;config.h&gt;</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#ifdef ENABLE_MPI</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;mpi.h&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="WorkerShifter_8h.html">WorkerShifter.h</a>&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;base/Paths.h&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="MPIManager_8h.html">stats/MPIManager.h</a>&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="RandomNumGenerator_8h.html">util/RandomNumGenerator.h</a>&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno"><a class="code" href="classWorkerShifter.html#a9a699e5901dda189499ff5019cd155fc">   12</a></span>&#160;<a class="code" href="classWorkerShifter.html#a9a699e5901dda189499ff5019cd155fc">WorkerShifter::WorkerShifter</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> maxShift, Paths&amp; paths, <a class="code" href="classMPIManager.html">MPIManager</a>* mpi)</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;  : <a class="code" href="classCompositeAlgorithm.html" title="Algorithm class combining several steps.">CompositeAlgorithm</a>(1), maxShift(maxShift), paths(paths), mpi(mpi) {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;}</div>
+<a href="WorkerShifter_8cc.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;config.h&quot;</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#ifdef ENABLE_MPI</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;mpi.h&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &quot;<a class="code" href="WorkerShifter_8h.html">WorkerShifter.h</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;base/Paths.h&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="MPIManager_8h.html">stats/MPIManager.h</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="RandomNumGenerator_8h.html">util/RandomNumGenerator.h</a>&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="code" href="classWorkerShifter.html#a9a699e5901dda189499ff5019cd155fc">   10</a></span>&#160;<a class="code" href="classWorkerShifter.html#a9a699e5901dda189499ff5019cd155fc">WorkerShifter::WorkerShifter</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> maxShift, Paths&amp; paths, <a class="code" href="classMPIManager.html">MPIManager</a>* mpi)</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  : <a class="code" href="classCompositeAlgorithm.html" title="Algorithm class combining several steps.">CompositeAlgorithm</a>(1), maxShift(maxShift), paths(paths), mpi(mpi) {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;}</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="code" href="classWorkerShifter.html#a3e15965061d78bfdb7c82faad8644873">   14</a></span>&#160;<a class="code" href="classWorkerShifter.html#a3e15965061d78bfdb7c82faad8644873">WorkerShifter::~WorkerShifter</a>() {}</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="code" href="classWorkerShifter.html#a3e15965061d78bfdb7c82faad8644873">   16</a></span>&#160;<a class="code" href="classWorkerShifter.html#a3e15965061d78bfdb7c82faad8644873">WorkerShifter::~WorkerShifter</a>() {}</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="code" href="classWorkerShifter.html#a2d111454392885bee318df7805ab40dd">   18</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classWorkerShifter.html#a2d111454392885bee318df7805ab40dd" title="Run the algorithm.">WorkerShifter::run</a>() {</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keywordtype">int</span> ishift=(int)((<a class="code" href="classWorkerShifter.html#a2d1508afa833d4ac71323ec63b89fbd4">maxShift</a>-1)*<a class="code" href="classRandomNumGenerator.html#a35999f78b61103dadf2ed300db20b5a7" title="Get a random number.">RandomNumGenerator::getRand</a>()*(1-1e-8))+1;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classWorkerShifter.html#a2d1508afa833d4ac71323ec63b89fbd4">maxShift</a>==0) ishift=0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#ifdef ENABLE_MPI</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor"></span>  <span class="keywordflow">if</span> (<a class="code" href="classWorkerShifter.html#adde8a6a518869bd5c36564b076f5ea45">mpi</a>) <a class="code" href="classWorkerShifter.html#adde8a6a518869bd5c36564b076f5ea45">mpi</a>-&gt;getWorkerComm().Bcast(&amp;ishift,1,MPI::INT,0);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor"></span>  <a class="code" href="classWorkerShifter.html#ac680b78f528740800c48ec42345bab58">paths</a>.shift(ishift);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;  <a class="code" href="classWorkerShifter.html#a2d111454392885bee318df7805ab40dd" title="Run the algorithm.">CompositeAlgorithm::run</a>();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;}</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="code" href="classWorkerShifter.html#a2d111454392885bee318df7805ab40dd">   16</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classWorkerShifter.html#a2d111454392885bee318df7805ab40dd" title="Run the algorithm.">WorkerShifter::run</a>() {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;  <span class="keywordtype">int</span> ishift=(int)((<a class="code" href="classWorkerShifter.html#a2d1508afa833d4ac71323ec63b89fbd4">maxShift</a>-1)*<a class="code" href="classRandomNumGenerator.html#a35999f78b61103dadf2ed300db20b5a7" title="Get a random number.">RandomNumGenerator::getRand</a>()*(1-1e-8))+1;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keywordflow">if</span> (<a class="code" href="classWorkerShifter.html#a2d1508afa833d4ac71323ec63b89fbd4">maxShift</a>==0) ishift=0;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifdef ENABLE_MPI</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor"></span>  <span class="keywordflow">if</span> (<a class="code" href="classWorkerShifter.html#adde8a6a518869bd5c36564b076f5ea45">mpi</a>) <a class="code" href="classWorkerShifter.html#adde8a6a518869bd5c36564b076f5ea45">mpi</a>-&gt;getWorkerComm().Bcast(&amp;ishift,1,MPI::INT,0);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor"></span>  <a class="code" href="classWorkerShifter.html#ac680b78f528740800c48ec42345bab58">paths</a>.shift(ishift);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <a class="code" href="classWorkerShifter.html#a2d111454392885bee318df7805ab40dd" title="Run the algorithm.">CompositeAlgorithm::run</a>();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:15:38 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:08 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

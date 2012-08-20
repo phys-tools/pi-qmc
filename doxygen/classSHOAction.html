@@ -70,8 +70,7 @@ Inheritance diagram for SHOAction:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a266ea41e97844a8b724957c3eebe294d"><td class="memItemLeft" align="right" valign="top">typedef blitz::Array&lt; int, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a266ea41e97844a8b724957c3eebe294d">IArray</a></td></tr>
-<tr class="memdesc:a266ea41e97844a8b724957c3eebe294d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Typedefs.  <a href="#a266ea41e97844a8b724957c3eebe294d"></a><br/></td></tr>
+<tr class="memitem:a0c04ddd3a52dffaa82bb69e62f99598d"><td class="memItemLeft" align="right" valign="top">typedef blitz::Array&lt; int, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a0c04ddd3a52dffaa82bb69e62f99598d">IArray</a></td></tr>
 <tr class="inherit_header pub_types_classAction"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classAction')"><img src="closed.png" alt="-"/>&nbsp;Public Types inherited from <a class="el" href="classAction.html">Action</a></td></tr>
 <tr class="memitem:aab9fe1b22076f5ae2e1d6fdc85567101 inherit pub_types_classAction"><td class="memItemLeft" align="right" valign="top">typedef blitz::TinyVector<br class="typebreak"/>
 &lt; double, NDIM &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAction.html#aab9fe1b22076f5ae2e1d6fdc85567101">Vec</a></td></tr>
@@ -80,17 +79,12 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac43dc37b381de9b48ed8ce7f1ae06e9a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#ac43dc37b381de9b48ed8ce7f1ae06e9a">SHOAction</a> (const double <a class="el" href="classSHOAction.html#ad0f07ffbc41fe4e3d5faa84e71cfe4bb">tau</a>, const double <a class="el" href="classSHOAction.html#ab47a6bb0ddafcad641686b84b8a971b4">omega</a>, const double <a class="el" href="classSHOAction.html#ae5fe256c1db140d1e19bc4c737fc2139">mass</a>, const int <a class="el" href="classSHOAction.html#ae5105cae9974c5b350aa7173e7082c7f">ndim</a>, const Species &amp;, const <a class="el" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> &amp;)</td></tr>
-<tr class="memdesc:ac43dc37b381de9b48ed8ce7f1ae06e9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor by providing the timestep tau.  <a href="#ac43dc37b381de9b48ed8ce7f1ae06e9a"></a><br/></td></tr>
 <tr class="memitem:a4880fdec9db23b501528fd4134e87559"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a4880fdec9db23b501528fd4134e87559">~SHOAction</a> ()</td></tr>
-<tr class="memdesc:a4880fdec9db23b501528fd4134e87559"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor.  <a href="#a4880fdec9db23b501528fd4134e87559"></a><br/></td></tr>
 <tr class="memitem:aabfb66a8bb7ffa4485277ec5ef624b2c"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#aabfb66a8bb7ffa4485277ec5ef624b2c">getActionDifference</a> (const SectionSamplerInterface &amp;, int level)</td></tr>
-<tr class="memdesc:aabfb66a8bb7ffa4485277ec5ef624b2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the difference in action.  <a href="#aabfb66a8bb7ffa4485277ec5ef624b2c"></a><br/></td></tr>
 <tr class="memitem:a2cf98373c7874edd9eef301165edcb87"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a2cf98373c7874edd9eef301165edcb87">getActionDifference</a> (const Paths &amp;, const <a class="el" href="classAction.html#a4d221c1d096af88b8df67d99f4bec446">VArray</a> &amp;displacement, int nmoving, const <a class="el" href="classAction.html#a49aa914464920d47e066eac4b853fd7a">IArray</a> &amp;movingIndex, int iFirstSlice, int iLastSlice)</td></tr>
-<tr class="memdesc:a2cf98373c7874edd9eef301165edcb87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the difference in action.  <a href="#a2cf98373c7874edd9eef301165edcb87"></a><br/></td></tr>
 <tr class="memitem:a2d2c357f10ebeea059fe925d4da059e8"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a2d2c357f10ebeea059fe925d4da059e8">getTotalAction</a> (const Paths &amp;, const int level) const </td></tr>
-<tr class="memdesc:a2d2c357f10ebeea059fe925d4da059e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the total action.  <a href="#a2d2c357f10ebeea059fe925d4da059e8"></a><br/></td></tr>
 <tr class="memitem:ade5796828a4876f678e9e34164bbb81f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#ade5796828a4876f678e9e34164bbb81f">getBeadAction</a> (const Paths &amp;, int ipart, int islice, double &amp;u, double &amp;utau, double &amp;ulambda, <a class="el" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> &amp;fm, <a class="el" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a> &amp;fp) const </td></tr>
-<tr class="memdesc:ade5796828a4876f678e9e34164bbb81f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the action and derivatives at a bead.  <a href="#ade5796828a4876f678e9e34164bbb81f"></a><br/></td></tr>
+<tr class="memdesc:ade5796828a4876f678e9e34164bbb81f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate action and derivatives at a bead (defaults to no contribution).  <a href="#ade5796828a4876f678e9e34164bbb81f"></a><br/></td></tr>
 <tr class="inherit_header pub_methods_classAction"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classAction')"><img src="closed.png" alt="-"/>&nbsp;Public Member Functions inherited from <a class="el" href="classAction.html">Action</a></td></tr>
 <tr class="memitem:abcf4c6358f53a666631ace11b325a7cd inherit pub_methods_classAction"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAction.html#abcf4c6358f53a666631ace11b325a7cd">~Action</a> ()</td></tr>
 <tr class="memitem:a4846f18699c79a8d6c56b3f3e6e0043f inherit pub_methods_classAction"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAction.html#a4846f18699c79a8d6c56b3f3e6e0043f">initialize</a> (const SectionChooser &amp;)</td></tr>
@@ -103,17 +97,12 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ad0f07ffbc41fe4e3d5faa84e71cfe4bb"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#ad0f07ffbc41fe4e3d5faa84e71cfe4bb">tau</a></td></tr>
-<tr class="memdesc:ad0f07ffbc41fe4e3d5faa84e71cfe4bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timestep.  <a href="#ad0f07ffbc41fe4e3d5faa84e71cfe4bb"></a><br/></td></tr>
 <tr class="memitem:ab47a6bb0ddafcad641686b84b8a971b4"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#ab47a6bb0ddafcad641686b84b8a971b4">omega</a></td></tr>
-<tr class="memdesc:ab47a6bb0ddafcad641686b84b8a971b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">The frequency.  <a href="#ab47a6bb0ddafcad641686b84b8a971b4"></a><br/></td></tr>
 <tr class="memitem:ae5fe256c1db140d1e19bc4c737fc2139"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#ae5fe256c1db140d1e19bc4c737fc2139">mass</a></td></tr>
-<tr class="memdesc:ae5fe256c1db140d1e19bc4c737fc2139"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mass.  <a href="#ae5fe256c1db140d1e19bc4c737fc2139"></a><br/></td></tr>
 <tr class="memitem:ae5105cae9974c5b350aa7173e7082c7f"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#ae5105cae9974c5b350aa7173e7082c7f">ndim</a></td></tr>
 <tr class="memdesc:ae5105cae9974c5b350aa7173e7082c7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of dimensions (can be less than NDIM, i.e., to make a wire).  <a href="#ae5105cae9974c5b350aa7173e7082c7f"></a><br/></td></tr>
 <tr class="memitem:a4d2b347874125e80e094e0be9f12f2c1"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a4d2b347874125e80e094e0be9f12f2c1">ifirst</a></td></tr>
-<tr class="memdesc:a4d2b347874125e80e094e0be9f12f2c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The first particle in this interaction.  <a href="#a4d2b347874125e80e094e0be9f12f2c1"></a><br/></td></tr>
 <tr class="memitem:a1e5eaec6cf6bd156c16d8e01a6248793"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a1e5eaec6cf6bd156c16d8e01a6248793">npart</a></td></tr>
-<tr class="memdesc:a1e5eaec6cf6bd156c16d8e01a6248793"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of particles with this interaction.  <a href="#a1e5eaec6cf6bd156c16d8e01a6248793"></a><br/></td></tr>
 <tr class="memitem:a2da417fd57b5b45a0e7e1f1a997f2fe7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="Distance_8h.html#a793b6ce881e05108aed00a423338e684">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSHOAction.html#a2da417fd57b5b45a0e7e1f1a997f2fe7">center</a></td></tr>
 <tr class="memdesc:a2da417fd57b5b45a0e7e1f1a997f2fe7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The location of the minimum of the potential.  <a href="#a2da417fd57b5b45a0e7e1f1a997f2fe7"></a><br/></td></tr>
 </table>
@@ -125,7 +114,7 @@ Private Attributes</h2></td></tr>
 </p>
 <p> For a derivation, see Feynman, <em>Statistical Mecahnics</em> (1972). This class only represents the potential contribution to the action, defined as <img class="formulaInl" alt="$U=-\log(\rho/\rho^0)$" src="form_38.png"/>. This action is </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ U(x,x';\tau) = \frac{1}{2}\log\frac{2\pi\sinh\omega\tau}{m\omega} +\frac{m\omega[(x^2+{x'}^2)\cosh\omega\tau-2xx']}{2\sinh\omega\tau} -\frac{1}{2}\log 2\pi\tau/m -\frac{m(x-x')^2}{2\tau}. \]" src="form_39.png"/>
+<img class="formulaDsp" alt="\[ U(x,x';\tau) = \frac{1}{2}\log\frac{\sinh\omega\tau}{\omega\tau} +\frac{m\omega[(x^2+{x'}^2)\cosh\omega\tau-2xx']}{2\sinh\omega\tau} -\frac{m(x-x')^2}{2\tau}. \]" src="form_39.png"/>
 </p>
 <p> We also need the time derivative, </p>
 <p class="formulaDsp">
@@ -140,26 +129,23 @@ Private Attributes</h2></td></tr>
 <p class="enddd">Calculate forces for virial estimator. </p>
 </dd></dl>
 <dl class="bug"><dt><b><a class="el" href="bug.html#_bug000006">Bug:</a></b></dt><dd>Doesn't use mass correctly. </dd></dl>
-<dl class="section version"><dt>Version:</dt><dd>$Revision$ </dd></dl>
 <dl class="section author"><dt>Author:</dt><dd>John Shumway. </dd></dl>
 
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00056">56</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00040">40</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 </div><hr/><h2>Member Typedef Documentation</h2>
-<a class="anchor" id="a266ea41e97844a8b724957c3eebe294d"></a>
+<a class="anchor" id="a0c04ddd3a52dffaa82bb69e62f99598d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef blitz::Array&lt;int,1&gt; <a class="el" href="classSHOAction.html#a266ea41e97844a8b724957c3eebe294d">SHOAction::IArray</a></td>
+          <td class="memname">typedef blitz::Array&lt;int, 1&gt; <a class="el" href="classSHOAction.html#a0c04ddd3a52dffaa82bb69e62f99598d">SHOAction::IArray</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Typedefs. </p>
-
 <p>Reimplemented from <a class="el" href="classAction.html#a49aa914464920d47e066eac4b853fd7a">Action</a>.</p>
 
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00059">59</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00042">42</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 </div>
 </div>
@@ -212,8 +198,6 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor by providing the timestep tau. </p>
-
 <p>Definition at line <a class="el" href="SHOAction_8cc_source.html#l00011">11</a> of file <a class="el" href="SHOAction_8cc_source.html">SHOAction.cc</a>.</p>
 
 </div>
@@ -239,9 +223,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Virtual destructor. </p>
-
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00064">64</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00045">45</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 </div>
 </div>
@@ -278,13 +260,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculate the difference in action. </p>
-
 <p>Implements <a class="el" href="classAction.html#a5e3c515d7ffeeec2b2e257e9acd19bcb">Action</a>.</p>
 
 <p>Definition at line <a class="el" href="SHOAction_8cc_source.html#l00019">19</a> of file <a class="el" href="SHOAction_8cc_source.html">SHOAction.cc</a>.</p>
 
-<p>References <a class="el" href="SHOAction_8h_source.html#l00089">center</a>, <a class="el" href="SHOAction_8h_source.html#l00085">ifirst</a>, <a class="el" href="SHOAction_8h_source.html#l00081">mass</a>, <a class="el" href="SHOAction_8h_source.html#l00083">ndim</a>, <a class="el" href="SHOAction_8h_source.html#l00087">npart</a>, <a class="el" href="SHOAction_8h_source.html#l00079">omega</a>, and <a class="el" href="SHOAction_8h_source.html#l00077">tau</a>.</p>
+<p>References <a class="el" href="SHOAction_8h_source.html#l00065">center</a>, <a class="el" href="SHOAction_8h_source.html#l00062">ifirst</a>, <a class="el" href="SHOAction_8h_source.html#l00059">mass</a>, <a class="el" href="SHOAction_8h_source.html#l00061">ndim</a>, <a class="el" href="SHOAction_8h_source.html#l00063">npart</a>, <a class="el" href="SHOAction_8h_source.html#l00058">omega</a>, and <a class="el" href="SHOAction_8h_source.html#l00057">tau</a>.</p>
 
 </div>
 </div>
@@ -344,13 +324,11 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculate the difference in action. </p>
-
 <p>Reimplemented from <a class="el" href="classAction.html#a3dc69fab35cc250dfb2c596786faa4fd">Action</a>.</p>
 
 <p>Definition at line <a class="el" href="SHOAction_8cc_source.html#l00107">107</a> of file <a class="el" href="SHOAction_8cc_source.html">SHOAction.cc</a>.</p>
 
-<p>References <a class="el" href="SHOAction_8h_source.html#l00089">center</a>, <a class="el" href="SHOAction_8h_source.html#l00085">ifirst</a>, <a class="el" href="SHOAction_8h_source.html#l00081">mass</a>, <a class="el" href="SHOAction_8h_source.html#l00083">ndim</a>, <a class="el" href="SHOAction_8h_source.html#l00087">npart</a>, <a class="el" href="SHOAction_8h_source.html#l00079">omega</a>, and <a class="el" href="SHOAction_8h_source.html#l00077">tau</a>.</p>
+<p>References <a class="el" href="SHOAction_8h_source.html#l00065">center</a>, <a class="el" href="SHOAction_8h_source.html#l00062">ifirst</a>, <a class="el" href="SHOAction_8h_source.html#l00059">mass</a>, <a class="el" href="SHOAction_8h_source.html#l00061">ndim</a>, <a class="el" href="SHOAction_8h_source.html#l00063">npart</a>, <a class="el" href="SHOAction_8h_source.html#l00058">omega</a>, and <a class="el" href="SHOAction_8h_source.html#l00057">tau</a>.</p>
 
 </div>
 </div>
@@ -365,7 +343,7 @@ Private Attributes</h2></td></tr>
           <td class="memname">void SHOAction::getBeadAction </td>
           <td>(</td>
           <td class="paramtype">const Paths &amp;&#160;</td>
-          <td class="paramname"><em>paths</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -422,13 +400,13 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculate the action and derivatives at a bead. </p>
+<p>Calculate action and derivatives at a bead (defaults to no contribution). </p>
 
 <p>Implements <a class="el" href="classAction.html#aff88157afb9ed080c1d61f8dd4c1de0c">Action</a>.</p>
 
 <p>Definition at line <a class="el" href="SHOAction_8cc_source.html#l00071">71</a> of file <a class="el" href="SHOAction_8cc_source.html">SHOAction.cc</a>.</p>
 
-<p>References <a class="el" href="SHOAction_8h_source.html#l00089">center</a>, <a class="el" href="SHOAction_8h_source.html#l00085">ifirst</a>, <a class="el" href="SHOAction_8h_source.html#l00081">mass</a>, <a class="el" href="SHOAction_8h_source.html#l00083">ndim</a>, <a class="el" href="SHOAction_8h_source.html#l00087">npart</a>, <a class="el" href="SHOAction_8h_source.html#l00079">omega</a>, and <a class="el" href="SHOAction_8h_source.html#l00077">tau</a>.</p>
+<p>References <a class="el" href="SHOAction_8h_source.html#l00065">center</a>, <a class="el" href="SHOAction_8h_source.html#l00062">ifirst</a>, <a class="el" href="SHOAction_8h_source.html#l00059">mass</a>, <a class="el" href="SHOAction_8h_source.html#l00061">ndim</a>, <a class="el" href="SHOAction_8h_source.html#l00063">npart</a>, <a class="el" href="SHOAction_8h_source.html#l00058">omega</a>, and <a class="el" href="SHOAction_8h_source.html#l00057">tau</a>.</p>
 
 </div>
 </div>
@@ -464,8 +442,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Calculate the total action. </p>
-
 <p>Implements <a class="el" href="classAction.html#a66a78abff9155f4dc973fe2461c4a4ef">Action</a>.</p>
 
 <p>Definition at line <a class="el" href="SHOAction_8cc_source.html#l00067">67</a> of file <a class="el" href="SHOAction_8cc_source.html">SHOAction.cc</a>.</p>
@@ -493,7 +469,7 @@ Private Attributes</h2></td></tr>
 
 <p>The location of the minimum of the potential. </p>
 
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00089">89</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00065">65</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -517,9 +493,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The first particle in this interaction. </p>
-
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00085">85</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00062">62</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -543,9 +517,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The mass. </p>
-
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00081">81</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00059">59</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -571,7 +543,7 @@ Private Attributes</h2></td></tr>
 
 <p>The number of dimensions (can be less than NDIM, i.e., to make a wire). </p>
 
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00083">83</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00061">61</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -595,9 +567,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The number of particles with this interaction. </p>
-
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00087">87</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00063">63</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -621,9 +591,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The frequency. </p>
-
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00079">79</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00058">58</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -647,9 +615,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The timestep. </p>
-
-<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00077">77</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
+<p>Definition at line <a class="el" href="SHOAction_8h_source.html#l00057">57</a> of file <a class="el" href="SHOAction_8h_source.html">SHOAction.h</a>.</p>
 
 <p>Referenced by <a class="el" href="SHOAction_8cc_source.html#l00019">getActionDifference()</a>, and <a class="el" href="SHOAction_8cc_source.html#l00071">getBeadAction()</a>.</p>
 
@@ -662,7 +628,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:16:16 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:40 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

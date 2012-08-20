@@ -160,26 +160,26 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>Free particle nodes for new fermion algorithm. </p>
 <p>This nodal restriction rejects any paths for which </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \rho_0(R(t),R(t+\beta/2),\beta/2) < 0; \qquad (0\le t < \beta/2). \]" src="form_97.png"/>
+<img class="formulaDsp" alt="\[ \rho_0(R(t),R(t+\beta/2),\beta/2) < 0; \qquad (0\le t < \beta/2). \]" src="form_102.png"/>
 </p>
 <p> It does this by returning HUGE_NUMBER for the action value from getActionDifference and getTotalAction methods.</p>
-<p>The free particle slater determinant is a slater determinant of PeriodicGaussians with width <img class="formulaInl" alt="$\sigma^2=\beta/2m$" src="form_119.png"/>, or <img class="formulaInl" alt="$\alpha=1/(mT)$" src="form_120.png"/>.</p>
+<p>The free particle slater determinant is a slater determinant of PeriodicGaussians with width <img class="formulaInl" alt="$\sigma^2=\beta/2m$" src="form_124.png"/>, or <img class="formulaInl" alt="$\alpha=1/(mT)$" src="form_125.png"/>.</p>
 <p>There is a nodal action for paths that come close to the node but do not cross it. As in Ceperley's article, we approximate this fermion action as </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ U = -\log [ 1-\exp(-2m d_i d_{i-1}/ \tau)], \]" src="form_99.png"/>
+<img class="formulaDsp" alt="\[ U = -\log [ 1-\exp(-2m d_i d_{i-1}/ \tau)], \]" src="form_104.png"/>
 </p>
-<p> where <img class="formulaInl" alt="$\tau$" src="form_100.png"/> is the link timestep, <img class="formulaInl" alt="$d_i$" src="form_101.png"/> is the distance from bead <img class="formulaInl" alt="$i$" src="form_102.png"/> to the node, and <img class="formulaInl" alt="$m$" src="form_103.png"/> is is the mass of a fermion. We estimate the distance to the node as the inverse log gradient, <img class="formulaInl" alt="$d_i\approx\rho_T/|\nabla_{R_i}\rho_T|$" src="form_92.png"/>. This gives a nodal contribution to the beta derivative of the action, </p>
+<p> where <img class="formulaInl" alt="$\tau$" src="form_105.png"/> is the link timestep, <img class="formulaInl" alt="$d_i$" src="form_106.png"/> is the distance from bead <img class="formulaInl" alt="$i$" src="form_107.png"/> to the node, and <img class="formulaInl" alt="$m$" src="form_108.png"/> is is the mass of a fermion. We estimate the distance to the node as the inverse log gradient, <img class="formulaInl" alt="$d_i\approx\rho_T/|\nabla_{R_i}\rho_T|$" src="form_97.png"/>. This gives a nodal contribution to the beta derivative of the action, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[\dot{U_i}=\frac{X_{i-1,i} e^{-X_{i-1,i}}}{\tau(1-e^{-X_{i-1,i}})}, \]" src="form_104.png"/>
+<img class="formulaDsp" alt="\[\dot{U_i}=\frac{X_{i-1,i} e^{-X_{i-1,i}}}{\tau(1-e^{-X_{i-1,i}})}, \]" src="form_109.png"/>
 </p>
-<p> where <img class="formulaInl" alt="$X_{i-1,i}=2md_{i-1}d_i/\tau$" src="form_105.png"/>. Here we have ignored the <img class="formulaInl" alt="$\tau$" src="form_100.png"/> dependence of the nodal distance, since it is negligible when <img class="formulaInl" alt="$\tau\ll\beta$" src="form_106.png"/>.</p>
+<p> where <img class="formulaInl" alt="$X_{i-1,i}=2md_{i-1}d_i/\tau$" src="form_110.png"/>. Here we have ignored the <img class="formulaInl" alt="$\tau$" src="form_105.png"/> dependence of the nodal distance, since it is negligible when <img class="formulaInl" alt="$\tau\ll\beta$" src="form_111.png"/>.</p>
 <p>For the virial estimator, we need the nodal force, defined as the negative gradient of the nodal action for coordinates at slice i. From the chain rule we get </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ F = -\nabla_{R_i} U = \left[ X_{i+1,i}\frac{e^{-X_{i+1,i}}}{1-e^{-X_{i+1,i}}} + X_{i,i-1}\frac{e^{-X_{i,i-1}}}{1-e^{-X_{i,i-1}}} \right] \frac{\nabla d_i}{d_i}. \]" src="form_107.png"/>
+<img class="formulaDsp" alt="\[ F = -\nabla_{R_i} U = \left[ X_{i+1,i}\frac{e^{-X_{i+1,i}}}{1-e^{-X_{i+1,i}}} + X_{i,i-1}\frac{e^{-X_{i,i-1}}}{1-e^{-X_{i,i-1}}} \right] \frac{\nabla d_i}{d_i}. \]" src="form_112.png"/>
 </p>
 <p> The gradient of the distance is given by first and second derivatives of the trial density matrix, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \frac{\nabla_i d}{d}= \frac{\nabla_i \rho}{\rho} -d^2 \sum_j \frac{\overleftarrow{\vec{\nabla}}_{i,j}\rho}{\rho}\cdot \frac{\vec{\nabla}_j\rho}{\rho} -d^2 \sum_j \frac{\overleftarrow{\vec{\nabla}}'_{i,j}\rho}{\rho}\cdot \frac{\vec{\nabla}'_j\rho}{\rho}. \]" src="form_93.png"/>
+<img class="formulaDsp" alt="\[ \frac{\nabla_i d}{d}= \frac{\nabla_i \rho}{\rho} -d^2 \sum_j \frac{\overleftarrow{\vec{\nabla}}_{i,j}\rho}{\rho}\cdot \frac{\vec{\nabla}_j\rho}{\rho} -d^2 \sum_j \frac{\overleftarrow{\vec{\nabla}}'_{i,j}\rho}{\rho}\cdot \frac{\vec{\nabla}'_j\rho}{\rho}. \]" src="form_98.png"/>
 </p>
 <p> where the indicies refer to particles.</p>
 <p>Before sampling, once we know the section, a call to initialize evalutates and stores inverse slater matricies and the distances to the nodes for each slice in the section, including the end slices. The evaluateUpdate method calculates the new slater matrices and (on the last level) the new distances to the nodes. Evaluate update returns the difference in nodal action (HUGE_NUMBER if a node was crossed). If the move is accepted, acceptLastMove updates the stored matrices and nodal distances.</p>
@@ -1302,7 +1302,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:15:58 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:24 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>

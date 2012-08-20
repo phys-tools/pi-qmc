@@ -127,9 +127,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a205022ba83f35f877b8d01643dca59ea"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a205022ba83f35f877b8d01643dca59ea">by</a></td></tr>
 <tr class="memitem:a88e54aa582aeca53c0e3ce1fbc0b6c99"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a88e54aa582aeca53c0e3ce1fbc0b6c99">bz</a></td></tr>
 <tr class="memitem:a3219989f773c136750489c52d3405bc5"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a3219989f773c136750489c52d3405bc5">gmubs</a></td></tr>
-<tr class="memdesc:a3219989f773c136750489c52d3405bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constant <img class="formulaInl" alt="$ g\mu_B s $" src="form_167.png"/>.  <a href="#a3219989f773c136750489c52d3405bc5"></a><br/></td></tr>
+<tr class="memdesc:a3219989f773c136750489c52d3405bc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constant <img class="formulaInl" alt="$ g\mu_B s $" src="form_173.png"/>.  <a href="#a3219989f773c136750489c52d3405bc5"></a><br/></td></tr>
 <tr class="memitem:a4dd17856f521338f76ef0c6646162533"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a4dd17856f521338f76ef0c6646162533">tanhx</a></td></tr>
-<tr class="memdesc:a4dd17856f521338f76ef0c6646162533"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value of <img class="formulaInl" alt="$ \tanh \beta g\mu_B B s $" src="form_168.png"/>.  <a href="#a4dd17856f521338f76ef0c6646162533"></a><br/></td></tr>
+<tr class="memdesc:a4dd17856f521338f76ef0c6646162533"><td class="mdescLeft">&#160;</td><td class="mdescRight">The value of <img class="formulaInl" alt="$ \tanh \beta g\mu_B B s $" src="form_174.png"/>.  <a href="#a4dd17856f521338f76ef0c6646162533"></a><br/></td></tr>
 <tr class="memitem:a9cb2d37c0e932c8f187fb964e7b8a2d7"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a9cb2d37c0e932c8f187fb964e7b8a2d7">tanhy</a></td></tr>
 <tr class="memitem:a3d6b6494bb99bc706ec8e86350521f1e"><td class="memItemLeft" align="right" valign="top">const double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a3d6b6494bb99bc706ec8e86350521f1e">tanhz</a></td></tr>
 <tr class="memitem:a01b1f3e08b30933e9fd85f0936a922ec"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSpinPhase.html#a01b1f3e08b30933e9fd85f0936a922ec">npart</a></td></tr>
@@ -174,29 +174,29 @@ Additional Inherited Members</h2></td></tr>
 <div class="textblock"><p>Class for Spin phase action in the 4-D Spin simulation. </p>
 <p>A spin-1/2 particle in a magnetic field has energy </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ H = g\mu_B sB\; \vec{\sigma}\cdot\hat{B} \]" src="form_156.png"/>
+<img class="formulaDsp" alt="\[ H = g\mu_B sB\; \vec{\sigma}\cdot\hat{B} \]" src="form_162.png"/>
 </p>
-<p> where the magnetic field is <img class="formulaInl" alt="$\vec{B}=B\hat{B}$" src="form_157.png"/>.</p>
+<p> where the magnetic field is <img class="formulaInl" alt="$\vec{B}=B\hat{B}$" src="form_163.png"/>.</p>
 <p>We represent the up and down spin states with complex functions, </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \chi_\uparrow(\vec{s}) = \pi^{-1}(s_0+is_3)e^{-s^2/2} \qquad \chi_\downarrow(\vec{s}) = \pi^{-1}(-s_2-is_1)e^{-s^2/2}. \]" src="form_158.png"/>
+<img class="formulaDsp" alt="\[ \chi_\uparrow(\vec{s}) = \pi^{-1}(s_0+is_3)e^{-s^2/2} \qquad \chi_\downarrow(\vec{s}) = \pi^{-1}(-s_2-is_1)e^{-s^2/2}. \]" src="form_164.png"/>
 </p>
-<p> The thermal density matrix is <img class="formulaInl" alt="$ \hat{\rho} = \frac{1}{2}(\hat{\mathbb 1} + \hat{B}\cdot\vec{\sigma} \tanh x), $" src="form_159.png"/> where <img class="formulaInl" alt="$x=\beta g \mu_B s B$" src="form_160.png"/>.</p>
+<p> The thermal density matrix is <img class="formulaInl" alt="$ \hat{\rho} = \frac{1}{2}(\hat{\mathbb 1} + \hat{B}\cdot\vec{\sigma} \tanh x), $" src="form_165.png"/> where <img class="formulaInl" alt="$x=\beta g \mu_B s B$" src="form_166.png"/>.</p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \rho(\vec {s}, \vec {s'}) = f(\vec {s} , \vec {s'})[\vec {s}\cdot \vec{s'} +i(s_{0}s'_{3}-s'_{0}s_{3} + s_{1}s'_{2}-s'_{1}s_{2})] \]" src="form_161.png"/>
+<img class="formulaDsp" alt="\[ \rho(\vec {s}, \vec {s'}) = f(\vec {s} , \vec {s'})[\vec {s}\cdot \vec{s'} +i(s_{0}s'_{3}-s'_{0}s_{3} + s_{1}s'_{2}-s'_{1}s_{2})] \]" src="form_167.png"/>
 </p>
 <p> where </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ f(\vec {s} , \vec {s'}) = \frac{1}{16\pi^{2}} e^{-\frac{(s^{2}+s'^{2})}{2}} \]" src="form_162.png"/>
+<img class="formulaDsp" alt="\[ f(\vec {s} , \vec {s'}) = \frac{1}{16\pi^{2}} e^{-\frac{(s^{2}+s'^{2})}{2}} \]" src="form_168.png"/>
 </p>
 <p>The derivative of the density matrix are </p>
 <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \nabla \rho(\vec{s},\vec{s'})=\vec{s'}+i(-s'_{3}\hat{0}-s'_{2}\hat{1} +s'_{1}\hat{2} +s'_{0}\hat{3}) \]" src="form_163.png"/>
+<img class="formulaDsp" alt="\[ \nabla \rho(\vec{s},\vec{s'})=\vec{s'}+i(-s'_{3}\hat{0}-s'_{2}\hat{1} +s'_{1}\hat{2} +s'_{0}\hat{3}) \]" src="form_169.png"/>
 </p>
  <p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \nabla' \rho(\vec{s},\vec{s'})=\vec{s}+i(s_{3}\hat{0'}+s_{2}\hat{1'} +s_{1}\hat{2'} +s_{0}\hat{3'}) \]" src="form_164.png"/>
+<img class="formulaDsp" alt="\[ \nabla' \rho(\vec{s},\vec{s'})=\vec{s}+i(s_{3}\hat{0'}+s_{2}\hat{1'} +s_{1}\hat{2'} +s_{0}\hat{3'}) \]" src="form_170.png"/>
 </p>
-<p> where <img class="formulaInl" alt="$ \hat{0}, \hat{1}, \hat{2}, \hat{3} $" src="form_165.png"/> are the unit vector of <img class="formulaInl" alt="$ \vec{s} $" src="form_166.png"/>.</p>
+<p> where <img class="formulaInl" alt="$ \hat{0}, \hat{1}, \hat{2}, \hat{3} $" src="form_171.png"/> are the unit vector of <img class="formulaInl" alt="$ \vec{s} $" src="form_172.png"/>.</p>
 <dl class="section author"><dt>Author:</dt><dd>Daejin Shin and John Shumway </dd></dl>
 
 <p>Definition at line <a class="el" href="SpinPhase_8h_source.html#l00054">54</a> of file <a class="el" href="SpinPhase_8h_source.html">SpinPhase.h</a>.</p>
@@ -697,7 +697,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The constant <img class="formulaInl" alt="$ g\mu_B s $" src="form_167.png"/>. </p>
+<p>The constant <img class="formulaInl" alt="$ g\mu_B s $" src="form_173.png"/>. </p>
 
 <p>Definition at line <a class="el" href="SpinPhase_8h_source.html#l00088">88</a> of file <a class="el" href="SpinPhase_8h_source.html">SpinPhase.h</a>.</p>
 
@@ -939,7 +939,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The value of <img class="formulaInl" alt="$ \tanh \beta g\mu_B B s $" src="form_168.png"/>. </p>
+<p>The value of <img class="formulaInl" alt="$ \tanh \beta g\mu_B B s $" src="form_174.png"/>. </p>
 
 <p>Definition at line <a class="el" href="SpinPhase_8h_source.html#l00090">90</a> of file <a class="el" href="SpinPhase_8h_source.html">SpinPhase.h</a>.</p>
 
@@ -1074,7 +1074,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 10 2012 13:16:21 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Aug 20 2012 05:32:44 for pi: Path integral Quantum Monte Carlo by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.1.1
 </small></address>
