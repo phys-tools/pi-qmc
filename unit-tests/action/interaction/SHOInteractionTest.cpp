@@ -40,16 +40,17 @@ protected:
     static const int npart = 2;
     static const int nmoving = 1;
     static const int nlevel = 6;
-    static const int nslice = 64;
+    static const int nslice = 65;
 
     void setPaths(Vec newPos1, Vec newPos2, Vec oldPos1, Vec oldPos2) {
         Beads<NDIM> sectionBeads = sampler->getSectionBeads();
         Beads<NDIM> movingBeads = sampler->getMovingBeads();
         for (int i = 0; i < nslice; ++i) {
+            double newWeight = 1.0 - abs(i-nslice/2) * 1.0 / (nslice/2);
             sectionBeads(0, i) = oldPos1;
             sectionBeads(1, i) = oldPos2;
-            movingBeads(0, i) = newPos1;
-            movingBeads(1, i) = newPos2;
+            movingBeads(0, i) = newWeight * newPos1 + (1.0 - newWeight) * oldPos1;
+            movingBeads(1, i) = newWeight * newPos2 + (1.0 - newWeight) * oldPos2;
         }
     }
 };
@@ -59,6 +60,13 @@ TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsZero) {
     setPaths(Vec(0.0), Vec(0.0), Vec(0.0), Vec(0.0));
     double deltaAction = action.getActionDifference(*sampler, 0);
     ASSERT_DOUBLE_EQ(0.0, deltaAction);
+}
+
+TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsCorrect) {
+    SHOInteraction action(simInfo, omega);
+    setPaths(Vec(1.0), Vec(-1.0), Vec(0.0), Vec(0.0));
+    double deltaAction = action.getActionDifference(*sampler, 0);
+    ASSERT_DOUBLE_EQ(10.0, deltaAction);
 }
 
 }
