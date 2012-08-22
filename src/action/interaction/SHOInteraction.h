@@ -8,6 +8,11 @@ class Species;
 #include <cstdlib>
 #include <blitz/array.h>
 
+/** Spring connecting two particles.
+ * @bug Not fully implemented! Only used for debugging EMARateAction.
+ * @author John Shumway
+ * */
+
 class SHOInteraction: public Action {
 public:
     typedef blitz::Array<int, 1> IArray;

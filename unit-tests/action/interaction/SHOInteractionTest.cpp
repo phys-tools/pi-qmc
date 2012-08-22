@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <cmath>
+#include "config.h"
 
 #include "action/interaction/SHOInteraction.h"
 
@@ -15,24 +16,28 @@ protected:
     typedef Beads<NDIM>::Vec Vec;
 
     virtual void SetUp() {
-        sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
-        setupSpecies(species1);
-        setupSpecies(species2);
+        species1 = createSpecies();
+        species2 = createSpecies();
+
         mu = 1.0 / (1.0 / species1->mass + 1.0 / species2->mass);
         deltaTau = 0.1;
         simInfo.setTau(deltaTau);
         omega = 1.0;
+
+        nslice = 5;
+        nlevel = 2;
     }
 
     virtual void TearDown() {
         delete sampler;
     }
 
-    void setupSpecies(Species *species) {
-        species = new Species();
+    Species* createSpecies() {
+        Species *species = new Species();
         species->count = 1;
         simInfo.speciesList.push_back(species);
         simInfo.speciesIndex.push_back(species);
+        return species;
     }
 
     MultiLevelSamplerFake *sampler;
@@ -44,8 +49,8 @@ protected:
     double deltaTau;
     static const int npart = 2;
     static const int nmoving = 2;
-    static const int nlevel = 1;
-    static const int nslice = 3;
+    static int nlevel;
+    static int nslice;
 
     void setPaths(Vec newPos1, Vec newPos2, Vec oldPos1, Vec oldPos2) {
         Beads<NDIM> &sectionBeads = sampler->getSectionBeads();
@@ -60,9 +65,22 @@ protected:
                     + (1.0 - newWeight) * oldPos2;
         }
     }
+
+    double calculateSHOAction(double x1, double x2) {
+        double sinhwt = sinh(omega * deltaTau);
+        double coshwt = cosh(omega * deltaTau);
+        double expect = 0.5 * mu * omega
+                * ((x1 * x1 + x2 * x2) * coshwt - 2.0 * x1 * x2) / sinhwt;
+        expect -= 0.5 * mu * (x1 - x2) * (x1 - x2) / deltaTau;
+        return expect;
+    }
 };
 
+int SHOInteractionTest::nslice;
+int SHOInteractionTest::nlevel;
+
 TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsZero) {
+    sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
     SHOInteraction action(simInfo, omega, species1, species2);
     setPaths(Vec(0.0), Vec(0.0), Vec(0.0), Vec(0.0));
     double deltaAction = action.getActionDifference(*sampler, 0);
@@ -70,7 +88,10 @@ TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsZero) {
     ASSERT_DOUBLE_EQ(expect, deltaAction);
 }
 
-TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsCorrect) {
+TEST_F(SHOInteractionTest, getActionDifferenceForShortPaths) {
+    nslice = 3;
+    nlevel = 1;
+    sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
     SHOInteraction action(simInfo, omega, species1, species2);
     double dist = 1.0;
     setPaths(Vec(dist), Vec(-dist), Vec(0.0), Vec(0.0));
@@ -78,13 +99,24 @@ TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsCorrect) {
 
     double x1 = 0.0;
     double x2 = 2.0 * sqrt(NDIM) * dist;
-    double sinhwt = sinh(omega * deltaTau);
-    double coshwt = cosh(omega * deltaTau);
-    double expect = 0.5 * mu * omega
-            * ((x1 * x2 + x2 * x2) * coshwt - 2.0 * x1 * x2) / sinhwt;
-    expect -= 0.5 * mu * (x1 - x2) * (x1 - x2) / deltaTau;
-    expect *= 2.0;
-    ASSERT_DOUBLE_EQ(expect, deltaAction);
+    double expect = calculateSHOAction(x1, x2);
+    expect *= 2;
+    ASSERT_NEAR(expect, deltaAction, 1e-12);
+}
+
+TEST_F(SHOInteractionTest, getActionDifferenceForLongerPaths) {
+    sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
+    SHOInteraction action(simInfo, omega, species1, species2);
+    double dist = 1.0;
+    setPaths(Vec(dist), Vec(-dist), Vec(0.0), Vec(0.0));
+    double deltaAction = action.getActionDifference(*sampler, 0);
+
+    double x1 = 0.0;
+    double x2 = sqrt(NDIM) * dist;
+    double x3 = 2.0 * x2;
+    double expect = calculateSHOAction(x1, x2) + calculateSHOAction(x2, x3);
+    expect *= 2;
+    ASSERT_NEAR(expect, deltaAction, 1e-12);
 }
 
 }
