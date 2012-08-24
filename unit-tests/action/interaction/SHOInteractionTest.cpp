@@ -26,6 +26,8 @@ protected:
 
         nslice = 5;
         nlevel = 2;
+
+        sampler = 0;
     }
 
     virtual void TearDown() {
@@ -51,6 +53,7 @@ protected:
     static const int nmoving = 2;
     static int nlevel;
     static int nslice;
+    static const int maxlevel = 8;
 
     void setPaths(Vec newPos1, Vec newPos2, Vec oldPos1, Vec oldPos2) {
         Beads<NDIM> &sectionBeads = sampler->getSectionBeads();
@@ -66,12 +69,14 @@ protected:
         }
     }
 
-    double calculateSHOAction(double x1, double x2) {
-        double sinhwt = sinh(omega * deltaTau);
-        double coshwt = cosh(omega * deltaTau);
+    double calculateSHOAction(double d1, double d2, int stride) {
+        double sinhwt = sinh(omega * deltaTau * stride);
+        double coshwt = cosh(omega * deltaTau * stride);
         double expect = 0.5 * mu * omega
-                * ((x1 * x1 + x2 * x2) * coshwt - 2.0 * x1 * x2) / sinhwt;
-        expect -= 0.5 * mu * (x1 - x2) * (x1 - x2) / deltaTau;
+                * ((d1 * d1 + d2 * d2) * coshwt
+                        - 2.0 * d1 * d2) / sinhwt;
+        expect -= 0.5 * mu * (d1 - d2) * (d1 - d2)
+                / (deltaTau * stride);
         return expect;
     }
 };
@@ -81,7 +86,7 @@ int SHOInteractionTest::nlevel;
 
 TEST_F(SHOInteractionTest, getActionDifferenceForIdenticalPathsIsZero) {
     sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
-    SHOInteraction action(simInfo, omega, species1, species2);
+    SHOInteraction action(simInfo, omega, species1, species2, maxlevel);
     setPaths(Vec(0.0), Vec(0.0), Vec(0.0), Vec(0.0));
     double deltaAction = action.getActionDifference(*sampler, 0);
     double expect = 0.0;
@@ -92,21 +97,21 @@ TEST_F(SHOInteractionTest, getActionDifferenceForShortPaths) {
     nslice = 3;
     nlevel = 1;
     sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
-    SHOInteraction action(simInfo, omega, species1, species2);
+    SHOInteraction action(simInfo, omega, species1, species2, maxlevel);
     double dist = 1.0;
     setPaths(Vec(dist), Vec(-dist), Vec(0.0), Vec(0.0));
     double deltaAction = action.getActionDifference(*sampler, 0);
 
     double x1 = 0.0;
     double x2 = 2.0 * sqrt(NDIM) * dist;
-    double expect = calculateSHOAction(x1, x2);
+    double expect = calculateSHOAction(x1, x2, 1);
     expect *= 2;
     ASSERT_NEAR(expect, deltaAction, 1e-12);
 }
 
 TEST_F(SHOInteractionTest, getActionDifferenceForLongerPaths) {
     sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
-    SHOInteraction action(simInfo, omega, species1, species2);
+    SHOInteraction action(simInfo, omega, species1, species2, maxlevel);
     double dist = 1.0;
     setPaths(Vec(dist), Vec(-dist), Vec(0.0), Vec(0.0));
     double deltaAction = action.getActionDifference(*sampler, 0);
@@ -114,9 +119,42 @@ TEST_F(SHOInteractionTest, getActionDifferenceForLongerPaths) {
     double x1 = 0.0;
     double x2 = sqrt(NDIM) * dist;
     double x3 = 2.0 * x2;
-    double expect = calculateSHOAction(x1, x2) + calculateSHOAction(x2, x3);
+    double expect = calculateSHOAction(x1, x2, 1)
+            + calculateSHOAction(x2, x3, 1);
     expect *= 2;
     ASSERT_NEAR(expect, deltaAction, 1e-12);
+}
+
+TEST_F(SHOInteractionTest, getLevel2ActionDifferenceForLongerPaths) {
+    sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
+    SHOInteraction action(simInfo, omega, species1, species2, maxlevel);
+    double dist = 1.0;
+    setPaths(Vec(dist), Vec(-dist), Vec(0.0), Vec(0.0));
+    double deltaAction = action.getActionDifference(*sampler, 1);
+
+    double x1 = 0.0;
+    double x2 = 2 * sqrt(NDIM) * dist;
+    double expect = calculateSHOAction(x1, x2, 2);
+    expect *= 2;
+    ASSERT_NEAR(expect, deltaAction, 1e-12);
+}
+
+TEST_F(SHOInteractionTest, checkTauDerivativeOfAction) {
+    double dist = 1.0;
+    Vec vec1 = Vec(0.0);
+    Vec vec2 = Vec(dist);
+    SHOInteraction action(simInfo, omega, species1, species2, maxlevel);
+    double value = action.calculateTauDerivativeOfAction(vec1, vec2);
+
+    double epsilon = 1e-7;
+    simInfo.tau += epsilon;
+    SHOInteraction actionPlus(simInfo, omega, species1, species2, maxlevel);
+    simInfo.tau -= 2 * epsilon;
+    SHOInteraction actionMinus(simInfo, omega, species1, species2, maxlevel);
+    simInfo.tau += epsilon;
+    double expect = (actionPlus.calculateAction(vec1, vec2, 0)
+            - actionMinus.calculateAction(vec1, vec2, 0)) / (2 * epsilon);
+    ASSERT_NEAR(expect, value, 1e-8);
 }
 
 }

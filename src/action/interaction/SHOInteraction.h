@@ -21,7 +21,7 @@ public:
     typedef blitz::Array<double, 3> Array3;
 
     SHOInteraction(const SimulationInfo &simInfo, double omega,
-            const Species *species1, const Species *species2);
+            const Species *species1, const Species *species2, int maxlevel);
     virtual ~SHOInteraction();
 
     virtual double getActionDifference(const SectionSamplerInterface&,
@@ -36,12 +36,13 @@ public:
     virtual void getBeadAction(const Paths&, const int ipart, const int islice,
             double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
 
+    double calculateAction(Vec delta1, Vec delta2, int level) const;
+    double calculateTauDerivativeOfAction(Vec delta1, Vec delta2) const;
 private:
     const double omega;
     const double mu;
     const double deltaTau;
-    const double coshwt;
-    const double sinhwt;
-    double calculateAction(Vec delta1, Vec delta2);
+    Array coshwt;
+    Array sinhwt;
 };
 #endif
