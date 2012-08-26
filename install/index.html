@@ -40,7 +40,32 @@
             <li><a href= "http://xmlsoft.org/">fftw3</a>).</li>          
             <li>BLAS/LAPACK</li>
             <li><a href= "http://www.gnu.org/software/gsl/">gsl</a>).</li>       
-        
+        <h1>Advanced build using multiple directories</h1>
+        <p>In research, we often want different versions of the executables, for example, versions with and without MPI, or versions compiled for two-dimensional systems. To accomplish this, we make a pibuilds directory beside our svn checkout directory (pi or pi-qmc). We then make empty subdirectories for each build, for example ndim2mpi for a two dimensional MPI version. A typical directory structure is:</p>
+        <pre>
+          codes/
+            pi-qmc/
+            configure
+            src/
+            lib/
+          pibuilds/
+            ndim1/
+            ndim2/
+            ndim3/
+            ndim1mpi/
+            ndim2mpi/
+            ndim3mpi/
+            debug/
+        </pre>
+        <p>To build, go into the empty build directory,</p>
+        <pre> cd ~/codes/pibuilds/ndim2mpi</pre>
+        <p>Then run the configure script with the desired options</p>
+        <pre> ../../configure --with-ndim=2 --enable-mpi</pre>
+        <p>You will probably want more configure options; see the platform specific instructions below for some examples.
+            Then, make the code in that directory,</p>
+        <pre> make -j2</pre>
+        <p>For conveniance, you can make a soft link to the executable</p>
+        <pre> ln -sf ~/codes/pibuilds/ndim3mpi ~/bin/pi2Dmpi</pre>
       </section>
       <script type="text/JavaScript"><!--
         writeFooter("../"); //-->
