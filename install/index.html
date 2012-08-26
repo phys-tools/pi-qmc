@@ -109,6 +109,61 @@
       <p>To run piworld you will also need pyqt4</p>
       <pre> sudo port install py26-pyqt4</pre>
       <h2>Ubuntu</h2>
+      <pre>
+        sudo apt-get install g++
+        sudo apt-get install gfortran
+        sudo apt-get install blitz++
+        sudo apt-get install hdf5-tools
+        sudo apt-get install libgsl0-dev
+        sudo apt-get install fftw3-dev
+        sudo apt-get install liblapack-dev
+        sudo apt-get install libhdf5-serial-dev</pre>
+      <p>Or:</p>
+      <pre> sudo apt-get install g++ gfortran blitz++ hdf5-tools libgsl0-dev fftw3-dev liblapack-dev libhdf5-serial-dev</pre>
+      <h3>Ubuntu Launchpad ppa (experimental)</h3>
+      <p>There is an ubuntu repository with binary packages here:
+      <a href= "https://launchpad.net/~jarondl/+archive/pi-qmc">https://launchpad.net/~jarondl/+archive/pi-qmc</a> To install all you have to do is:</p>
+      <pre>
+        sudo add-apt-repository ppa:jarondl/pi-qmc
+        sudo apt-get update
+        sudo apt-get install pi-qmc python-pitools</pre>
+      <p>The pi-qmc package will install three binary versions, "pi1D","pi2D" and "pi3D". The python-pitools package will install the python "pitools" module, which can later be imported in a python script using "import pitools". The building and packaging is done automatically by launchpad several hours after a change is detected in the svn source. Please note that this is the first version of the debian packaging, so feedback is encouraged.</p>
+      <h2>Linux (CentOS 5.3)</h2>
+      <p>You can download dependencies using yum. First, you may need to add access to the fedora
+      <a href= "http://fedoraproject.org/wiki/EPEL">Extra Packages for Enterprise Linux (EPEL).</a></p>
+      <pre> sudo rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm </pre>
+      <p>Then install the required packages for pi. (You probably want to compile atlas yourself to get automatic performance tuning for your hardware, but the yum install will work if you are impatient.) Note: replace x86_64 with i386 if you are on a 32 bit machine.</p>
+      <pre>
+         sudo yum install libxml2-devel-versionXXX.x86_64 (here I don't know the correct version)
+         sudo yum install blitz-devel.x86_64
+         sudo yum install fftw3-devel.x86_64
+         sudo yum install hdf5-devel.x86_64
+         sudo yum install atlas-sse3-devel.x86_64
+         sudo yum install lapack-devel.x86_64
+         sudo yum install gsl-devel.x86_64
+      </pre>
+      <p>It is useful to install the gcc 4.3 compilers.</p>
+      <pre>
+        sudo yum install gcc43.x86_64
+        sudo yum install gcc43-c++.x86_64
+        sudo yum install gcc43-gfortran.x86_64</pre>
+      <p>You will want an MPI implementation if you want to run in parallel,</p>
+      <pre> sudo yum install openmpi-devel.x86_64</pre>
+      <p>The openmpi package will require that you run mpi-selector and open a new terminal to get the executables. Use the mpi-selector --list option to see what is available, then set a system-wide default.</p>
+      <pre> sudo mpi-selector --system --set openmpi-1.2.7-gcc-x86_64</pre>
+      <p>When you configure pi, you will probably need to specify the location of your BLAS and LAPACK routines,</p>
+      <pre> ../../pi/configure CXX=g++43 CC=gcc43 F77=gfortran43 CXXFLAGS=\
+            "-g -O3 -ffast-math -ftree-vectorize -march=native -fomit-frame-pointer -pipe"\
+            --with-blas="-L/usr/lib64/atlas -llapack -lf77blas"</pre>
+      <p>For mpi, just add --enable-mpi.
+          For the python analysis utilities, you'll want to install ipython and matplotlib.</p>
+      <pre>
+        sudo yum install python-matplotlib
+        sudo yum install ipython
+        sudo yum install scipy</pre>
+      <p>The python package
+      <a href="http://www.pytables.org/moin"pytables</a> for reading HDF5 files is also required for the analysis scripts, but it is not available through yum, so you'll have to download it and install it yourself.</p>
+      <h2>HPC Centers</h2>
       </section>
       <script type="text/JavaScript"><!--
         writeFooter("../"); //-->
