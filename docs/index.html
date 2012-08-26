@@ -21,11 +21,12 @@
       <section>
           <h1>
               Introduction
-          </h1>    
+          </h1>
               <p>
          
           <small>
               This documentation describes the pimc.xml input file and the pitools python utilities for reading the pimc.h5 output file.
+          </small>
               </p>
               <p>
               <small>
@@ -33,7 +34,6 @@
               </small>
               </p>
               
-           
             <pre>
                   &lt;?xml version="1.0"?&gt;
                   &lt;Simulation&gt;
@@ -51,12 +51,97 @@
                       &lt;/PIMC&gt;
                   &lt;/Simulation&gt;
            </pre>
-            
               <p>
-              As you can see, the file is grouped by six tags that describe the PIMC simulation: 
-              </p>
-          </small>
-              </p>
+              As you can see, the file is grouped by six tags that describe the PIMC simulation:
+              
+            <li> SuperCell </li>
+            <li> Species(this tag is repeated for each species) </li>
+            <li> Temperature </li>
+            <li> Action (contains all the
+            <a href= "file://localhost/Users/shardulgolwalkar/Desktop/pi-qmc-pages/docs/ActionTags.html">ActionTags</a>).</li>
+            <li> Estimators (contains all the
+            <a href= "file://localhost/Users/shardulgolwalkar/Desktop/pi-qmc-pages/docs/EstimatorTags.html">EstimatorTags</a>).</li>
+            <li> PIMC (specifies the parallelism and contains the algorithm tree as PIMCTags). </li>
+            &nbsp;
+             <p> All these tags are required.
+            &nbsp;    
+            Notes:<b> The code uses
+                <a href = "http://www.answers.com/topic/hartree-units?cat=technology">atomic units
+                </a>
+                    (Ha, a0), but has some unit conversion capabilities. </b>
+            &nbsp;
+            <h2>
+              SuperCell
+            </h2>
+            <p>
+            The SuperCell tag is parsed in SimInfoParser.cc.
+            </p>
+            <h2>
+              Species
+            </h2>
+            <p>
+            The Species tag is parsed in SimInfoParser.cc.
+            </p>
+            <h2>
+              Temperature
+            </h2>
+            <p>
+            The Temperature tag is parsed in SimInfoParser.cc.
+            </p>
+            <h2>
+              Actions
+            </h2>
+            <p>
+            In path integrals, the action plays the same role as the Hamiltonian plays in Schrödinger's equation. The action section of a pimc.xml file is denoted
+            </p>
+            <pre>
+              &lt;Actions&gt;
+              &lt;/Actions&gt;
+            </pre>
+            <p>
+            and contains any number of 
+            <a href= "file://localhost/Users/shardulgolwalkar/Desktop/pi-qmc-pages/docs/ActionTags.html">ActionTags</a>. Most simulations contain at least SpringAction for free-particle kinetic action, but in some cases even that may be replaced. Action tags are parsed in ActionParser.cc.
+            </p>
+          <p>
+          and contains any number of ActionTags. Most simulations contain at least SpringAction for free-particle kinetic action, but in some cases even that may be replaced. Action tags are parsed in ActionParser.cc.
+          </p>
+          <h2>
+              Estimators
+          </h2>
+          <p>
+          Estimators are the mathematical and algorithmic tools to extract physical information from the path integral. The estimator section is denoted
+          </p>
+          <pre>
+              &lt;Estimators&gt;
+              &lt;/Estimators&gt;
+          </pre>
+          <p>
+          and may contain any number of EstimatorTags. Estimator tags are parsed in EstimatorParser.cc.
+          </p>
+          <h2>
+              PIMC Commands
+          </h2>
+          <p>
+          The PIMC commands are denoted
+          </p>
+          <pre>
+              &lt;PIMC Commands&gt;
+              &lt;/PIMC Commands&gt;
+          </pre>
+          <p>
+          and may contain any number of sequential or nested PIMCTags. PIMC commands describe the how the paths are sampled, when measurements are performed, and when data is written to disk. PIMC tags are parsed in PIMCParser.cc.
+          </p>
+          <h2>
+              Output: pimc.h5 and pitools
+          </h2>
+          <p>
+          See pitools documentation
+          </p>
+
+            </p>
+            </p>
+            </p>
+          
           
       </section>
       <script type="text/JavaScript"><!--
