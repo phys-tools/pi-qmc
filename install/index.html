@@ -39,7 +39,8 @@
             <li><a href= "http://www.hdfgroup.org/">hdf5</a>).</li>
             <li><a href= "http://xmlsoft.org/">fftw3</a>).</li>          
             <li>BLAS/LAPACK</li>
-            <li><a href= "http://www.gnu.org/software/gsl/">gsl</a>).</li>       
+            <li><a href= "http://www.gnu.org/software/gsl/">gsl</a>).</li>
+            &nbsp;
         <h1>Advanced build using multiple directories</h1>
         <p>In research, we often want different versions of the executables, for example, versions with and without MPI, or versions compiled for two-dimensional systems. To accomplish this, we make a pibuilds directory beside our svn checkout directory (pi or pi-qmc). We then make empty subdirectories for each build, for example ndim2mpi for a two dimensional MPI version. A typical directory structure is:</p>
         <pre>
@@ -66,6 +67,12 @@
         <pre> make -j2</pre>
         <p>For conveniance, you can make a soft link to the executable</p>
         <pre> ln -sf ~/codes/pibuilds/ndim3mpi ~/bin/pi2Dmpi</pre>
+      </section>
+      <section>
+        <h1>Platform Specific Instructions</h1>
+        <h2>Mac OS X</h2>
+        <p>All the dependencies are available through
+        <a href="http://www.macports.org/">macports.</a> It is also handy to install the latest gcc compilers (with gfortran), openmpi, and python utilities for data analysis and plotting.</p>
       </section>
       <script type="text/JavaScript"><!--
         writeFooter("../"); //-->
