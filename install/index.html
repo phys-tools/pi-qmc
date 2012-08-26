@@ -21,9 +21,13 @@
       <section>
          <h1>Introduction</h1>
          <p>The easiest way to build is to use</p>
-         <pre> ./configure
-         <li>make</li>
+         <pre> ./configure &nbsp;
+         make
          </pre>
+        <p>For a parallel build</p>
+        <pre>./configure --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77</pre>
+        <p>where you should use the names of your MPI enabled compilers.</p>
+        <p>You can also build for different numbers of physical dimensions (default is NDIM=3)</p>
       </section>
       <script type="text/JavaScript"><!--
         writeFooter("../"); //-->
