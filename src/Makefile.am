@@ -19,8 +19,8 @@ pi_DEPENDENCIES = \
     stats/libstats.la \
     util/libutil.la
 pi_LDADD = -Lparser -lparser -Lemarate -lemarate -Laction -laction \
-    -Lalgorithm -lalgorithm -Ladvancer -ladvancer -Ldemo -ldemo \
+    -Lalgorithm -lalgorithm -Ladvancer -ladvancer \
     -Lestimator -lestimator -Lfixednode -lfixednode \
-    -Lspin -lspin -Lstats -lstats -Lbase -lbase -Lutil -lutil
+    -Lspin -lspin -Lstats -lstats -Lbase -lbase -Lutil -lutil -Ldemo -ldemo
 pi_SOURCES = \
     main.cc
