@@ -161,9 +161,70 @@
         sudo yum install python-matplotlib
         sudo yum install ipython
         sudo yum install scipy</pre>
+      
       <p>The python package
       <a href="http://www.pytables.org/moin"pytables</a> for reading HDF5 files is also required for the analysis scripts, but it is not available through yum, so you'll have to download it and install it yourself.</p>
       <h2>HPC Centers</h2>
+      <h3>ASU Fulton: saguaro</h3>
+      <p>For a serial build in two dimensions,</p>
+      <pre> ../../pi/configure --with-ndim=2 --enable-sprng  CXX=icpc CC=icc CXXFLAGS="-O3 -xP -ipo" \
+      --with-blas="-L$MKL_LIB -lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+      F77=ifort AR="xild -lib"</pre>
+      <p>or for a parallel version,</p>
+      <pre> ../../pi/configure --with-ndim=2 --enable-sprng --enable-mpi MPICC=mpicc MPICXX=mpicxx \
+      CXX=icpc CC=icc F77=ifort CXXFLAGS="-O3 -xP -ipo" AR="xild -lib" \
+      --with-blas="-L$MKL_LIB -lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" </pre>
+      <p>Omit the --enable-sprng option if you do not have the SPRNG library.</p>
+      <h3>LONI-LSU: queenbee</h3>
+      <p>You need to add some lines to your .soft file to include some required libraries,</p>
+      <pre> #My additions (CPATH mimics -I include directories).
+      CPATH += /usr/local/packages/hdf5-1.8.1-intel10.1/include
+      +gsl-1.9-intel10.1
+      +sprng4-mvapich-1.1-intel-10.1
+      +fftw-3.1.2-intel10.1
+      CPATH += :/usr/local/packages/fftw-3.1.2-intel10.1/include
+      +intel-mkl
+      CPPFLAGS += -DMPICH_IGNORE_CXX_SEEK</pre>
+      <p>For an MPI build, use,</p>
+      <pre>../../pi/configure --with-ndim=3 --enable-mpi MPICC=mpicc MPICXX=mpicxx \
+      CXX=icpc CC=icc F77=ifort AR="xild -lib" CXXFLAGS="-O3 -xP -ipo" \
+      --with-blas="-lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core"</pre>
+      <h3>NCSA: abe</h3>
+      <p>You need to add some lines to your .soft file to include some required libraries,</p>
+      <pre>#My additions (CPATH mimics -I include directories).
+        +libxml2-2.6.29
+        +libxml2
+        +intel-mkl
+        +gsl-intel
+        +hdf5-1.8.2
+        CPATH += :/usr/apps/hdf/hdf5/v182/include
+        LD_LIBRARY_PATH += /usr/apps/hdf/szip/lib
+        +fftw-3.1-intel
+        LD_LIBRARY_PATH += /usr/apps/math/fftw/fftw-3.1.2/intel10/lib
+        CPATH += :/usr/apps/math/fftw/fftw-3.1.2/intel10/include
+        +intel-mkl
+        CPPFLAGS = "${CPPFLAGS} -DMPICH_IGNORE_CXX_SEEK"
+        Also have blitz installed locally with --prefix=(your dir choice)</pre>
+      <p>For an MPI build, use,</p>
+      <pre> ../../pi/configure --with-ndim=3 --enable-mpi MPICC=mpicc MPICXX=mpicxx CXX=icpc CC=icc \
+      CXXFLAGS="-O3 -xP -ipo" LDFLAGS="-lsz" \
+      --with-blas="-lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" F77=ifort AR="xild -lib"</pre>
+      <h3>TACC: Ranger</h3>
+      <h3>Cornell CNF: nanolab</h3>
+      <p>The svn client wasn't working for me, so I built one in my ~/packages/bin directory. You need to specify the most recent C++ and Fortran compilers by including the following in your .bash_profile,</p>
+      <pre># Version 10 compilers
+        source /opt/intel/cc/10.1.017/bin/iccvars.sh
+        source /opt/intel/fc/10.1.017/bin/ifortvars.shsource /opt/intel/idb/10.1.017/bin/idbvars.sh
+        source /opt/intel/mkl/10.0.4.023/tools/environment/mklvars32.sh</pre>
+      <p>Also, make sure that /usr/lam-7.4.1_intelv10/bin is in your path to get the correct MPI compilers.</p>
+      <p>You need to build blitz (again, in my ~/packages directory). For a serial <i>pi</i> build,</p>
+      <pre> ../../pi/configure --with-ndim=3 CXX=icpc CC=icc CXXFLAGS="-O3 -ipo" \
+        --with-blas="-Wl,-rpath,$MKLROOT/lib/32 -L/opt$MKLROOT/lib/32 -lmkl_intel \
+        -lmkl_sequential -lmkl_core -lpthread -lm" F77=ifort AR="xild -lib"</pre>
+      <pre>../../pi/configure --with-ndim=3 CXX=icpc CC=icc CXXFLAGS="-O3 -ipo" \
+        --with-blas="-Wl,-rpath,$MKLROOT/lib/32 -L$MKLROOT/lib/32 -lmkl_intel \
+        -lmkl_sequential -lmkl_core -lpthread -lm" F77=ifort AR="xild -lib" \
+        --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77</pre>
       </section>
       <script type="text/JavaScript"><!--
         writeFooter("../"); //-->
