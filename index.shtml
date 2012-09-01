@@ -58,7 +58,10 @@ Instructional or tutorial material is much easier to justify if people document 
 New developers are welcome to join this project.</p>
       
 <p>
-This document last modified <!--#flastmod file="index.html" --> 
+This document last modified <!--#flastmod file="index.shtml" --> 
+<!--#config timefmt="%D" -->
+This file last modified <!--#echo var="LAST_MODIFIED" --> 
+{{ site.time | date_to_string }}
 </p>
       </section>
 
