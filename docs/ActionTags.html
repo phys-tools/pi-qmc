@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>pi-qmc</title>
-
+    
     <link rel="stylesheet" href="../stylesheets/styles.css">
     <link rel="stylesheet" href="../stylesheets/pygment_trac.css">
     <script src="../javascripts/headfoot.js"></script>
@@ -14,11 +14,32 @@
     <![endif]-->
   </head>
   <body>
-    <div class="wrapper">
-      <script type="text/JavaScript"><!--
-        writeHeader("../"); //-->
-      </script>
-      <section>
-          <h1>
-              <a href= "file://localhost/Users/shardulgolwalkar/Desktop/pi-qmc-pages/docs/index.html">Introduction</a>
-          </h1>
+    <h2>EFieldAction</h2>
+    <pre>   < EFieldAction strength="50000 V/cm" dir="z"  width="10 nm" /> </pre>
+    <p>dir = "x" "y" or "z" , width is region centred at 0 where finite field is generated.</p>
+    <h2>FixedNodeAction</h2>
+    <pre> < FixedNodeAction species="eup" model="SHONodes" temperature="1 Ha"/></pre>
+    <p>Attributes:</p>
+    <li>model</li>
+    <li>"FreeNodes" (default)</li>
+    <li>"SHONodes"</li>
+    <li>WireNodes"</li>
+    <li>"GSSNode" or "GroundStateSNode"</li>
+    <li>"species"</li>
+    <li>double temperature</li>
+    <li>bool noNodalAction</li>
+    <li>bool useUpdates</li>
+    <h2>SHODotAction</h2>
+    <pre> < SHODotAction thickness="10 nm" v0="100 meV" k="0"/> </pre>
+    <h2>TwoQDAction</h2>
+    <pre> < TwoQDAction omega="12 meV" d="50 nm" alpha="1.0"/> </pre>
+    <h2>SHOAction</h2>
+    <p>Action for a Simple Harmonic Oscillator (SHO) potential, using the exact density matrix (For a derivation, see Feynman, Statistical Mecahnics (1972).)</p>
+    <pre> < SHOAction omega="30 meV" ndim="3" species="hole"/> </pre>
+    <p>Attributes: <b>omega - sets hbar*omega of the SHO Action.
+    &nbsp;
+    ndim - defines the number of dimensions for the action, if left out the action will default to no. dimensions in the simulation.
+    &nbsp;
+    species - Sets action to work on a species.</b></p>
+    
+  </body>
