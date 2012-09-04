@@ -13,3 +13,77 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
+  <body>
+    <div class="wrapper">
+      <script type="text/JavaScript"><!--
+        writeHeader("../"); //-->
+      </script>
+      <section>
+    <h1>Estimator Tags</h1>
+    <h2>Scalar estimators</h2>
+    <h2> Thermodynamic energy estimator</h2>
+    <pre> < ThermalEnergyEstimator unit="Ha" shift="0 Ha" perN="1"/> </pre>
+    <li>unit allows different energy units, such as eV.</li>
+    <li>shift is useful in semiconductors, for example, to get energy relative to CBM.</li>
+    <li>perN can be used to get the energy per atom, rather than total energy.</li>
+    <h2>Imaginary time correlation functions</h2>
+    <p>A general imaginary time correlation function is</p>
+    &nbsp;
+    <p>?AB(?) = -(1/?)?A†(?) B(0)?</p>
+    &nbsp;
+    <p>PIMC reports these functions in imaginary frequency space,</p>
+    &nbsp;
+    <p>?AB(i?n) = ∫0?? exp(i?n?) ?AB(?) d?.</p>
+    &nbsp;
+    <p>where the Matsubura frequencies are i?n=2πinkBT/?.</p>
+    <h2>Conductance Estimator</h2>
+    <pre> < ConductanceEstimator nfreq="50" component="all" useCharge="false" useSpeciesTensor="false" species="eup" order="1"/> </pre>
+    <p>Current-current correlation estimator for a homogeneous system. (For current density correlations, see ConductivityEstimator.) Calculates the current-current correlation function,</p>
+    <p>?J?AJ?B = -(1/?)?J?AJ?B?,</p>
+    <p>where the J?A are the particle (or charge) current in direction ? for species A.</p>
+    <p>Results are stored in a rank 6 array,</p>
+    <p>?JJ(iorder , ?, ?, A, B, i?n).</p>
+    <p>Flags control the behavior:</p>
+    <li>bool useCharge uses charge currents, otherwise use particle number current.</li>
+    <li>Component is “x,” “y,” “z,” or “all”. If “all” it computes a tensor.</li>
+    <li>species selects a species</li>
+    <li>`bool speciesTensor computes a tensor of cross-species correlations</li>
+    <li>int nfreq number of frequencies to store.</li>
+    <li>int order specifies the order (1 for polarizability, 2 or 3 for hyperpolarizability).</li>
+    <h2>ConductivityEstimator</h2>
+    <pre>   < DensityEstimator nx="20" ny="20" nz="20" a="1 nm"/> </pre>
+    <pre> < DensityEstimator name="rhoe" species="eup">
+         < Radial min="0" max="10 nm" nbin="100"/>
+          < /DensityEstimator></pre>
+    <p>Up to NDIM distances can be combined to make multidimensional correlation functions. Options are</p>
+    <li>Cartesian</li>
+    <li>dir = x,y,z</li>
+    <li>int min, max, nbin</li>
+    <li>Radial</li>  
+    <li>dir=x,y,z or none (for cylidrical or spherical metric)</li>
+    <li> int min, max, nbin</li>
+    <h2> Pair Correlation functions</h2> 
+    <pre> < PairCFEstimator name="g(r)" species1="eup" species2="H">
+      < Radial min="0" max="10 nm" nbin="100"/>
+      < /PairCFEstimator></pre>
+    <p>or</p>  
+    <pre>< PairCFEstimator species1="eup" species2="edn" name="cf_ee">
+      < Cartesian dir="x"  min="0. nm" max="5 nm" nbin="100"/>
+      < Cartesian dir="z"  min="0. nm" max="3 nm" nbin="100"/>
+      < /PairCFEstimator></pre>
+    <p>Any number of distances can be combined to make multidimensional correlation functions. Options are</p>
+    <li>Cartesian, Cartesian1, Cartesian2 (relative separation or absolute position of species 1 or 2 respectively).</li>  
+    <li>dir x,y,z</li>
+    <li>int min, max, nbin</li>
+    <li>Radial</li>
+    <li>dir x,y,z or none (for cylidrical or spherical metric)</li>
+    <li>int min, max, nbin</li>
+      </section>
+      <script type="text/JavaScript"><!--
+        writeFooter("../"); //-->
+      </script>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
