@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libbase.la
-libbase_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libbase_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I $(top_srcdir)/contrib/blitz-0.9
 libbase_la_SOURCES = \
     BeadFactory.cc \
     DoubleParallelPaths.cc \

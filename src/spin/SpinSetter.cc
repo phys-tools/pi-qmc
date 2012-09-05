@@ -1,5 +1,6 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
+#ifdef ENABLE_MPI
+#include <mpi.h>
 #endif
 #include "SpinSetter.h"
 #include "base/Paths.h"

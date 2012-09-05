@@ -1,4 +1,5 @@
 noinst_LTLIBRARIES = libstats.la
+libstats_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/contrib/blitz-0.9
 libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \

@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libutil.la
-libutil_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libutil_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libutil_la_SOURCES = \
 	AperiodicGaussian.cc \
 	EwaldSum.cc \

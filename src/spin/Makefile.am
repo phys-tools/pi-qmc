@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libspin.la
-libspin_la_CXXFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)
+libspin_la_CXXFLAGS = -I$(top_srcdir)/src -I$(top_srcdir) -I$(top_srcdir)/contrib/blitz-0.9
 libspin_la_SOURCES = \
     FreeSpinMover.cc \
     MainSpinParser.cc \

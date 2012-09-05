@@ -16,5 +16,6 @@ set(sources
     ${dir}/coulomb/Coulomb1DLinkActionTest.cpp
     ${dir}/coulomb/Coulomb3DLinkActionTest.cpp
     ${dir}/coulomb/CoulombLinkActionTest.cpp
+    ${dir}/interaction/SHOInteractionTest.cpp
     PARENT_SCOPE
 )

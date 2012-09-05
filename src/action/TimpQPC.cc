@@ -1,6 +1,4 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "config.h"
 #include "TimpQPC.h"
 #include "advancer/SectionSamplerInterface.h"
 #include "base/Beads.h"
@@ -16,9 +14,7 @@ TimpQPC::TimpQPC(const SuperCell& cell, const Species &species, const double tau
   : tau(tau), width(width), length(length), vG(vG), z(z),
     ifirst(species.ifirst), npart(species.count),
     lx(cell[0]), ly(cell[1]) {
-#ifdef ENABLE_MPI
   if (mpi && mpi->isMain())
-#endif
   {
     std::cout << "Timp QPC on "<<species.name
               <<" with w=" << width << ", l=" << length

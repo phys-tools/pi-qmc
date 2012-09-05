@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libparser.la
-libparser_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libparser_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libparser_la_SOURCES = \
     ActionParser.cc \
     EstimatorParser.cc \

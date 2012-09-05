@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libalgorithm.la
-libalgorithm_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libalgorithm_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libalgorithm_la_SOURCES = \
 	BinProbDensity.cc \
 	Collect.cc \

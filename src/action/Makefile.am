@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libaction.la
-libaction_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libaction_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libaction_la_SOURCES = \
 	ActionChoice.cc \
 	CaoBerneAction.cc \

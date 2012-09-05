@@ -44,6 +44,7 @@ set (sources
     coulomb/CoulombLinkAction.cpp
     coulomb/Coulomb1DLinkAction.cpp
     coulomb/Coulomb3DLinkAction.cpp
+    interaction/SHOInteraction.cpp
 )
 
 add_library(action STATIC ${sources})

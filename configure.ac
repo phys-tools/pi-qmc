@@ -53,7 +53,9 @@ AX_PATH_GSL([1.0],[],[AC_MSG_ERROR(
 *** Libgsl is required to build pi; Available at http://www.gnu.org/software/gsl/.)])
 LIBS="$GSL_LIBS $LIBS"
 CPPFLAGS="$GSL_CFLAGS $CPPFLAGS"
-ACX_BLITZ(required)
+
+#ACX_BLITZ(required) #moved to Makefile.am files.
+
 AC_CHECK_LIB(hdf5,H5Fopen)
 AC_CHECK_LIB(fftw3,fftw_plan_dft)
 

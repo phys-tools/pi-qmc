@@ -1,5 +1,5 @@
 noinst_LTLIBRARIES = libadvancer.la
-libadvancer_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src
+libadvancer_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libadvancer_la_SOURCES = \
         AlternatingParticleChooser.cc \
         CollectiveMover.cc \

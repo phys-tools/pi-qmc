@@ -1,6 +1,5 @@
 #include "MPILifecycle.h"
-#include <config.h>
-
+#include "config.h"
 #ifdef ENABLE_MPI
 #include <mpi.h>
 #endif

@@ -1,6 +1,9 @@
 SUBDIRS = action advancer base demo emarate estimator fixednode parser \
 	spin stats util algorithm
 
+pi_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
+
+
 bin_PROGRAMS = pi
 pi_DEPENDENCIES = \
     action/libaction.la \
@@ -16,8 +19,8 @@ pi_DEPENDENCIES = \
     stats/libstats.la \
     util/libutil.la
 pi_LDADD = -Lparser -lparser -Lemarate -lemarate -Laction -laction \
-    -Lalgorithm -lalgorithm -Ladvancer -ladvancer -Ldemo -ldemo \
+    -Lalgorithm -lalgorithm -Ladvancer -ladvancer \
     -Lestimator -lestimator -Lfixednode -lfixednode \
-    -Lspin -lspin -Lstats -lstats -Lbase -lbase -Lutil -lutil
+    -Lspin -lspin -Lstats -lstats -Lbase -lbase -Lutil -lutil -Ldemo -ldemo
 pi_SOURCES = \
     main.cc
