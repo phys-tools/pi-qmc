@@ -27,7 +27,6 @@
 #include "base/Paths.h"
 #include "base/SimulationInfo.h"
 #include "base/Species.h"
-#include "stats/ArrayBlockedEstimator.h"
 #include "stats/BlitzArrayBlkdEst.h"
 #include "stats/MPIManager.h"
 #include "util/SuperCell.h"

@@ -4,7 +4,7 @@
 #include "H5ReportBuilder.h"
 #include "ScalarEstimator.h"
 #include "EstimatorManager.h"
-#include "ArrayBlockedEstimator.h"
+#include "ArrayEstimator.h"
 #include "ReportWriters.h"
 #include "H5ScalarReportWriter.h"
 
@@ -16,7 +16,7 @@ H5ReportBuilder::H5ReportBuilder(const std::string& filename,
             H5P_DEFAULT);
     simInfoWriter->writeH5(fileID);
     scalarWriter = new H5ScalarReportWriter();
-    reportWriters = new ReportWriters(scalarWriter, 0, 0, 0);
+    reportWriters = new ReportWriters(scalarWriter, 0, 0);
 }
 
 H5ReportBuilder::~H5ReportBuilder() {
@@ -79,8 +79,8 @@ void H5ReportBuilder::reportScalarStep(const ScalarEstimator &est) {
     scalarWriter->reportScalarStep(est);
 }
 
-void H5ReportBuilder::startArrayBlockedReport(
-        const ArrayBlockedEstimator& est) {
+void H5ReportBuilder::startArrayReport(
+        const ArrayEstimator& est) {
     hsize_t *dims;
     dims = new hsize_t[est.getNDim()];
     unsigned int maxDim = 1, imaxDim = 0, size = 1;
@@ -206,7 +206,7 @@ void H5ReportBuilder::startArrayBlockedReport(
 
 }
 
-void H5ReportBuilder::reportArrayBlockedStep(const ArrayBlockedEstimator& est) {
+void H5ReportBuilder::reportArrayStep(const ArrayEstimator& est) {
     est.normalize();
     H5Dwrite(*dset, H5T_NATIVE_FLOAT, H5S_ALL, H5S_ALL, H5P_DEFAULT,
             est.getData());
@@ -217,13 +217,6 @@ void H5ReportBuilder::reportArrayBlockedStep(const ArrayBlockedEstimator& est) {
         dset++;
     }
     est.unnormalize();
-}
-
-void H5ReportBuilder::startAccRejReport(const AccRejEstimator& est) {
-
-}
-
-void H5ReportBuilder::reportAccRejStep(const AccRejEstimator& est) {
 }
 
 void H5ReportBuilder::recordInputDocument(const std::string &docstring) {

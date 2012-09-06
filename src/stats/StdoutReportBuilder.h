@@ -20,7 +20,7 @@ public:
     virtual void reportScalarStep(const ScalarEstimator& est);
     virtual void startAccRejReport(const AccRejEstimator& est) {}
     virtual void reportAccRejStep(const AccRejEstimator& est);
-    virtual void reportArrayBlockedStep(const ArrayBlockedEstimator& est);
+    virtual void reportArrayBlockedStep(const ArrayEstimator& est);
 private:
     typedef blitz::Array<double, 1> Array;
     int nstep;

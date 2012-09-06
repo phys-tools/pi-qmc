@@ -1,6 +1,5 @@
 set (sources
     AccRejEstimator.cc
-    ArrayBlockedEstimator.cc
     ArrayEstimator.cc
     AsciiReportBuilder.cc
     EstimatorReportBuilder.cpp

@@ -71,7 +71,6 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libstats_la_LIBADD =
 am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-ArrayEstimator.lo \
-	libstats_la-ArrayBlockedEstimator.lo \
 	libstats_la-AsciiReportBuilder.lo \
 	libstats_la-EstimatorReportBuilder.lo \
 	libstats_la-EstimatorManager.lo libstats_la-H5ReportBuilder.lo \
@@ -245,7 +244,6 @@ libstats_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/contrib/blitz-0.9
 libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \
-    ArrayBlockedEstimator.cc \
     AsciiReportBuilder.cc \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
@@ -261,7 +259,6 @@ libstats_la_SOURCES = \
 noinst_HEADERS = \
     AccRejEstimator.h \
     ArrayEstimator.h \
-    ArrayBlockedEstimator.h \
     AsciiReportBuilder.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \
@@ -331,7 +328,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AccRejEstimator.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ArrayBlockedEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ArrayEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorManager.Plo@am__quote@
@@ -379,13 +375,6 @@ libstats_la-ArrayEstimator.lo: ArrayEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ArrayEstimator.cc' object='libstats_la-ArrayEstimator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ArrayEstimator.lo `test -f 'ArrayEstimator.cc' || echo '$(srcdir)/'`ArrayEstimator.cc
-
-libstats_la-ArrayBlockedEstimator.lo: ArrayBlockedEstimator.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ArrayBlockedEstimator.lo -MD -MP -MF $(DEPDIR)/libstats_la-ArrayBlockedEstimator.Tpo -c -o libstats_la-ArrayBlockedEstimator.lo `test -f 'ArrayBlockedEstimator.cc' || echo '$(srcdir)/'`ArrayBlockedEstimator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-ArrayBlockedEstimator.Tpo $(DEPDIR)/libstats_la-ArrayBlockedEstimator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ArrayBlockedEstimator.cc' object='libstats_la-ArrayBlockedEstimator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ArrayBlockedEstimator.lo `test -f 'ArrayBlockedEstimator.cc' || echo '$(srcdir)/'`ArrayBlockedEstimator.cc
 
 libstats_la-AsciiReportBuilder.lo: AsciiReportBuilder.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo -c -o libstats_la-AsciiReportBuilder.lo `test -f 'AsciiReportBuilder.cc' || echo '$(srcdir)/'`AsciiReportBuilder.cc

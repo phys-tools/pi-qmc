@@ -6,7 +6,6 @@
 class EstimatorManager;
 class AccRejEstimator;
 class ArrayEstimator;
-class ArrayBlockedEstimator;
 
 /** Base class for reporting estimators.
  @author John Shumway */
@@ -24,9 +23,6 @@ public:
 
     virtual void startArrayReport(const ArrayEstimator& est);
     virtual void reportArrayStep(const ArrayEstimator& est);
-
-    virtual void startArrayBlockedReport(const ArrayBlockedEstimator& est);
-    virtual void reportArrayBlockedStep(const ArrayBlockedEstimator& est);
 
     virtual void startAccRejReport(const AccRejEstimator& est);
     virtual void reportAccRejStep(const AccRejEstimator& est);

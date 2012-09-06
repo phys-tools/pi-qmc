@@ -3,7 +3,6 @@ libstats_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/contrib/blitz-0.9
 libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \
-    ArrayBlockedEstimator.cc \
     AsciiReportBuilder.cc \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
@@ -18,7 +17,6 @@ libstats_la_SOURCES = \
 noinst_HEADERS = \
     AccRejEstimator.h \
     ArrayEstimator.h \
-    ArrayBlockedEstimator.h \
     AsciiReportBuilder.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \

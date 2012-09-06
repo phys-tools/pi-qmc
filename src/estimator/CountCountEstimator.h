@@ -12,7 +12,6 @@
 #include "base/SimulationInfo.h"
 #include "base/Species.h"
 #include "util/SuperCell.h"
-#include "stats/ArrayBlockedEstimator.h"
 #include "stats/BlitzArrayBlkdEst.h"
 #include "stats/MPIManager.h"
 #include <cstdlib>

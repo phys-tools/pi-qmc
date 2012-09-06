@@ -25,21 +25,13 @@ public:
 
     virtual void initializeReport(EstimatorManager*);
     virtual void collectAndWriteDataBlock(EstimatorManager*);
-
-    /// Method to start reporting a ScalarEstimator.
-    virtual void startScalarReport(const ScalarEstimator& est);
-    /// Method to write a step for a ScalarEstimator.
-    virtual void reportScalarStep(const ScalarEstimator& est);
-    /// Method to start reporting a ArrayBlockedEstimator.
-    virtual void startArrayBlockedReport(const ArrayBlockedEstimator& est);
-    /// Method to write a step for a ArrayBlockedEstimator.
-    virtual void reportArrayBlockedStep(const ArrayBlockedEstimator& est);
-    /// Method to start reporting a AccRejEstimator.
-    virtual void startAccRejReport(const AccRejEstimator& est);
-    /// Method to write a step for a AccRejEstimator.
-    virtual void reportAccRejStep(const AccRejEstimator& est);
-    /// Method to record the input file contents.
     virtual void recordInputDocument(const std::string &docstring);
+
+    virtual void startScalarReport(const ScalarEstimator& est);
+    virtual void reportScalarStep(const ScalarEstimator& est);
+    virtual void startArrayReport(const ArrayEstimator& est);
+    virtual void reportArrayStep(const ArrayEstimator& est);
+
 private:
     std::string filename;
     const EstimatorManager::SimInfoWriter *simInfoWriter;
@@ -47,16 +39,14 @@ private:
     int istep;
     typedef std::vector<hid_t> DataSetContainer;
     typedef DataSetContainer::iterator DataSetIter;
-    /// The HDF5 file.
+
     hid_t fileID;
-    /// The current HDF5 writing group.
     hid_t writingGroupID;
-    /// The group's step counter.
     hid_t stepAttrID;
-    /// The current HDF5 datasets.
+
     DataSetContainer dataset;
-    /// Iterator pointing at the current dataset.
     DataSetIter dset;
+
     ReportWriters *reportWriters;
     H5ScalarReportWriter *scalarWriter;
 };

@@ -4,7 +4,7 @@
 #include "StdoutReportBuilder.h"
 #include "ScalarEstimator.h"
 #include "AccRejEstimator.h"
-#include "ArrayBlockedEstimator.h"
+#include "ArrayEstimator.h"
 #include "EstimatorManager.h"
 #include <ctime>
 #include <string.h>
@@ -79,6 +79,6 @@ void StdoutReportBuilder::reportAccRejStep(const AccRejEstimator& est) {
 
 void
 
-StdoutReportBuilder::reportArrayBlockedStep(const ArrayBlockedEstimator& est) {
+StdoutReportBuilder::reportArrayBlockedStep(const ArrayEstimator& est) {
     std::cout << "(measured " << est.getName() << ")" << std::endl;
 }
