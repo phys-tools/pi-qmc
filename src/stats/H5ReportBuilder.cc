@@ -7,6 +7,7 @@
 #include "ArrayEstimator.h"
 #include "ReportWriters.h"
 #include "H5ScalarReportWriter.h"
+#include "ReportWriterInterface.h"
 
 H5ReportBuilder::H5ReportBuilder(const std::string& filename,
         const EstimatorManager::SimInfoWriter *simInfoWriter) :
@@ -16,6 +17,9 @@ H5ReportBuilder::H5ReportBuilder(const std::string& filename,
             H5P_DEFAULT);
     simInfoWriter->writeH5(fileID);
     scalarWriter = new H5ScalarReportWriter();
+//    arrayWriter = new H5ArrayReportWriter();
+    ReportWriterInterface<AccRejEstimator> *accrejWriter
+        = new ReportWriterInterface<AccRejEstimator>;
     reportWriters = new ReportWriters(scalarWriter, 0, 0);
 }
 

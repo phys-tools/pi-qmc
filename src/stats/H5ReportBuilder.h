@@ -2,13 +2,15 @@
 #define __H5ReportBuilder_h_
 
 #include "EstimatorReportBuilder.h"
+#include "EstimatorManager.h"
 #include <string>
 #include <vector>
 #include <hdf5.h>
 
-#include "EstimatorManager.h"
+class EstimatorManager;
 class ReportWriters;
 class H5ScalarReportWriter;
+class H5ArrayReportWriter;
 
 /** Class for recording statistical data to an HDF5 file.
 
@@ -49,5 +51,6 @@ private:
 
     ReportWriters *reportWriters;
     H5ScalarReportWriter *scalarWriter;
+    H5ArrayReportWriter *arrayWriter;
 };
 #endif

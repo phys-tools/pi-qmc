@@ -2,18 +2,19 @@
 #define __EstimatorReportBuilder_h_
 
 #include <string>
-#include "ScalarReportWriter.h"
 class EstimatorManager;
+class ScalarEstimator;
 class AccRejEstimator;
 class ArrayEstimator;
 
 /** Base class for reporting estimators.
  @author John Shumway */
 
-class EstimatorReportBuilder : public ScalarReportWriter {
+class EstimatorReportBuilder {
 public:
     EstimatorReportBuilder();
     virtual ~EstimatorReportBuilder();
+    virtual void recordInputDocument(const std::string &docstring);
 
     virtual void initializeReport(EstimatorManager*) = 0;
     virtual void collectAndWriteDataBlock(EstimatorManager*) = 0;
@@ -26,7 +27,5 @@ public:
 
     virtual void startAccRejReport(const AccRejEstimator& est);
     virtual void reportAccRejStep(const AccRejEstimator& est);
-
-    virtual void recordInputDocument(const std::string &docstring);
 };
 #endif

@@ -1,24 +1,26 @@
 #ifndef REPORTWRITERS_H_
 #define REPORTWRITERS_H_
 
-class ScalarReportWriter;
-class ArrayReportWriter;
-class AccRejReportWriter;
+template <class T> class ReportWriterInterface;
+class ScalarEstimator;
+class ArrayEstimator;
+class AccRejEstimator;
 
 class ReportWriters {
 public:
-    ReportWriters(ScalarReportWriter*, ArrayReportWriter*,
-            AccRejReportWriter*);
+    ReportWriters(ReportWriterInterface<ScalarEstimator>*,
+            ReportWriterInterface<ArrayEstimator>*,
+            ReportWriterInterface<AccRejEstimator>*);
     virtual ~ReportWriters();
 
-    ScalarReportWriter* getScalarReportWriter() const;
-    ArrayReportWriter* getArrayBlockedReportWriter() const;
-    AccRejReportWriter* getAccRejReportWriter() const;
+    ReportWriterInterface<ScalarEstimator>* getScalarReportWriter() const;
+    ReportWriterInterface<ArrayEstimator>* getArrayBlockedReportWriter() const;
+    ReportWriterInterface<AccRejEstimator>* getAccRejReportWriter() const;
 
 private:
-    ScalarReportWriter *scalarReportWriter;
-    ArrayReportWriter *arrayReportWriter;
-    AccRejReportWriter *accRejReportWriter;
+    ReportWriterInterface<ScalarEstimator> *scalarReportWriter;
+    ReportWriterInterface<ArrayEstimator> *arrayReportWriter;
+    ReportWriterInterface<AccRejEstimator> *accRejReportWriter;
 };
 
 #endif

@@ -5,7 +5,8 @@
 #include <blitz/tinyvec.h>
 class Paths;
 class EstimatorReportBuilder;
-class ScalarReportWriter;
+template <class T> class ReportWriterInterface;
+
 /// Base class for scalar estimators.
 /// @author John Shumway
 class ScalarEstimator: public Estimator {

@@ -5,7 +5,6 @@
 #include "ScalarEstimator.h"
 #include "MPIManager.h"
 #include "EstimatorReportBuilder.h"
-#include "ScalarReportWriter.h"
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
   : Estimator(name,"","scalar"), scale(1.), shift(0.) {

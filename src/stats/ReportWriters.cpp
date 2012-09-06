@@ -1,26 +1,29 @@
 #include "ReportWriters.h"
 
-ReportWriters::ReportWriters(ScalarReportWriter* scalarReportWriter,
-        ArrayReportWriter* arrayBlockedReportWriter,
-        AccRejReportWriter* accRejReportWriter)
+ReportWriters::ReportWriters(
+        ReportWriterInterface<ScalarEstimator>* scalarReportWriter,
+        ReportWriterInterface<ArrayEstimator>* arrayReportWriter,
+        ReportWriterInterface<AccRejEstimator>* accRejReportWriter)
 :   scalarReportWriter(scalarReportWriter),
-    arrayReportWriter(arrayBlockedReportWriter),
+    arrayReportWriter(arrayReportWriter),
     accRejReportWriter(accRejReportWriter) {
 }
 
 ReportWriters::~ReportWriters() {
+    delete scalarReportWriter;
+    delete arrayReportWriter;
+    delete accRejReportWriter;
 }
 
-ScalarReportWriter* ReportWriters::getScalarReportWriter() const {
+ReportWriterInterface<ScalarEstimator>* ReportWriters::getScalarReportWriter() const {
     return scalarReportWriter;
 }
 
 
-ArrayReportWriter* ReportWriters::getArrayBlockedReportWriter() const {
+ReportWriterInterface<ArrayEstimator>* ReportWriters::getArrayBlockedReportWriter() const {
     return arrayReportWriter;
 }
 
-AccRejReportWriter* ReportWriters::getAccRejReportWriter() const {
+ReportWriterInterface<AccRejEstimator>* ReportWriters::getAccRejReportWriter() const {
     return accRejReportWriter;
 }
-

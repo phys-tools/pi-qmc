@@ -1,11 +1,12 @@
 #ifndef H5SCALARREPORTWRITER_H_
 #define H5SCALARREPORTWRITER_H_
 
-#include "ScalarReportWriter.h"
+#include "ReportWriterInterface.h"
+class ScalarEstimator;
 #include <hdf5.h>
 #include <vector>
 
-class H5ScalarReportWriter : public ScalarReportWriter {
+class H5ScalarReportWriter : public ReportWriterInterface<ScalarEstimator> {
 public:
     H5ScalarReportWriter();
     virtual ~H5ScalarReportWriter();
