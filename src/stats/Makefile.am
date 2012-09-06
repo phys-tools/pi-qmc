@@ -5,10 +5,14 @@ libstats_la_SOURCES = \
     ArrayEstimator.cc \
     ArrayBlockedEstimator.cc \
     AsciiReportBuilder.cc \
+    EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
     H5ReportBuilder.cc \
+    H5ScalarReportWriter.cpp \
     MPIManager.cc \
+    ReportWriters.cpp \
     ScalarEstimator.cc \
+    ScalarReportWriter.cpp \
     StdoutReportBuilder.cc \
     Units.cc
 noinst_HEADERS = \
@@ -21,7 +25,10 @@ noinst_HEADERS = \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
     H5ReportBuilder.h \
+    H5ScalarReportWriter.h \
     MPIManager.h \
+	ReportWriters.h \
     ScalarEstimator.h \
+    ScalarReportWriter.h \
     StdoutReportBuilder.h \
     Units.h

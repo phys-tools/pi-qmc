@@ -4,6 +4,8 @@
 #endif
 #include "ScalarEstimator.h"
 #include "MPIManager.h"
+#include "EstimatorReportBuilder.h"
+#include "ScalarReportWriter.h"
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
   : Estimator(name,"","scalar"), scale(1.), shift(0.) {
@@ -13,6 +15,17 @@ ScalarEstimator::ScalarEstimator(const std::string &name,
   const std::string &typeString, const std::string &unitName,
   double scale, double shift)
   : Estimator(name,typeString,unitName), scale(scale), shift(shift) {
+}
+
+ScalarEstimator::~ScalarEstimator() {
+}
+
+double ScalarEstimator::getValue() const {
+    return scale * (value + shift);
+}
+
+void ScalarEstimator::setValue(const double v) {
+    value = v;
 }
 
 void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
@@ -32,3 +45,13 @@ void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
 #endif
   if (rank==0) setValue(value/size);
 }
+
+void ScalarEstimator::startReport(EstimatorReportBuilder& builder) {
+    builder.startScalarReport(*this);
+}
+
+void ScalarEstimator::reportStep(EstimatorReportBuilder& builder) {
+    builder.reportScalarStep(*this);
+
+}
+

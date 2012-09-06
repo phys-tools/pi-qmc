@@ -42,7 +42,7 @@ void EstimatorManager::startWritingGroup(const int nstep,
   if (rank==0) {
     for (BuilderIter builder=builders.begin();
          builder!=builders.end(); ++builder) {
-      (*builder)->startWritingGroup(*this);
+      (*builder)->initializeReport(this);
     }
   }
 }
@@ -56,7 +56,7 @@ void EstimatorManager::writeStep() {
   if (!mpi || mpi->isMain()) {
     for (BuilderIter builder=builders.begin();
          builder!=builders.end(); ++builder) {
-      (*builder)->writeStep(*this);
+      (*builder)->collectAndWriteDataBlock(this);
     }
   }
   // Avoid a race condition.
