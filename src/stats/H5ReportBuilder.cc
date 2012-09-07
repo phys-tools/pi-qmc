@@ -29,6 +29,7 @@ H5ReportBuilder::~H5ReportBuilder() {
 void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
     nstep = manager->nstep;
     scalarWriter->setNstep(nstep);
+    arrayWriter->setNstep(nstep);
     istep = 0;
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
     writingGroupID = H5Gcreate2(fileID, "estimators", H5P_DEFAULT, H5P_DEFAULT,
@@ -37,6 +38,7 @@ void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
     writingGroupID = H5Gcreate(fileID,"estimators",0);
 #endif
     scalarWriter->setWritingGroupID(writingGroupID);
+    arrayWriter->setWritingGroupID(writingGroupID);
     hsize_t dims = 1;
     hid_t dataspaceID = H5Screate_simple(1, &dims, NULL);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
@@ -58,6 +60,7 @@ void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
 void H5ReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     dset = dataset.begin();
     scalarWriter->startBlock(istep);
+    arrayWriter->startBlock(istep);
     for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
             est != manager->estimator.end(); ++est) {
         (*est)->reportStep(*this);
