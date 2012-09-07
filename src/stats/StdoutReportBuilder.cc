@@ -13,10 +13,12 @@
 
 StdoutReportBuilder::StdoutReportBuilder()
 :   istep(0),
-    nstep(0) {
+    nstep(0),
+    reportWriters(0) {
 }
 
 StdoutReportBuilder::~StdoutReportBuilder() {
+    delete reportWriters;
 }
 
 void StdoutReportBuilder::initializeReport(EstimatorManager *manager) {

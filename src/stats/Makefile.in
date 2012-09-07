@@ -72,6 +72,7 @@ libstats_la_LIBADD =
 am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-ArrayEstimator.lo \
 	libstats_la-AsciiReportBuilder.lo \
+	libstats_la-AsciiScalarReportWriter.lo \
 	libstats_la-EstimatorReportBuilder.lo \
 	libstats_la-EstimatorManager.lo \
 	libstats_la-H5ArrayReportWriter.lo \
@@ -249,6 +250,7 @@ libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \
     AsciiReportBuilder.cc \
+    AsciiScalarReportWriter.cpp \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
     H5ArrayReportWriter.cpp \
@@ -267,6 +269,7 @@ noinst_HEADERS = \
     AccRejEstimator.h \
     ArrayEstimator.h \
     AsciiReportBuilder.h \
+    AsciiScalarReportWriter.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \
     EstimatorManager.h \
@@ -275,6 +278,8 @@ noinst_HEADERS = \
     H5ReportBuilder.h \
     H5ScalarReportWriter.h \
     MPIManager.h \
+    NullArrayReportWriter.h \
+    NullAccRejReportWriter.h \
     ReportWriterInterface.h \
 	ReportWriters.h \
     ScalarEstimator.h \
@@ -341,6 +346,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AccRejEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ArrayEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiReportBuilder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorManager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ArrayReportWriter.Plo@am__quote@
@@ -396,6 +402,13 @@ libstats_la-AsciiReportBuilder.lo: AsciiReportBuilder.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AsciiReportBuilder.cc' object='libstats_la-AsciiReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiReportBuilder.lo `test -f 'AsciiReportBuilder.cc' || echo '$(srcdir)/'`AsciiReportBuilder.cc
+
+libstats_la-AsciiScalarReportWriter.lo: AsciiScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Tpo -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`AsciiScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Tpo $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AsciiScalarReportWriter.cpp' object='libstats_la-AsciiScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`AsciiScalarReportWriter.cpp
 
 libstats_la-EstimatorReportBuilder.lo: EstimatorReportBuilder.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-EstimatorReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-EstimatorReportBuilder.Tpo -c -o libstats_la-EstimatorReportBuilder.lo `test -f 'EstimatorReportBuilder.cpp' || echo '$(srcdir)/'`EstimatorReportBuilder.cpp

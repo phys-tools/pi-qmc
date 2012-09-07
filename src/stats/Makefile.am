@@ -4,6 +4,7 @@ libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \
     AsciiReportBuilder.cc \
+    AsciiScalarReportWriter.cpp \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
     H5ArrayReportWriter.cpp \
@@ -21,6 +22,7 @@ noinst_HEADERS = \
     AccRejEstimator.h \
     ArrayEstimator.h \
     AsciiReportBuilder.h \
+    AsciiScalarReportWriter.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \
     EstimatorManager.h \
@@ -29,6 +31,8 @@ noinst_HEADERS = \
     H5ReportBuilder.h \
     H5ScalarReportWriter.h \
     MPIManager.h \
+    NullArrayReportWriter.h \
+    NullAccRejReportWriter.h \
     ReportWriterInterface.h \
 	ReportWriters.h \
     ScalarEstimator.h \

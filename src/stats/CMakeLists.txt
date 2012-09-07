@@ -2,6 +2,7 @@ set (sources
     AccRejEstimator.cc
     ArrayEstimator.cc
     AsciiReportBuilder.cc
+    AsciiScalarReportWriter.cpp
     EstimatorReportBuilder.cpp
     EstimatorManager.cc
     H5ArrayReportWriter.cpp
