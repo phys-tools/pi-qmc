@@ -6,6 +6,7 @@ libstats_la_SOURCES = \
     AsciiReportBuilder.cc \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
+    H5ArrayReportWriter.cpp \
     H5ReportBuilder.cc \
     H5ScalarReportWriter.cpp \
     MPIManager.cc \
@@ -21,6 +22,7 @@ noinst_HEADERS = \
     Estimator.h \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
+    H5ArrayReportWriter.h \
     H5ReportBuilder.h \
     H5ScalarReportWriter.h \
     MPIManager.h \

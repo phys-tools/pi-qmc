@@ -7,8 +7,8 @@ public:
     ReportWriterInterface() {}
     virtual ~ReportWriterInterface() {}
 
-    virtual void startScalarReport(const T& estimator) {}
-    virtual void reportScalarStep(const T& estimator) {}
+    virtual void startReport(const T& estimator) {}
+    virtual void reportStep(const T& estimator) {}
 };
 
 #endif

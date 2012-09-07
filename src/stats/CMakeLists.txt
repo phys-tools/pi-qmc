@@ -4,6 +4,7 @@ set (sources
     AsciiReportBuilder.cc
     EstimatorReportBuilder.cpp
     EstimatorManager.cc
+    H5ArrayReportWriter.cpp
     H5ReportBuilder.cc
     H5ScalarReportWriter.cpp
     MPIManager.cc

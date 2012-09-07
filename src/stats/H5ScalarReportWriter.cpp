@@ -9,7 +9,7 @@ H5ScalarReportWriter::H5ScalarReportWriter() :
 H5ScalarReportWriter::~H5ScalarReportWriter() {
 }
 
-void H5ScalarReportWriter::startScalarReport(const ScalarEstimator& est) {
+void H5ScalarReportWriter::startReport(const ScalarEstimator& est) {
     hsize_t dims = nstep;
     hid_t dataSpaceID = H5Screate_simple(1, &dims, NULL);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
@@ -58,7 +58,7 @@ void H5ScalarReportWriter::startScalarReport(const ScalarEstimator& est) {
     dataset.push_back(dataSetID);
 }
 
-void H5ScalarReportWriter::reportScalarStep(const ScalarEstimator& est) {
+void H5ScalarReportWriter::reportStep(const ScalarEstimator& est) {
     hid_t space = H5Dget_space(*dset);
     H5Sselect_none(space);
 #if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR==6)&&(H5_VERS_RELEASE>=7))
