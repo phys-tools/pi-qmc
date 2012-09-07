@@ -20,11 +20,6 @@ public:
     virtual void initializeReport(EstimatorManager*);
     virtual void collectAndWriteDataBlock(EstimatorManager*);
 
-    virtual void reportScalarStep(const ScalarEstimator& est);
-    virtual void startAccRejReport(const AccRejEstimator& est) {}
-    virtual void reportAccRejStep(const AccRejEstimator& est);
-    virtual void reportArrayBlockedStep(const ArrayEstimator& est);
-
 private:
     int istep;
     int nstep;

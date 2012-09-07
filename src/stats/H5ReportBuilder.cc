@@ -77,22 +77,6 @@ void H5ReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     }
 }
 
-void H5ReportBuilder::startScalarReport(const ScalarEstimator &est) {
-    scalarWriter->startReport(est);
-}
-
-void H5ReportBuilder::reportScalarStep(const ScalarEstimator &est) {
-    scalarWriter->reportStep(est);
-}
-
-void H5ReportBuilder::startArrayReport(const ArrayEstimator& est) {
-    arrayWriter->startReport(est);
-}
-
-void H5ReportBuilder::reportArrayStep(const ArrayEstimator& est) {
-    arrayWriter->reportStep(est);
-}
-
 void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
     hid_t dspaceID = H5Screate(H5S_SCALAR);
     hid_t dtypeID = H5Tcopy(H5T_C_S1);

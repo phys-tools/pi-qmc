@@ -52,14 +52,3 @@ void StdoutReportBuilder::writeBlockHeader() {
     std::cout << " (" << myTime << ")" << std::endl;
 }
 
-void StdoutReportBuilder::reportScalarStep(const ScalarEstimator& est) {
-    scalarWriter->reportStep(est);
-}
-
-void StdoutReportBuilder::reportAccRejStep(const AccRejEstimator& est) {
-    accrejWriter->reportStep(est);
-}
-
-void StdoutReportBuilder::reportArrayBlockedStep(const ArrayEstimator& est) {
-    arrayWriter->reportStep(est);
-}

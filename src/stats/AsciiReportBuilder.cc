@@ -38,11 +38,3 @@ void AsciiReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     }
     file << std::endl;
 }
-
-void AsciiReportBuilder::startScalarReport(const ScalarEstimator& est) {
-    scalarWriter->startReport(est);
-}
-
-void AsciiReportBuilder::reportScalarStep(const ScalarEstimator& est) {
-    scalarWriter->reportStep(est);
-}

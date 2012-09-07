@@ -29,11 +29,6 @@ public:
     virtual void collectAndWriteDataBlock(EstimatorManager*);
     virtual void recordInputDocument(const std::string &docstring);
 
-    virtual void startScalarReport(const ScalarEstimator& est);
-    virtual void reportScalarStep(const ScalarEstimator& est);
-    virtual void startArrayReport(const ArrayEstimator& est);
-    virtual void reportArrayStep(const ArrayEstimator& est);
-
 private:
     std::string filename;
     const EstimatorManager::SimInfoWriter *simInfoWriter;

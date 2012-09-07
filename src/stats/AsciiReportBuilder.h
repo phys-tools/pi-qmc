@@ -18,8 +18,6 @@ public:
     virtual void initializeReport(EstimatorManager*);
     virtual void collectAndWriteDataBlock(EstimatorManager*);
 
-    virtual void reportScalarStep(const ScalarEstimator &est);
-    virtual void startScalarReport(const ScalarEstimator &est);
 private:
     std::string filename;
     std::ofstream file;
