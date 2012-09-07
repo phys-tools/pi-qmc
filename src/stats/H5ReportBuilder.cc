@@ -18,7 +18,7 @@ H5ReportBuilder::H5ReportBuilder(const std::string& filename,
     scalarWriter = new H5ScalarReportWriter();
     arrayWriter = new H5ArrayReportWriter();
     NullAccRejReportWriter *accrejWriter = new NullAccRejReportWriter();
-    reportWriters = new ReportWriters(scalarWriter, 0, 0);
+    reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
 }
 
 H5ReportBuilder::~H5ReportBuilder() {
@@ -53,7 +53,7 @@ void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
     dataset.resize(0);
     for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
             est != manager->estimator.end(); ++est) {
-        (*est)->startReport(*this);
+        (*est)->startReport(reportWriters);
     }
 }
 
@@ -63,7 +63,7 @@ void H5ReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     arrayWriter->startBlock(istep);
     for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
             est != manager->estimator.end(); ++est) {
-        (*est)->reportStep(*this);
+        (*est)->reportStep(reportWriters);
     }
     H5Awrite(stepAttrID, H5T_NATIVE_INT, &(++istep));
     H5Fflush(fileID, H5F_SCOPE_LOCAL);

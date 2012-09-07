@@ -36,7 +36,7 @@ void StdoutReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     scalarWriter->startBlock(istep);
     for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
             est != manager->estimator.end(); ++est) {
-        (*est)->reportStep(*this);
+        (*est)->reportStep(reportWriters);
     }
     std::cout << std::endl;
     ++istep;

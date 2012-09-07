@@ -26,7 +26,7 @@ void AsciiReportBuilder::initializeReport(EstimatorManager *manager) {
     file << "#";
     for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
             est != manager->estimator.end(); ++est) {
-        (*est)->startReport(*this);
+        (*est)->startReport(reportWriters);
     }
     file << std::endl;
 }
@@ -34,7 +34,7 @@ void AsciiReportBuilder::initializeReport(EstimatorManager *manager) {
 void AsciiReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
             est != manager->estimator.end(); ++est) {
-        (*est)->reportStep(*this);
+        (*est)->reportStep(reportWriters);
     }
     file << std::endl;
 }

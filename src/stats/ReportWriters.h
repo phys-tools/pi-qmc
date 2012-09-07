@@ -13,9 +13,14 @@ public:
             ReportWriterInterface<AccRejEstimator>*);
     virtual ~ReportWriters();
 
-    ReportWriterInterface<ScalarEstimator>* getScalarReportWriter() const;
-    ReportWriterInterface<ArrayEstimator>* getArrayBlockedReportWriter() const;
-    ReportWriterInterface<AccRejEstimator>* getAccRejReportWriter() const;
+    void startScalarReport(ScalarEstimator &est);
+    void reportScalarStep(ScalarEstimator &est);
+
+    void startAccRejReport(AccRejEstimator &est);
+    void reportAccRejStep(AccRejEstimator &est);
+
+    void startArrayReport(ArrayEstimator &est);
+    void reportArrayStep(ArrayEstimator &est);
 
 private:
     ReportWriterInterface<ScalarEstimator> *scalarReportWriter;

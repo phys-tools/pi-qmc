@@ -4,7 +4,7 @@
 #endif
 #include "ScalarEstimator.h"
 #include "MPIManager.h"
-#include "EstimatorReportBuilder.h"
+#include "ReportWriters.h"
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
   : Estimator(name,"","scalar"), scale(1.), shift(0.) {
@@ -45,12 +45,11 @@ void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
   if (rank==0) setValue(value/size);
 }
 
-void ScalarEstimator::startReport(EstimatorReportBuilder& builder) {
-    builder.startScalarReport(*this);
+void ScalarEstimator::startReport(ReportWriters *writer) {
+    writer->startScalarReport(*this);
 }
 
-void ScalarEstimator::reportStep(EstimatorReportBuilder& builder) {
-    builder.reportScalarStep(*this);
-
+void ScalarEstimator::reportStep(ReportWriters *writer) {
+    writer->reportScalarStep(*this);
 }
 

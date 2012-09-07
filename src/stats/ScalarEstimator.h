@@ -23,9 +23,9 @@ public:
     virtual void reset()=0;
     virtual void averageOverClones(const MPIManager* mpi);
 
-    virtual void startReport(EstimatorReportBuilder& builder);
+    virtual void startReport(ReportWriters* writers);
 
-    virtual void reportStep(EstimatorReportBuilder& builder);
+    virtual void reportStep(ReportWriters* writers);
 protected:
     double value;
     const double scale;

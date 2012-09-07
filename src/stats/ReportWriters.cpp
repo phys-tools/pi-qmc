@@ -1,4 +1,5 @@
 #include "ReportWriters.h"
+#include "ReportWriterInterface.h"
 
 ReportWriters::ReportWriters(
         ReportWriterInterface<ScalarEstimator>* scalarReportWriter,
@@ -15,15 +16,26 @@ ReportWriters::~ReportWriters() {
     delete accRejReportWriter;
 }
 
-ReportWriterInterface<ScalarEstimator>* ReportWriters::getScalarReportWriter() const {
-    return scalarReportWriter;
+void ReportWriters::startScalarReport(ScalarEstimator& est) {
+    scalarReportWriter->startReport(est);
 }
 
-
-ReportWriterInterface<ArrayEstimator>* ReportWriters::getArrayBlockedReportWriter() const {
-    return arrayReportWriter;
+void ReportWriters::reportScalarStep(ScalarEstimator& est) {
+    scalarReportWriter->reportStep(est);
 }
 
-ReportWriterInterface<AccRejEstimator>* ReportWriters::getAccRejReportWriter() const {
-    return accRejReportWriter;
+void ReportWriters::startAccRejReport(AccRejEstimator& est) {
+    accRejReportWriter->startReport(est);
+}
+
+void ReportWriters::reportAccRejStep(AccRejEstimator& est) {
+    accRejReportWriter->reportStep(est);
+}
+
+void ReportWriters::startArrayReport(ArrayEstimator& est) {
+    arrayReportWriter->startReport(est);
+}
+
+void ReportWriters::reportArrayStep(ArrayEstimator& est) {
+    arrayReportWriter->reportStep(est);
 }

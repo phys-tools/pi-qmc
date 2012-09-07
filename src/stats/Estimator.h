@@ -5,7 +5,7 @@
 #include <iostream>
 class MPIManager;
 class Paths;
-class EstimatorReportBuilder;
+class ReportWriters;
 /** Base class for all estimators.
 
  Estimators should be subclassed to handle different
@@ -41,11 +41,9 @@ public:
     virtual void averageOverClones(const MPIManager*) {
     }
 
-    virtual void startReport(EstimatorReportBuilder& builder) {
-    }
+    virtual void startReport(ReportWriters* builder) = 0;
+    virtual void reportStep(ReportWriters* builder) = 0;
 
-    virtual void reportStep(EstimatorReportBuilder& builder) {
-    }
 private:
     /// The name of the estimator.
     const std::string name;

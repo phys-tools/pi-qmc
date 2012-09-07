@@ -2,6 +2,7 @@
 #define __ArrayBlockedEstimator_h_
 #include "Estimator.h"
 #include "EstimatorReportBuilder.h"
+#include "ReportWriters.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 class Paths;
@@ -15,11 +16,11 @@ public:
 
   virtual void reset()=0;
 
-  virtual void startReport(EstimatorReportBuilder& builder) {
-    builder.startArrayReport(*this);}
+  virtual void startReport(ReportWriters *writers) {
+    writers->startArrayReport(*this);}
 
-  virtual void reportStep(EstimatorReportBuilder& builder) {
-    builder.reportArrayStep(*this);}
+  virtual void reportStep(ReportWriters *writers) {
+    writers->reportArrayStep(*this);}
 
   virtual int getNDim() const=0;
 
