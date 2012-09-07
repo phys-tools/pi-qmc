@@ -3,9 +3,12 @@
 
 #include "EstimatorReportBuilder.h"
 #include <string>
-#include <vector>
-#include <cstdlib>
 #include <blitz/array.h>
+
+class ReportWriters;
+class StdoutScalarReportWriter;
+class StdoutArrayReportWriter;
+class StdoutAccRejReportWriter;
 
 /** Class for reporting estimators to standard output.
  @author John Shumway */
@@ -21,12 +24,15 @@ public:
     virtual void startAccRejReport(const AccRejEstimator& est) {}
     virtual void reportAccRejStep(const AccRejEstimator& est);
     virtual void reportArrayBlockedStep(const ArrayEstimator& est);
+
 private:
-    typedef blitz::Array<double, 1> Array;
-    int nstep;
     int istep;
-    int iscalar;
-    /// The sum of the estimator.
-    Array sum, sum2, norm;
+    int nstep;
+
+    ReportWriters *reportWriters;
+    StdoutScalarReportWriter *scalarWriter;
+    StdoutArrayReportWriter *arrayWriter;
+    StdoutAccRejReportWriter *accrejWriter;
+    void writeBlockHeader();
 };
 #endif

@@ -10,6 +10,9 @@ set (sources
     MPIManager.cc
     ReportWriters.cpp
     ScalarEstimator.cc
+    StdoutAccRejReportWriter.cpp
+    StdoutArrayReportWriter.cpp
+    StdoutScalarReportWriter.cpp
     StdoutReportBuilder.cc
     Units.cc
 )

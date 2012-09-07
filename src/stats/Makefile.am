@@ -12,6 +12,9 @@ libstats_la_SOURCES = \
     MPIManager.cc \
     ReportWriters.cpp \
     ScalarEstimator.cc \
+    StdoutAccRejReportWriter.cpp \
+    StdoutArrayReportWriter.cpp \
+    StdoutScalarReportWriter.cpp \
     StdoutReportBuilder.cc \
     Units.cc
 noinst_HEADERS = \
@@ -29,5 +32,8 @@ noinst_HEADERS = \
     ReportWriterInterface.h \
 	ReportWriters.h \
     ScalarEstimator.h \
+    StdoutAccRejReportWriter.h \
+    StdoutArrayReportWriter.h \
+    StdoutScalarReportWriter.h \
     StdoutReportBuilder.h \
     Units.h

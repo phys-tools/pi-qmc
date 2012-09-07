@@ -14,7 +14,7 @@ class H5ArrayReportWriter;
 
 /** Class for recording statistical data to an HDF5 file.
 
- The H5ReportBuilder s responsible for recording data
+ The H5ReportBuilder is responsible for recording data
  recording it to disk. We have chosen an HDF5
  file format (http://hdf.ncsa.uiuc.edu/HDF5) so that we can compress
  the data and include meta data and other structure.
