@@ -2,6 +2,7 @@
 #include <config.h>
 #endif
 #include "H5ReportBuilder.h"
+#include "EstimatorIterator.h"
 #include "EstimatorManager.h"
 #include "ReportWriters.h"
 #include "H5ArrayReportWriter.h"
@@ -9,9 +10,12 @@
 #include "NullAccRejReportWriter.h"
 
 H5ReportBuilder::H5ReportBuilder(const std::string& filename,
-        const EstimatorManager::SimInfoWriter *simInfoWriter) :
-        filename(filename), simInfoWriter(simInfoWriter), fileID(0), writingGroupID(
-                0), stepAttrID(0), dataset(0) {
+        const EstimatorManager::SimInfoWriter *simInfoWriter)
+:   filename(filename),
+    simInfoWriter(simInfoWriter),
+    fileID(0),
+    writingGroupID(0),
+    stepAttrID(0) {
     fileID = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
             H5P_DEFAULT);
     simInfoWriter->writeH5(fileID);
@@ -27,7 +31,7 @@ H5ReportBuilder::~H5ReportBuilder() {
 }
 
 void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
-    nstep = manager->nstep;
+    nstep = manager->getNStep();
     scalarWriter->setNstep(nstep);
     arrayWriter->setNstep(nstep);
     istep = 0;
@@ -50,31 +54,29 @@ void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
 #endif
     H5Sclose(dataspaceID);
     H5Awrite(stepAttrID, H5T_NATIVE_INT, &istep);
-    dataset.resize(0);
-    for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
-            est != manager->estimator.end(); ++est) {
-        (*est)->startReport(reportWriters);
-    }
+    EstimatorIterator iterator = manager->getEstimatorIterator();
+    do {
+        (*iterator)->startReport(reportWriters);
+    } while (iterator.step());
 }
 
 void H5ReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
-    dset = dataset.begin();
     scalarWriter->startBlock(istep);
     arrayWriter->startBlock(istep);
-    for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
-            est != manager->estimator.end(); ++est) {
-        (*est)->reportStep(reportWriters);
-    }
+    EstimatorIterator iterator = manager->getEstimatorIterator();
+    do {
+        (*iterator)->reportStep(reportWriters);
+    } while (iterator.step());
     H5Awrite(stepAttrID, H5T_NATIVE_INT, &(++istep));
     H5Fflush(fileID, H5F_SCOPE_LOCAL);
     if (istep == nstep) {
-        H5Aclose(stepAttrID);
-        for (DataSetIter d = dataset.begin(); d != dataset.end(); ++d) {
-            H5Dclose(*d);
-        }
-        H5Gclose(writingGroupID);
-        dataset.resize(0);
+        closeDatasets();
     }
+}
+
+void H5ReportBuilder::closeDatasets() {
+    H5Aclose (stepAttrID);
+    H5Gclose (writingGroupID);
 }
 
 void H5ReportBuilder::recordInputDocument(const std::string &docstring) {

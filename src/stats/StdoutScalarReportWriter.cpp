@@ -1,21 +1,23 @@
 #include "StdoutScalarReportWriter.h"
 
-StdoutScalarReportWriter::StdoutScalarReportWriter(int stepCount,
-        int estimatorCount) {
+StdoutScalarReportWriter::StdoutScalarReportWriter(int stepCount) {
     nstep = stepCount;
-    istep = 0;
-    sum.resize(estimatorCount);
-    sum2.resize(estimatorCount);
-    norm.resize(estimatorCount);
-    sum = 0;
-    sum2 = 0;
-    norm = 0;
 }
 
 StdoutScalarReportWriter::~StdoutScalarReportWriter() {
 }
 
-void StdoutScalarReportWriter::reportStep(const ScalarEstimator& est) {
+void StdoutScalarReportWriter::startReport(const ScalarEstimator &est) {
+    sum.resize(sum.size() + 1);
+    sum2.resize(sum2.size() + 1);
+    norm.resize(norm.size() + 1);
+    istep = 0;
+    sum = 0;
+    sum2 = 0;
+    norm = 0;
+}
+
+void StdoutScalarReportWriter::reportStep(const ScalarEstimator &est) {
     double value = est.getValue();
     sum(iscalar) += value;
     sum2(iscalar) += value * value;

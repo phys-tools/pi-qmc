@@ -3,6 +3,7 @@
 #endif
 #include "StdoutReportBuilder.h"
 #include "EstimatorManager.h"
+#include "EstimatorIterator.h"
 #include "ReportWriters.h"
 #include "StdoutAccRejReportWriter.h"
 #include "StdoutArrayReportWriter.h"
@@ -22,22 +23,23 @@ StdoutReportBuilder::~StdoutReportBuilder() {
 }
 
 void StdoutReportBuilder::initializeReport(EstimatorManager *manager) {
-    nstep = manager->nstep;
-    int n = manager->estimator.size();
-
-    scalarWriter = new StdoutScalarReportWriter(n, nstep);
+    nstep = manager->getNStep();
+    scalarWriter = new StdoutScalarReportWriter(nstep);
     arrayWriter = new StdoutArrayReportWriter();
     accrejWriter = new StdoutAccRejReportWriter();
     reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
-}
+    EstimatorIterator iterator = manager->getEstimatorIterator();
+    do {
+        (*iterator)->startReport(reportWriters);
+    } while(iterator.step());}
 
 void StdoutReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     writeBlockHeader();
     scalarWriter->startBlock(istep);
-    for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
-            est != manager->estimator.end(); ++est) {
-        (*est)->reportStep(reportWriters);
-    }
+    EstimatorIterator iterator = manager->getEstimatorIterator();
+    do {
+        (*iterator)->reportStep(reportWriters);
+    } while(iterator.step());
     std::cout << std::endl;
     ++istep;
 }

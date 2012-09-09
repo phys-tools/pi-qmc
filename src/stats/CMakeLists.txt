@@ -3,6 +3,7 @@ set (sources
     ArrayEstimator.cc
     AsciiReportBuilder.cc
     AsciiScalarReportWriter.cpp
+    EstimatorIterator.cpp
     EstimatorReportBuilder.cpp
     EstimatorManager.cc
     H5ArrayReportWriter.cpp

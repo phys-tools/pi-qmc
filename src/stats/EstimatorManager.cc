@@ -7,6 +7,7 @@
 #include "H5ReportBuilder.h"
 #include "MPIManager.h"
 #include "StdoutReportBuilder.h"
+#include "EstimatorIterator.h"
 #include <algorithm>
 #include <functional>
 #include <iostream>
@@ -102,3 +103,13 @@ void EstimatorManager::recordInputDocument(const std::string &filename) {
     (*builder)->recordInputDocument(docstring);
   }
 }
+
+EstimatorIterator EstimatorManager::getEstimatorIterator() {
+    return EstimatorIterator(estimator);
+}
+
+int EstimatorManager::getNStep() const {
+    return nstep;
+}
+
+

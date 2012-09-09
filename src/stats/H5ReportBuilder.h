@@ -34,18 +34,14 @@ private:
     const EstimatorManager::SimInfoWriter *simInfoWriter;
     int nstep;
     int istep;
-    typedef std::vector<hid_t> DataSetContainer;
-    typedef DataSetContainer::iterator DataSetIter;
 
     hid_t fileID;
     hid_t writingGroupID;
     hid_t stepAttrID;
 
-    DataSetContainer dataset;
-    DataSetIter dset;
-
     ReportWriters *reportWriters;
     H5ScalarReportWriter *scalarWriter;
     H5ArrayReportWriter *arrayWriter;
+    void closeDatasets();
 };
 #endif

@@ -7,8 +7,8 @@
 #include "AsciiScalarReportWriter.h"
 #include "NullArrayReportWriter.h"
 #include "NullAccRejReportWriter.h"
+#include "EstimatorIterator.h"
 #include <fstream>
-#include <iostream>
 
 AsciiReportBuilder::AsciiReportBuilder(const std::string& filename)
 :   file(filename.c_str()) {
@@ -24,17 +24,17 @@ AsciiReportBuilder::~AsciiReportBuilder() {
 
 void AsciiReportBuilder::initializeReport(EstimatorManager *manager) {
     file << "#";
-    for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
-            est != manager->estimator.end(); ++est) {
-        (*est)->startReport(reportWriters);
-    }
+    EstimatorIterator iterator = manager->getEstimatorIterator();
+    do {
+        (*iterator)->startReport(reportWriters);
+    } while (iterator.step());
     file << std::endl;
 }
 
 void AsciiReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
-    for (EstimatorManager::EstimatorIter est = manager->estimator.begin();
-            est != manager->estimator.end(); ++est) {
-        (*est)->reportStep(reportWriters);
-    }
+    EstimatorIterator iterator = manager->getEstimatorIterator();
+    do {
+        (*iterator)->reportStep(reportWriters);
+    } while (iterator.step());
     file << std::endl;
 }

@@ -7,10 +7,11 @@
 
 class StdoutScalarReportWriter: public ReportWriterInterface<ScalarEstimator> {
 public:
-    StdoutScalarReportWriter(int stepCount, int estimatorCount);
+    StdoutScalarReportWriter(int stepCount);
     virtual ~StdoutScalarReportWriter();
 
-    virtual void reportStep(const ScalarEstimator& est);
+    virtual void startReport(const ScalarEstimator &est);
+    virtual void reportStep(const ScalarEstimator &est);
     void startBlock(int istep);
 private:
     typedef blitz::Array<double, 1> Array;

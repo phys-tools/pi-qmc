@@ -5,6 +5,7 @@ libstats_la_SOURCES = \
     ArrayEstimator.cc \
     AsciiReportBuilder.cc \
     AsciiScalarReportWriter.cpp \
+    EstimatorIterator.cpp \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
     H5ArrayReportWriter.cpp \
@@ -25,6 +26,7 @@ noinst_HEADERS = \
     AsciiScalarReportWriter.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \
+    EstimatorIterator.h \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
     H5ArrayReportWriter.h \
