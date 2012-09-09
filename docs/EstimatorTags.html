@@ -29,23 +29,23 @@
     <h2>Imaginary time correlation functions</h2>
     <p>A general imaginary time correlation function is</p>
     &nbsp;
-    <p>?AB(?) = -(1/?)?A�(?) B(0)?</p>
+    <p>χAB(τ) = -(1/ℏ)⟨A†(τ) B(0)⟩</p>
     &nbsp;
     <p>PIMC reports these functions in imaginary frequency space,</p>
     &nbsp;
-    <p>?AB(i?n) = �0?? exp(i?n?) ?AB(?) d?.</p>
+    <p>χAB(iωn) = ∫0βℏ exp(iωnτ) χAB(τ) dτ.</p>
     &nbsp;
-    <p>where the Matsubura frequencies are i?n=2�inkBT/?.</p>
+    <p>where the Matsubura frequencies are  iωn=2πinkBT/ℏ.</p>
     <h2>Conductance Estimator</h2>
     <pre> < ConductanceEstimator nfreq="50" component="all" useCharge="false" useSpeciesTensor="false" species="eup" order="1"/> </pre>
     <p>Current-current correlation estimator for a homogeneous system. (For current density correlations, see ConductivityEstimator.) Calculates the current-current correlation function,</p>
-    <p>?J?AJ?B = -(1/?)?J?AJ?B?,</p>
-    <p>where the J?A are the particle (or charge) current in direction ? for species A.</p>
+    <p>χJαAJβB = -(1/ℏ)⟨JαAJβB⟩,</p>
+    <p>where the JαA  are the particle (or charge) current in direction α for species A.</p>
     <p>Results are stored in a rank 6 array,</p>
-    <p>?JJ(iorder , ?, ?, A, B, i?n).</p>
+    <p>χJJ(iorder , α, β, A, B, iωn).</p>
     <p>Flags control the behavior:</p>
     <li>bool useCharge uses charge currents, otherwise use particle number current.</li>
-    <li>Component is �x,� �y,� �z,� or �all�. If �all� it computes a tensor.</li>
+    <li>Component is “x,” “y,” “z,” or “all”. If “all” it computes a tensor.</li>
     <li>species selects a species</li>
     <li>`bool speciesTensor computes a tensor of cross-species correlations</li>
     <li>int nfreq number of frequencies to store.</li>
