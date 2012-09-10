@@ -25,8 +25,8 @@ private:
 
     typedef std::vector<hid_t> DataSetContainer;
     typedef DataSetContainer::iterator DataSetIterator;
-    DataSetContainer dataset;
-    DataSetIterator dset;
+    DataSetContainer datasetList;
+    DataSetIterator datasetIterator;
 };
 
 #endif

@@ -11,6 +11,7 @@ set (sources
     ascii/AsciiReportBuilder.cc
     ascii/AsciiScalarReportWriter.cpp
     hdf5/H5ArrayReportWriter.cpp
+    hdf5/H5Lib.cpp
     hdf5/H5ReportBuilder.cc
     hdf5/H5ScalarReportWriter.cpp
     stdout/StdoutAccRejReportWriter.cpp

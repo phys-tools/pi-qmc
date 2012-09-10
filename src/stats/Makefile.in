@@ -76,7 +76,7 @@ am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-ReportWriters.lo libstats_la-ScalarEstimator.lo \
 	libstats_la-Units.lo libstats_la-AsciiReportBuilder.lo \
 	libstats_la-AsciiScalarReportWriter.lo \
-	libstats_la-H5ArrayReportWriter.lo \
+	libstats_la-H5ArrayReportWriter.lo libstats_la-H5Lib.lo \
 	libstats_la-H5ReportBuilder.lo \
 	libstats_la-H5ScalarReportWriter.lo \
 	libstats_la-StdoutAccRejReportWriter.lo \
@@ -259,6 +259,7 @@ libstats_la_SOURCES = \
     ascii/AsciiReportBuilder.cc \
     ascii/AsciiScalarReportWriter.cpp \
     hdf5/H5ArrayReportWriter.cpp \
+    hdf5/H5Lib.cpp \
     hdf5/H5ReportBuilder.cc \
     hdf5/H5ScalarReportWriter.cpp \
     stdout/StdoutAccRejReportWriter.cpp \
@@ -284,6 +285,7 @@ noinst_HEADERS = \
     ascii/AsciiReportBuilder.h \
     ascii/AsciiScalarReportWriter.h \
     hdf5/H5ArrayReportWriter.h \
+    hdf5/H5Lib.h \
     hdf5/H5ReportBuilder.h \
     hdf5/H5ScalarReportWriter.h \
     stdout/StdoutAccRejReportWriter.h \
@@ -353,6 +355,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorManager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ArrayReportWriter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5Lib.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-MPIManager.Plo@am__quote@
@@ -468,6 +471,13 @@ libstats_la-H5ArrayReportWriter.lo: hdf5/H5ArrayReportWriter.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5ArrayReportWriter.cpp' object='libstats_la-H5ArrayReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ArrayReportWriter.lo `test -f 'hdf5/H5ArrayReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ArrayReportWriter.cpp
+
+libstats_la-H5Lib.lo: hdf5/H5Lib.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5Lib.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5Lib.Tpo -c -o libstats_la-H5Lib.lo `test -f 'hdf5/H5Lib.cpp' || echo '$(srcdir)/'`hdf5/H5Lib.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5Lib.Tpo $(DEPDIR)/libstats_la-H5Lib.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5Lib.cpp' object='libstats_la-H5Lib.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5Lib.lo `test -f 'hdf5/H5Lib.cpp' || echo '$(srcdir)/'`hdf5/H5Lib.cpp
 
 libstats_la-H5ReportBuilder.lo: hdf5/H5ReportBuilder.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo -c -o libstats_la-H5ReportBuilder.lo `test -f 'hdf5/H5ReportBuilder.cc' || echo '$(srcdir)/'`hdf5/H5ReportBuilder.cc
