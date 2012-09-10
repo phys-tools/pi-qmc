@@ -1,7 +1,7 @@
 #ifndef __AsciiReportBuilder_h_
 #define __AsciiReportBuilder_h_
 
-#include "EstimatorReportBuilder.h"
+#include "stats/EstimatorReportBuilder.h"
 #include <fstream>
 #include <string>
 

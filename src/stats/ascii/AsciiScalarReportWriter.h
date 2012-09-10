@@ -1,8 +1,8 @@
 #ifndef ASCIISCALARREPORTWRITER_H_
 #define ASCIISCALARREPORTWRITER_H_
 
-#include "ReportWriterInterface.h"
-#include "ScalarEstimator.h"
+#include "stats/ReportWriterInterface.h"
+#include "stats/ScalarEstimator.h"
 #include <fstream>
 
 class AsciiScalarReportWriter: public ReportWriterInterface<ScalarEstimator> {

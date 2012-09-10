@@ -1,8 +1,8 @@
 #ifndef STDOUTACCREJREPORTWRITER_H_
 #define STDOUTACCREJREPORTWRITER_H_
 
-#include "ReportWriterInterface.h"
-#include "AccRejEstimator.h"
+#include "stats/ReportWriterInterface.h"
+#include "stats/AccRejEstimator.h"
 
 class StdoutAccRejReportWriter: public ReportWriterInterface<AccRejEstimator> {
 public:

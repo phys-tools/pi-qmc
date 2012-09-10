@@ -1,7 +1,7 @@
 #ifndef H5SCALARREPORTWRITER_H_
 #define H5SCALARREPORTWRITER_H_
 
-#include "ReportWriterInterface.h"
+#include "stats/ReportWriterInterface.h"
 class ScalarEstimator;
 #include <hdf5.h>
 #include <vector>

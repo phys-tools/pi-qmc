@@ -70,20 +70,19 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libstats_la_LIBADD =
 am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
-	libstats_la-ArrayEstimator.lo \
-	libstats_la-AsciiReportBuilder.lo \
-	libstats_la-AsciiScalarReportWriter.lo \
-	libstats_la-EstimatorIterator.lo \
+	libstats_la-ArrayEstimator.lo libstats_la-EstimatorIterator.lo \
 	libstats_la-EstimatorReportBuilder.lo \
-	libstats_la-EstimatorManager.lo \
+	libstats_la-EstimatorManager.lo libstats_la-MPIManager.lo \
+	libstats_la-ReportWriters.lo libstats_la-ScalarEstimator.lo \
+	libstats_la-Units.lo libstats_la-AsciiReportBuilder.lo \
+	libstats_la-AsciiScalarReportWriter.lo \
 	libstats_la-H5ArrayReportWriter.lo \
 	libstats_la-H5ReportBuilder.lo \
-	libstats_la-H5ScalarReportWriter.lo libstats_la-MPIManager.lo \
-	libstats_la-ReportWriters.lo libstats_la-ScalarEstimator.lo \
+	libstats_la-H5ScalarReportWriter.lo \
 	libstats_la-StdoutAccRejReportWriter.lo \
 	libstats_la-StdoutArrayReportWriter.lo \
 	libstats_la-StdoutScalarReportWriter.lo \
-	libstats_la-StdoutReportBuilder.lo libstats_la-Units.lo
+	libstats_la-StdoutReportBuilder.lo
 libstats_la_OBJECTS = $(am_libstats_la_OBJECTS)
 libstats_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libstats_la_CXXFLAGS) \
@@ -246,51 +245,51 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libstats.la
-libstats_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/contrib/blitz-0.9
+libstats_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
 libstats_la_SOURCES = \
     AccRejEstimator.cc \
     ArrayEstimator.cc \
-    AsciiReportBuilder.cc \
-    AsciiScalarReportWriter.cpp \
     EstimatorIterator.cpp \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
-    H5ArrayReportWriter.cpp \
-    H5ReportBuilder.cc \
-    H5ScalarReportWriter.cpp \
     MPIManager.cc \
     ReportWriters.cpp \
     ScalarEstimator.cc \
-    StdoutAccRejReportWriter.cpp \
-    StdoutArrayReportWriter.cpp \
-    StdoutScalarReportWriter.cpp \
-    StdoutReportBuilder.cc \
-    Units.cc
+    Units.cc \
+    ascii/AsciiReportBuilder.cc \
+    ascii/AsciiScalarReportWriter.cpp \
+    hdf5/H5ArrayReportWriter.cpp \
+    hdf5/H5ReportBuilder.cc \
+    hdf5/H5ScalarReportWriter.cpp \
+    stdout/StdoutAccRejReportWriter.cpp \
+    stdout/StdoutArrayReportWriter.cpp \
+    stdout/StdoutScalarReportWriter.cpp \
+    stdout/StdoutReportBuilder.cc
 
 noinst_HEADERS = \
     AccRejEstimator.h \
     ArrayEstimator.h \
-    AsciiReportBuilder.h \
-    AsciiScalarReportWriter.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \
     EstimatorIterator.h \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
-    H5ArrayReportWriter.h \
-    H5ReportBuilder.h \
-    H5ScalarReportWriter.h \
     MPIManager.h \
     NullArrayReportWriter.h \
     NullAccRejReportWriter.h \
     ReportWriterInterface.h \
 	ReportWriters.h \
     ScalarEstimator.h \
-    StdoutAccRejReportWriter.h \
-    StdoutArrayReportWriter.h \
-    StdoutScalarReportWriter.h \
-    StdoutReportBuilder.h \
-    Units.h
+    Units.h \
+    ascii/AsciiReportBuilder.h \
+    ascii/AsciiScalarReportWriter.h \
+    hdf5/H5ArrayReportWriter.h \
+    hdf5/H5ReportBuilder.h \
+    hdf5/H5ScalarReportWriter.h \
+    stdout/StdoutAccRejReportWriter.h \
+    stdout/StdoutArrayReportWriter.h \
+    stdout/StdoutScalarReportWriter.h \
+    stdout/StdoutReportBuilder.h
 
 all: all-am
 
@@ -400,20 +399,6 @@ libstats_la-ArrayEstimator.lo: ArrayEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ArrayEstimator.lo `test -f 'ArrayEstimator.cc' || echo '$(srcdir)/'`ArrayEstimator.cc
 
-libstats_la-AsciiReportBuilder.lo: AsciiReportBuilder.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo -c -o libstats_la-AsciiReportBuilder.lo `test -f 'AsciiReportBuilder.cc' || echo '$(srcdir)/'`AsciiReportBuilder.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo $(DEPDIR)/libstats_la-AsciiReportBuilder.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AsciiReportBuilder.cc' object='libstats_la-AsciiReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiReportBuilder.lo `test -f 'AsciiReportBuilder.cc' || echo '$(srcdir)/'`AsciiReportBuilder.cc
-
-libstats_la-AsciiScalarReportWriter.lo: AsciiScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Tpo -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`AsciiScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Tpo $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='AsciiScalarReportWriter.cpp' object='libstats_la-AsciiScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`AsciiScalarReportWriter.cpp
-
 libstats_la-EstimatorIterator.lo: EstimatorIterator.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-EstimatorIterator.lo -MD -MP -MF $(DEPDIR)/libstats_la-EstimatorIterator.Tpo -c -o libstats_la-EstimatorIterator.lo `test -f 'EstimatorIterator.cpp' || echo '$(srcdir)/'`EstimatorIterator.cpp
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-EstimatorIterator.Tpo $(DEPDIR)/libstats_la-EstimatorIterator.Plo
@@ -434,27 +419,6 @@ libstats_la-EstimatorManager.lo: EstimatorManager.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EstimatorManager.cc' object='libstats_la-EstimatorManager.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-EstimatorManager.lo `test -f 'EstimatorManager.cc' || echo '$(srcdir)/'`EstimatorManager.cc
-
-libstats_la-H5ArrayReportWriter.lo: H5ArrayReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ArrayReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ArrayReportWriter.Tpo -c -o libstats_la-H5ArrayReportWriter.lo `test -f 'H5ArrayReportWriter.cpp' || echo '$(srcdir)/'`H5ArrayReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ArrayReportWriter.Tpo $(DEPDIR)/libstats_la-H5ArrayReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='H5ArrayReportWriter.cpp' object='libstats_la-H5ArrayReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ArrayReportWriter.lo `test -f 'H5ArrayReportWriter.cpp' || echo '$(srcdir)/'`H5ArrayReportWriter.cpp
-
-libstats_la-H5ReportBuilder.lo: H5ReportBuilder.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo -c -o libstats_la-H5ReportBuilder.lo `test -f 'H5ReportBuilder.cc' || echo '$(srcdir)/'`H5ReportBuilder.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo $(DEPDIR)/libstats_la-H5ReportBuilder.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='H5ReportBuilder.cc' object='libstats_la-H5ReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ReportBuilder.lo `test -f 'H5ReportBuilder.cc' || echo '$(srcdir)/'`H5ReportBuilder.cc
-
-libstats_la-H5ScalarReportWriter.lo: H5ScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ScalarReportWriter.Tpo -c -o libstats_la-H5ScalarReportWriter.lo `test -f 'H5ScalarReportWriter.cpp' || echo '$(srcdir)/'`H5ScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ScalarReportWriter.Tpo $(DEPDIR)/libstats_la-H5ScalarReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='H5ScalarReportWriter.cpp' object='libstats_la-H5ScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ScalarReportWriter.lo `test -f 'H5ScalarReportWriter.cpp' || echo '$(srcdir)/'`H5ScalarReportWriter.cpp
 
 libstats_la-MPIManager.lo: MPIManager.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-MPIManager.lo -MD -MP -MF $(DEPDIR)/libstats_la-MPIManager.Tpo -c -o libstats_la-MPIManager.lo `test -f 'MPIManager.cc' || echo '$(srcdir)/'`MPIManager.cc
@@ -477,40 +441,75 @@ libstats_la-ScalarEstimator.lo: ScalarEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ScalarEstimator.lo `test -f 'ScalarEstimator.cc' || echo '$(srcdir)/'`ScalarEstimator.cc
 
-libstats_la-StdoutAccRejReportWriter.lo: StdoutAccRejReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutAccRejReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Tpo -c -o libstats_la-StdoutAccRejReportWriter.lo `test -f 'StdoutAccRejReportWriter.cpp' || echo '$(srcdir)/'`StdoutAccRejReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Tpo $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='StdoutAccRejReportWriter.cpp' object='libstats_la-StdoutAccRejReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutAccRejReportWriter.lo `test -f 'StdoutAccRejReportWriter.cpp' || echo '$(srcdir)/'`StdoutAccRejReportWriter.cpp
-
-libstats_la-StdoutArrayReportWriter.lo: StdoutArrayReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutArrayReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutArrayReportWriter.Tpo -c -o libstats_la-StdoutArrayReportWriter.lo `test -f 'StdoutArrayReportWriter.cpp' || echo '$(srcdir)/'`StdoutArrayReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutArrayReportWriter.Tpo $(DEPDIR)/libstats_la-StdoutArrayReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='StdoutArrayReportWriter.cpp' object='libstats_la-StdoutArrayReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutArrayReportWriter.lo `test -f 'StdoutArrayReportWriter.cpp' || echo '$(srcdir)/'`StdoutArrayReportWriter.cpp
-
-libstats_la-StdoutScalarReportWriter.lo: StdoutScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutScalarReportWriter.Tpo -c -o libstats_la-StdoutScalarReportWriter.lo `test -f 'StdoutScalarReportWriter.cpp' || echo '$(srcdir)/'`StdoutScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutScalarReportWriter.Tpo $(DEPDIR)/libstats_la-StdoutScalarReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='StdoutScalarReportWriter.cpp' object='libstats_la-StdoutScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutScalarReportWriter.lo `test -f 'StdoutScalarReportWriter.cpp' || echo '$(srcdir)/'`StdoutScalarReportWriter.cpp
-
-libstats_la-StdoutReportBuilder.lo: StdoutReportBuilder.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutReportBuilder.Tpo -c -o libstats_la-StdoutReportBuilder.lo `test -f 'StdoutReportBuilder.cc' || echo '$(srcdir)/'`StdoutReportBuilder.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutReportBuilder.Tpo $(DEPDIR)/libstats_la-StdoutReportBuilder.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='StdoutReportBuilder.cc' object='libstats_la-StdoutReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutReportBuilder.lo `test -f 'StdoutReportBuilder.cc' || echo '$(srcdir)/'`StdoutReportBuilder.cc
-
 libstats_la-Units.lo: Units.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-Units.lo -MD -MP -MF $(DEPDIR)/libstats_la-Units.Tpo -c -o libstats_la-Units.lo `test -f 'Units.cc' || echo '$(srcdir)/'`Units.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-Units.Tpo $(DEPDIR)/libstats_la-Units.Plo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Units.cc' object='libstats_la-Units.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-Units.lo `test -f 'Units.cc' || echo '$(srcdir)/'`Units.cc
+
+libstats_la-AsciiReportBuilder.lo: ascii/AsciiReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo -c -o libstats_la-AsciiReportBuilder.lo `test -f 'ascii/AsciiReportBuilder.cc' || echo '$(srcdir)/'`ascii/AsciiReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiReportBuilder.Tpo $(DEPDIR)/libstats_la-AsciiReportBuilder.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ascii/AsciiReportBuilder.cc' object='libstats_la-AsciiReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiReportBuilder.lo `test -f 'ascii/AsciiReportBuilder.cc' || echo '$(srcdir)/'`ascii/AsciiReportBuilder.cc
+
+libstats_la-AsciiScalarReportWriter.lo: ascii/AsciiScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Tpo -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'ascii/AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`ascii/AsciiScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Tpo $(DEPDIR)/libstats_la-AsciiScalarReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ascii/AsciiScalarReportWriter.cpp' object='libstats_la-AsciiScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'ascii/AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`ascii/AsciiScalarReportWriter.cpp
+
+libstats_la-H5ArrayReportWriter.lo: hdf5/H5ArrayReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ArrayReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ArrayReportWriter.Tpo -c -o libstats_la-H5ArrayReportWriter.lo `test -f 'hdf5/H5ArrayReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ArrayReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ArrayReportWriter.Tpo $(DEPDIR)/libstats_la-H5ArrayReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5ArrayReportWriter.cpp' object='libstats_la-H5ArrayReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ArrayReportWriter.lo `test -f 'hdf5/H5ArrayReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ArrayReportWriter.cpp
+
+libstats_la-H5ReportBuilder.lo: hdf5/H5ReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo -c -o libstats_la-H5ReportBuilder.lo `test -f 'hdf5/H5ReportBuilder.cc' || echo '$(srcdir)/'`hdf5/H5ReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ReportBuilder.Tpo $(DEPDIR)/libstats_la-H5ReportBuilder.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5ReportBuilder.cc' object='libstats_la-H5ReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ReportBuilder.lo `test -f 'hdf5/H5ReportBuilder.cc' || echo '$(srcdir)/'`hdf5/H5ReportBuilder.cc
+
+libstats_la-H5ScalarReportWriter.lo: hdf5/H5ScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ScalarReportWriter.Tpo -c -o libstats_la-H5ScalarReportWriter.lo `test -f 'hdf5/H5ScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5ScalarReportWriter.Tpo $(DEPDIR)/libstats_la-H5ScalarReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5ScalarReportWriter.cpp' object='libstats_la-H5ScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ScalarReportWriter.lo `test -f 'hdf5/H5ScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ScalarReportWriter.cpp
+
+libstats_la-StdoutAccRejReportWriter.lo: stdout/StdoutAccRejReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutAccRejReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Tpo -c -o libstats_la-StdoutAccRejReportWriter.lo `test -f 'stdout/StdoutAccRejReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutAccRejReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Tpo $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stdout/StdoutAccRejReportWriter.cpp' object='libstats_la-StdoutAccRejReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutAccRejReportWriter.lo `test -f 'stdout/StdoutAccRejReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutAccRejReportWriter.cpp
+
+libstats_la-StdoutArrayReportWriter.lo: stdout/StdoutArrayReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutArrayReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutArrayReportWriter.Tpo -c -o libstats_la-StdoutArrayReportWriter.lo `test -f 'stdout/StdoutArrayReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutArrayReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutArrayReportWriter.Tpo $(DEPDIR)/libstats_la-StdoutArrayReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stdout/StdoutArrayReportWriter.cpp' object='libstats_la-StdoutArrayReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutArrayReportWriter.lo `test -f 'stdout/StdoutArrayReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutArrayReportWriter.cpp
+
+libstats_la-StdoutScalarReportWriter.lo: stdout/StdoutScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutScalarReportWriter.Tpo -c -o libstats_la-StdoutScalarReportWriter.lo `test -f 'stdout/StdoutScalarReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutScalarReportWriter.Tpo $(DEPDIR)/libstats_la-StdoutScalarReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stdout/StdoutScalarReportWriter.cpp' object='libstats_la-StdoutScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutScalarReportWriter.lo `test -f 'stdout/StdoutScalarReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutScalarReportWriter.cpp
+
+libstats_la-StdoutReportBuilder.lo: stdout/StdoutReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutReportBuilder.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutReportBuilder.Tpo -c -o libstats_la-StdoutReportBuilder.lo `test -f 'stdout/StdoutReportBuilder.cc' || echo '$(srcdir)/'`stdout/StdoutReportBuilder.cc
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-StdoutReportBuilder.Tpo $(DEPDIR)/libstats_la-StdoutReportBuilder.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='stdout/StdoutReportBuilder.cc' object='libstats_la-StdoutReportBuilder.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-StdoutReportBuilder.lo `test -f 'stdout/StdoutReportBuilder.cc' || echo '$(srcdir)/'`stdout/StdoutReportBuilder.cc
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

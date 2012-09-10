@@ -2,12 +2,12 @@
 #include <config.h>
 #endif
 #include "H5ReportBuilder.h"
-#include "EstimatorIterator.h"
-#include "EstimatorManager.h"
-#include "ReportWriters.h"
+#include "stats/EstimatorIterator.h"
+#include "stats/EstimatorManager.h"
+#include "stats/ReportWriters.h"
 #include "H5ArrayReportWriter.h"
 #include "H5ScalarReportWriter.h"
-#include "NullAccRejReportWriter.h"
+#include "stats/NullAccRejReportWriter.h"
 
 H5ReportBuilder::H5ReportBuilder(const std::string& filename,
         const EstimatorManager::SimInfoWriter *simInfoWriter)

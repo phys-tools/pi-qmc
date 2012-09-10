@@ -1,22 +1,22 @@
 set (sources
     AccRejEstimator.cc
     ArrayEstimator.cc
-    AsciiReportBuilder.cc
-    AsciiScalarReportWriter.cpp
     EstimatorIterator.cpp
     EstimatorReportBuilder.cpp
     EstimatorManager.cc
-    H5ArrayReportWriter.cpp
-    H5ReportBuilder.cc
-    H5ScalarReportWriter.cpp
     MPIManager.cc
     ReportWriters.cpp
     ScalarEstimator.cc
-    StdoutAccRejReportWriter.cpp
-    StdoutArrayReportWriter.cpp
-    StdoutScalarReportWriter.cpp
-    StdoutReportBuilder.cc
     Units.cc
+    ascii/AsciiReportBuilder.cc
+    ascii/AsciiScalarReportWriter.cpp
+    hdf5/H5ArrayReportWriter.cpp
+    hdf5/H5ReportBuilder.cc
+    hdf5/H5ScalarReportWriter.cpp
+    stdout/StdoutAccRejReportWriter.cpp
+    stdout/StdoutArrayReportWriter.cpp
+    stdout/StdoutScalarReportWriter.cpp
+    stdout/StdoutReportBuilder.cc
 )
 
 add_library(stats STATIC ${sources})

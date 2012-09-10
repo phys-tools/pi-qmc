@@ -1,7 +1,7 @@
 #ifndef __StdoutReportBuilder_h_
 #define __StdoutReportBuilder_h_
 
-#include "EstimatorReportBuilder.h"
+#include "stats/EstimatorReportBuilder.h"
 #include <string>
 #include <blitz/array.h>
 

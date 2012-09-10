@@ -1,6 +1,6 @@
 #include "H5ScalarReportWriter.h"
 
-#include "ScalarEstimator.h"
+#include "stats/ScalarEstimator.h"
 
 H5ScalarReportWriter::H5ScalarReportWriter() :
         nstep(0) {

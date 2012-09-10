@@ -2,9 +2,9 @@
 #include <config.h>
 #endif
 #include "StdoutReportBuilder.h"
-#include "EstimatorManager.h"
-#include "EstimatorIterator.h"
-#include "ReportWriters.h"
+#include "stats/EstimatorManager.h"
+#include "stats/EstimatorIterator.h"
+#include "stats/ReportWriters.h"
 #include "StdoutAccRejReportWriter.h"
 #include "StdoutArrayReportWriter.h"
 #include "StdoutScalarReportWriter.h"

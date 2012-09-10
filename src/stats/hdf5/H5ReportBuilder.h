@@ -1,8 +1,8 @@
 #ifndef __H5ReportBuilder_h_
 #define __H5ReportBuilder_h_
 
-#include "EstimatorReportBuilder.h"
-#include "EstimatorManager.h"
+#include "stats/EstimatorReportBuilder.h"
+#include "stats/EstimatorManager.h"
 #include <string>
 #include <vector>
 #include <hdf5.h>

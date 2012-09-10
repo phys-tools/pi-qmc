@@ -1,8 +1,8 @@
 #ifndef STDOUTARRAYREPORTWRITER_H_
 #define STDOUTARRAYREPORTWRITER_H_
 
-#include "ReportWriterInterface.h"
-#include "ArrayEstimator.h"
+#include "stats/ReportWriterInterface.h"
+#include "stats/ArrayEstimator.h"
 
 class StdoutArrayReportWriter: public ReportWriterInterface<ArrayEstimator> {
 public:

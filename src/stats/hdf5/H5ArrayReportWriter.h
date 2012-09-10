@@ -1,8 +1,8 @@
 #ifndef H5ARRAYREPORTWRITER_H_
 #define H5ARRAYREPORTWRITER_H_
 
-#include "ReportWriterInterface.h"
-#include "ArrayEstimator.h"
+#include "stats/ReportWriterInterface.h"
+#include "stats/ArrayEstimator.h"
 #include <vector>
 #include "hdf5.h"
 

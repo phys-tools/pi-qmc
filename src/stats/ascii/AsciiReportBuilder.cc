@@ -2,12 +2,12 @@
 #include <config.h>
 #endif
 #include "AsciiReportBuilder.h"
-#include "EstimatorManager.h"
-#include "ReportWriters.h"
-#include "AsciiScalarReportWriter.h"
-#include "NullArrayReportWriter.h"
-#include "NullAccRejReportWriter.h"
-#include "EstimatorIterator.h"
+#include "stats/EstimatorManager.h"
+#include "stats/ReportWriters.h"
+#include "stats/ascii/AsciiScalarReportWriter.h"
+#include "stats/NullArrayReportWriter.h"
+#include "stats/NullAccRejReportWriter.h"
+#include "stats/EstimatorIterator.h"
 #include <fstream>
 
 AsciiReportBuilder::AsciiReportBuilder(const std::string& filename)

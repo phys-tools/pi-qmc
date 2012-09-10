@@ -3,11 +3,11 @@
 #include <mpi.h>
 #endif
 #include "EstimatorManager.h"
-#include "AsciiReportBuilder.h"
-#include "H5ReportBuilder.h"
 #include "MPIManager.h"
-#include "StdoutReportBuilder.h"
 #include "EstimatorIterator.h"
+#include "ascii/AsciiReportBuilder.h"
+#include "hdf5/H5ReportBuilder.h"
+#include "stdout/StdoutReportBuilder.h"
 #include <algorithm>
 #include <functional>
 #include <iostream>

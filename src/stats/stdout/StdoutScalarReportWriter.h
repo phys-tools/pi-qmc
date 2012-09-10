@@ -1,8 +1,8 @@
 #ifndef STDOUTSCALARREPORTWRITER_H_
 #define STDOUTSCALARREPORTWRITER_H_
 
-#include "ReportWriterInterface.h"
-#include "ScalarEstimator.h"
+#include "stats/ReportWriterInterface.h"
+#include "stats/ScalarEstimator.h"
 #include <blitz/array.h>
 
 class StdoutScalarReportWriter: public ReportWriterInterface<ScalarEstimator> {
