@@ -1,15 +1,16 @@
-#ifndef H5SCALARREPORTWRITER_H_
-#define H5SCALARREPORTWRITER_H_
+#ifndef H5SPLITSCALARREPORTWRITER_H_
+#define H5SPLITSCALARREPORTWRITER_H_
 
 #include "stats/ReportWriterInterface.h"
 class ScalarEstimator;
 #include <hdf5.h>
 #include <vector>
 
-class H5ScalarReportWriter : public ReportWriterInterface<ScalarEstimator> {
+class H5SplitScalarReportWriter
+:   public ReportWriterInterface<ScalarEstimator> {
 public:
-    H5ScalarReportWriter(int nstep, hid_t writingGroupID);
-    virtual ~H5ScalarReportWriter();
+    H5SplitScalarReportWriter(int nstep, hid_t writingGroupID);
+    virtual ~H5SplitScalarReportWriter();
 
     virtual void startReport(const ScalarEstimator& est);
     virtual void startBlock(int istep);

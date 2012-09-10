@@ -12,7 +12,7 @@ public:
 
     virtual void startReport(const ScalarEstimator &est);
     virtual void reportStep(const ScalarEstimator &est);
-    void startBlock(int istep);
+    virtual void startBlock(int istep);
 private:
     typedef blitz::Array<double, 1> Array;
     int nstep;

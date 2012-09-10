@@ -11,6 +11,8 @@ class EstimatorManager;
 class ReportWriters;
 class H5ScalarReportWriter;
 class H5ArrayReportWriter;
+class ScalarEstimator;
+#include "stats/ReportWriterInterface.h"
 
 /** Class for recording statistical data to an HDF5 file.
 
@@ -40,8 +42,11 @@ private:
     hid_t stepAttrID;
 
     ReportWriters *reportWriters;
-    H5ScalarReportWriter *scalarWriter;
+    ReportWriterInterface<ScalarEstimator> *scalarWriter;
     H5ArrayReportWriter *arrayWriter;
+    void createStepAttribute();
+    void createReportWriters(EstimatorManager*& manager);
+    static hid_t createH5Group(std::string name, hid_t fileID);
     void closeDatasets();
 };
 #endif

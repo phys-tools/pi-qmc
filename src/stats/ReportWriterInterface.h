@@ -8,6 +8,7 @@ public:
     virtual ~ReportWriterInterface() {}
 
     virtual void startReport(const T& estimator) {}
+    virtual void startBlock(int istep) {}
     virtual void reportStep(const T& estimator) {}
 };
 

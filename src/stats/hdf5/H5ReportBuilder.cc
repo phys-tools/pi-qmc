@@ -7,6 +7,7 @@
 #include "stats/ReportWriters.h"
 #include "H5ArrayReportWriter.h"
 #include "H5ScalarReportWriter.h"
+#include "H5SplitScalarReportWriter.h"
 #include "stats/NullAccRejReportWriter.h"
 
 H5ReportBuilder::H5ReportBuilder(const std::string& filename,
@@ -19,10 +20,6 @@ H5ReportBuilder::H5ReportBuilder(const std::string& filename,
     fileID = H5Fcreate(filename.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT,
             H5P_DEFAULT);
     simInfoWriter->writeH5(fileID);
-    scalarWriter = new H5ScalarReportWriter();
-    arrayWriter = new H5ArrayReportWriter();
-    NullAccRejReportWriter *accrejWriter = new NullAccRejReportWriter();
-    reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
 }
 
 H5ReportBuilder::~H5ReportBuilder() {
@@ -32,28 +29,10 @@ H5ReportBuilder::~H5ReportBuilder() {
 
 void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
     nstep = manager->getNStep();
-    scalarWriter->setNstep(nstep);
-    arrayWriter->setNstep(nstep);
     istep = 0;
-#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
-    writingGroupID = H5Gcreate2(fileID, "estimators", H5P_DEFAULT, H5P_DEFAULT,
-            H5P_DEFAULT);
-#else
-    writingGroupID = H5Gcreate(fileID,"estimators",0);
-#endif
-    scalarWriter->setWritingGroupID(writingGroupID);
-    arrayWriter->setWritingGroupID(writingGroupID);
-    hsize_t dims = 1;
-    hid_t dataspaceID = H5Screate_simple(1, &dims, NULL);
-#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
-    stepAttrID = H5Acreate2(writingGroupID, "nstep", H5T_NATIVE_INT,
-            dataspaceID, H5P_DEFAULT, H5P_DEFAULT);
-#else
-    stepAttrID = H5Acreate(writingGroupID, "nstep", H5T_NATIVE_INT,
-            dataspaceID, H5P_DEFAULT);
-#endif
-    H5Sclose(dataspaceID);
-    H5Awrite(stepAttrID, H5T_NATIVE_INT, &istep);
+    writingGroupID = createH5Group("estimators", fileID);
+    createReportWriters(manager);
+    createStepAttribute();
     EstimatorIterator iterator = manager->getEstimatorIterator();
     do {
         (*iterator)->startReport(reportWriters);
@@ -74,11 +53,6 @@ void H5ReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     }
 }
 
-void H5ReportBuilder::closeDatasets() {
-    H5Aclose (stepAttrID);
-    H5Gclose (writingGroupID);
-}
-
 void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
     hid_t dspaceID = H5Screate(H5S_SCALAR);
     hid_t dtypeID = H5Tcopy(H5T_C_S1);
@@ -95,3 +69,35 @@ void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
     H5Tclose(dtypeID);
     H5Sclose(dspaceID);
 }
+
+hid_t H5ReportBuilder::createH5Group(std::string name, hid_t fileID) {
+    return H5Gcreate2(fileID, name.c_str(), H5P_DEFAULT, H5P_DEFAULT,
+            H5P_DEFAULT);
+}
+
+void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {
+    if (manager->getIsSplitOverStates()) {
+        scalarWriter = new H5SplitScalarReportWriter(nstep, writingGroupID);
+        arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
+    } else {
+        scalarWriter = new H5ScalarReportWriter(nstep, writingGroupID);
+        arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
+    }
+    NullAccRejReportWriter* accrejWriter = new NullAccRejReportWriter();
+    reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
+}
+
+void H5ReportBuilder::createStepAttribute() {
+    hsize_t dims = 1;
+    hid_t dataspaceID = H5Screate_simple(1, &dims, NULL);
+    stepAttrID = H5Acreate2(writingGroupID, "nstep", H5T_NATIVE_INT,
+            dataspaceID, H5P_DEFAULT, H5P_DEFAULT);
+    H5Sclose(dataspaceID);
+    H5Awrite(stepAttrID, H5T_NATIVE_INT, &istep);
+}
+
+void H5ReportBuilder::closeDatasets() {
+    H5Aclose (stepAttrID);
+    H5Gclose (writingGroupID);
+}
+

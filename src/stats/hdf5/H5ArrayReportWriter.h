@@ -8,15 +8,12 @@
 
 class H5ArrayReportWriter: public ReportWriterInterface<ArrayEstimator> {
 public:
-    H5ArrayReportWriter();
+    H5ArrayReportWriter(int nstep, hid_t writingGroupID);
     virtual ~H5ArrayReportWriter();
 
     virtual void startReport(const ArrayEstimator &est);
+    virtual void startBlock(int istep);
     virtual void reportStep(const ArrayEstimator &est);
-
-    void setNstep(int nstep);
-    void setWritingGroupID(hid_t writingGroupID);
-    void startBlock(int istep);
 
 private:
     int nstep;

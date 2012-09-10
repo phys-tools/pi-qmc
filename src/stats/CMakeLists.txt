@@ -14,6 +14,7 @@ set (sources
     hdf5/H5Lib.cpp
     hdf5/H5ReportBuilder.cc
     hdf5/H5ScalarReportWriter.cpp
+    hdf5/H5SplitScalarReportWriter.cpp
     stdout/StdoutAccRejReportWriter.cpp
     stdout/StdoutArrayReportWriter.cpp
     stdout/StdoutScalarReportWriter.cpp

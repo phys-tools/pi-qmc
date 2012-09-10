@@ -1,7 +1,8 @@
 #include "H5ArrayReportWriter.h"
 
-H5ArrayReportWriter::H5ArrayReportWriter()
-:   nstep(nstep) {
+H5ArrayReportWriter::H5ArrayReportWriter(int nstep, hid_t writingGroupID)
+:   nstep(nstep),
+    writingGroupID(writingGroupID) {
 }
 
 H5ArrayReportWriter::~H5ArrayReportWriter() {
@@ -143,14 +144,6 @@ void H5ArrayReportWriter::reportStep(const ArrayEstimator& est) {
         dset++;
     }
     est.unnormalize();
-}
-
-void H5ArrayReportWriter::setWritingGroupID(hid_t writingGroupID) {
-    this->writingGroupID = writingGroupID;
-}
-
-void H5ArrayReportWriter::setNstep(int nstep) {
-    this->nstep = nstep;
 }
 
 void H5ArrayReportWriter::startBlock(int istep) {
