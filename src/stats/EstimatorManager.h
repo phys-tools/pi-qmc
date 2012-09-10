@@ -10,6 +10,7 @@
 class MPIManager;
 class EstimatorReportBuilder;
 class EstimatorIterator;
+class ModelState;
 
 /** Class for managing estimators. 
  Stores all estimators and sets of estimators.
@@ -47,6 +48,9 @@ public:
     void recordInputDocument(const std::string &filename);
     EstimatorIterator getEstimatorIterator();
     int getNStep() const;
+    void setModelState(const ModelState *modelState);
+    void setIsSplitOverStates(bool);
+    bool getIsSplitOverStates();
 private:
     typedef std::list<Estimator*> EstimatorList;
     typedef EstimatorList::iterator EstimatorIter;
@@ -60,5 +64,7 @@ private:
     MPIManager *mpi;
     const SimInfoWriter *simInfoWriter;
     BuilderList builders;
+    const ModelState *modelState;
+    int isSplitOverStates;
 };
 #endif

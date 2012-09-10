@@ -15,7 +15,10 @@
 
 EstimatorManager::EstimatorManager(const std::string& filename,
     MPIManager *mpi, const SimInfoWriter *simInfoWriter)
-  : filename(filename), mpi(mpi), simInfoWriter(simInfoWriter) {
+  : filename(filename),
+    mpi(mpi),
+    simInfoWriter(simInfoWriter),
+    isSplitOverStates(false) {
   int rank=0;
 #ifdef ENABLE_MPI
   rank = MPI::COMM_WORLD.Get_rank();
@@ -111,5 +114,20 @@ EstimatorIterator EstimatorManager::getEstimatorIterator() {
 int EstimatorManager::getNStep() const {
     return nstep;
 }
+
+void EstimatorManager::setModelState(const ModelState *modelState) {
+    this->modelState = modelState;
+}
+
+void EstimatorManager::setIsSplitOverStates(bool isSplitOverStates) {
+    this->isSplitOverStates = isSplitOverStates;
+    std::cout << "Splitting estimators over states" << std::endl;
+}
+
+bool EstimatorManager::getIsSplitOverStates() {
+    return isSplitOverStates;
+}
+
+
 
 

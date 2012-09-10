@@ -68,6 +68,11 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
   if (actionChoice) {
     manager->add(new FreeEnergyEstimator(simInfo,
        actionChoice->getModelState().getModelCount(), mpi));
+    manager->setModelState(&actionChoice->getModelState());
+    xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
+    xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
+    bool splitOverStates = parser.getBoolAttribute(estNode,"splitOverStates");
+    manager->setIsSplitOverStates(splitOverStates);
   }
   // Then parse the xml estimator list.
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);
