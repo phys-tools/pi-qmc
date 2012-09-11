@@ -47,6 +47,7 @@
 #include "spin/SpinEstimator.h"
 #include "stats/MPIManager.h"
 #include "stats/EstimatorManager.h"
+#include "stats/ScalarAccumulator.h"
 #include "stats/Units.h"
 #include "util/Distance.h"
 #include "util/PairDistance.h"
@@ -87,8 +88,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       double scale = 1.;
       if (perN>0) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getEnergyScaleIn(unitName);
-      manager->add(new ThermoEnergyEstimator(simInfo,action,doubleAction,mpi,
-                                             unitName,scale,shift));
+      manager->add(new ThermoEnergyEstimator(simInfo,action,doubleAction,
+          unitName, scale, shift, createScalarAccumulator()));
     }
     if (name=="SpinEstimator") {
       double gc= parser.getDoubleAttribute(estNode,"gc");
@@ -767,3 +768,8 @@ SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
 	simInfo.getSpecies(0), actionChoice->getModelState(),
 	min, max, nbin, dist, samespin, mpi);
 }
+
+ScalarAccumulator* EstimatorParser::createScalarAccumulator() {
+    return new ScalarAccumulator(mpi);
+}
+

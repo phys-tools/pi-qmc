@@ -35,7 +35,8 @@ void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
     size = mpi->getCloneComm().Get_size();
   }
 #endif
-  double v=calcValue(),value=v;
+  double v=calcValue();
+  value=v;
   reset();
 #ifdef ENABLE_MPI
   if (mpi->isCloneMain()) {

@@ -1,9 +1,11 @@
 #ifndef SCALARACUMULATOR_H_
 #define SCALARACUMULATOR_H_
 
+class MPIManager;
+
 class ScalarAccumulator {
 public:
-    ScalarAccumulator();
+    ScalarAccumulator(MPIManager *mpi);
     virtual ~ScalarAccumulator();
     void addToValue(double addend);
     void clearValue();
@@ -14,6 +16,7 @@ private:
     double value;
     double sum;
     double norm;
+    MPIManager *mpi;
 };
 
 #endif

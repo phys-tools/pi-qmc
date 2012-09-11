@@ -1,13 +1,11 @@
 #ifndef __ThermoEnergyEstimator_h_
 #define __ThermoEnergyEstimator_h_
 #include "base/LinkSummable.h"
-#include "base/Paths.h"
 #include "stats/ScalarEstimator.h"
 class Paths;
 class Action;
 class DoubleAction;
 class SimulationInfo;
-class MPIManager;
 class ScalarAccumulator;
 /** Thermodynamic energy estimator. 
  * The thermodynamic energy estimator is obtained by differentiating
@@ -23,8 +21,8 @@ class ScalarAccumulator;
 class ThermoEnergyEstimator: public ScalarEstimator, public LinkSummable {
 public:
     ThermoEnergyEstimator(const SimulationInfo& simInfo, const Action*,
-            const DoubleAction*, MPIManager *mpi, const std::string& unitName,
-            double scale, double shift);
+            const DoubleAction*, const std::string& unitName,
+            double scale, double shift, ScalarAccumulator*);
     virtual ~ThermoEnergyEstimator();
     virtual void initCalc(const int nslice, const int firstSlice);
     virtual void handleLink(const blitz::TinyVector<double, NDIM>& start,
@@ -38,7 +36,6 @@ private:
     ScalarAccumulator *accumulator;
     const Action* action;
     const DoubleAction* doubleAction;
-    MPIManager *mpi;
 };
 
 #endif

@@ -1,6 +1,12 @@
 #include "ScalarAccumulator.h"
+#include "config.h"
+#ifdef ENABLE_MPI
+#include <mpi.h>
+#endif
+#include "MPIManager.h"
 
-ScalarAccumulator::ScalarAccumulator() {
+ScalarAccumulator::ScalarAccumulator(MPIManager *mpi)
+:   mpi(mpi) {
 }
 
 ScalarAccumulator::~ScalarAccumulator() {

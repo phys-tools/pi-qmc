@@ -5,21 +5,20 @@
 #include "ThermoEnergyEstimator.h"
 #include "action/Action.h"
 #include "action/DoubleAction.h"
+#include "base/Paths.h"
 #include "base/SimulationInfo.h"
-#include "stats/MPIManager.h"
 #include "stats/ScalarAccumulator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 
 ThermoEnergyEstimator::ThermoEnergyEstimator(const SimulationInfo& simInfo,
-        const Action* action, const DoubleAction* doubleAction, MPIManager *mpi,
-        const std::string& unitName, double scale, double shift)
+        const Action* action, const DoubleAction* doubleAction,
+        const std::string& unitName, double scale, double shift,
+        ScalarAccumulator *accumulator)
 :   ScalarEstimator("thermo_energy", "scalar-energy/thermo-energy",
                 unitName, scale, shift),
     action(action),
-    doubleAction(doubleAction),
-    mpi(mpi) {
-    accumulator = new ScalarAccumulator();
+    doubleAction(doubleAction) {
 }
 
 ThermoEnergyEstimator::~ThermoEnergyEstimator() {
