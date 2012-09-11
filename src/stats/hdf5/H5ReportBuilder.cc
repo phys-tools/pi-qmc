@@ -71,8 +71,13 @@ void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
 }
 
 hid_t H5ReportBuilder::createH5Group(std::string name, hid_t fileID) {
-    return H5Gcreate2(fileID, name.c_str(), H5P_DEFAULT, H5P_DEFAULT,
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t groupID = H5Gcreate2(fileID, "estimators", H5P_DEFAULT, H5P_DEFAULT,
             H5P_DEFAULT);
+#else
+    hid_t groupID = H5Gcreate(fileID,"estimators",0);
+#endif 
+    return groupID;
 }
 
 void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {
@@ -90,8 +95,13 @@ void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {
 void H5ReportBuilder::createStepAttribute() {
     hsize_t dims = 1;
     hid_t dataspaceID = H5Screate_simple(1, &dims, NULL);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
     stepAttrID = H5Acreate2(writingGroupID, "nstep", H5T_NATIVE_INT,
             dataspaceID, H5P_DEFAULT, H5P_DEFAULT);
+#else
+    stepAttrID = H5Acreate(writingGroupID, "nstep", H5T_NATIVE_INT,
+            dataspaceID, H5P_DEFAULT);
+#endif
     H5Sclose(dataspaceID);
     H5Awrite(stepAttrID, H5T_NATIVE_INT, &istep);
 }
