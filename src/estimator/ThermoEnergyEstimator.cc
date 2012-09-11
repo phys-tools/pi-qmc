@@ -7,52 +7,62 @@
 #include "action/DoubleAction.h"
 #include "base/SimulationInfo.h"
 #include "stats/MPIManager.h"
+#include "stats/ScalarAccumulator.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 
-ThermoEnergyEstimator::ThermoEnergyEstimator(
-  const SimulationInfo& simInfo, const Action* action,
-  const DoubleAction* doubleAction, MPIManager *mpi,
-  const std::string& unitName, double scale, double shift)
-  : ScalarEstimator("thermo_energy","scalar-energy/thermo-energy",
-                    unitName,scale,shift),
-    energy(0), etot(0), enorm(0), action(action), doubleAction(doubleAction),
+ThermoEnergyEstimator::ThermoEnergyEstimator(const SimulationInfo& simInfo,
+        const Action* action, const DoubleAction* doubleAction, MPIManager *mpi,
+        const std::string& unitName, double scale, double shift)
+:   ScalarEstimator("thermo_energy", "scalar-energy/thermo-energy",
+                unitName, scale, shift),
+    action(action),
+    doubleAction(doubleAction),
     mpi(mpi) {
+    accumulator = new ScalarAccumulator();
+}
+
+ThermoEnergyEstimator::~ThermoEnergyEstimator() {
+    delete accumulator;
 }
 
 void ThermoEnergyEstimator::initCalc(const int nslice, const int firstSlice) {
-  energy=0;
+    accumulator->clearValue();
 }
 
 void ThermoEnergyEstimator::handleLink(const Vec& start, const Vec& end,
-          const int ipart, const int islice, const Paths& paths) {
+        const int ipart, const int islice, const Paths& paths) {
 
-  if (action) {
-    double u(0),utau(0),ulambda(0);
-    Vec fm,fp;
-    action->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
-    energy+=utau;
-  }
- 
-  if (doubleAction) {
-    double u(0),utau(0),ulambda(0);
-    Vec fm,fp;
-    doubleAction->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
-    energy+=utau;
-  }
+    if (action) {
+        double u(0), utau(0), ulambda(0);
+        Vec fm, fp;
+        action->getBeadAction(paths, ipart, islice, u, utau, ulambda, fm, fp);
+        accumulator->addToValue(utau);
+    }
+
+    if (doubleAction) {
+        double u(0), utau(0), ulambda(0);
+        Vec fm, fp;
+        doubleAction->getBeadAction(paths, ipart, islice, u, utau, ulambda, fm,
+                fp);
+        accumulator->addToValue(utau);
+    }
 
 }
 
 void ThermoEnergyEstimator::endCalc(const int lnslice) {
-  int nslice=lnslice;
-  #ifdef ENABLE_MPI
-  if (mpi) {
-    double buffer; int ibuffer;
-    mpi->getWorkerComm().Reduce(&energy,&buffer,1,MPI::DOUBLE,MPI::SUM,0);
-    mpi->getWorkerComm().Reduce(&lnslice,&ibuffer,1,MPI::INT,MPI::SUM,0);
-    energy=buffer; nslice=ibuffer;
-  }
-  #endif
-  energy/=nslice;
-  etot+=energy; enorm+=1; 
+    accumulator->storeValue(lnslice);
 }
+
+double ThermoEnergyEstimator::calcValue() {
+    return value = accumulator->calcValue();
+}
+
+void ThermoEnergyEstimator::reset() {
+    accumulator->reset();
+}
+
+void ThermoEnergyEstimator::evaluate(const Paths& paths) {
+    paths.sumOverLinks(*this);
+}
+

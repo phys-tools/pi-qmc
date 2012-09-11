@@ -73,8 +73,9 @@ am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-ArrayEstimator.lo libstats_la-EstimatorIterator.lo \
 	libstats_la-EstimatorReportBuilder.lo \
 	libstats_la-EstimatorManager.lo libstats_la-MPIManager.lo \
-	libstats_la-ReportWriters.lo libstats_la-ScalarEstimator.lo \
-	libstats_la-Units.lo libstats_la-AsciiReportBuilder.lo \
+	libstats_la-ReportWriters.lo libstats_la-ScalarAccumulator.lo \
+	libstats_la-ScalarEstimator.lo libstats_la-Units.lo \
+	libstats_la-AsciiReportBuilder.lo \
 	libstats_la-AsciiScalarReportWriter.lo \
 	libstats_la-H5ArrayReportWriter.lo libstats_la-H5Lib.lo \
 	libstats_la-H5ReportBuilder.lo \
@@ -255,6 +256,7 @@ libstats_la_SOURCES = \
     EstimatorManager.cc \
     MPIManager.cc \
     ReportWriters.cpp \
+    ScalarAccumulator.cpp \
     ScalarEstimator.cc \
     Units.cc \
     ascii/AsciiReportBuilder.cc \
@@ -282,6 +284,7 @@ noinst_HEADERS = \
     NullAccRejReportWriter.h \
     ReportWriterInterface.h \
 	ReportWriters.h \
+	ScalarAccumulator.h \
     ScalarEstimator.h \
     Units.h \
     ascii/AsciiReportBuilder.h \
@@ -364,6 +367,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5SplitScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-MPIManager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ReportWriters.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ScalarAccumulator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ScalarEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-StdoutArrayReportWriter.Plo@am__quote@
@@ -440,6 +444,13 @@ libstats_la-ReportWriters.lo: ReportWriters.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ReportWriters.cpp' object='libstats_la-ReportWriters.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ReportWriters.lo `test -f 'ReportWriters.cpp' || echo '$(srcdir)/'`ReportWriters.cpp
+
+libstats_la-ScalarAccumulator.lo: ScalarAccumulator.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ScalarAccumulator.lo -MD -MP -MF $(DEPDIR)/libstats_la-ScalarAccumulator.Tpo -c -o libstats_la-ScalarAccumulator.lo `test -f 'ScalarAccumulator.cpp' || echo '$(srcdir)/'`ScalarAccumulator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-ScalarAccumulator.Tpo $(DEPDIR)/libstats_la-ScalarAccumulator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ScalarAccumulator.cpp' object='libstats_la-ScalarAccumulator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-ScalarAccumulator.lo `test -f 'ScalarAccumulator.cpp' || echo '$(srcdir)/'`ScalarAccumulator.cpp
 
 libstats_la-ScalarEstimator.lo: ScalarEstimator.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ScalarEstimator.lo -MD -MP -MF $(DEPDIR)/libstats_la-ScalarEstimator.Tpo -c -o libstats_la-ScalarEstimator.lo `test -f 'ScalarEstimator.cc' || echo '$(srcdir)/'`ScalarEstimator.cc

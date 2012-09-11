@@ -128,6 +128,3 @@ bool EstimatorManager::getIsSplitOverStates() {
     return isSplitOverStates;
 }
 
-
-
-
