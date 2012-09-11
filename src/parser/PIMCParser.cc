@@ -507,9 +507,11 @@ std::cout << "doubleAction!=0" << std::endl;
         }
         parseBoundary(ctxt, min, max);
         std::cout << "amplitude = " << amplitude << std::endl;
-        CollectiveSectionMover *mover = new CollectiveSectionMover(cell);
-        mover->setRadius(radius);
-        mover->setAmplitude(amplitude);
+//        CollectiveSectionMover *mover = new CollectiveSectionMover(cell);
+//        mover->setRadius(radius);
+//        mover->setAmplitude(amplitude);
+	CollectiveSectionMover *mover=
+		    new CollectiveSectionMover(radius,amplitude,min,max,cell);
         bool both = getBoolAttribute(ctxt->node, "both");
         if (doubleAction == 0) {
             algorithm = new CollectiveSectionSampler(npart, *sectionChooser,

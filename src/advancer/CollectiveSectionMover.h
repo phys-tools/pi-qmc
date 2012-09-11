@@ -17,7 +17,9 @@ public:
     typedef blitz::TinyVector<int, NDIM> IVec;
     typedef blitz::TinyMatrix<double, NDIM, NDIM> Mat;
 
-    CollectiveSectionMover(SuperCell* cell);
+//    CollectiveSectionMover(SuperCell* cell);
+    CollectiveSectionMover(double radius, Vec amplitude, Vec min,
+	                                           Vec max, SuperCell* cell);
     ~CollectiveSectionMover();
     double makeMove(CollectiveSectionSampler&);
     Vec calcShift(const Vec&, int sliceIndex) const;
@@ -25,11 +27,11 @@ public:
     Mat calcJacobian(const Vec&, int sliceIndex) const;
     double calcJacobianDet(const Mat&);
 
-    void setAmplitude(Vec amplitude);
+    void setAmplitude(Vec ampl);
     Vec getAmplitude() const;
 
-    void setRadius(double radius);
-    void setCenter(Vec center);
+    void setRadius(double r);
+    void setCenter(Vec c);
 
     double getRadius() const;
     void setSliceCount(int);
@@ -43,8 +45,9 @@ private:
     inline bool isOutsideRadius(const Vec &rin) const;
 
     double radius;
-    Vec amplitude;
+    Vec amplitude, amp;
     Vec center;
+    Vec min, max;
     int sliceCount;
     SuperCell *cell;
 };
