@@ -13,12 +13,21 @@
 extern "C" void DGESV_F77(const int *n, const int *nrhs, const double *a,
         const int *lda, int *ipiv, double *b, const int *ldb, int *info);
 
+/*
 CollectiveSectionMover::CollectiveSectionMover(SuperCell* cell) :
         cell(cell) {
     center = 0.0;
     radius = 1.0;
     sliceCount = 3;
     amplitude = 0.0;
+    amp = 0.0;
+}
+*/
+CollectiveSectionMover::CollectiveSectionMover(double radius, Vec amplitude,
+                                              Vec min, Vec max, SuperCell* cell)
+:   radius(radius), amplitude(amplitude), amp(amplitude),
+    min(min), max(max), sliceCount(1), cell(cell) {
+    for (int idim=0; idim<NDIM; ++idim) center[idim]=0.;
 }
 
 CollectiveSectionMover::~CollectiveSectionMover() {
@@ -30,6 +39,14 @@ double CollectiveSectionMover::makeMove(CollectiveSectionSampler& sampler) {
     int npart = movingBeads.getNPart();
     sliceCount = sectionBeads.getNSlice();
     double tranProb = 1.;
+    // Randomize the amplitude and the center of the cylinder.
+    for (int idim=0; idim<NDIM; ++idim) {
+        amplitude[idim] = 2. * amp[idim]
+                                   * (RandomNumGenerator::getRand() - 0.5);
+        center[idim] = min[idim]
+                           + (max[idim]-min[idim])
+                           * RandomNumGenerator::getRand();
+    }
     cell->pbc(center);
     bool forward = (RandomNumGenerator::getRand() > 0.5);
     double jacobian = 0.;
@@ -175,15 +192,15 @@ double CollectiveSectionMover::calcJacobianDet(
 }
 
 CollectiveSectionMover::Vec CollectiveSectionMover::getAmplitude() const {
-    return amplitude;
+    return amp;
 }
 
 double CollectiveSectionMover::getRadius() const {
     return radius;
 }
 
-void CollectiveSectionMover::setAmplitude(Vec amplitude) {
-    this->amplitude = amplitude;
+void CollectiveSectionMover::setAmplitude(Vec ampl) {
+    amp = ampl;
 }
 
 int CollectiveSectionMover::getSliceCount() const {
@@ -191,18 +208,18 @@ int CollectiveSectionMover::getSliceCount() const {
 }
 
 void CollectiveSectionMover::setSliceCount(int count) {
-    this->sliceCount = count;
+    sliceCount = count;
 }
 
-void CollectiveSectionMover::setRadius(double radius) {
-    this->radius = radius;
+void CollectiveSectionMover::setRadius(double r) {
+    radius = r;
 }
 
 CollectiveSectionMover::Vec CollectiveSectionMover::getCenter() const {
     return center;
 }
 
-void CollectiveSectionMover::setCenter(Vec center) {
-    this->center = center;
+void CollectiveSectionMover::setCenter(Vec c) {
+    center = c;
 }
 

@@ -13,8 +13,14 @@ hid_t H5Lib::createScalarDataset(int nstep, hid_t writingGroupID,
         std::string name) {
     hsize_t dims = nstep;
     hid_t dataSpaceID = H5Screate_simple(1, &dims, NULL);
-    hid_t dataSetID = H5Dcreate2(writingGroupID, name.c_str(), H5T_NATIVE_FLOAT,
-            dataSpaceID, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t dataSetID = H5Dcreate2(writingGroupID, name.c_str(),
+        H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT, H5P_DEFAULT,
+        H5P_DEFAULT);
+#else
+    hid_t dataSetID = H5Dcreate(writingGroupID, name.c_str(),
+        H5T_NATIVE_FLOAT, dataSpaceID, H5P_DEFAULT);
+#endif
     H5Sclose(dataSpaceID);
     return dataSetID;
 }
@@ -25,8 +31,13 @@ void H5Lib::writeTypeString(const std::string& typeString,
     hid_t dataSpaceID = H5Screate_simple(1, &dims, NULL);
     hid_t strType = H5Tcopy(H5T_C_S1);
     H5Tset_size(strType, typeString.length());
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
     hid_t attrID = H5Acreate2(dataSetID, "type", strType, dataSpaceID,
-            H5P_DEFAULT, H5P_DEFAULT);
+         H5P_DEFAULT, H5P_DEFAULT);
+#else
+    hid_t attrID = H5Acreate(dataSetID, "type", strType, dataSpaceID,
+         H5P_DEFAULT);
+#endif
     H5Awrite(attrID, strType, typeString.c_str());
     H5Sclose(dataSpaceID);
     H5Aclose(attrID);
