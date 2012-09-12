@@ -17,10 +17,10 @@ public:
   virtual void reset()=0;
 
   virtual void startReport(ReportWriters *writers) {
-    writers->startArrayReport(*this);}
+    writers->startArrayReport(this, 0);}
 
   virtual void reportStep(ReportWriters *writers) {
-    writers->reportArrayStep(*this);}
+    writers->reportArrayStep(this, 0);}
 
   virtual int getNDim() const=0;
 

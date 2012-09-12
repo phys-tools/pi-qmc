@@ -42,7 +42,7 @@ private:
     hid_t stepAttrID;
 
     ReportWriters *reportWriters;
-    ReportWriterInterface<ScalarEstimator> *scalarWriter;
+    H5ScalarReportWriter *scalarWriter;
     H5ArrayReportWriter *arrayWriter;
     void createStepAttribute();
     void createReportWriters(EstimatorManager*& manager);

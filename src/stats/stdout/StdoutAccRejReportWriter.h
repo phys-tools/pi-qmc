@@ -3,8 +3,10 @@
 
 #include "stats/ReportWriterInterface.h"
 #include "stats/AccRejEstimator.h"
+#include "stats/ScalarAccumulator.h"
 
-class StdoutAccRejReportWriter: public ReportWriterInterface<AccRejEstimator> {
+class StdoutAccRejReportWriter
+:   public ReportWriterInterface<AccRejEstimator, ScalarAccumulator> {
 public:
     StdoutAccRejReportWriter();
     virtual ~StdoutAccRejReportWriter();

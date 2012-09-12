@@ -3,8 +3,10 @@
 
 #include "ReportWriterInterface.h"
 class ArrayEstimator;
+class ScalarAccumulator;
 
-class NullArrayReportWriter: public ReportWriterInterface<ArrayEstimator> {
+class NullArrayReportWriter
+:   public ReportWriterInterface<ArrayEstimator, ScalarAccumulator> {
 public:
     NullArrayReportWriter() {}
     virtual ~NullArrayReportWriter(){}

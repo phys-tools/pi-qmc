@@ -4,7 +4,8 @@
 #include "ReportWriterInterface.h"
 class AccRejEstimator;
 
-class NullAccRejReportWriter: public ReportWriterInterface<AccRejEstimator> {
+class NullAccRejReportWriter
+:   public ReportWriterInterface<AccRejEstimator, ScalarAccumulator> {
 public:
     NullAccRejReportWriter() {}
     virtual ~NullAccRejReportWriter(){}

@@ -3,9 +3,11 @@
 
 #include "stats/ReportWriterInterface.h"
 #include "stats/ScalarEstimator.h"
+#include "stats/ScalarAccumulator.h"
 #include <fstream>
 
-class AsciiScalarReportWriter: public ReportWriterInterface<ScalarEstimator> {
+class AsciiScalarReportWriter
+:   public ReportWriterInterface<ScalarEstimator, ScalarAccumulator> {
 public:
     AsciiScalarReportWriter(std::ofstream& file);
     virtual ~AsciiScalarReportWriter();

@@ -3,9 +3,11 @@
 
 #include "stats/ReportWriterInterface.h"
 #include "stats/ScalarEstimator.h"
+#include "stats/ScalarAccumulator.h"
 #include <blitz/array.h>
 
-class StdoutScalarReportWriter: public ReportWriterInterface<ScalarEstimator> {
+class StdoutScalarReportWriter
+:   public ReportWriterInterface<ScalarEstimator, ScalarAccumulator> {
 public:
     StdoutScalarReportWriter(int stepCount);
     virtual ~StdoutScalarReportWriter();

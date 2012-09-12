@@ -47,10 +47,10 @@ void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
 }
 
 void ScalarEstimator::startReport(ReportWriters *writer) {
-    writer->startScalarReport(*this);
+    writer->startScalarReport(this, 0);
 }
 
 void ScalarEstimator::reportStep(ReportWriters *writer) {
-    writer->reportScalarStep(*this);
+    writer->reportScalarStep(this, 0);
 }
 

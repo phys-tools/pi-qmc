@@ -49,11 +49,11 @@ public:
     virtual void averageOverClones(const MPIManager* mpi);
     /// Callback EstimatorReportBuilder method for integer arrays.
     virtual void startReport(ReportWriters *writers) {
-        writers->startAccRejReport(*this);
+        writers->startAccRejReport(this, 0);
     }
     /// Callback EstimatorReportBuilder method for integer arrays.
     virtual void reportStep(ReportWriters* writers) {
-        writers->reportAccRejStep(*this);
+        writers->reportAccRejStep(this, 0);
     }
     virtual void evaluate(const Paths&) {
         ;

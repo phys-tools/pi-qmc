@@ -3,8 +3,10 @@
 
 #include "stats/ReportWriterInterface.h"
 #include "stats/ArrayEstimator.h"
+#include "stats/ScalarAccumulator.h"
 
-class StdoutArrayReportWriter: public ReportWriterInterface<ArrayEstimator> {
+class StdoutArrayReportWriter
+:   public ReportWriterInterface<ArrayEstimator, ScalarAccumulator> {
 public:
     StdoutArrayReportWriter();
     virtual ~StdoutArrayReportWriter();

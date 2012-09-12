@@ -76,13 +76,8 @@ hid_t H5ReportBuilder::createH5Group(std::string name, hid_t fileID) {
 }
 
 void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {
-    if (manager->getIsSplitOverStates()) {
-        scalarWriter = new H5SplitScalarReportWriter(nstep, writingGroupID);
-        arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
-    } else {
-        scalarWriter = new H5ScalarReportWriter(nstep, writingGroupID);
-        arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
-    }
+    scalarWriter = new H5ScalarReportWriter(nstep, writingGroupID);
+    arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
     NullAccRejReportWriter* accrejWriter = new NullAccRejReportWriter();
     reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
 }

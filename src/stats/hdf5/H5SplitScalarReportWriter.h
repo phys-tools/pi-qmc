@@ -3,11 +3,12 @@
 
 #include "stats/ReportWriterInterface.h"
 class ScalarEstimator;
+class ScalarAccumulator;
 #include <hdf5.h>
 #include <vector>
 
 class H5SplitScalarReportWriter
-:   public ReportWriterInterface<ScalarEstimator> {
+:   public ReportWriterInterface<ScalarEstimator, ScalarAccumulator> {
 public:
     H5SplitScalarReportWriter(int nstep, hid_t writingGroupID);
     virtual ~H5SplitScalarReportWriter();

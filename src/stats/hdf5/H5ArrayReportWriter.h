@@ -6,7 +6,8 @@
 #include <vector>
 #include "hdf5.h"
 
-class H5ArrayReportWriter: public ReportWriterInterface<ArrayEstimator> {
+class H5ArrayReportWriter
+:   public ReportWriterInterface<ArrayEstimator, ScalarAccumulator> {
 public:
     H5ArrayReportWriter(int nstep, hid_t writingGroupID);
     virtual ~H5ArrayReportWriter();
