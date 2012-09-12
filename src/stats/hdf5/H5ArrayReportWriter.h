@@ -12,9 +12,11 @@ public:
     H5ArrayReportWriter(int nstep, hid_t writingGroupID);
     virtual ~H5ArrayReportWriter();
 
-    virtual void startReport(const ArrayEstimator &est);
+    virtual void startReport(const ArrayEstimator *est,
+            const ScalarAccumulator *acc);
     virtual void startBlock(int istep);
-    virtual void reportStep(const ArrayEstimator &est);
+    virtual void reportStep(const ArrayEstimator *est,
+            const ScalarAccumulator *acc);
 
 private:
     int nstep;

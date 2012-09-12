@@ -12,9 +12,11 @@ public:
     StdoutScalarReportWriter(int stepCount);
     virtual ~StdoutScalarReportWriter();
 
-    virtual void startReport(const ScalarEstimator &est);
-    virtual void reportStep(const ScalarEstimator &est);
+    virtual void startReport(const ScalarEstimator *est,
+            const ScalarAccumulator *acc);
     virtual void startBlock(int istep);
+    virtual void reportStep(const ScalarEstimator *est,
+            const ScalarAccumulator *acc);
 private:
     typedef blitz::Array<double, 1> Array;
     int nstep;

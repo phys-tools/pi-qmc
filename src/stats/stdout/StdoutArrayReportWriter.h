@@ -11,7 +11,12 @@ public:
     StdoutArrayReportWriter();
     virtual ~StdoutArrayReportWriter();
 
-    virtual void reportStep(const ArrayEstimator &est);
+    virtual void startReport(const ArrayEstimator* estimator,
+            const ScalarAccumulator* accumulator);
+    virtual void startBlock(int istep);
+    virtual void reportStep(const ArrayEstimator* estimator,
+            const ScalarAccumulator* accumulator);
+
 };
 
 #endif

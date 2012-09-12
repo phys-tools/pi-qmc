@@ -11,8 +11,9 @@ H5ScalarReportWriter::H5ScalarReportWriter(int nstep, hid_t writingGroupID)
 H5ScalarReportWriter::~H5ScalarReportWriter() {
 }
 
-void H5ScalarReportWriter::startReport(const ScalarEstimator& est) {
-    hid_t dataSetID = H5Lib::createScalarInH5File(est, writingGroupID, nstep);
+void H5ScalarReportWriter::startReport(const ScalarEstimator *est,
+        const ScalarAccumulator *acc) {
+    hid_t dataSetID = H5Lib::createScalarInH5File(*est, writingGroupID, nstep);
     datasetList.push_back(dataSetID);
 }
 
@@ -21,7 +22,8 @@ void H5ScalarReportWriter::startBlock(int istep) {
     datasetIterator = datasetList.begin();
 }
 
-void H5ScalarReportWriter::reportStep(const ScalarEstimator& est) {
-    H5Lib::writeScalarValue(*datasetIterator, istep, est.getValue());
+void H5ScalarReportWriter::reportStep(const ScalarEstimator *est,
+        const ScalarAccumulator *acc) {
+    H5Lib::writeScalarValue(*datasetIterator, istep, est->getValue());
     datasetIterator++;
 }

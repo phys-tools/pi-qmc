@@ -12,8 +12,11 @@ public:
     AsciiScalarReportWriter(std::ofstream& file);
     virtual ~AsciiScalarReportWriter();
 
-    virtual void startReport(const ScalarEstimator& est);
-    virtual void reportStep(const ScalarEstimator& est);
+    virtual void startReport(const ScalarEstimator* est,
+            const ScalarAccumulator *acc);
+    virtual void startBlock(int istep);
+    virtual void reportStep(const ScalarEstimator* est,
+            const ScalarAccumulator *acc);
 
 private:
     std::ofstream &file;

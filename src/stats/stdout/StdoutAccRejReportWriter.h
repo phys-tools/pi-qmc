@@ -11,7 +11,12 @@ public:
     StdoutAccRejReportWriter();
     virtual ~StdoutAccRejReportWriter();
 
-    virtual void reportStep(const AccRejEstimator &est);
+    virtual void startReport(const AccRejEstimator* estimator,
+            const ScalarAccumulator* accumulator);
+    virtual void startBlock(int istep);
+    virtual void reportStep(const AccRejEstimator* estimator,
+            const ScalarAccumulator* accumulator);
+
 };
 
 #endif

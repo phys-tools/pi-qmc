@@ -7,7 +7,8 @@ StdoutScalarReportWriter::StdoutScalarReportWriter(int stepCount) {
 StdoutScalarReportWriter::~StdoutScalarReportWriter() {
 }
 
-void StdoutScalarReportWriter::startReport(const ScalarEstimator &est) {
+void StdoutScalarReportWriter::startReport(const ScalarEstimator *est,
+        const ScalarAccumulator *acc) {
     sum.resize(sum.size() + 1);
     sum2.resize(sum2.size() + 1);
     norm.resize(norm.size() + 1);
@@ -17,14 +18,15 @@ void StdoutScalarReportWriter::startReport(const ScalarEstimator &est) {
     norm = 0;
 }
 
-void StdoutScalarReportWriter::reportStep(const ScalarEstimator &est) {
-    double value = est.getValue();
+void StdoutScalarReportWriter::reportStep(const ScalarEstimator *est,
+        const ScalarAccumulator *acc) {
+    double value = est->getValue();
     sum(iscalar) += value;
     sum2(iscalar) += value * value;
     norm(iscalar) += 1;
-    std::cout << est.getName();
-    if (est.getUnitName() != "")
-        std::cout << " (" << est.getUnitName() << ")";
+    std::cout << est->getName();
+    if (est->getUnitName() != "")
+        std::cout << " (" << est->getUnitName() << ")";
     std::cout << ": " << value << ", " << "Av="
             << sum(iscalar) / (norm(iscalar)) << " +-"
             << sqrt(

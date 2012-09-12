@@ -13,9 +13,11 @@ public:
     H5ScalarReportWriter(int nstep, hid_t writingGroupID);
     virtual ~H5ScalarReportWriter();
 
-    virtual void startReport(const ScalarEstimator& est);
+    virtual void startReport(const ScalarEstimator* est,
+            const ScalarAccumulator *acc);
     virtual void startBlock(int istep);
-    virtual void reportStep(const ScalarEstimator& est);
+    virtual void reportStep(const ScalarEstimator* est,
+            const ScalarAccumulator *acc);
 
 private:
     int nstep;

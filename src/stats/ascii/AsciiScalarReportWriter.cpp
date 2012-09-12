@@ -7,17 +7,22 @@ AsciiScalarReportWriter::AsciiScalarReportWriter(std::ofstream &file)
 AsciiScalarReportWriter::~AsciiScalarReportWriter() {
 }
 
-void AsciiScalarReportWriter::startReport(const ScalarEstimator& est) {
-    file << "\"" << est.getName();
-    const std::string& unitName(est.getUnitName());
+void AsciiScalarReportWriter::startReport(const ScalarEstimator *est,
+        const ScalarAccumulator *acc) {
+    file << "\"" << est->getName();
+    const std::string& unitName(est->getUnitName());
     if (unitName != "") {
         file << " (" << unitName << ")";
     }
     file << "\" ";
 }
 
-void AsciiScalarReportWriter::reportStep(const ScalarEstimator& est) {
-    file << est.getValue() << " ";
+void AsciiScalarReportWriter::startBlock(int istep) {
+}
+
+void AsciiScalarReportWriter::reportStep(const ScalarEstimator *est,
+        const ScalarAccumulator *acc) {
+    file << est->getValue() << " ";
 }
 
 
