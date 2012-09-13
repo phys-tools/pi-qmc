@@ -18,7 +18,8 @@ ThermoEnergyEstimator::ThermoEnergyEstimator(const SimulationInfo& simInfo,
 :   ScalarEstimator("thermo_energy", "scalar-energy/thermo-energy",
                 unitName, scale, shift),
     action(action),
-    doubleAction(doubleAction) {
+    doubleAction(doubleAction),
+    accumulator(accumulator) {
 }
 
 ThermoEnergyEstimator::~ThermoEnergyEstimator() {
