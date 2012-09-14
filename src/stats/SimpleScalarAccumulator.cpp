@@ -1,4 +1,4 @@
-#include "ScalarAccumulator.h"
+#include "SimpleScalarAccumulator.h"
 #include "config.h"
 #ifdef ENABLE_MPI
 #include <mpi.h>
@@ -6,22 +6,22 @@
 #include "MPIManager.h"
 #include "ReportWriters.h"
 
-ScalarAccumulator::ScalarAccumulator(MPIManager *mpi)
+SimpleScalarAccumulator::SimpleScalarAccumulator(MPIManager *mpi)
 :   mpi(mpi) {
 }
 
-ScalarAccumulator::~ScalarAccumulator() {
+SimpleScalarAccumulator::~SimpleScalarAccumulator() {
 }
 
-void ScalarAccumulator::clearValue() {
+void SimpleScalarAccumulator::clearValue() {
     value = 0.0;
 }
 
-void ScalarAccumulator::addToValue(double addend) {
+void SimpleScalarAccumulator::addToValue(double addend) {
     value += addend;
 }
 
-void ScalarAccumulator::storeValue(const int lnslice) {
+void SimpleScalarAccumulator::storeValue(const int lnslice) {
     int nslice = lnslice;
 #ifdef ENABLE_MPI
     if (mpi) {
@@ -36,20 +36,20 @@ void ScalarAccumulator::storeValue(const int lnslice) {
     norm += 1.0;
 }
 
-void ScalarAccumulator::reset() {
+void SimpleScalarAccumulator::reset() {
     sum = norm = 0.0;
 }
 
-double ScalarAccumulator::calcValue() {
+double SimpleScalarAccumulator::calcValue() {
     return sum / norm;
 }
 
-void ScalarAccumulator::startReport(ReportWriters* writers,
+void SimpleScalarAccumulator::startReport(ReportWriters* writers,
         ScalarEstimator* estimator) {
     writers->startScalarReport(estimator, this);
 }
 
-void ScalarAccumulator::reportStep(ReportWriters* writers,
+void SimpleScalarAccumulator::reportStep(ReportWriters* writers,
         ScalarEstimator* estimator) {
     writers->reportScalarStep(estimator, this);
 }

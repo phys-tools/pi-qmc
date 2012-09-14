@@ -47,7 +47,7 @@
 #include "spin/SpinEstimator.h"
 #include "stats/MPIManager.h"
 #include "stats/EstimatorManager.h"
-#include "stats/ScalarAccumulator.h"
+#include "stats/SimpleScalarAccumulator.h"
 #include "stats/Units.h"
 #include "util/Distance.h"
 #include "util/PairDistance.h"
@@ -770,6 +770,6 @@ SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
 }
 
 ScalarAccumulator* EstimatorParser::createScalarAccumulator() {
-    return new ScalarAccumulator(mpi);
+    return new SimpleScalarAccumulator(mpi);
 }
 

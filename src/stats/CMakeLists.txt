@@ -6,7 +6,7 @@ set (sources
     EstimatorManager.cc
     MPIManager.cc
     ReportWriters.cpp
-    ScalarAccumulator.cpp
+    SimpleScalarAccumulator.cpp
     ScalarEstimator.cc
     Units.cc
     ascii/AsciiReportBuilder.cc

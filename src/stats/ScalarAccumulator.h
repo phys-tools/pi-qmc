@@ -1,29 +1,23 @@
 #ifndef SCALARACUMULATOR_H_
 #define SCALARACUMULATOR_H_
 
-class MPIManager;
 class ReportWriters;
 class ScalarEstimator;
 
 class ScalarAccumulator {
 public:
-    ScalarAccumulator(MPIManager *mpi);
-    virtual ~ScalarAccumulator();
-    void addToValue(double addend);
-    void clearValue();
-    void storeValue(const int lnslice);
-    void reset();
-    double calcValue();
+    ScalarAccumulator() {}
+    virtual ~ScalarAccumulator() {}
+    virtual void addToValue(double addend) = 0;
+    virtual void clearValue() = 0;
+    virtual void storeValue(const int lnslice) = 0;
+    virtual void reset() = 0;
+    virtual double calcValue() = 0;
 
     virtual void startReport(ReportWriters* writers,
-            ScalarEstimator* estimator);
+            ScalarEstimator* estimator) = 0;
     virtual void reportStep(ReportWriters* writers,
-            ScalarEstimator* estimator);
-private:
-    double value;
-    double sum;
-    double norm;
-    MPIManager *mpi;
+            ScalarEstimator* estimator) = 0;
 };
 
 #endif

@@ -8,8 +8,8 @@ libstats_la_SOURCES = \
     EstimatorManager.cc \
     MPIManager.cc \
     ReportWriters.cpp \
-    ScalarAccumulator.cpp \
     ScalarEstimator.cc \
+    SimpleScalarAccumulator.cpp \
     Units.cc \
     ascii/AsciiReportBuilder.cc \
     ascii/AsciiScalarReportWriter.cpp \
@@ -37,6 +37,7 @@ noinst_HEADERS = \
 	ReportWriters.h \
 	ScalarAccumulator.h \
     ScalarEstimator.h \
+    SimpleScalarAccumulator.h \
     Units.h \
     ascii/AsciiReportBuilder.h \
     ascii/AsciiScalarReportWriter.h \
