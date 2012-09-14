@@ -5,6 +5,7 @@
 #include <blitz/tinyvec.h>
 class Paths;
 class EstimatorReportBuilder;
+class ScalarAccumulator;
 
 /// Base class for scalar estimators.
 /// @author John Shumway
@@ -23,9 +24,9 @@ public:
     virtual void averageOverClones(const MPIManager* mpi);
 
     virtual void startReport(ReportWriters* writers);
-
     virtual void reportStep(ReportWriters* writers);
 protected:
+    ScalarAccumulator *accumulator;
     double value;
     const double scale;
     const double shift;

@@ -5,18 +5,26 @@
 #include "ScalarEstimator.h"
 #include "MPIManager.h"
 #include "ReportWriters.h"
+#include "ScalarAccumulator.h"
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
-  : Estimator(name,"","scalar"), scale(1.), shift(0.) {
+  : Estimator(name,"","scalar"),
+    scale(1.),
+    shift(0.),
+    accumulator(0) {
 }
 
 ScalarEstimator::ScalarEstimator(const std::string &name,
   const std::string &typeString, const std::string &unitName,
   double scale, double shift)
-  : Estimator(name,typeString,unitName), scale(scale), shift(shift) {
+  : Estimator(name,typeString,unitName),
+    scale(scale),
+    shift(shift),
+    accumulator(0) {
 }
 
 ScalarEstimator::~ScalarEstimator() {
+    delete accumulator;
 }
 
 double ScalarEstimator::getValue() const {
@@ -46,11 +54,19 @@ void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
   if (rank==0) setValue(value/size);
 }
 
-void ScalarEstimator::startReport(ReportWriters *writer) {
-    writer->startScalarReport(this, 0);
+void ScalarEstimator::startReport(ReportWriters *writers) {
+    if (accumulator) {
+        accumulator->startReport(writers, this);
+    } else {
+        writers->startScalarReport(this, 0);
+    }
 }
 
-void ScalarEstimator::reportStep(ReportWriters *writer) {
-    writer->reportScalarStep(this, 0);
+void ScalarEstimator::reportStep(ReportWriters *writers) {
+    if (accumulator) {
+        accumulator->reportStep(writers, this);
+    } else {
+        writers->reportScalarStep(this, 0);
+    }
 }
 

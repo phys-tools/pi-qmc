@@ -18,12 +18,11 @@ ThermoEnergyEstimator::ThermoEnergyEstimator(const SimulationInfo& simInfo,
 :   ScalarEstimator("thermo_energy", "scalar-energy/thermo-energy",
                 unitName, scale, shift),
     action(action),
-    doubleAction(doubleAction),
-    accumulator(accumulator) {
+    doubleAction(doubleAction) {
+    this->accumulator = accumulator;
 }
 
 ThermoEnergyEstimator::~ThermoEnergyEstimator() {
-    delete accumulator;
 }
 
 void ThermoEnergyEstimator::initCalc(const int nslice, const int firstSlice) {
@@ -65,4 +64,5 @@ void ThermoEnergyEstimator::reset() {
 void ThermoEnergyEstimator::evaluate(const Paths& paths) {
     paths.sumOverLinks(*this);
 }
+
 

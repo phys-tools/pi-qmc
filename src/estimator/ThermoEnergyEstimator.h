@@ -33,7 +33,6 @@ public:
     virtual void reset();
     virtual void evaluate(const Paths& paths);
 private:
-    ScalarAccumulator *accumulator;
     const Action* action;
     const DoubleAction* doubleAction;
 };

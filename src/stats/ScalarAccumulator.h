@@ -2,6 +2,8 @@
 #define SCALARACUMULATOR_H_
 
 class MPIManager;
+class ReportWriters;
+class ScalarEstimator;
 
 class ScalarAccumulator {
 public:
@@ -12,6 +14,11 @@ public:
     void storeValue(const int lnslice);
     void reset();
     double calcValue();
+
+    virtual void startReport(ReportWriters* writers,
+            ScalarEstimator* estimator);
+    virtual void reportStep(ReportWriters* writers,
+            ScalarEstimator* estimator);
 private:
     double value;
     double sum;

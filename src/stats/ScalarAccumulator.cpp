@@ -4,6 +4,7 @@
 #include <mpi.h>
 #endif
 #include "MPIManager.h"
+#include "ReportWriters.h"
 
 ScalarAccumulator::ScalarAccumulator(MPIManager *mpi)
 :   mpi(mpi) {
@@ -42,5 +43,16 @@ void ScalarAccumulator::reset() {
 double ScalarAccumulator::calcValue() {
     return sum / norm;
 }
+
+void ScalarAccumulator::startReport(ReportWriters* writers,
+        ScalarEstimator* estimator) {
+    writers->startScalarReport(estimator, this);
+}
+
+void ScalarAccumulator::reportStep(ReportWriters* writers,
+        ScalarEstimator* estimator) {
+    writers->reportScalarStep(estimator, this);
+}
+
 
 
