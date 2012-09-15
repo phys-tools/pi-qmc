@@ -6,16 +6,24 @@ class ScalarEstimator;
 class ArrayEstimator;
 class AccRejEstimator;
 class ScalarAccumulator;
+class SimpleScalarAccumulator;
+class PartitionedScalarAccumulator;
 
 class ReportWriters {
 public:
-    ReportWriters(ReportWriterInterface<ScalarEstimator, ScalarAccumulator>*,
+    ReportWriters(
+            ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator>*,
             ReportWriterInterface<ArrayEstimator, ScalarAccumulator>*,
             ReportWriterInterface<AccRejEstimator, ScalarAccumulator>*);
     virtual ~ReportWriters();
 
-    void startScalarReport(ScalarEstimator *est, ScalarAccumulator *acc);
-    void reportScalarStep(ScalarEstimator *est, ScalarAccumulator *acc);
+    void startScalarReport(ScalarEstimator *est, SimpleScalarAccumulator *acc);
+    void reportScalarStep(ScalarEstimator *est, SimpleScalarAccumulator *acc);
+
+    void startScalarReport(ScalarEstimator *est,
+            PartitionedScalarAccumulator *acc);
+    void reportScalarStep(ScalarEstimator *est,
+            PartitionedScalarAccumulator *acc);
 
     void startAccRejReport(AccRejEstimator *est, ScalarAccumulator *acc);
     void reportAccRejStep(AccRejEstimator *est, ScalarAccumulator *acc);
@@ -24,7 +32,7 @@ public:
     void reportArrayStep(ArrayEstimator *est, ScalarAccumulator *acc);
 
 private:
-    ReportWriterInterface<ScalarEstimator, ScalarAccumulator>
+    ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator>
         *scalarReportWriter;
     ReportWriterInterface<ArrayEstimator, ScalarAccumulator>
         *arrayReportWriter;

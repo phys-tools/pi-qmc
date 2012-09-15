@@ -1,4 +1,6 @@
 #include "StdoutScalarReportWriter.h"
+#include "stats/ScalarEstimator.h"
+#include "stats/SimpleScalarAccumulator.h"
 
 StdoutScalarReportWriter::StdoutScalarReportWriter(int stepCount) {
     nstep = stepCount;
@@ -8,7 +10,7 @@ StdoutScalarReportWriter::~StdoutScalarReportWriter() {
 }
 
 void StdoutScalarReportWriter::startReport(const ScalarEstimator *est,
-        const ScalarAccumulator *acc) {
+        const SimpleScalarAccumulator *acc) {
     sum.resize(sum.size() + 1);
     sum2.resize(sum2.size() + 1);
     norm.resize(norm.size() + 1);
@@ -19,7 +21,7 @@ void StdoutScalarReportWriter::startReport(const ScalarEstimator *est,
 }
 
 void StdoutScalarReportWriter::reportStep(const ScalarEstimator *est,
-        const ScalarAccumulator *acc) {
+        const SimpleScalarAccumulator *acc) {
     double value = est->getValue();
     sum(iscalar) += value;
     sum2(iscalar) += value * value;

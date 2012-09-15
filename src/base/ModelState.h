@@ -4,10 +4,11 @@
 #include <iostream>
 #include <string>
 class MPIManager;
+#include "stats/ModelStateInterface.h"
 
 ///Base class for model state.
 /// @author John Shumway and Jianheng Liu
-class ModelState {
+class ModelState : public ModelStateInterface {
 public:
   virtual ~ModelState() {};
   virtual void write(std::ostream &os) const=0;

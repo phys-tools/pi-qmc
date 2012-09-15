@@ -7,6 +7,7 @@ libstats_la_SOURCES = \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
     MPIManager.cc \
+    PartitionedScalarAccumulator.cpp \
     ReportWriters.cpp \
     ScalarEstimator.cc \
     SimpleScalarAccumulator.cpp \
@@ -30,11 +31,13 @@ noinst_HEADERS = \
     EstimatorIterator.h \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
+    ModelStateInterface.h \
     MPIManager.h \
     NullArrayReportWriter.h \
     NullAccRejReportWriter.h \
+    PartitionedScalarAccumulator.h \
     ReportWriterInterface.h \
-	ReportWriters.h \
+    ReportWriters.h \
 	ScalarAccumulator.h \
     ScalarEstimator.h \
     SimpleScalarAccumulator.h \

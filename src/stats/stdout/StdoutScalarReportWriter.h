@@ -2,21 +2,21 @@
 #define STDOUTSCALARREPORTWRITER_H_
 
 #include "stats/ReportWriterInterface.h"
-#include "stats/ScalarEstimator.h"
-#include "stats/ScalarAccumulator.h"
+class ScalarEstimator;
+class SimpleScalarAccumulator;
 #include <blitz/array.h>
 
 class StdoutScalarReportWriter
-:   public ReportWriterInterface<ScalarEstimator, ScalarAccumulator> {
+:   public ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator> {
 public:
     StdoutScalarReportWriter(int stepCount);
     virtual ~StdoutScalarReportWriter();
 
     virtual void startReport(const ScalarEstimator *est,
-            const ScalarAccumulator *acc);
+            const SimpleScalarAccumulator *acc);
     virtual void startBlock(int istep);
     virtual void reportStep(const ScalarEstimator *est,
-            const ScalarAccumulator *acc);
+            const SimpleScalarAccumulator *acc);
 private:
     typedef blitz::Array<double, 1> Array;
     int nstep;

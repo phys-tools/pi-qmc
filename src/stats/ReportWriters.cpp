@@ -1,8 +1,10 @@
 #include "ReportWriters.h"
 #include "ReportWriterInterface.h"
+#include "SimpleScalarAccumulator.h"
+#include "PartitionedScalarAccumulator.h"
 
 ReportWriters::ReportWriters(
-        ReportWriterInterface<ScalarEstimator, ScalarAccumulator>*
+        ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator>*
             scalarReportWriter,
         ReportWriterInterface<ArrayEstimator, ScalarAccumulator>*
             arrayReportWriter,
@@ -20,13 +22,23 @@ ReportWriters::~ReportWriters() {
 }
 
 void ReportWriters::startScalarReport(ScalarEstimator *est,
-        ScalarAccumulator *acc) {
+        SimpleScalarAccumulator *acc) {
     scalarReportWriter->startReport(est, acc);
 }
 
 void ReportWriters::reportScalarStep(ScalarEstimator* est,
-        ScalarAccumulator *acc) {
+        SimpleScalarAccumulator *acc) {
     scalarReportWriter->reportStep(est, acc);
+}
+
+void ReportWriters::startScalarReport(ScalarEstimator* est,
+        PartitionedScalarAccumulator* acc) {
+//    scalarReportWriter->startReport(est, acc);
+}
+
+void ReportWriters::reportScalarStep(ScalarEstimator* est,
+        PartitionedScalarAccumulator* acc) {
+//    scalarReportWriter->reportStep(est, acc);
 }
 
 void ReportWriters::startAccRejReport(AccRejEstimator* est,

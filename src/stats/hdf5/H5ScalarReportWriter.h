@@ -3,21 +3,21 @@
 
 #include "stats/ReportWriterInterface.h"
 class ScalarEstimator;
-class ScalarAccumulator;
+class SimpleScalarAccumulator;
 #include <hdf5.h>
 #include <vector>
 
 class H5ScalarReportWriter
-:   public ReportWriterInterface<ScalarEstimator, ScalarAccumulator> {
+:   public ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator> {
 public:
     H5ScalarReportWriter(int nstep, hid_t writingGroupID);
     virtual ~H5ScalarReportWriter();
 
     virtual void startReport(const ScalarEstimator* est,
-            const ScalarAccumulator *acc);
+            const SimpleScalarAccumulator *acc);
     virtual void startBlock(int istep);
     virtual void reportStep(const ScalarEstimator* est,
-            const ScalarAccumulator *acc);
+            const SimpleScalarAccumulator *acc);
 
 private:
     int nstep;

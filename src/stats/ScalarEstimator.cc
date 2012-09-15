@@ -58,7 +58,8 @@ void ScalarEstimator::startReport(ReportWriters *writers) {
     if (accumulator) {
         accumulator->startReport(writers, this);
     } else {
-        writers->startScalarReport(this, 0);
+        SimpleScalarAccumulator *accumulator = 0;
+        writers->startScalarReport(this, accumulator);
     }
 }
 
@@ -66,7 +67,8 @@ void ScalarEstimator::reportStep(ReportWriters *writers) {
     if (accumulator) {
         accumulator->reportStep(writers, this);
     } else {
-        writers->reportScalarStep(this, 0);
+        SimpleScalarAccumulator *accumulator = 0;
+        writers->reportScalarStep(this, accumulator);
     }
 }
 

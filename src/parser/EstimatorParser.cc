@@ -48,6 +48,7 @@
 #include "stats/MPIManager.h"
 #include "stats/EstimatorManager.h"
 #include "stats/SimpleScalarAccumulator.h"
+#include "stats/PartitionedScalarAccumulator.h"
 #include "stats/Units.h"
 #include "util/Distance.h"
 #include "util/PairDistance.h"
@@ -770,6 +771,13 @@ SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
 }
 
 ScalarAccumulator* EstimatorParser::createScalarAccumulator() {
-    return new SimpleScalarAccumulator(mpi);
+    ScalarAccumulator *accumulator;
+    if (manager->getIsSplitOverStates()) {
+        ModelState *modelState = &actionChoice->getModelState();
+        accumulator = new PartitionedScalarAccumulator(mpi, modelState);
+    } else {
+        accumulator = new SimpleScalarAccumulator(mpi);
+    }
+    return accumulator;
 }
 

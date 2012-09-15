@@ -5,6 +5,7 @@ set (sources
     EstimatorReportBuilder.cpp
     EstimatorManager.cc
     MPIManager.cc
+    PartitionedScalarAccumulator.cpp
     ReportWriters.cpp
     SimpleScalarAccumulator.cpp
     ScalarEstimator.cc

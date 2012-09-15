@@ -73,6 +73,7 @@ am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-ArrayEstimator.lo libstats_la-EstimatorIterator.lo \
 	libstats_la-EstimatorReportBuilder.lo \
 	libstats_la-EstimatorManager.lo libstats_la-MPIManager.lo \
+	libstats_la-PartitionedScalarAccumulator.lo \
 	libstats_la-ReportWriters.lo libstats_la-ScalarEstimator.lo \
 	libstats_la-SimpleScalarAccumulator.lo libstats_la-Units.lo \
 	libstats_la-AsciiReportBuilder.lo \
@@ -255,6 +256,7 @@ libstats_la_SOURCES = \
     EstimatorReportBuilder.cpp \
     EstimatorManager.cc \
     MPIManager.cc \
+    PartitionedScalarAccumulator.cpp \
     ReportWriters.cpp \
     ScalarEstimator.cc \
     SimpleScalarAccumulator.cpp \
@@ -279,11 +281,13 @@ noinst_HEADERS = \
     EstimatorIterator.h \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
+    ModelStateInterface.h \
     MPIManager.h \
     NullArrayReportWriter.h \
     NullAccRejReportWriter.h \
+    PartitionedScalarAccumulator.h \
     ReportWriterInterface.h \
-	ReportWriters.h \
+    ReportWriters.h \
 	ScalarAccumulator.h \
     ScalarEstimator.h \
     SimpleScalarAccumulator.h \
@@ -367,6 +371,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5SplitScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-MPIManager.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-PartitionedScalarAccumulator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ReportWriters.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ScalarEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-SimpleScalarAccumulator.Plo@am__quote@
@@ -438,6 +443,13 @@ libstats_la-MPIManager.lo: MPIManager.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MPIManager.cc' object='libstats_la-MPIManager.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-MPIManager.lo `test -f 'MPIManager.cc' || echo '$(srcdir)/'`MPIManager.cc
+
+libstats_la-PartitionedScalarAccumulator.lo: PartitionedScalarAccumulator.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-PartitionedScalarAccumulator.lo -MD -MP -MF $(DEPDIR)/libstats_la-PartitionedScalarAccumulator.Tpo -c -o libstats_la-PartitionedScalarAccumulator.lo `test -f 'PartitionedScalarAccumulator.cpp' || echo '$(srcdir)/'`PartitionedScalarAccumulator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-PartitionedScalarAccumulator.Tpo $(DEPDIR)/libstats_la-PartitionedScalarAccumulator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PartitionedScalarAccumulator.cpp' object='libstats_la-PartitionedScalarAccumulator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-PartitionedScalarAccumulator.lo `test -f 'PartitionedScalarAccumulator.cpp' || echo '$(srcdir)/'`PartitionedScalarAccumulator.cpp
 
 libstats_la-ReportWriters.lo: ReportWriters.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-ReportWriters.lo -MD -MP -MF $(DEPDIR)/libstats_la-ReportWriters.Tpo -c -o libstats_la-ReportWriters.lo `test -f 'ReportWriters.cpp' || echo '$(srcdir)/'`ReportWriters.cpp
