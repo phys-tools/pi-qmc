@@ -13,6 +13,7 @@ class ReportWriters {
 public:
     ReportWriters(
             ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator>*,
+            ReportWriterInterface<ScalarEstimator, PartitionedScalarAccumulator>*,
             ReportWriterInterface<ArrayEstimator, ScalarAccumulator>*,
             ReportWriterInterface<AccRejEstimator, ScalarAccumulator>*);
     virtual ~ReportWriters();
@@ -34,6 +35,8 @@ public:
 private:
     ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator>
         *scalarReportWriter;
+    ReportWriterInterface<ScalarEstimator, PartitionedScalarAccumulator>
+        *partitionedScalarReportWriter;
     ReportWriterInterface<ArrayEstimator, ScalarAccumulator>
         *arrayReportWriter;
     ReportWriterInterface<AccRejEstimator, ScalarAccumulator>

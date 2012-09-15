@@ -35,6 +35,7 @@ noinst_HEADERS = \
     MPIManager.h \
     NullArrayReportWriter.h \
     NullAccRejReportWriter.h \
+    NullPartitionedScalarReportWriter.h \
     PartitionedScalarAccumulator.h \
     ReportWriterInterface.h \
     ReportWriters.h \

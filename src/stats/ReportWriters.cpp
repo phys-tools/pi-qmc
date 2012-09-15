@@ -6,6 +6,8 @@
 ReportWriters::ReportWriters(
         ReportWriterInterface<ScalarEstimator, SimpleScalarAccumulator>*
             scalarReportWriter,
+        ReportWriterInterface<ScalarEstimator, PartitionedScalarAccumulator>*
+            partitionedScalarReportWriter,
         ReportWriterInterface<ArrayEstimator, ScalarAccumulator>*
             arrayReportWriter,
         ReportWriterInterface<AccRejEstimator, ScalarAccumulator>*
@@ -17,6 +19,7 @@ ReportWriters::ReportWriters(
 
 ReportWriters::~ReportWriters() {
     delete scalarReportWriter;
+    delete partitionedScalarReportWriter;
     delete arrayReportWriter;
     delete accRejReportWriter;
 }

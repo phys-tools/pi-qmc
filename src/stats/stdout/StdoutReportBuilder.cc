@@ -4,6 +4,7 @@
 #include "StdoutReportBuilder.h"
 #include "stats/EstimatorManager.h"
 #include "stats/EstimatorIterator.h"
+#include "stats/NullPartitionedScalarReportWriter.h"
 #include "stats/ReportWriters.h"
 #include "StdoutAccRejReportWriter.h"
 #include "StdoutArrayReportWriter.h"
@@ -25,9 +26,12 @@ StdoutReportBuilder::~StdoutReportBuilder() {
 void StdoutReportBuilder::initializeReport(EstimatorManager *manager) {
     nstep = manager->getNStep();
     scalarWriter = new StdoutScalarReportWriter(nstep);
+    NullPartitionedScalrReportWriter *partitionedScalarWriter
+        = new NullPartitionedScalrReportWriter();
     arrayWriter = new StdoutArrayReportWriter();
     accrejWriter = new StdoutAccRejReportWriter();
-    reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
+    reportWriters = new ReportWriters(scalarWriter, partitionedScalarWriter,
+            arrayWriter, accrejWriter);
     EstimatorIterator iterator = manager->getEstimatorIterator();
     do {
         (*iterator)->startReport(reportWriters);

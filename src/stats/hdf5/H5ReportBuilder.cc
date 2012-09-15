@@ -9,6 +9,7 @@
 #include "H5ScalarReportWriter.h"
 #include "H5SplitScalarReportWriter.h"
 #include "stats/NullAccRejReportWriter.h"
+#include "stats/NullPartitionedScalarReportWriter.h"
 
 H5ReportBuilder::H5ReportBuilder(const std::string& filename,
         const EstimatorManager::SimInfoWriter *simInfoWriter)
@@ -83,8 +84,11 @@ hid_t H5ReportBuilder::createH5Group(std::string name, hid_t fileID) {
 void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {
     scalarWriter = new H5ScalarReportWriter(nstep, writingGroupID);
     arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
+    NullPartitionedScalrReportWriter *partitionedScalarWriter
+        = new NullPartitionedScalrReportWriter();
     NullAccRejReportWriter* accrejWriter = new NullAccRejReportWriter();
-    reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
+    reportWriters = new ReportWriters(scalarWriter, partitionedScalarWriter,
+            arrayWriter, accrejWriter);
 }
 
 void H5ReportBuilder::createStepAttribute() {

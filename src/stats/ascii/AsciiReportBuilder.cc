@@ -7,15 +7,19 @@
 #include "stats/ascii/AsciiScalarReportWriter.h"
 #include "stats/NullArrayReportWriter.h"
 #include "stats/NullAccRejReportWriter.h"
+#include "stats/NullPartitionedScalarReportWriter.h"
 #include "stats/EstimatorIterator.h"
 #include <fstream>
 
 AsciiReportBuilder::AsciiReportBuilder(const std::string& filename)
 :   file(filename.c_str()) {
     scalarWriter = new AsciiScalarReportWriter(file);
+    NullPartitionedScalrReportWriter *partitionedScalarWriter
+        = new NullPartitionedScalrReportWriter();
     NullArrayReportWriter *arrayWriter = new NullArrayReportWriter();
     NullAccRejReportWriter *accrejWriter = new NullAccRejReportWriter();
-    reportWriters = new ReportWriters(scalarWriter, arrayWriter, accrejWriter);
+    reportWriters = new ReportWriters(scalarWriter, partitionedScalarWriter,
+            arrayWriter, accrejWriter);
 }
 
 AsciiReportBuilder::~AsciiReportBuilder() {
