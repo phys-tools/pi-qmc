@@ -6,8 +6,6 @@
 #include "MPIManager.h"
 #include "ReportWriters.h"
 
-#include <iostream>
-
 PartitionedScalarAccumulator::PartitionedScalarAccumulator(MPIManager *mpi,
         ModelStateInterface *modelState)
 :   mpi(mpi),

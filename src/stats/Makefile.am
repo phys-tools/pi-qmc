@@ -18,7 +18,7 @@ libstats_la_SOURCES = \
     hdf5/H5Lib.cpp \
     hdf5/H5ReportBuilder.cc \
     hdf5/H5ScalarReportWriter.cpp \
-    hdf5/H5SplitScalarReportWriter.cpp \
+    hdf5/H5PartitionedScalarReportWriter.cpp \
     stdout/StdoutAccRejReportWriter.cpp \
     stdout/StdoutArrayReportWriter.cpp \
     stdout/StdoutScalarReportWriter.cpp \
@@ -49,7 +49,7 @@ noinst_HEADERS = \
     hdf5/H5Lib.h \
     hdf5/H5ReportBuilder.h \
     hdf5/H5ScalarReportWriter.h \
-    hdf5/H5SplitScalarReportWriter.h \
+    hdf5/H5PartitionedScalarReportWriter.h \
     stdout/StdoutAccRejReportWriter.h \
     stdout/StdoutArrayReportWriter.h \
     stdout/StdoutScalarReportWriter.h \

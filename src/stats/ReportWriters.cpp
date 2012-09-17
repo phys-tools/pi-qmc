@@ -13,6 +13,7 @@ ReportWriters::ReportWriters(
         ReportWriterInterface<AccRejEstimator, ScalarAccumulator>*
             accRejReportWriter)
 :   scalarReportWriter(scalarReportWriter),
+    partitionedScalarReportWriter(partitionedScalarReportWriter),
     arrayReportWriter(arrayReportWriter),
     accRejReportWriter(accRejReportWriter) {
 }
@@ -36,12 +37,12 @@ void ReportWriters::reportScalarStep(ScalarEstimator* est,
 
 void ReportWriters::startScalarReport(ScalarEstimator* est,
         PartitionedScalarAccumulator* acc) {
-//    scalarReportWriter->startReport(est, acc);
+    partitionedScalarReportWriter->startReport(est, acc);
 }
 
 void ReportWriters::reportScalarStep(ScalarEstimator* est,
         PartitionedScalarAccumulator* acc) {
-//    scalarReportWriter->reportStep(est, acc);
+    partitionedScalarReportWriter->reportStep(est, acc);
 }
 
 void ReportWriters::startAccRejReport(AccRejEstimator* est,

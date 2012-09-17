@@ -7,7 +7,7 @@
 #include "stats/ReportWriters.h"
 #include "H5ArrayReportWriter.h"
 #include "H5ScalarReportWriter.h"
-#include "H5SplitScalarReportWriter.h"
+#include "H5PartitionedScalarReportWriter.h"
 #include "stats/NullAccRejReportWriter.h"
 #include "stats/NullPartitionedScalarReportWriter.h"
 
@@ -42,6 +42,7 @@ void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
 
 void H5ReportBuilder::collectAndWriteDataBlock(EstimatorManager *manager) {
     scalarWriter->startBlock(istep);
+    partitionedScalarWriter->startBlock(istep);
     arrayWriter->startBlock(istep);
     EstimatorIterator iterator = manager->getEstimatorIterator();
     do {
@@ -84,8 +85,8 @@ hid_t H5ReportBuilder::createH5Group(std::string name, hid_t fileID) {
 void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {
     scalarWriter = new H5ScalarReportWriter(nstep, writingGroupID);
     arrayWriter = new H5ArrayReportWriter(nstep, writingGroupID);
-    NullPartitionedScalrReportWriter *partitionedScalarWriter
-        = new NullPartitionedScalrReportWriter();
+    partitionedScalarWriter
+        = new H5PartitionedScalarReportWriter(nstep, writingGroupID);
     NullAccRejReportWriter* accrejWriter = new NullAccRejReportWriter();
     reportWriters = new ReportWriters(scalarWriter, partitionedScalarWriter,
             arrayWriter, accrejWriter);

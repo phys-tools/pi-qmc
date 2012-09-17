@@ -10,6 +10,7 @@
 class EstimatorManager;
 class ReportWriters;
 class H5ScalarReportWriter;
+class H5PartitionedScalarReportWriter;
 class H5ArrayReportWriter;
 class ScalarEstimator;
 #include "stats/ReportWriterInterface.h"
@@ -43,6 +44,7 @@ private:
 
     ReportWriters *reportWriters;
     H5ScalarReportWriter *scalarWriter;
+    H5PartitionedScalarReportWriter *partitionedScalarWriter;
     H5ArrayReportWriter *arrayWriter;
     void createStepAttribute();
     void createReportWriters(EstimatorManager*& manager);

@@ -81,7 +81,7 @@ am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-H5ArrayReportWriter.lo libstats_la-H5Lib.lo \
 	libstats_la-H5ReportBuilder.lo \
 	libstats_la-H5ScalarReportWriter.lo \
-	libstats_la-H5SplitScalarReportWriter.lo \
+	libstats_la-H5PartitionedScalarReportWriter.lo \
 	libstats_la-StdoutAccRejReportWriter.lo \
 	libstats_la-StdoutArrayReportWriter.lo \
 	libstats_la-StdoutScalarReportWriter.lo \
@@ -267,7 +267,7 @@ libstats_la_SOURCES = \
     hdf5/H5Lib.cpp \
     hdf5/H5ReportBuilder.cc \
     hdf5/H5ScalarReportWriter.cpp \
-    hdf5/H5SplitScalarReportWriter.cpp \
+    hdf5/H5PartitionedScalarReportWriter.cpp \
     stdout/StdoutAccRejReportWriter.cpp \
     stdout/StdoutArrayReportWriter.cpp \
     stdout/StdoutScalarReportWriter.cpp \
@@ -299,7 +299,7 @@ noinst_HEADERS = \
     hdf5/H5Lib.h \
     hdf5/H5ReportBuilder.h \
     hdf5/H5ScalarReportWriter.h \
-    hdf5/H5SplitScalarReportWriter.h \
+    hdf5/H5PartitionedScalarReportWriter.h \
     stdout/StdoutAccRejReportWriter.h \
     stdout/StdoutArrayReportWriter.h \
     stdout/StdoutScalarReportWriter.h \
@@ -368,9 +368,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ArrayReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5Lib.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5PartitionedScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5ScalarReportWriter.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-H5SplitScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-MPIManager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-PartitionedScalarAccumulator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ReportWriters.Plo@am__quote@
@@ -522,12 +522,12 @@ libstats_la-H5ScalarReportWriter.lo: hdf5/H5ScalarReportWriter.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5ScalarReportWriter.lo `test -f 'hdf5/H5ScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ScalarReportWriter.cpp
 
-libstats_la-H5SplitScalarReportWriter.lo: hdf5/H5SplitScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5SplitScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5SplitScalarReportWriter.Tpo -c -o libstats_la-H5SplitScalarReportWriter.lo `test -f 'hdf5/H5SplitScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5SplitScalarReportWriter.cpp
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5SplitScalarReportWriter.Tpo $(DEPDIR)/libstats_la-H5SplitScalarReportWriter.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5SplitScalarReportWriter.cpp' object='libstats_la-H5SplitScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+libstats_la-H5PartitionedScalarReportWriter.lo: hdf5/H5PartitionedScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5PartitionedScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5PartitionedScalarReportWriter.Tpo -c -o libstats_la-H5PartitionedScalarReportWriter.lo `test -f 'hdf5/H5PartitionedScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5PartitionedScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-H5PartitionedScalarReportWriter.Tpo $(DEPDIR)/libstats_la-H5PartitionedScalarReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='hdf5/H5PartitionedScalarReportWriter.cpp' object='libstats_la-H5PartitionedScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5SplitScalarReportWriter.lo `test -f 'hdf5/H5SplitScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5SplitScalarReportWriter.cpp
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-H5PartitionedScalarReportWriter.lo `test -f 'hdf5/H5PartitionedScalarReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5PartitionedScalarReportWriter.cpp
 
 libstats_la-StdoutAccRejReportWriter.lo: stdout/StdoutAccRejReportWriter.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-StdoutAccRejReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-StdoutAccRejReportWriter.Tpo -c -o libstats_la-StdoutAccRejReportWriter.lo `test -f 'stdout/StdoutAccRejReportWriter.cpp' || echo '$(srcdir)/'`stdout/StdoutAccRejReportWriter.cpp
