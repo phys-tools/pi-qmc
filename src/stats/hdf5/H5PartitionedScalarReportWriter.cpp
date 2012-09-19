@@ -15,7 +15,8 @@ H5PartitionedScalarReportWriter::~H5PartitionedScalarReportWriter() {
 
 void H5PartitionedScalarReportWriter::startReport(const ScalarEstimator *est,
         const PartitionedScalarAccumulator *acc) {
-    hid_t dataSetID = H5Lib::createScalarInH5File(*est, writingGroupID, nstep);
+    hid_t groupID = H5Lib::createGroupInH5File("partition0", writingGroupID);
+    hid_t dataSetID = H5Lib::createScalarInH5File(*est, groupID, nstep);
     datasetList.push_back(dataSetID);
 }
 

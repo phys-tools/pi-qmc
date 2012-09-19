@@ -48,7 +48,6 @@ private:
     H5ArrayReportWriter *arrayWriter;
     void createStepAttribute();
     void createReportWriters(EstimatorManager*& manager);
-    static hid_t createH5Group(std::string name, hid_t fileID);
     void closeDatasets();
 };
 #endif

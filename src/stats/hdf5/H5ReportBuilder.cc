@@ -10,6 +10,7 @@
 #include "H5PartitionedScalarReportWriter.h"
 #include "stats/NullAccRejReportWriter.h"
 #include "stats/NullPartitionedScalarReportWriter.h"
+#include "H5Lib.h"
 
 H5ReportBuilder::H5ReportBuilder(const std::string& filename,
         const EstimatorManager::SimInfoWriter *simInfoWriter)
@@ -31,7 +32,7 @@ H5ReportBuilder::~H5ReportBuilder() {
 void H5ReportBuilder::initializeReport(EstimatorManager *manager) {
     nstep = manager->getNStep();
     istep = 0;
-    writingGroupID = createH5Group("estimators", fileID);
+    writingGroupID = H5Lib::createGroupInH5File("estimators", fileID);
     createReportWriters(manager);
     createStepAttribute();
     EstimatorIterator iterator = manager->getEstimatorIterator();
@@ -70,16 +71,6 @@ void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
     H5Dclose(dsetID);
     H5Tclose(dtypeID);
     H5Sclose(dspaceID);
-}
-
-hid_t H5ReportBuilder::createH5Group(std::string name, hid_t fileID) {
-#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
-    hid_t groupID = H5Gcreate2(fileID, "estimators", H5P_DEFAULT, H5P_DEFAULT,
-            H5P_DEFAULT);
-#else
-    hid_t groupID = H5Gcreate(fileID,"estimators",0);
-#endif 
-    return groupID;
 }
 
 void H5ReportBuilder::createReportWriters(EstimatorManager*& manager) {

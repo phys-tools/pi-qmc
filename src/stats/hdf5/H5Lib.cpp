@@ -72,3 +72,15 @@ void H5Lib::writeScalarValue(hid_t dataSetID, int istep,
     hid_t mspace = H5Screate_simple(1, &dims, &maxdims);
     H5Dwrite(dataSetID, H5T_NATIVE_FLOAT, mspace, space, H5P_DEFAULT, &value);
 }
+
+hid_t H5Lib::createGroupInH5File(const std::string& name,
+        hid_t containerID) {
+#if (H5_VERS_MAJOR>1)||((H5_VERS_MAJOR==1)&&(H5_VERS_MINOR>=8))
+    hid_t groupID = H5Gcreate2(containerID, name.c_str(), H5P_DEFAULT, H5P_DEFAULT,
+            H5P_DEFAULT);
+#else
+    hid_t groupID = H5Gcreate(containerID, name.c_str(), 0);
+#endif
+    return groupID;
+}
+

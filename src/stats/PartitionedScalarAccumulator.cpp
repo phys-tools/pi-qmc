@@ -51,6 +51,10 @@ void PartitionedScalarAccumulator::startReport(ReportWriters* writers,
     writers->startScalarReport(estimator, this);
 }
 
+int PartitionedScalarAccumulator::getPartitionCount() const {
+    return 1;
+}
+
 void PartitionedScalarAccumulator::reportStep(ReportWriters* writers,
         ScalarEstimator* estimator) {
     writers->reportScalarStep(estimator, this);

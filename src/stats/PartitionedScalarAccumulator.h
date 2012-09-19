@@ -15,6 +15,7 @@ public:
     virtual void storeValue(const int lnslice);
     virtual void reset();
     virtual double calcValue();
+    int getPartitionCount() const;
 
     virtual void startReport(ReportWriters* writers,
             ScalarEstimator* estimator);
