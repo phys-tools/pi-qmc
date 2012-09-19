@@ -15,17 +15,11 @@
 
 EstimatorManager::EstimatorManager(const std::string& filename, MPIManager *mpi,
         const SimInfoWriter *simInfoWriter) :
-        filename(filename), mpi(mpi), simInfoWriter(simInfoWriter), isSplitOverStates(
-                false) {
-    int rank = 0;
-#ifdef ENABLE_MPI
-    rank = MPI::COMM_WORLD.Get_rank();
-#endif
-    if (rank == 0) {
-        builders.push_back(new H5ReportBuilder(filename, simInfoWriter));
-        builders.push_back(new StdoutReportBuilder());
-        builders.push_back(new AsciiReportBuilder("pimc.dat"));
-    }
+    filename(filename),
+    mpi(mpi),
+    simInfoWriter(simInfoWriter),
+    modelState(0),
+    isSplitOverStates(false) {
 }
 
 EstimatorManager::~EstimatorManager() {
@@ -36,8 +30,19 @@ EstimatorManager::~EstimatorManager() {
         delete *i;
 }
 
+void EstimatorManager::createBuilders(const std::string& filename,
+        const SimInfoWriter* simInfoWriter) {
+    int rank = 0;
+    if (rank == 0) {
+        builders.push_back(new H5ReportBuilder(filename, simInfoWriter));
+        builders.push_back(new StdoutReportBuilder());
+        builders.push_back(new AsciiReportBuilder("pimc.dat"));
+    }
+}
+
 void EstimatorManager::startWritingGroup(const int nstep,
         const std::string& name) {
+    createBuilders(filename, simInfoWriter);
     this->nstep = nstep;
     istep = 0;
     int rank = 0;

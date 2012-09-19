@@ -66,5 +66,7 @@ private:
     BuilderList builders;
     const ModelState *modelState;
     int isSplitOverStates;
+    void createBuilders(const std::string& filename,
+            const SimInfoWriter* simInfoWriter);
 };
 #endif
