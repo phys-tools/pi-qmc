@@ -6,6 +6,7 @@
 #include "MPIManager.h"
 #include "ReportWriters.h"
 #include "ScalarAccumulator.h"
+#include <iostream>
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
   : Estimator(name,"","scalar"),
@@ -36,22 +37,26 @@ void ScalarEstimator::setValue(const double v) {
 }
 
 void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
-  int rank=0, size=1;
+    if (accumulator) {
+        std::cout << "we have an accumulator: " << getName() << std::endl;
+    } else {
+        int rank=0, size=1;
 #ifdef ENABLE_MPI
-  if (mpi->isCloneMain()) {
-    rank = mpi->getCloneComm().Get_rank();
-    size = mpi->getCloneComm().Get_size();
-  }
+        if (mpi->isCloneMain()) {
+            rank = mpi->getCloneComm().Get_rank();
+            size = mpi->getCloneComm().Get_size();
+        }
 #endif
-  double v=calcValue();
-  value=v;
-  reset();
+        double v=calcValue();
+        value=v;
+        reset();
 #ifdef ENABLE_MPI
-  if (mpi->isCloneMain()) {
-    mpi->getCloneComm().Reduce(&v,&value,1,MPI::DOUBLE,MPI::SUM,0);
-  }
+        if (mpi->isCloneMain()) {
+            mpi->getCloneComm().Reduce(&v,&value,1,MPI::DOUBLE,MPI::SUM,0);
+        }
 #endif
-  if (rank==0) setValue(value/size);
+        if (rank==0) setValue(value/size);
+    }
 }
 
 void ScalarEstimator::startReport(ReportWriters *writers) {
@@ -65,10 +70,20 @@ void ScalarEstimator::startReport(ReportWriters *writers) {
 
 void ScalarEstimator::reportStep(ReportWriters *writers) {
     if (accumulator) {
+
         accumulator->reportStep(writers, this);
     } else {
         SimpleScalarAccumulator *accumulator = 0;
         writers->reportScalarStep(this, accumulator);
     }
 }
+
+const double ScalarEstimator::getScale() const {
+    return scale;
+}
+
+const double ScalarEstimator::getShift() const {
+    return shift;
+}
+
 

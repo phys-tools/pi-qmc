@@ -31,7 +31,7 @@ noinst_HEADERS = \
     EstimatorIterator.h \
     EstimatorManager.h \
     EstimatorReportBuilder.h \
-    ModelStateInterface.h \
+    PartitionWeight.h \
     MPIManager.h \
     NullArrayReportWriter.h \
     NullAccRejReportWriter.h \

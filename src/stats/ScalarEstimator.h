@@ -25,6 +25,9 @@ public:
 
     virtual void startReport(ReportWriters* writers);
     virtual void reportStep(ReportWriters* writers);
+
+    const double getScale() const;
+    const double getShift() const;
 protected:
     ScalarAccumulator *accumulator;
     double value;

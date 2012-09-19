@@ -54,7 +54,7 @@ void ThermoEnergyEstimator::endCalc(const int lnslice) {
 }
 
 double ThermoEnergyEstimator::calcValue() {
-    return value = accumulator->calcValue();
+    return 0.0;
 }
 
 void ThermoEnergyEstimator::reset() {

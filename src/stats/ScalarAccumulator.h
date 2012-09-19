@@ -12,7 +12,6 @@ public:
     virtual void clearValue() = 0;
     virtual void storeValue(const int lnslice) = 0;
     virtual void reset() = 0;
-    virtual double calcValue() = 0;
 
     virtual void startReport(ReportWriters* writers,
             ScalarEstimator* estimator) = 0;

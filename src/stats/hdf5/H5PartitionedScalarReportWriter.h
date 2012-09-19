@@ -6,6 +6,7 @@ class ScalarEstimator;
 class PartitionedScalarAccumulator;
 #include <hdf5.h>
 #include <vector>
+#include <string>
 
 class H5PartitionedScalarReportWriter
 :   public ReportWriterInterface<ScalarEstimator, PartitionedScalarAccumulator> {
@@ -22,12 +23,14 @@ public:
 private:
     int nstep;
     int istep;
+    int partitionCount;
     hid_t writingGroupID;
 
     typedef std::vector<hid_t> DataSetContainer;
     typedef DataSetContainer::iterator DataSetIterator;
     DataSetContainer datasetList;
     DataSetIterator datasetIterator;
+    static std::string groupName(int partition);
 };
 
 #endif

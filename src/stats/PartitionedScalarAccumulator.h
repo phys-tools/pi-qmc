@@ -3,18 +3,18 @@
 
 #include "ScalarAccumulator.h"
 class MPIManager;
-class ModelStateInterface;
+class PartitionWeight;
 
 class PartitionedScalarAccumulator : public ScalarAccumulator {
 public:
     PartitionedScalarAccumulator(MPIManager *mpi,
-            ModelStateInterface *modelState);
+            PartitionWeight *modelState);
     virtual ~PartitionedScalarAccumulator();
     virtual void addToValue(double addend);
     virtual void clearValue();
     virtual void storeValue(const int lnslice);
     virtual void reset();
-    virtual double calcValue();
+    double getValue(int partition) const;
     int getPartitionCount() const;
 
     virtual void startReport(ReportWriters* writers,
@@ -22,11 +22,12 @@ public:
     virtual void reportStep(ReportWriters* writers,
             ScalarEstimator* estimator);
 private:
-    double value;
-    double sum;
-    double norm;
+    double* value;
+    double* sum;
+    double* norm;
+    const int partitionCount;
     MPIManager *mpi;
-    ModelStateInterface *modelState;
+    PartitionWeight *weight;
 };
 
 #endif
