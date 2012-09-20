@@ -24,7 +24,13 @@ void AsciiScalarReportWriter::startBlock(int istep) {
 
 void AsciiScalarReportWriter::reportStep(const ScalarEstimator *est,
         const SimpleScalarAccumulator *acc) {
-    file << est->getValue() << " ";
+    double value = 0.0;
+    if (acc == 0) {
+        value = est->getValue();
+    } else {
+        value = acc->getValue();
+    }
+    file << value << " ";
 }
 
 

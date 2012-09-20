@@ -6,6 +6,7 @@
 #include "MPIManager.h"
 #include "ReportWriters.h"
 #include "PartitionWeight.h"
+#include <iostream>
 
 PartitionedScalarAccumulator::PartitionedScalarAccumulator(MPIManager *mpi,
         PartitionWeight *weight)
@@ -15,6 +16,7 @@ PartitionedScalarAccumulator::PartitionedScalarAccumulator(MPIManager *mpi,
     norm(new double[partitionCount]),
     mpi(mpi),
     weight(weight) {
+    reset();
 }
 
 PartitionedScalarAccumulator::~PartitionedScalarAccumulator() {
@@ -56,10 +58,20 @@ void PartitionedScalarAccumulator::storeValue(const int lnslice) {
     }
 }
 
+void PartitionedScalarAccumulator::calculateTotal() {
+    for (int i = 0; i < partitionCount; ++i) {
+        value[i] = sum[i] / norm[i];
+    }
+}
+
 void PartitionedScalarAccumulator::reset() {
     for (int i = 0; i < partitionCount; ++i) {
         sum[i] = norm[i] = 0.0;
     }
+}
+
+double PartitionedScalarAccumulator::getValue(int partition) const {
+    return value[partition];
 }
 
 void PartitionedScalarAccumulator::startReport(ReportWriters* writers,
@@ -69,10 +81,6 @@ void PartitionedScalarAccumulator::startReport(ReportWriters* writers,
 
 int PartitionedScalarAccumulator::getPartitionCount() const {
     return partitionCount;
-}
-
-double PartitionedScalarAccumulator::getValue(int partition) const {
-    return sum[partition] / norm[partition];
 }
 
 void PartitionedScalarAccumulator::reportStep(ReportWriters* writers,

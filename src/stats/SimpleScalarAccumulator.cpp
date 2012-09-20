@@ -36,12 +36,16 @@ void SimpleScalarAccumulator::storeValue(const int lnslice) {
     norm += 1.0;
 }
 
+void SimpleScalarAccumulator::calculateTotal() {
+    value = sum / norm;
+}
+
 void SimpleScalarAccumulator::reset() {
     sum = norm = 0.0;
 }
 
-double SimpleScalarAccumulator::calcValue() {
-    return sum / norm;
+double SimpleScalarAccumulator::getValue() const {
+    return value;
 }
 
 void SimpleScalarAccumulator::startReport(ReportWriters* writers,
@@ -53,6 +57,4 @@ void SimpleScalarAccumulator::reportStep(ReportWriters* writers,
         ScalarEstimator* estimator) {
     writers->reportScalarStep(estimator, this);
 }
-
-
 

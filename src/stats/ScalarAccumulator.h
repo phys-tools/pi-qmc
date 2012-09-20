@@ -11,6 +11,7 @@ public:
     virtual void addToValue(double addend) = 0;
     virtual void clearValue() = 0;
     virtual void storeValue(const int lnslice) = 0;
+    virtual void calculateTotal() = 0;
     virtual void reset() = 0;
 
     virtual void startReport(ReportWriters* writers,

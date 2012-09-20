@@ -37,6 +37,8 @@ void ScalarEstimator::setValue(const double v) {
 
 void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
     if (accumulator) {
+        accumulator->calculateTotal();
+        accumulator->reset();
     } else {
         int rank=0, size=1;
 #ifdef ENABLE_MPI

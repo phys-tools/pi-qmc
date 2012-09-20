@@ -12,7 +12,8 @@ public:
     virtual void clearValue();
     virtual void storeValue(const int lnslice);
     virtual void reset();
-    virtual double calcValue();
+    virtual void calculateTotal();
+    double getValue() const;
 
     virtual void startReport(ReportWriters* writers,
             ScalarEstimator* estimator);
