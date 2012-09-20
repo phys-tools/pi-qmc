@@ -18,6 +18,9 @@ PartitionedScalarAccumulator::PartitionedScalarAccumulator(MPIManager *mpi,
 }
 
 PartitionedScalarAccumulator::~PartitionedScalarAccumulator() {
+    delete [] value;
+    delete [] sum;
+    delete [] norm;
 }
 
 void PartitionedScalarAccumulator::clearValue() {

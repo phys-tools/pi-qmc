@@ -6,7 +6,6 @@
 #include "MPIManager.h"
 #include "ReportWriters.h"
 #include "ScalarAccumulator.h"
-#include <iostream>
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
   : Estimator(name,"","scalar"),
@@ -38,7 +37,6 @@ void ScalarEstimator::setValue(const double v) {
 
 void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
     if (accumulator) {
-        std::cout << "we have an accumulator: " << getName() << std::endl;
     } else {
         int rank=0, size=1;
 #ifdef ENABLE_MPI

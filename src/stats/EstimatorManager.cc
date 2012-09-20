@@ -10,7 +10,6 @@
 #include "stdout/StdoutReportBuilder.h"
 #include <algorithm>
 #include <functional>
-#include <iostream>
 #include <fstream>
 
 EstimatorManager::EstimatorManager(const std::string& filename, MPIManager *mpi,
@@ -28,6 +27,10 @@ EstimatorManager::~EstimatorManager() {
         delete *i;
     for (BuilderIter i = builders.begin(); i != builders.end(); ++i)
         delete *i;
+}
+
+void EstimatorManager::add(Estimator* e) {
+    estimator.push_back(e);
 }
 
 void EstimatorManager::createBuilders(const std::string& filename,
@@ -127,7 +130,6 @@ void EstimatorManager::setModelState(const ModelState *modelState) {
 
 void EstimatorManager::setIsSplitOverStates(bool isSplitOverStates) {
     this->isSplitOverStates = isSplitOverStates;
-    std::cout << "Splitting estimators over states" << std::endl;
 }
 
 bool EstimatorManager::getIsSplitOverStates() {

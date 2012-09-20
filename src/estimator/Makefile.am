@@ -28,6 +28,7 @@ libestimator_la_SOURCES = \
 	ThermoEnergyEstimator.cc \
 	VIndEstimator.cc \
 	VirialEnergyEstimator.cc \
+	WeightEstimator.cpp \
 	WindingEstimator.cc
 noinst_HEADERS = \
 	AngularMomentumEstimator.h \
@@ -60,5 +61,6 @@ noinst_HEADERS = \
 	ThermoEnergyEstimator.h \
 	VIndEstimator.h \
 	VirialEnergyEstimator.h \
+	WeightEstimator.h \
 	WindingEstimator.h \
 	ZeroVarDensityEstimator.h

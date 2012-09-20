@@ -7,19 +7,29 @@
 H5PartitionedScalarReportWriter::H5PartitionedScalarReportWriter(
         int nstep, hid_t writingGroupID)
 :   nstep(nstep),
-    writingGroupID(writingGroupID) {
+    writingGroupID(writingGroupID),
+    groupID(0) {
 }
 
 H5PartitionedScalarReportWriter::~H5PartitionedScalarReportWriter() {
+    delete [] groupID;
+}
+
+void H5PartitionedScalarReportWriter::createPartitionGroups() {
+    groupID = new hid_t[partitionCount];
+    for (int partition = 0; partition < partitionCount; ++partition) {
+        std::string name = groupName(partition);
+        groupID[partition] = H5Lib::createGroupInH5File(name, writingGroupID);
+    }
 }
 
 void H5PartitionedScalarReportWriter::startReport(const ScalarEstimator *est,
         const PartitionedScalarAccumulator *acc) {
     partitionCount = acc->getPartitionCount();
+    if (groupID == 0) createPartitionGroups();
     for (int partition = 0; partition < partitionCount; ++partition) {
-        std::string name = groupName(partition);
-        hid_t groupID = H5Lib::createGroupInH5File(name, writingGroupID);
-        hid_t dataSetID = H5Lib::createScalarInH5File(*est, groupID, nstep);
+        hid_t dataSetID
+            = H5Lib::createScalarInH5File(*est, groupID[partition], nstep);
         datasetList.push_back(dataSetID);
     }
 }

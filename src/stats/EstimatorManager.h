@@ -40,13 +40,13 @@ public:
             const SimInfoWriter*);
     std::vector<Estimator*>& getEstimatorSet(const std::string &name);
     virtual ~EstimatorManager();
-    void add(Estimator* e) {
-        estimator.push_back(e);
-    }
+    void add(Estimator* e);
+
     void startWritingGroup(const int nstep, const std::string& name);
     void writeStep();
     void recordInputDocument(const std::string &filename);
     EstimatorIterator getEstimatorIterator();
+
     int getNStep() const;
     void setModelState(const ModelState *modelState);
     void setIsSplitOverStates(bool);

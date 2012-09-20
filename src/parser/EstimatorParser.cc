@@ -53,6 +53,7 @@
 #include "util/Distance.h"
 #include "util/PairDistance.h"
 #include "util/SuperCell.h"
+#include "estimator/WeightEstimator.h"
 
 EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
     const double tau, const Action* action, const DoubleAction* doubleAction,
@@ -70,11 +71,16 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
   if (actionChoice) {
     manager->add(new FreeEnergyEstimator(simInfo,
        actionChoice->getModelState().getModelCount(), mpi));
-    manager->setModelState(&actionChoice->getModelState());
+
     xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
     xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
     bool splitOverStates = parser.getBoolAttribute(estNode,"splitOverStates");
-    manager->setIsSplitOverStates(splitOverStates);
+
+    if (splitOverStates) {
+        manager->setIsSplitOverStates(true);
+        manager->setModelState(&actionChoice->getModelState());
+        manager->add(new WeightEstimator(createScalarAccumulator()));
+    }
   }
   // Then parse the xml estimator list.
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);
@@ -771,7 +777,7 @@ SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
 }
 
 ScalarAccumulator* EstimatorParser::createScalarAccumulator() {
-    ScalarAccumulator *accumulator;
+    ScalarAccumulator *accumulator = 0;
     if (manager->getIsSplitOverStates()) {
         ModelState *modelState = &actionChoice->getModelState();
         accumulator = new PartitionedScalarAccumulator(mpi, modelState);

@@ -22,10 +22,10 @@ public:
     virtual void reportStep(ReportWriters* writers,
             ScalarEstimator* estimator);
 private:
+    const int partitionCount;
     double* value;
     double* sum;
     double* norm;
-    const int partitionCount;
     MPIManager *mpi;
     PartitionWeight *weight;
 };

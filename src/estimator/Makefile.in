@@ -97,6 +97,7 @@ am_libestimator_la_OBJECTS =  \
 	libestimator_la-ThermoEnergyEstimator.lo \
 	libestimator_la-VIndEstimator.lo \
 	libestimator_la-VirialEnergyEstimator.lo \
+	libestimator_la-WeightEstimator.lo \
 	libestimator_la-WindingEstimator.lo
 libestimator_la_OBJECTS = $(am_libestimator_la_OBJECTS)
 libestimator_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -290,6 +291,7 @@ libestimator_la_SOURCES = \
 	ThermoEnergyEstimator.cc \
 	VIndEstimator.cc \
 	VirialEnergyEstimator.cc \
+	WeightEstimator.cpp \
 	WindingEstimator.cc
 
 noinst_HEADERS = \
@@ -323,13 +325,14 @@ noinst_HEADERS = \
 	ThermoEnergyEstimator.h \
 	VIndEstimator.h \
 	VirialEnergyEstimator.h \
+	WeightEstimator.h \
 	WindingEstimator.h \
 	ZeroVarDensityEstimator.h
 
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cc .lo .o .obj
+.SUFFIXES: .cc .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -407,6 +410,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libestimator_la-ThermoEnergyEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libestimator_la-VIndEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libestimator_la-VirialEnergyEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libestimator_la-WeightEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libestimator_la-WindingEstimator.Plo@am__quote@
 
 .cc.o:
@@ -619,12 +623,40 @@ libestimator_la-VirialEnergyEstimator.lo: VirialEnergyEstimator.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libestimator_la_CXXFLAGS) $(CXXFLAGS) -c -o libestimator_la-VirialEnergyEstimator.lo `test -f 'VirialEnergyEstimator.cc' || echo '$(srcdir)/'`VirialEnergyEstimator.cc
 
+libestimator_la-WeightEstimator.lo: WeightEstimator.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libestimator_la_CXXFLAGS) $(CXXFLAGS) -MT libestimator_la-WeightEstimator.lo -MD -MP -MF $(DEPDIR)/libestimator_la-WeightEstimator.Tpo -c -o libestimator_la-WeightEstimator.lo `test -f 'WeightEstimator.cpp' || echo '$(srcdir)/'`WeightEstimator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libestimator_la-WeightEstimator.Tpo $(DEPDIR)/libestimator_la-WeightEstimator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WeightEstimator.cpp' object='libestimator_la-WeightEstimator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libestimator_la_CXXFLAGS) $(CXXFLAGS) -c -o libestimator_la-WeightEstimator.lo `test -f 'WeightEstimator.cpp' || echo '$(srcdir)/'`WeightEstimator.cpp
+
 libestimator_la-WindingEstimator.lo: WindingEstimator.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libestimator_la_CXXFLAGS) $(CXXFLAGS) -MT libestimator_la-WindingEstimator.lo -MD -MP -MF $(DEPDIR)/libestimator_la-WindingEstimator.Tpo -c -o libestimator_la-WindingEstimator.lo `test -f 'WindingEstimator.cc' || echo '$(srcdir)/'`WindingEstimator.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libestimator_la-WindingEstimator.Tpo $(DEPDIR)/libestimator_la-WindingEstimator.Plo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='WindingEstimator.cc' object='libestimator_la-WindingEstimator.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libestimator_la_CXXFLAGS) $(CXXFLAGS) -c -o libestimator_la-WindingEstimator.lo `test -f 'WindingEstimator.cc' || echo '$(srcdir)/'`WindingEstimator.cc
+
+.cpp.o:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cpp.lo:
+@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo

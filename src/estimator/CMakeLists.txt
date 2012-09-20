@@ -26,6 +26,7 @@ set (sources
     ThermoEnergyEstimator.cc
     VIndEstimator.cc
     VirialEnergyEstimator.cc
+    WeightEstimator.cpp
     WindingEstimator.cc
 )
 

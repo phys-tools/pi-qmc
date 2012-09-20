@@ -30,6 +30,8 @@ private:
     typedef DataSetContainer::iterator DataSetIterator;
     DataSetContainer datasetList;
     DataSetIterator datasetIterator;
+    hid_t* groupID;
+    void createPartitionGroups();
     static std::string groupName(int partition);
 };
 
