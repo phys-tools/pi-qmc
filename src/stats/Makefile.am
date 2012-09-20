@@ -14,6 +14,7 @@ libstats_la_SOURCES = \
     Units.cc \
     ascii/AsciiReportBuilder.cc \
     ascii/AsciiScalarReportWriter.cpp \
+    ascii/AsciiPartitionedScalarReportWriter.cpp \
     hdf5/H5ArrayReportWriter.cpp \
     hdf5/H5Lib.cpp \
     hdf5/H5ReportBuilder.cc \
@@ -45,6 +46,7 @@ noinst_HEADERS = \
     Units.h \
     ascii/AsciiReportBuilder.h \
     ascii/AsciiScalarReportWriter.h \
+    ascii/AsciiPartitionedScalarReportWriter.h \
     hdf5/H5ArrayReportWriter.h \
     hdf5/H5Lib.h \
     hdf5/H5ReportBuilder.h \

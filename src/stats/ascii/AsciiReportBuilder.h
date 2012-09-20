@@ -7,6 +7,7 @@
 
 class ReportWriters;
 class AsciiScalarReportWriter;
+class AsciiPartitionedScalarReportWriter;
 
 /** Class for reporting estimators to an ascii column file.
  @author John Shumway */
@@ -26,5 +27,6 @@ private:
 
     ReportWriters *reportWriters;
     AsciiScalarReportWriter *scalarWriter;
+    AsciiPartitionedScalarReportWriter *partitionedScalarWriter;
 };
 #endif

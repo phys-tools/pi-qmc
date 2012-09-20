@@ -12,6 +12,7 @@ set (sources
     Units.cc
     ascii/AsciiReportBuilder.cc
     ascii/AsciiScalarReportWriter.cpp
+    ascii/AsciiPartitionedScalarReportWriter.cpp
     hdf5/H5ArrayReportWriter.cpp
     hdf5/H5Lib.cpp
     hdf5/H5ReportBuilder.cc

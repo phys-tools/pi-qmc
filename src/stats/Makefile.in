@@ -78,6 +78,7 @@ am_libstats_la_OBJECTS = libstats_la-AccRejEstimator.lo \
 	libstats_la-SimpleScalarAccumulator.lo libstats_la-Units.lo \
 	libstats_la-AsciiReportBuilder.lo \
 	libstats_la-AsciiScalarReportWriter.lo \
+	libstats_la-AsciiPartitionedScalarReportWriter.lo \
 	libstats_la-H5ArrayReportWriter.lo libstats_la-H5Lib.lo \
 	libstats_la-H5ReportBuilder.lo \
 	libstats_la-H5ScalarReportWriter.lo \
@@ -263,6 +264,7 @@ libstats_la_SOURCES = \
     Units.cc \
     ascii/AsciiReportBuilder.cc \
     ascii/AsciiScalarReportWriter.cpp \
+    ascii/AsciiPartitionedScalarReportWriter.cpp \
     hdf5/H5ArrayReportWriter.cpp \
     hdf5/H5Lib.cpp \
     hdf5/H5ReportBuilder.cc \
@@ -295,6 +297,7 @@ noinst_HEADERS = \
     Units.h \
     ascii/AsciiReportBuilder.h \
     ascii/AsciiScalarReportWriter.h \
+    ascii/AsciiPartitionedScalarReportWriter.h \
     hdf5/H5ArrayReportWriter.h \
     hdf5/H5Lib.h \
     hdf5/H5ReportBuilder.h \
@@ -361,6 +364,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AccRejEstimator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-ArrayEstimator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiPartitionedScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiReportBuilder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-AsciiScalarReportWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libstats_la-EstimatorIterator.Plo@am__quote@
@@ -493,6 +497,13 @@ libstats_la-AsciiScalarReportWriter.lo: ascii/AsciiScalarReportWriter.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ascii/AsciiScalarReportWriter.cpp' object='libstats_la-AsciiScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiScalarReportWriter.lo `test -f 'ascii/AsciiScalarReportWriter.cpp' || echo '$(srcdir)/'`ascii/AsciiScalarReportWriter.cpp
+
+libstats_la-AsciiPartitionedScalarReportWriter.lo: ascii/AsciiPartitionedScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-AsciiPartitionedScalarReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-AsciiPartitionedScalarReportWriter.Tpo -c -o libstats_la-AsciiPartitionedScalarReportWriter.lo `test -f 'ascii/AsciiPartitionedScalarReportWriter.cpp' || echo '$(srcdir)/'`ascii/AsciiPartitionedScalarReportWriter.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libstats_la-AsciiPartitionedScalarReportWriter.Tpo $(DEPDIR)/libstats_la-AsciiPartitionedScalarReportWriter.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ascii/AsciiPartitionedScalarReportWriter.cpp' object='libstats_la-AsciiPartitionedScalarReportWriter.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -c -o libstats_la-AsciiPartitionedScalarReportWriter.lo `test -f 'ascii/AsciiPartitionedScalarReportWriter.cpp' || echo '$(srcdir)/'`ascii/AsciiPartitionedScalarReportWriter.cpp
 
 libstats_la-H5ArrayReportWriter.lo: hdf5/H5ArrayReportWriter.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libstats_la_CXXFLAGS) $(CXXFLAGS) -MT libstats_la-H5ArrayReportWriter.lo -MD -MP -MF $(DEPDIR)/libstats_la-H5ArrayReportWriter.Tpo -c -o libstats_la-H5ArrayReportWriter.lo `test -f 'hdf5/H5ArrayReportWriter.cpp' || echo '$(srcdir)/'`hdf5/H5ArrayReportWriter.cpp
