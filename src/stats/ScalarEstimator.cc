@@ -9,18 +9,18 @@
 
 ScalarEstimator::ScalarEstimator(const std::string& name)
   : Estimator(name,"","scalar"),
+    accumulator(0),
     scale(1.),
-    shift(0.),
-    accumulator(0) {
+    shift(0.) {
 }
 
 ScalarEstimator::ScalarEstimator(const std::string &name,
   const std::string &typeString, const std::string &unitName,
   double scale, double shift)
   : Estimator(name,typeString,unitName),
+    accumulator(0),
     scale(scale),
-    shift(shift),
-    accumulator(0) {
+    shift(shift) {
 }
 
 ScalarEstimator::~ScalarEstimator() {

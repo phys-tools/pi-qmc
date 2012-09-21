@@ -41,14 +41,15 @@ void PartitionedScalarAccumulator::storeValue(const int lnslice) {
     int nslice = lnslice;
 #ifdef ENABLE_MPI
     if (mpi) {
-        double *buffer = new buffer[partitionCount];
+        double *buffer = new double[partitionCount];
         int ibuffer;
-        mpi->getWorkerComm().Reduce(&value,&buffer,partitionCount,MPI::DOUBLE,MPI::SUM,0);
+        mpi->getWorkerComm().Reduce(value,buffer,partitionCount,MPI::DOUBLE,MPI::SUM,0);
         mpi->getWorkerComm().Reduce(&lnslice,&ibuffer,1,MPI::INT,MPI::SUM,0);
         for (int i = 0; i < partitionCount; ++i) {
             value[i] = buffer[i];
         }
         nslice=ibuffer;
+        delete [] buffer;
     }
 #endif
     for (int i = 0; i < partitionCount; ++i) {
