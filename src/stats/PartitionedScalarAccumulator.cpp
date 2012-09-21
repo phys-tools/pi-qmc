@@ -84,6 +84,23 @@ int PartitionedScalarAccumulator::getPartitionCount() const {
     return partitionCount;
 }
 
+void PartitionedScalarAccumulator::averageOverClones() {
+#ifdef ENABLE_MPI
+    double *buffer = new double[partitionCount];
+    for (int i = 0; i < partitionCount; ++i) {
+        buffer[i] = value[i];
+    }
+    mpi->getCloneComm().Reduce(buffer,value,partitionCount,MPI::DOUBLE,MPI::SUM,0);
+    delete [] buffer;
+    if (mpi->isCloneMain()) {
+        double oneOverSize = 1.0 / mpi->getNClone();
+        for (int i = 0; i < partitionCount; ++i) {
+            value[i] *= oneOverSize;
+        }
+    }
+#endif
+}
+
 void PartitionedScalarAccumulator::reportStep(ReportWriters* writers,
         ScalarEstimator* estimator) {
     writers->reportScalarStep(estimator, this);

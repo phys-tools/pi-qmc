@@ -53,6 +53,16 @@ void SimpleScalarAccumulator::startReport(ReportWriters* writers,
     writers->startScalarReport(estimator, this);
 }
 
+void SimpleScalarAccumulator::averageOverClones() {
+#ifdef ENABLE_MPI
+    double v = value;
+    mpi->getCloneComm().Reduce(&v,&value,1,MPI::DOUBLE,MPI::SUM,0);
+    if (mpi->isCloneMain()) {
+        value /= mpi->getNClone();
+    }
+#endif
+}
+
 void SimpleScalarAccumulator::reportStep(ReportWriters* writers,
         ScalarEstimator* estimator) {
     writers->reportScalarStep(estimator, this);

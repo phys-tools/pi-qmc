@@ -39,23 +39,18 @@ void ScalarEstimator::averageOverClones(const MPIManager* mpi) {
     if (accumulator) {
         accumulator->calculateTotal();
         accumulator->reset();
+        accumulator->averageOverClones();
     } else {
-        int rank=0, size=1;
-#ifdef ENABLE_MPI
-        if (mpi->isCloneMain()) {
-            rank = mpi->getCloneComm().Get_rank();
-            size = mpi->getCloneComm().Get_size();
-        }
-#endif
         double v=calcValue();
         value=v;
         reset();
 #ifdef ENABLE_MPI
         if (mpi->isCloneMain()) {
             mpi->getCloneComm().Reduce(&v,&value,1,MPI::DOUBLE,MPI::SUM,0);
+            int size = mpi->getNClone();
+            setValue(value/size);
         }
 #endif
-        if (rank==0) setValue(value/size);
     }
 }
 

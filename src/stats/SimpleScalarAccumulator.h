@@ -11,8 +11,9 @@ public:
     virtual void addToValue(double addend);
     virtual void clearValue();
     virtual void storeValue(const int lnslice);
-    virtual void reset();
+    virtual void averageOverClones();
     virtual void calculateTotal();
+    virtual void reset();
     double getValue() const;
 
     virtual void startReport(ReportWriters* writers,
