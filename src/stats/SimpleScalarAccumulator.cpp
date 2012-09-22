@@ -8,6 +8,7 @@
 
 SimpleScalarAccumulator::SimpleScalarAccumulator(MPIManager *mpi)
 :   mpi(mpi) {
+    reset();
 }
 
 SimpleScalarAccumulator::~SimpleScalarAccumulator() {

@@ -23,6 +23,9 @@ void StdoutScalarReportWriter::startReport(const ScalarEstimator *est,
 void StdoutScalarReportWriter::reportStep(const ScalarEstimator *est,
         const SimpleScalarAccumulator *acc) {
     double value = est->getValue();
+    if (acc) {
+        value = (acc->getValue() + est->getShift()) * est->getScale();
+    }
     sum(iscalar) += value;
     sum2(iscalar) += value * value;
     norm(iscalar) += 1;

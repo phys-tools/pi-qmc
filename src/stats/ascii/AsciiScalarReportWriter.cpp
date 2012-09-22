@@ -28,7 +28,7 @@ void AsciiScalarReportWriter::reportStep(const ScalarEstimator *est,
     if (acc == 0) {
         value = est->getValue();
     } else {
-        value = acc->getValue();
+        value = (acc->getValue() + est->getShift()) * est->getScale();
     }
     file << value << " ";
 }

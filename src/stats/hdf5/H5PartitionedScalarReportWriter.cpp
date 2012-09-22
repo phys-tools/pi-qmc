@@ -42,7 +42,8 @@ void H5PartitionedScalarReportWriter::startBlock(int istep) {
 void H5PartitionedScalarReportWriter::reportStep(const ScalarEstimator* est,
         const PartitionedScalarAccumulator *acc) {
     for (int partition = 0; partition < partitionCount; ++partition) {
-        double value = acc->getValue(partition);
+        double value
+            = (acc->getValue(partition) + est->getShift()) * est->getScale();
         H5Lib::writeScalarValue(*datasetIterator, istep, value);
         datasetIterator++;
     }

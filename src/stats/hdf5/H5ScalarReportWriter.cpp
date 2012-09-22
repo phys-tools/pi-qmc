@@ -1,6 +1,7 @@
 #include "H5ScalarReportWriter.h"
 
 #include "stats/ScalarEstimator.h"
+#include "stats/SimpleScalarAccumulator.h"
 #include "stats/hdf5/H5Lib.h"
 
 H5ScalarReportWriter::H5ScalarReportWriter(int nstep, hid_t writingGroupID)
@@ -24,6 +25,10 @@ void H5ScalarReportWriter::startBlock(int istep) {
 
 void H5ScalarReportWriter::reportStep(const ScalarEstimator *est,
         const SimpleScalarAccumulator *acc) {
-    H5Lib::writeScalarValue(*datasetIterator, istep, est->getValue());
+    double value = est->getValue();
+    if (acc) {
+        value = (acc->getValue() + est->getShift()) * est->getScale();
+    }
+    H5Lib::writeScalarValue(*datasetIterator, istep, value);
     datasetIterator++;
 }
