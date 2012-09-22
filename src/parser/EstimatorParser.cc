@@ -78,8 +78,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 
     if (splitOverStates) {
         manager->setIsSplitOverStates(true);
-        manager->setModelState(&actionChoice->getModelState());
-        manager->add(new WeightEstimator(createScalarAccumulator()));
+        manager->setPartitionWeight(&actionChoice->getModelState());
+        manager->add(new WeightEstimator(manager->createScalarAccumulator()));
     }
   }
   // Then parse the xml estimator list.
@@ -96,7 +96,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
       if (perN>0) scale/=perN;
       if (unitName!="") scale/=simInfo.getUnits()->getEnergyScaleIn(unitName);
       manager->add(new ThermoEnergyEstimator(simInfo,action,doubleAction,
-          unitName, scale, shift, createScalarAccumulator()));
+          unitName, scale, shift, manager->createScalarAccumulator()));
     }
     if (name=="SpinEstimator") {
       double gc= parser.getDoubleAttribute(estNode,"gc");
@@ -776,14 +776,4 @@ SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
 	min, max, nbin, dist, samespin, mpi);
 }
 
-ScalarAccumulator* EstimatorParser::createScalarAccumulator() {
-    ScalarAccumulator *accumulator = 0;
-    if (manager->getIsSplitOverStates()) {
-        ModelState *modelState = &actionChoice->getModelState();
-        accumulator = new PartitionedScalarAccumulator(mpi, modelState);
-    } else {
-        accumulator = new SimpleScalarAccumulator(mpi);
-    }
-    return accumulator;
-}
 

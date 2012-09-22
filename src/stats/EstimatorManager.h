@@ -10,7 +10,8 @@
 class MPIManager;
 class EstimatorReportBuilder;
 class EstimatorIterator;
-class ModelState;
+class PartitionWeight;
+class ScalarAccumulator;
 
 /** Class for managing estimators. 
  Stores all estimators and sets of estimators.
@@ -48,9 +49,10 @@ public:
     EstimatorIterator getEstimatorIterator();
 
     int getNStep() const;
-    void setModelState(const ModelState *modelState);
+    void setPartitionWeight(PartitionWeight *partitionWeight);
     void setIsSplitOverStates(bool);
     bool getIsSplitOverStates();
+    ScalarAccumulator* createScalarAccumulator();
 private:
     typedef std::list<Estimator*> EstimatorList;
     typedef EstimatorList::iterator EstimatorIter;
@@ -64,7 +66,7 @@ private:
     MPIManager *mpi;
     const SimInfoWriter *simInfoWriter;
     BuilderList builders;
-    const ModelState *modelState;
+    PartitionWeight *partitionWeight;
     int isSplitOverStates;
     void createBuilders(const std::string& filename,
             const SimInfoWriter* simInfoWriter);

@@ -8,6 +8,8 @@
 #include "ascii/AsciiReportBuilder.h"
 #include "hdf5/H5ReportBuilder.h"
 #include "stdout/StdoutReportBuilder.h"
+#include "PartitionedScalarAccumulator.h"
+#include "SimpleScalarAccumulator.h"
 #include <algorithm>
 #include <functional>
 #include <fstream>
@@ -17,7 +19,7 @@ EstimatorManager::EstimatorManager(const std::string& filename, MPIManager *mpi,
     filename(filename),
     mpi(mpi),
     simInfoWriter(simInfoWriter),
-    modelState(0),
+    partitionWeight(0),
     isSplitOverStates(false) {
 }
 
@@ -124,8 +126,8 @@ int EstimatorManager::getNStep() const {
     return nstep;
 }
 
-void EstimatorManager::setModelState(const ModelState *modelState) {
-    this->modelState = modelState;
+void EstimatorManager::setPartitionWeight(PartitionWeight *partitionWeight) {
+    this->partitionWeight = partitionWeight;
 }
 
 void EstimatorManager::setIsSplitOverStates(bool isSplitOverStates) {
@@ -134,5 +136,15 @@ void EstimatorManager::setIsSplitOverStates(bool isSplitOverStates) {
 
 bool EstimatorManager::getIsSplitOverStates() {
     return isSplitOverStates;
+}
+
+ScalarAccumulator* EstimatorManager::createScalarAccumulator() {
+    ScalarAccumulator *accumulator = 0;
+    if (isSplitOverStates) {
+        accumulator = new PartitionedScalarAccumulator(mpi, partitionWeight);
+    } else {
+        accumulator = new SimpleScalarAccumulator(mpi);
+    }
+    return accumulator;
 }
 

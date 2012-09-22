@@ -36,6 +36,8 @@ public:
     virtual int getPartitionCount() const {
         return 1;
     }
+    virtual void evaluate() {
+    }
     virtual double getValue(int i) const {
         return 1.0;
     }
