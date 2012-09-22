@@ -10,6 +10,7 @@
 #include "stdout/StdoutReportBuilder.h"
 #include "PartitionedScalarAccumulator.h"
 #include "SimpleScalarAccumulator.h"
+#include "PartitionWeight.h"
 #include <algorithm>
 #include <functional>
 #include <fstream>
@@ -33,6 +34,10 @@ EstimatorManager::~EstimatorManager() {
 
 void EstimatorManager::add(Estimator* e) {
     estimator.push_back(e);
+}
+
+PartitionWeight* EstimatorManager::getPartitionWeight() const {
+    return partitionWeight;
 }
 
 void EstimatorManager::createBuilders(const std::string& filename,

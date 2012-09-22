@@ -6,7 +6,6 @@
 #include <blitz/array.h>
 
 ///Model state for spin up and spin down.
-/// @version $Revision: 338 $
 /// @author John Shumway and Jianheng Liu
 class SpinModelState: public ModelState {
 public:
@@ -36,7 +35,7 @@ public:
     virtual int getPartitionCount() const {
         return 1;
     }
-    virtual void evaluate() {
+    virtual void evaluate(Paths* paths) {
     }
     virtual double getValue(int i) const {
         return 1.0;

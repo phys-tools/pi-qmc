@@ -117,6 +117,7 @@ void PIMCParser::parse(const xmlXPathContextPtr& ctxt) {
   if (actionChoice) {
     paths->setModelState(&actionChoice->getModelState());
   }
+
   // Parse the algorithm.
   algorithm=parseAlgorithm(ctxt);
 }
@@ -300,7 +301,8 @@ std::cout << "doubleAction!=0" << std::endl;
     algorithm=shifter;
   } else if (name=="Measure") {
     std::string estName=getStringAttribute(ctxt->node,"estimator");
-    algorithm=new Measure(*paths,estimators->getEstimatorSet(estName));
+    algorithm=new Measure(*paths,estimators->getEstimatorSet(estName),
+            estimators->getPartitionWeight());
   } else if (name=="Collect") {
     std::string estName=getStringAttribute(ctxt->node,"estimator");
     algorithm=new Collect(estName,*estimators,getLoopCount(ctxt));

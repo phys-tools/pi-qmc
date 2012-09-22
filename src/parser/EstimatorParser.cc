@@ -7,9 +7,12 @@
 #include "action/ActionChoice.h"
 #include "action/CoulombAction.h"
 #include "action/DoubleAction.h"
+#include "base/Charges.h"
+#include "base/MagneticFluxCalculator.h"
+#include "base/MagneticFluxWeight.h"
+#include "base/ModelState.h"
 #include "base/SimulationInfo.h"
 #include "base/SimInfoWriter.h"
-#include "base/ModelState.h"
 #include "emarate/EMARateEstimator.h"
 #include "estimator/AngularMomentumEstimator.h"
 #include "estimator/ConductivityEstimator.h"
@@ -74,16 +77,30 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 
     xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
     xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
-    bool splitOverStates = parser.getBoolAttribute(estNode,"splitOverStates");
 
+    bool splitOverStates = parser.getBoolAttribute(estNode,"splitOverStates");
     if (splitOverStates) {
         manager->setIsSplitOverStates(true);
         manager->setPartitionWeight(&actionChoice->getModelState());
         manager->add(new WeightEstimator(manager->createScalarAccumulator()));
     }
   }
+
+  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
+  xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
+  double bfield = parser.getDoubleAttribute(estNode, "bfield");
+  if (bfield > 1e-15) {
+      int partitionCount = parser.getIntAttribute(estNode, "partitions");
+      Charges* charges = new Charges(&simInfo);
+      MagneticFluxCalculator* fluxCalculator = new MagneticFluxCalculator(charges);
+      PartitionWeight* weight = new MagneticFluxWeight(bfield, partitionCount, fluxCalculator);
+      manager->setIsSplitOverStates(true);
+      manager->setPartitionWeight(weight);
+      manager->add(new WeightEstimator(manager->createScalarAccumulator()));
+  }
+
   // Then parse the xml estimator list.
-  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);
+  obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);
   int nest=obj->nodesetval->nodeNr;
   for (int iest=0; iest<nest; ++iest) {
     xmlNodePtr estNode=obj->nodesetval->nodeTab[iest];

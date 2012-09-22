@@ -70,8 +70,10 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libbase_la_LIBADD =
 am_libbase_la_OBJECTS = libbase_la-BeadFactory.lo \
-	libbase_la-DoubleParallelPaths.lo \
-	libbase_la-EnumeratedModelState.lo libbase_la-ParallelPaths.lo \
+	libbase_la-Charges.lo libbase_la-DoubleParallelPaths.lo \
+	libbase_la-EnumeratedModelState.lo \
+	libbase_la-MagneticFluxCalculator.lo \
+	libbase_la-MagneticFluxWeight.lo libbase_la-ParallelPaths.lo \
 	libbase_la-Paths.lo libbase_la-SerialPaths.lo \
 	libbase_la-SimInfoWriter.lo libbase_la-SimulationInfo.lo \
 	libbase_la-Species.lo libbase_la-SpinModelState.lo \
@@ -241,8 +243,11 @@ noinst_LTLIBRARIES = libbase.la
 libbase_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I $(top_srcdir)/contrib/blitz-0.9
 libbase_la_SOURCES = \
     BeadFactory.cc \
+    Charges.cpp \
     DoubleParallelPaths.cc \
     EnumeratedModelState.cc \
+    MagneticFluxCalculator.cpp \
+    MagneticFluxWeight.cpp \
     ParallelPaths.cc \
     Paths.cc \
     SerialPaths.cc \
@@ -255,10 +260,13 @@ libbase_la_SOURCES = \
 noinst_HEADERS = \
     BeadFactory.h \
     Beads.h \
+    Charges.h \
     DoubleParallelPaths.h \
     EnumeratedModelState.h \
     Help.h \
     LinkSummable.h \
+    MagneticFluxCalculator.h \
+    MagneticFluxWeight.h \
     ModelState.h \
     ParallelPaths.h \
     Paths.h \
@@ -272,7 +280,7 @@ noinst_HEADERS = \
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cc .lo .o .obj
+.SUFFIXES: .cc .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -324,8 +332,11 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-BeadFactory.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-Charges.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-DoubleParallelPaths.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-EnumeratedModelState.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-MagneticFluxCalculator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-MagneticFluxWeight.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-ParallelPaths.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-Paths.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-SerialPaths.Plo@am__quote@
@@ -363,6 +374,13 @@ libbase_la-BeadFactory.lo: BeadFactory.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-BeadFactory.lo `test -f 'BeadFactory.cc' || echo '$(srcdir)/'`BeadFactory.cc
 
+libbase_la-Charges.lo: Charges.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-Charges.lo -MD -MP -MF $(DEPDIR)/libbase_la-Charges.Tpo -c -o libbase_la-Charges.lo `test -f 'Charges.cpp' || echo '$(srcdir)/'`Charges.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libbase_la-Charges.Tpo $(DEPDIR)/libbase_la-Charges.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='Charges.cpp' object='libbase_la-Charges.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-Charges.lo `test -f 'Charges.cpp' || echo '$(srcdir)/'`Charges.cpp
+
 libbase_la-DoubleParallelPaths.lo: DoubleParallelPaths.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-DoubleParallelPaths.lo -MD -MP -MF $(DEPDIR)/libbase_la-DoubleParallelPaths.Tpo -c -o libbase_la-DoubleParallelPaths.lo `test -f 'DoubleParallelPaths.cc' || echo '$(srcdir)/'`DoubleParallelPaths.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libbase_la-DoubleParallelPaths.Tpo $(DEPDIR)/libbase_la-DoubleParallelPaths.Plo
@@ -376,6 +394,20 @@ libbase_la-EnumeratedModelState.lo: EnumeratedModelState.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EnumeratedModelState.cc' object='libbase_la-EnumeratedModelState.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-EnumeratedModelState.lo `test -f 'EnumeratedModelState.cc' || echo '$(srcdir)/'`EnumeratedModelState.cc
+
+libbase_la-MagneticFluxCalculator.lo: MagneticFluxCalculator.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-MagneticFluxCalculator.lo -MD -MP -MF $(DEPDIR)/libbase_la-MagneticFluxCalculator.Tpo -c -o libbase_la-MagneticFluxCalculator.lo `test -f 'MagneticFluxCalculator.cpp' || echo '$(srcdir)/'`MagneticFluxCalculator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libbase_la-MagneticFluxCalculator.Tpo $(DEPDIR)/libbase_la-MagneticFluxCalculator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MagneticFluxCalculator.cpp' object='libbase_la-MagneticFluxCalculator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-MagneticFluxCalculator.lo `test -f 'MagneticFluxCalculator.cpp' || echo '$(srcdir)/'`MagneticFluxCalculator.cpp
+
+libbase_la-MagneticFluxWeight.lo: MagneticFluxWeight.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-MagneticFluxWeight.lo -MD -MP -MF $(DEPDIR)/libbase_la-MagneticFluxWeight.Tpo -c -o libbase_la-MagneticFluxWeight.lo `test -f 'MagneticFluxWeight.cpp' || echo '$(srcdir)/'`MagneticFluxWeight.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libbase_la-MagneticFluxWeight.Tpo $(DEPDIR)/libbase_la-MagneticFluxWeight.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='MagneticFluxWeight.cpp' object='libbase_la-MagneticFluxWeight.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-MagneticFluxWeight.lo `test -f 'MagneticFluxWeight.cpp' || echo '$(srcdir)/'`MagneticFluxWeight.cpp
 
 libbase_la-ParallelPaths.lo: ParallelPaths.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-ParallelPaths.lo -MD -MP -MF $(DEPDIR)/libbase_la-ParallelPaths.Tpo -c -o libbase_la-ParallelPaths.lo `test -f 'ParallelPaths.cc' || echo '$(srcdir)/'`ParallelPaths.cc
@@ -432,6 +464,27 @@ libbase_la-XMLWriter.lo: XMLWriter.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='XMLWriter.cc' object='libbase_la-XMLWriter.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-XMLWriter.lo `test -f 'XMLWriter.cc' || echo '$(srcdir)/'`XMLWriter.cc
+
+.cpp.o:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+
+.cpp.obj:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cpp.lo:
+@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo

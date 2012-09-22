@@ -50,6 +50,7 @@ public:
 
     int getNStep() const;
     void setPartitionWeight(PartitionWeight *partitionWeight);
+    PartitionWeight* getPartitionWeight() const;
     void setIsSplitOverStates(bool);
     bool getIsSplitOverStates();
     ScalarAccumulator* createScalarAccumulator();

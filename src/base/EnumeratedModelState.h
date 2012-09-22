@@ -23,7 +23,7 @@ public:
     virtual int getPartitionCount() const {
         return modelCount;
     }
-    virtual void evaluate() {
+    virtual void evaluate(Paths* paths) {
     }
     virtual double getValue(int i) const {
         return (i == modelState) ? 1.0 : 0.0;
