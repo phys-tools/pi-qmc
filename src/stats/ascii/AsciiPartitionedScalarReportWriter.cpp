@@ -28,7 +28,9 @@ void AsciiPartitionedScalarReportWriter::startBlock(int istep) {
 void AsciiPartitionedScalarReportWriter::reportStep(const ScalarEstimator *est,
         const PartitionedScalarAccumulator *acc) {
     for (int partition = 0; partition < partitionCount; ++ partition) {
-        file << acc->getValue(partition) << " ";
+        double value
+            = (acc->getValue(partition) + est->getShift()) * est->getScale();
+        file << value << " ";
     }
 }
 
