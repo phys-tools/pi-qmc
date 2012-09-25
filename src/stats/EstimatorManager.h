@@ -47,6 +47,7 @@ public:
     void writeStep();
     void recordInputDocument(const std::string &filename);
     EstimatorIterator getEstimatorIterator();
+    void setInputFilename(const std::string& inputFilename);
 
     int getNStep() const;
     void setPartitionWeight(PartitionWeight *partitionWeight);
@@ -60,6 +61,7 @@ private:
     typedef std::list<EstimatorReportBuilder*> BuilderList;
     typedef BuilderList::iterator BuilderIter;
     const std::string filename;
+    std::string inputFilename;
     EstimatorList estimator;
     std::map<std::string, std::vector<Estimator*> > estimatorSet;
     int nstep;

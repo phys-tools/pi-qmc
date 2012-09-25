@@ -65,7 +65,7 @@ void H5ReportBuilder::recordInputDocument(const std::string &docstring) {
     hid_t dsetID = H5Dcreate2(fileID, "simInfo/inputDoc", dtypeID, dspaceID,
             H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 #else
-    hid_t dsetID = H5Dcreate(fileID, "comment", dtypeID, dspaceID, H5P_DEFAULT);
+    hid_t dsetID = H5Dcreate(fileID, "simInfo/inputDoc", dtypeID, dspaceID, H5P_DEFAULT);
 #endif
     H5Dwrite(dsetID, dtypeID, H5S_ALL, H5S_ALL, H5P_DEFAULT, docstring.data());
     H5Dclose(dsetID);

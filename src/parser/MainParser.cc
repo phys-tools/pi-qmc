@@ -98,7 +98,8 @@ std::cout << "Level = " << nlevel << std::endl;
     actionChoice,mpi);
   estimatorParser.parse(ctxt);
   EstimatorManager* estimators=estimatorParser.getEstimatorManager();
-  estimators->recordInputDocument(filename);
+  estimators->setInputFilename(filename);
+//  estimators->recordInputDocument(filename);
   // Setup the PIMC method.
   PIMCParser pimcParser(simInfo, action, doubleAction, actionChoice,
       estimators, simInfo.getBeadFactory(),mpi);

@@ -40,6 +40,10 @@ PartitionWeight* EstimatorManager::getPartitionWeight() const {
     return partitionWeight;
 }
 
+void EstimatorManager::setInputFilename(const std::string& inputFilename) {
+    this->inputFilename = inputFilename;
+}
+
 void EstimatorManager::createBuilders(const std::string& filename,
         const SimInfoWriter* simInfoWriter) {
     if (mpi || mpi->isMain()) {
@@ -47,6 +51,7 @@ void EstimatorManager::createBuilders(const std::string& filename,
         builders.push_back(new StdoutReportBuilder());
         builders.push_back(new AsciiReportBuilder("pimc.dat"));
     }
+    recordInputDocument(inputFilename);
 }
 
 void EstimatorManager::startWritingGroup(const int nstep,
@@ -109,6 +114,7 @@ void EstimatorManager::recordInputDocument(const std::string &filename) {
     if (!mpi || mpi->isMain()) {
         std::string buffer;
         std::string docstring;
+        std::cout << "recording " << filename << std::endl;
         std::ifstream in(filename.c_str());
         while (!std::getline(in, buffer).eof()) {
             docstring += buffer += "\n";
