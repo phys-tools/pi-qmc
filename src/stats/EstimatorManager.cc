@@ -42,8 +42,7 @@ PartitionWeight* EstimatorManager::getPartitionWeight() const {
 
 void EstimatorManager::createBuilders(const std::string& filename,
         const SimInfoWriter* simInfoWriter) {
-    int rank = 0;
-    if (rank == 0) {
+    if (mpi || mpi->isMain()) {
         builders.push_back(new H5ReportBuilder(filename, simInfoWriter));
         builders.push_back(new StdoutReportBuilder());
         builders.push_back(new AsciiReportBuilder("pimc.dat"));
@@ -55,11 +54,7 @@ void EstimatorManager::startWritingGroup(const int nstep,
     createBuilders(filename, simInfoWriter);
     this->nstep = nstep;
     istep = 0;
-    int rank = 0;
-#ifdef ENABLE_MPI
-    rank = MPI::COMM_WORLD.Get_rank();
-#endif
-    if (rank == 0) {
+    if (!mpi || mpi->isMain()) {
         for (BuilderIter builder = builders.begin(); builder != builders.end();
                 ++builder) {
             (*builder)->initializeReport(this);
@@ -111,15 +106,17 @@ EstimatorManager::getEstimatorSet(const std::string& name) {
 }
 
 void EstimatorManager::recordInputDocument(const std::string &filename) {
-    std::string buffer;
-    std::string docstring;
-    std::ifstream in(filename.c_str());
-    while (!std::getline(in, buffer).eof())
-        docstring += buffer += "\n";
-
-    for (BuilderIter builder = builders.begin(); builder != builders.end();
-            ++builder) {
-        (*builder)->recordInputDocument(docstring);
+    if (!mpi || mpi->isMain()) {
+        std::string buffer;
+        std::string docstring;
+        std::ifstream in(filename.c_str());
+        while (!std::getline(in, buffer).eof()) {
+            docstring += buffer += "\n";
+        }
+        for (BuilderIter builder = builders.begin(); builder != builders.end();
+                ++builder) {
+            (*builder)->recordInputDocument(docstring);
+        }
     }
 }
 
