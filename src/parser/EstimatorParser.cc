@@ -88,7 +88,7 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 
   xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
   xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
-  double bfield = parser.getDoubleAttribute(estNode, "bfield");
+  double bfield = parser.getEnergyAttribute(estNode, "bfield");
   if (bfield > 1e-15) {
       int partitionCount = parser.getIntAttribute(estNode, "partitions");
       Charges* charges = new Charges(&simInfo);
