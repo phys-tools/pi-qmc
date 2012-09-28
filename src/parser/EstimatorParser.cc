@@ -506,19 +506,27 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="SpinChoicePCFEstimator") {
       std::string name =  parser.getStringAttribute(estNode, "name");
+      std::string spin =  parser.getStringAttribute(estNode, "spin");
       std::string corr =  parser.getStringAttribute(estNode, "correlation");
       bool samespin = false;
       if (corr == "same") samespin = true;
+      int ispin = 0;
+      if (spin == "down") ispin = 1;
       std::vector<PairDistance*> dist;
       std::vector<double> tmin, tmax;
       std::vector<int> tnbin;
       parsePairDistance(estNode, ctxt, dist, tmin, tmax, tnbin);
       switch (tnbin.size()) {
-	case 1: manager->add(parseSpinPair<1>(name,tmin,tmax,tnbin,dist,samespin)); break;
-	case 2: manager->add(parseSpinPair<2>(name,tmin,tmax,tnbin,dist,samespin)); break;
-	case 3: manager->add(parseSpinPair<3>(name,tmin,tmax,tnbin,dist,samespin)); break;
-	case 4: manager->add(parseSpinPair<4>(name,tmin,tmax,tnbin,dist,samespin)); break;
-	case 5: manager->add(parseSpinPair<5>(name,tmin,tmax,tnbin,dist,samespin)); break;
+	case 1: manager->add(parseSpinPair<1>(name,tmin,tmax,tnbin,dist,
+					      ispin,samespin)); break;
+	case 2: manager->add(parseSpinPair<2>(name,tmin,tmax,tnbin,dist,
+					      ispin,samespin)); break;
+	case 3: manager->add(parseSpinPair<3>(name,tmin,tmax,tnbin,dist,
+					      ispin,samespin)); break;
+	case 4: manager->add(parseSpinPair<4>(name,tmin,tmax,tnbin,dist,
+					      ispin,samespin)); break;
+	case 5: manager->add(parseSpinPair<5>(name,tmin,tmax,tnbin,dist,
+					      ispin,samespin)); break;
       }
     }
     if (name=="PermutationEstimator") {
@@ -780,7 +788,8 @@ template<int N>
 SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
     const std::string &name, const std::vector<double> &tmin, 
     const std::vector<double> &tmax, const std::vector<int> &tnbin,
-    const std::vector<PairDistance*> &dist, const bool &samespin) {
+    const std::vector<PairDistance*> &dist, const int &ispin, 
+    const bool &samespin) {
   typename SpinChoicePCFEstimator<N>::VecN min(0.), max(1.);
   typename SpinChoicePCFEstimator<N>::IVecN nbin(1);
   for (int i=0; i<N; ++i) {
@@ -790,7 +799,7 @@ SpinChoicePCFEstimator<N>* EstimatorParser::parseSpinPair(
   }
   return new SpinChoicePCFEstimator<N>(simInfo, name, 
 	simInfo.getSpecies(0), actionChoice->getModelState(),
-	min, max, nbin, dist, samespin, mpi);
+	min, max, nbin, dist, ispin, samespin, mpi);
 }
 
 

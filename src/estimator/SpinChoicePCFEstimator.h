@@ -36,10 +36,10 @@ public:
   SpinChoicePCFEstimator(const SimulationInfo& simInfo, const std::string& name,
                   const Species &species, ModelState& modelState,
                   const VecN &min, const VecN &max, const IVecN &nbin, 
-		  const DistN &dist, bool samespin, MPIManager *mpi) 
+		  const DistN &dist, int ispin, bool samespin, MPIManager *mpi) 
     : BlitzArrayBlkdEst<N>(name,"array/spin-pair-correlation",nbin,true), 
       min(min), deltaInv(nbin/(max-min)), nbin(nbin), dist(dist),
-      cell(*simInfo.getSuperCell()), temp(nbin), ispin(0), samespin(samespin),
+      cell(*simInfo.getSuperCell()), temp(nbin), ispin(ispin), samespin(samespin),
       spinState((dynamic_cast<SpinModelState*>(&modelState))->getSpinState()),
       mpi(mpi){
 
@@ -53,10 +53,14 @@ public:
 #ifdef ENABLE_MPI
     if (mpi) mpiBuffer.resize(nbin);
 #endif
-    if (samespin) 
-      std::cout<<"SpinChoicePCFEstimator for up-up correlation."<<std::endl;
+    if (ispin == 0)
+      std::cout<<"SpinChoicePCFEstimator: the reference spin is up."<<std::endl;
     else
-      std::cout<<"SpinChoicePCFEstimator for up-down correlation."<<std::endl;
+      std::cout<<"SpinChoicePCFEstimator: the reference spin is down."<<std::endl;
+    if (samespin) 
+      std::cout<<"SpinChoicePCFEstimator for same spin correlation."<<std::endl;
+    else
+      std::cout<<"SpinChoicePCFEstimator for opposite spin correlation."<<std::endl;
   }
 
   virtual ~SpinChoicePCFEstimator() {

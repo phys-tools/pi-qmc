@@ -79,7 +79,8 @@ private:
     template<int N>
     SpinChoicePCFEstimator<N>* parseSpinPair(const std::string &name,
             const std::vector<double> &tmin, const std::vector<double> &tmax,
-            const std::vector<int> &tnbin,
-            const std::vector<PairDistance*> &dist, const bool &samespin);
+            const std::vector<int> &tnbin, 
+	    const std::vector<PairDistance*> &dist, const int &ispin,
+	    const bool &samespin);
 };
 #endif
