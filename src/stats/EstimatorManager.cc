@@ -46,7 +46,7 @@ void EstimatorManager::setInputFilename(const std::string& inputFilename) {
 
 void EstimatorManager::createBuilders(const std::string& filename,
         const SimInfoWriter* simInfoWriter) {
-    if (mpi || mpi->isMain()) {
+    if (!mpi || mpi->isMain()) {
         builders.push_back(new H5ReportBuilder(filename, simInfoWriter));
         builders.push_back(new StdoutReportBuilder());
         builders.push_back(new AsciiReportBuilder("pimc.dat"));
