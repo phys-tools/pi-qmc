@@ -47,7 +47,7 @@ void EMARateAction::includeCoulombContribution(double epsilon, int norder) {
     hasCoulomb = true;
     double q1q2 = -1.0;
     double mu = 1.0 / (1.0 / species1.mass + 1.0 / species2.mass);
-    double deltaTau = 1.0 / deltaTau;
+    double deltaTau = 1.0 / invTau;
     coulomb = new CoulombLinkAction(q1q2, epsilon, mu, deltaTau, norder);
 }
 
