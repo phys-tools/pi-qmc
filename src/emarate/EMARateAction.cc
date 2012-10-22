@@ -15,26 +15,26 @@
 #include <blitz/tinyvec-et.h>
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
-        const Species& species1, const Species& species2, double C)
+        const Species* species1, const Species* species2, double C)
 : invTau(1./simInfo.getTau()),
   species1(species1),
   species2(species2),
-  index1(species1.ifirst),
-  index2(species2.ifirst),
+  index1(species1->ifirst),
+  index2(species2->ifirst),
   C(C),
   nPathSlice(simInfo.getNSlice()),
   hasCoulomb(false),
   coulomb(0) {
 
-    if (species1.anMass) {
-        mass1 = *species1.anMass;
+    if (species1->anMass) {
+        mass1 = *(species1->anMass);
     } else {
-        mass1 = species1.mass;
+        mass1 = species1->mass;
     }
-    if (species2.anMass) {
-        mass2 = *species2.anMass;
+    if (species2->anMass) {
+        mass2 = *(species2->anMass);
     } else {
-        mass2 = species2.mass;
+        mass2 = species2->mass;
     }
 
 }
@@ -46,7 +46,7 @@ EMARateAction::~EMARateAction() {
 void EMARateAction::includeCoulombContribution(double epsilon, int norder) {
     hasCoulomb = true;
     double q1q2 = -1.0;
-    double mu = 1.0 / (1.0 / species1.mass + 1.0 / species2.mass);
+    double mu = 1.0 / (1.0 / species1->mass + 1.0 / species2->mass);
     double deltaTau = 1.0 / invTau;
     coulomb = new CoulombLinkAction(q1q2, epsilon, mu, deltaTau, norder);
 }
@@ -54,15 +54,14 @@ void EMARateAction::includeCoulombContribution(double epsilon, int norder) {
 EMARateAction::Vec EMARateAction::getMovingPosition(
         int ipart, int islice, int nMoving, const IArray& index,
         const Beads<NDIM>& sectionBeads, const Beads<NDIM>& movingBeads) {
-    Vec re = sectionBeads(ipart, islice);
+    Vec position = sectionBeads(ipart, islice);
     for(int imoving = 0;imoving < nMoving;++imoving){
         int thisPart = index(imoving);
         if (thisPart == ipart) {
-            re = movingBeads(imoving, islice);
+            position = movingBeads(imoving, islice);
         }
     }
-
-    return re;
+    return position;
 }
 
 double EMARateAction::getActionDifference(
@@ -88,13 +87,13 @@ double EMARateAction::getActionDifference(
     const Vec inv2Sigma22 = 0.5 * mass2 * invTau / nStride;
 
     Vec rePrev = getMovingPosition(
-            0, 0, nMoving, index, sectionBeads,  movingBeads);
+            index1, 0, nMoving, index, sectionBeads,  movingBeads);
     Vec rhPrev = getMovingPosition(
-            1, 0, nMoving, index, sectionBeads,  movingBeads);
+            index2, 0, nMoving, index, sectionBeads,  movingBeads);
     Vec reRadPrev = rePrev;
     Vec rhRadPrev = rhPrev;
-    Vec rePrevOld = sectionBeads(0,0);
-    Vec rhPrevOld = sectionBeads(1,0);
+    Vec rePrevOld = sectionBeads(index1,0);
+    Vec rhPrevOld = sectionBeads(index2,0);
     Vec reRadPrevOld = rePrevOld;
     Vec rhRadPrevOld = rhPrevOld;
 
@@ -102,9 +101,9 @@ double EMARateAction::getActionDifference(
 
         // Calculate action for moving beads.
         Vec re = getMovingPosition(
-                0, islice, nMoving, index, sectionBeads,  movingBeads);
+                index1, islice, nMoving, index, sectionBeads,  movingBeads);
         Vec rh = getMovingPosition(
-                1, islice, nMoving, index, sectionBeads,  movingBeads);
+                index2, islice, nMoving, index, sectionBeads,  movingBeads);
 
 
         Vec reRad = re;

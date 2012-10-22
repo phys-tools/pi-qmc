@@ -35,7 +35,7 @@ public:
     typedef blitz::Array<double,1> Array;
     typedef blitz::Array<bool,1> BArray;
 
-    EMARateAction(const SimulationInfo&, const Species&, const Species&,
+    EMARateAction(const SimulationInfo&, const Species*, const Species*,
             double C);
     virtual ~EMARateAction();
 
@@ -56,19 +56,13 @@ public:
 private:
     /// The inverse of the timestep.
     const double invTau;
-    /// The electron species.
-    const Species& species1;
-    /// The hole species.
-    const Species& species2;
-    /// The index of the recombining electron.
+    const Species* species1;
+    const Species* species2;
     const int index1;
-    /// The index of the recombining hole.
     const int index2;
     /// The weight parameter "C" used to optimize sampling.
     const double C;
-    /// The mass of the electron.
     Vec mass1;
-    /// The mass of the hole.
     Vec mass2;
     /// The total number of slices in the path.
     const int nPathSlice;

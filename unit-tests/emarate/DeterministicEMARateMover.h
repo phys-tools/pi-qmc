@@ -5,9 +5,10 @@
 
 class DeterministicEMARateMover : public EMARateMover {
 public:
-    DeterministicEMARateMover(double tau, double mass1, double mass2,
+    DeterministicEMARateMover(double tau,
+            const Species *species1, const Species *species2,
             int maxlevel, double C)
-    : EMARateMover(tau, mass1, mass2, maxlevel, C),
+    : EMARateMover(tau, species1, species2, maxlevel, C),
       nextRandomNumber(0.5) {
     }
 

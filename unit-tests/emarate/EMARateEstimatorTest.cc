@@ -9,7 +9,7 @@
 
 namespace {
 
-class EMARateEstimatorTest: public ::testing::Test {
+class EMARateEstimatorTest: public testing::Test {
 protected:
 
     virtual void SetUp() {
@@ -20,18 +20,25 @@ protected:
         SuperCell::Vec length = 100.0;
         simInfo.superCell = new SuperCell(length);
 
+        species1 = new Species("h", 1, 1.0, 1.0, 1, false);
+        species1->ifirst = 0;
+        species2 = new Species("e", 1, 1.0, -1.0, 1, false);
+        species2->ifirst = 1;
+
         paths = new SerialPaths(simInfo.npart, simInfo.nslice, simInfo.tau,
                 *simInfo.superCell, beadFactory);
         coefficient = 1.0;
     }
 
     virtual void TearDown() {
+        delete species1;
+        delete species2;
         delete estimator;
         delete paths;
     }
 
     void createEstimator() {
-        estimator = new EMARateEstimator(simInfo, coefficient);
+        estimator = new EMARateEstimator(simInfo, species1, species2, coefficient);
         estimator->reset();
     }
 
@@ -60,7 +67,8 @@ protected:
     }
 
     EMARateEstimator *estimator;
-    Species species1, species2;
+    Species* species1;
+    Species* species2;
     double coefficient;
     SimulationInfo simInfo;
     SerialPaths *paths;

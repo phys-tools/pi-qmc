@@ -21,7 +21,7 @@ protected:
         separation = 1.0;
         setupSimulationInfo();
         coefficient = 1.0;
-        mover = new DeterministicEMARateMover(deltaTau, 1.0, 1.0,
+        mover = new DeterministicEMARateMover(deltaTau, species1, species2,
                 maxlevel, coefficient);
         sampler = new MultiLevelSamplerFake(npart, nmoving, nslice);
         positioner = new EMARateTestBeadPositioner(*sampler);
@@ -34,8 +34,10 @@ protected:
     }
 
     void setupSimulationInfo() {
-        species1 = new Species("h", 1, 1.0, 0.0, 0, 0);
-        species2 = new Species("e", 1, 1.0, 0.0, 0, 0);
+        species1 = new Species("h", 1, 1.0, 1.0, 1, false);
+        species1->ifirst = 0;
+        species2 = new Species("e", 1, 1.0, -1.0, 1, false);
+        species2->ifirst = 1;
         simInfo.tau = deltaTau;
         simInfo.nslice = 128;
         simInfo.npart = 2;

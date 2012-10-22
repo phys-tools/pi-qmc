@@ -6,6 +6,7 @@
 #include "advancer/MultiLevelSampler.h"
 #include "base/Beads.h"
 #include "base/SimulationInfo.h"
+#include "base/Species.h"
 #include "util/RandomNumGenerator.h"
 #include "util/SuperCell.h"
 #include "util/PeriodicGaussian.h"
@@ -14,14 +15,27 @@
 #include <cmath>
 #include <blitz/tinyvec-et.h>
 
-EMARateMover::EMARateMover(double tau, double mass1, double mass2,
+EMARateMover::EMARateMover(double tau,
+        const Species* species1, const Species* species2,
         int maxlevel, double C)
 :   PermutationChooser(2),
     ParticleChooser(2),
     tau(tau),
-    lambda1(0.5/mass1),
-    lambda2(0.5/mass2),
-    C(C) {
+    lambda1(0.5 / species1->mass),
+    lambda2(0.5 / species2->mass),
+    C(C),
+    index1(species1->ifirst),
+    index2(species2->ifirst) {
+    if (species1->anMass) {
+        lambda1 = 0.5 / *(species1->anMass);
+    } else {
+        lambda1 = 0.5 / species1->mass;
+    }
+    if (species2->anMass) {
+        lambda2 = 0.5 / *(species2->anMass);
+    } else {
+        lambda2 = 0.5 / species2->mass;
+    }
 }
 
 EMARateMover::~EMARateMover() {
@@ -50,8 +64,8 @@ double EMARateMover::calculateTransitionProbability(int nStride,
     for (int islice = nStride; islice < nSlice; islice += nStride) {
 
         // Calculate action for moving beads.
-        Vec re = movingBeads(0,islice);
-        Vec rh = movingBeads(1,islice);
+        Vec re = movingBeads(0, islice);
+        Vec rh = movingBeads(1, islice);
 
         Vec reRad = re;
         Vec rhRad = (islice == nSlice/2) ? re : rh;
@@ -159,9 +173,9 @@ double EMARateMover::calculateRadiatingProbability(
     Vec delta2 = re2 - rh2;
     cell.pbc(delta2);
     int nStride = nSlice - 1;
-    double inv2sigma21 = 1. / ( (lambda1 + lambda2) * tau * nStride * 2);
-    double t1 = dot(delta1, delta1) * inv2sigma21;
-    double t2 = dot(delta2, delta2) * inv2sigma21;
+    Vec inv2sigma21 = 1. / ( (lambda1 + lambda2) * tau * nStride * 2);
+    double t1 = dot(delta1, delta1 * inv2sigma21);
+    double t2 = dot(delta2, delta2 * inv2sigma21);
     return exp(-(t1 + t2));
 }
 
@@ -176,10 +190,10 @@ double EMARateMover::calculateDiagonalProbability(
     Vec deltah = rh2 - rh1;
     cell.pbc(deltah);
     int nStride = nSlice - 1;
-    double inv2sigma2e = 0.25 / (lambda1 * tau * nStride);
-    double inv2sigma2h = 0.25 / (lambda2 * tau * nStride);
-    double te = dot(deltae, deltae) * inv2sigma2e;
-    double th = dot(deltah, deltah) * inv2sigma2h;
+    Vec inv2sigma2e = 0.25 / (lambda1 * tau * nStride);
+    Vec inv2sigma2h = 0.25 / (lambda2 * tau * nStride);
+    double te = dot(deltae, deltae * inv2sigma2e);
+    double th = dot(deltah, deltah * inv2sigma2h);
     return exp(-(te + th));
 }
 
@@ -213,16 +227,16 @@ void EMARateMover::sampleRadiating(int nStride, int nSlice,
         Vec mass2 = 0.5 / lambda2;
         Vec prev1 = (iSlice - nStride <= nSlice / 2)
                     ? movingBeads(0, iSlice - nStride)
-                            : movingBeads(1, nSlice  - 1 - (iSlice - nStride));
+                    : movingBeads(1, nSlice  - 1 - (iSlice - nStride));
         Vec prev2 = (iSlice - nStride < nSlice / 2)
                     ? movingBeads(0, nSlice - 1 - (iSlice - nStride))
-                            : movingBeads(1, iSlice - nStride);
+                    : movingBeads(1, iSlice - nStride);
         Vec next1 = (iSlice + nStride <= nSlice / 2)
                     ? movingBeads(0, iSlice + nStride)
-                            : movingBeads(1, nSlice -1 - (iSlice + nStride));
+                    : movingBeads(1, nSlice -1 - (iSlice + nStride));
         Vec next2 = (iSlice + nStride < nSlice / 2)
                     ? movingBeads(0, nSlice -1 - (iSlice + nStride))
-                            : movingBeads(1, iSlice + nStride);
+                    : movingBeads(1, iSlice + nStride);
 
         Vec midpoint1, midpoint2;
         // Should be rewritten to use PBC.
@@ -268,8 +282,8 @@ void EMARateMover::sampleDiagonal(int nStride, int nSlice,
         blitz::Array<Vec,1> gaussRand(2);
         makeGaussianRandomNumbers(gaussRand);
         for(int iMoving = 0;iMoving < 2;++iMoving){
-            double lambda = (iMoving == 0) ? lambda1 : lambda2;
-            double sigma = sqrt(lambda * tau * nStride);
+            Vec lambda = (iMoving == 0) ? lambda1 : lambda2;
+            Vec sigma = sqrt(lambda * tau * nStride);
             // Calculate the new position.
             Vec midpoint = movingBeads.delta(iMoving, iSlice + nStride, -2 * nStride);
             cell.pbc(midpoint) *= 0.5;

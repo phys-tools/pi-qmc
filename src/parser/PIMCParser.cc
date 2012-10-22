@@ -351,10 +351,10 @@ std::cout << "doubleAction!=0" << std::endl;
                     "species1");
             std::string speciesName2 = getStringAttribute(ctxt->node,
                     "species2");
-            double mass1 = simInfo.getSpecies(speciesName1).mass;
-            double mass2 = simInfo.getSpecies(speciesName2).mass;
-            EMARateMover* emaRateMover = new EMARateMover(simInfo.tau, mass1,
-                    mass2, nlevel, c);
+            const Species* species1 = &simInfo.getSpecies(speciesName1);
+            const Species* species2 = &simInfo.getSpecies(speciesName2);
+            EMARateMover* emaRateMover = new EMARateMover(simInfo.tau, species1,
+                    species2, nlevel, c);
             mover = emaRateMover;
             particleChooser = emaRateMover;
             permutationChooser = emaRateMover;

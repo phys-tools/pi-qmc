@@ -9,6 +9,7 @@
 #include <vector>
 class SimulationInfo;
 class PeriodicGaussian;
+class Species;
 
 class EMARateMover : public Mover,
                      public PermutationChooser,
@@ -18,7 +19,8 @@ public:
     typedef blitz::Array<double,1> Array;
     typedef blitz::Array<PeriodicGaussian*,3> PGArray;
     typedef blitz::TinyVector<double,NDIM> Vec;
-    EMARateMover(double tau, double mass1, double mass2,
+    EMARateMover(double tau,
+            const Species *species1, const Species *species2,
             int maxlevel, double C);
     virtual ~EMARateMover();
     /// Move the samplers moving beads for a given level, returning
@@ -46,12 +48,14 @@ public:
 
 private:
     double tau;
-    double lambda1;
-    double lambda2;
+    Vec lambda1;
+    Vec lambda2;
     double forwardProb;
     bool isSamplingRadiating;
     double earlierTransitions;
     const double C;
+    const int index1;
+    const int index2;
 
 protected:
     virtual double getRandomNumber() const;

@@ -13,6 +13,7 @@
 #include "base/ModelState.h"
 #include "base/SimulationInfo.h"
 #include "base/SimInfoWriter.h"
+#include "base/Species.h"
 #include "emarate/EMARateEstimator.h"
 #include "estimator/AngularMomentumEstimator.h"
 #include "estimator/ConductivityEstimator.h"
@@ -587,9 +588,15 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
     }
     if (name=="EMARateEstimator") {
       double C =  parser.getDoubleAttribute(estNode,"c");
-      EMARateEstimator* estimator = new EMARateEstimator(simInfo, C);
+      std::string specName = parser.getStringAttribute(estNode,"species1");
+      const Species& species1(simInfo.getSpecies(specName));
+      specName = parser.getStringAttribute(estNode,"species2");
+      const Species& species2(simInfo.getSpecies(specName));
+      EMARateEstimator* estimator =
+              new EMARateEstimator(simInfo, &species1, &species2, C);
       if (parser.getBoolAttribute(estNode, "useCoulomb")) {
           double epsilon = parser.getDoubleAttribute(estNode, "epsilon");
+          if (epsilon < 1e-15) epsilon = 1.0;
           int norder = parser.getIntAttribute(estNode, "norder");
           estimator->includeCoulombContribution(epsilon, norder);
       }

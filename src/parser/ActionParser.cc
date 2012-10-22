@@ -628,9 +628,10 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       const Species& species2(simInfo.getSpecies(specName));
       const double C=getDoubleAttribute(actNode,"c");
       EMARateAction* action
-          = new EMARateAction(simInfo, species1, species2, C);
+          = new EMARateAction(simInfo, &species1, &species2, C);
       if (getBoolAttribute(actNode, "useCoulomb")) {
-          const double epsilon = getDoubleAttribute(actNode, "epsilon");
+          double epsilon = getDoubleAttribute(actNode, "epsilon");
+          if (epsilon < 1e-15) epsilon = 1.0;
           const int norder = getIntAttribute(actNode, "norder");
           action->includeCoulombContribution(epsilon, norder);
       }

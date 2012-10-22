@@ -17,16 +17,23 @@ protected:
     virtual void SetUp() {
         simInfo.nslice = 128;
         coefficient = 10.0;
+        species1 = new Species("h", 1, 1.0, 1.0, 1, false);
+        species1->ifirst = 0;
+        species2 = new Species("e", 1, 1.0, -1.0, 1, false);
+        species2->ifirst = 1;
     }
 
     virtual void TearDown() {
+        delete species1;
+        delete species2;
         delete sampler;
         delete positioner;
     }
 
     MultiLevelSamplerFake *sampler;
     EMARateTestBeadPositioner *positioner;
-    Species species1, species2;
+    Species *species1;
+    Species *species2;
     SimulationInfo simInfo;
     static const int npart=2;
     int nmoving;
