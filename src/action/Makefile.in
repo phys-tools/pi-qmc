@@ -98,6 +98,9 @@ am_libaction_la_OBJECTS = libaction_la-ActionChoice.lo \
 	libaction_la-Coulomb1DLinkAction.lo \
 	libaction_la-Coulomb3DLinkAction.lo \
 	libaction_la-CoulombLinkAction.lo \
+	libaction_la-AzizPotential.lo \
+	libaction_la-InverseCosh2Potential.lo \
+	libaction_la-LennardJonesPotential.lo \
 	libaction_la-PairIntegrator.lo libaction_la-PairPotential.lo \
 	libaction_la-PrimitivePairAction.lo \
 	libaction_la-SHOInteraction.lo
@@ -310,6 +313,9 @@ libaction_la_SOURCES = \
     coulomb/Coulomb1DLinkAction.cpp \
     coulomb/Coulomb3DLinkAction.cpp \
     coulomb/CoulombLinkAction.cpp \
+    interaction/AzizPotential.cpp \
+    interaction/InverseCosh2Potential.cpp \
+    interaction/LennardJonesPotential.cpp \
 	interaction/PairIntegrator.cpp \
 	interaction/PairPotential.cpp \
 	interaction/PrimitivePairAction.cpp \
@@ -360,6 +366,9 @@ noinst_HEADERS = \
     coulomb/Coulomb1DLinkAction.h \
     coulomb/Coulomb3DLinkAction.h \
     coulomb/CoulombLinkAction.h \
+    interaction/AzizPotential.h \
+    interaction/InverseCosh2Potential.h \
+    interaction/LennardJonesPotential.h \
 	interaction/PairIntegrator.h \
 	interaction/PairPotential.h \
 	interaction/PrimitivePairAction.h \
@@ -420,6 +429,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-ActionChoice.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-AzizPotential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-CaoBerneAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-CompositeAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-CompositeDoubleAction.Plo@am__quote@
@@ -439,7 +449,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-GridPotential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-HyperbolicAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-ImagePairAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-InverseCosh2Potential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-JelliumSlab.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-LennardJonesPotential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-OpticalLatticeAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PairAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-PairIntegrator.Plo@am__quote@
@@ -780,6 +792,27 @@ libaction_la-CoulombLinkAction.lo: coulomb/CoulombLinkAction.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='coulomb/CoulombLinkAction.cpp' object='libaction_la-CoulombLinkAction.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-CoulombLinkAction.lo `test -f 'coulomb/CoulombLinkAction.cpp' || echo '$(srcdir)/'`coulomb/CoulombLinkAction.cpp
+
+libaction_la-AzizPotential.lo: interaction/AzizPotential.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-AzizPotential.lo -MD -MP -MF $(DEPDIR)/libaction_la-AzizPotential.Tpo -c -o libaction_la-AzizPotential.lo `test -f 'interaction/AzizPotential.cpp' || echo '$(srcdir)/'`interaction/AzizPotential.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-AzizPotential.Tpo $(DEPDIR)/libaction_la-AzizPotential.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/AzizPotential.cpp' object='libaction_la-AzizPotential.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-AzizPotential.lo `test -f 'interaction/AzizPotential.cpp' || echo '$(srcdir)/'`interaction/AzizPotential.cpp
+
+libaction_la-InverseCosh2Potential.lo: interaction/InverseCosh2Potential.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-InverseCosh2Potential.lo -MD -MP -MF $(DEPDIR)/libaction_la-InverseCosh2Potential.Tpo -c -o libaction_la-InverseCosh2Potential.lo `test -f 'interaction/InverseCosh2Potential.cpp' || echo '$(srcdir)/'`interaction/InverseCosh2Potential.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-InverseCosh2Potential.Tpo $(DEPDIR)/libaction_la-InverseCosh2Potential.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/InverseCosh2Potential.cpp' object='libaction_la-InverseCosh2Potential.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-InverseCosh2Potential.lo `test -f 'interaction/InverseCosh2Potential.cpp' || echo '$(srcdir)/'`interaction/InverseCosh2Potential.cpp
+
+libaction_la-LennardJonesPotential.lo: interaction/LennardJonesPotential.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-LennardJonesPotential.lo -MD -MP -MF $(DEPDIR)/libaction_la-LennardJonesPotential.Tpo -c -o libaction_la-LennardJonesPotential.lo `test -f 'interaction/LennardJonesPotential.cpp' || echo '$(srcdir)/'`interaction/LennardJonesPotential.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-LennardJonesPotential.Tpo $(DEPDIR)/libaction_la-LennardJonesPotential.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/LennardJonesPotential.cpp' object='libaction_la-LennardJonesPotential.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-LennardJonesPotential.lo `test -f 'interaction/LennardJonesPotential.cpp' || echo '$(srcdir)/'`interaction/LennardJonesPotential.cpp
 
 libaction_la-PairIntegrator.lo: interaction/PairIntegrator.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairIntegrator.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairIntegrator.Tpo -c -o libaction_la-PairIntegrator.lo `test -f 'interaction/PairIntegrator.cpp' || echo '$(srcdir)/'`interaction/PairIntegrator.cpp

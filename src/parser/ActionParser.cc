@@ -13,6 +13,9 @@
 #include "action/SpringTensorAction.h"
 #include "action/CoulombAction.h"
 #include "action/PairAction.h"
+#include "action/interaction/AzizPotential.h"
+#include "action/interaction/InverseCosh2Potential.h"
+#include "action/interaction/LennardJonesPotential.h"
 #include "action/interaction/PrimitivePairAction.h"
 #include "action/interaction/PairPotential.h"
 #include "action/GridPotential.h"
@@ -536,18 +539,18 @@ void ActionParser::parseActions(const xmlXPathContextPtr& ctxt,
       if (modelName=="cosh2") {
         double v0=getEnergyAttribute(actNode,"v0");
         double kappa=getInvLengthAttribute(actNode,"kappa");
-        pot = new PairPotential::InvCosh2(v0,kappa); 
+        pot = new InverseCosh2Potential(v0,kappa);
       } else if (modelName=="LJ") {
         double epsilon=getEnergyAttribute(actNode,"epsilon");
         double sigma=getLengthAttribute(actNode,"sigma");
-        pot = new PairPotential::LennardJones(epsilon,sigma); 
+        pot = new LennardJonesPotential(epsilon,sigma);
       } else if (modelName=="Aziz") {
-        pot = new PairPotential::Aziz(); 
+        pot = new AzizPotential();
       } else if (modelName=="CaoBerne") {
         double mu=1./(1./species1.mass+1./species2.mass);
         double radius = getLengthAttribute(actNode,"radius");
         bool dumpFiles=getBoolAttribute(actNode,"dumpFiles");
-	bool hasZ=getBoolAttribute(actNode,"hasZ");
+	    bool hasZ=getBoolAttribute(actNode,"hasZ");
         PairAction* action = new PairAction(species1,species2,
                              CaoBerneAction(mu,radius,tau,norder),
                              simInfo,norder,rmin,rmax,ngpts,true,-1);

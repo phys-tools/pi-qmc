@@ -41,6 +41,9 @@ set (sources
     coulomb/CoulombLinkAction.cpp
     coulomb/Coulomb1DLinkAction.cpp
     coulomb/Coulomb3DLinkAction.cpp
+    interaction/AzizPotential.cpp
+    interaction/InverseCosh2Potential.cpp
+    interaction/LennardJonesPotential.cpp
     interaction/PairIntegrator.cpp
     interaction/PairPotential.cpp
     interaction/PrimitivePairAction.cpp

@@ -45,6 +45,9 @@ libaction_la_SOURCES = \
     coulomb/Coulomb1DLinkAction.cpp \
     coulomb/Coulomb3DLinkAction.cpp \
     coulomb/CoulombLinkAction.cpp \
+    interaction/AzizPotential.cpp \
+    interaction/InverseCosh2Potential.cpp \
+    interaction/LennardJonesPotential.cpp \
 	interaction/PairIntegrator.cpp \
 	interaction/PairPotential.cpp \
 	interaction/PrimitivePairAction.cpp \
@@ -94,6 +97,9 @@ noinst_HEADERS = \
     coulomb/Coulomb1DLinkAction.h \
     coulomb/Coulomb3DLinkAction.h \
     coulomb/CoulombLinkAction.h \
+    interaction/AzizPotential.h \
+    interaction/InverseCosh2Potential.h \
+    interaction/LennardJonesPotential.h \
 	interaction/PairIntegrator.h \
 	interaction/PairPotential.h \
 	interaction/PrimitivePairAction.h \
