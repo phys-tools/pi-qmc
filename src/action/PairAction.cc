@@ -2,7 +2,7 @@
 #include <config.h>
 #endif
 #include "PairAction.h"
-#include "PairIntegrator.h"
+#include "interaction/PairIntegrator.h"
 #include "advancer/DisplaceMoveSampler.h"
 #include "advancer/SectionSamplerInterface.h"
 #include "base/Beads.h"

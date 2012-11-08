@@ -19,8 +19,6 @@ set (sources
     JelliumSlab.cc
     OpticalLatticeAction.cc
     PairAction.cc
-    PairIntegrator.cc
-    PairPotential.cc
     PrimAnisSHOAction.cc
     PrimColloidalAction.cc
     PrimCosineAction.cc
@@ -28,7 +26,6 @@ set (sources
     PrimSHOAction.cc
     PrimShellAction.cc
     PrimTorusAction.cc
-    PrimitivePairAction.cc
     QPCAction.cc
     RingGateAction.cc
     SHOAction.cc
@@ -44,6 +41,9 @@ set (sources
     coulomb/CoulombLinkAction.cpp
     coulomb/Coulomb1DLinkAction.cpp
     coulomb/Coulomb3DLinkAction.cpp
+    interaction/PairIntegrator.cpp
+    interaction/PairPotential.cpp
+    interaction/PrimitivePairAction.cpp
     interaction/SHOInteraction.cpp
 )
 

@@ -82,15 +82,12 @@ am_libaction_la_OBJECTS = libaction_la-ActionChoice.lo \
 	libaction_la-HyperbolicAction.lo \
 	libaction_la-ImagePairAction.lo libaction_la-JelliumSlab.lo \
 	libaction_la-OpticalLatticeAction.lo \
-	libaction_la-PairAction.lo libaction_la-PairIntegrator.lo \
-	libaction_la-PairPotential.lo \
-	libaction_la-PrimAnisSHOAction.lo \
+	libaction_la-PairAction.lo libaction_la-PrimAnisSHOAction.lo \
 	libaction_la-PrimColloidalAction.lo \
 	libaction_la-PrimCosineAction.lo \
 	libaction_la-PrimImageAction.lo libaction_la-PrimSHOAction.lo \
 	libaction_la-PrimShellAction.lo \
-	libaction_la-PrimTorusAction.lo \
-	libaction_la-PrimitivePairAction.lo libaction_la-QPCAction.lo \
+	libaction_la-PrimTorusAction.lo libaction_la-QPCAction.lo \
 	libaction_la-RingGateAction.lo libaction_la-SHOAction.lo \
 	libaction_la-SHODotAction.lo \
 	libaction_la-SmoothedGridPotential.lo \
@@ -100,7 +97,10 @@ am_libaction_la_OBJECTS = libaction_la-ActionChoice.lo \
 	libaction_la-TwoQDAction.lo libaction_la-WellImageAction.lo \
 	libaction_la-Coulomb1DLinkAction.lo \
 	libaction_la-Coulomb3DLinkAction.lo \
-	libaction_la-CoulombLinkAction.lo
+	libaction_la-CoulombLinkAction.lo \
+	libaction_la-PairIntegrator.lo libaction_la-PairPotential.lo \
+	libaction_la-PrimitivePairAction.lo \
+	libaction_la-SHOInteraction.lo
 libaction_la_OBJECTS = $(am_libaction_la_OBJECTS)
 libaction_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libaction_la_CXXFLAGS) \
@@ -263,7 +263,10 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_LTLIBRARIES = libaction.la
-libaction_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
+libaction_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src \
+    -I$(top_srcdir)/contrib/blitz-0.9 \
+    -I$(top_bindir)/contrib/blitz-0.9
+
 libaction_la_SOURCES = \
 	ActionChoice.cc \
 	CaoBerneAction.cc \
@@ -285,8 +288,6 @@ libaction_la_SOURCES = \
 	JelliumSlab.cc \
 	OpticalLatticeAction.cc \
 	PairAction.cc \
-	PairIntegrator.cc \
-	PairPotential.cc \
 	PrimAnisSHOAction.cc \
 	PrimColloidalAction.cc \
 	PrimCosineAction.cc \
@@ -294,7 +295,6 @@ libaction_la_SOURCES = \
 	PrimSHOAction.cc \
 	PrimShellAction.cc \
 	PrimTorusAction.cc \
-	PrimitivePairAction.cc \
 	QPCAction.cc \
 	RingGateAction.cc \
 	SHOAction.cc \
@@ -309,7 +309,11 @@ libaction_la_SOURCES = \
 	WellImageAction.cc \
     coulomb/Coulomb1DLinkAction.cpp \
     coulomb/Coulomb3DLinkAction.cpp \
-    coulomb/CoulombLinkAction.cpp 
+    coulomb/CoulombLinkAction.cpp \
+	interaction/PairIntegrator.cpp \
+	interaction/PairPotential.cpp \
+	interaction/PrimitivePairAction.cpp \
+	interaction/SHOInteraction.cpp
 
 noinst_HEADERS = \
 	Action.h \
@@ -334,8 +338,6 @@ noinst_HEADERS = \
 	JelliumSlab.h \
 	OpticalLatticeAction.h \
 	PairAction.h \
-	PairIntegrator.h \
-	PairPotential.h \
 	PrimAnisSHOAction.h \
 	PrimColloidalAction.h \
 	PrimCosineAction.h \
@@ -343,7 +345,6 @@ noinst_HEADERS = \
 	PrimSHOAction.h \
 	PrimShellAction.h \
 	PrimTorusAction.h \
-	PrimitivePairAction.h \
 	QPCAction.h \
 	RingGateAction.h \
 	SHOAction.h \
@@ -358,7 +359,11 @@ noinst_HEADERS = \
 	WellImageAction.h \
     coulomb/Coulomb1DLinkAction.h \
     coulomb/Coulomb3DLinkAction.h \
-    coulomb/CoulombLinkAction.h
+    coulomb/CoulombLinkAction.h \
+	interaction/PairIntegrator.h \
+	interaction/PairPotential.h \
+	interaction/PrimitivePairAction.h \
+    interaction/SHOInteraction.h
 
 all: all-am
 
@@ -451,6 +456,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-RingGateAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-SHOAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-SHODotAction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-SHOInteraction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-SmoothedGridPotential.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-SphereAction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaction_la-SpringAction.Plo@am__quote@
@@ -621,20 +627,6 @@ libaction_la-PairAction.lo: PairAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairAction.lo `test -f 'PairAction.cc' || echo '$(srcdir)/'`PairAction.cc
 
-libaction_la-PairIntegrator.lo: PairIntegrator.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairIntegrator.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairIntegrator.Tpo -c -o libaction_la-PairIntegrator.lo `test -f 'PairIntegrator.cc' || echo '$(srcdir)/'`PairIntegrator.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PairIntegrator.Tpo $(DEPDIR)/libaction_la-PairIntegrator.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairIntegrator.cc' object='libaction_la-PairIntegrator.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairIntegrator.lo `test -f 'PairIntegrator.cc' || echo '$(srcdir)/'`PairIntegrator.cc
-
-libaction_la-PairPotential.lo: PairPotential.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairPotential.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairPotential.Tpo -c -o libaction_la-PairPotential.lo `test -f 'PairPotential.cc' || echo '$(srcdir)/'`PairPotential.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PairPotential.Tpo $(DEPDIR)/libaction_la-PairPotential.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PairPotential.cc' object='libaction_la-PairPotential.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairPotential.lo `test -f 'PairPotential.cc' || echo '$(srcdir)/'`PairPotential.cc
-
 libaction_la-PrimAnisSHOAction.lo: PrimAnisSHOAction.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PrimAnisSHOAction.lo -MD -MP -MF $(DEPDIR)/libaction_la-PrimAnisSHOAction.Tpo -c -o libaction_la-PrimAnisSHOAction.lo `test -f 'PrimAnisSHOAction.cc' || echo '$(srcdir)/'`PrimAnisSHOAction.cc
 @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PrimAnisSHOAction.Tpo $(DEPDIR)/libaction_la-PrimAnisSHOAction.Plo
@@ -683,13 +675,6 @@ libaction_la-PrimTorusAction.lo: PrimTorusAction.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimTorusAction.cc' object='libaction_la-PrimTorusAction.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PrimTorusAction.lo `test -f 'PrimTorusAction.cc' || echo '$(srcdir)/'`PrimTorusAction.cc
-
-libaction_la-PrimitivePairAction.lo: PrimitivePairAction.cc
-@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PrimitivePairAction.lo -MD -MP -MF $(DEPDIR)/libaction_la-PrimitivePairAction.Tpo -c -o libaction_la-PrimitivePairAction.lo `test -f 'PrimitivePairAction.cc' || echo '$(srcdir)/'`PrimitivePairAction.cc
-@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PrimitivePairAction.Tpo $(DEPDIR)/libaction_la-PrimitivePairAction.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='PrimitivePairAction.cc' object='libaction_la-PrimitivePairAction.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PrimitivePairAction.lo `test -f 'PrimitivePairAction.cc' || echo '$(srcdir)/'`PrimitivePairAction.cc
 
 libaction_la-QPCAction.lo: QPCAction.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-QPCAction.lo -MD -MP -MF $(DEPDIR)/libaction_la-QPCAction.Tpo -c -o libaction_la-QPCAction.lo `test -f 'QPCAction.cc' || echo '$(srcdir)/'`QPCAction.cc
@@ -795,6 +780,34 @@ libaction_la-CoulombLinkAction.lo: coulomb/CoulombLinkAction.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='coulomb/CoulombLinkAction.cpp' object='libaction_la-CoulombLinkAction.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-CoulombLinkAction.lo `test -f 'coulomb/CoulombLinkAction.cpp' || echo '$(srcdir)/'`coulomb/CoulombLinkAction.cpp
+
+libaction_la-PairIntegrator.lo: interaction/PairIntegrator.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairIntegrator.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairIntegrator.Tpo -c -o libaction_la-PairIntegrator.lo `test -f 'interaction/PairIntegrator.cpp' || echo '$(srcdir)/'`interaction/PairIntegrator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PairIntegrator.Tpo $(DEPDIR)/libaction_la-PairIntegrator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/PairIntegrator.cpp' object='libaction_la-PairIntegrator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairIntegrator.lo `test -f 'interaction/PairIntegrator.cpp' || echo '$(srcdir)/'`interaction/PairIntegrator.cpp
+
+libaction_la-PairPotential.lo: interaction/PairPotential.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PairPotential.lo -MD -MP -MF $(DEPDIR)/libaction_la-PairPotential.Tpo -c -o libaction_la-PairPotential.lo `test -f 'interaction/PairPotential.cpp' || echo '$(srcdir)/'`interaction/PairPotential.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PairPotential.Tpo $(DEPDIR)/libaction_la-PairPotential.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/PairPotential.cpp' object='libaction_la-PairPotential.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PairPotential.lo `test -f 'interaction/PairPotential.cpp' || echo '$(srcdir)/'`interaction/PairPotential.cpp
+
+libaction_la-PrimitivePairAction.lo: interaction/PrimitivePairAction.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-PrimitivePairAction.lo -MD -MP -MF $(DEPDIR)/libaction_la-PrimitivePairAction.Tpo -c -o libaction_la-PrimitivePairAction.lo `test -f 'interaction/PrimitivePairAction.cpp' || echo '$(srcdir)/'`interaction/PrimitivePairAction.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-PrimitivePairAction.Tpo $(DEPDIR)/libaction_la-PrimitivePairAction.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/PrimitivePairAction.cpp' object='libaction_la-PrimitivePairAction.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-PrimitivePairAction.lo `test -f 'interaction/PrimitivePairAction.cpp' || echo '$(srcdir)/'`interaction/PrimitivePairAction.cpp
+
+libaction_la-SHOInteraction.lo: interaction/SHOInteraction.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -MT libaction_la-SHOInteraction.lo -MD -MP -MF $(DEPDIR)/libaction_la-SHOInteraction.Tpo -c -o libaction_la-SHOInteraction.lo `test -f 'interaction/SHOInteraction.cpp' || echo '$(srcdir)/'`interaction/SHOInteraction.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libaction_la-SHOInteraction.Tpo $(DEPDIR)/libaction_la-SHOInteraction.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='interaction/SHOInteraction.cpp' object='libaction_la-SHOInteraction.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaction_la_CXXFLAGS) $(CXXFLAGS) -c -o libaction_la-SHOInteraction.lo `test -f 'interaction/SHOInteraction.cpp' || echo '$(srcdir)/'`interaction/SHOInteraction.cpp
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

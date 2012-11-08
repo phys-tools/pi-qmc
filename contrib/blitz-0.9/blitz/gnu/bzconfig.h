@@ -359,17 +359,17 @@
 
 /* date */
 #ifndef BZ__config_date 
-#define BZ__config_date  "Fri Oct 14 21:21:14 PDT 2005" 
+#define BZ__config_date  "Thu Nov  8 14:30:37 MST 2012" 
 #endif
 
 /* uname -a */
 #ifndef BZ__os_name 
-#define BZ__os_name  "Linux valhalla.cacr.caltech.edu 2.6.12-1.1376_FC3smp #1 SMP Fri Aug 26 23:51:16 EDT 2005 x86_64 x86_64 x86_64 GNU/Linux" 
+#define BZ__os_name  "Darwin edub.mobile.asu.edu 11.4.2 Darwin Kernel Version 11.4.2: Thu Aug 23 16:25:48 PDT 2012; root:xnu-1699.32.7~1/RELEASE_X86_64 x86_64" 
 #endif
 
 /* target */
 #ifndef BZ__platform 
-#define BZ__platform  "x86_64-unknown-linux-gnu" 
+#define BZ__platform  "i686-apple-darwin11.4.2" 
 #endif
  
 /* once: _BLITZ_GNU_BZCONFIG_H */

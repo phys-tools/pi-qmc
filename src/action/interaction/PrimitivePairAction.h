@@ -5,7 +5,7 @@ class Paths;
 class Species;
 class SimulationInfo;
 class PairPotential;
-#include "PairAction.h"
+#include "action/PairAction.h"
 #include <cstdlib>
 #include <blitz/array.h>
 

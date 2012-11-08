@@ -2,7 +2,6 @@
 #include <config.h>
 #endif
 #include "CaoBerneAction.h"
-#include "PairPotential.h"
 #include "base/Species.h"
 #include <blitz/tinyvec-et.h>
 

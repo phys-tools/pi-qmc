@@ -1,5 +1,7 @@
 noinst_LTLIBRARIES = libaction.la
-libaction_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src -I$(top_srcdir)/contrib/blitz-0.9
+libaction_la_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src \
+    -I$(top_srcdir)/contrib/blitz-0.9 \
+    -I$(top_bindir)/contrib/blitz-0.9
 libaction_la_SOURCES = \
 	ActionChoice.cc \
 	CaoBerneAction.cc \
@@ -21,8 +23,6 @@ libaction_la_SOURCES = \
 	JelliumSlab.cc \
 	OpticalLatticeAction.cc \
 	PairAction.cc \
-	PairIntegrator.cc \
-	PairPotential.cc \
 	PrimAnisSHOAction.cc \
 	PrimColloidalAction.cc \
 	PrimCosineAction.cc \
@@ -30,7 +30,6 @@ libaction_la_SOURCES = \
 	PrimSHOAction.cc \
 	PrimShellAction.cc \
 	PrimTorusAction.cc \
-	PrimitivePairAction.cc \
 	QPCAction.cc \
 	RingGateAction.cc \
 	SHOAction.cc \
@@ -45,7 +44,11 @@ libaction_la_SOURCES = \
 	WellImageAction.cc \
     coulomb/Coulomb1DLinkAction.cpp \
     coulomb/Coulomb3DLinkAction.cpp \
-    coulomb/CoulombLinkAction.cpp 
+    coulomb/CoulombLinkAction.cpp \
+	interaction/PairIntegrator.cpp \
+	interaction/PairPotential.cpp \
+	interaction/PrimitivePairAction.cpp \
+	interaction/SHOInteraction.cpp
 noinst_HEADERS = \
 	Action.h \
 	ActionChoice.h \
@@ -69,8 +72,6 @@ noinst_HEADERS = \
 	JelliumSlab.h \
 	OpticalLatticeAction.h \
 	PairAction.h \
-	PairIntegrator.h \
-	PairPotential.h \
 	PrimAnisSHOAction.h \
 	PrimColloidalAction.h \
 	PrimCosineAction.h \
@@ -78,7 +79,6 @@ noinst_HEADERS = \
 	PrimSHOAction.h \
 	PrimShellAction.h \
 	PrimTorusAction.h \
-	PrimitivePairAction.h \
 	QPCAction.h \
 	RingGateAction.h \
 	SHOAction.h \
@@ -93,4 +93,9 @@ noinst_HEADERS = \
 	WellImageAction.h \
     coulomb/Coulomb1DLinkAction.h \
     coulomb/Coulomb3DLinkAction.h \
-    coulomb/CoulombLinkAction.h
+    coulomb/CoulombLinkAction.h \
+	interaction/PairIntegrator.h \
+	interaction/PairPotential.h \
+	interaction/PrimitivePairAction.h \
+    interaction/SHOInteraction.h
+	
