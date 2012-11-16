@@ -12,6 +12,7 @@ set (sources
     WireEwald.cc
     erf.cpp
     ipow.cpp
+    math/VPolyFit.cpp
     startup/CommandLineParser.cpp
     startup/Greeting.cpp
     startup/MPILifecycle.cpp

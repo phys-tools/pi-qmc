@@ -7,5 +7,6 @@ set(sources
     ${dir}/PeriodicGaussianTest.cc
     ${dir}/PermutationTest.cc
     ${dir}/SuperCellTest.cc
+    ${dir}/math/VPolyFitTest.cpp
     PARENT_SCOPE
 )

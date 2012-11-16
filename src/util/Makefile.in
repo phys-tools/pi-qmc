@@ -75,7 +75,7 @@ am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
 	libutil_la-PeriodicGaussian.lo libutil_la-Permutation.lo \
 	libutil_la-RandomNumGenerator.lo libutil_la-SuperCell.lo \
 	libutil_la-TradEwaldSum.lo libutil_la-WireEwald.lo \
-	libutil_la-erf.lo libutil_la-ipow.lo \
+	libutil_la-erf.lo libutil_la-ipow.lo libutil_la-VPolyFit.lo \
 	libutil_la-CommandLineParser.lo libutil_la-Greeting.lo \
 	libutil_la-MPILifecycle.lo libutil_la-UsageMessage.lo
 libutil_la_OBJECTS = $(am_libutil_la_OBJECTS)
@@ -255,6 +255,7 @@ libutil_la_SOURCES = \
 	WireEwald.cc \
 	erf.cpp \
 	ipow.cpp \
+	math/VPolyFit.cpp \
     startup/CommandLineParser.cpp \
     startup/Greeting.cpp \
     startup/MPILifecycle.cpp \
@@ -276,6 +277,7 @@ noinst_HEADERS = \
 	erf.h \
 	gnugetopt.h \
 	ipow.h \
+	math/VPolyFit.h \
     startup/CommandLineParser.h \
     startup/Greeting.h \
     startup/MPILifecycle.h \
@@ -349,6 +351,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-SuperCell.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-TradEwaldSum.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-UsageMessage.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-VPolyFit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-WireEwald.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-erf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-ipow.Plo@am__quote@
@@ -464,6 +467,13 @@ libutil_la-ipow.lo: ipow.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='ipow.cpp' object='libutil_la-ipow.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-ipow.lo `test -f 'ipow.cpp' || echo '$(srcdir)/'`ipow.cpp
+
+libutil_la-VPolyFit.lo: math/VPolyFit.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-VPolyFit.lo -MD -MP -MF $(DEPDIR)/libutil_la-VPolyFit.Tpo -c -o libutil_la-VPolyFit.lo `test -f 'math/VPolyFit.cpp' || echo '$(srcdir)/'`math/VPolyFit.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-VPolyFit.Tpo $(DEPDIR)/libutil_la-VPolyFit.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='math/VPolyFit.cpp' object='libutil_la-VPolyFit.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-VPolyFit.lo `test -f 'math/VPolyFit.cpp' || echo '$(srcdir)/'`math/VPolyFit.cpp
 
 libutil_la-CommandLineParser.lo: startup/CommandLineParser.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-CommandLineParser.lo -MD -MP -MF $(DEPDIR)/libutil_la-CommandLineParser.Tpo -c -o libutil_la-CommandLineParser.lo `test -f 'startup/CommandLineParser.cpp' || echo '$(srcdir)/'`startup/CommandLineParser.cpp

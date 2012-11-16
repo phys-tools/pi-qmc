@@ -14,6 +14,7 @@ libutil_la_SOURCES = \
 	WireEwald.cc \
 	erf.cpp \
 	ipow.cpp \
+	math/VPolyFit.cpp \
     startup/CommandLineParser.cpp \
     startup/Greeting.cpp \
     startup/MPILifecycle.cpp \
@@ -34,6 +35,7 @@ noinst_HEADERS = \
 	erf.h \
 	gnugetopt.h \
 	ipow.h \
+	math/VPolyFit.h \
     startup/CommandLineParser.h \
     startup/Greeting.h \
     startup/MPILifecycle.h \
