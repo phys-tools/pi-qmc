@@ -21,8 +21,8 @@ VPolyFit::VPolyFit(int dataCount, int dimension, const double* xdata,
         dimension(dimension) {
     solution = new double[dimension];
     worka = new double[dataCount * dimension];
-    workc = new double[dataCount * dataCount * dimension];
-    workd = new double[dataCount * dataCount * dimension];
+    workc = new double[dataCount * dimension];
+    workd = new double[dataCount * dimension];
     y0 = new double[dimension];
 }
 
@@ -40,38 +40,33 @@ void VPolyFit::fit() {
 const double* VPolyFit::getSolution() const {
     int ntot = dataCount * dimension;
     int one = 1;
+    const double* lasty = ydata + (dataCount - 1) * dimension;
 
-    DCOPY_F77(&dimension, ydata + (dataCount - 1) * dimension, &one, y0, &one);
+    DCOPY_F77(&dimension, lasty, &one, y0, &one);
     DCOPY_F77(&ntot, ydata, &one, workc, &one);
     DCOPY_F77(&ntot, ydata, &one, workd, &one);
 
     for (int j = 1; j < dataCount; ++j) {
         for (int i = 0; i < dataCount - j; ++i) {
             double denom = 1. / (xdata[i] - xdata[i + j]);
-            DCOPY_F77(&ntot, workc + (i + 1) * dataCount * dimension, &one, worka, &one);
+            double* ciplus1 = workc + (i + 1) * dimension;
+            DCOPY_F77(&dimension, ciplus1, &one, worka, &one);
 
-            DSCAL_F77(&ntot, &denom, worka, &one);
+            DSCAL_F77(&dimension, &denom, worka, &one);
             denom *= -1;
-            DAXPY_F77(&ntot, &denom, workd + i * dataCount * dimension, &one, worka, &one);
-            DCOPY_F77(&ntot, worka, &one, workc + i * dataCount * dimension, &one);
-            DSCAL_F77(&ntot, xdata + i, workc + i * dataCount * dimension, &one);
-            DCOPY_F77(&ntot, worka, &one, workd + i * dataCount * dimension, &one);
-            DSCAL_F77(&ntot, xdata + i + j, workd+ i * dataCount * dimension, &one);
-////    /*      for (int i1=0; i1<n1; ++ i1) {
-////            for (int i2=0; i2<n2; ++ i2) {
-////              a(i1,i2) = (c(i+1,i1,i2)-d(i,i1,i2))*denom;
-////              c(i,i1,i2) = x(i)*a(i1,i2);
-////              d(i,i1,i2) = x(i+j)*a(i1,i2);
-////            }
-////          } */
+            double* di = workd + i * dimension;
+            double* ci = workc + i * dimension;
+            DAXPY_F77(&dimension, &denom, di, &one, worka, &one);
+            DCOPY_F77(&dimension, worka, &one, ci, &one);
+            DSCAL_F77(&dimension, xdata + i, ci, &one);
+            DCOPY_F77(&dimension, worka, &one, di, &one);
+            DSCAL_F77(&dimension, xdata + i + j, di, &one);
         }
-////        //y0 += d(n-j-1,all,all);
         double unity = 1.0;
-        DAXPY_F77(&dimension, &unity, workd  + (dataCount - j - 1) * dataCount * dimension, &one, y0, &one);
+        double* lastd = workd + (dataCount - j - 1) * dimension;
+        DAXPY_F77(&dimension, &unity, lastd, &one, y0, &one);
     }
-//    diff = workd(0,all,all);
-    solution[0] = -1.0;
-    solution[1] = 0.5;
-    return solution;
+    //    diff = workd(0,all);
+    return y0;
 }
 
