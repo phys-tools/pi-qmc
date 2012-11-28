@@ -10,7 +10,13 @@ public:
     void fit();
     const double* getSolution() const;
 private:
+    const double* xdata;
+    const double* ydata;
     double* solution;
+    double* worka;
+    double* workc;
+    double* workd;
+    double* y0;
     int dataCount;
     int dimension;
 };
