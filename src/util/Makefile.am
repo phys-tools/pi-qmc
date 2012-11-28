@@ -35,6 +35,7 @@ noinst_HEADERS = \
 	erf.h \
 	gnugetopt.h \
 	ipow.h \
+	math/BLAS.h \
 	math/VPolyFit.h \
     startup/CommandLineParser.h \
     startup/Greeting.h \

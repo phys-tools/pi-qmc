@@ -1,17 +1,5 @@
 #include "VPolyFit.h"
-#include <config.h>
-
-#define DCOPY_F77 F77_FUNC(dcopy,DCOPY)
-extern "C" void DCOPY_F77(const int *n, const double *x, const int *incx,
-                                        const double *y, const int *incy);
-
-#define DSCAL_F77 F77_FUNC(dscal,DSCAL)
-extern "C" void DSCAL_F77(const int *n, const double *da, const double *dx,
-  const int *incx);
-
-#define DAXPY_F77 F77_FUNC(daxpy,DAXPY)
-extern "C" void DAXPY_F77(const int *n, const double *da, const double *dx,
-  const int *incx, const double *dy, const int *incy);
+#include "util/math/BLAS.h"
 
 VPolyFit::VPolyFit(int dataCount, int dimension, const double* xdata,
         const double* ydata)
@@ -35,38 +23,38 @@ VPolyFit::~VPolyFit() {
 }
 
 void VPolyFit::fit() {
-}
-
-const double* VPolyFit::getSolution() const {
-    int ntot = dataCount * dimension;
-    int one = 1;
+    int totalCount = dataCount * dimension;
     const double* lasty = ydata + (dataCount - 1) * dimension;
 
-    DCOPY_F77(&dimension, lasty, &one, y0, &one);
-    DCOPY_F77(&ntot, ydata, &one, workc, &one);
-    DCOPY_F77(&ntot, ydata, &one, workd, &one);
+    BLAS::dcopy(dimension, lasty, 1, y0, 1);
+    BLAS::dcopy(totalCount, ydata, 1, workc, 1);
+    BLAS::dcopy(totalCount, ydata, 1, workd, 1);
 
     for (int j = 1; j < dataCount; ++j) {
         for (int i = 0; i < dataCount - j; ++i) {
-            double denom = 1. / (xdata[i] - xdata[i + j]);
             double* ciplus1 = workc + (i + 1) * dimension;
-            DCOPY_F77(&dimension, ciplus1, &one, worka, &one);
-
-            DSCAL_F77(&dimension, &denom, worka, &one);
-            denom *= -1;
             double* di = workd + i * dimension;
             double* ci = workc + i * dimension;
-            DAXPY_F77(&dimension, &denom, di, &one, worka, &one);
-            DCOPY_F77(&dimension, worka, &one, ci, &one);
-            DSCAL_F77(&dimension, xdata + i, ci, &one);
-            DCOPY_F77(&dimension, worka, &one, di, &one);
-            DSCAL_F77(&dimension, xdata + i + j, di, &one);
+
+            double deltaXInverse = 1. / (xdata[i] - xdata[i + j]);
+
+            BLAS::dcopy(dimension, ciplus1, 1, worka, 1);
+            BLAS::dscal(dimension, deltaXInverse, worka, 1);
+            BLAS::daxpy(dimension, -deltaXInverse, di, 1, worka, 1);
+
+            BLAS::dcopy(dimension, worka, 1, ci, 1);
+            BLAS::dscal(dimension, xdata[i], ci, 1);
+            BLAS::dcopy(dimension, worka, 1, di, 1);
+            BLAS::dscal(dimension, xdata[i + j], di, 1);
         }
         double unity = 1.0;
         double* lastd = workd + (dataCount - j - 1) * dimension;
-        DAXPY_F77(&dimension, &unity, lastd, &one, y0, &one);
+        BLAS::daxpy(dimension, 1.0, lastd, 1, y0, 1);
     }
     //    diff = workd(0,all);
+}
+
+const double* VPolyFit::getSolution() const {
     return y0;
 }
 
