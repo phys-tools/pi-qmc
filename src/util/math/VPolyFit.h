@@ -16,7 +16,6 @@ private:
     double* worka;
     double* workc;
     double* workd;
-    double* y0;
     int dataCount;
     int dimension;
 };

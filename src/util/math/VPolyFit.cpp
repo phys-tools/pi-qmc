@@ -11,7 +11,6 @@ VPolyFit::VPolyFit(int dataCount, int dimension, const double* xdata,
     worka = new double[dataCount * dimension];
     workc = new double[dataCount * dimension];
     workd = new double[dataCount * dimension];
-    y0 = new double[dimension];
 }
 
 VPolyFit::~VPolyFit() {
@@ -19,14 +18,13 @@ VPolyFit::~VPolyFit() {
     delete[] worka;
     delete[] workc;
     delete[] workd;
-    delete[] y0;
 }
 
 void VPolyFit::fit() {
     int totalCount = dataCount * dimension;
     const double* lasty = ydata + (dataCount - 1) * dimension;
 
-    BLAS::dcopy(dimension, lasty, 1, y0, 1);
+    BLAS::dcopy(dimension, lasty, 1, solution, 1);
     BLAS::dcopy(totalCount, ydata, 1, workc, 1);
     BLAS::dcopy(totalCount, ydata, 1, workd, 1);
 
@@ -47,14 +45,13 @@ void VPolyFit::fit() {
             BLAS::dcopy(dimension, worka, 1, di, 1);
             BLAS::dscal(dimension, xdata[i + j], di, 1);
         }
-        double unity = 1.0;
         double* lastd = workd + (dataCount - j - 1) * dimension;
-        BLAS::daxpy(dimension, 1.0, lastd, 1, y0, 1);
+        BLAS::daxpy(dimension, 1.0, lastd, 1, solution, 1);
     }
     //    diff = workd(0,all);
 }
 
 const double* VPolyFit::getSolution() const {
-    return y0;
+    return solution;
 }
 
