@@ -8,5 +8,7 @@ set(sources
     ${dir}/PermutationTest.cc
     ${dir}/SuperCellTest.cc
     ${dir}/math/VPolyFitTest.cpp
+    ${dir}/propagator/PropagatorGridTest.cpp
+    ${dir}/propagator/PropagatorTest.cpp
     PARENT_SCOPE
 )

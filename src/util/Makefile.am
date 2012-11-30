@@ -15,6 +15,8 @@ libutil_la_SOURCES = \
 	erf.cpp \
 	ipow.cpp \
 	math/VPolyFit.cpp \
+	propagator/Propagator.cpp \
+	propagator/PropagatorGrid.cpp \
     startup/CommandLineParser.cpp \
     startup/Greeting.cpp \
     startup/MPILifecycle.cpp \
@@ -37,6 +39,8 @@ noinst_HEADERS = \
 	ipow.h \
 	math/BLAS.h \
 	math/VPolyFit.h \
+	propagator/Propagator.h \
+	propagator/PropagatorGrid.h \	
     startup/CommandLineParser.h \
     startup/Greeting.h \
     startup/MPILifecycle.h \

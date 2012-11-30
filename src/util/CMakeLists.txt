@@ -13,6 +13,8 @@ set (sources
     erf.cpp
     ipow.cpp
     math/VPolyFit.cpp
+    propagator/Propagator.cpp
+    propagator/PropagatorGrid.cpp
     startup/CommandLineParser.cpp
     startup/Greeting.cpp
     startup/MPILifecycle.cpp

@@ -76,6 +76,7 @@ am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
 	libutil_la-RandomNumGenerator.lo libutil_la-SuperCell.lo \
 	libutil_la-TradEwaldSum.lo libutil_la-WireEwald.lo \
 	libutil_la-erf.lo libutil_la-ipow.lo libutil_la-VPolyFit.lo \
+	libutil_la-Propagator.lo libutil_la-PropagatorGrid.lo \
 	libutil_la-CommandLineParser.lo libutil_la-Greeting.lo \
 	libutil_la-MPILifecycle.lo libutil_la-UsageMessage.lo
 libutil_la_OBJECTS = $(am_libutil_la_OBJECTS)
@@ -256,6 +257,8 @@ libutil_la_SOURCES = \
 	erf.cpp \
 	ipow.cpp \
 	math/VPolyFit.cpp \
+	propagator/Propagator.cpp \
+	propagator/PropagatorGrid.cpp \
     startup/CommandLineParser.cpp \
     startup/Greeting.cpp \
     startup/MPILifecycle.cpp \
@@ -279,6 +282,8 @@ noinst_HEADERS = \
 	ipow.h \
 	math/BLAS.h \
 	math/VPolyFit.h \
+	propagator/Propagator.h \
+	propagator/PropagatorGrid.h \
     startup/CommandLineParser.h \
     startup/Greeting.h \
     startup/MPILifecycle.h \
@@ -348,6 +353,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PairDistance.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PeriodicGaussian.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Permutation.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Propagator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-PropagatorGrid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-RandomNumGenerator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-SuperCell.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-TradEwaldSum.Plo@am__quote@
@@ -475,6 +482,20 @@ libutil_la-VPolyFit.lo: math/VPolyFit.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='math/VPolyFit.cpp' object='libutil_la-VPolyFit.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-VPolyFit.lo `test -f 'math/VPolyFit.cpp' || echo '$(srcdir)/'`math/VPolyFit.cpp
+
+libutil_la-Propagator.lo: propagator/Propagator.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-Propagator.lo -MD -MP -MF $(DEPDIR)/libutil_la-Propagator.Tpo -c -o libutil_la-Propagator.lo `test -f 'propagator/Propagator.cpp' || echo '$(srcdir)/'`propagator/Propagator.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-Propagator.Tpo $(DEPDIR)/libutil_la-Propagator.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='propagator/Propagator.cpp' object='libutil_la-Propagator.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-Propagator.lo `test -f 'propagator/Propagator.cpp' || echo '$(srcdir)/'`propagator/Propagator.cpp
+
+libutil_la-PropagatorGrid.lo: propagator/PropagatorGrid.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-PropagatorGrid.lo -MD -MP -MF $(DEPDIR)/libutil_la-PropagatorGrid.Tpo -c -o libutil_la-PropagatorGrid.lo `test -f 'propagator/PropagatorGrid.cpp' || echo '$(srcdir)/'`propagator/PropagatorGrid.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-PropagatorGrid.Tpo $(DEPDIR)/libutil_la-PropagatorGrid.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='propagator/PropagatorGrid.cpp' object='libutil_la-PropagatorGrid.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-PropagatorGrid.lo `test -f 'propagator/PropagatorGrid.cpp' || echo '$(srcdir)/'`propagator/PropagatorGrid.cpp
 
 libutil_la-CommandLineParser.lo: startup/CommandLineParser.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-CommandLineParser.lo -MD -MP -MF $(DEPDIR)/libutil_la-CommandLineParser.Tpo -c -o libutil_la-CommandLineParser.lo `test -f 'startup/CommandLineParser.cpp' || echo '$(srcdir)/'`startup/CommandLineParser.cpp
