@@ -1,14 +1,20 @@
 Preliminaries
 =============
 
+File Formats: XML and HDF5
+--------------------------
+
 XML
----
+````
 
-HDF
----
+HDF5
+````
 
-Units
------
+Science: Units, Statistical Mechanics
+-------------------------------------
+
+Testing: Unit Tests, TDD, Integration Tests
+-------------------------------------------
 
 Parallelism
 -----------
