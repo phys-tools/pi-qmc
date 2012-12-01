@@ -10,6 +10,7 @@ pi-qmc Documentation Contents
    :maxdepth: 2
    
    intro
+   start
    prelim
    siminfo
    tutorials
