@@ -93,20 +93,40 @@ where the external potential in k-space satisfies
 
 and
 
-Vext(**q**') = ∫ d**q**' e-i**q**'·**r**' Vext(**r**').
+.. math::
+   :label:
+
+   V_{text{ext}}(\mathbf{q}') = \int d\mathbf{q}'
+   e^{-i\mathbf{q}'\cdot\mathbf{r}'} V_{text{ext}}(\mathbf{r}').
 
 These response functions are related to imaginary-frequency dynamic correlation
 functions,
 
-χnn(**r**,**r**',iωn) = -(1/βħ²)〈n(**r**,iωn) n(**r**',-iωn)〉,
+.. math::
+   :label:
+
+   \chi_{nn}(\mathbf{r}, \mathbf{r}', i\omega_n) 
+   = -\frac{1}{\beta\hbar^2}
+   \langle n(\mathbf{r} ,i\omega_n) n(\mathbf{r}',-i\omega_n)\rangle,
 
 and
 
-χnn(**q**,**q**',iωn) = -(1/βħ²V)〈n**q**(iωn) n-**q**'(-iωn)〉.
+.. math::
+   :label:
+
+   \chi_{nn}(\mathbf{q}, \mathbf{q}', i\omega_n)
+   = -\frac{1}{\beta\hbar^2 V} langlen_{\mathbf{q}}(i\omega_n) 
+   n_{-\mathbf{q}'}(-i\omega_n)\rangle.
 
 For a homogeneous system,
 
-χnn(**q**,**q**',iωn) = -(1/βħ²V)〈n**q**(iωn) n-**q**(-iωn)〉 δ**qq**'.
+.. math::
+   :label:
+
+   \chi_{nn}(\mathbf{q}, \mathbf{q}',i\omega_n) 
+   = -\frac{1}{\beta\hbar^2 V}
+   \langle n_{\mathbf{q}}(i\omega_n) n_{-\mathbf{q}}(-i\omega_n)\rangle
+   delta_{\mathbf{q}\mathbf{q}'}.
 
 Structure factor
 ````````````````
@@ -114,16 +134,30 @@ Structure factor
 The dynamic structure factor S(**k**,iωn) measures the density response of the
 system,
 
-S(**k**,iωn) = -(V/ħN) χnn(**k**,**k**,iωn)
+.. math::
+   :label: skomega
 
-The static structure factor is defined for equal time, not for ωn → 0,
+   S(\mathbf{k}, i\omega_n) = -\frac{V}{\hbar N} 
+   \chi_{nn}(\mathbf{k}, \mathbf{k}, i\omega_n)
 
-S(**k**) = (1/N) 〈n**k**(τ=0) n-**k**(τ=0)〉.
+The static structure factor is defined for equal time, not for 
+:math:`\omega_n \rightarrow 0`,
 
-In terms of χnn(**q**,**q**',iω), the static structure factor is given by
-(*prefactor is wrong*)
+.. math::
+   :label:
 
-S(**k**) = -(V/ħN) Σωn χnn(**k**,**k**,iωn) e-iωnτ.
+   S(\mathbf{k}) 
+   = \frac{1}{N} \langle n_{\mathbf{k}}(\tau=0) n_{-\mathbf{k}}(\tau=0)\rangle.
+
+In terms of :math:`\chi_{nn}(\mathbf{q}, \mathbf{q}', i\omega)`, 
+the static structure factor is given by (*prefactor is wrong*)
+
+.. math::0
+   :label: sk
+
+   S(\mathbf{k}) = -\frac{V}{\hbar N} \sum_n \omega_n 
+   \chi_{nn}(\mathbf{k}, \mathbf{k}, i\omega_n) 
+   e^{-i\omega_n\tau}.
 
 Polarizability
 ``````````````
