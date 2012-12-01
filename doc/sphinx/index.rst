@@ -7,7 +7,7 @@ pi-qmc Documentation Contents
 =============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    
    intro
    start
