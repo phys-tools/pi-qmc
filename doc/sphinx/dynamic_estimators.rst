@@ -126,7 +126,7 @@ For a homogeneous system,
    \chi_{nn}(\mathbf{q}, \mathbf{q}',i\omega_n) 
    = -\frac{1}{\beta\hbar^2 V}
    \langle n_{\mathbf{q}}(i\omega_n) n_{-\mathbf{q}}(-i\omega_n)\rangle
-   delta_{\mathbf{q}\mathbf{q}'}.
+   \delta_{\mathbf{q}\mathbf{q}'}.
 
 Structure factor
 ````````````````
