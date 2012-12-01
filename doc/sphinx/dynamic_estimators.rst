@@ -96,8 +96,8 @@ and
 .. math::
    :label:
 
-   V_{text{ext}}(\mathbf{q}') = \int d\mathbf{q}'
-   e^{-i\mathbf{q}'\cdot\mathbf{r}'} V_{text{ext}}(\mathbf{r}').
+   V_{\text{ext}}(\mathbf{q}') = \int d\mathbf{q}'
+   e^{-i\mathbf{q}'\cdot\mathbf{r}'} V_{\text{ext}}(\mathbf{r}').
 
 These response functions are related to imaginary-frequency dynamic correlation
 functions,
@@ -115,7 +115,7 @@ and
    :label:
 
    \chi_{nn}(\mathbf{q}, \mathbf{q}', i\omega_n)
-   = -\frac{1}{\beta\hbar^2 V} langlen_{\mathbf{q}}(i\omega_n) 
+   = -\frac{1}{\beta\hbar^2 V} \langle n_{\mathbf{q}}(i\omega_n) 
    n_{-\mathbf{q}'}(-i\omega_n)\rangle.
 
 For a homogeneous system,
