@@ -5,4 +5,5 @@ Estimators: Describing the Measurements
    :maxdepth: 2
 
    estimator_list
+   density
    dynamic_estimators
