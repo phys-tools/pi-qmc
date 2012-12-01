@@ -73,6 +73,7 @@ Icon?
 ehthumbs.db
 Thumbs.db
 .*.swp
+_*
 
 # pi-qmc files #
 ################
