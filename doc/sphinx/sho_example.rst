@@ -64,7 +64,7 @@ Here we have set the temperature :math:`k_BT = 1.0` (line 5),
 and we are simulating a harmonic oscillator with :math:`\hbar\omega = 0.5`
 Hartrees (line 8).
 From Eq. :eq:`sho_energy`, the energy of this oscillator in three
-dimensions is :math:`\frac{3}{2}\coth\frac{1}{4}\approx 3.06224`.
+dimensions should be :math:`\frac{3}{2}\coth\frac{1}{4}\approx 3.06224`.
 
 Calculating the Energy
 ``````````````````````
