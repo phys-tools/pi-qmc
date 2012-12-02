@@ -10,10 +10,10 @@ Contents
    :maxdepth: 2
    
    intro
-   start
    prelim
    siminfo
    tutorials
+   building
 
 
 Indices and tables

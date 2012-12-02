@@ -1,2 +1,2 @@
-Introduction
-============
+Getting Started
+---------------
