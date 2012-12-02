@@ -70,4 +70,6 @@ with inversion symmetry about the origin.
 Homegeneous systems, such as liquid helium or the electron gas, will have
 :math:`\langle n_{\mathbf{k}}\rangle = 0`
 for all :math:`\mathbf{k} \ne 0`.
-In those cases, it is better to calculate the static structure factor.
+In those cases, it is better to calculate the 
+static structure factor 
+(see :ref:`static structure factor<static-structure-factor>`).

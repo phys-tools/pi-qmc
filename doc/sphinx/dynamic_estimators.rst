@@ -1,4 +1,5 @@
 .. index:: response function
+
 Dynamic Response Functions
 ==========================
 
@@ -131,6 +132,7 @@ For a homogeneous system,
 
 
 .. index:: structure factor, dynamic structure factor
+
 Structure factor
 ````````````````
 
@@ -143,6 +145,8 @@ system,
    S(\mathbf{k}, i\omega_n) = -\frac{V}{\hbar N} 
    \chi_{nn}(\mathbf{k}, \mathbf{k}, i\omega_n)
 
+.. _static-structure-factor:
+
 The static structure factor is defined for equal time, not for 
 :math:`\omega_n \rightarrow 0`,
 
@@ -152,10 +156,11 @@ The static structure factor is defined for equal time, not for
    S(\mathbf{k}) 
    = \frac{1}{N} \langle n_{\mathbf{k}}(\tau=0) n_{-\mathbf{k}}(\tau=0)\rangle.
 
+
 In terms of :math:`\chi_{nn}(\mathbf{q}, \mathbf{q}', i\omega)`, 
 the static structure factor is given by (*prefactor is wrong*)
 
-.. math::0
+.. math::
    :label: sk
 
    S(\mathbf{k}) = -\frac{V}{\hbar N} \sum_n \omega_n 
@@ -164,5 +169,6 @@ the static structure factor is given by (*prefactor is wrong*)
 
 
 .. index: polarizability
+
 Polarizability
 ``````````````
