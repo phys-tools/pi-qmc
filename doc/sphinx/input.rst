@@ -6,24 +6,25 @@ python utilities for reading the pimc.h5 output file.
 
 The pimc.xml files are xml files. 
 The root tag contains six elements. Order doesn't matter to the parser, 
-but we always order them in our pimc.xml input files:
+but we always order them in our pimc.xml input files (extended whitespace
+indicates omitted details):
 
 
 .. code-block:: xml
 
    <?xml version="1.0"?>
    <Simulation>
-       <SuperCell ... />
-       <Species ... />
-       <Temperature .../>
+       <SuperCell     />
+       <Species     />
+       <Temperature    />
        <Action>
-           ...
+               
        </Action>
        <Estimators>
-           ...
+               
        </Estimators>
-       <PIMC ...>
-           ...
+       <PIMC    >
+               
        </PIMC>
    </Simulation>
 
