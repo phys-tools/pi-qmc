@@ -23,5 +23,5 @@ only hydrogen and helium systems work well.
 Overview
 --------
 
-Getting Started
----------------
+.. include:: start.rst
+

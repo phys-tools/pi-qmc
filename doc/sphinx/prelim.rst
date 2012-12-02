@@ -16,5 +16,11 @@ Science: Units, Statistical Mechanics
 Testing: Unit Tests, TDD, Integration Tests
 -------------------------------------------
 
-Parallelism
------------
+Parallel Computing
+------------------
+
+MPI
+```
+
+OpenMP
+``````

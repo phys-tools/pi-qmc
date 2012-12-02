@@ -10,10 +10,11 @@ Contents
    :maxdepth: 2
    
    intro
-   start
+   sho_example
    prelim
    siminfo
    tutorials
+   building
 
 
 Indices and tables
