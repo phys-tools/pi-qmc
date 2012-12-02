@@ -1,3 +1,4 @@
+.. index:: response function
 Dynamic Response Functions
 ==========================
 
@@ -128,6 +129,8 @@ For a homogeneous system,
    \langle n_{\mathbf{q}}(i\omega_n) n_{-\mathbf{q}}(-i\omega_n)\rangle
    \delta_{\mathbf{q}\mathbf{q}'}.
 
+
+.. index:: structure factor, dynamic structure factor
 Structure factor
 ````````````````
 
@@ -159,5 +162,7 @@ the static structure factor is given by (*prefactor is wrong*)
    \chi_{nn}(\mathbf{k}, \mathbf{k}, i\omega_n) 
    e^{-i\omega_n\tau}.
 
+
+.. index: polarizability
 Polarizability
 ``````````````
