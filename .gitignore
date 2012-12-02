@@ -11,6 +11,7 @@
 *.dylib
 *.la
 *.lo
+*.pyc
 .deps
 config.status
 autom4te.cache
