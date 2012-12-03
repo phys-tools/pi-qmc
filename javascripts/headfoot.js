@@ -58,7 +58,7 @@ function writeNavigationLinks(relURL) {
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
-    document.write("      <a href='" + relURL + "install/index.html'>");
+    document.write("      <a href='http://pi-qmc.readthedocs.org/en/latest/building.html'>");
     document.write("        Build / Install");
     document.write("      </a>");
     document.write("    </li>");
