@@ -183,9 +183,10 @@ latex_elements = {
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
+authorList = r"John Shumway \and Ian Galbraith \and Peter MacDonald \and Jonathan DuBois \and Saad Khairallah \and Jianheng Liu \and Mark Sanger \and Nikhil Monga \and Dan Quach"
 latex_documents = [
   ('index', 'pi-qmc.tex', u'pi-qmc Documentation',
-   u'John Shumway', 'manual'),
+   authorList, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
