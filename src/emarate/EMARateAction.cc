@@ -16,15 +16,15 @@
 
 EMARateAction::EMARateAction(const SimulationInfo& simInfo,
         const Species* species1, const Species* species2, double C)
-: invTau(1./simInfo.getTau()),
-  species1(species1),
-  species2(species2),
-  index1(species1->ifirst),
-  index2(species2->ifirst),
-  C(C),
-  nPathSlice(simInfo.getNSlice()),
-  hasCoulomb(false),
-  coulomb(0) {
+:   invTau(1./simInfo.getTau()),
+    species1(species1),
+    species2(species2),
+    index1(species1->ifirst),
+    index2(species2->ifirst),
+    C(C),
+    nPathSlice(simInfo.getNSlice()),
+    hasCoulomb(false),
+    coulomb(0) {
 
     if (species1->anMass) {
         mass1 = *(species1->anMass);
@@ -55,7 +55,7 @@ EMARateAction::Vec EMARateAction::getMovingPosition(
         int ipart, int islice, int nMoving, const IArray& index,
         const Beads<NDIM>& sectionBeads, const Beads<NDIM>& movingBeads) {
     Vec position = sectionBeads(ipart, islice);
-    for(int imoving = 0;imoving < nMoving;++imoving){
+    for (int imoving = 0;imoving < nMoving; ++imoving){
         int thisPart = index(imoving);
         if (thisPart == ipart) {
             position = movingBeads(imoving, islice);
@@ -149,8 +149,8 @@ double EMARateAction::getActionDifference(
         }
 
         // Calculate action for old beads.
-        Vec reOld = sectionBeads(0,islice);
-        Vec rhOld = sectionBeads(1,islice);
+        Vec reOld = sectionBeads(index1,islice);
+        Vec rhOld = sectionBeads(index2,islice);
 
         Vec reRadOld = reOld;
         Vec rhRadOld = (islice == nSlice / 2) ? reOld : rhOld;
@@ -213,7 +213,6 @@ double EMARateAction::getActionDifference(
     }
 
     double deltaAction = newAction - oldAction;
-
     return deltaAction;
 }
 

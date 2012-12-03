@@ -26,6 +26,8 @@ EMARateMover::EMARateMover(double tau,
     C(C),
     index1(species1->ifirst),
     index2(species2->ifirst) {
+    index(0) = index1;
+    index(1) = index2;
     if (species1->anMass) {
         lambda1 = 0.5 / *(species1->anMass);
     } else {
@@ -57,8 +59,8 @@ double EMARateMover::calculateTransitionProbability(int nStride,
     Vec rhPrev = movingBeads(1, 0);
     Vec reRadPrev = rePrev;
     Vec rhRadPrev = rhPrev;
-    Vec rePrevOld = sectionBeads(0, 0);
-    Vec rhPrevOld = sectionBeads(1, 0);
+    Vec rePrevOld = sectionBeads(index1, 0);
+    Vec rhPrevOld = sectionBeads(index2, 0);
     Vec reRadPrevOld = rePrevOld;
     Vec rhRadPrevOld = rhPrevOld;
     for (int islice = nStride; islice < nSlice; islice += nStride) {
@@ -87,8 +89,8 @@ double EMARateMover::calculateTransitionProbability(int nStride,
             newRadAction += delta[idim] * delta[idim] * inv2Sigma22[idim];
         }
         // Calculate action for old beads.
-        Vec reOld = sectionBeads(0,islice);
-        Vec rhOld = sectionBeads(1,islice);
+        Vec reOld = sectionBeads(index1,islice);
+        Vec rhOld = sectionBeads(index2,islice);
 
         Vec reRadOld = reOld;
         Vec rhRadOld = (islice == nSlice / 2) ? reOld : rhOld;
