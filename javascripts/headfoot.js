@@ -53,7 +53,7 @@ function writeNavigationLinks(relURL) {
     shumwayURL = "http://shumway.physics.asu.edu";
     document.write("  <ul>");
     document.write("    <li>");
-    document.write("      <a href='" + relURL + "docs/index.html'>");
+    document.write("      <a href='http://pi-qmc.readthedocs.org'>");
     document.write("        Documentation");
     document.write("      </a>");
     document.write("    </li>");
