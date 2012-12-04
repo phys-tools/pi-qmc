@@ -17,7 +17,7 @@ class SHOTestCase(unittest.TestCase):
 
     def tearDown(self):
         self.h5file.close()
-        os.remove("pimc.dat")
+        os.chdir("..")
 
     def test_energy(self):
         energy = self.h5file.getScalar("thermo_energy")
