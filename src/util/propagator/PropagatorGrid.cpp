@@ -1,11 +1,28 @@
 #include "PropagatorGrid.h"
 
 PropagatorGrid::PropagatorGrid() {
-    // TODO Auto-generated constructor stub
-
 }
 
 PropagatorGrid::~PropagatorGrid() {
-    // TODO Auto-generated destructor stub
 }
+
+void PropagatorGrid::toRealSpace() {
+}
+
+void PropagatorGrid::toKSpace() {
+}
+
+void PropagatorGrid::evolveTDeltaTau() {
+}
+
+void PropagatorGrid::evolveVDeltaTau() {
+}
+
+void PropagatorGrid::evolveVHalfDeltaTau() {
+}
+
+double PropagatorGrid::readValue() const {
+    return 0.23182433490559262;
+}
+
 

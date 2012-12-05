@@ -11,6 +11,8 @@ public:
     void evolveTDeltaTau();
     void evolveVDeltaTau();
     void evolveVHalfDeltaTau();
+
+    double readValue() const;
 };
 
 #endif
