@@ -10,13 +10,16 @@ Eigenstates of the Simple Harmonic Oscillator
 The Classical Partition Function
 ````````````````````````````````
 
+.. index:: 
+   pair: simple harmonic oscillator; partition function
+
 The Quantum Mechanical Partition Function
 `````````````````````````````````````````
 
 In one dimension, the partition function of the simple harmonic oscillator is
 
 .. math::
-   :label:
+   :label: shoz
 
    Z = \sum_{n=0}^\infty e^{-\beta\hbar\omega (n+\frac{1}{2})}
    = \left[2\cosh\left(\frac{\hbar\omega}{2k_BT}\right)\right]^{-1}
@@ -24,21 +27,21 @@ In one dimension, the partition function of the simple harmonic oscillator is
 For N oscillators in D dimensions, the partition function is
 
 .. math::
-   :label:
+   :label: shoznd
 
    Z = \left[2\cosh\left(\frac{\hbar\omega}{2k_BT}\right)\right]^{-ND}
 
 The Helmholtz free energy is
 
 .. math::
-   :label:
+   :label: sho_free_energy
 
    F = E - TS = -k_BT \ln(Z) 
    = ND k_BT \ln\left[2 \cosh\left(\frac{\hbar\omega}{2k_BT}\right)\right].
 
 The total energy is
 
-.. math::
+.. math:: 
    :label: sho_energy
 
    E = -\frac{d}{d\beta} \ln(Z) = ND \frac{\hbar\omega}{2} 
