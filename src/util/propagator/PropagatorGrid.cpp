@@ -1,7 +1,9 @@
 #include "PropagatorGrid.h"
 
-PropagatorGrid::PropagatorGrid(int size)
+PropagatorGrid::PropagatorGrid(int size, double deltaX)
     :   size(size),
+        deltaX(deltaX),
+        deltaK(2.0 * PI / (deltaX * size)),
         value(new Complex[size]) {
 }
 
@@ -38,6 +40,17 @@ void PropagatorGrid::initialize(int index0) {
 PropagatorGrid::Complex PropagatorGrid::operator()(int index) const {
     return value[index];
 }
+
+const double PropagatorGrid::PI = 3.141592653589793;
+
+double PropagatorGrid::getDeltaX() const {
+    return deltaX;
+}
+
+double PropagatorGrid::getDeltaK() const {
+    return deltaK;
+}
+
 
 
 
