@@ -15,6 +15,7 @@
 #include "base/SimInfoWriter.h"
 #include "base/Species.h"
 #include "emarate/EMARateEstimator.h"
+#include "emarate/EMARateWeight.h"
 #include "estimator/AngularMomentumEstimator.h"
 #include "estimator/ConductivityEstimator.h"
 #include "estimator/ConductivityEstimator2D.h"
@@ -71,24 +72,45 @@ EstimatorParser::EstimatorParser(const SimulationInfo& simInfo,
 EstimatorParser::~EstimatorParser() {delete manager;}
 
 void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
-  // First see if we need a FreeEnergyEstimator for ActionChoice.
-  if (actionChoice) {
-    manager->add(new FreeEnergyEstimator(simInfo,
-       actionChoice->getModelState().getModelCount(), mpi));
-
     xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
     xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
+    // First see if we need a FreeEnergyEstimator for ActionChoice.
+    if (actionChoice) {
+        manager->add(new FreeEnergyEstimator(simInfo,
+                actionChoice->getModelState().getModelCount(), mpi));
 
-    bool splitOverStates = parser.getBoolAttribute(estNode,"splitOverStates");
-    if (splitOverStates) {
-        manager->setIsSplitOverStates(true);
-        manager->setPartitionWeight(&actionChoice->getModelState());
-        manager->add(new WeightEstimator(manager->createScalarAccumulator()));
+
+        bool splitOverStates = parser.getBoolAttribute(estNode,"splitOverStates");
+        if (splitOverStates) {
+            manager->setIsSplitOverStates(true);
+            manager->setPartitionWeight(&actionChoice->getModelState());
+            manager->add(new WeightEstimator(manager->createScalarAccumulator()));
+        }
     }
-  }
 
-  xmlXPathObjectPtr obj = xmlXPathEval(BAD_CAST"//Estimators",ctxt);
-  xmlNodePtr estNode=obj->nodesetval->nodeTab[0];
+    bool withEMARate = parser.getBoolAttribute(estNode, "withEMARate");
+    std::cout << "withEMARate = " << withEMARate << std::endl;
+    if (withEMARate) {
+        manager->setIsSplitOverStates(true);
+        double C =  parser.getDoubleAttribute(estNode,"c");
+        std::string specName = parser.getStringAttribute(estNode,"species1");
+        const Species& species1(simInfo.getSpecies(specName));
+        specName = parser.getStringAttribute(estNode,"species2");
+        const Species& species2(simInfo.getSpecies(specName));
+        EMARateWeight* partitionWeight =
+                new EMARateWeight(simInfo, &species1, &species2, C);
+        if (parser.getBoolAttribute(estNode, "useCoulomb")) {
+            double epsilon = parser.getDoubleAttribute(estNode, "epsilon");
+            if (epsilon < 1e-15) epsilon = 1.0;
+            int norder = parser.getIntAttribute(estNode, "norder");
+            partitionWeight->includeCoulombContribution(epsilon, norder);
+        }
+        manager->setPartitionWeight(partitionWeight);
+        manager->add(new WeightEstimator(manager->createScalarAccumulator()));
+        std::cout << "Using EMA rates" << std::endl;
+
+    }
+
   double bfield = parser.getEnergyAttribute(estNode, "bfield");
   if (bfield > 1e-15) {
       int partitionCount = parser.getIntAttribute(estNode, "partitions");

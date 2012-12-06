@@ -40,7 +40,7 @@ noinst_HEADERS = \
 	math/BLAS.h \
 	math/VPolyFit.h \
 	propagator/Propagator.h \
-	propagator/PropagatorGrid.h \	
+	propagator/PropagatorGrid.h \
     startup/CommandLineParser.h \
     startup/Greeting.h \
     startup/MPILifecycle.h \
