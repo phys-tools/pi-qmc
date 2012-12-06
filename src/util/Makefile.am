@@ -14,6 +14,7 @@ libutil_la_SOURCES = \
 	WireEwald.cc \
 	erf.cpp \
 	ipow.cpp \
+	fft/FFT1D.cpp \
 	math/VPolyFit.cpp \
 	propagator/Propagator.cpp \
 	propagator/PropagatorGrid.cpp \
@@ -37,6 +38,7 @@ noinst_HEADERS = \
 	erf.h \
 	gnugetopt.h \
 	ipow.h \
+	fft/FFT1D.h \
 	math/BLAS.h \
 	math/VPolyFit.h \
 	propagator/Propagator.h \

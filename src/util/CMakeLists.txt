@@ -12,6 +12,7 @@ set (sources
     WireEwald.cc
     erf.cpp
     ipow.cpp
+    fft/FFT1D.cpp
     math/VPolyFit.cpp
     propagator/Propagator.cpp
     propagator/PropagatorGrid.cpp

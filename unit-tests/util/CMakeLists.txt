@@ -7,6 +7,7 @@ set(sources
     ${dir}/PeriodicGaussianTest.cc
     ${dir}/PermutationTest.cc
     ${dir}/SuperCellTest.cc
+    ${dir}/fft/FFT1DTest.cpp
     ${dir}/math/VPolyFitTest.cpp
     ${dir}/propagator/PropagatorGridTest.cpp
     ${dir}/propagator/PropagatorTest.cpp
