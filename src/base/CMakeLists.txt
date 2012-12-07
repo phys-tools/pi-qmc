@@ -3,6 +3,7 @@ set (sources
     Charges.cpp
     DoubleParallelPaths.cc
     EnumeratedModelState.cc
+    FermionWeight.cpp
     MagneticFluxCalculator.cpp
     MagneticFluxWeight.cpp
     ParallelPaths.cc

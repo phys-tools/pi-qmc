@@ -71,7 +71,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libbase_la_LIBADD =
 am_libbase_la_OBJECTS = libbase_la-BeadFactory.lo \
 	libbase_la-Charges.lo libbase_la-DoubleParallelPaths.lo \
-	libbase_la-EnumeratedModelState.lo \
+	libbase_la-EnumeratedModelState.lo libbase_la-FermionWeight.lo \
 	libbase_la-MagneticFluxCalculator.lo \
 	libbase_la-MagneticFluxWeight.lo libbase_la-ParallelPaths.lo \
 	libbase_la-Paths.lo libbase_la-SerialPaths.lo \
@@ -246,6 +246,7 @@ libbase_la_SOURCES = \
     Charges.cpp \
     DoubleParallelPaths.cc \
     EnumeratedModelState.cc \
+    FermionWeight.cpp \
     MagneticFluxCalculator.cpp \
     MagneticFluxWeight.cpp \
     ParallelPaths.cc \
@@ -263,6 +264,7 @@ noinst_HEADERS = \
     Charges.h \
     DoubleParallelPaths.h \
     EnumeratedModelState.h \
+    FermionWeight.h \
     Help.h \
     LinkSummable.h \
     MagneticFluxCalculator.h \
@@ -335,6 +337,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-Charges.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-DoubleParallelPaths.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-EnumeratedModelState.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-FermionWeight.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-MagneticFluxCalculator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-MagneticFluxWeight.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-ParallelPaths.Plo@am__quote@
@@ -394,6 +397,13 @@ libbase_la-EnumeratedModelState.lo: EnumeratedModelState.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='EnumeratedModelState.cc' object='libbase_la-EnumeratedModelState.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-EnumeratedModelState.lo `test -f 'EnumeratedModelState.cc' || echo '$(srcdir)/'`EnumeratedModelState.cc
+
+libbase_la-FermionWeight.lo: FermionWeight.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-FermionWeight.lo -MD -MP -MF $(DEPDIR)/libbase_la-FermionWeight.Tpo -c -o libbase_la-FermionWeight.lo `test -f 'FermionWeight.cpp' || echo '$(srcdir)/'`FermionWeight.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libbase_la-FermionWeight.Tpo $(DEPDIR)/libbase_la-FermionWeight.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='FermionWeight.cpp' object='libbase_la-FermionWeight.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-FermionWeight.lo `test -f 'FermionWeight.cpp' || echo '$(srcdir)/'`FermionWeight.cpp
 
 libbase_la-MagneticFluxCalculator.lo: MagneticFluxCalculator.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-MagneticFluxCalculator.lo -MD -MP -MF $(DEPDIR)/libbase_la-MagneticFluxCalculator.Tpo -c -o libbase_la-MagneticFluxCalculator.lo `test -f 'MagneticFluxCalculator.cpp' || echo '$(srcdir)/'`MagneticFluxCalculator.cpp

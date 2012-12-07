@@ -101,7 +101,31 @@ TEST_F(PermutationTest, testAppendPermutation) {
 
 }
 
+TEST_F(PermutationTest, testInversionCount) {
+    Permutation permutation(5);
+    permutation[1]=4;
+    permutation[2]=1;
+    permutation[3]=3;
+    permutation[4]=2;
+    ASSERT_EQ(4, permutation.inversionCount());
+}
 
+TEST_F(PermutationTest, testSignOfAnOddPermutation) {
+    Permutation permutation(5);
+    permutation[3]=4;
+    permutation[4]=1;
+    permutation[2]=3;
+    permutation[1]=2;
+    ASSERT_EQ(-1, permutation.sign());
+}
+
+TEST_F(PermutationTest, testSignOfAnEvenPermutation) {
+    Permutation permutation(5);
+    permutation[1]=2;
+    permutation[2]=3;
+    permutation[3]=1;
+    ASSERT_EQ(1, permutation.sign());
+}
 
 }
 

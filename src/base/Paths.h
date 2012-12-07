@@ -6,6 +6,7 @@ template <int TDIM> class Beads;
 class Permutation;
 class LinkSummable;
 class ModelState;
+#include <config.h>
 #include <cstdlib>
 #include <blitz/array.h>
 

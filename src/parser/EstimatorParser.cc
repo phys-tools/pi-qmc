@@ -8,6 +8,7 @@
 #include "action/CoulombAction.h"
 #include "action/DoubleAction.h"
 #include "base/Charges.h"
+#include "base/FermionWeight.h"
 #include "base/MagneticFluxCalculator.h"
 #include "base/MagneticFluxWeight.h"
 #include "base/ModelState.h"
@@ -111,16 +112,24 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 
     }
 
-  double bfield = parser.getEnergyAttribute(estNode, "bfield");
-  if (bfield > 1e-15) {
-      int partitionCount = parser.getIntAttribute(estNode, "partitions");
-      Charges* charges = new Charges(&simInfo);
-      MagneticFluxCalculator* fluxCalculator = new MagneticFluxCalculator(charges);
-      PartitionWeight* weight = new MagneticFluxWeight(bfield, partitionCount, fluxCalculator);
-      manager->setIsSplitOverStates(true);
-      manager->setPartitionWeight(weight);
-      manager->add(new WeightEstimator(manager->createScalarAccumulator()));
-  }
+    double bfield = parser.getEnergyAttribute(estNode, "bfield");
+    if (bfield > 1e-15) {
+        int partitionCount = parser.getIntAttribute(estNode, "partitions");
+        Charges* charges = new Charges(&simInfo);
+        MagneticFluxCalculator* fluxCalculator = new MagneticFluxCalculator(charges);
+        PartitionWeight* weight = new MagneticFluxWeight(bfield, partitionCount, fluxCalculator);
+        manager->setIsSplitOverStates(true);
+        manager->setPartitionWeight(weight);
+        manager->add(new WeightEstimator(manager->createScalarAccumulator()));
+    }
+
+    double withExactFermions = parser.getBoolAttribute(estNode, "withExactFermions");
+    if (withExactFermions) {
+        PartitionWeight* weight = new FermionWeight();
+        manager->setIsSplitOverStates(true);
+        manager->setPartitionWeight(weight);
+        manager->add(new WeightEstimator(manager->createScalarAccumulator()));
+    }
 
   // Then parse the xml estimator list.
   obj = xmlXPathEval(BAD_CAST"//Estimators/*",ctxt);

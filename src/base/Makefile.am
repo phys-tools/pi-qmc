@@ -5,6 +5,7 @@ libbase_la_SOURCES = \
     Charges.cpp \
     DoubleParallelPaths.cc \
     EnumeratedModelState.cc \
+    FermionWeight.cpp \
     MagneticFluxCalculator.cpp \
     MagneticFluxWeight.cpp \
     ParallelPaths.cc \
@@ -21,6 +22,7 @@ noinst_HEADERS = \
     Charges.h \
     DoubleParallelPaths.h \
     EnumeratedModelState.h \
+    FermionWeight.h \
     Help.h \
     LinkSummable.h \
     MagneticFluxCalculator.h \

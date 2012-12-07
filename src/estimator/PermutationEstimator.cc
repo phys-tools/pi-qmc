@@ -12,8 +12,8 @@
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
 #include <fstream>
-//sak
-#include <iostream>
+
+
 PermutationEstimator::PermutationEstimator(const SimulationInfo& simInfo, const std::string& name,
 		       const Species &s1, MPIManager *mpi)
   : BlitzArrayBlkdEst<1>(name, "histogram/permutation", IVecN(s1.count), true), 
@@ -30,31 +30,25 @@ PermutationEstimator::~PermutationEstimator() {
 }
 
 void PermutationEstimator::evaluate(const Paths &paths) {
-  const Permutation &perm(paths.getGlobalPermutation());
-  //std :: cout << "SAK :: IN PERMUTATION ESTIMATOR"<<std :: endl;
-  //std :: cout << perm<<std :: endl;
+    const Permutation &perm(paths.getGlobalPermutation());
 
-  for (int k=0; k<nipart; k++){
-    int i = ifirst + k;
-    if (!visited[k]){
-      int cnt = 0;
-      visited[k] = true;
-      int j = i;
-      while(perm[j] !=i){
-	cnt++;	
-	j = perm[j];
-	if ((j-ifirst) > (ifirst+nipart)){
-	  std :: cout<< "*** WARNING in permutationEstimator"<<std ::endl;
-	  break;
-	}
-	visited[j-ifirst]= true;
-      }
-      value(cnt) += 1.;
+    for (int k=0; k<nipart; k++){
+        int i = ifirst + k;
+        if (!visited[k]){
+            int cnt = 0;
+            visited[k] = true;
+            int j = i;
+            while(perm[j] !=i){
+                cnt++;
+                j = perm[j];
+                visited[j-ifirst]= true;
+            }
+            value(cnt) += 1.;
+        }
     }
-  }
-  for (int i=0; i<nipart; ++i)   visited[i] = false;
-  norm += 1.;
-  
+    for (int i=0; i<nipart; ++i)   visited[i] = false;
+    norm += 1.;
+
 }
 
 

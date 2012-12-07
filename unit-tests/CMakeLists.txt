@@ -1,7 +1,7 @@
 add_subdirectory(action)
 #add_subdirectory(algorithm)
 add_subdirectory(advancer)
-#add_subdirectory(base)
+add_subdirectory(base)
 #add_subdirectory(demo)
 add_subdirectory(emarate)
 #add_subdirectory(estimator)
