@@ -6,17 +6,19 @@ import math
 
 
 class SHOTestCase(unittest.TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         os.chdir("sho")
         out = file("pi.log", "w")
         process = subprocess.Popen("pi3D", stdout=subprocess.PIPE,
             stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         process.wait()
-        self.h5file = pitools.openFile()
+        cls.h5file = pitools.openFile()
 
-    def tearDown(self):
-        self.h5file.close()
+    @classmethod
+    def tearDownClass(cls):
+        cls.h5file.close()
         os.chdir("..")
 
     def test_energy(self):
