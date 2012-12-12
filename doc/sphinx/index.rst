@@ -5,6 +5,7 @@ Contents
    :maxdepth: 2
    
    intro
+   features
    sho_example
    prelim
    input

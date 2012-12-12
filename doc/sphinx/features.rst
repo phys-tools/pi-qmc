@@ -1,5 +1,5 @@
 Features
---------
+========
 
 A primary motivation of pi-qmc is to have a framework so that features
 developed by one student or for one research project can be used

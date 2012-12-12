@@ -24,4 +24,3 @@ Overview
 --------
 
 .. include:: start.rst
-.. include:: features.rst
