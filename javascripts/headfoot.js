@@ -52,6 +52,7 @@ function writeGetCode(githubURL) {
 function writeNavigationLinks(relURL) {
     shumwayURL = "http://shumway.physics.asu.edu";
     rtfdURL = "http://pi-qmc.readthedocs.org/en/latest/";
+    listURL = "https://groups.google.com/forum/?fromgroups#!forum/pi-qmc";
     document.write("  <ul>");
     document.write("    <li>");
     document.write("      <a href='http://pi-qmc.readthedocs.org'>");
@@ -69,18 +70,28 @@ function writeNavigationLinks(relURL) {
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
+    document.write("      <a href='" + githubURL + "/issues'>");
+    document.write("        Bug Tracker");
+    document.write("      </a>");
+    document.write("    </li>");
+    document.write("    <li>");
+    document.write("      <a href='" + listURL + "'>");
+    document.write("        Discussion Forum");
+    document.write("      </a>");
+    document.write("    </li>");
+    document.write("    <li>");
     document.write("      <a href='" + relURL + "team/people.html'>");
     document.write("        People");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
     document.write("      <a href='" + relURL + "team/groups.html'>");
-    document.write("        Groups using pi-qmc");
+    document.write("        Groups Using pi-qmc");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
     document.write("      <a href='" + relURL + "team/funding.html'>");
-    document.write("        Funding Sponsors");
+    document.write("        Sponsors and Funding");
     document.write("    <li>");
     document.write("      <a href='" + shumwayURL + "'>");
     document.write("        Shumway Research Group");
