@@ -51,6 +51,7 @@ function writeGetCode(githubURL) {
 
 function writeNavigationLinks(relURL) {
     shumwayURL = "http://shumway.physics.asu.edu";
+    rtfdURL = "http://pi-qmc.readthedocs.org/en/latest/";
     document.write("  <ul>");
     document.write("    <li>");
     document.write("      <a href='http://pi-qmc.readthedocs.org'>");
@@ -58,13 +59,13 @@ function writeNavigationLinks(relURL) {
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
-    document.write("      <a href='http://pi-qmc.readthedocs.org/en/latest/building.html'>");
+    document.write("      <a href='" + rtfdURL + "building.html'>");
     document.write("        Build / Install");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
-    document.write("      <a href='" + relURL + "doxygen/index.html'>");
-    document.write("        Doxygen");
+    document.write("      <a href='" + rtfdURL + "features.html'>");
+    document.write("        Features");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
