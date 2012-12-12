@@ -1,20 +1,34 @@
 #include "PropagatorGrid.h"
+#include "util/fft/FFT1D.h"
 
 PropagatorGrid::PropagatorGrid(int size, double deltaX)
     :   size(size),
+        oneOverSqrtSize(1.0 / sqrt(size)),
         deltaX(deltaX),
         deltaK(2.0 * PI / (deltaX * size)),
-        value(new Complex[size]) {
+        value(new Complex[size]),
+        fft(new FFT1D(value, size)) {
 }
 
 PropagatorGrid::~PropagatorGrid() {
+    delete fft;
     delete value;
 }
 
 void PropagatorGrid::toRealSpace() {
+    fft->reverse();
+    scaleBySqrtOfSize();
 }
 
 void PropagatorGrid::toKSpace() {
+    fft->forward();
+    scaleBySqrtOfSize();
+}
+
+void PropagatorGrid::scaleBySqrtOfSize() {
+    for (int i = 0; i < size; ++i) {
+        value[i] *= oneOverSqrtSize;
+    }
 }
 
 void PropagatorGrid::evolveTDeltaTau() {
@@ -50,7 +64,4 @@ double PropagatorGrid::getDeltaX() const {
 double PropagatorGrid::getDeltaK() const {
     return deltaK;
 }
-
-
-
 

@@ -36,11 +36,11 @@ TEST_F(PropagatorGridTest, TestDeltaK) {
 TEST_F(PropagatorGridTest, TestInitialization) {
     int index0 = size / 2;
     grid->initialize(index0);
-    ASSERT_NEAR(real((*grid)(index0)), 1.0, 1e-12);
-    ASSERT_NEAR(real((*grid)(10)), 0.0, 1e-12);
+    ASSERT_NEAR(1.0, real((*grid)(index0)), 1e-12);
+    ASSERT_NEAR(0.0, real((*grid)(10)), 1e-12);
 }
 
-TEST_F(PropagatorGridTest, DISABLED_TestTransformToKSpace) {
+TEST_F(PropagatorGridTest, TestTransformToKSpace) {
     int index0 = 13;
     double position = index0 * deltaX;
     grid->initialize(index0);
@@ -48,9 +48,17 @@ TEST_F(PropagatorGridTest, DISABLED_TestTransformToKSpace) {
     int indexk = 9;
     double k = indexk * grid->getDeltaK();
     Complex value = (*grid)(indexk);
-    Complex expect = exp(I * k * position);
+    Complex expect = exp(-I * k * position) / sqrt(size);
     ASSERT_NEAR(real(expect), real(value), 1e-12);
     ASSERT_NEAR(imag(expect), imag(value), 1e-12);
+}
+
+TEST_F(PropagatorGridTest, TestTransformToKSpaceAndBack) {
+    int index0 = 13;
+    grid->initialize(index0);
+    grid->toKSpace();
+    grid->toRealSpace();
+    ASSERT_NEAR(1.0, real((*grid)(index0)), 1e-12);
 }
 
 }

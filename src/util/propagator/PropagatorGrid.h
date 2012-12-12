@@ -2,6 +2,7 @@
 #define PROPAGATORGRID_H_
 
 #include <complex>
+class FFT1D;
 
 class PropagatorGrid {
 public:
@@ -24,11 +25,14 @@ public:
     double getDeltaK() const;
 private:
     const int size;
+    double oneOverSqrtSize;
     const double deltaX;
     const double deltaK;
     Complex* value;
+    FFT1D *fft;
 
     static const double PI;
+    void scaleBySqrtOfSize();
 };
 
 #endif
