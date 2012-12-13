@@ -75,13 +75,13 @@ function writeNavigationLinks(relURL) {
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
-    document.write("      <a href='" + githubURL + "/issues'>");
-    document.write("        Bug Tracker");
+    document.write("      <a href='" + listURL + "'>");
+    document.write("        Discussion Forum");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
-    document.write("      <a href='" + listURL + "'>");
-    document.write("        Discussion Forum");
+    document.write("      <a href='" + githubURL + "/issues'>");
+    document.write("        Bug Tracker");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
