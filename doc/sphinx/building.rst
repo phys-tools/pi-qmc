@@ -1,22 +1,27 @@
-Building pi
-===========
+Building pi-qmc
+===============
 
 Quick start
 -----------
 
 The easiest way to build is to use:
 
-./configure make
+.. code:: bash
+
+   ./configure make
 
 For a parallel build
 
-./configure --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77
+.. code:: bash
+
+  ./configure --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77
 
 where you should use the names of your MPI enabled compilers.
 
 You can also build for different numbers of physical dimensions (default is NDIM=3)
 
-./configure --with-ndim=2
+.. code:: bash
+  ./configure --with-ndim=2
 
 Required libraries
 ------------------
@@ -69,14 +74,18 @@ cd ~/codes/pibuilds/ndim2mpi
 
 Then run the configure script with the desired options
 
-../../configure --with-ndim=2 --enable-mpi
+.. code:: bash
+
+  ../../configure --with-ndim=2 --enable-mpi
 
 You will probably want more configure options; see the platform specific instructions below for some
 examples.
 
 Then, make the code in that directory,
 
-make -j2
+.. code:: bash
+
+  make -j2
 
 For conveniance, you can make a soft link to the executable
 
@@ -368,7 +377,7 @@ You need to build blitz (again, in my ~/packages directory). For a serial pi bui
     http://www.fftw.org/
 
 .. _`blitz++`:
-    http://www.oonumerics.org/blitz/
+    http://sourceforge.net/projects/blitz/
 
 .. _`gsl`:
     http://www.gnu.org/software/gsl/
