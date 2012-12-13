@@ -6,13 +6,13 @@ Quick start
 
 The easiest way to build is to use:
 
-.. code:: bash
+.. code-block:: bash
 
    ./configure make
 
 For a parallel build
 
-.. code:: bash
+.. code-block:: bash
 
   ./configure --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77
 
@@ -20,7 +20,8 @@ where you should use the names of your MPI enabled compilers.
 
 You can also build for different numbers of physical dimensions (default is NDIM=3)
 
-.. code:: bash
+.. code-block:: bash
+
   ./configure --with-ndim=2
 
 Required libraries
@@ -36,7 +37,7 @@ We use the following libraries in the pi code:
 
 *   `fftw3`_
 
-*   BLAS/LAPACK
+*   `BLAS`_ / `LAPACK`_
 
 *   `gsl`_
 
@@ -64,32 +65,36 @@ directory structure is:
         ndim2mpi/
         ndim3mpi/
         debug/
-..
 
+..
 
 
 To build, go into the empty build directory,
 
-cd ~/codes/pibuilds/ndim2mpi
+.. code-block:: bash
+
+   cd ~/codes/pibuilds/ndim2mpi
 
 Then run the configure script with the desired options
 
-.. code:: bash
+.. code-block:: bash
 
-  ../../configure --with-ndim=2 --enable-mpi
+   ../../configure --with-ndim=2 --enable-mpi
 
 You will probably want more configure options; see the platform specific instructions below for some
 examples.
 
 Then, make the code in that directory,
 
-.. code:: bash
+.. code-block:: bash
 
-  make -j2
+   make -j2
 
 For conveniance, you can make a soft link to the executable
 
-ln -sf ~/codes/pibuilds/ndim3mpi ~/bin/pi2Dmpi
+.. code-block:: bash
+
+    ln -sf ~/codes/pibuilds/ndim3mpi ~/bin/pi2Dmpi
 
 Platform specific instructions
 ------------------------------
@@ -117,6 +122,7 @@ plotting.
       py26-ipython @0.9.1_0+scientific (active)
       py26-scipy @0.7.0_0+gcc44 (active)
       py26-tables @2.1_0 (active)
+
 ..
 
 
@@ -129,6 +135,7 @@ The following configure works well on an intel mac:
       CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize \
       -march=native -fomit-frame-pointer -pipe" \ 
       F77=gfortran-mp-4.4
+
 ..
 
 
@@ -141,6 +148,7 @@ or, for an MPI enabled build,
       MPICC=openmpicc MPICXX=openmpicxx MPIF77=openmpif77 \
       CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize \
       -march=native -fomit-frame-pointer -pipe"
+
 ..
 
 
@@ -152,6 +160,7 @@ On a G5 mac, try:
     ../../pi/configure --with-ndim=3  F77=gfortran-mp-4.4 CC=gcc-mp-4.4 CXX=g++-mp-4.4\
       CXXFLAGS="-g -O3 -ffast-math -ftree-vectorize -maltivec -mpowerpc-gpopt \
       -mpowerpc64 falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -funroll-loops"
+
 ..
 
 
@@ -164,6 +173,7 @@ or, for an MPI enabled build,
       CXXFLAGS="-g -O3 -ffast-math -ftree-vectorize -maltivec -mpowerpc-gpopt \
       -mpowerpc64 falign-functions=32 -falign-labels=32 -falign-loops=32 -falign-jumps=32 -funroll-loops" \
       F77=gfortran-mp-4.4 CC=gcc-mp-4.4 CXX=g++-mp-4.4  MPICC=openmpicc MPICXX=openmpicxx MPIF77=openmpif77
+
 ..
 
 
@@ -189,6 +199,7 @@ Note: replace ``x86_64`` with ``i386`` if you are on a 32 bit machine.
     sudo yum install atlas-sse3-devel.x86_64
     sudo yum install lapack-devel.x86_64
     sudo yum install gsl-devel.x86_64
+
 ..
 
 
@@ -200,6 +211,7 @@ It is useful to install the gcc 4.3 compilers.
     sudo yum install gcc43.x86_64
     sudo yum install gcc43-c++.x86_64
     sudo yum install gcc43-gfortran.x86_64
+
 ..
 
 
@@ -221,6 +233,7 @@ When you configure pi, you will probably need to specify the location of your BL
     ../../pi/configure CXX=g++43 CC=gcc43 F77=gfortran43 CXXFLAGS=\
     "-g -O3 -ffast-math -ftree-vectorize -march=native -fomit-frame-pointer -pipe"\
      --with-blas="-L/usr/lib64/atlas -llapack -lf77blas"
+
 ..
 
 
@@ -234,8 +247,8 @@ For the python analysis utilities, you'll want to install ipython and matplotlib
     sudo yum install python-matplotlib
     sudo yum install ipython
     sudo yum install scipy
-..
 
+..
 
 
 The python package `pytables`_ for reading HDF5 files is also required for the analysis scripts, but it
@@ -276,6 +289,7 @@ You need to add some lines to your ``.soft`` file to include some required libra
     CPATH += :/usr/local/packages/fftw-3.1.2-intel10.1/include
     +intel-mkl
     CPPFLAGS += -DMPICH_IGNORE_CXX_SEEK
+
 ..
 
 
@@ -287,6 +301,7 @@ For an MPI build, use,
     ../../pi/configure --with-ndim=3 --enable-mpi MPICC=mpicc MPICXX=mpicxx \
       CXX=icpc CC=icc F77=ifort AR="xild -lib" CXXFLAGS="-O3 -xP -ipo" \
       --with-blas="-lmkl_lapack -lmkl_intel_lp64 -lmkl_sequential -lmkl_core"
+
 ..
 
 
@@ -312,6 +327,7 @@ You need to add some lines to your ``.soft`` file to include some required libra
     +intel-mkl
     CPPFLAGS = "${CPPFLAGS} -DMPICH_IGNORE_CXX_SEEK"
     Also have blitz installed locally with --prefix=(your dir choice)
+
 ..
 
 
@@ -337,6 +353,7 @@ specify the most recent C++ and Fortran compilers by including the following in 
     source /opt/intel/cc/10.1.017/bin/iccvars.sh
     source /opt/intel/fc/10.1.017/bin/ifortvars.shsource /opt/intel/idb/10.1.017/bin/idbvars.sh
     source /opt/intel/mkl/10.0.4.023/tools/environment/mklvars32.sh
+
 ..
 
 
@@ -350,6 +367,7 @@ You need to build blitz (again, in my ~/packages directory). For a serial pi bui
     ../../pi/configure --with-ndim=3 CXX=icpc CC=icc CXXFLAGS="-O3 -ipo" \
     --with-blas="-Wl,-rpath,$MKLROOT/lib/32 -L/opt$MKLROOT/lib/32 -lmkl_intel \
     -lmkl_sequential -lmkl_core -lpthread -lm" F77=ifort AR="xild -lib"
+
 ..
 
 
@@ -360,6 +378,7 @@ You need to build blitz (again, in my ~/packages directory). For a serial pi bui
     --with-blas="-Wl,-rpath,$MKLROOT/lib/32 -L$MKLROOT/lib/32 -lmkl_intel \
     -lmkl_sequential -lmkl_core -lpthread -lm" F77=ifort AR="xild -lib" \
     --enable-mpi MPICXX=mpic++ MPICC=mpicc MPIF77=mpif77
+
 ..
 
 
@@ -381,6 +400,13 @@ You need to build blitz (again, in my ~/packages directory). For a serial pi bui
 
 .. _`gsl`:
     http://www.gnu.org/software/gsl/
+
+.. _`BLAS`:
+    http://www.netlib.org/blas/
+
+.. _`LAPACK`:
+    http://www.netlib.org/lapack/
+
 
 .. _`contents`:
     index.xhtml
