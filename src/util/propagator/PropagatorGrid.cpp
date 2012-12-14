@@ -25,6 +25,9 @@ void PropagatorGrid::toKSpace() {
     scaleBySqrtOfSize();
 }
 
+void PropagatorGrid::setupKineticPropagator(double mass) {
+}
+
 void PropagatorGrid::scaleBySqrtOfSize() {
     for (int i = 0; i < size; ++i) {
         value[i] *= oneOverSqrtSize;

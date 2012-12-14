@@ -3,8 +3,13 @@
 
 class KineticGrid {
 public:
-    KineticGrid();
+    KineticGrid(int gridCount, double deltaK, double mass, double deltaTau);
     virtual ~KineticGrid();
+
+    double operator() (int index) const;
+private:
+    int gridCount;
+    double *value;
 };
 
 #endif

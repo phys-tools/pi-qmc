@@ -21,6 +21,8 @@ public:
     void initialize(int index0);
     Complex operator()(int index) const;
 
+    void setupKineticPropagator(double mass);
+
     double getDeltaX() const;
     double getDeltaK() const;
 private:

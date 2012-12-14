@@ -61,4 +61,5 @@ TEST_F(PropagatorGridTest, TestTransformToKSpaceAndBack) {
     ASSERT_NEAR(1.0, real((*grid)(index0)), 1e-12);
 }
 
+
 }
