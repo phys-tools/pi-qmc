@@ -1,5 +1,6 @@
 #include "PropagatorGrid.h"
 #include "util/fft/FFT1D.h"
+#include "util/propagator/KineticGrid.h"
 
 PropagatorGrid::PropagatorGrid(int size, double deltaX)
     :   size(size),
@@ -7,12 +8,14 @@ PropagatorGrid::PropagatorGrid(int size, double deltaX)
         deltaX(deltaX),
         deltaK(2.0 * PI / (deltaX * size)),
         value(new Complex[size]),
-        fft(new FFT1D(value, size)) {
+        fft(new FFT1D(value, size)),
+        kineticPropagator(0) {
 }
 
 PropagatorGrid::~PropagatorGrid() {
     delete fft;
     delete value;
+    delete kineticPropagator;
 }
 
 void PropagatorGrid::toRealSpace() {
@@ -25,7 +28,8 @@ void PropagatorGrid::toKSpace() {
     scaleBySqrtOfSize();
 }
 
-void PropagatorGrid::setupKineticPropagator(double mass) {
+void PropagatorGrid::setupKineticPropagator(double mass, double deltaTau) {
+    kineticPropagator = new KineticGrid(size, deltaK, mass, deltaTau);
 }
 
 void PropagatorGrid::scaleBySqrtOfSize() {
@@ -35,6 +39,9 @@ void PropagatorGrid::scaleBySqrtOfSize() {
 }
 
 void PropagatorGrid::evolveTDeltaTau() {
+    for (int i = 0; i < size; ++i) {
+        value[i] *= (*kineticPropagator)(i);
+    }
 }
 
 void PropagatorGrid::evolveVDeltaTau() {

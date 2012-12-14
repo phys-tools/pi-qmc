@@ -61,5 +61,20 @@ TEST_F(PropagatorGridTest, TestTransformToKSpaceAndBack) {
     ASSERT_NEAR(1.0, real((*grid)(index0)), 1e-12);
 }
 
+TEST_F(PropagatorGridTest, TestKineticEvolution) {
+    int index0 = 13;
+    int offset = -2;
+    double mass = 1.0;
+    double deltaTau = 0.1;
+    grid->setupKineticPropagator(mass, deltaTau);
+    grid->initialize(index0);
+    grid->toKSpace();
+    grid->evolveTDeltaTau();
+    grid->toRealSpace();
+    double delta2 = (offset * deltaX) * (offset * deltaX);
+    double expect = exp(-0.5 * mass * delta2 / deltaTau)
+            / sqrt(2.0 * PI * mass / deltaTau);
+    ASSERT_NEAR(expect, real((*grid)(index0 + offset)), 1e-12);
+}
 
 }

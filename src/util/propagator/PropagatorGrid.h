@@ -3,6 +3,7 @@
 
 #include <complex>
 class FFT1D;
+class KineticGrid;
 
 class PropagatorGrid {
 public:
@@ -21,7 +22,7 @@ public:
     void initialize(int index0);
     Complex operator()(int index) const;
 
-    void setupKineticPropagator(double mass);
+    void setupKineticPropagator(double mass, double deltaTau);
 
     double getDeltaX() const;
     double getDeltaK() const;
@@ -32,6 +33,7 @@ private:
     const double deltaK;
     Complex* value;
     FFT1D *fft;
+    KineticGrid* kineticPropagator;
 
     static const double PI;
     void scaleBySqrtOfSize();
