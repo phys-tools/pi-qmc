@@ -11,7 +11,7 @@ protected:
 
     void SetUp() {
         gridCount = 16;
-        deltaK = 0.1;
+        deltaK = 0.1783;
         mass = 2.1;
         deltaTau = 0.05;
         grid = new KineticGrid(gridCount, deltaK, mass, deltaTau);

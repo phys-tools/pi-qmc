@@ -12,6 +12,12 @@ protected:
         omega = 1.0;
     }
 
+    double K0(double x1, double x2, double tau) {
+        const double PI = 3.141592653589793;
+        return 1.0 / sqrt(2.0 * PI * mass / tau)
+                * exp(-0.5 * mass * (x1 - x2) * (x1 - x2) / tau);
+    }
+
     double K(double x1, double x2, double tau) {
         const double PI = 3.141592653589793;
         double sinhwt = sinh(omega * tau);
@@ -28,7 +34,7 @@ protected:
 TEST_F(PropagatorTest, TestCreate) {
     Propagator propagator;
     double value = propagator.evaluate();
-    double expect = K(1.0, 1.0, 1.0);
+    double expect = K0(1.0, 1.0, 0.124235);
     ASSERT_NEAR(expect, value, 1e-12);
 }
 

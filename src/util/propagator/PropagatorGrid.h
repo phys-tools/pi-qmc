@@ -19,7 +19,7 @@ public:
     void evolveVDeltaTau();
     void evolveVHalfDeltaTau();
 
-    double readValue() const;
+    double readValue(int index) const;
     void initialize(int index0);
     Complex operator()(int index) const;
 

@@ -11,7 +11,7 @@ protected:
 
     void SetUp() {
         size = 32;
-        deltaX = 0.1;
+        deltaX = 0.14234;
         grid = new PropagatorGrid(size, deltaX);
     }
 
@@ -69,7 +69,7 @@ TEST_F(PropagatorGridTest, TestKineticEvolution) {
     int index0 = 13;
     int offset = -2;
     double mass = 1.0;
-    double deltaTau = 0.1;
+    double deltaTau = 0.14234;
     grid->setupKineticPropagator(mass, deltaTau);
     grid->initialize(index0);
     grid->toKSpace();
