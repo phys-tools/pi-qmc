@@ -4,6 +4,7 @@
 #include <complex>
 class FFT1D;
 class KineticGrid;
+class PotentialGrid;
 
 class PropagatorGrid {
 public:
@@ -23,6 +24,7 @@ public:
     Complex operator()(int index) const;
 
     void setupKineticPropagator(double mass, double deltaTau);
+    void setupPotentialPropagator(double (*v)(double), double deltaTau);
 
     double getDeltaX() const;
     double getDeltaK() const;
@@ -30,10 +32,13 @@ private:
     const int size;
     double oneOverSqrtSize;
     const double deltaX;
+    const double x0;
     const double deltaK;
     Complex* value;
-    FFT1D *fft;
+    FFT1D* fft;
     KineticGrid* kineticPropagator;
+    PotentialGrid* potentialPropagator;
+    PotentialGrid* halfPotentialPropagator;
 
     static const double PI;
     void scaleBySqrtOfSize();

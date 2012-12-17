@@ -21,6 +21,10 @@ protected:
 
     static const double PI;
     static const Complex I;
+
+    static double potential(double x) {
+        return 1.57;
+    }
 };
 
 const double PropagatorGridTest::PI = 3.141592653589793;
@@ -75,6 +79,31 @@ TEST_F(PropagatorGridTest, TestKineticEvolution) {
     double expect = exp(-0.5 * mass * delta2 / deltaTau)
             / sqrt(2.0 * PI * mass / deltaTau);
     ASSERT_NEAR(expect, real((*grid)(index0 + offset)), 1e-12);
+}
+
+
+TEST_F(PropagatorGridTest, TestPotentialEvolution) {
+    int index0 = 13;
+    int offset = -2;
+    double mass = 1.0;
+    double deltaTau = 0.1;
+    grid->setupPotentialPropagator(potential, deltaTau);
+    grid->initialize(index0);
+    grid->evolveVDeltaTau();
+    double expect = exp(-deltaTau * potential(0.0));
+    ASSERT_NEAR(expect, real((*grid)(index0)), 1e-12);
+}
+
+TEST_F(PropagatorGridTest, TestHalfPotentialEvolution) {
+    int index0 = 13;
+    int offset = -2;
+    double mass = 1.0;
+    double deltaTau = 0.1;
+    grid->setupPotentialPropagator(potential, deltaTau);
+    grid->initialize(index0);
+    grid->evolveVHalfDeltaTau();
+    double expect = exp(-0.5 * deltaTau * potential(0.0));
+    ASSERT_NEAR(expect, real((*grid)(index0)), 1e-12);
 }
 
 }
