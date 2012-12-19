@@ -1,9 +1,7 @@
+***************************************
 Estimators: Describing the Measurements
-=======================================
+***************************************
 
-.. toctree::
-   :maxdepth: 2
-
-   estimator_list
-   density
-   dynamic_estimators
+.. include:: estimator_list.rst
+.. include:: density.rst
+.. include:: dynamic_estimators.rst

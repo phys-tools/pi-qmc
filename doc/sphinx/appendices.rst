@@ -1,0 +1,8 @@
+##########
+Appendices
+##########
+
+.. toctree::
+
+   building
+   faq

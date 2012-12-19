@@ -1,20 +1,21 @@
+*************************************
 Example: A Simple Harmonic Oscillator
-=====================================
+*************************************
 
-Background
-----------
+Background: Quantum Simple Harmonic Oscillator
+==============================================
 
 Eigenstates of the Simple Harmonic Oscillator
-`````````````````````````````````````````````
+---------------------------------------------
 
 The Classical Partition Function
-````````````````````````````````
+--------------------------------
 
 .. index:: 
    pair: simple harmonic oscillator; partition function
 
 The Quantum Mechanical Partition Function
-`````````````````````````````````````````
+-----------------------------------------
 
 In one dimension, the partition function of the simple harmonic oscillator is
 
@@ -48,13 +49,36 @@ The total energy is
    \coth\left(\frac{\hbar\omega}{2k_BT}\right).
 
 The Density Matrix
-``````````````````
+------------------
+
+For one particle in a haromonic confinining potential
+in three dimensions, the imaginary time propagator is
+
+.. math::
+   :label: shok3d
+
+   K(\mathbf{r}, \mathbf{r}';\tau)
+   = \left(\frac{m\omega}{2\pi\hbar\sinh\omega\tau}\right)^3
+   \exp\left(-\frac{m\omega((r^2 + r'^2)
+   \cosh\omega\tau - 2\mathbf{r}\cdot\mathbf{r}')}
+   {2\hbar\sinh\omega\tau}\right)
+
+The diagonal of the density matrix is the probability density,
+
+.. math::
+   :label: shorho3d
+
+   \rho(\mathbf{r}) & = K(\mathbf{r}, \mathbf{r}';\tau) \\
+   & = \left(\frac{m\omega}{2\pi\hbar\sinh\omega\tau}\right)^3
+   \exp\left(-\frac{m\omega((r^2 + r'^2)
+   \cosh\omega\tau - 2\mathbf{r}\cdot\mathbf{r}')}
+   {2\hbar\sinh\omega\tau}\right)
 
 Simulating a Simple Harmonic Oscillator
 ---------------------------------------
 
 Setting up the Input file
-`````````````````````````
+-------------------------
 
 You can simulate a simple harmonic oscillator with the following
 input file, which we copy from the ``test/system/sho/`` directory.
@@ -70,11 +94,11 @@ From Eq. :eq:`sho_energy`, the energy of this oscillator in three
 dimensions should be :math:`\frac{3}{2}\coth\frac{1}{4}\approx 3.06224`.
 
 Calculating the Energy
-``````````````````````
+----------------------
 
 Calculating the Density
-```````````````````````
+-----------------------
 
 Calculating the Polarizability
-``````````````````````````````
+------------------------------
 
