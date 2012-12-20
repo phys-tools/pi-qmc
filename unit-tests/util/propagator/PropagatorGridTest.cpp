@@ -12,7 +12,7 @@ protected:
     void SetUp() {
         size = 32;
         deltaX = 0.2;
-        grid = new PropagatorGrid(size, deltaX);
+        grid = new PropagatorGrid(size, deltaX, 0.0);
     }
 
     int size;

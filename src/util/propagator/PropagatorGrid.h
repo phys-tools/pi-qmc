@@ -10,7 +10,7 @@ class PropagatorGrid {
 public:
     typedef std::complex<double> Complex;
 
-    PropagatorGrid(int size, double deltaX);
+    PropagatorGrid(int size, double deltaX, double x0);
     virtual ~PropagatorGrid();
 
     void toRealSpace();

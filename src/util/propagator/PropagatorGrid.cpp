@@ -3,11 +3,11 @@
 #include "util/propagator/KineticGrid.h"
 #include "util/propagator/PotentialGrid.h"
 
-PropagatorGrid::PropagatorGrid(int size, double deltaX)
+PropagatorGrid::PropagatorGrid(int size, double deltaX, double x0)
     :   size(size),
         oneOverSqrtSize(1.0 / sqrt(size)),
         deltaX(deltaX),
-        x0(0.0),
+        x0(x0),
         deltaK(2.0 * PI / (deltaX * size)),
         value(new Complex[size]),
         fft(new FFT1D(value, size)),
