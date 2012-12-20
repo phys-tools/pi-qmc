@@ -18,7 +18,7 @@ double Propagator::evaluate() {
 }
 
 void Propagator::setupGrid() {
-    grid = new PropagatorGrid(256, 0.124235);
+    grid = new PropagatorGrid(256, 0.1);
 }
 
 void Propagator::initializeGrid(int index0) {

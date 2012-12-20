@@ -65,7 +65,7 @@ release = '1.0.beta'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # Note, we'll put included files here, too, to ignore warning messages.
-exclude_patterns = ['_build', 'themes', 'start.rst']
+exclude_patterns = ['_build', 'themes']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -195,7 +195,7 @@ latex_logo = "images/pi-logo.pdf"
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-#latex_use_parts = False
+latex_use_parts = True
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False

@@ -12,11 +12,23 @@ protected:
         omega = 1.0;
     }
 
+    void TearDown() {
+    }
+
     double K0(double x1, double x2, double tau) {
         const double PI = 3.141592653589793;
-        return 1.0 / sqrt(2.0 * PI * mass / tau)
-                * exp(-0.5 * mass * (x1 - x2) * (x1 - x2) / tau);
+        double amplitude = 0.0;
+        int size = 256;
+        double deltaX = 0.1;
+        for (int n = -size / 2; n < size / 2; ++n) {
+            double kn = 2.0 * PI * n / (size * deltaX);
+            double weight = exp(-0.5 * tau * kn * kn / mass);
+            amplitude += weight * cos(kn * (x1 - x2));
+        }
+        amplitude /= size;
+        return amplitude;
     }
+
 
     double K(double x1, double x2, double tau) {
         const double PI = 3.141592653589793;

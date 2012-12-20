@@ -11,7 +11,7 @@ protected:
 
     void SetUp() {
         size = 32;
-        deltaX = 0.14234;
+        deltaX = 0.2;
         grid = new PropagatorGrid(size, deltaX);
     }
 
@@ -21,6 +21,17 @@ protected:
 
     static const double PI;
     static const Complex I;
+
+    double K0(double distance, double tau, double mass) {
+        double amplitude = 0.0;
+        for (int n = -size / 2; n < size / 2; ++n) {
+            double kn = 2.0 * PI * n / (size * deltaX);
+            double weight = exp(-0.5 * tau * kn * kn / mass);
+            amplitude += weight * cos(kn * distance);
+        }
+        amplitude /= size;
+        return amplitude;
+    }
 
     static double potential(double x) {
         return 1.57;
@@ -67,7 +78,7 @@ TEST_F(PropagatorGridTest, TestTransformToKSpaceAndBack) {
 
 TEST_F(PropagatorGridTest, TestKineticEvolution) {
     int index0 = 13;
-    int offset = -2;
+    int offset = 0;
     double mass = 1.0;
     double deltaTau = 0.14234;
     grid->setupKineticPropagator(mass, deltaTau);
@@ -76,8 +87,8 @@ TEST_F(PropagatorGridTest, TestKineticEvolution) {
     grid->evolveTDeltaTau();
     grid->toRealSpace();
     double delta2 = (offset * deltaX) * (offset * deltaX);
-    double expect = exp(-0.5 * mass * delta2 / deltaTau)
-            / sqrt(2.0 * PI * mass / deltaTau);
+    double expect = K0(offset * deltaX, deltaTau, mass);
+    ASSERT_NEAR(expect, K0(0.0, deltaTau, mass), 1e-12);
     ASSERT_NEAR(expect, real((*grid)(index0 + offset)), 1e-12);
 }
 
