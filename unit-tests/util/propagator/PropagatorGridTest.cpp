@@ -33,6 +33,14 @@ protected:
         return amplitude;
     }
 
+    /// Approximate grid propagator with continuum propagator.
+    double approximateK0(double distance, double tau, double mass) {
+        const double PI = 3.141592653589793;
+        double delta2 = distance * distance;
+        double prefactor = deltaX / sqrt(2 * PI * tau / mass);
+        return prefactor * exp(-0.5 * mass * delta2 / tau);
+    }
+
     static double potential(double x) {
         return 1.57;
     }
@@ -41,6 +49,15 @@ protected:
 const double PropagatorGridTest::PI = 3.141592653589793;
 const Complex PropagatorGridTest::I = Complex(0.0, 1.0);
 
+
+TEST_F(PropagatorGridTest, TestSanityOfOurAnalyticK0Propagator) {
+    double mass = 0.85;
+    double offset = 0.2;
+    double deltaTau = 0.14234;
+    double expect = approximateK0(offset, deltaTau, mass);
+    double value = K0(offset, deltaTau, mass);
+    ASSERT_NEAR(expect, value, 1e-10);
+}
 
 TEST_F(PropagatorGridTest, TestDeltaK) {
     double deltaK = grid->getDeltaK();

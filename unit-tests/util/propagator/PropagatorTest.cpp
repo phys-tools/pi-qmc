@@ -12,21 +12,12 @@ protected:
         omega = 1.0;
     }
 
-    void TearDown() {
-    }
-
-    double K0(double x1, double x2, double tau) {
+    /// Approximate grid propagator with continuum propagator.
+    double approximateK0(double x1, double x2, double tau, double gridDeltaX) {
         const double PI = 3.141592653589793;
-        double amplitude = 0.0;
-        int size = 256;
-        double deltaX = 0.1;
-        for (int n = -size / 2; n < size / 2; ++n) {
-            double kn = 2.0 * PI * n / (size * deltaX);
-            double weight = exp(-0.5 * tau * kn * kn / mass);
-            amplitude += weight * cos(kn * (x1 - x2));
-        }
-        amplitude /= size;
-        return amplitude;
+        double delta2 = (x1 - x2) * (x1 -x2);
+        double prefactor = gridDeltaX / sqrt(2 * PI * tau / mass);
+        return prefactor * exp(-0.5 * mass * delta2 / tau);
     }
 
 
@@ -43,10 +34,10 @@ protected:
     double omega;
 };
 
-TEST_F(PropagatorTest, TestCreate) {
+TEST_F(PropagatorTest, TestKineticEvolution) {
     Propagator propagator;
     double value = propagator.evaluate();
-    double expect = K0(1.0, 1.0, 0.124235);
+    double expect = approximateK0(1.0, 1.0, 0.124235, 0.1);
     ASSERT_NEAR(expect, value, 1e-12);
 }
 
