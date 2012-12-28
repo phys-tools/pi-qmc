@@ -23,6 +23,9 @@ class Scalar(object):
     av = self.data[nskip:].mean()
     npts = self.data[nskip:].size
     var = self.data[nskip:].var()
-    err = math.sqrt(var/(npts-1))
+    if npts > 1:
+      err = math.sqrt(var/(npts-1))
+    else:
+      err = 0.0
     return av,err
 
