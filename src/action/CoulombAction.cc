@@ -30,8 +30,13 @@ CoulombAction::CoulombAction(const double epsilon,
     if (ewaldRcut==0.) ewaldRcut = cell.a[0]/2.;
     std::cout << "EwaldRcut = " << ewaldRcut << std::endl;
   
-    if (ewaldType=="tradEwald") ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut, kappa);
-    if (ewaldType=="optEwald")  ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
+    if (ewaldType=="tradEwald") {
+        ewaldSum = new TradEwaldSum(cell,npart,ewaldRcut,ewaldKcut, kappa);
+    } else if (ewaldType=="optEwald")  {
+        ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
+    } else {
+        ewaldSum = new OptEwaldSum(cell,npart,ewaldRcut,ewaldKcut,4*ewaldKcut,8);
+    }
     rewald.resize(npart);
     EwaldSum::Array &q=ewaldSum->getQArray();  
     for (int i=0; i<npart; ++i) q(i)=simInfo.getPartSpecies(i).charge;
@@ -235,9 +240,9 @@ double CoulombAction::u(double r, int order) const {
     	break;
     }
 
-//    if(order == 0 && ewaldSum){
-//            u -= tau * q1q2 * ewaldSum->evalFR(r);
-//    }
+    if (order == 0 && ewaldSum){
+            u -= tau * q1q2 * ewaldSum->evalFR(r);
+    }
 
     return u;
 }
