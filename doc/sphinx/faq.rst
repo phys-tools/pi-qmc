@@ -13,8 +13,8 @@ How to help update the FAQ
 --------------------------
 
 If you are a project member, simply checkout the code and go to the
-:code:`pi-qmc/doc/sphinx/faq.rst` file and start editing. The 
-markup language is _`ReStructuredText`, and running :code:`make html`
+``pi-qmc/doc/sphinx/faq.rst`` file and start editing. The 
+markup language is _`ReStructuredText`, and running ``make html``
 will build the documentation on your machine so you can proofread
 the resulting HTML. When you commit your changes to GitHub, the websites
 will be automatically updated with your changes, including the FAQ page.
