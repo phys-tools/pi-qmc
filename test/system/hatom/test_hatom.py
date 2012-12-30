@@ -10,8 +10,9 @@ class HAtomTestCase(unittest.TestCase):
     def setUpClass(cls):
         os.chdir("hatom")
         out = file("pi.log", "w")
-        process = subprocess.Popen("pi3D", stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        process = subprocess.Popen("../../../bin/pi-qmc", 
+            stdout=subprocess.PIPE, stdin=subprocess.PIPE, 
+            stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         process.wait()
         cls.h5file = pitools.openFile()

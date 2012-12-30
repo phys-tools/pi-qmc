@@ -166,3 +166,5 @@ endif(DOXYGEN_FOUND)
 
 add_subdirectory(src)
 add_subdirectory(unit-tests)
+add_subdirectory(test)
+
