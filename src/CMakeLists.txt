@@ -13,19 +13,19 @@ add_subdirectory(util)
 
 add_executable(pi main.cc)
 
-target_link_libraries(pi parser advancer estimator emarate 
+target_link_libraries(pi-qmc parser advancer estimator emarate 
     fixednode spin stats action algorithm base util demo)
 
-target_link_libraries(pi ${LIBXML2_LIBRARIES} )
-target_link_libraries(pi ${BLAS_LIB})
-target_link_libraries(pi ${LAPACK_LIB})
+target_link_libraries(pi-qmc ${LIBXML2_LIBRARIES} )
+target_link_libraries(pi-qmc ${BLAS_LIB})
+target_link_libraries(pi-qmc ${LAPACK_LIB})
 if (EXISTS ${LIBF2C_LIB})
-  target_link_libraries(pi ${LIBF2C_LIB})
+  target_link_libraries(pi-qmc ${LIBF2C_LIB})
 endif(EXISTS ${LIBF2C_LIB})
-target_link_libraries(pi ${FFTW3_LIB})
-target_link_libraries(pi ${HDF5_LIB})
-target_link_libraries(pi ${GSL_LIB})
+target_link_libraries(pi-qmc ${FFTW3_LIB})
+target_link_libraries(pi-qmc ${HDF5_LIB})
+target_link_libraries(pi-qmc ${GSL_LIB})
 
-set_target_properties(pi
+set_target_properties(pi-qmc
     PROPERTIES
     LINKER_LANGUAGE CXX)
