@@ -11,6 +11,7 @@
   <Estimators>
     <ThermalEnergyEstimator unit="eV"/>
     <VirialEnergyEstimator unit="eV" nwindow="500"/>
+    <CoulombEnergyEstimator unit="eV"/>
   </Estimators>
   <PIMC>
     <RandomGenerator/>

@@ -186,7 +186,8 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	
 	if (ewaldType=="" || ewaldType=="optEwald"){
 	  manager->add(new EwaldCoulombEstimator(simInfo,action,
-						 epsilon,rcut,kcut,mpi,unitName,scale,shift));
+						 epsilon,rcut,kcut,unitName,scale,shift,
+						 manager->createScalarAccumulator()));
 	} else 
 	  if ( ewaldType=="tradEwald"){
 	    int nimages= parser.getIntAttribute(estNode, "ewaldImages");
@@ -204,11 +205,12 @@ void EstimatorParser::parse(const xmlXPathContextPtr& ctxt) {
 	    bool testEwald= parser.getBoolAttribute(estNode,"testEwald");
 
 	    manager->add(new EwaldCoulombEstimator(simInfo,action,
-						   epsilon,rcut,kcut,mpi,unitName,scale,shift, kappa, nimages,testEwald));
+						   epsilon,rcut,kcut,unitName,scale,shift, kappa, nimages,testEwald,
+						   manager->createScalarAccumulator()));
 	  }
       } else {
-        manager->add(new CoulombEnergyEstimator(simInfo,action,epsilon,mpi,
-                                                unitName,scale,shift));
+        manager->add(new CoulombEnergyEstimator(simInfo,epsilon,
+                        unitName,scale,shift,manager->createScalarAccumulator()));
       }
     }
     if (name=="AngularMomentumEstimator") {

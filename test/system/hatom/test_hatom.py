@@ -43,3 +43,12 @@ class HAtomTestCase(unittest.TestCase):
             'wrong error for virial energy, expected %f but got %f' 
             % (expect[1], de))
 
+    def test_coluomb_energy(self):
+        energy = self.h5file.getScalar("coulomb_energy")
+        e, de = energy.getAverage()
+        expect = -2 * 13.6, 0.20
+        self.assertAlmostEqual(e, expect[0], delta=1.2, msg=
+            'wrong colomb energy, expected %f but got %f' % (expect[0], e))
+        self.assertAlmostEqual(de, expect[1], delta=0.1, msg=
+            'wrong error for columob energy, expected %f but got %f'
+             % (expect[1], de))
