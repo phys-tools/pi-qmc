@@ -95,6 +95,11 @@ function writeNavigationLinks(relURL) {
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
+    document.write("      <a href='" + rtfdURL + "publications.html'>");
+    document.write("        Publications Using pi-qmc");
+    document.write("      </a>");
+    document.write("    </li>");
+    document.write("    <li>");
     document.write("      <a href='" + relURL + "team/funding.html'>");
     document.write("        Sponsors and Funding");
     document.write("      </a>");
