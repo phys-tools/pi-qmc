@@ -6,3 +6,4 @@ Appendices
 
    building
    faq
+   publications
