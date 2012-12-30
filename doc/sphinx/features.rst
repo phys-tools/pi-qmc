@@ -21,3 +21,43 @@ Some of the many features developed for pi-qmc include:
 
 We are developing system integration tests to document and verify the status
 of these features.
+
+Applications
+============
+
+Small Molecules
+---------------
+We have performed careful calculations on a H\ :sub:`2` molecule.
+
+
+.. figure:: images/h2story.*
+   :width: 100 %
+
+   An illustrative calculation of a hydrogen molecule at 295 K.
+   *(Top center)* A typical path in imaginary time for HD, showing low-mass 
+   electrons (faint lines), a proton (blue, left) and a heavier 
+   deuteron (black, right).
+   *(Bottom center)* The same path, shown in real space.
+   *(Top left)* Calculated bond length for H\ :sub:`2` and HD, showing 
+   zero-point expansion from the *d* = 1.40 a\ :sub:`0` potential minimum and 
+   thermal expansion due to molecular vibrations and rotations.
+   *(Bottom left)* Dynamic fluctuations in the bond length give the 
+   linear-response to a stretching force (inverse spring constant) and 
+   vibrational frequency.
+   *(Right side)* Fluctuations in the dipole give the polarizabilities α
+   and hyperpolarizabilities γ.
+
+
+
+Quantum Dots
+------------
+
+Quantum Point Contacts
+----------------------
+
+Plasmas
+-------
+
+Ultracold Atomic Gases
+----------------------
+
