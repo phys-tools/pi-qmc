@@ -125,16 +125,21 @@ plotting.
 
 ..
 
+A bash script to download the pi-qmc source from git hub, compile on Mac OS X,
+and run all tests is included in ``doc/deploy/macosx/start.sh``:
+
+.. literalinclude:: ../../doc/deploy/macosx/start.sh
+   :language: bash
 
 
 The following configure works well on an intel mac:
 
 ::
 
-    ../../pi/configure CXX=g++-mp-4.4 CC=gcc-mp-4.4 \
+    ../../pi/configure CXX=g++-mp-4.7 CC=gcc-mp-4.7 \
       CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize \
       -march=native -fomit-frame-pointer -pipe" \ 
-      F77=gfortran-mp-4.4
+      F77=gfortran-mp-4.7
 
 ..
 
