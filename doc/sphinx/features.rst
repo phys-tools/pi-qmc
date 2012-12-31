@@ -25,6 +25,8 @@ of these features.
 Applications
 ============
 
+.. index:: molecules
+
 Small Molecules
 ---------------
 We have performed careful calculations on a H\ :sub:`2` molecule.
@@ -48,15 +50,23 @@ We have performed careful calculations on a H\ :sub:`2` molecule.
    and hyperpolarizabilities γ.
 
 
+.. index:: quantum dot
+
 
 Quantum Dots
 ------------
+
+.. index:: quantum point contact
+
 
 Quantum Point Contacts
 ----------------------
 
 Plasmas
 -------
+
+.. index:: Bose-Einstein condensate
+
 
 Ultracold Atomic Gases
 ----------------------

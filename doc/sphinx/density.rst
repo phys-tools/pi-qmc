@@ -45,7 +45,7 @@ Real-space on arbitrary grids
 Density in k-space
 ------------------
 
-Since pi uses a position basis, we often collect density fluctuations in real
+Since pi-qmc uses a position basis, we often collect density fluctuations in real
 space. However, most textbook descriptions of density fluctioans are in
 k-space, and results for homogeneous systems are often best represented in
 k-space. Here we give a brief summary of common definitions for pedagogical
