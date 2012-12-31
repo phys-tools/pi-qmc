@@ -133,7 +133,10 @@ html_logo = "images/pi-logo64.png"
 #html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
-#html_sidebars = {}
+html_sidebars = {
+    '**' : ['project.html', 'localtoc.html', 'relations.html',
+            'sourcelink.html', 'searchbox.html']
+}
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
