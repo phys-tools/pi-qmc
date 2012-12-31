@@ -1,0 +1,16 @@
+{% extends '!layout.html' %}
+
+{%- block sidebarlogo %}
+{%- if logo %}
+<p class="logo"><a href="http://phys-tools.github.com/pi-qmc">
+<img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="pi-qmc logo"/>
+<span style="font-size:200%; font-weight:bold">&nbsp;pi-qmc</span></a></p>
+{%- endif %}
+{%- endblock %}
+
+{% block sidebartoc %}
+<ul>
+<li><a href="http://phys-tools.github.com/pi-qmc">PROJECT HOMEPAGE</a></li>
+</ul>
+{{ super() }}
+{% endblock %}
