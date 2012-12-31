@@ -11,7 +11,7 @@ add_subdirectory(spin)
 add_subdirectory(stats)
 add_subdirectory(util)
 
-add_executable(pi main.cc)
+add_executable(pi-qmc main.cc)
 
 target_link_libraries(pi-qmc parser advancer estimator emarate 
     fixednode spin stats action algorithm base util demo)
