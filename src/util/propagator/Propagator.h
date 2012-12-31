@@ -5,7 +5,7 @@ class PropagatorGrid;
 
 class Propagator {
 public:
-    Propagator();
+    Propagator(double tau);
     virtual ~Propagator();
 
     double evaluate();
@@ -22,6 +22,7 @@ public:
     static double harmonicPotential(double x);
 private:
     PropagatorGrid* grid;
+    double tau;
     double (*potential)(double);
 
 

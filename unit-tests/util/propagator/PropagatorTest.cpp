@@ -10,6 +10,7 @@ protected:
     void SetUp() {
         mass = 1.0;
         omega = 1.0;
+        tau = 0.124235;
     }
 
     /// Approximate grid propagator with continuum propagator.
@@ -33,21 +34,22 @@ protected:
 
     double mass;
     double omega;
+    double tau;
 };
 
 TEST_F(PropagatorTest, TestKineticEvolution) {
-    Propagator propagator;
+    Propagator propagator(tau);
     propagator.setPotential(Propagator::zeroPotential);
     double value = propagator.evaluate();
-    double expect = approximateK0(1.0, 1.0, 0.124235, 0.005);
+    double expect = approximateK0(1.0, 1.0, tau, 0.005);
     ASSERT_NEAR(expect, value, 1e-12);
 }
 
 TEST_F(PropagatorTest, TestSHOEvolution) {
-    Propagator propagator;
+    Propagator propagator(tau);
     propagator.setPotential(Propagator::harmonicPotential);
     double value = propagator.evaluate();
-    double expect = K(1.0, 1.0, 0.124235, 0.005);
+    double expect = K(1.0, 1.0, tau, 0.005);
     ASSERT_NEAR(expect, value, 1e-5);
 }
 

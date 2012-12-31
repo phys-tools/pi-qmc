@@ -1,8 +1,9 @@
 #include "Propagator.h"
 #include "PropagatorGrid.h"
 
-Propagator::Propagator()
-    :   grid(0) {
+Propagator::Propagator(double tau)
+    :   grid(0),
+        tau(tau) {
     potential = zeroPotential;
 }
 
@@ -28,7 +29,7 @@ void Propagator::initializeGrid(int index0) {
 
 void Propagator::propagate() {
     int stepCount = 100;
-    double deltaTau = 0.124235 / stepCount;
+    double deltaTau = tau / stepCount;
     double mass = 1.0;
     grid->setupKineticPropagator(mass, deltaTau);
     grid->setupPotentialPropagator(potential, deltaTau);
@@ -55,7 +56,7 @@ PropagatorGrid* Propagator::getGrid() const {
 }
 
 double Propagator::zeroPotential(double x) {
-    return 0.0; //0.5 * x * x;
+    return 0.0;
 }
 
 double Propagator::harmonicPotential(double x) {

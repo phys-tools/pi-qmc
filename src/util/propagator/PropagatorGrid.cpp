@@ -71,7 +71,6 @@ void PropagatorGrid::evolveVHalfDeltaTau() {
 }
 
 double PropagatorGrid::readValue(int index) const {
-//    return 0.23182433490559262;
     return real(value[index]);
 }
 
