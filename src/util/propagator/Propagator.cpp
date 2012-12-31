@@ -1,26 +1,34 @@
 #include "Propagator.h"
 #include "PropagatorGrid.h"
+#include "GridParameters.h"
 
-Propagator::Propagator(double tau)
+Propagator::Propagator(double tau, double mass)
     :   grid(0),
-        tau(tau) {
+        tau(tau),
+        mass(mass) {
     potential = zeroPotential;
+    gridParameters = new GridParameters();
 }
 
 Propagator::~Propagator() {
     delete grid;
+    delete gridParameters;
 }
 
 double Propagator::evaluate() {
     setupGrid();
-    initializeGrid(1224);
+    int index0 = gridParameters->getIndex0();
+    initializeGrid(index0);
     propagate();
-    double value = readValue(1224);
+    double value = readValue(index0);
     return value;
 }
 
 void Propagator::setupGrid() {
-    grid = new PropagatorGrid(2048, 0.005, -5.11);
+    int gridCount = gridParameters->getGridCount();
+    double deltaX = gridParameters->getDeltaX();
+    double xmin = gridParameters->getXMin();
+    grid = new PropagatorGrid(gridCount, deltaX, xmin);
 }
 
 void Propagator::initializeGrid(int index0) {
@@ -30,7 +38,7 @@ void Propagator::initializeGrid(int index0) {
 void Propagator::propagate() {
     int stepCount = 100;
     double deltaTau = tau / stepCount;
-    double mass = 1.0;
+    mass = 1.0;
     grid->setupKineticPropagator(mass, deltaTau);
     grid->setupPotentialPropagator(potential, deltaTau);
     grid->evolveVHalfDeltaTau();
@@ -66,6 +74,11 @@ double Propagator::harmonicPotential(double x) {
 void Propagator::setPotential(double (*v)(double)) {
     potential = v;
 }
+
+double Propagator::getGridSpacing() const {
+    grid->getDeltaX();
+}
+
 
 
 

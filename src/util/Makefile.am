@@ -16,6 +16,7 @@ libutil_la_SOURCES = \
 	ipow.cpp \
 	fft/FFT1D.cpp \
 	math/VPolyFit.cpp \
+	propagator/GridParameters.cpp \
 	propagator/KineticGrid.cpp \
 	propagator/PotentialGrid.cpp \
 	propagator/Propagator.cpp \
@@ -43,6 +44,7 @@ noinst_HEADERS = \
 	fft/FFT1D.h \
 	math/BLAS.h \
 	math/VPolyFit.h \
+	propagator/GridParameters.h \
 	propagator/KineticGrid.h \
 	propagator/PotentialGrid.h \
 	propagator/Propagator.h \
