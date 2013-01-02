@@ -1,8 +1,7 @@
 #ifndef __ScalarEstimator_h_
 #define __ScalarEstimator_h_
 #include "Estimator.h"
-#include <cstdlib>
-#include <blitz/tinyvec.h>
+#include <string>
 class Paths;
 class EstimatorReportBuilder;
 class ScalarAccumulator;

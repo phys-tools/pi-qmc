@@ -1,5 +1,6 @@
 #include "H5PartitionedScalarReportWriter.h"
 
+#include <sstream>
 #include "stats/ScalarEstimator.h"
 #include "stats/PartitionedScalarAccumulator.h"
 #include "stats/hdf5/H5Lib.h"

@@ -26,6 +26,7 @@ libstats_la_SOURCES = \
     stdout/StdoutReportBuilder.cc
 noinst_HEADERS = \
     AccRejEstimator.h \
+    ArrayAccumulator.h \
     ArrayEstimator.h \
     BlitzArrayBlkdEst.h \
     Estimator.h \
