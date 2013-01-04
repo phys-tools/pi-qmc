@@ -6,7 +6,7 @@ class GridParameters;
 
 class Propagator {
 public:
-    Propagator(double tau, double mass);
+    Propagator(double mass, double tau, double x0);
     virtual ~Propagator();
 
     double evaluate();
@@ -27,6 +27,8 @@ private:
     GridParameters* gridParameters;
     double tau;
     double mass;
+    double x0;
+    double deltaX;
     double (*potential)(double);
 };
 

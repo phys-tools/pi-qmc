@@ -2,12 +2,14 @@
 #include "PropagatorGrid.h"
 #include "GridParameters.h"
 
-Propagator::Propagator(double tau, double mass)
+Propagator::Propagator(double mass, double tau, double x0)
     :   grid(0),
         tau(tau),
-        mass(mass) {
+        mass(mass),
+        x0(x0),
+        deltaX(0.005) {
     potential = zeroPotential;
-    gridParameters = new GridParameters();
+    gridParameters = new GridParameters(mass, tau, x0, deltaX);
 }
 
 Propagator::~Propagator() {
