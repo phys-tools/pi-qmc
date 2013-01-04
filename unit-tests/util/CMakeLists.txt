@@ -9,6 +9,7 @@ set(sources
     ${dir}/SuperCellTest.cc
     ${dir}/fft/FFT1DTest.cpp
     ${dir}/math/VPolyFitTest.cpp
+    ${dir}/propagator/GridParametersTest.cpp
     ${dir}/propagator/KineticGridTest.cpp
     ${dir}/propagator/PotentialGridTest.cpp
     ${dir}/propagator/PropagatorGridTest.cpp
