@@ -2,7 +2,7 @@
 #define PROPAGATOR_H_
 
 class PropagatorGrid;
-class GridParameters;
+class GridSet;
 
 class Propagator {
 public:
@@ -11,24 +11,22 @@ public:
 
     double evaluate();
 
-    void setupGrid();
-    void initializeGrid(int index0);
     void propagate();
-    double readValue(int index) const;
-    double getGridSpacing() const;
 
-    PropagatorGrid* getGrid() const;
+    double getGridSpacing() const;
     void setPotential(double (*v)(double));
 
     static double zeroPotential(double x);
     static double harmonicPotential(double x);
+
 private:
-    PropagatorGrid* grid;
-    GridParameters* gridParameters;
+    GridSet* gridSet;
     double tau;
     double mass;
     double x0;
     double deltaX;
+    void propagate(int step);
+    void propagate(PropagatorGrid* grid, double deltaTau, int stepCount);
     double (*potential)(double);
 };
 

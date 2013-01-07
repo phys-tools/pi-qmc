@@ -1,46 +1,47 @@
 #include "Propagator.h"
 #include "PropagatorGrid.h"
 #include "GridParameters.h"
+#include "GridSet.h"
 
 Propagator::Propagator(double mass, double tau, double x0)
-    :   grid(0),
-        tau(tau),
+    :   tau(tau),
         mass(mass),
         x0(x0),
         deltaX(0.005) {
+    gridSet = new GridSet();
+    gridSet->setGridParameters(new GridParameters(mass, tau, x0, deltaX));
     potential = zeroPotential;
-    gridParameters = new GridParameters(mass, tau, x0, deltaX);
 }
 
 Propagator::~Propagator() {
-    delete grid;
-    delete gridParameters;
+    delete gridSet;
 }
 
 double Propagator::evaluate() {
-    setupGrid();
-    int index0 = gridParameters->getIndex0();
-    initializeGrid(index0);
+    gridSet->setupGrid();
+    gridSet->initializeGrid();
     propagate();
-    double value = readValue(index0);
+    double value = gridSet->readValue0();
     return value;
 }
 
-void Propagator::setupGrid() {
-    int gridCount = gridParameters->getGridCount();
-    double deltaX = gridParameters->getDeltaX();
-    double xmin = gridParameters->getXMin();
-    grid = new PropagatorGrid(gridCount, deltaX, xmin);
-}
-
-void Propagator::initializeGrid(int index0) {
-    grid->initialize(index0);
-}
-
 void Propagator::propagate() {
-    int stepCount = 100;
+    int istep = 0;
+    propagate(istep++);
+    propagate(istep++);
+    while (! gridSet->isConverged()) {
+        propagate(istep++);
+    }
+}
+
+void Propagator::propagate(int step) {
+    int stepCount = 2 * (step + 1);
     double deltaTau = tau / stepCount;
-    mass = 1.0;
+    propagate(gridSet->getGrid(step), deltaTau, stepCount);
+}
+
+void Propagator::propagate(PropagatorGrid* grid, double deltaTau,
+        int stepCount) {
     grid->setupKineticPropagator(mass, deltaTau);
     grid->setupPotentialPropagator(potential, deltaTau);
     grid->evolveVHalfDeltaTau();
@@ -56,14 +57,6 @@ void Propagator::propagate() {
     grid->evolveVHalfDeltaTau();
 }
 
-double Propagator::readValue(int index) const {
-    double value = grid->readValue(index);
-    return value;
-}
-
-PropagatorGrid* Propagator::getGrid() const {
-    return grid;
-}
 
 double Propagator::zeroPotential(double x) {
     return 0.0;
@@ -78,10 +71,6 @@ void Propagator::setPotential(double (*v)(double)) {
 }
 
 double Propagator::getGridSpacing() const {
-    grid->getDeltaX();
+    return gridSet->getDeltaX();
 }
-
-
-
-
 

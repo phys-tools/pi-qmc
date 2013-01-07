@@ -77,10 +77,11 @@ am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
 	libutil_la-TradEwaldSum.lo libutil_la-WireEwald.lo \
 	libutil_la-erf.lo libutil_la-ipow.lo libutil_la-FFT1D.lo \
 	libutil_la-VPolyFit.lo libutil_la-GridParameters.lo \
-	libutil_la-KineticGrid.lo libutil_la-PotentialGrid.lo \
-	libutil_la-Propagator.lo libutil_la-PropagatorGrid.lo \
-	libutil_la-CommandLineParser.lo libutil_la-Greeting.lo \
-	libutil_la-MPILifecycle.lo libutil_la-UsageMessage.lo
+	libutil_la-GridSet.lo libutil_la-KineticGrid.lo \
+	libutil_la-PotentialGrid.lo libutil_la-Propagator.lo \
+	libutil_la-PropagatorGrid.lo libutil_la-CommandLineParser.lo \
+	libutil_la-Greeting.lo libutil_la-MPILifecycle.lo \
+	libutil_la-UsageMessage.lo
 libutil_la_OBJECTS = $(am_libutil_la_OBJECTS)
 libutil_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libutil_la_CXXFLAGS) \
@@ -261,6 +262,7 @@ libutil_la_SOURCES = \
 	fft/FFT1D.cpp \
 	math/VPolyFit.cpp \
 	propagator/GridParameters.cpp \
+	propagator/GridSet.cpp \
 	propagator/KineticGrid.cpp \
 	propagator/PotentialGrid.cpp \
 	propagator/Propagator.cpp \
@@ -290,6 +292,7 @@ noinst_HEADERS = \
 	math/BLAS.h \
 	math/VPolyFit.h \
 	propagator/GridParameters.h \
+	propagator/GridSet.h \
 	propagator/KineticGrid.h \
 	propagator/PotentialGrid.h \
 	propagator/Propagator.h \
@@ -359,6 +362,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-FFT1D.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Greeting.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-GridParameters.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-GridSet.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-Hungarian.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-KineticGrid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libutil_la-MPILifecycle.Plo@am__quote@
@@ -510,6 +514,13 @@ libutil_la-GridParameters.lo: propagator/GridParameters.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='propagator/GridParameters.cpp' object='libutil_la-GridParameters.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-GridParameters.lo `test -f 'propagator/GridParameters.cpp' || echo '$(srcdir)/'`propagator/GridParameters.cpp
+
+libutil_la-GridSet.lo: propagator/GridSet.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-GridSet.lo -MD -MP -MF $(DEPDIR)/libutil_la-GridSet.Tpo -c -o libutil_la-GridSet.lo `test -f 'propagator/GridSet.cpp' || echo '$(srcdir)/'`propagator/GridSet.cpp
+@am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/libutil_la-GridSet.Tpo $(DEPDIR)/libutil_la-GridSet.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='propagator/GridSet.cpp' object='libutil_la-GridSet.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o libutil_la-GridSet.lo `test -f 'propagator/GridSet.cpp' || echo '$(srcdir)/'`propagator/GridSet.cpp
 
 libutil_la-KineticGrid.lo: propagator/KineticGrid.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT libutil_la-KineticGrid.lo -MD -MP -MF $(DEPDIR)/libutil_la-KineticGrid.Tpo -c -o libutil_la-KineticGrid.lo `test -f 'propagator/KineticGrid.cpp' || echo '$(srcdir)/'`propagator/KineticGrid.cpp

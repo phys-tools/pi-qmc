@@ -15,6 +15,7 @@ set (sources
     fft/FFT1D.cpp
     math/VPolyFit.cpp
     propagator/GridParameters.cpp
+    propagator/GridSet.cpp
     propagator/KineticGrid.cpp
     propagator/PotentialGrid.cpp
     propagator/Propagator.cpp
