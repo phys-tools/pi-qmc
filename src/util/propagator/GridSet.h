@@ -13,18 +13,19 @@ public:
     double getDeltaX() const;
     void setGridParameters(GridParameters*);
 
-    void setupGrid();
-    void initializeGrid();
 
     bool isConverged() const;
-
     double readValue0() const;
-    PropagatorGrid* getGrid(int index);
+
+    PropagatorGrid* makeNewGrid(double deltaTau);
 private:
     typedef std::vector<PropagatorGrid*> GridArray;
-    typedef std::vector<PropagatorGrid*>::iterator GridIterator;
-    GridArray grid;
+    typedef std::vector<double> Array;
+    GridArray gridArray;
     GridParameters* parameters;
+    Array deltaTau;
+    PropagatorGrid* allocateGrid();
+    int gridCount;
 };
 
 #endif

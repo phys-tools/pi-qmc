@@ -18,8 +18,6 @@ Propagator::~Propagator() {
 }
 
 double Propagator::evaluate() {
-    gridSet->setupGrid();
-    gridSet->initializeGrid();
     propagate();
     double value = gridSet->readValue0();
     return value;
@@ -37,7 +35,8 @@ void Propagator::propagate() {
 void Propagator::propagate(int step) {
     int stepCount = 2 * (step + 1);
     double deltaTau = tau / stepCount;
-    propagate(gridSet->getGrid(step), deltaTau, stepCount);
+    PropagatorGrid* grid = gridSet->makeNewGrid(deltaTau);
+    propagate(grid, deltaTau, stepCount);
 }
 
 void Propagator::propagate(PropagatorGrid* grid, double deltaTau,
