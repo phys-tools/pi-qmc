@@ -27,8 +27,10 @@ void Propagator::propagate() {
     int istep = 0;
     propagate(istep++);
     propagate(istep++);
+    gridSet->extrapolateValue0();
     while (! gridSet->isConverged()) {
         propagate(istep++);
+        gridSet->extrapolateValue0();
     }
 }
 

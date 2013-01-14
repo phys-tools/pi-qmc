@@ -4,8 +4,8 @@
 #include "util/math/VPolyFit.h"
 
 GridSet::GridSet()
-    :   gridCount(0) {
-
+    :   gridCount(0),
+        lastDelta(0.0) {
 }
 
 GridSet::~GridSet() {
@@ -34,7 +34,7 @@ void GridSet::setGridParameters(GridParameters* parameters) {
     this->parameters = parameters;
 }
 
-double GridSet::readValue0() const {
+void GridSet::extrapolateValue0() {
     int index0 = parameters->getIndex0();
     Array value(gridArray.size());
     for (int index = 0; index < gridCount; ++index) {
@@ -42,11 +42,16 @@ double GridSet::readValue0() const {
     }
     VPolyFit fitter(gridCount, 1, &deltaTau[0], &value[0]);
     fitter.fit();
-    return *fitter.getSolution();
+    lastDelta = *fitter.getLastDelta();
+    solution = *fitter.getSolution();
+}
+
+double GridSet::readValue0() const{
+    return solution;
 }
 
 bool GridSet::isConverged() const {
-    return gridArray.size() > 10;
+    return fabs(lastDelta) < TOLERANCE;
 }
 
 PropagatorGrid* GridSet::makeNewGrid(double deltaTau) {
@@ -57,3 +62,4 @@ PropagatorGrid* GridSet::makeNewGrid(double deltaTau) {
     return newGrid;
 }
 
+const double GridSet::TOLERANCE = 1e-12;

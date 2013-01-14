@@ -13,7 +13,7 @@ public:
     double getDeltaX() const;
     void setGridParameters(GridParameters*);
 
-
+    void extrapolateValue0();
     bool isConverged() const;
     double readValue0() const;
 
@@ -26,6 +26,9 @@ private:
     Array deltaTau;
     PropagatorGrid* allocateGrid();
     int gridCount;
+    double solution;
+    double lastDelta;
+    static const double TOLERANCE;
 };
 
 #endif
