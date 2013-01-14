@@ -9,10 +9,12 @@ public:
 
     void fit();
     const double* getSolution() const;
+    const double* getLastDelta() const;
 private:
     const double* xdata;
     const double* ydata;
     double* solution;
+    double* lastDelta;
     double* worka;
     double* workc;
     double* workd;

@@ -18,8 +18,8 @@ extern "C" void DAXPY_F77(const int *n, const double *a, const double *x,
 
 class BLAS {
 public:
-    static void dcopy(int n, const double *x, int incx, double *y, int incy) {
-        DCOPY_F77(&n, x, &incx, y, &incy);
+    static void dcopy(int n, const double *fromX, int incx, double *toY, int incy) {
+        DCOPY_F77(&n, fromX, &incx, toY, &incy);
     }
 
     static void dscal(int n, double a, double *x, int incx) {

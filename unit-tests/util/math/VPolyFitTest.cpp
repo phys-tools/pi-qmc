@@ -82,4 +82,25 @@ TEST_F(VPolyFitTest, testVectorFit) {
     delete vpolyfit;
 }
 
+TEST_F(VPolyFitTest, TestConvergence) {
+    dataCount = 3;
+    dimension = 2;
+    double xdata [] = {0.3, 0.2, 0.1};
+    // y1(x) = 50x^2 - 10x + 1.5
+    // linear approximation is y1(x) = 15x - 1.5
+    // So last correction should be 3.0 from the last point.
+    // y2(x) = 20x^2 - 5x
+    // linear approximation is y1(x) = 10x - 1.8
+    // So last correction should be 1.8 from the last point.
+    double ydata [] = {3.0, 1.2,
+                       1.5, 0.2,
+                       1.0, -0.2};
+    VPolyFit* vpolyfit = new VPolyFit(dataCount, dimension, xdata, ydata);
+    vpolyfit->fit();
+    const double* lastDelta = vpolyfit->getLastDelta();
+    ASSERT_DOUBLE_EQ(3.0, lastDelta[0]);
+    ASSERT_DOUBLE_EQ(1.8, lastDelta[1]);
+    delete vpolyfit;
+}
+
 }

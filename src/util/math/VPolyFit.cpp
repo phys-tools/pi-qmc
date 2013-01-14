@@ -8,6 +8,7 @@ VPolyFit::VPolyFit(int dataCount, int dimension, const double* xdata,
         dataCount(dataCount),
         dimension(dimension) {
     solution = new double[dimension];
+    lastDelta = new double[dimension];
     worka = new double[dataCount * dimension];
     workc = new double[dataCount * dimension];
     workd = new double[dataCount * dimension];
@@ -15,6 +16,7 @@ VPolyFit::VPolyFit(int dataCount, int dimension, const double* xdata,
 
 VPolyFit::~VPolyFit() {
     delete[] solution;
+    delete[] lastDelta;
     delete[] worka;
     delete[] workc;
     delete[] workd;
@@ -48,10 +50,15 @@ void VPolyFit::fit() {
         double* lastd = workd + (dataCount - j - 1) * dimension;
         BLAS::daxpy(dimension, 1.0, lastd, 1, solution, 1);
     }
-    //    diff = workd(0,all);
+    BLAS::dcopy(dimension, workc, 1, lastDelta, 1);
 }
 
 const double* VPolyFit::getSolution() const {
     return solution;
 }
+
+const double* VPolyFit::getLastDelta() const {
+    return lastDelta;
+}
+
 
