@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
-
 #include "util/Hungarian.h"
-
 
 namespace {
 
@@ -21,7 +19,6 @@ TEST_F(HungarianTest, testMinusIdentityMatrix) {
         ASSERT_EQ(expect[index], hungarian[index]);
     }
 }
-
 
 TEST_F(HungarianTest, testShiftedMinusIdentityMatrix) {
     double matrix[3][3] = { { 0.0, -1.0,  0.0},

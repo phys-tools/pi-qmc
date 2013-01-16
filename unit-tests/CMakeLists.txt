@@ -8,7 +8,7 @@ add_subdirectory(emarate)
 add_subdirectory(fixednode)
 add_subdirectory(parser)
 #add_subdirectory(spin)
-#add_subdirectory(stats)
+add_subdirectory(stats)
 add_subdirectory(util)
 
 set(SRC_DIR ${PI_QMC_SOURCE_DIR}/src)

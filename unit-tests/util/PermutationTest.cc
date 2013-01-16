@@ -1,10 +1,5 @@
 #include <gtest/gtest.h>
-
 #include "util/Permutation.h"
-
-
-
-
 
 namespace {
 

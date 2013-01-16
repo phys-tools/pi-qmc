@@ -1,16 +1,12 @@
 #include <gtest/gtest.h>
-
 #include "util/AperiodicGaussian.h"
-
-
-
-
 
 namespace {
 
 class AperiodicGaussianTest: public ::testing::Test {
 protected:
 };
+
 TEST_F(AperiodicGaussianTest, testAperiodicGaussianValue) {
    AperiodicGaussian apg(1.0, 10, 2);
    double value = apg(0);
