@@ -5,7 +5,10 @@ compiler:
     - clang
 
 before_install:
-    - sudo apt-get install gfortran gsl lapack hdf5
+    - sudo apt-get install gfortran 
+    - sudo apt-get gsl-bin 
+    - sudo apt-get libblas-dev 
+    - sudo apt-get install libhdf5-serial libhdf5-dev
 
 script:
     - ./configure && make
