@@ -5,7 +5,7 @@ compiler:
     - clang
 
 before_install:
-    - sudo apt-get install gfortran
+    - sudo apt-get install gfortran gsl lapack hdf5
 
 script:
     - ./configure && make
