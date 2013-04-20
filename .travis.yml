@@ -6,8 +6,8 @@ compiler:
 
 before_install:
     - sudo apt-get install gfortran 
-    - sudo apt-get gsl-bin 
-    - sudo apt-get libblas-dev 
+    - sudo apt-get install gsl-bin 
+    - sudo apt-get install libblas-dev 
     - sudo apt-get install libhdf5-serial libhdf5-dev
 
 script:
