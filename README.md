@@ -1,3 +1,11 @@
+# Current status
+
+The current branch is tested with continuous integration on travis-ci.org:
+
+    http://https://travis-ci.org/phys-tools/pi-qmc
+
+    [![Build Status](https://travis-ci.org/phys-tools/pi-qmc.png)](https://travis-ci.org/phys-tools/pi-qmc)
+
 # Obtaining the source code
 
 *   Version control through gitHUB:
