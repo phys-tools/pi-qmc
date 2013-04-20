@@ -7,8 +7,7 @@
 #include <blitz/array.h>
 #include <blitz/tinyvec-et.h>
 class Paths;
-/// Base class for scalar estimators.
-/// @author John Shumway
+
 template<int N>
 class BlitzArrayBlkdEst: public ArrayEstimator {
 public:

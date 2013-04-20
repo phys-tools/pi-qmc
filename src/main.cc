@@ -2,6 +2,7 @@
 #include "util/startup/CommandLineParser.h"
 #include "util/startup/MPILifecycle.h"
 #include "util/startup/Greeting.h"
+#include <string>
 
 /** @mainpage pi: Path integral quantum Monte Carlo
  * @section usage Usage
