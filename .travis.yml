@@ -1,6 +1,11 @@
 language: cpp
+
 compiler:
     - gcc
     - clang
-# Change this to your needs
-script: ./configure && make
+
+before_install:
+    - sudo apt-get install gfortran
+
+script:
+    - ./configure && make
