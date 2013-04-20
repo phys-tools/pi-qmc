@@ -52,6 +52,7 @@ function writeGetCode(githubURL) {
 function writeNavigationLinks(relURL) {
     shumwayURL = "http://shumway.physics.asu.edu";
     rtfdURL = "http://pi-qmc.readthedocs.org/en/latest/";
+    ciURL = "http://travis-ci.org/phys-tools/pi-qmc";
     listURL = "https://groups.google.com/forum/?fromgroups#!forum/pi-qmc";
     document.write("  <ul>");
     document.write("    <li>");
@@ -82,6 +83,11 @@ function writeNavigationLinks(relURL) {
     document.write("    <li>");
     document.write("      <a href='" + githubURL + "/issues'>");
     document.write("        Bug Tracker");
+    document.write("      </a>");
+    document.write("    </li>");
+    document.write("    <li>");
+    document.write("      <a href='" + ciURL + "'>");
+    document.write("        Continuous Integration");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
