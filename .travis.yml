@@ -12,4 +12,4 @@ before_install:
     - sudo apt-get install libfftw3-dev
 
 script:
-    - ./configure && make
+    - ./configure && make && make test
