@@ -4,5 +4,5 @@ docs:
 	(cd doc; make docs)
 .PHONY: test
 
-test: all
-	(cd test/system; python run_tests.py)
+test:
+	bin/system-test-pi-qmc
