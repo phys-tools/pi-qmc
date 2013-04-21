@@ -17,7 +17,7 @@ config.status
 autom4te.cache
 libtool
 stamp-h1
-src/pi
+src/pi-qmc
 
 # Packages #
 ############

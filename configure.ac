@@ -1,11 +1,11 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT([pi],[1.3.0],[john.shumway@asu.edu])
+AC_INIT([pi-qmc], [1.1], [john.shumwayjr@gmail.com])
 
 #save flags passed to configure
 config_flags="$*"
 
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE(pi, 1.3,0)
+AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
