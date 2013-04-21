@@ -26,7 +26,7 @@ class SHOTestCase(unittest.TestCase):
         energy = self.h5file.getScalar("thermo_energy")
         e, de = energy.getAverage()
         expect = 0.75/math.tanh(0.25), 0.041
-        self.assertAlmostEqual(e, expect[0], delta=0.01, msg=
+        self.assertAlmostEqual(e, expect[0], delta=0.08, msg=
             'wrong total energy, expected %f but got %f' % (expect[0], e))
-        self.assertAlmostEqual(de, expect[1], delta=0.005, msg=
+        self.assertAlmostEqual(de, expect[1], delta=0.01, msg=
             'wrong error for energy, expected %f but got %f' % (expect[1], de))
