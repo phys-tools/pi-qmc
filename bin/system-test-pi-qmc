@@ -4,4 +4,4 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 export PYTHONPATH=$DIR/../python:$DIR/../python/pitools
 
-(cd $DIR/../test/system; nosetests -v --rednose)
+(cd $DIR/../test/system; nosetests -v)
