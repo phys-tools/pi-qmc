@@ -72,7 +72,6 @@ PROGRAMS = $(bin_PROGRAMS)
 am_unit_test_pi_qmc_OBJECTS =  \
 	unit_test_pi_qmc-unittest_main.$(OBJEXT)
 unit_test_pi_qmc_OBJECTS = $(am_unit_test_pi_qmc_OBJECTS)
-unit_test_pi_qmc_DEPENDENCIES =
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -281,6 +280,7 @@ unit_test_pi_qmc_LDADD = -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread
 unit_test_pi_qmc_SOURCES = \
     unittest_main.cc
 
+unit_test_pi_qmc_DEPENDENCIES = gtest
 all: all-am
 
 .SUFFIXES:

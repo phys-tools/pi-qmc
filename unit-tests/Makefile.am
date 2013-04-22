@@ -15,3 +15,4 @@ all-local: $(top_builddir)/bin unit-test-pi-qmc gtest
 gtest:
 	(cd $(top_srcdir)/contrib/gtest-1.6.0; cmake .; make)
 
+unit_test_pi_qmc_DEPENDENCIES = gtest
