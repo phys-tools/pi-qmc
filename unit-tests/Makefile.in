@@ -277,7 +277,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 unit_test_pi_qmc_CXXFLAGS = -I$(top_srcdir)/contrib/gtest-1.6.0/include
-unit_test_pi_qmc_LDADD = -L../contrib/gtest-1.6.0 -lgtest -lpthread
+unit_test_pi_qmc_LDADD = -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread
 unit_test_pi_qmc_SOURCES = \
     unittest_main.cc
 
@@ -623,8 +623,11 @@ uninstall-am: uninstall-binPROGRAMS
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS
 
 
-all-local: $(top_builddir)/bin unit-test-pi-qmc
+all-local: $(top_builddir)/bin unit-test-pi-qmc gtest
 	cp unit-test-pi-qmc $(top_builddir)/bin/
+
+.PHONY: gtest
+	(cd $(top_srcdir)/contrib/gtest-1.6.0; cmake .; make)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
