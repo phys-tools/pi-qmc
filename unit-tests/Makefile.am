@@ -11,5 +11,7 @@ all-local: $(top_builddir)/bin unit-test-pi-qmc gtest
 	cp unit-test-pi-qmc $(top_builddir)/bin/
 
 .PHONY: gtest
+
+gtest:
 	(cd $(top_srcdir)/contrib/gtest-1.6.0; cmake .; make)
 
