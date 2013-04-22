@@ -18,6 +18,7 @@ autom4te.cache
 libtool
 stamp-h1
 src/pi-qmc
+unit-tests/unit-test-pi-qmc
 
 # Packages #
 ############

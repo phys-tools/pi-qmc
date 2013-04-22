@@ -21242,7 +21242,7 @@ fi
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/action/Makefile src/advancer/Makefile src/algorithm/Makefile src/base/Makefile src/demo/Makefile src/emarate/Makefile src/estimator/Makefile src/fixednode/Makefile src/parser/Makefile src/spin/Makefile src/stats/Makefile src/util/Makefile doc/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/action/Makefile src/advancer/Makefile src/algorithm/Makefile src/base/Makefile src/demo/Makefile src/emarate/Makefile src/estimator/Makefile src/fixednode/Makefile src/parser/Makefile src/spin/Makefile src/stats/Makefile src/util/Makefile doc/Makefile unit-tests/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -22460,6 +22460,7 @@ do
     "src/stats/Makefile") CONFIG_FILES="$CONFIG_FILES src/stats/Makefile" ;;
     "src/util/Makefile") CONFIG_FILES="$CONFIG_FILES src/util/Makefile" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
+    "unit-tests/Makefile") CONFIG_FILES="$CONFIG_FILES unit-tests/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
