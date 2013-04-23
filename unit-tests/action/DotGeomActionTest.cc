@@ -48,7 +48,7 @@ TEST_F(DotGeomActionTest, getActionDifferenceForIdenticalPathsIsZero) {
     DotGeomAction action(tau);
     setIdenticalPaths();
     double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0.0, deltaAction, 1e-12);
+    ASSERT_NEAR(0.0, deltaAction, 1e-12);
 }
 
 TEST_F(DotGeomActionTest, getActionDifferenceForOneMovedBead) {
@@ -58,7 +58,7 @@ TEST_F(DotGeomActionTest, getActionDifferenceForOneMovedBead) {
     Beads<NDIM>::Vec position(1.0, 2.0, -10.0);
     (*movingBeads)(0, 32) = position;
     double deltaAction = action.getActionDifference(*sampler, 0);
-    ASSERT_FLOAT_EQ(0, deltaAction, 1e-12);
+    ASSERT_NEAR(0, deltaAction, 1e-12);
 }
 
 }
