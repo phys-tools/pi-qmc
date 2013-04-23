@@ -1,21 +1,6 @@
 bin_PROGRAMS = unit-test-pi-qmc
 
 
-unit_test_pi_qmc_LDADD = \
-    -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread \
-    -L$(top_srcdir)/src/parser -lparser \
-    -L$(top_srcdir)/src/emarate -lemarate \
-    -L$(top_srcdir)/src/action -laction \
-    -L$(top_srcdir)/src/advancer -ladvancer \
-    -L$(top_srcdir)/src/algorithm -lalgorithm \
-    -L$(top_srcdir)/src/demo -ldemo \
-    -L$(top_srcdir)/src/estimator -lestimator \
-    -L$(top_srcdir)/src/fixednode -lfixednode \
-    -L$(top_srcdir)/src/spin -lspin \
-    -L$(top_srcdir)/src/stats -lstats \
-    -L$(top_srcdir)/src/util -lutil
-    -L$(top_srcdir)/src/base -lbase \
-
 unit_test_pi_qmc_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src \
     -I$(top_srcdir)/contrib/blitz-0.9 \
     -I$(top_srcdir)/contrib/gtest-1.6.0/include
@@ -39,8 +24,8 @@ unit_test_pi_qmc_SOURCES = \
     action/interaction/SHOInteractionTest.cpp \
     advancer/CollectiveSectionMoverTest.cc \
     advancer/CollectiveSectionSamplerTest.cc \
-    advancer/MultiLevelSamplerFake.cc \
     advancer/MultiLevelSamplerTest.cc \
+    advancer/MultiLevelSamplerFake.cc \
     base/FermionWeightTest.cpp \
     emarate/EMARateActionTest.cc \
     emarate/EMARateEstimatorTest.cc \
@@ -65,6 +50,22 @@ unit_test_pi_qmc_SOURCES = \
     util/propagator/PotentialGridTest.cpp \
     util/propagator/PropagatorGridTest.cpp \
     util/propagator/PropagatorTest.cpp
+
+unit_test_pi_qmc_LDADD = \
+    -L$(top_srcdir)/src/parser -lparser \
+    -L$(top_srcdir)/src/emarate -lemarate \
+    -L$(top_srcdir)/src/action -laction \
+    -L$(top_srcdir)/src/advancer -ladvancer \
+    -L$(top_srcdir)/src/algorithm -lalgorithm \
+    -L$(top_srcdir)/src/demo -ldemo \
+    -L$(top_srcdir)/src/estimator -lestimator \
+    -L$(top_srcdir)/src/fixednode -lfixednode \
+    -L$(top_srcdir)/src/spin -lspin \
+    -L$(top_srcdir)/src/stats -lstats \
+    -L$(top_srcdir)/src/base -lbase \
+    -L$(top_srcdir)/src/util -lutil \
+    -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread
+
 
 all-local: $(top_builddir)/bin unit-test-pi-qmc gtest
 	cp unit-test-pi-qmc $(top_builddir)/bin/

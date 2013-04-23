@@ -88,8 +88,8 @@ am_unit_test_pi_qmc_OBJECTS =  \
 	unit_test_pi_qmc-SHOInteractionTest.$(OBJEXT) \
 	unit_test_pi_qmc-CollectiveSectionMoverTest.$(OBJEXT) \
 	unit_test_pi_qmc-CollectiveSectionSamplerTest.$(OBJEXT) \
-	unit_test_pi_qmc-MultiLevelSamplerFake.$(OBJEXT) \
 	unit_test_pi_qmc-MultiLevelSamplerTest.$(OBJEXT) \
+	unit_test_pi_qmc-MultiLevelSamplerFake.$(OBJEXT) \
 	unit_test_pi_qmc-FermionWeightTest.$(OBJEXT) \
 	unit_test_pi_qmc-EMARateActionTest.$(OBJEXT) \
 	unit_test_pi_qmc-EMARateEstimatorTest.$(OBJEXT) \
@@ -318,17 +318,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-unit_test_pi_qmc_LDADD = \
-    -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread \
-    -L$(top_srcdir)/src/action -laction \
-    -L$(top_srcdir)/src/advancer -ladvancer \
-    -L$(top_srcdir)/src/base -lbase \
-    -L$(top_srcdir)/src/emarate -lemarate \
-    -L$(top_srcdir)/src/fixednode -lfixednode \
-    -L$(top_srcdir)/src/parser -lparser \
-    -L$(top_srcdir)/src/stats -lstats \
-    -L$(top_srcdir)/src/util -lutil
-
 unit_test_pi_qmc_CXXFLAGS = -I$(top_srcdir) -I$(top_srcdir)/src \
     -I$(top_srcdir)/contrib/blitz-0.9 \
     -I$(top_srcdir)/contrib/gtest-1.6.0/include
@@ -352,8 +341,8 @@ unit_test_pi_qmc_SOURCES = \
     action/interaction/SHOInteractionTest.cpp \
     advancer/CollectiveSectionMoverTest.cc \
     advancer/CollectiveSectionSamplerTest.cc \
-    advancer/MultiLevelSamplerFake.cc \
     advancer/MultiLevelSamplerTest.cc \
+    advancer/MultiLevelSamplerFake.cc \
     base/FermionWeightTest.cpp \
     emarate/EMARateActionTest.cc \
     emarate/EMARateEstimatorTest.cc \
@@ -378,6 +367,21 @@ unit_test_pi_qmc_SOURCES = \
     util/propagator/PotentialGridTest.cpp \
     util/propagator/PropagatorGridTest.cpp \
     util/propagator/PropagatorTest.cpp
+
+unit_test_pi_qmc_LDADD = \
+    -L$(top_srcdir)/src/parser -lparser \
+    -L$(top_srcdir)/src/emarate -lemarate \
+    -L$(top_srcdir)/src/action -laction \
+    -L$(top_srcdir)/src/advancer -ladvancer \
+    -L$(top_srcdir)/src/algorithm -lalgorithm \
+    -L$(top_srcdir)/src/demo -ldemo \
+    -L$(top_srcdir)/src/estimator -lestimator \
+    -L$(top_srcdir)/src/fixednode -lfixednode \
+    -L$(top_srcdir)/src/spin -lspin \
+    -L$(top_srcdir)/src/stats -lstats \
+    -L$(top_srcdir)/src/base -lbase \
+    -L$(top_srcdir)/src/util -lutil \
+    -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread
 
 unit_test_pi_qmc_DEPENDENCIES = \
     gtest \
@@ -801,20 +805,6 @@ unit_test_pi_qmc-CollectiveSectionSamplerTest.obj: advancer/CollectiveSectionSam
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o unit_test_pi_qmc-CollectiveSectionSamplerTest.obj `if test -f 'advancer/CollectiveSectionSamplerTest.cc'; then $(CYGPATH_W) 'advancer/CollectiveSectionSamplerTest.cc'; else $(CYGPATH_W) '$(srcdir)/advancer/CollectiveSectionSamplerTest.cc'; fi`
 
-unit_test_pi_qmc-MultiLevelSamplerFake.o: advancer/MultiLevelSamplerFake.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT unit_test_pi_qmc-MultiLevelSamplerFake.o -MD -MP -MF $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo -c -o unit_test_pi_qmc-MultiLevelSamplerFake.o `test -f 'advancer/MultiLevelSamplerFake.cc' || echo '$(srcdir)/'`advancer/MultiLevelSamplerFake.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='advancer/MultiLevelSamplerFake.cc' object='unit_test_pi_qmc-MultiLevelSamplerFake.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o unit_test_pi_qmc-MultiLevelSamplerFake.o `test -f 'advancer/MultiLevelSamplerFake.cc' || echo '$(srcdir)/'`advancer/MultiLevelSamplerFake.cc
-
-unit_test_pi_qmc-MultiLevelSamplerFake.obj: advancer/MultiLevelSamplerFake.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT unit_test_pi_qmc-MultiLevelSamplerFake.obj -MD -MP -MF $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo -c -o unit_test_pi_qmc-MultiLevelSamplerFake.obj `if test -f 'advancer/MultiLevelSamplerFake.cc'; then $(CYGPATH_W) 'advancer/MultiLevelSamplerFake.cc'; else $(CYGPATH_W) '$(srcdir)/advancer/MultiLevelSamplerFake.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='advancer/MultiLevelSamplerFake.cc' object='unit_test_pi_qmc-MultiLevelSamplerFake.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o unit_test_pi_qmc-MultiLevelSamplerFake.obj `if test -f 'advancer/MultiLevelSamplerFake.cc'; then $(CYGPATH_W) 'advancer/MultiLevelSamplerFake.cc'; else $(CYGPATH_W) '$(srcdir)/advancer/MultiLevelSamplerFake.cc'; fi`
-
 unit_test_pi_qmc-MultiLevelSamplerTest.o: advancer/MultiLevelSamplerTest.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT unit_test_pi_qmc-MultiLevelSamplerTest.o -MD -MP -MF $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerTest.Tpo -c -o unit_test_pi_qmc-MultiLevelSamplerTest.o `test -f 'advancer/MultiLevelSamplerTest.cc' || echo '$(srcdir)/'`advancer/MultiLevelSamplerTest.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerTest.Tpo $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerTest.Po
@@ -828,6 +818,20 @@ unit_test_pi_qmc-MultiLevelSamplerTest.obj: advancer/MultiLevelSamplerTest.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='advancer/MultiLevelSamplerTest.cc' object='unit_test_pi_qmc-MultiLevelSamplerTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o unit_test_pi_qmc-MultiLevelSamplerTest.obj `if test -f 'advancer/MultiLevelSamplerTest.cc'; then $(CYGPATH_W) 'advancer/MultiLevelSamplerTest.cc'; else $(CYGPATH_W) '$(srcdir)/advancer/MultiLevelSamplerTest.cc'; fi`
+
+unit_test_pi_qmc-MultiLevelSamplerFake.o: advancer/MultiLevelSamplerFake.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT unit_test_pi_qmc-MultiLevelSamplerFake.o -MD -MP -MF $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo -c -o unit_test_pi_qmc-MultiLevelSamplerFake.o `test -f 'advancer/MultiLevelSamplerFake.cc' || echo '$(srcdir)/'`advancer/MultiLevelSamplerFake.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='advancer/MultiLevelSamplerFake.cc' object='unit_test_pi_qmc-MultiLevelSamplerFake.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o unit_test_pi_qmc-MultiLevelSamplerFake.o `test -f 'advancer/MultiLevelSamplerFake.cc' || echo '$(srcdir)/'`advancer/MultiLevelSamplerFake.cc
+
+unit_test_pi_qmc-MultiLevelSamplerFake.obj: advancer/MultiLevelSamplerFake.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT unit_test_pi_qmc-MultiLevelSamplerFake.obj -MD -MP -MF $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo -c -o unit_test_pi_qmc-MultiLevelSamplerFake.obj `if test -f 'advancer/MultiLevelSamplerFake.cc'; then $(CYGPATH_W) 'advancer/MultiLevelSamplerFake.cc'; else $(CYGPATH_W) '$(srcdir)/advancer/MultiLevelSamplerFake.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Tpo $(DEPDIR)/unit_test_pi_qmc-MultiLevelSamplerFake.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='advancer/MultiLevelSamplerFake.cc' object='unit_test_pi_qmc-MultiLevelSamplerFake.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o unit_test_pi_qmc-MultiLevelSamplerFake.obj `if test -f 'advancer/MultiLevelSamplerFake.cc'; then $(CYGPATH_W) 'advancer/MultiLevelSamplerFake.cc'; else $(CYGPATH_W) '$(srcdir)/advancer/MultiLevelSamplerFake.cc'; fi`
 
 unit_test_pi_qmc-FermionWeightTest.o: base/FermionWeightTest.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT unit_test_pi_qmc-FermionWeightTest.o -MD -MP -MF $(DEPDIR)/unit_test_pi_qmc-FermionWeightTest.Tpo -c -o unit_test_pi_qmc-FermionWeightTest.o `test -f 'base/FermionWeightTest.cpp' || echo '$(srcdir)/'`base/FermionWeightTest.cpp
