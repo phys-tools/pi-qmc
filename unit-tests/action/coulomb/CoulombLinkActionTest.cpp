@@ -125,7 +125,7 @@ TEST_F(CoulombLinkActionTest, testTauDerivatve) {
     delta2(0) = dist;
     double value = calculateUDot(delta1, delta2);
     double expect = -10.654095383699769;
-    ASSERT_NEAR(expect, value, 1e-10);
+    ASSERT_NEAR(expect, value, 1e-6);
 }
 
 TEST_F(CoulombLinkActionTest, testLaplacian) {
