@@ -17,14 +17,14 @@ The total energy, or Hamiltonian, of a Quantum Harmonic Oscillator is represente
 .. math:: 
    :label: sho_hamilt
 
-\hat{H}=\frac{\hat{\rho} ^{2}}{2m}+(1/2)m\omega^{2}\hat{x}^{2}
+   \hat{H}=\frac{\hat{\rho} ^{2}}{2m}+(1/2)m\omega^{2}\hat{x}^{2}
 
 Where \hat{H} is the hamiltonian, \rho is the momentum, m is the mass, \omega is the angular velocity, and x is the distance from equilibrium. The kinetic energy of the quantum harmonic oscillator is represented by the first term while the stored energy is represented by the second term. This may seem complex at first glance, but upon further inspection, it becomes apparent that this Hamiltonian is nearly identical to Hamiltonian of a regular harmonic oscillator which is represented by the function
 
 .. math:: 
    :label: sho_rearrangedhamilt
 
-E=\frac{1}{2}mv^{2}+\frac{1}{2}kx^{2}
+   E=\frac{1}{2}mv^{2}+\frac{1}{2}kx^{2}
 
 Where E is the energy, m is the mass, v is the velocity, k is the spring constant, and x is the distance from equilibrium. In the Hamiltonian of a Quantum Harmonic Oscillator, the mass multiplied by the velocity can be substituted in place of the momentum and the first term can be rearranged to resemble the first term of the regular harmonic oscillator’s Hamiltonian. Similarly, the square root of the spring constant divided by the mass can be substituted in for the wavelength and the second term can be rearranged to resemble the second term of the regular harmonic oscillator. After both terms are rearranged, it becomes clear that the two Hamiltonians are identical.
 
@@ -37,7 +37,7 @@ The Eigenstate of Quantum Harmonic Oscillator is the energy level it occupies. T
 .. math:: 
    :label: sho_eigenstatesol
 
-E_{n}=\hbar\omega(n+\frac{1}{2})
+   E_{n}=\hbar\omega(n+\frac{1}{2})
 
 Where E_{n} is the eigenvalue, \hbar is Planck's constant,\omega is the angular velocity, and n is the eigenstate.
 According to Heisenberg’s Uncertainty Principle, the momentum and the position of a quantum particle cannot be known at the same time. Therefore, we can surmise that the energy of the eigenvalue will never be equal to zero since the no energy means no movement which, in turn, means that both the momentum and the position of the quantum particle will be known. When we substitute in a 0 for the eigenvalue, we find that the function simplifies to
@@ -45,7 +45,7 @@ According to Heisenberg’s Uncertainty Principle, the momentum and the position
 .. math:: 
    :label: sho_zeroenergy
 
-E_{0}=\frac{1}{2}\hbar\omega
+   E_{0}=\frac{1}{2}\hbar\omega
 
 which represents the lowest possible energy of the Eigenstate and agrees with Heisenberg’s Uncertainty principle.
 When the eigenstate is multiplied by the Hamiltonian, the resulting value is the eigenvalue as shown in the function
@@ -53,7 +53,7 @@ When the eigenstate is multiplied by the Hamiltonian, the resulting value is the
 .. math:: 
    :label: sho_eigenvalue
 
-\hat{H}\psi(x)=E\psi(x)
+   \hat{H}\psi(x)=E\psi(x)
 
 where \hat{h} is the total energy of the harmonic oscillator, \psi(x) is the eigenvalue, and E\psi(x) is the eigenvalue.
 
@@ -104,7 +104,7 @@ The function is now normalized by dividing by the partition function
 
 .. math:: 
    :label: sho_norm
-z=\sum_{n=0}^{\infty}e^{-\frac{E_{n}}{kt}}
+   z=\sum_{n=0}^{\infty}e^{-\frac{E_{n}}{kt}}
 
 where z is the partition function, E_{n} is the eigenvalue, k is a constant, and T is the temperature.
 
@@ -112,13 +112,13 @@ This function can be simplified to the form
 
 .. math:: 
    :label: sho_simpnorm
-z=\frac{1}{2sin(h)\frac{\beta\hbar\omega}{2}}
+   z=\frac{1}{2sin(h)\frac{\beta\hbar\omega}{2}}
 
 where \beta is \frac{1}{kT}, \hbar is Planck’s constant, and \omega is the angular velocity by substituting and finding the sum using the formula first term/(1-common ratio).Our final equation is now  
 
 .. math:: 
    :label: sho_endnorm
-P_{n}=\frac{e^{\frac{-E_{n}}{kt}}}{z}
+   P_{n}=\frac{e^{\frac{-E_{n}}{kt}}}{z}
 
 where P_{n} is the probability of being in a certain eigenstate, E_{n} is the eigenvalue, k is a constant, T is the temperature, and z is the partition function.
 
