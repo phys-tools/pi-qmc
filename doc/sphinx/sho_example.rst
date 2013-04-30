@@ -110,7 +110,14 @@ This function can be simplified to the form
 .. math:: 
    :label: sho_simpnorm
 
-   z=\frac{1}{2sin(h)\frac{\beta\hbar\omega}{2}} \beta=\frac{1}{kt}
+   z=\frac{1}{2sin(h)\frac{\beta\hbar\omega}{2}} 
+
+where
+
+.. math:: 
+   :label: sho_beta
+
+   \beta=\frac{1}{kt}
 
 Our final equation is now  
 
