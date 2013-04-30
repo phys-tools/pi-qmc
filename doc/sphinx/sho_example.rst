@@ -102,18 +102,21 @@ The function is now normalized by dividing by the partition function
 
 .. math:: 
    :label: sho_norm
+
    z=\sum_{n=0}^{\infty}e^{-\frac{E_{n}}{kt}}
 
 This function can be simplified to the form
 
 .. math:: 
    :label: sho_simpnorm
+
    z=\frac{1}{2sin(h)\frac{\beta\hbar\omega}{2}} \beta=\frac{1}{kt}
 
 Our final equation is now  
 
 .. math:: 
    :label: sho_endnorm
+
    P_{n}=\frac{e^{\frac{-E_{n}}{kt}}}{z}
 
 The Density Matrix
