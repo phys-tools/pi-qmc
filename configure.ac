@@ -5,7 +5,7 @@ AC_INIT([pi-qmc], [1.1], [john.shumwayjr@gmail.com])
 config_flags="$*"
 
 AC_CONFIG_AUX_DIR(config)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])

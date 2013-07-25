@@ -52,18 +52,18 @@ unit_test_pi_qmc_SOURCES = \
     util/propagator/PropagatorTest.cpp
 
 unit_test_pi_qmc_LDADD = \
-    -L$(top_srcdir)/src/parser -lparser \
-    -L$(top_srcdir)/src/emarate -lemarate \
-    -L$(top_srcdir)/src/action -laction \
-    -L$(top_srcdir)/src/advancer -ladvancer \
-    -L$(top_srcdir)/src/algorithm -lalgorithm \
-    -L$(top_srcdir)/src/demo -ldemo \
-    -L$(top_srcdir)/src/estimator -lestimator \
-    -L$(top_srcdir)/src/fixednode -lfixednode \
-    -L$(top_srcdir)/src/spin -lspin \
-    -L$(top_srcdir)/src/stats -lstats \
-    -L$(top_srcdir)/src/base -lbase \
-    -L$(top_srcdir)/src/util -lutil \
+    -L$(top_builddir)/src/parser -lparser \
+    -L$(top_builddir)/src/emarate -lemarate \
+    -L$(top_builddir)/src/action -laction \
+    -L$(top_builddir)/src/advancer -ladvancer \
+    -L$(top_builddir)/src/algorithm -lalgorithm \
+    -L$(top_builddir)/src/demo -ldemo \
+    -L$(top_builddir)/src/estimator -lestimator \
+    -L$(top_builddir)/src/fixednode -lfixednode \
+    -L$(top_builddir)/src/spin -lspin \
+    -L$(top_builddir)/src/stats -lstats \
+    -L$(top_builddir)/src/base -lbase \
+    -L$(top_builddir)/src/util -lutil \
     -L$(top_srcdir)/contrib/gtest-1.6.0 -lgtest -lpthread
 
 
@@ -77,11 +77,11 @@ gtest:
 
 unit_test_pi_qmc_DEPENDENCIES = \
     gtest \
-    $(top_srcdir)/src/action/libaction.la \
-    $(top_srcdir)/src/advancer/libadvancer.la \
-    $(top_srcdir)/src/base/libbase.la \
-    $(top_srcdir)/src/emarate/libemarate.la \
-    $(top_srcdir)/src/fixednode/libfixednode.la \
-    $(top_srcdir)/src/parser/libparser.la \
-    $(top_srcdir)/src/stats/libstats.la \
-    $(top_srcdir)/src/util/libutil.la
+    $(top_builddir)/src/action/libaction.la \
+    $(top_builddir)/src/advancer/libadvancer.la \
+    $(top_builddir)/src/base/libbase.la \
+    $(top_builddir)/src/emarate/libemarate.la \
+    $(top_builddir)/src/fixednode/libfixednode.la \
+    $(top_builddir)/src/parser/libparser.la \
+    $(top_builddir)/src/stats/libstats.la \
+    $(top_builddir)/src/util/libutil.la
