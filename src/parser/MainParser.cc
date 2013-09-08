@@ -13,8 +13,10 @@
 #include "spin/MainSpinParser.h"
 #include "stats/EstimatorManager.h"
 #include "stats/MPIManager.h"
+#include "util/shiny/Shiny.h"
 #include <iostream>
 #include <ctime>
+
 class ActionChoiceBase;
 
 MainParser::MainParser(const std::string& filename) 
@@ -33,6 +35,7 @@ void MainParser::parse() {
 }
 
 void MainParser::parse(const xmlXPathContextPtr& ctxt) {
+  PROFILE_BEGIN(Parser);
 
   MPIManager *mpi=0;
 #ifdef ENABLE_MPI
@@ -50,10 +53,14 @@ void MainParser::parse(const xmlXPathContextPtr& ctxt) {
   std::time ( &rawtime );
   if (mpi){ 
     if ( mpi->isMain()) {
-      std :: cout << "Start Simulation at current local time and date: "<< std::ctime (&rawtime)<<std ::endl ;
+      std::cout << 
+        "Start Simulation at current local time and date: " <<
+        std::ctime (&rawtime) <<std ::endl ;
     } 
   }else {
-    std :: cout << "Start Simulation at current local time and date: "<< std::ctime (&rawtime)<<std ::endl ;
+    std::cout << 
+      "Start Simulation at current local time and date: " <<
+      std::ctime (&rawtime)<<std ::endl ;
   }
 #else
   std::time_t rawtime;
@@ -105,22 +112,40 @@ std::cout << "Level = " << nlevel << std::endl;
       estimators, simInfo.getBeadFactory(),mpi);
   pimcParser.parse(ctxt);
   Algorithm* algorithm=pimcParser.getAlgorithm();
+  PROFILE_END();
 
 
   // Run the simulation.
+  PROFILE_BEGIN(Run);
   algorithm->run();
+  PROFILE_END();
 
   //print date
 #ifdef ENABLE_MPI
   std::time (&rawtime );
   if (mpi){ 
-    if ( mpi->isMain()) {
-      std :: cout << "\n\n********** Simulation ended successfully :: "<< std::ctime (&rawtime)<<std ::endl ;
+    if (mpi->isMain()) {
+      std::cout << 
+          "\n\n********** Simulation ended successfully :: " <<
+          std::ctime (&rawtime)<<std ::endl ;
+      std::cout << "\n\n** Timing Profile Data **\n" << std::endl;
+      PROFILE_UPDATE(); // uptate all timing profiles
+      PROFILE_OUTPUT(NULL); // print profile to terminal
     } 
-  }else {
-    std :: cout << "\n\n********** Simulation ended successfully :: "<< std::ctime (&rawtime)<<std ::endl ;
+  } else {
+    std::cout << 
+        "\n\n********** Simulation ended successfully :: " <<
+        std::ctime (&rawtime)<<std ::endl ;
+    std::cout << "\n\n** Timing Profile Data **\n" << std::endl;
+    PROFILE_UPDATE(); // uptate all timing profiles
+    PROFILE_OUTPUT(NULL); // print profile to terminal
   }
 #else
-  std :: cout << "\n\n********** Simulation ended successfully :: "<< std::ctime (&rawtime)<<std ::endl ;
+  std::cout << 
+      "\n\n********** Simulation ended successfully :: " <<
+      std::ctime(&rawtime) <<std::endl;
+  std::cout << "\n\n** Timing Profile Data **\n" << std::endl;
+  PROFILE_UPDATE(); // uptate all timing profiles
+  PROFILE_OUTPUT(NULL); // print profile to terminal
 #endif
 }

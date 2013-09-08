@@ -20,6 +20,13 @@ set (sources
     propagator/PotentialGrid.cpp
     propagator/Propagator.cpp
     propagator/PropagatorGrid.cpp
+    shiny/ShinyManager.cpp
+    shiny/ShinyNode.cpp
+    shiny/ShinyNodePool.cpp
+    shiny/ShinyNodeState.cpp
+    shiny/ShinyOutput.cpp
+    shiny/ShinyTools.cpp
+    shiny/ShinyZone.cpp
     startup/CommandLineParser.cpp
     startup/Greeting.cpp
     startup/MPILifecycle.cpp
