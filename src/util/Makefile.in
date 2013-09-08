@@ -112,7 +112,15 @@ am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
 	propagator/libutil_la-PotentialGrid.lo \
 	propagator/libutil_la-Propagator.lo \
 	propagator/libutil_la-PropagatorGrid.lo \
-	shiny/libutil_la-ShinyManager.lo
+	shiny/libutil_la-ShinyManager.lo shiny/libutil_la-ShinyNode.lo \
+	shiny/libutil_la-ShinyNodePool.lo \
+	shiny/libutil_la-ShinyNodeState.lo \
+	shiny/libutil_la-ShinyOutput.lo shiny/libutil_la-ShinyTools.lo \
+	shiny/libutil_la-ShinyZone.lo \
+	startup/libutil_la-CommandLineParser.lo \
+	startup/libutil_la-Greeting.lo \
+	startup/libutil_la-MPILifecycle.lo \
+	startup/libutil_la-UsageMessage.lo
 libutil_la_OBJECTS = $(am_libutil_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -155,6 +163,24 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC      " $@;
+am__v_CC_1 = 
+CCLD = $(CC)
+LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD    " $@;
+am__v_CCLD_1 = 
 SOURCES = $(libutil_la_SOURCES)
 DIST_SOURCES = $(libutil_la_SOURCES)
 am__can_run_installinfo = \
@@ -341,7 +367,18 @@ libutil_la_SOURCES = \
     propagator/PotentialGrid.cpp \
     propagator/Propagator.cpp \
     propagator/PropagatorGrid.cpp \
-    shiny/ShinyManager.cpp
+    shiny/ShinyManager.cpp \
+    shiny/ShinyNode.cpp \
+    shiny/ShinyNodePool.cpp \
+    shiny/ShinyNodeState.cpp \
+    shiny/ShinyOutput.cpp \
+    shiny/ShinyTools.cpp \
+    shiny/ShinyZone.cpp \
+    startup/CommandLineParser.h \
+    startup/CommandLineParser.cpp \
+    startup/Greeting.cpp \
+    startup/MPILifecycle.cpp \
+    startup/UsageMessage.cpp
 
 noinst_HEADERS = \
     AperiodicGaussian.h \
@@ -368,7 +405,22 @@ noinst_HEADERS = \
     propagator/PotentialGrid.h \
     propagator/Propagator.h \
     propagator/PropagatorGrid.h \
-    shiny/Shiny.h
+    shiny/Shiny.h \
+    shiny/ShinyConfig.h \
+    shiny/ShinyData.h \
+    shiny/ShinyMacros.h \
+    shiny/ShinyManager.h \
+    shiny/ShinyNode.h \
+    shiny/ShinyNodePool.h \
+    shiny/ShinyNodeState.h \
+    shiny/ShinyOutput.h \
+    shiny/ShinyPrereqs.h \
+    shiny/ShinyTools.h \
+    shiny/ShinyVersion.h \
+    shiny/ShinyZone.h \
+    startup/Greeting.h \
+    startup/MPILifecycle.h \
+    startup/UsageMessage.h
 
 all: all-am
 
@@ -457,6 +509,32 @@ shiny/$(DEPDIR)/$(am__dirstamp):
 	@: > shiny/$(DEPDIR)/$(am__dirstamp)
 shiny/libutil_la-ShinyManager.lo: shiny/$(am__dirstamp) \
 	shiny/$(DEPDIR)/$(am__dirstamp)
+shiny/libutil_la-ShinyNode.lo: shiny/$(am__dirstamp) \
+	shiny/$(DEPDIR)/$(am__dirstamp)
+shiny/libutil_la-ShinyNodePool.lo: shiny/$(am__dirstamp) \
+	shiny/$(DEPDIR)/$(am__dirstamp)
+shiny/libutil_la-ShinyNodeState.lo: shiny/$(am__dirstamp) \
+	shiny/$(DEPDIR)/$(am__dirstamp)
+shiny/libutil_la-ShinyOutput.lo: shiny/$(am__dirstamp) \
+	shiny/$(DEPDIR)/$(am__dirstamp)
+shiny/libutil_la-ShinyTools.lo: shiny/$(am__dirstamp) \
+	shiny/$(DEPDIR)/$(am__dirstamp)
+shiny/libutil_la-ShinyZone.lo: shiny/$(am__dirstamp) \
+	shiny/$(DEPDIR)/$(am__dirstamp)
+startup/$(am__dirstamp):
+	@$(MKDIR_P) startup
+	@: > startup/$(am__dirstamp)
+startup/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) startup/$(DEPDIR)
+	@: > startup/$(DEPDIR)/$(am__dirstamp)
+startup/libutil_la-CommandLineParser.lo: startup/$(am__dirstamp) \
+	startup/$(DEPDIR)/$(am__dirstamp)
+startup/libutil_la-Greeting.lo: startup/$(am__dirstamp) \
+	startup/$(DEPDIR)/$(am__dirstamp)
+startup/libutil_la-MPILifecycle.lo: startup/$(am__dirstamp) \
+	startup/$(DEPDIR)/$(am__dirstamp)
+startup/libutil_la-UsageMessage.lo: startup/$(am__dirstamp) \
+	startup/$(DEPDIR)/$(am__dirstamp)
 
 libutil.la: $(libutil_la_OBJECTS) $(libutil_la_DEPENDENCIES) $(EXTRA_libutil_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libutil_la_LINK)  $(libutil_la_OBJECTS) $(libutil_la_LIBADD) $(LIBS)
@@ -471,6 +549,8 @@ mostlyclean-compile:
 	-rm -f propagator/*.lo
 	-rm -f shiny/*.$(OBJEXT)
 	-rm -f shiny/*.lo
+	-rm -f startup/*.$(OBJEXT)
+	-rm -f startup/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -497,6 +577,16 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-Propagator.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-PropagatorGrid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyManager.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyNode.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyNodePool.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyNodeState.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyOutput.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyTools.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyZone.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@startup/$(DEPDIR)/libutil_la-CommandLineParser.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@startup/$(DEPDIR)/libutil_la-Greeting.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@startup/$(DEPDIR)/libutil_la-MPILifecycle.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@startup/$(DEPDIR)/libutil_la-UsageMessage.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -676,6 +766,76 @@ shiny/libutil_la-ShinyManager.lo: shiny/ShinyManager.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyManager.lo `test -f 'shiny/ShinyManager.cpp' || echo '$(srcdir)/'`shiny/ShinyManager.cpp
 
+shiny/libutil_la-ShinyNode.lo: shiny/ShinyNode.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT shiny/libutil_la-ShinyNode.lo -MD -MP -MF shiny/$(DEPDIR)/libutil_la-ShinyNode.Tpo -c -o shiny/libutil_la-ShinyNode.lo `test -f 'shiny/ShinyNode.cpp' || echo '$(srcdir)/'`shiny/ShinyNode.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) shiny/$(DEPDIR)/libutil_la-ShinyNode.Tpo shiny/$(DEPDIR)/libutil_la-ShinyNode.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shiny/ShinyNode.cpp' object='shiny/libutil_la-ShinyNode.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyNode.lo `test -f 'shiny/ShinyNode.cpp' || echo '$(srcdir)/'`shiny/ShinyNode.cpp
+
+shiny/libutil_la-ShinyNodePool.lo: shiny/ShinyNodePool.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT shiny/libutil_la-ShinyNodePool.lo -MD -MP -MF shiny/$(DEPDIR)/libutil_la-ShinyNodePool.Tpo -c -o shiny/libutil_la-ShinyNodePool.lo `test -f 'shiny/ShinyNodePool.cpp' || echo '$(srcdir)/'`shiny/ShinyNodePool.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) shiny/$(DEPDIR)/libutil_la-ShinyNodePool.Tpo shiny/$(DEPDIR)/libutil_la-ShinyNodePool.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shiny/ShinyNodePool.cpp' object='shiny/libutil_la-ShinyNodePool.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyNodePool.lo `test -f 'shiny/ShinyNodePool.cpp' || echo '$(srcdir)/'`shiny/ShinyNodePool.cpp
+
+shiny/libutil_la-ShinyNodeState.lo: shiny/ShinyNodeState.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT shiny/libutil_la-ShinyNodeState.lo -MD -MP -MF shiny/$(DEPDIR)/libutil_la-ShinyNodeState.Tpo -c -o shiny/libutil_la-ShinyNodeState.lo `test -f 'shiny/ShinyNodeState.cpp' || echo '$(srcdir)/'`shiny/ShinyNodeState.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) shiny/$(DEPDIR)/libutil_la-ShinyNodeState.Tpo shiny/$(DEPDIR)/libutil_la-ShinyNodeState.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shiny/ShinyNodeState.cpp' object='shiny/libutil_la-ShinyNodeState.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyNodeState.lo `test -f 'shiny/ShinyNodeState.cpp' || echo '$(srcdir)/'`shiny/ShinyNodeState.cpp
+
+shiny/libutil_la-ShinyOutput.lo: shiny/ShinyOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT shiny/libutil_la-ShinyOutput.lo -MD -MP -MF shiny/$(DEPDIR)/libutil_la-ShinyOutput.Tpo -c -o shiny/libutil_la-ShinyOutput.lo `test -f 'shiny/ShinyOutput.cpp' || echo '$(srcdir)/'`shiny/ShinyOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) shiny/$(DEPDIR)/libutil_la-ShinyOutput.Tpo shiny/$(DEPDIR)/libutil_la-ShinyOutput.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shiny/ShinyOutput.cpp' object='shiny/libutil_la-ShinyOutput.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyOutput.lo `test -f 'shiny/ShinyOutput.cpp' || echo '$(srcdir)/'`shiny/ShinyOutput.cpp
+
+shiny/libutil_la-ShinyTools.lo: shiny/ShinyTools.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT shiny/libutil_la-ShinyTools.lo -MD -MP -MF shiny/$(DEPDIR)/libutil_la-ShinyTools.Tpo -c -o shiny/libutil_la-ShinyTools.lo `test -f 'shiny/ShinyTools.cpp' || echo '$(srcdir)/'`shiny/ShinyTools.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) shiny/$(DEPDIR)/libutil_la-ShinyTools.Tpo shiny/$(DEPDIR)/libutil_la-ShinyTools.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shiny/ShinyTools.cpp' object='shiny/libutil_la-ShinyTools.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyTools.lo `test -f 'shiny/ShinyTools.cpp' || echo '$(srcdir)/'`shiny/ShinyTools.cpp
+
+shiny/libutil_la-ShinyZone.lo: shiny/ShinyZone.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT shiny/libutil_la-ShinyZone.lo -MD -MP -MF shiny/$(DEPDIR)/libutil_la-ShinyZone.Tpo -c -o shiny/libutil_la-ShinyZone.lo `test -f 'shiny/ShinyZone.cpp' || echo '$(srcdir)/'`shiny/ShinyZone.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) shiny/$(DEPDIR)/libutil_la-ShinyZone.Tpo shiny/$(DEPDIR)/libutil_la-ShinyZone.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='shiny/ShinyZone.cpp' object='shiny/libutil_la-ShinyZone.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o shiny/libutil_la-ShinyZone.lo `test -f 'shiny/ShinyZone.cpp' || echo '$(srcdir)/'`shiny/ShinyZone.cpp
+
+startup/libutil_la-CommandLineParser.lo: startup/CommandLineParser.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT startup/libutil_la-CommandLineParser.lo -MD -MP -MF startup/$(DEPDIR)/libutil_la-CommandLineParser.Tpo -c -o startup/libutil_la-CommandLineParser.lo `test -f 'startup/CommandLineParser.cpp' || echo '$(srcdir)/'`startup/CommandLineParser.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) startup/$(DEPDIR)/libutil_la-CommandLineParser.Tpo startup/$(DEPDIR)/libutil_la-CommandLineParser.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='startup/CommandLineParser.cpp' object='startup/libutil_la-CommandLineParser.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o startup/libutil_la-CommandLineParser.lo `test -f 'startup/CommandLineParser.cpp' || echo '$(srcdir)/'`startup/CommandLineParser.cpp
+
+startup/libutil_la-Greeting.lo: startup/Greeting.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT startup/libutil_la-Greeting.lo -MD -MP -MF startup/$(DEPDIR)/libutil_la-Greeting.Tpo -c -o startup/libutil_la-Greeting.lo `test -f 'startup/Greeting.cpp' || echo '$(srcdir)/'`startup/Greeting.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) startup/$(DEPDIR)/libutil_la-Greeting.Tpo startup/$(DEPDIR)/libutil_la-Greeting.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='startup/Greeting.cpp' object='startup/libutil_la-Greeting.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o startup/libutil_la-Greeting.lo `test -f 'startup/Greeting.cpp' || echo '$(srcdir)/'`startup/Greeting.cpp
+
+startup/libutil_la-MPILifecycle.lo: startup/MPILifecycle.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT startup/libutil_la-MPILifecycle.lo -MD -MP -MF startup/$(DEPDIR)/libutil_la-MPILifecycle.Tpo -c -o startup/libutil_la-MPILifecycle.lo `test -f 'startup/MPILifecycle.cpp' || echo '$(srcdir)/'`startup/MPILifecycle.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) startup/$(DEPDIR)/libutil_la-MPILifecycle.Tpo startup/$(DEPDIR)/libutil_la-MPILifecycle.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='startup/MPILifecycle.cpp' object='startup/libutil_la-MPILifecycle.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o startup/libutil_la-MPILifecycle.lo `test -f 'startup/MPILifecycle.cpp' || echo '$(srcdir)/'`startup/MPILifecycle.cpp
+
+startup/libutil_la-UsageMessage.lo: startup/UsageMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT startup/libutil_la-UsageMessage.lo -MD -MP -MF startup/$(DEPDIR)/libutil_la-UsageMessage.Tpo -c -o startup/libutil_la-UsageMessage.lo `test -f 'startup/UsageMessage.cpp' || echo '$(srcdir)/'`startup/UsageMessage.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) startup/$(DEPDIR)/libutil_la-UsageMessage.Tpo startup/$(DEPDIR)/libutil_la-UsageMessage.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='startup/UsageMessage.cpp' object='startup/libutil_la-UsageMessage.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o startup/libutil_la-UsageMessage.lo `test -f 'startup/UsageMessage.cpp' || echo '$(srcdir)/'`startup/UsageMessage.cpp
+
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
@@ -709,6 +869,7 @@ clean-libtool:
 	-rm -rf math/.libs math/_libs
 	-rm -rf propagator/.libs propagator/_libs
 	-rm -rf shiny/.libs shiny/_libs
+	-rm -rf startup/.libs startup/_libs
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -830,6 +991,8 @@ distclean-generic:
 	-rm -f propagator/$(am__dirstamp)
 	-rm -f shiny/$(DEPDIR)/$(am__dirstamp)
 	-rm -f shiny/$(am__dirstamp)
+	-rm -f startup/$(DEPDIR)/$(am__dirstamp)
+	-rm -f startup/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -840,7 +1003,7 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-am
-	-rm -rf ./$(DEPDIR) fft/$(DEPDIR) math/$(DEPDIR) propagator/$(DEPDIR) shiny/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) fft/$(DEPDIR) math/$(DEPDIR) propagator/$(DEPDIR) shiny/$(DEPDIR) startup/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -886,7 +1049,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-	-rm -rf ./$(DEPDIR) fft/$(DEPDIR) math/$(DEPDIR) propagator/$(DEPDIR) shiny/$(DEPDIR)
+	-rm -rf ./$(DEPDIR) fft/$(DEPDIR) math/$(DEPDIR) propagator/$(DEPDIR) shiny/$(DEPDIR) startup/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -921,32 +1084,6 @@ uninstall-am:
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am
 
-    shiny/ShinyNode.cpp
-    shiny/ShinyNodePool.cpp
-    shiny/ShinyNodeState.cpp
-    shiny/ShinyOutput.cpp
-    shiny/ShinyTools.cpp
-    shiny/ShinyZone.cpp
-    startup/CommandLineParser.h \
-    startup/CommandLineParser.cpp \
-    startup/Greeting.cpp \
-    startup/MPILifecycle.cpp \
-    startup/UsageMessage.cpp
-    shiny/ShinyConfig.h
-    shiny/ShinyData.h
-    shiny/ShinyMacros.h
-    shiny/ShinyManager.h
-    shiny/ShinyNode.h
-    shiny/ShinyNodePool.h
-    shiny/ShinyNodeState.h
-    shiny/ShinyOutput.h
-    shiny/ShinyPrereqs.h
-    shiny/ShinyTools.h
-    shiny/ShinyVersion.h
-    shiny/ShinyZone.h
-    startup/Greeting.h \
-    startup/MPILifecycle.h \
-    startup/UsageMessage.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

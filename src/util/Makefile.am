@@ -22,13 +22,13 @@ libutil_la_SOURCES = \
     propagator/PotentialGrid.cpp \
     propagator/Propagator.cpp \
     propagator/PropagatorGrid.cpp \
-    shiny/ShinyManager.cpp
-    shiny/ShinyNode.cpp
-    shiny/ShinyNodePool.cpp
-    shiny/ShinyNodeState.cpp
-    shiny/ShinyOutput.cpp
-    shiny/ShinyTools.cpp
-    shiny/ShinyZone.cpp
+    shiny/ShinyManager.cpp \
+    shiny/ShinyNode.cpp \
+    shiny/ShinyNodePool.cpp \
+    shiny/ShinyNodeState.cpp \
+    shiny/ShinyOutput.cpp \
+    shiny/ShinyTools.cpp \
+    shiny/ShinyZone.cpp \
     startup/CommandLineParser.h \
     startup/CommandLineParser.cpp \
     startup/Greeting.cpp \
@@ -59,20 +59,20 @@ noinst_HEADERS = \
     propagator/PotentialGrid.h \
     propagator/Propagator.h \
     propagator/PropagatorGrid.h \
-    shiny/Shiny.h
-    shiny/ShinyConfig.h
-    shiny/ShinyData.h
-    shiny/ShinyMacros.h
-    shiny/ShinyManager.h
-    shiny/ShinyNode.h
-    shiny/ShinyNodePool.h
-    shiny/ShinyNodeState.h
-    shiny/ShinyOutput.h
-    shiny/ShinyPrereqs.h
-    shiny/ShinyTools.h
-    shiny/ShinyVersion.h
-    shiny/ShinyZone.h
+    shiny/Shiny.h \
+    shiny/ShinyConfig.h \
+    shiny/ShinyData.h \
+    shiny/ShinyMacros.h \
+    shiny/ShinyManager.h \
+    shiny/ShinyNode.h \
+    shiny/ShinyNodePool.h \
+    shiny/ShinyNodeState.h \
+    shiny/ShinyOutput.h \
+    shiny/ShinyPrereqs.h \
+    shiny/ShinyTools.h \
+    shiny/ShinyVersion.h \
+    shiny/ShinyZone.h \
     startup/Greeting.h \
     startup/MPILifecycle.h \
     startup/UsageMessage.h
-    
+
