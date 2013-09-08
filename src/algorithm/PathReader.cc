@@ -9,12 +9,14 @@
 #include "base/Paths.h"
 #include "stats/MPIManager.h"
 #include "util/Permutation.h"
+#include "util/shiny/Shiny.h"
 #include <blitz/tinyvec-et.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 void PathReader::run() {
+  PROFILE_BEGIN(Read_Paths);
   paths.clearPermutation();
   int workerID=(mpi)?mpi->getWorkerID():0;
   int nclone=(mpi)?mpi->getNClone():1;
@@ -138,4 +140,5 @@ void PathReader::run() {
       if(p[i] != perm[i] && permutationsFlag) std :: cout <<"ERROR :: clone "<<cloneID<<",  worker "<<workerID<<", discrepancy found for permutation pickup at part "<<i <<": p[i]="<<p[i]<<"perm[i]="<<perm[i]<<std :: endl<<std::flush;
     }
 */
+  PROFILE_END();
 }

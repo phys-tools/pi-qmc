@@ -14,6 +14,7 @@
 #include "util/Hungarian.h"
 #include "util/PeriodicGaussian.h"
 #include "util/SuperCell.h"
+#include "util/shiny/Shiny.h"
 #include <cstdlib>
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
@@ -128,7 +129,9 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
     }
     // Next calculate determinant and inverse of slater matrix.
     int info=0;//LU decomposition
+    PROFILE_BEGIN(DGETRF);
     DGETRF_F77(&npart,&npart,mat.data(),&npart,ipiv.data(),&info);
+    PROFILE_END();
     if (info!=0) {
       result.err = true;
       std::cout << "BAD RETURN FROM ZGETRF!?!!" << std::endl;
@@ -143,7 +146,9 @@ AugmentedNodes::evaluate(const VArray &r1, const VArray &r2,
       det *= mat(i,i); 
       det *= (i+1==ipiv(i))?1:-1;
     }
+    PROFILE_BEGIN(DGETRI);
     DGETRI_F77(&npart,mat.data(),&npart,ipiv.data(),work.data(),&lwork,&info);
+    PROFILE_END();
     if (info!=0) {
       result.err = true;
       std::cout << "BAD RETURN FROM ZGETRI!?!!" << std::endl;
@@ -504,7 +509,9 @@ double AugmentedNodes::MatrixUpdate::evaluateChange(
   }
   // Calculate determinant and inverse.
   int info=0;//LU decomposition
+  PROFILE_BEGIN(DGETRF);
   DGETRF_F77(&nMoving,&nMoving,smallDet.data(),&maxMovers,ipiv.data(),&info);
+  PROFILE_END();
   if (info!=0) std::cout << "BAD RETURN FROM ZGETRF!!!!" << std::endl;
   double det = 1;
   for (int i=0; i<nMoving; ++i) {

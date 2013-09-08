@@ -9,6 +9,7 @@
 #include "base/Paths.h"
 #include "base/SimulationInfo.h"
 #include "stats/MPIManager.h"
+#include "util/shiny/Shiny.h"
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -23,6 +24,7 @@ WritePaths::WritePaths(Paths& paths, const std::string& filename, int dumpFreq,
 }
 
 void WritePaths::run() {
+  PROFILE_BEGIN(Write_Paths);
   //Write paths (movie) every dumpFreq (dumpMovieCounter) times
   static int dumpPathCounter=0;
   if (dumpPathCounter < dumpFreq) {
@@ -59,6 +61,7 @@ void WritePaths::run() {
   }
   //movie files
   if (cloneID==0 && workerID==0 && writeMovie) {
+    PROFILE_BEGIN(Write_Movie);
     if (dumpMovieCounter > maxConfigs) {
       movieFile->close();
       movieFile->open("pathMovie", std::ios::trunc);
@@ -73,6 +76,7 @@ void WritePaths::run() {
      for (int ispec=0;ispec<simInfo.getNSpecies(); ispec++) *movieFile <<simInfo.getSpecies(ispec).count<<"  ";
      *movieFile <<std::endl;
      */
+    PROFILE_END();
   }
 
   /// Now determine how many chunked steps we need to write out all slices.
@@ -111,4 +115,5 @@ void WritePaths::run() {
     paths.shift(lastSlice);
   }
   if (workerID==0) delete file;
+  PROFILE_END();
 }

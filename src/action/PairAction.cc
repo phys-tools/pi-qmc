@@ -9,6 +9,7 @@
 #include "base/Paths.h"
 #include "base/SimulationInfo.h"
 #include "util/SuperCell.h"
+#include "util/shiny/Shiny.h"
 #include <vector>
 #include <fstream>
 #include <blitz/tinyvec-et.h>
@@ -218,6 +219,7 @@ std::cout << "species1= " <<  s1 << "species2= " <<  s2 << std::endl;
 
 double PairAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
+  PROFILE_FUNC();
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();

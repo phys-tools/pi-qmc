@@ -11,6 +11,7 @@
 #include "util/OptEwaldSum.h"
 #include "util/SuperCell.h"
 #include "util/TradEwaldSum.h"
+#include "util/shiny/Shiny.h"
 #include <blitz/tinyvec-et.h>
 
 // constructor trad ewald
@@ -101,8 +102,10 @@ void EwaldCoulombEstimator::initCalc(const int nslice, const int firstSlice) {
 
 void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
         const int ipart, const int islice, const Paths& paths) {
+    PROFILE_BEGIN(HandleLink);
     double energy = 0.0;
     if (nImages > 1) {
+        PROFILE_BEGIN(CoulombImages);
         for (int jpart = 0; jpart < ipart; ++jpart) {
             for (unsigned int img = 0; img < boxImageVecs.size(); img++) {
                 Vec boxImage;
@@ -116,6 +119,7 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
                         * (1. / (r * epsilon) - ewaldSum.evalFR(r) / epsilon); /// could use the vgrid later after testing
             }
         }
+        PROFILE_END();
     } else {
         for (int jpart = 0; jpart < ipart; ++jpart) {
             Vec delta = end - paths(jpart, islice);
@@ -133,11 +137,14 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
 
     // Add long range contribution.
     if (ipart == 0) {
+        PROFILE_BEGIN(Ewald);
         paths.getSlice(islice, r);
         energy += ewaldSum.evalLongRange(r) / epsilon;
+        PROFILE_END();
     }
 
     accumulator->addToValue(energy);
+    PROFILE_END();
 }
 
 void EwaldCoulombEstimator::endCalc(const int lnslice) {
@@ -153,7 +160,9 @@ void EwaldCoulombEstimator::reset() {
 }
 
 void EwaldCoulombEstimator::evaluate(const Paths& paths) {
+    PROFILE_BEGIN(Ewald_Coulomb_Estimator);
     paths.sumOverLinks(*this);
+    PROFILE_END();
 }
 
 void EwaldCoulombEstimator::findBoxImageVectors(const SuperCell &a) {
