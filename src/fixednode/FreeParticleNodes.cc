@@ -12,6 +12,7 @@
 #include "util/SuperCell.h"
 #include <cstdlib>
 #include <blitz/tinyvec-et.h>
+#include "util/shiny/Shiny.h"
 
 #define DGETRF_F77 F77_FUNC(dgetrf,DGETRF)
 extern "C" void DGETRF_F77(const int*, const int*, double*, const int*,
@@ -183,6 +184,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                               const int islice, Array& d1, Array& d2) {
+  PROFILE_BEGIN(FreeParticleNodes_evaluateDistance);
   if (useIterations>0) {
     newtonRaphson(r1, r2, islice, d1, 1);
     newtonRaphson(r2, r1, islice, d2, 2);
@@ -231,6 +233,7 @@ void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
                         ((dot(gradArray2(ipart),gradArray2(ipart))+1e-15)*tau));
     }
   }
+  PROFILE_END();
 }
 
 void FreeParticleNodes::newtonRaphson(const VArray& r1, const VArray& r2, const int  islice, Array& d, int  section) {

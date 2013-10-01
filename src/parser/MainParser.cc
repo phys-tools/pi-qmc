@@ -130,6 +130,7 @@ std::cout << "Level = " << nlevel << std::endl;
           std::ctime (&rawtime)<<std ::endl ;
       std::cout << "\n\n** Timing Profile Data **\n" << std::endl;
       PROFILE_UPDATE(); // uptate all timing profiles
+      PROFILE_OUTPUT("Shiny.out"); // print profile to file
       PROFILE_OUTPUT(NULL); // print profile to terminal
     } 
   } else {
@@ -138,6 +139,7 @@ std::cout << "Level = " << nlevel << std::endl;
         std::ctime (&rawtime)<<std ::endl ;
     std::cout << "\n\n** Timing Profile Data **\n" << std::endl;
     PROFILE_UPDATE(); // uptate all timing profiles
+    PROFILE_OUTPUT("Shiny.out"); // print profile to file
     PROFILE_OUTPUT(NULL); // print profile to terminal
   }
 #else
@@ -146,6 +148,7 @@ std::cout << "Level = " << nlevel << std::endl;
       std::ctime(&rawtime) <<std::endl;
   std::cout << "\n\n** Timing Profile Data **\n" << std::endl;
   PROFILE_UPDATE(); // uptate all timing profiles
+  PROFILE_OUTPUT("Shiny.out"); // print profile to file
   PROFILE_OUTPUT(NULL); // print profile to terminal
 #endif
 }
