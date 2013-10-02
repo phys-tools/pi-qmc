@@ -41,6 +41,7 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     useHungarian(useHungarian), scale(1.0), useIterations(useIterations),
     nodalFactor(nodalFactor),
     hungarian(useHungarian ? new Hungarian(npart) : 0) {
+    PROFILE_BEGIN(FreeParticleNodes_ForPerGaussuian);
     for (unsigned int i=0; i<matrix.size(); ++i)  {
         matrix[i] = new Matrix(npart,npart,ColMajor());
         romatrix[i] = new Matrix(npart,npart,ColMajor());
@@ -60,6 +61,7 @@ FreeParticleNodes::FreeParticleNodes(const SimulationInfo &simInfo,
     if (useUpdates) {
         updateObj = new MatrixUpdate(maxMovers,maxlevel,npart,matrix,*this);
     }
+    PROFILE_END();
 }
 
 FreeParticleNodes::~FreeParticleNodes() {
@@ -159,6 +161,7 @@ FreeParticleNodes::evaluate(const VArray &r1, const VArray &r2,
 
 void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
          const int islice, Array &d1, Array &d2) {
+  PROFILE_BEGIN(FreeParticleNodes_evalDotDist_ForPeriodicGaussian);
   std::vector<PeriodicGaussian*> pgSave(NDIM);
   for (int i=0; i<NDIM; ++i) pgSave[i]=pg[i];
   double tauSave=tau;
@@ -180,6 +183,7 @@ void FreeParticleNodes::evaluateDotDistance(const VArray &r1, const VArray &r2,
   // Restore pg and tau to proper temperature.
   for (int i=0; i<NDIM; ++i) pg[i]=pgSave[i];
   tau=tauSave;
+  PROFILE_END();
 }
 ////////////////////
 void FreeParticleNodes::evaluateDistance(const VArray& r1, const VArray& r2,
