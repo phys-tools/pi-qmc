@@ -12,14 +12,12 @@
 #include "util/SuperCell.h"
 #include "util/RandomNumGenerator.h"
 #include <blitz/tinyvec-et.h>
-#include "util/shiny/Shiny.h"
 
 WalkingChooser::WalkingChooser(const int nsize, const Species &species,
         const int nlevel, const SimulationInfo& simInfo) :
         PermutationChooser(nsize), SpeciesParticleChooser(species, nsize), t(
                 npart, npart), cump(npart, npart), pg(NDIM), nsize(nsize), mass(
                 species.mass), tau(simInfo.getTau()) {
-    PROFILE_BEGIN(WalkingChooser_ForPeriodicGaussian);
     double alpha = mass / (2 * tau * (1 << nlevel));
     for (int idim = 0; idim < NDIM; ++idim) {
         double length = (*simInfo.getSuperCell())[idim];
@@ -28,7 +26,6 @@ WalkingChooser::WalkingChooser(const int nsize, const Species &species,
     // Initialize permutation to an n-cycle.
     for (int i = 0; i < nsize; ++i)
         (*permutation)[i] = (i + 1) % nsize;
-    PROFILE_END();
 }
 
 WalkingChooser::~WalkingChooser() {

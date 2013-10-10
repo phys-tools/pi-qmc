@@ -3,6 +3,7 @@
 #endif
 #include "PeriodicGaussian.h"
 #include <complex>
+#include "util/shiny/Shiny.h"
 
 PeriodicGaussian::PeriodicGaussian(double alpha, double length)
 :   alpha(alpha),
@@ -18,6 +19,7 @@ int PeriodicGaussian::numberOfTerms(double alpha, double length) {
 }
 
 double PeriodicGaussian::evaluate(double x) const {
+    PROFILE_BEGIN(PeriodicGaussian);
     std::complex<double> w = exp(std::complex<double>(0, k * x));
     std::complex<double> sum0 = 0;
     std::complex<double> sum1 = 0;
@@ -37,6 +39,7 @@ double PeriodicGaussian::evaluate(double x) const {
     gradient = prefactor * 2 * real(sum1);
     secondDerivative = prefactor * 2 * real(sum2);
     return value;
+    PROFILE_END();
 }
 
 const double PeriodicGaussian::PI = 3.141592653589793;
