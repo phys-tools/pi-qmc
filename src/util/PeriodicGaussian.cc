@@ -9,9 +9,9 @@ PeriodicGaussian::PeriodicGaussian(double alpha, double length)
 :   alpha(alpha),
     length(length),
     nome(exp(-PI*PI/(alpha*length*length))),
-    nmax(numberOfTerms(alpha, length)),
     prefactor(sqrt(PI/(alpha*length*length))),
-    k(2 * PI / length) {
+    k(2 * PI / length),
+    nmax(numberOfTerms(alpha, length)) {
 }
 
 int PeriodicGaussian::numberOfTerms(double alpha, double length) {
@@ -38,8 +38,8 @@ double PeriodicGaussian::evaluate(double x) const {
     value = prefactor * (1 + 2 * real(sum0));
     gradient = prefactor * 2 * real(sum1);
     secondDerivative = prefactor * 2 * real(sum2);
-    return value;
     PROFILE_END();
+    return value;
 }
 
 const double PeriodicGaussian::PI = 3.141592653589793;
