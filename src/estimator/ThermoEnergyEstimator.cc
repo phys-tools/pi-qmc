@@ -48,7 +48,7 @@ void ThermoEnergyEstimator::handleLink(const Vec& start, const Vec& end,
         double u(0), utau(0), ulambda(0);
         Vec fm, fp;
         doubleAction->getBeadAction(paths, ipart, islice, u, utau, ulambda, fm,
-                fp);
+                fp, false);
         accumulator->addToValue(utau);
         PROFILE_END();
     }

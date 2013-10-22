@@ -107,7 +107,8 @@ public:
   virtual double getTotalAction(const Paths&, const int level) const;
   /// Calculate action and derivatives at a bead.
   virtual void getBeadAction(const Paths&, int ipart, int islice,
-    double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const;
+    double& u, double& utau, double& ulambda, Vec& fm, Vec& fp,
+    bool check_for_node_crossing) const;
   /// Evaluate the slater determinant for a slice.
   double evaluate(const VArray& r1, const VArray& r2, const int islice) const;
   /// Evaluate the slater determinant for a slice.

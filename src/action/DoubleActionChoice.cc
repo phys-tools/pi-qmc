@@ -40,10 +40,11 @@ double DoubleActionChoice::getTotalAction(const Paths& paths, int level) const {
 
 void DoubleActionChoice::getBeadAction(const Paths& paths, 
        int ipart, int islice, double& u, double& utau, double& ulambda,
-       Action::Vec& fm, Action::Vec& fp) const {
+       Action::Vec& fm, Action::Vec& fp, bool check_for_node_crossing) const {
   u=utau=ulambda=0; fm=0.; fp=0.;
   int imodel = enumModelState->getModelState();
-  actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
+  actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp,
+          check_for_node_crossing);
 }
 
 void DoubleActionChoice::initialize(const DoubleSectionChooser& 
@@ -73,9 +74,9 @@ void DoubleActionChoice::handleLink(const LinkSummable::Vec &start,
   double u=0., utau=0, ulambda=0;
   LinkSummable::Vec fm=0.; LinkSummable::Vec fp=0.;
   int imodel = enumModelState->getModelState();
-  actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
+  actions[imodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp, false);
   actionDifference -= u;
-  actions[jmodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
+  actions[jmodel]->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp, false);
   actionDifference += u;
 }
 

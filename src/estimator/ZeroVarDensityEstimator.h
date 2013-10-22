@@ -92,7 +92,7 @@ virtual void handleLink(const Vec& start, const Vec& end,
 	  if (doubleAction) {
 	    u=0;utau=0;ulambda=0;fm=0.; fp=0.;
 	    doubleAction->getBeadAction(paths,jpart,islice,
-                                        u,utau,ulambda,fm,fp);
+                                        u,utau,ulambda,fm,fp,false);
 	    gradU+=fp+fm;
           }
          Vec rij =end-paths(jpart,islice);

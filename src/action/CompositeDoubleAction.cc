@@ -58,13 +58,15 @@ double CompositeDoubleAction::getTotalAction(const Paths& paths, int level) cons
 
 void CompositeDoubleAction::getBeadAction(const Paths& paths, 
        int ipart, int islice,
-       double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const {
+       double& u, double& utau, double& ulambda, Vec& fm, Vec& fp,
+       bool check_for_node_crossing) const {
   u=utau=ulambda=0; fm=0.; fp=0.;
   for (ConstActionIter action=actions.begin(); action<actions.end(); ++action) {
     double ui=0, utaui=0, ulambdai=0; 
     Vec fmi=0., fpi=0.;
     if (*action) (*action)->getBeadAction(paths,ipart,islice,
-                                          ui,utaui,ulambdai,fmi,fpi);
+                                          ui,utaui,ulambdai,fmi,fpi,
+                                          check_for_node_crossing);
     u+=ui; utau+=utaui; ulambda+=ulambdai; fm+=fmi; fp+=fpi;
   }
 }

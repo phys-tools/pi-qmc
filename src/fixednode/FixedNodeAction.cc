@@ -252,7 +252,8 @@ double FixedNodeAction::getTotalAction(const Paths&, const int level) const {
 }
 
 void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
-    double &u, double &utau, double &ulambda, Vec &fm, Vec &fp) const {
+    double &u, double &utau, double &ulambda, Vec &fm, Vec &fp,
+    bool check_for_node_crossing) const {
   int totNSlice=paths.getNSlice();
   fm=0; fp=0; u=utau=ulambda=0;
   // Attribute u and utau to first particle.
@@ -312,7 +313,7 @@ void FixedNodeAction::getBeadAction(const Paths &paths, int ipart, int islice,
         utau += -dotxim1*exp(-xim1)/(1-exp(-xim1)); 
       }
     }
-  } else {
+  } else if (check_for_node_crossing) {
     // Just check for node crossing.
     int jslice=(islice+totNSlice/2)%totNSlice;
     for (int i=0; i<npart; ++i) r1(i)=paths(i,islice,-1);

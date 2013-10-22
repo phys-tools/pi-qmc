@@ -29,7 +29,8 @@ public:
   /// Calculate the action and derivatives at a bead.
   virtual void getBeadAction(const Paths&, const int ipart, const int islice,
        double& u, double& utau, double& ulambda,
-       Action::Vec& fm, Action::Vec& fp) const;
+       Action::Vec& fm, Action::Vec& fp,
+       bool check_for_node_crossing) const;
   /// Add an action object.
   void addAction(DoubleAction* a) {actions.push_back(a);}
   /// Initialize for a sampling section.

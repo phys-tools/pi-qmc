@@ -245,7 +245,7 @@ double SpinFixedPhaseAction::action(const double phi0, const double phi1,
 
 void SpinFixedPhaseAction::getBeadAction(const Paths &paths, int ipart, 
     int islice, double &u, double &utau, double &ulambda, 
-    Vec &fm, Vec &fp) const {
+    Vec &fm, Vec &fp, bool check_for_node_crossing) const {
   int totNSlice=paths.getNSlice();
   fm=0.; fp=0.; u=utau=ulambda=0;
   return;

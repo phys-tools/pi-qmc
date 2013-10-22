@@ -50,7 +50,8 @@ public:
   /// Calculate action and derivatives at a bead (defaults to no
   /// contribution).
   virtual void getBeadAction(const Paths&, int ipart, int islice,
-          double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const=0;
+          double& u, double& utau, double& ulambda, Vec& fm, Vec& fp,
+          bool check_for_node_crossing) const=0;
   /// Initialize for a sampling section.
   virtual void initialize(const DoubleSectionChooser&) {};
 

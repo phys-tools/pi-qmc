@@ -54,7 +54,7 @@ void VirialEnergyEstimator::handleLink(const Vec& start, const Vec& end,
   }
   if (doubleAction) {
     u=0;utau=0;ulambda=0;fm=0.; fp=0.;
-    doubleAction->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
+    doubleAction->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp,false);
     fav(ipart) += fm+fp;
     energy+=utau;
     if (!isStatic(ipart)) energy+=-(1/(2*tau))*dot((fm+fp),rav(ipart));
