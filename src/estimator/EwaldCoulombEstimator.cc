@@ -102,10 +102,10 @@ void EwaldCoulombEstimator::initCalc(const int nslice, const int firstSlice) {
 
 void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
         const int ipart, const int islice, const Paths& paths) {
-    PROFILE_BEGIN(HandleLink);
+    PROFILE_BEGIN(EwaldCoulombEstimator_HandleLink);
     double energy = 0.0;
     if (nImages > 1) {
-        PROFILE_BEGIN(CoulombImages);
+        PROFILE_BEGIN(EwaldCoulombEstimator_CoulombImages);
         for (int jpart = 0; jpart < ipart; ++jpart) {
             for (unsigned int img = 0; img < boxImageVecs.size(); img++) {
                 Vec boxImage;
@@ -137,7 +137,7 @@ void EwaldCoulombEstimator::handleLink(const Vec& start, const Vec& end,
 
     // Add long range contribution.
     if (ipart == 0) {
-        PROFILE_BEGIN(Ewald);
+        PROFILE_BEGIN(EwaldCoulombEstimator_Ewald);
         paths.getSlice(islice, r);
         energy += ewaldSum.evalLongRange(r) / epsilon;
         PROFILE_END();

@@ -40,10 +40,10 @@ THE SOFTWARE.
 
 /*---------------------------------------------------------------------------*/
 
-#define OUTPUT_WIDTH_CALL	6
-#define OUTPUT_WIDTH_TIME	6
+#define OUTPUT_WIDTH_CALL	20
+#define OUTPUT_WIDTH_TIME	10
 #define OUTPUT_WIDTH_PERC	4
-#define OUTPUT_WIDTH_SUM	79
+#define OUTPUT_WIDTH_SUM	131
 
 #define OUTPUT_WIDTH_DATA	(1+OUTPUT_WIDTH_CALL + 1 + 2*(OUTPUT_WIDTH_TIME+4+OUTPUT_WIDTH_PERC+1) + 1)
 #define OUTPUT_WIDTH_NAME	(OUTPUT_WIDTH_SUM - OUTPUT_WIDTH_DATA)

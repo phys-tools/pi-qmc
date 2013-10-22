@@ -15,6 +15,7 @@
 #include "util/SuperCell.h"
 #include "util/TradEwaldSum.h"
 #include "util/OptEwaldSum.h"
+#include "util/shiny/Shiny.h"
 
 CoulombAction::CoulombAction(const double epsilon, 
   const SimulationInfo& simInfo, const int norder, double rmin, double rmax,
@@ -99,6 +100,7 @@ CoulombAction::~CoulombAction() {
 
 double CoulombAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
+  PROFILE_BEGIN(CoulombAction_getActionDifferenceML);
   double u=0;
   for (unsigned int i=0; i<pairActionArray.size(); ++i) {
     u += pairActionArray[i]->getActionDifference(sampler,level);
@@ -117,12 +119,14 @@ double CoulombAction::getActionDifference(const SectionSamplerInterface& sampler
       u += ewaldSum->evalLongRange(rewald)*tau/epsilon; 
     }
   } 
+  PROFILE_END();
   return u;
 }
 
 double CoulombAction::getActionDifference(const Paths &paths, 
     const VArray &displacement, int nmoving, const IArray &movingIndex, 
     int iFirstSlice, int iLastSlice) {
+  PROFILE_BEGIN(CoulombAction_getActionDifferenceDisp);
 
   SuperCell cell=paths.getSuperCell();
   double u=0;
@@ -142,6 +146,7 @@ double CoulombAction::getActionDifference(const Paths &paths,
       u += ewaldSum->evalLongRange(rewald)*tau/epsilon;
     }
   }
+  PROFILE_END();
   return u;
 }
 
@@ -153,6 +158,8 @@ double CoulombAction::getTotalAction(const Paths& paths, int level) const {
 
 void CoulombAction::getBeadAction(const Paths& paths, int ipart, int islice,
          double& u, double& utau, double& ulambda, Vec& fm, Vec& fp) const {
+  PROFILE_BEGIN(CoulombAction_getBeadAction);
+
   u=utau=ulambda=0; fm=0.; fp=0.;
   for (unsigned int i=0; i<pairActionArray.size(); ++i) {
     double ui=0, utaui=0, ulambdai=0; 
@@ -169,9 +176,11 @@ void CoulombAction::getBeadAction(const Paths& paths, int ipart, int islice,
     utau += longRange;
   }
   //std :: cout << "CA :: "<<ipart<<" "<<islice<<"  "<<utau<<"  "<<u<<std ::endl;
+  PROFILE_END();
 }
 
 double CoulombAction::getAction(const Paths& paths, int islice) const {
+  PROFILE_BEGIN(CoulombAction_getAction);
   double u=0;
   for (int ipart=0; ipart<npart; ++ipart) {
     for (unsigned int i=0; i<pairActionArray.size(); ++i) {
@@ -188,6 +197,7 @@ double CoulombAction::getAction(const Paths& paths, int islice) const {
     double longRange = ewaldSum->evalLongRange(rewald)/epsilon;
     u += longRange*tau;
   }
+  PROFILE_END();
   return u;
 }
 

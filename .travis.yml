@@ -17,5 +17,5 @@ script:
     - >
         ./configure 
         CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize -march=native -fomit-frame-pointer -pipe"
-        && make 
+        && make -j 12
         && make test

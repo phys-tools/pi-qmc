@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
+#include "util/shiny/Shiny.h"
 
 SpringAction::SpringAction(const SimulationInfo& simInfo, const int maxlevel,
   const double deltaPG) 
@@ -55,6 +56,7 @@ SpringAction::~SpringAction() {
 
 double SpringAction::getActionDifference(const SectionSamplerInterface& sampler,
                                          const int level) {
+  PROFILE_BEGIN(SpringAction_getActionDifferenceML);
   const Beads<NDIM>& sectionBeads=sampler.getSectionBeads();
   const Beads<NDIM>& movingBeads=sampler.getMovingBeads();
   const SuperCell& cell=sampler.getSuperCell();
@@ -94,6 +96,7 @@ double SpringAction::getActionDifference(const SectionSamplerInterface& sampler,
       deltaAction+=log(temp);
     }
   } 
+  PROFILE_END();
   return deltaAction;
 }
 
@@ -110,14 +113,19 @@ double SpringAction::getTotalAction(const Paths& paths, int level) const {
 }
 
 void SpringAction::getBeadAction(const Paths& paths, int ipart, int islice,
-     double &u, double &utau, double &ulambda, Vec &fm, Vec &fp) const {
-  u=utau=ulambda=0; fm=0.; fp=0.;
-  if (isStatic(ipart)) return;
-  Vec delta = paths.delta(ipart,islice,-1);
-  fm-=(delta/(2*lambda(ipart)*tau));
-  utau = NDIM/(2*tau) - dot(delta,delta)/(4.0*lambda(ipart)*tau*tau);   
+    double &u, double &utau, double &ulambda, Vec &fm, Vec &fp) const {
+  PROFILE_BEGIN(SpringAction_getBeadAction);
+  u = utau = ulambda = 0;
+  fm = 0.;
+  fp = 0.;
+  if (!isStatic(ipart)) {
+    Vec delta = paths.delta(ipart, islice, -1);
+    fm -= (delta / (2 * lambda(ipart) * tau));
+    utau = NDIM / (2 * tau)
+        - dot(delta, delta) / (4.0 * lambda(ipart) * tau * tau);
 
-  delta = paths.delta(ipart,islice,1);
-  fp-=(delta/(2*lambda(ipart)*tau));
-
+    delta = paths.delta(ipart, islice, 1);
+    fp -= (delta / (2 * lambda(ipart) * tau));
+  }
+  PROFILE_END();
 }

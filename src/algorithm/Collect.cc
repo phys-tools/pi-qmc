@@ -3,6 +3,7 @@
 #endif
 #include "Collect.h"
 #include "stats/EstimatorManager.h"
+#include "util/shiny/Shiny.h"
 
 Collect::Collect(std::string& estName, EstimatorManager& estManager,  
           const int nstep) 
@@ -10,9 +11,11 @@ Collect::Collect(std::string& estName, EstimatorManager& estManager,
 }
 
 void Collect::run() {
+  PROFILE_BEGIN (Collect);
   if (isFirstRun) {
     estManager.startWritingGroup(nstep,"estimators");
     isFirstRun=false;
   }
   estManager.writeStep();
+  PROFILE_END();
 }

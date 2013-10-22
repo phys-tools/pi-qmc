@@ -33,9 +33,9 @@ void ThermoEnergyEstimator::initCalc(const int nslice, const int firstSlice) {
 
 void ThermoEnergyEstimator::handleLink(const Vec& start, const Vec& end,
         const int ipart, const int islice, const Paths& paths) {
-    PROFILE_BEGIN(HandleLink);
+    PROFILE_BEGIN(ThemoEnergyEstimator_HandleLink);
     if (action) {
-        PROFILE_BEGIN(Action);
+        PROFILE_BEGIN(ThermoEnergyEstimator_Action);
         double u(0), utau(0), ulambda(0);
         Vec fm, fp;
         action->getBeadAction(paths, ipart, islice, u, utau, ulambda, fm, fp);
@@ -44,7 +44,7 @@ void ThermoEnergyEstimator::handleLink(const Vec& start, const Vec& end,
     }
 
     if (doubleAction) {
-        PROFILE_BEGIN(DoubleAction);
+        PROFILE_BEGIN(ThermoEnergyEstimator_DoubleAction);
         double u(0), utau(0), ulambda(0);
         Vec fm, fp;
         doubleAction->getBeadAction(paths, ipart, islice, u, utau, ulambda, fm,
