@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<Simulation>
+  <SuperCell a="100" x="1" y="1" z="1"/>
+  <Species name="e" count="1" mass="1.0 m_e" charge="-1"/>
+  <Species name="h" count="1" mass="0.5 m_e" charge="+1"/>
+  <Temperature value="0.1 Ry" nslice="1024"/>
+  <Action>
+    <PrimSHOAction omega="4.0 Ry" species="e"/>
+    <PrimSHOAction omega="1.0 Ry" species="h"/>
+    <SpringAction/>
+    <EMARateAction species1="e" species2="h" c="1.0"/>
+  </Action>
+  <Estimators>
+    <EMARateEstimator species1="e" species2="h" c="1.0"/>
+  </Estimators>
+  <PIMC>
+    <RandomGenerator/>
+    <SetCubicLattice nx="2" ny="2" a="1.0"/>
+    <!--ReadPaths file="paths.in"/-->
+    <!-- Thermalize -->
+    <Loop nrepeat="1000">
+      <ChooseNonZeroSection nlevel="7">
+         <Sample npart="1" mover="Free" species="h"/>
+         <Sample npart="1" mover="Free" species="e"/>
+      </ChooseNonZeroSection>
+    </Loop>
+    <!-- Sample data -->
+    <Loop nrepeat="200">
+      <Loop nrepeat="200">
+        <ChooseMiddleSection nlevel="3">
+          <Loop nrepeat="5">
+            <Sample mover="EMARate" species1="e" species2="h" c="1.0"/>
+          </Loop>
+        </ChooseMiddleSection>
+        <ChooseMiddleSection nlevel="5">
+          <Loop nrepeat="5">
+            <Sample mover="EMARate" species1="e" species2="h" c="1.0"/>
+          </Loop>
+        </ChooseMiddleSection>
+        <ChooseMiddleSection nlevel="7">
+          <Loop nrepeat="5">
+            <Sample mover="EMARate" species1="e" species2="h" c="1.0"/>
+          </Loop>
+        </ChooseMiddleSection>
+        <ChooseNonZeroSection nlevel="3">
+          <Loop nrepeat="5">
+            <Sample npart="1" mover="Free" species="h"/>
+            <Sample npart="1" mover="Free" species="e"/>
+          </Loop>
+        </ChooseNonZeroSection>
+        <Loop nrepeat="7">
+          <ChooseNonZeroSection nlevel="5">
+            <Sample npart="1" mover="Free" species="e"/>
+            <Sample npart="1" mover="Free" species="h"/>
+          </ChooseNonZeroSection>
+        </Loop>
+        <Loop nrepeat="37">
+          <ChooseNonZeroSection nlevel="7">
+            <Sample npart="1" mover="Free" species="h"/>
+            <Sample npart="1" mover="Free" species="e"/>
+          </ChooseNonZeroSection>
+        </Loop>
+        <Measure estimator="all"/>
+      </Loop>
+      <Collect estimator="all"/>
+      <WritePaths file="paths.out"/>
+    </Loop>
+  </PIMC>
+</Simulation>

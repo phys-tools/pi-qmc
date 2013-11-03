@@ -1,0 +1,123 @@
+/* Basic layout and paragraphs */
+body {
+  font-size: 1em;
+  font-family: Georgia, Times, "Times new Roman", serif;
+  color: #232018;
+  background-color:#ffffff;
+}
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+p {
+  text-align: justify;
+}
+span.pi {
+  font-family: "Tahoma", "Geneva", sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 0.85em;
+  letter-spacing: -0.02em;
+}
+h1 {
+  font-family: "Palatino", serif;
+  font-weight: lighter;
+  font-size: 1.6em;
+  font-stretch: wider;
+  letter-spacing: 0.1em;
+  padding: 0.25em 0em 0.5em 0em;
+  color: #232018;
+}
+h2 {
+  font-family: "Times New Roman", serif;
+  font-size: 1.3em;
+  font-stretch: wider;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid #e9e7e7;
+  padding: 0.4em 0em 0.2em 0em;
+  font-weight: normal;
+  color: #464031;
+}
+h3 {
+  font-size: .9em;
+  font-weight: normal;
+  text-transform: uppercase;
+  font-family: "Optima", sans-serif;
+  color: #801008;
+}
+h4{
+  text-transform: uppercase;
+  font-weight: lighter;
+  font-family: "Times New Roman", serif;
+  color: #a1a09b;
+}
+h5 { }
+h6 { }
+
+/* Equations */
+*.math {
+  font-family: "Times New Roman", "Unicode Symbols", "Apple Symbols",
+               "Arial Unicode MS", serif;
+}
+div.math {
+  padding: 1em;
+  text-align:center;
+  font-size: 1.1em;
+}
+
+/* Code */
+*.code {
+  font-family: Courier, 'Courier New', monospace;
+}
+div.code {
+  font-size: small;
+  margin: 1em;
+}
+
+/* TOC formatting */
+div.toc {
+}
+div.toc ol {
+  list-style-type: upper-roman;
+  color: #801008;
+  font-size: 0.9em;
+}
+div.toc ol ol {
+  list-style-type: decimal;
+  font-weight: normal;
+  color: #232018;
+  font-size: 0.9em;
+}
+div.toc ol ol ol {
+  list-style-type: upper-alpha;
+}
+
+div.toc ol.appendix {
+  list-style-type: decimal;
+}
+div.toc ol.appendix li:before {
+  content: "Appendix: ";
+}
+
+/* Page TOC formatting */
+div#innertoc {
+  border-style: outset;
+  width: 100%;
+  font-family: "Lucida Grande", "Lucida Sans Unicdoe", Helvetica, "Helvetica Neue", Arial;
+  font-size: small;
+}
+div#innertoc span#contentheader {
+  color: black;
+  font-weight: bold;
+}
+div#innertoc a.page {
+  display: block;
+  text-decoration: none; 
+}
+div#innertoc a.indent {
+  text-indent: 2em; 
+}
+div#innertoc a.extraindent {
+  text-indent: 4em; 
+}
+

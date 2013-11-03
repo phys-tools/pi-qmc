@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<Simulation>
+  <SuperCell a="25 A" x="1" y="1" z="1"/>
+  <Species name="eup" count="1" mass="1 m_e" charge="-1"/>
+  <Species name="H" count="1" mass="1.006780 amu" charge="+1"/>
+  <Temperature value="10000 K" nslice="512"/>
+  <Action>
+    <SpringAction/>
+    <CoulombAction norder="3" rmin="0.001" rmax="5." ngridPoints="1000"/>
+  </Action>
+  <Estimators>
+    <ThermalEnergyEstimator unit="eV"/>
+    <VirialEnergyEstimator unit="eV" nwindow="500"/>
+    <CoulombEnergyEstimator unit="eV"/>
+  </Estimators>
+  <PIMC>
+    <RandomGenerator/>
+    <SetCubicLattice nx="2" ny="2" nz="2" a="1."/>
+    <!-- Thermalize -->
+    <Loop nrepeat="10000">
+      <ChooseSection nlevel="6">
+         <Sample npart="1" mover="Free" species="H"/>
+         <Sample npart="1" mover="Free" species="eup"/>
+      </ChooseSection>
+    </Loop>
+    <!-- Sample data -->
+    <Loop nrepeat="100">
+      <Loop nrepeat="300">
+        <ChooseSection nlevel="7">
+          <Sample npart="1" mover="Free" species="H"/>
+          <Sample npart="1" mover="Free" species="eup"/>
+        </ChooseSection>
+        <Loop nrepeat="3">
+          <ChooseSection nlevel="6">
+            <Sample npart="1" mover="Free" species="eup"/>
+          </ChooseSection>
+        </Loop>
+        <Loop nrepeat="5">
+          <ChooseSection nlevel="5">
+            <Sample npart="1" mover="Free" species="eup"/>
+          </ChooseSection>
+        </Loop>
+        <Measure estimator="all"/>
+      </Loop>
+      <Collect estimator="all"/>
+    </Loop>
+  </PIMC>
+</Simulation>

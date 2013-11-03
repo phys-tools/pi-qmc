@@ -1,0 +1,71 @@
+#ifndef __SpinChargeEstimator_h_
+#define __SpinChargeEstimator_h_
+#include "base/LinkSummable.h"
+#include "base/Paths.h"
+#include "stats/BlitzArrayBlkdEst.h"
+#include <fftw3.h>
+class Paths;
+class Species;
+class SimulationInfo;
+class MPIManager;
+/// SpinCharge estimator for an inhomogeneous system.
+///
+/// @f[
+/// \chi_{jj}(x,x';\tau) = -\langle j(x,\tau) j(x',0)\rangle_\beta
+/// @f]
+///
+/// @f[
+/// j(x_0)=\frac{q\hbar}{2im}[\partial_x\delta(x-x_0)+\delta(x-x_0)\partial_x]
+/// @f]
+/// We find it simplest to apply the estimator between beads, in the
+/// middle of the free particle propagator, @f$G_0@f$, over the 
+/// imaginary-time interval @f$\Delta\tau = \tau-\tau'@f$ :
+/// @f[
+/// T_\tau j(x,(\tau+\tau')/2)G_0(x,\tau;x,\tau') = 
+/// iq\frac{x-x'}{\Delta\tau}
+/// \frac{e^{-\frac{m(x+x'-2x_0)^2}{\Delta\tau}}}{\sqrt{\pi\Delta\tau/2m}}
+/// G_0(x,\tau;x,\tau')
+/// @f]
+/// Even with interactions, we use the same free-particle estimator, as
+/// this estimator satisfies the continuity equation and has the correct
+/// coarse-grained response.
+///
+/// @version $Revision$
+/// @author John Shumway 
+class SpinChargeEstimator : public BlitzArrayBlkdEst<5>, public LinkSummable {
+public:
+  typedef blitz::Array<std::complex<double>,5> CArray5;
+  typedef blitz::Array<int,1> IArray;
+  typedef blitz::Array<double,1> Array;
+  /// Constructor.
+  SpinChargeEstimator(const SimulationInfo& simInfo,
+    const Species &s1, const Species &s2, const int nfreq,
+    const int nbin, const int ndbin, const int nstride,  MPIManager *mpi);
+  /// Virtual destructor.
+  virtual ~SpinChargeEstimator();
+  /// Initialize the calculation.
+  virtual void initCalc(const int nslice, const int firstSlice);
+  /// Add contribution from a link.
+  virtual void handleLink(const blitz::TinyVector<double,NDIM>& start,
+                          const blitz::TinyVector<double,NDIM>& end,
+                          const int ipart, const int islice, const Paths&);
+  /// Finalize the calculation.
+  virtual void endCalc(const int nslice);
+  // Get value of kinetic energy estimator.
+  //virtual double calcValue() {return value=etot/enorm;}
+  /// Clear value of the estimator.
+  virtual void reset() {}
+  /// Evaluate for Paths configuration.
+  virtual void evaluate(const Paths& paths) {paths.sumOverLinks(*this);}
+private:
+  ///
+  const int npart, nslice, nfreq, nbin, ndbin, nstride;
+  const int nup, ndn, ifirstup, ifirstdn;
+  const double beta, tau, tauinv, massinv, dx, dxinv;
+  Array q;
+  CArray5 temp;
+  fftw_plan fwd, rev;
+  MPIManager *mpi;
+};
+
+#endif

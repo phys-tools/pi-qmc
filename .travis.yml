@@ -1,0 +1,21 @@
+language: cpp
+
+compiler:
+    - gcc
+#    - clang
+
+before_install:
+    - sudo apt-get install gfortran 
+    - sudo apt-get install libgsl0-dev libgsl0ldbl
+    - sudo apt-get install liblapack-dev
+    - sudo apt-get install libhdf5-serial-dev
+    - sudo apt-get install libfftw3-dev
+    - sudo apt-get install python-nose
+    - sudo apt-get install python-tables
+
+script:
+    - >
+        ./configure 
+        CXXFLAGS="-O3 -g -Wall -ffast-math -ftree-vectorize -march=native -fomit-frame-pointer -pipe"
+        && make -j 12
+        && make test

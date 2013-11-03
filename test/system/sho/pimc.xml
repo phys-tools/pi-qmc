@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<Simulation>
+  <SuperCell a="20.0" x="1" y="1" z="1"/>
+  <Species name="e" count="1" mass="1" charge="-1"/>
+  <Temperature value="1.0" nslice="32"/>
+  <Action>
+    <SpringAction/>
+    <SHOAction omega="0.5 Ha"/>
+  </Action>
+  <Estimators>
+    <ThermalEnergyEstimator/>
+  </Estimators>
+  <PIMC>
+    <RandomGenerator/>
+    <!-- Thermalize -->
+    <Loop nrepeat="100">
+      <ChooseSection nlevel="5">
+         <Sample npart="1" mover="Free" species="e"/>
+      </ChooseSection>
+    </Loop>
+    <!-- Sample data -->
+    <Loop nrepeat="500">
+      <Loop nrepeat="200">
+        <ChooseSection nlevel="5">
+          <Sample npart="1" mover="Free" species="e"/>
+        </ChooseSection>
+        <Measure estimator="all"/>
+      </Loop>
+      <Collect estimator="all"/>
+    </Loop>
+  </PIMC>
+</Simulation>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Simulation>
+  <SuperCell a="2" x="1" y="1" z="1"/>
+  <Species name="Na" count="4" mass="23 amu" charge="+1" isStatic="true"/>
+  <Species name="Cl" count="4" mass="35 amu" charge="-1" isStatic="true"/>
+  <Temperature value="1000.0" nslice="10"/>
+  <Action>
+    <SpringAction/>
+    <CoulombAction norder="1" rmin="0.01" rmax="3.0" ngridPoints="1000"
+      useEwald="true" ewaldRcut="0.5" ewaldKcut="50.0"/>
+  </Action>
+  <Estimators>
+    <ThermalEnergyEstimator perN="4"/>
+    <CoulombEnergyEstimator useEwald="true" kcut="50.0" rcut="0.5" perN="4"/>
+  </Estimators>
+  <PIMC>
+    <RandomGenerator/>
+    <ReadPaths file="paths.in"/>
+    <Measure estimator="all"/>
+    <Collect estimator="all"/>
+  </PIMC>
+</Simulation>

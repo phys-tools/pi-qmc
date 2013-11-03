@@ -1,0 +1,26 @@
+Files are in UTF-8.
+
+Digraphs can be typed with ctrl-k. For a list type
+:digraphs
+
+Some handy ones are In (Integral), \- (dagger), A* (Alpha)
+
+Some more math:
+00B7 : \cdot
+0127 : \hbar
+3008 : \langle
+3009 : \rangle
+00d7 : \times
+2113 : \ell
+2207 : \nabla
+221e : \infty
+
+To get hats or bars (use g8 on vi to see codes!):
+(These are only working for me on safari, so don't use now.)
+0302 : cominbing curcumflex accent
+0303 : cominbing tilde
+0305 : combining overline
+0307 : combining dot above
+0308 : combining double dot above
+
+

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC
+ "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN"
+ "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>pi-qmc: Interactions</title>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="pi.css" type="text/css"/>
+<script type="text/javascript" src="pagecontents.js"></script>
+</head>
+
+<body>
+<h1>Interactions</h1>
+
+<h2>Pair Potentials</h2>
+
+<p>The following pair potentials have been coded into 
+<span class="pi">pi</span>:
+<ul>
+<li>Lennard Jones 6-12
+<div class="math">
+v(r) = 4ε[ (σ/r)<sup>12</sup> - (σ/r)<sup>6</sup> ]
+</div>
+</li>
+<li>Aziz Potential.<br/>
+R. A. Aziz et al., Mol. Phys. <b>77</b>, 321 (1992).
+</li>
+</ul>
+In addition to these potentials, the Cao-Berne approximation to the 
+hard-sphere pair action has been coded as an empirical pair action.
+</p>
+
+<p>Coulomb interactions are special because of their
+<span div="math">1/r</span> singularities, long range tails, and
+special symmetry involving the Lens vector. The action for
+Coulomb problems is <a href="CoulombAction.xhtml">
+discussed in its own section.</a></p>
+
+<h2>Primative Approximation</h2>
+
+<h2>Pair Approximation</h2>
+
+<h2>Long-range potentials</h2>
+<p>Long range potentials require periodic images and/or
+Ewald sumations. Currently these are only implemented for
+the <a href="CoulombAction.xhtml">Coulomb action</a>.</p>
+
+<h2>Specifying Interactions in the Input File</h2>
+<p>
+To specify the interactions, use the EmpiricalAction tag,
+<div class="code">
+<pre>
+&lt;!-- Lennard-Jones 6-12 parameters from Seitz and Blancore,
+     J. Chem. Thermodynamics, <b>26</b> p. 1207, (1996). --&gt;
+&lt;EmpiricalAction species1="He" species2="He"
+  ngridPoints="1000" rmin="1 pm" rmax="10 nm"
+  model="LJ" epsilon="10.22 K" sigma="0.25565 nm"/&gt;
+</pre>
+</div>
+</p>
+
+</body>
+</html>
+

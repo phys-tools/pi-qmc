@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="nosetests" tests="2" errors="0" failures="0" skip="0"><testcase classname="integration.sho.test_sho.SHOTestCase" name="test_energy" time="3.701" /><testcase classname="integration.sho.test_sho2.SHOTest2Case" name="test_resize" time="0.000" /></testsuite>

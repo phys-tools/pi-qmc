@@ -1,0 +1,11 @@
+This is a graphical user interface for setting up pi-qmc simulations,
+running simulations, and looking at data. It is in early stages of 
+development.
+
+Before using, you need to generate piworldUI.py using:
+
+pyuic4 piworld.ui > piworldUI.py
+pyuic4 ScalarView.ui > ScalarViewUI.py
+pyrcc4 ../../doc/manual/manual.qrc > manual_rc.py
+pyrcc4 icons/icons.qrc > icons_rc.py
+
