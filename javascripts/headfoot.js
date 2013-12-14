@@ -54,6 +54,7 @@ function writeNavigationLinks(relURL) {
     rtfdURL = "http://pi-qmc.readthedocs.org/en/latest/";
     ciURL = "http://travis-ci.org/phys-tools/pi-qmc";
     listURL = "https://groups.google.com/forum/?fromgroups#!forum/pi-qmc";
+    wikiURL = "https://github.com/phys-tools/pi-qmc/wiki"
     document.write("  <ul>");
     document.write("    <li>");
     document.write("      <a href='http://pi-qmc.readthedocs.org'>");
@@ -78,6 +79,11 @@ function writeNavigationLinks(relURL) {
     document.write("    <li>");
     document.write("      <a href='" + listURL + "'>");
     document.write("        Discussion Forum");
+    document.write("      </a>");
+    document.write("    </li>");
+    document.write("    <li>");
+    document.write("      <a href='" + wikiURL + "'>");
+    document.write("        Project Wiki");
     document.write("      </a>");
     document.write("    </li>");
     document.write("    <li>");
