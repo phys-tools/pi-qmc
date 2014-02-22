@@ -15,6 +15,7 @@
 #include "mover/Mover.h"
 #include "util/RandomNumGenerator.h"
 #include "util/Permutation.h"
+#include "util/shiny/Shiny.h"
 #include "stats/AccRejEstimator.h"
 #include <cstdlib>
 #include <sstream>
@@ -66,6 +67,7 @@ MultiLevelSampler::~MultiLevelSampler() {
 }
 
 void MultiLevelSampler::run() {
+    PROFILE_BEGIN(MulitLevelSampler);
     // Select particles to move and the permuation.
     permutationChooser->init();
     for (int irepeat = 0; irepeat < nrepeat; ++irepeat) {
@@ -95,6 +97,7 @@ void MultiLevelSampler::run() {
                 permutationChooser->init();
         }
     }
+    PROFILE_END();
 }
 
 bool MultiLevelSampler::tryMove(double initialLnTranProb) {

@@ -1,8 +1,8 @@
 #define NDIM 3
 
-#define PACKAGE_NAME "pi"
-#define PACKAGE_STRING "pi 1.3.0"
-#define PACKAGE_VERSION "1.3.0"
+#define PACKAGE_NAME "pi-qmc"
+#define PACKAGE_STRING "pi-qmc 13.09 LTS"
+#define PACKAGE_VERSION "13.09 LTS"
 
 #define F77_FUNC(name,NAME) name ## _
 #define F77_FUNC_(name,NAME) name ## _

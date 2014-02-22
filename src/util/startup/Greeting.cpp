@@ -8,7 +8,7 @@ void Greeting::print() {
 
     if (rank == 0) {
         std::cout << std::endl;
-        std::cout << "PIMC program: " << PACKAGE_STRING << "(";
+        std::cout << "PIMC program: " << PACKAGE_STRING << " (";
         if (MPILifecycle::isEnabled()) {
             std::cout << "MPI enabled, ";
         } else {

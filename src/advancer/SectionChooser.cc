@@ -9,6 +9,7 @@
 #include "base/Paths.h"
 #include "util/Permutation.h"
 #include "util/RandomNumGenerator.h"
+#include "util/shiny/Shiny.h"
 #include <cmath>
 #include <iostream>
 #include <gsl/gsl_qrng.h>
@@ -28,6 +29,7 @@ SectionChooser::~SectionChooser() {
 }
 
 void SectionChooser::run() {
+    PROFILE_BEGIN(SectionChooser);
     double x = RandomNumGenerator::getRand() * (1 - 1e-8);
     int ilo = paths->getLowestOwnedSlice(false) - 1;
     int ihi = paths->getHighestSampledSlice(beads->getNSlice() - 1, false);
@@ -45,4 +47,5 @@ void SectionChooser::run() {
     paths->putBeads(iFirstSlice, *beads, *permutation);
     // Refresh the buffer slices.
     paths->setBuffers();
+    PROFILE_END();
 }

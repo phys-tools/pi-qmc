@@ -8,6 +8,7 @@
 #include "base/SimulationInfo.h"
 #include "stats/MPIManager.h"
 #include "util/SuperCell.h"
+#include "util/shiny/Shiny.h"
 #include <cstdlib>
 #include <blitz/tinyvec.h>
 #include <blitz/tinyvec-et.h>
@@ -26,6 +27,7 @@ VirialEnergyEstimator::VirialEnergyEstimator(
 }
 
 void VirialEnergyEstimator::initCalc(const int nslice, const int firstSlice) {
+  PROFILE_BEGIN(VirialEnergyEstimator);
   this->nslice=nslice;
   this->firstSlice=firstSlice;
   energy=0; rav=0.0; r0=0.0; fav=0.0;
@@ -33,6 +35,7 @@ void VirialEnergyEstimator::initCalc(const int nslice, const int firstSlice) {
 
 void VirialEnergyEstimator::handleLink(const Vec& start, const Vec& end,
     const int ipart, const int islice, const Paths& paths) {
+  PROFILE_BEGIN(VirialEnergyEstimator_HandleLink);
   if ((islice-firstSlice)%nwindow==0 && !isStatic(ipart)) {
     energy+=(1/(2*tau))*dot(fav(ipart),r0(ipart));
     r0(ipart)=0;
@@ -45,7 +48,11 @@ void VirialEnergyEstimator::handleLink(const Vec& start, const Vec& end,
   rav(ipart)+=r;
   r0(ipart)+=(thisWindow-(islice-firstSlice)%nwindow)*r/thisWindow;
   double u(0),utau(0),ulambda(0); Vec fm=0.0, fp=0.0;
-  if (action) action->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
+  if (action) {
+    PROFILE_BEGIN(ThermoEnergyEstimator_Action);
+    action->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp);
+    PROFILE_END();
+  }
   fav(ipart) += fm + fp;
   energy+=utau;
   if (!isStatic(ipart)) {
@@ -53,12 +60,15 @@ void VirialEnergyEstimator::handleLink(const Vec& start, const Vec& end,
               -(1/(2*tau))*dot((fm+fp),rav(ipart));
   }
   if (doubleAction) {
+    PROFILE_BEGIN(ThermoEnergyEstimator_DoubleAction);
     u=0;utau=0;ulambda=0;fm=0.; fp=0.;
     doubleAction->getBeadAction(paths,ipart,islice,u,utau,ulambda,fm,fp,false);
     fav(ipart) += fm+fp;
     energy+=utau;
     if (!isStatic(ipart)) energy+=-(1/(2*tau))*dot((fm+fp),rav(ipart));
+    PROFILE_END();
   }
+  PROFILE_END();
 }
 
 void VirialEnergyEstimator::endCalc(const int lnslice) {
@@ -76,4 +86,5 @@ void VirialEnergyEstimator::endCalc(const int lnslice) {
   #endif
   energy/=nslice;
   etot+=energy; enorm+=1;
+  PROFILE_END();
 }
