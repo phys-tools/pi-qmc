@@ -13,6 +13,6 @@ set(sources
     ${dir}/propagator/KineticGridTest.cpp
     ${dir}/propagator/PotentialGridTest.cpp
     ${dir}/propagator/PropagatorGridTest.cpp
-    ${dir}/propagator/PropagatorTest.cpp
+    ${dir}/propagator/Propagator1DTest.cpp
     PARENT_SCOPE
 )

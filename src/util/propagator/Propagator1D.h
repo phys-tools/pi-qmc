@@ -1,13 +1,13 @@
-#ifndef PROPAGATOR_H_
-#define PROPAGATOR_H_
+#ifndef PROPAGATOR1D_H_
+#define PROPAGATOR1D_H_
 
 class PropagatorGrid;
 class GridSet;
 
-class Propagator {
+class Propagator1D {
 public:
-    Propagator(double mass, double tau, double x0);
-    virtual ~Propagator();
+    Propagator1D(double mass, double tau, double x0);
+    virtual ~Propagator1D();
 
     double evaluate();
 
