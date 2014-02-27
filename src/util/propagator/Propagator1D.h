@@ -1,6 +1,8 @@
 #ifndef PROPAGATOR1D_H_
 #define PROPAGATOR1D_H_
 
+#include "PotentialGrid.h"
+
 class PropagatorGrid;
 class GridSet;
 
@@ -15,6 +17,7 @@ public:
 
     double getGridSpacing() const;
     void setPotential(double (*v)(double));
+    void setPotential(PotentialGrid::functor*);
 
     static double zeroPotential(double x);
     static double harmonicPotential(double x);
@@ -28,6 +31,7 @@ private:
     void propagate(int step);
     void propagate(PropagatorGrid* grid, double deltaTau, int stepCount);
     double (*potential)(double);
+    PotentialGrid::functor* potential_functor;
 };
 
 #endif

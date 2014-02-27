@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "util/propagator/Propagator1D.h"
 #include "util/propagator/PropagatorGrid.h"
+#include "util/propagator/PotentialGrid.h"
 #include "PropagatorTestUtil.h"
 #include <cmath>
 
@@ -21,6 +22,13 @@ protected:
   double x0;
 
   PropagatorTestUtil util;
+
+  struct SHO_potential : public PotentialGrid::functor
+  {
+    SHO_potential() : k(1.0) {}
+    double operator()(double r) {return 0.5 * k * r * r;}
+    double k;
+  };
 };
 
 TEST_F(Propagator1DTest, TestDiagonalKineticEvolution) {
@@ -35,6 +43,22 @@ TEST_F(Propagator1DTest, TestDiagonalKineticEvolution) {
 TEST_F(Propagator1DTest, TestDiagonalSHOEvolution) {
   Propagator1D propagator(mass, tau, x0);
   propagator.setPotential(Propagator1D::harmonicPotential);
+  double value = propagator.evaluate();
+  double deltaX = propagator.getGridSpacing();
+  double expect = util.K(x0, x0, tau, deltaX);
+  ASSERT_NEAR(expect, value, 1e-9);
+}
+
+TEST_F(Propagator1DTest, test_functor) {
+  SHO_potential* sho = new SHO_potential();
+  ASSERT_DOUBLE_EQ(3.125, (*sho)(2.5));
+}
+
+TEST_F(Propagator1DTest, test_SHO_potential_functor) {
+  Propagator1D propagator(mass, tau, x0);
+  SHO_potential* sho = new SHO_potential();
+  ASSERT_DOUBLE_EQ(3.125, (*sho)(2.5));
+  propagator.setPotential(sho);
   double value = propagator.evaluate();
   double deltaX = propagator.getGridSpacing();
   double expect = util.K(x0, x0, tau, deltaX);

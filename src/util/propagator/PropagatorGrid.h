@@ -2,9 +2,9 @@
 #define PROPAGATORGRID_H_
 
 #include <complex>
+#include "PotentialGrid.h"
 class FFT1D;
 class KineticGrid;
-class PotentialGrid;
 
 class PropagatorGrid {
 public:
@@ -25,6 +25,8 @@ public:
 
     void setupKineticPropagator(double mass, double deltaTau);
     void setupPotentialPropagator(double (*v)(double), double deltaTau);
+    void setupPotentialPropagator(PotentialGrid::functor& v,
+                                  double deltaTau);
 
     double getDeltaX() const;
     double getDeltaK() const;

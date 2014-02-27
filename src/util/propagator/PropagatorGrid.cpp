@@ -46,28 +46,32 @@ void PropagatorGrid::setupPotentialPropagator(double (*v)(double),
             new PotentialGrid(size, deltaX, x0, v, 0.5 * deltaTau);
 }
 
+void PropagatorGrid::setupPotentialPropagator
+    (PotentialGrid::functor& v, double deltaTau) {
+    potentialPropagator =
+            new PotentialGrid(size, deltaX, x0, v, deltaTau);
+    halfPotentialPropagator =
+            new PotentialGrid(size, deltaX, x0, v, 0.5 * deltaTau);
+}
+
 void PropagatorGrid::scaleBySqrtOfSize() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i)
         value[i] *= oneOverSqrtSize;
-    }
 }
 
 void PropagatorGrid::evolveTDeltaTau() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i)
         value[i] *= (*kineticPropagator)(i);
-    }
 }
 
 void PropagatorGrid::evolveVDeltaTau() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i)
         value[i] *= (*potentialPropagator)(i);
-    }
 }
 
 void PropagatorGrid::evolveVHalfDeltaTau() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i)
         value[i] *= (*halfPotentialPropagator)(i);
-    }
 }
 
 double PropagatorGrid::readValue(int index) const {
@@ -75,9 +79,8 @@ double PropagatorGrid::readValue(int index) const {
 }
 
 void PropagatorGrid::initialize(int index0) {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i)
         value[i] = 0.0;
-    }
     value[index0] = 1.0;
 }
 

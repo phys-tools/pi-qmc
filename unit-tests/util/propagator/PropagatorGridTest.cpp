@@ -103,7 +103,6 @@ TEST_F(PropagatorGridTest, TestKineticEvolution) {
     grid->toKSpace();
     grid->evolveTDeltaTau();
     grid->toRealSpace();
-    double delta2 = (offset * deltaX) * (offset * deltaX);
     double expect = K0(offset * deltaX, deltaTau, mass);
     ASSERT_NEAR(expect, K0(0.0, deltaTau, mass), 1e-12);
     ASSERT_NEAR(expect, real((*grid)(index0 + offset)), 1e-12);
@@ -112,8 +111,6 @@ TEST_F(PropagatorGridTest, TestKineticEvolution) {
 
 TEST_F(PropagatorGridTest, TestPotentialEvolution) {
     int index0 = 13;
-    int offset = -2;
-    double mass = 1.0;
     double deltaTau = 0.1;
     grid->setupPotentialPropagator(potential, deltaTau);
     grid->initialize(index0);
@@ -124,8 +121,6 @@ TEST_F(PropagatorGridTest, TestPotentialEvolution) {
 
 TEST_F(PropagatorGridTest, TestHalfPotentialEvolution) {
     int index0 = 13;
-    int offset = -2;
-    double mass = 1.0;
     double deltaTau = 0.1;
     grid->setupPotentialPropagator(potential, deltaTau);
     grid->initialize(index0);

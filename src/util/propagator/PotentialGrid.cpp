@@ -11,6 +11,16 @@ PotentialGrid::PotentialGrid(int size, double deltaX, double x0,
     }
 }
 
+PotentialGrid::PotentialGrid(int size, double deltaX, double x0,
+        functor& v, double deltaTau)
+    :   value(new double[size]),
+        size(size) {
+    for (int i = 0; i < size; ++i) {
+        double x = x0 + i * deltaX;
+        value[i] = exp(-deltaTau * v(x));
+    }
+}
+
 PotentialGrid::~PotentialGrid() {
     delete value;
 }

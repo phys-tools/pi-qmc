@@ -7,7 +7,8 @@ Propagator1D::Propagator1D(double mass, double tau, double x0)
 :   tau(tau),
     mass(mass),
     x0(x0),
-    deltaX(0.005) {
+    deltaX(0.005),
+    potential_functor(0) {
   gridSet = new GridSet();
   gridSet->setGridParameters(new GridParameters(mass, tau, x0, deltaX));
   potential = zeroPotential;
@@ -44,7 +45,10 @@ void Propagator1D::propagate(int step) {
 void Propagator1D::propagate(PropagatorGrid* grid, double deltaTau,
     int stepCount) {
   grid->setupKineticPropagator(mass, deltaTau);
-  grid->setupPotentialPropagator(potential, deltaTau);
+  if (potential_functor)
+    grid->setupPotentialPropagator(*potential_functor, deltaTau);
+  else
+    grid->setupPotentialPropagator(potential, deltaTau);
   grid->evolveVHalfDeltaTau();
   for (int i = 0; i < stepCount - 1; ++i) {
     grid->toKSpace();
@@ -69,6 +73,10 @@ double Propagator1D::harmonicPotential(double x) {
 
 void Propagator1D::setPotential(double (*v)(double)) {
   potential = v;
+}
+
+void Propagator1D::setPotential(PotentialGrid::functor* v) {
+  potential_functor = v;
 }
 
 double Propagator1D::getGridSpacing() const {
