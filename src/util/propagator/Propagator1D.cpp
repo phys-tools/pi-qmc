@@ -25,12 +25,13 @@ double Propagator1D::evaluate() {
 }
 
 void Propagator1D::propagate() {
+  int inc = 5;
   int istep = 0;
-  propagate(istep++);
-  propagate(istep++);
+  propagate(istep += inc);
+  propagate(istep += inc);
   gridSet->extrapolateValue0();
   while (! gridSet->isConverged()) {
-    propagate(istep++);
+    propagate(istep += inc);
     gridSet->extrapolateValue0();
   }
 }
