@@ -142,7 +142,8 @@ am_unit_test_pi_qmc_OBJECTS =  \
 	util/propagator/unit_test_pi_qmc-KineticGridTest.$(OBJEXT) \
 	util/propagator/unit_test_pi_qmc-PotentialGridTest.$(OBJEXT) \
 	util/propagator/unit_test_pi_qmc-PropagatorGridTest.$(OBJEXT) \
-	util/propagator/unit_test_pi_qmc-Propagator1DTest.$(OBJEXT)
+	util/propagator/unit_test_pi_qmc-Propagator1DTest.$(OBJEXT) \
+	util/propagator/unit_test_pi_qmc-Propagator3DTest.$(OBJEXT)
 unit_test_pi_qmc_OBJECTS = $(am_unit_test_pi_qmc_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -395,7 +396,8 @@ unit_test_pi_qmc_SOURCES = \
     util/propagator/KineticGridTest.cpp \
     util/propagator/PotentialGridTest.cpp \
     util/propagator/PropagatorGridTest.cpp \
-    util/propagator/Propagator1DTest.cpp
+    util/propagator/Propagator1DTest.cpp \
+    util/propagator/Propagator3DTest.cpp
 
 unit_test_pi_qmc_LDADD = \
     -L$(top_builddir)/src/parser -lparser \
@@ -679,6 +681,9 @@ util/propagator/unit_test_pi_qmc-PropagatorGridTest.$(OBJEXT):  \
 util/propagator/unit_test_pi_qmc-Propagator1DTest.$(OBJEXT):  \
 	util/propagator/$(am__dirstamp) \
 	util/propagator/$(DEPDIR)/$(am__dirstamp)
+util/propagator/unit_test_pi_qmc-Propagator3DTest.$(OBJEXT):  \
+	util/propagator/$(am__dirstamp) \
+	util/propagator/$(DEPDIR)/$(am__dirstamp)
 
 unit-test-pi-qmc$(EXEEXT): $(unit_test_pi_qmc_OBJECTS) $(unit_test_pi_qmc_DEPENDENCIES) $(EXTRA_unit_test_pi_qmc_DEPENDENCIES) 
 	@rm -f unit-test-pi-qmc$(EXEEXT)
@@ -746,6 +751,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@util/propagator/$(DEPDIR)/unit_test_pi_qmc-KineticGridTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@util/propagator/$(DEPDIR)/unit_test_pi_qmc-PotentialGridTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator1DTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@util/propagator/$(DEPDIR)/unit_test_pi_qmc-PropagatorGridTest.Po@am__quote@
 
 .cc.o:
@@ -1388,6 +1394,20 @@ util/propagator/unit_test_pi_qmc-Propagator1DTest.obj: util/propagator/Propagato
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o util/propagator/unit_test_pi_qmc-Propagator1DTest.obj `if test -f 'util/propagator/Propagator1DTest.cpp'; then $(CYGPATH_W) 'util/propagator/Propagator1DTest.cpp'; else $(CYGPATH_W) '$(srcdir)/util/propagator/Propagator1DTest.cpp'; fi`
 
+util/propagator/unit_test_pi_qmc-Propagator3DTest.o: util/propagator/Propagator3DTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT util/propagator/unit_test_pi_qmc-Propagator3DTest.o -MD -MP -MF util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Tpo -c -o util/propagator/unit_test_pi_qmc-Propagator3DTest.o `test -f 'util/propagator/Propagator3DTest.cpp' || echo '$(srcdir)/'`util/propagator/Propagator3DTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Tpo util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='util/propagator/Propagator3DTest.cpp' object='util/propagator/unit_test_pi_qmc-Propagator3DTest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o util/propagator/unit_test_pi_qmc-Propagator3DTest.o `test -f 'util/propagator/Propagator3DTest.cpp' || echo '$(srcdir)/'`util/propagator/Propagator3DTest.cpp
+
+util/propagator/unit_test_pi_qmc-Propagator3DTest.obj: util/propagator/Propagator3DTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -MT util/propagator/unit_test_pi_qmc-Propagator3DTest.obj -MD -MP -MF util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Tpo -c -o util/propagator/unit_test_pi_qmc-Propagator3DTest.obj `if test -f 'util/propagator/Propagator3DTest.cpp'; then $(CYGPATH_W) 'util/propagator/Propagator3DTest.cpp'; else $(CYGPATH_W) '$(srcdir)/util/propagator/Propagator3DTest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Tpo util/propagator/$(DEPDIR)/unit_test_pi_qmc-Propagator3DTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='util/propagator/Propagator3DTest.cpp' object='util/propagator/unit_test_pi_qmc-Propagator3DTest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(unit_test_pi_qmc_CXXFLAGS) $(CXXFLAGS) -c -o util/propagator/unit_test_pi_qmc-Propagator3DTest.obj `if test -f 'util/propagator/Propagator3DTest.cpp'; then $(CYGPATH_W) 'util/propagator/Propagator3DTest.cpp'; else $(CYGPATH_W) '$(srcdir)/util/propagator/Propagator3DTest.cpp'; fi`
+
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
@@ -1649,7 +1669,6 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS
 
-    util/propagator/Propagator3DTest.cpp
 
 all-local: $(top_builddir)/bin unit-test-pi-qmc gtest
 	cp unit-test-pi-qmc $(top_builddir)/bin/
