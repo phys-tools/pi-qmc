@@ -50,6 +50,7 @@ unit_test_pi_qmc_SOURCES = \
     util/propagator/PotentialGridTest.cpp \
     util/propagator/PropagatorGridTest.cpp \
     util/propagator/Propagator1DTest.cpp
+    util/propagator/Propagator3DTest.cpp
 
 unit_test_pi_qmc_LDADD = \
     -L$(top_builddir)/src/parser -lparser \

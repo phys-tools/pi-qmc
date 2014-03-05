@@ -11,8 +11,8 @@ namespace {
 class Propagator1DTest: public testing::Test {
 protected:
   void SetUp() {
-    util.mass = mass = 1.0;
-    util.omega = omega = 1.0;
+    mass = 1.0;
+    omega = 1.0;
     tau = 0.124235;
     x0 = 1.0;
   }
@@ -43,7 +43,7 @@ TEST_F(Propagator1DTest, TestDiagonalKineticEvolution) {
   propagator.setPotential(Propagator1D::zeroPotential);
   double value = propagator.evaluate();
   double deltaX = propagator.getGridSpacing();
-  double expect = util.approximateK0(x0, x0, tau, deltaX);
+  double expect = util.approximateK0(x0, x0, tau, deltaX, mass);
   ASSERT_NEAR(expect, value, 1e-12);
 }
 
@@ -52,7 +52,7 @@ TEST_F(Propagator1DTest, TestDiagonalSHOEvolution) {
   propagator.setPotential(Propagator1D::harmonicPotential);
   double value = propagator.evaluate();
   double deltaX = propagator.getGridSpacing();
-  double expect = util.K(x0, x0, tau, deltaX);
+  double expect = util.K(x0, x0, tau, deltaX, mass, omega);
   ASSERT_NEAR(expect, value, 1e-9);
 }
 
@@ -68,7 +68,7 @@ TEST_F(Propagator1DTest, test_SHO_potential_functor) {
   propagator.setPotential(sho);
   double value = propagator.evaluate();
   double deltaX = propagator.getGridSpacing();
-  double expect = util.K(x0, x0, tau, deltaX);
+  double expect = util.K(x0, x0, tau, deltaX, mass, omega);
   ASSERT_NEAR(expect, value, 1e-9);
 }
 

@@ -21,6 +21,7 @@ libutil_la_SOURCES = \
     propagator/KineticGrid.cpp \
     propagator/PotentialGrid.cpp \
     propagator/Propagator1D.cpp \
+    propagator/Propagator3D.cpp \
     propagator/PropagatorGrid.cpp \
     shiny/ShinyManager.cpp \
     shiny/ShinyNode.cpp \
@@ -58,6 +59,7 @@ noinst_HEADERS = \
     propagator/KineticGrid.h \
     propagator/PotentialGrid.h \
     propagator/Propagator1D.h \
+    propagator/Propagator3D.h \
     propagator/PropagatorGrid.h \
     shiny/Shiny.h \
     shiny/ShinyConfig.h \

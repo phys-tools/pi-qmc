@@ -1649,6 +1649,7 @@ uninstall-am: uninstall-binPROGRAMS
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS
 
+    util/propagator/Propagator3DTest.cpp
 
 all-local: $(top_builddir)/bin unit-test-pi-qmc gtest
 	cp unit-test-pi-qmc $(top_builddir)/bin/

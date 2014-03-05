@@ -5,7 +5,8 @@ class PropagatorTestUtil
 {
 public:
   /// Approximate grid propagator with continuum propagator.
-  double approximateK0(double x1, double x2, double tau, double gridDeltaX)
+  double approximateK0(double x1, double x2, double tau, double gridDeltaX,
+                       double mass)
   {
     const double PI = 3.141592653589793;
     double delta2 = (x1 - x2) * (x1 - x2);
@@ -13,7 +14,8 @@ public:
     return prefactor * exp(-0.5 * mass * delta2 / tau);
   }
 
-  double K(double x1, double x2, double tau, double gridDeltaX)
+  double K(double x1, double x2, double tau, double gridDeltaX,
+           double mass, double omega)
   {
     const double PI = 3.141592653589793;
     double sinhwt = sinh(omega * tau);
@@ -23,9 +25,6 @@ public:
             -(mass * omega * (x1 * x1 + x2 * x2) * coshwt - 2 * x1 * x2)
                 / (2.0 * sinhwt));
   }
-
-  double mass;
-  double omega;
 };
 
 #endif

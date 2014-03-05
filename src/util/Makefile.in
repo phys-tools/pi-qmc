@@ -111,6 +111,7 @@ am_libutil_la_OBJECTS = libutil_la-AperiodicGaussian.lo \
 	propagator/libutil_la-KineticGrid.lo \
 	propagator/libutil_la-PotentialGrid.lo \
 	propagator/libutil_la-Propagator1D.lo \
+	propagator/libutil_la-Propagator3D.lo \
 	propagator/libutil_la-PropagatorGrid.lo \
 	shiny/libutil_la-ShinyManager.lo shiny/libutil_la-ShinyNode.lo \
 	shiny/libutil_la-ShinyNodePool.lo \
@@ -366,6 +367,7 @@ libutil_la_SOURCES = \
     propagator/KineticGrid.cpp \
     propagator/PotentialGrid.cpp \
     propagator/Propagator1D.cpp \
+    propagator/Propagator3D.cpp \
     propagator/PropagatorGrid.cpp \
     shiny/ShinyManager.cpp \
     shiny/ShinyNode.cpp \
@@ -404,6 +406,7 @@ noinst_HEADERS = \
     propagator/KineticGrid.h \
     propagator/PotentialGrid.h \
     propagator/Propagator1D.h \
+    propagator/Propagator3D.h \
     propagator/PropagatorGrid.h \
     shiny/Shiny.h \
     shiny/ShinyConfig.h \
@@ -499,6 +502,8 @@ propagator/libutil_la-PotentialGrid.lo: propagator/$(am__dirstamp) \
 	propagator/$(DEPDIR)/$(am__dirstamp)
 propagator/libutil_la-Propagator1D.lo: propagator/$(am__dirstamp) \
 	propagator/$(DEPDIR)/$(am__dirstamp)
+propagator/libutil_la-Propagator3D.lo: propagator/$(am__dirstamp) \
+	propagator/$(DEPDIR)/$(am__dirstamp)
 propagator/libutil_la-PropagatorGrid.lo: propagator/$(am__dirstamp) \
 	propagator/$(DEPDIR)/$(am__dirstamp)
 shiny/$(am__dirstamp):
@@ -575,6 +580,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-KineticGrid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-PotentialGrid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-Propagator1D.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-Propagator3D.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@propagator/$(DEPDIR)/libutil_la-PropagatorGrid.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyManager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@shiny/$(DEPDIR)/libutil_la-ShinyNode.Plo@am__quote@
@@ -751,6 +757,13 @@ propagator/libutil_la-Propagator1D.lo: propagator/Propagator1D.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='propagator/Propagator1D.cpp' object='propagator/libutil_la-Propagator1D.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o propagator/libutil_la-Propagator1D.lo `test -f 'propagator/Propagator1D.cpp' || echo '$(srcdir)/'`propagator/Propagator1D.cpp
+
+propagator/libutil_la-Propagator3D.lo: propagator/Propagator3D.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT propagator/libutil_la-Propagator3D.lo -MD -MP -MF propagator/$(DEPDIR)/libutil_la-Propagator3D.Tpo -c -o propagator/libutil_la-Propagator3D.lo `test -f 'propagator/Propagator3D.cpp' || echo '$(srcdir)/'`propagator/Propagator3D.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) propagator/$(DEPDIR)/libutil_la-Propagator3D.Tpo propagator/$(DEPDIR)/libutil_la-Propagator3D.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='propagator/Propagator3D.cpp' object='propagator/libutil_la-Propagator3D.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -c -o propagator/libutil_la-Propagator3D.lo `test -f 'propagator/Propagator3D.cpp' || echo '$(srcdir)/'`propagator/Propagator3D.cpp
 
 propagator/libutil_la-PropagatorGrid.lo: propagator/PropagatorGrid.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libutil_la_CXXFLAGS) $(CXXFLAGS) -MT propagator/libutil_la-PropagatorGrid.lo -MD -MP -MF propagator/$(DEPDIR)/libutil_la-PropagatorGrid.Tpo -c -o propagator/libutil_la-PropagatorGrid.lo `test -f 'propagator/PropagatorGrid.cpp' || echo '$(srcdir)/'`propagator/PropagatorGrid.cpp

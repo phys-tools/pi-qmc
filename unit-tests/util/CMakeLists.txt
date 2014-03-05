@@ -14,5 +14,6 @@ set(sources
     ${dir}/propagator/PotentialGridTest.cpp
     ${dir}/propagator/PropagatorGridTest.cpp
     ${dir}/propagator/Propagator1DTest.cpp
+    ${dir}/propagator/Propagator3DTest.cpp
     PARENT_SCOPE
 )

@@ -19,6 +19,7 @@ set (sources
     propagator/KineticGrid.cpp
     propagator/PotentialGrid.cpp
     propagator/Propagator1D.cpp
+    propagator/Propagator3D.cpp
     propagator/PropagatorGrid.cpp
     shiny/ShinyManager.cpp
     shiny/ShinyNode.cpp
